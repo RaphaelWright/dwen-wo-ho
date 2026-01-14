@@ -2,11 +2,11 @@ export interface ProviderDetails {
   id: string;
   email: string;
   fullName: string;
-  professionalTitle: string;
+  professionalTitle?: string | null;
   status?: string;
-  officePhoneNumber?: string;
+  officePhoneNumber?: string | null;
   specialties?: string[];
-  profileImage?: string;
+  profileImage?: string | null;
   createdAt: string;
   updatedAt: string;
   applicationStatus?: "PENDING" | "APPROVED" | "REJECTED";
