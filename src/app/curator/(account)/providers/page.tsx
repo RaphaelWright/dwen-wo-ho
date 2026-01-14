@@ -236,36 +236,22 @@ export default function ProvidersPage() {
           providerEmail={selectedProviderEmail}
           provider={
             providersList.find((p) => p.email === selectedProviderEmail)
-              ? {
-                  ...providersList.find(
+              ? (() => {
+                  const foundProvider = providersList.find(
                     (p) => p.email === selectedProviderEmail
-                  )!,
-                  id: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.email,
-                  fullName: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.providerName,
-                  professionalTitle: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.specialty,
-                  profileImage: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.profilePhotoURL,
-                  createdAt: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.applicationDate,
-                  updatedAt:
-                    providersList.find(
-                      (p) => p.email === selectedProviderEmail
-                    )!.lastActive ||
-                    providersList.find(
-                      (p) => p.email === selectedProviderEmail
-                    )!.applicationDate,
-                  applicationStatus: providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!.applicationStatus,
-                }
+                  )!;
+                  return {
+                    id: foundProvider.email,
+                    email: foundProvider.email,
+                    fullName: foundProvider.providerName,
+                    professionalTitle: foundProvider.specialty || undefined,
+                    profileImage: foundProvider.profilePhotoURL || undefined,
+                    officePhoneNumber: foundProvider.officePhoneNumber || undefined,
+                    createdAt: foundProvider.applicationDate,
+                    updatedAt: foundProvider.lastActive || foundProvider.applicationDate,
+                    applicationStatus: foundProvider.applicationStatus,
+                  };
+                })()
               : undefined
           }
           onShowApproveModal={handleShowApproveModal}
