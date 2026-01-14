@@ -197,16 +197,16 @@ export default function SchoolDetailsPage() {
   ];
 
   if (isLoading) {
-    return (
+  return (
       <WidthConstraint>
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
             <p className="text-gray-500">Loading school details...</p>
           </div>
-        </div>
+    </div>
       </WidthConstraint>
-    );
+  );
   }
 
   if (error || !school) {
@@ -297,7 +297,7 @@ export default function SchoolDetailsPage() {
                   {school.totalPartners !== undefined && (
                     <span className="px-3 py-1 rounded-full bg-white/20 font-medium">
                       {school.totalPartners} Partners
-                    </span>
+              </span>
                   )}
                 </div>
               </div>
@@ -365,6 +365,6 @@ export default function SchoolDetailsPage() {
           />
         </>
       )}
-    </WidthConstraint>
+        </WidthConstraint>
   );
 }

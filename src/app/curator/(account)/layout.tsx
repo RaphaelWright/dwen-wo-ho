@@ -19,16 +19,11 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
-      return !!(token || curatorToken);
-    }
-    return null;
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       const curatorToken = localStorage.getItem("curatorToken");
@@ -62,7 +57,8 @@ export default function DashboardLayout({
     ? providers.data.length 
     : 0;
 
-  if (isAuthenticated === null) {
+  // Show loading state only after mount to prevent hydration mismatch
+  if (!mounted || isAuthenticated === null) {
     return (
       <div className="h-screen bg-white flex items-center justify-center">
         <div className="text-center">

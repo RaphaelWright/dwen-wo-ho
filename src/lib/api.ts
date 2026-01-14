@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://justgo.up.railway.app";
+    "https://justgo.up.railway.app";
 
 const PUBLIC_ENDPOINTS = [
   "/api/v1/auth/check-email",
@@ -95,7 +95,7 @@ export async function api(endpoint: string, options: RequestInit = {}) {
         }
       }
       throw await extractErrorFromResponse(response);
-    }
+      }
 
     return await parseSuccessResponse(response);
   } catch (error) {

@@ -6,11 +6,13 @@ import { toast } from "sonner";
 import { IProviderResponse } from "@/types/provider.type";
 
 export interface Provider {
-  id: string;
+  id?: string;
   email: string;
   providerName: string;
-  profilePhotoURL?:string;
-  specialty: string;
+  profilePhotoURL?: string | null;
+  specialty?: string | null;
+  officePhoneNumber?: string | null;
+  bio?: string | null;
   applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
   applicationDate: string;
   lastActive?: string;
@@ -18,7 +20,7 @@ export interface Provider {
 
 const getProviders = async (): Promise<IProviderResponse> => {
   try {
-    const response = await axiosInstance.get(ENDPOINTS.providers);
+  const response = await axiosInstance.get(ENDPOINTS.providers);
     const data = checkResponse(response, 200);
     
     if (data && typeof data === "object" && "data" in data) {

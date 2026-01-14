@@ -189,9 +189,9 @@ export const CuratorSidebar = ({
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => {
-          onLogout();
-          setShowLogoutModal(false);
-        }}
+                  onLogout();
+                  setShowLogoutModal(false);
+                }}
         title="Logout Confirmation"
         message="Are you sure you want to log out?"
         confirmText="Yes, Logout"
