@@ -122,7 +122,7 @@ const ProviderDetails = () => {
     };
 
     if (isAuthenticated) {
-      loadProvider();
+    loadProvider();
     }
   }, [email, router, isAuthenticated]);
 

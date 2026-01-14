@@ -120,52 +120,52 @@ const ProviderCard = ({
             </>
           ) : (
             <>
-              <button
+            <button
                 onClick={handleApproveClick}
-                disabled={isModerating}
+              disabled={isModerating}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {currentAction === "approving" ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Approving...
-                  </>
-                ) : (
-                  <>
-                    <FiCheck className="w-4 h-4" />
-                    Approve
-                  </>
-                )}
-              </button>
-              <button
+            >
+              {currentAction === "approving" ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Approving...
+                </>
+              ) : (
+                <>
+                  <FiCheck className="w-4 h-4" />
+                  Approve
+                </>
+              )}
+            </button>
+            <button
                 onClick={handleRejectClick}
-                disabled={isModerating}
+              disabled={isModerating}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold text-sm transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {currentAction === "rejecting" ? (
-                  <>
+            >
+              {currentAction === "rejecting" ? (
+                <>
                     <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-                    Rejecting...
-                  </>
-                ) : (
-                  <>
-                    <FiX className="w-4 h-4" />
-                    Reject
-                  </>
-                )}
-              </button>
+                  Rejecting...
+                </>
+              ) : (
+                <>
+                  <FiX className="w-4 h-4" />
+                  Reject
+                </>
+              )}
+            </button>
             </>
           )}
-        </div>
+          </div>
 
         {/* View Details Button */}
-        <button
+            <button
           onClick={handleViewDetails}
           className="mt-3 text-sm text-gray-600 hover:text-[#955aa4] transition-colors underline flex items-center gap-1"
-        >
+            >
           View Details
           <FiChevronRight className="w-4 h-4" />
-        </button>
+            </button>
       </div>
     </div>
   );

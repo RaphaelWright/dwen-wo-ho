@@ -20,7 +20,7 @@ export interface Provider {
 
 const getProviders = async (): Promise<IProviderResponse> => {
   try {
-    const response = await axiosInstance.get(ENDPOINTS.providers);
+  const response = await axiosInstance.get(ENDPOINTS.providers);
     const data = checkResponse(response, 200);
     
     if (data && typeof data === "object" && "data" in data) {

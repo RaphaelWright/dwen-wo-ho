@@ -196,7 +196,7 @@ export default function SchoolsPage() {
                 {/* Footer / Location */}
                 <div className="mt-6 flex items-center justify-between">
                   <div className="flex-1 min-w-0 mr-4">
-                    {school.campuses && Array.isArray(school.campuses) && school.campuses.length > 0 ? (
+                    {/* {school.campuses && Array.isArray(school.campuses) && school.campuses.length > 0 ? (
                       <div className="flex items-center gap-2 text-gray-600">
                         <MdLocationOn className="text-[#955aa4] w-4 h-4 flex-shrink-0" />
                         <span className="text-sm font-medium truncate">
@@ -205,15 +205,15 @@ export default function SchoolsPage() {
                       </div>
                     ) : (
                       <span className="text-sm text-gray-400 italic">No campus location</span>
-                    )}
+                    )} */}
                   </div>
 
                   <Link href={`${ROUTES.curator.schools}/${school.id}`}>
-                    <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#955aa4] group-hover:text-white transition-all duration-300 shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                      </svg>
-                    </button>
+                  <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#955aa4] group-hover:text-white transition-all duration-300 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </button>
                   </Link>
                 </div>
               </div>

@@ -28,7 +28,7 @@ const getSchool = async (schoolId: string): Promise<School> => {
   const result = await api(`/api/v1/schools/${schoolId}`);
 
   if (result?.success && result.data) {
-    return result.data;
+  return result.data;
   }
   
   throw new Error("Failed to fetch school");
@@ -41,7 +41,7 @@ const disableSchool = async (schoolId: string): Promise<School> => {
   });
   
   if (result?.success && result.data) {
-    return result.data;
+  return result.data;
   }
   
   throw new Error("Failed to disable school");
