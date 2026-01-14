@@ -69,6 +69,7 @@ const ProviderDetailsModal = ({
     if (isOpen && providerEmail && allPartners.length > 0) {
       loadProviderPartners(allPartners);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPartners.length, isOpen, providerEmail]);
 
   useEffect(() => {
@@ -283,12 +284,6 @@ const ProviderDetailsModal = ({
       toast.error(err.message || "Failed to remove partner");
     }
   };
-
-  useEffect(() => {
-    if (allPartners.length > 0) {
-      loadProviderPartners();
-    }
-  }, [allPartners.length]);
 
   const handleApproveClick = () => {
     if (onShowApproveModal) {
