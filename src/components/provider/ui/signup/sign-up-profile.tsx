@@ -23,6 +23,7 @@ interface SignUpProfileProps {
   isPending?: boolean;
   onBack?: () => void;
   startStep?: number;
+  password?: string;
 }
 
 const SignUpProfile = ({
@@ -34,12 +35,13 @@ const SignUpProfile = ({
   isPending,
   onBack,
   startStep = 0,
+  password,
 }: SignUpProfileProps) => {
   const [currentStep, setCurrentStep] = useState(startStep);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { addSpecialtyMutation, updateProfileMutation } = useAuthQuery();
+  const { addSpecialtyMutation, updateProfileMutation, loginMutation } = useAuthQuery();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -84,7 +86,7 @@ const SignUpProfile = ({
       const data = getProfileQuery.data;
       setUserInfo((prev) => ({
         ...prev,
-        name: data.providerName || prev.name,
+        name: `${(data as any).title ? `${(data as any).title} ` : ""}${data.providerName || prev.name}`,
         // If professionalTitle is available in response use it, else fallback
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         title: (data as any).professionalTitle || data.specialty || prev.title,
@@ -147,7 +149,7 @@ const SignUpProfile = ({
           const data = response.data;
           setUserInfo(prev => ({
             ...prev,
-            name: data.providerName || prev.name,
+            name: `${(data as any).title ? `${(data as any).title} ` : ""}${data.providerName || prev.name}`,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             title: (data as any).professionalTitle || data.specialty || prev.title,
             specialty: data.specialty || prev.specialty,
@@ -178,22 +180,43 @@ const SignUpProfile = ({
     if (currentStep === 2) {
       setIsSubmitting(true);
       try {
-        console.log("Adding specialty, checking token in localStorage:", localStorage.getItem("token"));
+        console.log("Adding specialty...");
         await addSpecialtyMutation.mutateAsync({
           specialty: profileData.specialty,
         });
 
         toast.success("Specialty added successfully!");
 
-        console.log("Profile setup complete", {
-          email,
-          fullName,
-          title,
-          ...profileData,
-        });
+        // Auto-login if password is available
+        if (password) {
+          console.log("Attempting auto-login...");
+          try {
+            const loginResponse = await loginMutation.mutateAsync({
+              email: email,
+              password: password,
+            });
 
-        // Route to sign in page as per requirements
-        router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+            if (loginResponse.success) {
+              const { token } = loginResponse.data;
+              if (token) {
+                localStorage.setItem("token", token);
+              }
+              console.log("✅ Auto-login successful, redirecting to provider home");
+              router.push(ROUTES.provider.home);
+            } else {
+              // Login failed logically? Fallback to auth page
+              console.warn("Auto-login returned failure:", loginResponse);
+              router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+            }
+          } catch (loginError) {
+            console.error("Auto-login error:", loginError);
+            // If login fails (e.g. 401), fallback to sign-in page
+            router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+          }
+        } else {
+          // No password (e.g. came from email link), fallback to sign-in page
+          router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+        }
 
       } catch (error) {
         console.error("Specialty submission error:", error);

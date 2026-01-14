@@ -78,12 +78,18 @@ const SignInContent = ({
 
   const onSubmit = async (values: ProviderLoginFormData) => {
     setErrorMessage("");
+    // Clear tokens before attempting new login to prevent stale state
+    localStorage.removeItem("token");
+    localStorage.removeItem("curatorToken");
+    localStorage.removeItem("pendingUser");
 
     try {
       const response = await loginMutation.mutateAsync({
         email: values.email,
         password: values.password,
       });
+
+      console.log("✅ Sign in response:", response);
 
       if (response.success) {
         if (response.data?.userData) {
@@ -97,10 +103,13 @@ const SignInContent = ({
           }
 
           // Check for pending status
-          if (
+          const isPending =
             userData.applicationStatus === "PENDING" ||
-            (response as any).message === "ACCOUNT PENDING"
-          ) {
+            userData.status === "PENDING" ||
+            (response as any).message === "ACCOUNT PENDING";
+
+
+          if (isPending) {
             // Smart timestamp derivation
             let timeAgo = "Recently";
             const createdDate =
@@ -131,7 +140,7 @@ const SignInContent = ({
             }
 
             setUserInfo({
-              name: userData.providerName || "Provider",
+              name: `${(userData as any).title ? `${(userData as any).title} ` : ""}${userData.providerName || "Provider"}`,
               title:
                 (userData as any).professionalTitle ||
                 userData.specialty ||
@@ -142,7 +151,15 @@ const SignInContent = ({
                 userData.profileURL ||
                 undefined,
             } as any);
-            setShowPendingModal(true);
+
+
+
+            // Persist pending user data for the home page to usage (since token might be missing)
+            localStorage.setItem("pendingUser", JSON.stringify(userData));
+
+            // Redirect to home page where the pending modal is handled
+            setIsRedirecting(true);
+            router.push(ROUTES.provider.home);
             return;
           }
 
@@ -225,21 +242,25 @@ const SignInContent = ({
           }
 
           setIsRedirecting(true);
-          router.push(ROUTES.provider.profile);
+          localStorage.removeItem("pendingUser");
+          router.push(ROUTES.provider.home);
         }
 
         // Check if user is verified (fallback logic if needed, but above checks should catch incomplete profiles first)
         if (response.data?.isVerified === false) {
           setUserInfo({
-            name: response.data?.fullName || "Dr. Amanda Gorman",
+            name: `${(response.data as any)?.title ? `${(response.data as any).title} ` : ""}${response.data?.fullName || "Dr. Amanda Gorman"}`,
             title:
               response.data?.professionalTitle || "Clinical Psychologist",
             timeAgo: "2 hours ago",
           });
-          setShowPendingModal(true);
-        } else {
+          localStorage.setItem("pendingUser", JSON.stringify(response.data));
           setIsRedirecting(true);
-          router.push(ROUTES.provider.profile);
+          router.push(ROUTES.provider.home);
+        } else {
+          localStorage.removeItem("pendingUser");
+          setIsRedirecting(true);
+          router.push(ROUTES.provider.home);
         }
       } else {
         setErrorMessage(
@@ -272,7 +293,7 @@ const SignInContent = ({
           title: "Health Provider",
           timeAgo: "Recently",
         });
-        setShowPendingModal(true);
+        router.push(ROUTES.provider.home);
         return;
       }
 
@@ -376,8 +397,8 @@ const SignInContent = ({
                 type={showPassword ? "text" : "password"}
                 autoFocus
                 className={`font-bold w-full rounded-xl outline-none placeholder:text-gray-500 border-[3px] focus:border-[#2bb673] transition-colors ${errors?.password
-                    ? "border-red-500 text-red-500"
-                    : "border-[#2bb673] text-gray-500"
+                  ? "border-red-500 text-red-500"
+                  : "border-[#2bb673] text-gray-500"
                   } text-xl p-4 bg-gray-200/50`}
               />
               <button

@@ -69,24 +69,48 @@ const SignInContent = () => {
       console.log("✅ Sign in response:", response);
 
       if (response?.success) {
+        console.log("✅ Sign in successful, processing response...");
+        console.log("📦 Response data:", response?.data);
+
         // Store token if needed
         if (response?.data?.token) {
           console.log("🔑 Token received, storing in localStorage");
           localStorage.setItem("token", response?.data?.token);
+        } else {
+          console.log("⚠️ No token in response");
         }
 
-        // Check if user is verified
-        if (response?.data?.isVerified === false) {
-          console.log("⚠️ User not verified, showing pending modal");
-          setUserInfo({
-            name: response?.data?.fullName || "Dr. Amanda Gorman",
-            title: response?.data?.professionalTitle || "Clinical Psychologist",
-            timeAgo: "2 hours ago",
-          });
-          setShowPendingModal(true);
+        // Check for pending status (comprehensive check)
+        const userData = response?.data;
+        const isPending =
+          userData?.applicationStatus === "PENDING" ||
+          userData?.status === "PENDING" ||
+          userData?.isVerified === false ||
+          response?.message === "ACCOUNT PENDING";
+
+        console.log("🔍 Pending check:", {
+          applicationStatus: userData?.applicationStatus,
+          status: userData?.status,
+          isVerified: userData?.isVerified,
+          message: response?.message,
+          isPending: isPending
+        });
+
+        if (isPending) {
+          console.log("⚠️ User is PENDING, saving to localStorage and redirecting...");
+          const userDataStr = JSON.stringify(userData);
+          console.log("💾 Saving pendingUser:", userDataStr);
+          localStorage.setItem("pendingUser", userDataStr);
+
+          // Verify it was saved
+          const savedData = localStorage.getItem("pendingUser");
+          console.log("✓ Verified pendingUser saved:", !!savedData);
+
+          console.log("🔄 Redirecting to:", ROUTES.provider.home);
+          router.push(ROUTES.provider.home);
         } else {
-          console.log("✅ Sign in successful, redirecting to profile");
-          router.push("/provider/profile");
+          console.log("✅ User is APPROVED, redirecting to home");
+          router.push(ROUTES.provider.home);
         }
       } else {
         console.error("❌ Sign in failed:", response?.message);
