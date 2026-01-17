@@ -12,6 +12,7 @@ import { ArrowLeft, Users, Handshake, TrendingUp, Pencil, Ban } from "lucide-rea
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import SchoolEditModal from "@/components/modals/school-edit";
+import ProviderDetailsModal from "@/components/modals/provider-details";
 import { useDisableSchool } from "@/hooks/queries/useSchoolsQuery";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import {
@@ -23,6 +24,8 @@ import {
   Partner,
   SchoolReachResponse,
 } from "@/components/curator/school-detail-tabs";
+import { ProviderDetails } from "@/types/provider";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 type TabType = "overview" | "providers" | "partners" | "reach";
 
@@ -60,6 +63,8 @@ export default function SchoolDetailsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const [showProviderModal, setShowProviderModal] = useState(false);
+  const [selectedProviderEmail, setSelectedProviderEmail] = useState("");
 
   const disableSchoolMutation = useDisableSchool();
 
@@ -185,10 +190,8 @@ export default function SchoolDetailsPage() {
   };
 
   const handleProviderClick = (provider: SchoolProvider) => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(`provider_${provider.email}`, JSON.stringify(provider));
-    }
-    router.push(`${ROUTES.curator.providerDetails}/${encodeURIComponent(provider.email)}`);
+    setSelectedProviderEmail(provider.email);
+    setShowProviderModal(true);
   };
 
   const handleSchoolUpdated = async () => {
@@ -393,6 +396,36 @@ export default function SchoolDetailsPage() {
           />
         </>
       )}
+
+      {/* Provider Details Modal */}
+      <ProviderDetailsModal
+        isOpen={showProviderModal}
+        onClose={() => setShowProviderModal(false)}
+        providerEmail={selectedProviderEmail}
+        provider={
+          providers.find((p) => p.email === selectedProviderEmail)
+            ? (() => {
+                const foundProvider = providers.find(
+                  (p) => p.email === selectedProviderEmail
+                )!;
+                return {
+                  id: foundProvider.id,
+                  email: foundProvider.email,
+                  fullName: formatProviderName(foundProvider.providerName, foundProvider.providerTitle),
+                  providerTitle: foundProvider.providerTitle || undefined,
+                  professionalTitle: foundProvider.specialty || undefined,
+                  profileImage: foundProvider.profilePhotoURL || undefined,
+                  createdAt: "",
+                  updatedAt: "",
+                  applicationStatus: foundProvider.applicationStatus as "PENDING" | "APPROVED" | "REJECTED",
+                  applicationDate: "",
+                  bio: undefined,
+                  officePhoneNumber: foundProvider.officePhoneNumber || undefined,
+                } as ProviderDetails;
+              })()
+            : undefined
+        }
+      />
         </WidthConstraint>
   );
 }

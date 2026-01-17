@@ -4,10 +4,12 @@ import Image from "next/image";
 import { Users, Handshake, TrendingUp, Calendar, Quote } from "lucide-react";
 import { MdSchool, MdLocationOn } from "react-icons/md";
 import { School } from "@/types/school";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 interface SchoolProvider {
   id: string;
   providerName: string;
+  providerTitle?: string | null;
   email: string;
   specialty: string | null;
   officePhoneNumber: string | null;
@@ -143,7 +145,7 @@ export const ProvidersTab = ({ providers, isLoading, onProviderClick }: Provider
               )}
               <div className="flex-1 min-w-0">
                 <h4 className="font-semibold text-gray-900 truncate group-hover:text-[#955aa4]">
-                  {provider.providerName}
+                  {formatProviderName(provider.providerName, provider.providerTitle)}
                 </h4>
                 {provider.specialty && (
                   <p className="text-sm text-gray-600 truncate">{provider.specialty}</p>

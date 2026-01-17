@@ -1,5 +1,6 @@
 export interface IProvider {
   providerName: string;
+  providerTitle?: string | null;
   email: string;
   specialty: string;
   officePhoneNumber: string;

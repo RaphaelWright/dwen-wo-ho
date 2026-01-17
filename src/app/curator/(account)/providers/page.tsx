@@ -8,6 +8,7 @@ import ProviderCard from "@/components/curator/provider-card";
 import { useProvidersQuery, Provider } from "@/hooks/queries/useProvidersQuery";
 import { IProvider } from "@/types/provider.type";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 export default function ProvidersPage() {
   const [filter, setFilter] = useState("All");
@@ -26,6 +27,7 @@ export default function ProvidersPage() {
     id: provider.email,
     email: provider.email,
     providerName: provider.providerName,
+    providerTitle: provider.providerTitle || undefined,
     profilePhotoURL: provider.profilePhotoURL || undefined,
     specialty: provider.specialty || "",
     applicationStatus: provider.applicationStatus,
@@ -70,7 +72,9 @@ export default function ProvidersPage() {
   };
 
   const getProviderName = (email: string) => {
-    return providersList.find((p) => p.email === email)?.providerName || "";
+    const provider = providersList.find((p) => p.email === email);
+    if (!provider) return "";
+    return formatProviderName(provider.providerName, provider.providerTitle);
   };
 
   const filteredProviders = providersList?.filter((provider) => {
@@ -244,7 +248,8 @@ export default function ProvidersPage() {
                   return {
                     id: foundProvider.email,
                     email: foundProvider.email,
-                    fullName: foundProvider.providerName,
+                    fullName: formatProviderName(foundProvider.providerName, foundProvider.providerTitle),
+                    providerTitle: foundProvider.providerTitle || undefined,
                     professionalTitle: foundProvider.specialty || undefined,
                     profileImage: foundProvider.profilePhotoURL || undefined,
                     officePhoneNumber: foundProvider.officePhoneNumber || undefined,

@@ -24,11 +24,13 @@ import {
   Camera,
 } from "lucide-react";
 import Image from "next/image";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 interface ProviderDetails {
   id: string;
   email: string;
   fullName: string;
+  providerTitle?: string | null;
   professionalTitle: string;
   // status: "PENDING" | "APPROVED" | "REJECTED";
   officePhoneNumber?: string;
@@ -104,7 +106,8 @@ const ProviderDetails = () => {
             setProvider({
               id: fallbackData.email || "",
               email: fallbackData.email || "",
-              fullName: fallbackData.providerName || "",
+              fullName: formatProviderName(fallbackData.providerName || "", fallbackData.providerTitle),
+              providerTitle: fallbackData.providerTitle || undefined,
               professionalTitle: fallbackData.specialty || "",
               officePhoneNumber: fallbackData.officePhoneNumber || undefined,
               status: (fallbackData.applicationStatus as "PENDING" | "APPROVED" | "REJECTED") || "PENDING",
@@ -226,8 +229,8 @@ const ProviderDetails = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Provider Not Found
           </h1>
-          <Button onClick={() => router.push(ROUTES.curator.dashboard)}>
-            Back to Dashboard
+          <Button onClick={() => router.push(ROUTES.curator.providers)}>
+            Back to Providers
           </Button>
         </div>
       </div>
@@ -247,12 +250,12 @@ const ProviderDetails = () => {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <Button
-                onClick={() => router.push(ROUTES.curator.dashboard)}
+                onClick={() => router.push(ROUTES.curator.providers)}
                 variant="outline"
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Back to Dashboard</span>
+                <span>Back to Providers</span>
               </Button>
               <JustGoHealth />
             </div>
@@ -310,7 +313,7 @@ const ProviderDetails = () => {
               {/* Provider Info */}
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {provider.professionalTitle} {provider.fullName}
+                  {provider.professionalTitle ? `${provider.professionalTitle} ` : ""}{provider.fullName}
                 </h1>
                 <div className="flex items-center space-x-2 mb-4">
                   <Mail className="w-5 h-5 text-gray-400" />

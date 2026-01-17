@@ -14,6 +14,7 @@ import { ENDPOINTS } from "@/constants/endpoints";
 import { toast } from "sonner";
 import { School } from "@/types/school";
 import { useQueryClient } from "@tanstack/react-query";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 interface ProviderDetailsModalProps {
   isOpen: boolean;
@@ -209,7 +210,8 @@ const ProviderDetailsModal = ({
     ? {
         id: providerData.id || providerData.email,
         email: providerData.email,
-        fullName: providerData.providerName,
+        fullName: formatProviderName(providerData.providerName, providerData.providerTitle),
+        providerTitle: providerData.providerTitle || undefined,
         professionalTitle: providerData.specialty || "",
         profileImage: providerData.profilePhotoURL || undefined,
         status: providerData.bio || undefined, // Use bio from API if available, otherwise undefined
