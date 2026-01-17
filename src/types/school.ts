@@ -4,6 +4,7 @@ export interface School {
   nickname: string;
   logo: string;
   type: string;
+  motto?: string;
   totalProviders?: number;
   totalPartners?: number;
   campuses: string[] | null;
@@ -15,6 +16,7 @@ export interface ICreateSchool {
   nickname: string;
   type: string;
   baseline: string;
+  motto: string;
   campuses: string[];
   logo: File | null;
 }
@@ -25,6 +27,7 @@ export interface IUpdateSchool {
   nickname?: string;
   type?: string;
   baseline?: string;
+  motto?: string;
   campuses?: string[];
   logo?: File | null;
 }

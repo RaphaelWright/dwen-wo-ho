@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { timeAgo } from "@/lib/utils/timeAgo";
 import { Provider } from "@/hooks/queries/useProvidersQuery";
-import { FiCheck, FiX, FiChevronRight } from "react-icons/fi";
+import { FiCheck, FiX } from "react-icons/fi";
 
 interface ProviderCardProps {
   provider: Provider;
@@ -12,6 +12,7 @@ interface ProviderCardProps {
   onShowRejectModal: (email: string) => void;
   isModerating?: boolean;
   currentAction?: "approving" | "rejecting" | null;
+  moderatingProviderEmail?: string | null;
 }
 
 const ProviderCard = ({ 
@@ -21,6 +22,7 @@ const ProviderCard = ({
   onShowRejectModal,
   isModerating = false,
   currentAction = null,
+  moderatingProviderEmail = null,
 }: ProviderCardProps) => {
   const defaultImage = "/auth/lawyer.jpg";
 
@@ -41,8 +43,18 @@ const ProviderCard = ({
 
   return (
     <div
-      className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-[#955aa4]/50 group hover:scale-[1.02] flex flex-col items-center w-full"
+      className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-[#955aa4]/50 group hover:scale-[1.02] flex flex-col items-center w-full relative"
     >
+      {/* View Details Button - Top Right Corner */}
+      <button
+        onClick={handleViewDetails}
+        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#955aa4] group-hover:text-white transition-all duration-300 shadow-sm z-10"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </button>
+
       {/* Provider Image - Centered at Top */}
       <div className="w-16 h-16 rounded-full overflow-hidden mb-4 ring-4 ring-gray-100 group-hover:ring-[#955aa4]/20 transition-all duration-300">
         <Image
@@ -78,10 +90,10 @@ const ProviderCard = ({
               </div>
               <button
                 onClick={handleRejectClick}
-                disabled={isModerating}
+                disabled={isModerating && moderatingProviderEmail === provider.email}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold text-sm transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {currentAction === "rejecting" ? (
+                {currentAction === "rejecting" && moderatingProviderEmail === provider.email ? (
                   <>
                     <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                     Rejecting...
@@ -98,10 +110,10 @@ const ProviderCard = ({
             <>
               <button
                 onClick={handleApproveClick}
-                disabled={isModerating}
+                disabled={isModerating && moderatingProviderEmail === provider.email}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {currentAction === "approving" ? (
+                {currentAction === "approving" && moderatingProviderEmail === provider.email ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Approving...
@@ -122,10 +134,10 @@ const ProviderCard = ({
             <>
             <button
                 onClick={handleApproveClick}
-              disabled={isModerating}
+              disabled={isModerating && moderatingProviderEmail === provider.email}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {currentAction === "approving" ? (
+              {currentAction === "approving" && moderatingProviderEmail === provider.email ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Approving...
@@ -139,10 +151,10 @@ const ProviderCard = ({
             </button>
             <button
                 onClick={handleRejectClick}
-              disabled={isModerating}
+              disabled={isModerating && moderatingProviderEmail === provider.email}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold text-sm transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {currentAction === "rejecting" ? (
+              {currentAction === "rejecting" && moderatingProviderEmail === provider.email ? (
                 <>
                     <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                   Rejecting...
@@ -157,15 +169,6 @@ const ProviderCard = ({
             </>
           )}
           </div>
-
-        {/* View Details Button */}
-            <button
-          onClick={handleViewDetails}
-          className="mt-3 text-sm text-gray-600 hover:text-[#955aa4] transition-colors underline flex items-center gap-1"
-            >
-          View Details
-          <FiChevronRight className="w-4 h-4" />
-            </button>
       </div>
     </div>
   );

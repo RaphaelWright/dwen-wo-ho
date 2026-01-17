@@ -49,6 +49,7 @@ export default function DashboardLayout({
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("curatorToken");
+    localStorage.removeItem("refreshToken");
     router.push(ROUTES.provider.auth);
   };
 

@@ -32,6 +32,7 @@ const schoolTypes = ["JHS", "SHS", "NMTC", "University"];
 type SchoolFormData = {
   name: string;
   nickname: string;
+  motto: string;
   campuses: string[];
   type: string;
   logo: File | undefined;
@@ -48,6 +49,7 @@ const SchoolCreationModal = ({
   const [formData, setFormData] = useState<SchoolFormData>({
     name: "",
     nickname: "",
+    motto: "",
     campuses: [] as string[],
     type: "",
     logo: undefined,
@@ -89,7 +91,7 @@ const SchoolCreationModal = ({
   };
 
   const handleNext = () => {
-    if (!formData.name || !formData.type) {
+    if (!formData.name || !formData.type || !formData.motto.trim()) {
       return;
     }
     setCurrentStep(2);
@@ -105,6 +107,7 @@ const SchoolCreationModal = ({
       nickname: formData.nickname,
       type: formData.type,
       baseline: "",
+      motto: formData.motto,
       campuses: selectedCampuses,
       logo: formData.logo ?? null,
     };
@@ -122,6 +125,7 @@ const SchoolCreationModal = ({
     setFormData({
       name: "",
       nickname: "",
+      motto: "",
       campuses: [],
       type: "",
       logo: undefined,
@@ -135,7 +139,7 @@ const SchoolCreationModal = ({
     onClose();
   };
 
-  const isFormValid = formData.name.trim() !== "" && formData.type !== "";
+  const isFormValid = formData.name.trim() !== "" && formData.type !== "" && formData.motto.trim() !== "";
 
   return (
     <AnimatePresence>
@@ -256,6 +260,20 @@ const SchoolCreationModal = ({
                         placeholder="e.g. Motown"
                       />
                     </div>
+                  </div>
+
+                  {/* Motto */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Motto <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={formData.motto}
+                      onChange={(e) => handleInputChange("motto", e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
+                      placeholder="Enter school motto"
+                      rows={3}
+                    />
                   </div>
 
                 {/* Type */}
@@ -448,6 +466,11 @@ const SchoolCreationModal = ({
                           {formData.nickname && (
                             <p className="text-lg text-gray-600 font-medium">
                               &quot;{formData.nickname}&quot;
+                            </p>
+                          )}
+                          {formData.motto && (
+                            <p className="text-sm text-gray-500 italic mt-1">
+                              &quot;{formData.motto}&quot;
                             </p>
                           )}
                           <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-[#955aa4]/10 text-[#955aa4]">

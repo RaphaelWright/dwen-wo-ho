@@ -14,6 +14,7 @@ const PUBLIC_ENDPOINTS = [
   "/api/v1/auth/recover-account",
   "/api/v1/auth/submit-account-recovery-code",
   "/api/v1/auth/reset-password",
+  "/api/v1/auth/refresh-token",
 ];
 
 const isPublicEndpoint = (url: string): boolean => {

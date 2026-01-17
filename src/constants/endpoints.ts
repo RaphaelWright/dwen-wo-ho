@@ -12,6 +12,7 @@ export const ENDPOINTS = {
   recoverAccount: "/api/v1/auth/recover-account",
   submitAccountRecoveryCode: "/api/v1/auth/submit-account-recovery-code",
   resetPassword: "/api/v1/auth/reset-password",
+  refreshToken: "/api/v1/auth/refresh-token",
 
   // Specialties endpoints
   specialties: "/api/v1/specialties",
@@ -21,10 +22,10 @@ export const ENDPOINTS = {
   provider: (email: string) => `/api/v1/providers/${email}`,
   approveProvider: (email: string) => `/api/v1/providers/${email}/approve`,
   rejectProvider: (email: string) => `/api/v1/providers/${email}/reject`,
-  addSchoolToProvider: (email: string) => `/api/v1/providers/${email}/add-school`,
-  removeSchoolFromProvider: (email: string) => `/api/v1/providers/${email}/remove-school`,
-  addPartnerToProvider: (email: string) => `/api/v1/providers/${email}/add-partner`,
-  removePartnerFromProvider: (email: string) => `/api/v1/providers/${email}/remove-partner`,
+  addSchoolToProvider: (schoolId: string | number, providerEmail: string) => `/api/v1/schools/${schoolId}/add-provider?providerEmail=${providerEmail}`,
+  removeSchoolFromProvider: (schoolId: string | number, providerEmail: string) => `/api/v1/schools/${schoolId}/remove-provider?providerEmail=${providerEmail}`,
+  addPartnerToProvider: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/add-provider?providerId=${providerId}`,
+  removePartnerFromProvider: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
 
   // Schools endpoints
   schools: "/api/v1/schools",

@@ -64,15 +64,43 @@ export default function SchoolDetailsPage() {
   const disableSchoolMutation = useDisableSchool();
 
   useEffect(() => {
+    const parseCampuses = (campuses: string[] | null | undefined): string[] => {
+      if (!campuses || campuses.length === 0) {
+        return [];
+      }
+
+      return campuses.flatMap((campus) => {
+        // Handle stringified arrays like '["Cape Coast"]'
+        if (typeof campus === "string" && campus.trim().startsWith("[")) {
+          try {
+            const parsed = JSON.parse(campus);
+            return Array.isArray(parsed) ? parsed : [campus];
+          } catch {
+            return [campus];
+          }
+        }
+        return [campus];
+      });
+    };
+
     const loadSchoolDetails = async () => {
       setIsLoading(true);
       setError(null);
       try {
         const response = await api(ENDPOINTS.school(schoolId));
         if (response?.success && response.data) {
-          setSchool(response.data);
+          const schoolData = response.data;
+          // Parse campuses if they exist
+          if (schoolData.campuses) {
+            schoolData.campuses = parseCampuses(schoolData.campuses);
+          }
+          setSchool(schoolData);
         } else if (Array.isArray(response) && response.length > 0) {
-          setSchool(response[0]);
+          const schoolData = response[0];
+          if (schoolData.campuses) {
+            schoolData.campuses = parseCampuses(schoolData.campuses);
+          }
+          setSchool(schoolData);
         } else {
           setError("Failed to load school details");
         }
@@ -193,7 +221,7 @@ export default function SchoolDetailsPage() {
     { id: "overview" as TabType, label: "Overview", icon: MdSchool },
     { id: "providers" as TabType, label: "Providers", icon: Users, count: providers.length },
     { id: "partners" as TabType, label: "Partners", icon: Handshake, count: partners.length },
-    { id: "reach" as TabType, label: "Reach", icon: TrendingUp },
+    { id: "reach" as TabType, label: "Reach", icon: TrendingUp, count: reach?.reach },
   ];
 
   if (isLoading) {
@@ -318,7 +346,7 @@ export default function SchoolDetailsPage() {
                 >
                   <tab.icon className="w-5 h-5" />
                   {tab.label}
-                  {tab.count !== undefined && (
+                  {tab.count !== undefined && tab.count !== null && (
                     <span className="px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium">
                       {tab.count}
                     </span>

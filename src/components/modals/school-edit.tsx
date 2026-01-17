@@ -32,6 +32,7 @@ const schoolTypes = ["JHS", "SHS", "NMTC", "University"];
 type SchoolFormData = {
   name: string;
   nickname: string;
+  motto: string;
   campuses: string[];
   type: string;
   logo: File | null;
@@ -49,6 +50,7 @@ const SchoolEditModal = ({
   const [formData, setFormData] = useState<SchoolFormData>({
     name: "",
     nickname: "",
+    motto: "",
     campuses: [],
     type: "",
     logo: null,
@@ -67,6 +69,7 @@ const SchoolEditModal = ({
       setFormData({
         name: school.name || "",
         nickname: school.nickname || "",
+        motto: school.motto || "",
         campuses: school.campuses || [],
         type: school.type || "",
         logo: null,
@@ -120,6 +123,7 @@ const SchoolEditModal = ({
         nickname: formData.nickname,
         type: formData.type,
         baseline: "",
+        motto: formData.motto,
         campuses: selectedCampuses,
         logo: formData.logo,
       },
@@ -198,6 +202,20 @@ const SchoolEditModal = ({
                         placeholder="e.g. Motown"
                       />
                     </div>
+                  </div>
+
+                  {/* Motto */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Motto <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      value={formData.motto}
+                      onChange={(e) => handleInputChange("motto", e.target.value)}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
+                      placeholder="Enter school motto"
+                      rows={3}
+                    />
                   </div>
 
                   <div className="flex items-center gap-6">

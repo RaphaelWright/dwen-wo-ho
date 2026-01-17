@@ -14,6 +14,7 @@ const PUBLIC_ENDPOINTS = [
   "/api/v1/auth/recover-account",
   "/api/v1/auth/submit-account-recovery-code",
   "/api/v1/auth/reset-password",
+  "/api/v1/auth/refresh-token",
 ];
 
 const isPublicEndpoint = (endpoint: string): boolean => {
@@ -71,7 +72,12 @@ const parseSuccessResponse = async (response: Response) => {
   const contentType = response.headers.get("content-type");
   if (contentType?.includes("application/json")) {
     const data = await response.json();
-    return { success: true, message: data.message, data: data.data };
+    // Handle cases where token/userData might be at root level or in data property
+    return { 
+      success: true, 
+      message: data.message, 
+      data: data.data || data // Fallback to root data if data.data is undefined
+    };
   }
   return { success: true, message: "Success", data: null };
 };
