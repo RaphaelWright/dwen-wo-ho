@@ -224,6 +224,7 @@ export default function ProvidersPage() {
                 onShowRejectModal={handleShowRejectModal}
                 isModerating={currentAction !== null}
                 currentAction={currentAction}
+                moderatingProviderEmail={modalProviderEmail}
               />
             ))
           )}
@@ -258,6 +259,7 @@ export default function ProvidersPage() {
           onShowRejectModal={handleShowRejectModal}
           isModerating={currentAction !== null}
           currentAction={currentAction}
+          moderatingProviderEmail={modalProviderEmail}
         />
 
         {/* Approve Confirmation Modal */}

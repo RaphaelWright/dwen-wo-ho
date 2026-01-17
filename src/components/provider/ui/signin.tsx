@@ -81,6 +81,7 @@ const SignInContent = ({
     // Clear tokens before attempting new login to prevent stale state
     localStorage.removeItem("token");
     localStorage.removeItem("curatorToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("pendingUser");
 
     try {
@@ -100,6 +101,12 @@ const SignInContent = ({
             if (userData?.userRole === "ROLE_CURATOR") {
               localStorage.setItem("curatorToken", token);
             }
+          }
+
+          // Store refresh token if available
+          const refreshTokenValue = response.data?.refreshToken;
+          if (refreshTokenValue) {
+            localStorage.setItem("refreshToken", refreshTokenValue);
           }
 
           // Check for pending status
@@ -196,21 +203,10 @@ const SignInContent = ({
             return;
           }
 
-          // If status is REJECTED or unknown, show pending modal
+          // If status is REJECTED, allow sign-in but redirect to home (pending page)
           if (userData.applicationStatus === "REJECTED") {
-            setUserInfo({
-              name: userData.providerName || "Provider",
-              title:
-                (userData as any).professionalTitle ||
-                userData.specialty ||
-                "Health Provider",
-              timeAgo: "Recently",
-              profileImage:
-                userData.profilePhotoURL ||
-                userData.profileURL ||
-                undefined,
-            } as any);
-            setShowPendingModal(true);
+            setIsRedirecting(true);
+            router.push(ROUTES.provider.home);
             return;
           }
 

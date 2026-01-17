@@ -222,6 +222,8 @@ const CuratorDashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("curatorToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     router.push(ROUTES.provider.auth);
   };
 

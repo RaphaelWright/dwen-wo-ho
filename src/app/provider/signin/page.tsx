@@ -80,6 +80,12 @@ const SignInContent = () => {
           console.log("⚠️ No token in response");
         }
 
+        // Store refresh token if available
+        if (response?.data?.refreshToken) {
+          console.log("🔑 Refresh token received, storing in localStorage");
+          localStorage.setItem("refreshToken", response?.data?.refreshToken);
+        }
+
         // Check for pending status (comprehensive check)
         const userData = response?.data;
         const isPending =

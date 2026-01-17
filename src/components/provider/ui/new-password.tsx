@@ -51,28 +51,48 @@ const NewPasswordContent = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
-    console.log(values);
     try {
       const response = await api(ENDPOINTS.resetPassword, {
         method: "POST",
         body: JSON.stringify({
+          email: email,
           password: values.password,
           confirmPassword: values.repeatPassword as string,
         }),
       });
 
       if (response.success) {
-        console.log(response);
+        // Auto sign-in after password reset
+        const token = response.data?.token;
+        const userData = response.data?.userData || response.data;
+        
+        if (token) {
+          localStorage.setItem("token", token);
+          if (userData?.userRole === "ROLE_CURATOR") {
+            localStorage.setItem("curatorToken", token);
+          }
+        }
+
+        // Store refresh token if available
+        const refreshTokenValue = response.data?.refreshToken;
+        if (refreshTokenValue) {
+          localStorage.setItem("refreshToken", refreshTokenValue);
+        }
+
+        // Redirect based on application status
+        if (userData?.applicationStatus === "APPROVED") {
+          router.push(ROUTES.provider.profile);
+        } else {
+          router.push(ROUTES.provider.home);
+        }
       } else {
-        console.error(response.message || "The provided email is invalid");
+        console.error(response.message || "Password reset failed");
       }
     } catch (error) {
       const errorMsg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error as any).response?.data?.message || "Sign in failed. Please try again.";
+        (error as any)?.response?.data?.message || "Password reset failed. Please try again.";
       console.error(errorMsg);
-    } finally {
-      // setIsLoading(false);
     }
   };
 

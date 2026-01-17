@@ -53,6 +53,7 @@ const createSchool = async (data: ICreateSchool): Promise<School> => {
   formData.append("nickname", data.nickname);
   formData.append("type", data.type);
   formData.append("baseline", data.baseline);
+  formData.append("motto", data.motto);
   formData.append("campuses", JSON.stringify(data.campuses));
   
   if (data.logo) {
@@ -69,11 +70,11 @@ const updateSchool = async (data: IUpdateSchool): Promise<School> => {
   if (data.nickname !== undefined) formData.append("nickname", data.nickname);
   if (data.type !== undefined) formData.append("type", data.type);
   if (data.baseline !== undefined) formData.append("baseline", data.baseline);
+  if (data.motto !== undefined) formData.append("motto", data.motto);
   if (data.campuses !== undefined) formData.append("campuses", JSON.stringify(data.campuses));
   if (data.logo) formData.append("logo", data.logo);
 
-  // const response = await axiosFormData.put(ENDPOINTS.updateSchool(data.id), formData);
-  const response = await axiosFormData.post(ENDPOINTS.updateSchool(data.id), formData);
+  const response = await axiosFormData.put(ENDPOINTS.updateSchool(data.id), formData);
   return checkResponse(response, 200);
 };
 

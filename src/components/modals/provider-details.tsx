@@ -23,6 +23,7 @@ interface ProviderDetailsModalProps {
   onShowRejectModal?: (email: string) => void;
   isModerating?: boolean;
   currentAction?: "approving" | "rejecting" | null;
+  moderatingProviderEmail?: string | null;
 }
 
 type TabType = "overview" | "schools" | "partners";
@@ -36,6 +37,7 @@ const ProviderDetailsModal = ({
   onShowRejectModal,
   isModerating = false,
   currentAction = null,
+  moderatingProviderEmail = null,
 }: ProviderDetailsModalProps) => {
   const { useProvider, approveProvider, rejectProvider } = useProvidersQuery();
   const { data: providerData, isLoading: isQueryLoading } = useProvider(providerEmail);
@@ -215,9 +217,8 @@ const ProviderDetailsModal = ({
 
   const handleAddSchool = async (school: AssociatedSchool) => {
     try {
-      const response = await api(ENDPOINTS.addSchoolToProvider(providerEmail), {
+      const response = await api(ENDPOINTS.addSchoolToProvider(school.id, providerEmail), {
         method: "POST",
-        body: JSON.stringify({ schoolId: school.id }),
       });
       
       if (response?.success) {
@@ -233,9 +234,8 @@ const ProviderDetailsModal = ({
 
   const handleRemoveSchool = async (school: AssociatedSchool) => {
     try {
-      const response = await api(ENDPOINTS.removeSchoolFromProvider(providerEmail), {
+      const response = await api(ENDPOINTS.removeSchoolFromProvider(school.id, providerEmail), {
         method: "POST",
-        body: JSON.stringify({ schoolId: school.id }),
       });
       
       if (response?.success) {
@@ -251,9 +251,9 @@ const ProviderDetailsModal = ({
 
   const handleAddPartner = async (partner: AssociatedPartner) => {
     try {
-      const response = await api(ENDPOINTS.addPartnerToProvider(providerEmail), {
+      const providerId = provider?.id || providerEmail;
+      const response = await api(ENDPOINTS.addPartnerToProvider(partner.id, providerId), {
         method: "POST",
-        body: JSON.stringify({ partnerId: partner.id }),
       });
       
       if (response?.success) {
@@ -269,9 +269,9 @@ const ProviderDetailsModal = ({
 
   const handleRemovePartner = async (partner: AssociatedPartner) => {
     try {
-      const response = await api(ENDPOINTS.removePartnerFromProvider(providerEmail), {
+      const providerId = provider?.id || providerEmail;
+      const response = await api(ENDPOINTS.removePartnerFromProvider(partner.id, providerId), {
         method: "POST",
-        body: JSON.stringify({ partnerId: partner.id }),
       });
       
       if (response?.success) {
@@ -774,10 +774,10 @@ const ProviderDetailsModal = ({
                 <div className="flex gap-2 flex-1">
                   <button
                     onClick={handleApproveClick}
-                    disabled={isModerating}
+                    disabled={isModerating && moderatingProviderEmail === providerEmail}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {currentAction === "approving" ? (
+                    {currentAction === "approving" && moderatingProviderEmail === providerEmail ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         Approving...
@@ -791,10 +791,10 @@ const ProviderDetailsModal = ({
                   </button>
                   <button
                     onClick={handleRejectClick}
-                    disabled={isModerating}
+                    disabled={isModerating && moderatingProviderEmail === providerEmail}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {currentAction === "rejecting" ? (
+                    {currentAction === "rejecting" && moderatingProviderEmail === providerEmail ? (
                       <>
                         <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                         Rejecting...
@@ -816,10 +816,10 @@ const ProviderDetailsModal = ({
                   </div>
                   <button
                     onClick={handleRejectClick}
-                    disabled={isModerating}
+                    disabled={isModerating && moderatingProviderEmail === providerEmail}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {currentAction === "rejecting" ? (
+                    {currentAction === "rejecting" && moderatingProviderEmail === providerEmail ? (
                       <>
                         <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
                         Rejecting...
@@ -837,10 +837,10 @@ const ProviderDetailsModal = ({
                 <div className="flex gap-2 flex-1">
                   <button
                     onClick={handleApproveClick}
-                    disabled={isModerating}
+                    disabled={isModerating && moderatingProviderEmail === providerEmail}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {currentAction === "approving" ? (
+                    {currentAction === "approving" && moderatingProviderEmail === providerEmail ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         Approving...

@@ -66,6 +66,12 @@ const SignUpVerification = ({
           console.log("🔑 Token received, storing in localStorage:", token.substring(0, 10) + "...");
           localStorage.setItem("token", token);
 
+          // Store refresh token if available
+          const refreshTokenValue = verifyResponse.data?.refreshToken;
+          if (refreshTokenValue) {
+            localStorage.setItem("refreshToken", refreshTokenValue);
+          }
+
           // Show success message
           toast.success("Account verified successfully");
 
