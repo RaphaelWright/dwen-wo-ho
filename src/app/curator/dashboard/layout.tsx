@@ -13,19 +13,17 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
-      return !!(token || curatorToken);
+      const refreshToken = localStorage.getItem("refreshToken");
+      return !!refreshToken;
     }
     return null;
   });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
+      const refreshToken = localStorage.getItem("refreshToken");
       
-      if (!token && !curatorToken) {
+      if (!refreshToken) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;

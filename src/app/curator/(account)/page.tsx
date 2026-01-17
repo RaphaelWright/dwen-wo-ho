@@ -8,10 +8,9 @@ const CuratorDashboard = () => {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
+      const refreshToken = localStorage.getItem("refreshToken");
       
-      if (token || curatorToken) {
+      if (refreshToken) {
         router.replace(ROUTES.curator.schools);
       } else {
         router.replace(ROUTES.provider.auth);
@@ -23,10 +22,9 @@ const CuratorDashboard = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && isChecking) {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
+      const refreshToken = localStorage.getItem("refreshToken");
       
-      if (token || curatorToken) {
+      if (refreshToken) {
         router.replace(ROUTES.curator.schools);
       } else {
         router.replace(ROUTES.provider.auth);

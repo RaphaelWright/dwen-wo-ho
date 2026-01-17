@@ -47,8 +47,8 @@ const ProviderDetails = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token") || localStorage.getItem("curatorToken");
-      return !!token;
+      const refreshToken = localStorage.getItem("refreshToken");
+      return !!refreshToken;
     }
     return null;
   });
@@ -58,8 +58,8 @@ const ProviderDetails = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token") || localStorage.getItem("curatorToken");
-      if (!token) {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;
@@ -73,10 +73,10 @@ const ProviderDetails = () => {
     
     const loadProvider = async () => {
       try {
-        const token = localStorage.getItem("token") || localStorage.getItem("curatorToken") || "";
+        const refreshToken = localStorage.getItem("refreshToken") || "";
 
         const response = await api(ENDPOINTS.provider(email), {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${refreshToken}` },
         });
 
         if (response.success) {
@@ -132,10 +132,10 @@ const ProviderDetails = () => {
     setSuccessMessage("");
 
     try {
-      const token = localStorage.getItem("curatorToken") || "";
+      const refreshToken = localStorage.getItem("refreshToken") || "";
       const response = await api(ENDPOINTS.approveProvider(email), {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${refreshToken}` },
       });
 
       if (response.success) {
@@ -162,10 +162,10 @@ const ProviderDetails = () => {
     setSuccessMessage("");
 
     try {
-      const token = localStorage.getItem("curatorToken") || "";
+      const refreshToken = localStorage.getItem("refreshToken") || "";
       const response = await api(ENDPOINTS.rejectProvider(email), {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${refreshToken}` },
       });
 
       if (response.success) {

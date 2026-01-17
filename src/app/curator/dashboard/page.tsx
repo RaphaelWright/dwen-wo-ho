@@ -187,14 +187,14 @@ const CuratorDashboard = () => {
   useEffect(() => {
     const loadProviders = async () => {
       try {
-        const token = localStorage.getItem("token") || localStorage.getItem("curatorToken");
-        if (!token) {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
           router.push(ROUTES.provider.auth);
           return;
         }
 
         const response = await api(ENDPOINTS.providers, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${refreshToken}` },
         });
 
         if (response?.success && response.data) {

@@ -33,16 +33,16 @@ export const axiosFormData = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Request interceptor - Add auth token to all requests
+// Request interceptor - Add refresh token to all requests
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token =
+    const refreshToken =
       typeof window !== "undefined"
-        ? localStorage.getItem("token") || localStorage.getItem("curatorToken")
+        ? localStorage.getItem("refreshToken")
         : null;
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (refreshToken) {
+      config.headers.Authorization = `Bearer ${refreshToken}`;
     }
 
     return config;
@@ -52,16 +52,16 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Request interceptor for form data - Add auth token
+// Request interceptor for form data - Add refresh token
 axiosFormData.interceptors.request.use(
   (config) => {
-    const token =
+    const refreshToken =
       typeof window !== "undefined"
-        ? localStorage.getItem("token") || localStorage.getItem("curatorToken")
+        ? localStorage.getItem("refreshToken")
         : null;
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (refreshToken) {
+      config.headers.Authorization = `Bearer ${refreshToken}`;
     }
 
     return config;
