@@ -4,6 +4,7 @@ import Image from "next/image";
 import { timeAgo } from "@/lib/utils/timeAgo";
 import { Provider } from "@/hooks/queries/useProvidersQuery";
 import { FiCheck, FiX } from "react-icons/fi";
+import { formatProviderName } from "@/lib/utils/formatProviderName";
 
 interface ProviderCardProps {
   provider: Provider;
@@ -59,7 +60,7 @@ const ProviderCard = ({
       <div className="w-16 h-16 rounded-full overflow-hidden mb-4 ring-4 ring-gray-100 group-hover:ring-[#955aa4]/20 transition-all duration-300">
         <Image
           src={provider.profilePhotoURL || defaultImage}
-          alt={provider.providerName}
+          alt={formatProviderName(provider.providerName, provider.providerTitle)}
           width={64}
           height={64}
           className="w-full h-full object-cover"
@@ -69,7 +70,7 @@ const ProviderCard = ({
       {/* Provider Info - Centered */}
       <div className="text-center w-full">
         <h3 className="font-bold text-gray-900 group-hover:text-[#955aa4] transition-colors text-lg mb-2 truncate px-1">
-          {provider.providerName}
+          {formatProviderName(provider.providerName, provider.providerTitle)}
         </h3>
         <p className="text-gray-600 text-sm mb-3 truncate px-1">
           {provider.specialty || "General Practice"}

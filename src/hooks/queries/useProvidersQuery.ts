@@ -9,6 +9,7 @@ export interface Provider {
   id?: string;
   email: string;
   providerName: string;
+  providerTitle?: string | null;
   profilePhotoURL?: string | null;
   specialty?: string | null;
   officePhoneNumber?: string | null;

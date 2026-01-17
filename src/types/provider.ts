@@ -2,6 +2,7 @@ export interface ProviderDetails {
   id: string;
   email: string;
   fullName: string;
+  providerTitle?: string | null;
   professionalTitle?: string | null;
   status?: string;
   officePhoneNumber?: string | null;
