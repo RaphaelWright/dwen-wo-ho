@@ -114,7 +114,7 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onSchoolCreated={() => {
-          console.log("School created:", schools);
+          // console.log("School created:", schools);
           setShowSchoolModal(false);
           setShowCreateModal(true);
         }}
@@ -127,7 +127,7 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onMemberCreated={(member) => {
-          console.log("Member created:", member);
+          // console.log("Member created:", member);
           setShowMemberModal(false);
           setShowCreateModal(true);
         }}
@@ -140,7 +140,7 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onPartnerCreated={(partner) => {
-          console.log("Partner created:", partner);
+          // console.log("Partner created:", partner);
           setShowPartnerModal(false);
           setShowCreateModal(true);
         }}

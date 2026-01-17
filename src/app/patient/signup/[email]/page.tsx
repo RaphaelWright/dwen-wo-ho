@@ -7,6 +7,7 @@ import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
 import { formatTime, signUpSteps } from "@/lib/utils";
 import Stepper from "@/components/stepper";
+import { ROUTES } from "@/constants/routes";
 
 const Verify = () => {
   const [isRunning, setIsRunning] = useState(true);
@@ -49,7 +50,7 @@ const Verify = () => {
         <div className="mt-5 text-center">
           <InputOTP
             maxLength={6}
-            onComplete={(value) => console.log(value)}
+            onComplete={(value) => router.push(`${ROUTES.patient.newPassword}?email=${email}`)}
             size={40}
           >
             <InputOTPSlot index={0} className="otp-slot" />

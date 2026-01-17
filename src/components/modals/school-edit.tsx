@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Upload, X, MapPin } from "lucide-react";
+import { ChevronDown, X, MapPin } from "lucide-react";
 import Image from "next/image";
 import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/types/school";
@@ -35,8 +35,6 @@ type SchoolFormData = {
   motto: string;
   campuses: string[];
   type: string;
-  logo: File | null;
-  existingLogo: string;
 };
 
 const SchoolEditModal = ({
@@ -53,8 +51,6 @@ const SchoolEditModal = ({
     motto: "",
     campuses: [],
     type: "",
-    logo: null,
-    existingLogo: "",
   });
 
   const updateSchoolMutation = useUpdateSchool();
@@ -72,8 +68,6 @@ const SchoolEditModal = ({
         motto: school.motto || "",
         campuses: school.campuses || [],
         type: school.type || "",
-        logo: null,
-        existingLogo: school.logo || "",
       });
       setSelectedCampuses(school.campuses || []);
     }
@@ -94,20 +88,6 @@ const SchoolEditModal = ({
     );
   };
 
-  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        logo: file,
-        existingLogo: "",
-      }));
-    }
-  };
-
-  const handleRemoveLogo = () => {
-    setFormData((prev) => ({ ...prev, logo: null, existingLogo: "" }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +105,7 @@ const SchoolEditModal = ({
         baseline: "",
         motto: formData.motto,
         campuses: selectedCampuses,
-        logo: formData.logo,
+        logo: null,
       },
       {
         onSuccess: () => {
@@ -136,9 +116,6 @@ const SchoolEditModal = ({
     );
   };
 
-  const displayLogo = formData.logo
-    ? URL.createObjectURL(formData.logo)
-    : formData.existingLogo;
 
   return (
     <AnimatePresence>
@@ -302,55 +279,24 @@ const SchoolEditModal = ({
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-700">School Logo</label>
-                    <div className="flex items-center gap-6">
-                      <div className="flex-1">
-                        {displayLogo ? (
-                          <div className="relative inline-block">
+                  {school.logo && (
+                    <div className="space-y-3">
+                      <label className="text-sm font-semibold text-gray-700">School Logo</label>
+                      <div className="flex items-center gap-6">
+                        <div className="flex-1">
+                          <div className="inline-block">
                             <Image
-                              src={displayLogo}
+                              src={school.logo}
                               alt="School logo"
                               width={128}
                               height={128}
                               className="w-32 h-32 object-cover rounded-lg border shadow-sm"
                             />
-                            <button
-                              type="button"
-                              onClick={handleRemoveLogo}
-                              className="absolute top-1 right-1 bg-black/60 hover:bg-black/80 text-white rounded-full p-1"
-                            >
-                              <X size={14} />
-                            </button>
                           </div>
-                        ) : (
-                          <>
-                            <input
-                              type="file"
-                              id="logo-edit-upload"
-                              accept="image/*"
-                              onChange={handleLogoUpload}
-                              className="hidden"
-                            />
-                            <label
-                              htmlFor="logo-edit-upload"
-                              className="w-full h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-[#955aa4]/30 transition-all group"
-                            >
-                              <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <Upload className="w-5 h-5 text-[#955aa4]" />
-                              </div>
-                              <span className="text-sm font-medium text-gray-600 group-hover:text-[#955aa4] transition-colors">
-                                Click to upload logo
-                              </span>
-                              <span className="text-xs text-gray-400 mt-1">
-                                PNG, JPG up to 5MB
-                              </span>
-                            </label>
-                          </>
-                        )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </form>
               </div>
 

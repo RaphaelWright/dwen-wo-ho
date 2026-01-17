@@ -56,7 +56,7 @@ const SignUpContent = () => {
   });
 
   const onSubmit = (values: z.infer<typeof SignUpSchema>) => {
-    console.log(values);
+    // console.log(values);
     loginMutation.mutate(values, {
       onSuccess: () => {
         router.push("/signin");

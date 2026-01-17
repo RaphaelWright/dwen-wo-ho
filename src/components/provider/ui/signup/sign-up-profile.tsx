@@ -159,7 +159,6 @@ const SignUpProfile = ({
             timeAgo: (data as any).applicationDate ? calculateTimeAgo((data as any).applicationDate) : prev.timeAgo,
           }));
 
-          console.log("✅ Profile info updated from Bio step response:", data);
         }
 
         toast.success("Profile updated successfully!");
@@ -180,7 +179,6 @@ const SignUpProfile = ({
     if (currentStep === 2) {
       setIsSubmitting(true);
       try {
-        console.log("Adding specialty...");
         await addSpecialtyMutation.mutateAsync({
           specialty: profileData.specialty,
         });
@@ -189,7 +187,6 @@ const SignUpProfile = ({
 
         // Auto-login if password is available
         if (password) {
-          console.log("Attempting auto-login...");
           try {
             const loginResponse = await loginMutation.mutateAsync({
               email: email,
@@ -201,7 +198,6 @@ const SignUpProfile = ({
               if (token) {
                 localStorage.setItem("token", token);
               }
-              console.log("✅ Auto-login successful, redirecting to provider home");
               router.push(ROUTES.provider.home);
             } else {
               // Login failed logically? Fallback to auth page

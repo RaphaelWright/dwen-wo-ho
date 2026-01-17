@@ -62,12 +62,9 @@ const CreateAccount = ({
 
     setErrorMessage("");
 
-    console.log("=== CREATING ACCOUNT ===");
-    console.log("Email:", values.email);
 
     try {
       // Create Account directly
-      console.log("Calling signupMutation with user details");
 
       const response = await signupMutation.mutateAsync({
         email: values.email,
@@ -76,10 +73,8 @@ const CreateAccount = ({
         professionalTitle: values.title,
       });
 
-      console.log("Signup response:", response);
 
       if (response?.success || response) {
-        console.log("✅ Account created successfully. Verification email sent.");
 
         onNext({
           email: values.email,

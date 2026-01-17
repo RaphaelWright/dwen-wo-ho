@@ -69,12 +69,7 @@ const useAuthQuery = () => {
   });
 
   async function login(data: { email: string; password: string }) {
-    console.log("🔑 login() called");
-    console.log("Request data:", data);
-
     const result = await api(ENDPOINTS.login, { method: "POST", body: JSON.stringify(data) });
-
-    console.log("🔑 login() result:", result);
     return result;
   }
 
@@ -84,21 +79,11 @@ const useAuthQuery = () => {
     fullName: string;
     professionalTitle: string;
   }) {
-    console.log("🔐 signup() called");
-    console.log("Endpoint:", ENDPOINTS.signup);
-    console.log("Request data:", {
-      email: data.email,
-      password: "***REDACTED***",
-      fullName: data.fullName,
-      professionalTitle: data.professionalTitle,
-    });
-
     const result = await api(ENDPOINTS.signup, {
       method: "POST",
       body: JSON.stringify(data),
     });
 
-    console.log("🔐 signup() result:", result);
     return result;
   }
 
@@ -110,29 +95,20 @@ const useAuthQuery = () => {
   }
 
   async function verifyEmail(data: { email: string; code: string }) {
-    console.log("✉️ verifyEmail() called");
-    console.log("Endpoint:", ENDPOINTS.verifyEmail);
-    console.log("Request data:", data);
-
     const result = await api(ENDPOINTS.verifyEmail, {
       method: "POST",
       body: JSON.stringify(data),
     });
 
-    console.log("✉️ verifyEmail() result:", result);
     return result;
   }
 
   async function sendVerificationEmail(data: { email: string }) {
-    console.log("📧 sendVerificationEmail called with:", data);
-    console.log("Endpoint:", ENDPOINTS.sendVerificationEmail);
-
     const result = await api(ENDPOINTS.sendVerificationEmail, {
       method: "POST",
       body: JSON.stringify(data),
     });
 
-    console.log("📧 sendVerificationEmail result:", result);
     return result;
   }
 

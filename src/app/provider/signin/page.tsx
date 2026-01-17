@@ -56,11 +56,11 @@ const SignInContent = () => {
     setIsLoading(true);
     setErrorMessage("");
 
-    console.log("=== SIGN IN STARTED ===");
-    console.log("Email:", values.email);
+    // console.log("=== SIGN IN STARTED ===");
+    // console.log("Email:", values.email);
 
     try {
-      console.log("📧 Attempting sign in...");
+      // console.log("📧 Attempting sign in...");
       const response = await api(ENDPOINTS.login, {
         method: "POST",
         body: JSON.stringify(values),
@@ -69,20 +69,20 @@ const SignInContent = () => {
       console.log("✅ Sign in response:", response);
 
       if (response?.success) {
-        console.log("✅ Sign in successful, processing response...");
-        console.log("📦 Response data:", response?.data);
+        // console.log("✅ Sign in successful, processing response...");
+        // console.log("📦 Response data:", response?.data);
 
         // Store token if needed
         if (response?.data?.token) {
-          console.log("🔑 Token received, storing in localStorage");
+          // console.log("🔑 Token received, storing in localStorage");
           localStorage.setItem("token", response?.data?.token);
         } else {
-          console.log("⚠️ No token in response");
+          // console.log("⚠️ No token in response");
         }
 
         // Store refresh token if available
         if (response?.data?.refreshToken) {
-          console.log("🔑 Refresh token received, storing in localStorage");
+          // console.log("🔑 Refresh token received, storing in localStorage");
           localStorage.setItem("refreshToken", response?.data?.refreshToken);
         }
 
@@ -94,28 +94,15 @@ const SignInContent = () => {
           userData?.isVerified === false ||
           response?.message === "ACCOUNT PENDING";
 
-        console.log("🔍 Pending check:", {
-          applicationStatus: userData?.applicationStatus,
-          status: userData?.status,
-          isVerified: userData?.isVerified,
-          message: response?.message,
-          isPending: isPending
-        });
-
         if (isPending) {
-          console.log("⚠️ User is PENDING, saving to localStorage and redirecting...");
           const userDataStr = JSON.stringify(userData);
-          console.log("💾 Saving pendingUser:", userDataStr);
           localStorage.setItem("pendingUser", userDataStr);
 
           // Verify it was saved
           const savedData = localStorage.getItem("pendingUser");
-          console.log("✓ Verified pendingUser saved:", !!savedData);
 
-          console.log("🔄 Redirecting to:", ROUTES.provider.home);
           router.push(ROUTES.provider.home);
         } else {
-          console.log("✅ User is APPROVED, redirecting to home");
           router.push(ROUTES.provider.home);
         }
       } else {
@@ -130,24 +117,19 @@ const SignInContent = () => {
 
       // Check if error is about incomplete profile
       if (error.message && error.message.includes("Profile is not complete")) {
-        console.log("⚠️ Profile incomplete, redirecting to profile completion");
 
         // Store user email for profile completion
         localStorage.setItem("profileCompletionEmail", values.email);
 
         // Determine which step to redirect to
         if (error.message.includes("upload your profile photo")) {
-          console.log("→ Redirecting to photo step");
           router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`);
         } else if (error.message.includes("office phone number")) {
-          console.log("→ Redirecting to bio step");
           router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=bio`);
         } else if (error.message.includes("add your specialty")) {
-          console.log("→ Redirecting to specialty step");
           router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=specialty`);
         } else {
           // Default to photo step
-          console.log("→ Redirecting to photo step (default)");
           router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`);
         }
       } else {
