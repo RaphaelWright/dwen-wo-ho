@@ -25,10 +25,9 @@ export default function DashboardLayout({
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const curatorToken = localStorage.getItem("curatorToken");
+      const refreshToken = localStorage.getItem("refreshToken");
       
-      if (!token && !curatorToken) {
+      if (!refreshToken) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;

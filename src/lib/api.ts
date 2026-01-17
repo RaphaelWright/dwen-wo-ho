@@ -31,8 +31,8 @@ const prepareRequestBody = (body: unknown): BodyInit | undefined => {
 };
 
 const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, string> => {
-  const token = typeof window !== "undefined" 
-    ? localStorage.getItem("token") || localStorage.getItem("curatorToken")
+  const refreshToken = typeof window !== "undefined" 
+    ? localStorage.getItem("refreshToken")
     : null;
   const headers: Record<string, string> = {
     Accept: "*/*",
@@ -43,8 +43,8 @@ const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, 
     headers["Content-Type"] = "application/json";
   }
 
-  if (token && !headers.Authorization && !isPublicEndpoint(endpoint)) {
-    headers.Authorization = `Bearer ${token}`;
+  if (refreshToken && !headers.Authorization && !isPublicEndpoint(endpoint)) {
+    headers.Authorization = `Bearer ${refreshToken}`;
   }
 
   return headers;
