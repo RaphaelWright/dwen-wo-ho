@@ -40,30 +40,22 @@ const SignUpVerification = ({
   const handleOTPComplete = async (value: string) => {
     setErrorMessage("");
 
-    console.log("=== OTP VERIFICATION STARTED ===");
-    console.log("Email:", email);
-    console.log("Code entered:", value);
-
     try {
       // First, verify the code
-      console.log("🔑 Step 1: Verifying OTP code...");
 
       const verifyResponse = await verifyEmailMutation.mutateAsync({
         code: value,
         email: email.trim(),
       });
 
-      console.log("✅ Verification response:", verifyResponse);
 
       // Check for success using the flag from the response
       if (verifyResponse?.success) {
-        console.log("✅ Verification successful! Proceeding to Profile Setup...");
 
         // Extract token based on the provided JSON structure
         const token = verifyResponse.data?.token;
 
         if (token) {
-          console.log("🔑 Token received, storing in localStorage:", token.substring(0, 10) + "...");
           localStorage.setItem("token", token);
 
           // Store refresh token if available

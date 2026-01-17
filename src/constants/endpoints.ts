@@ -30,7 +30,7 @@ export const ENDPOINTS = {
   // Schools endpoints
   schools: "/api/v1/schools",
   school: (id: string | number) => `/api/v1/schools/${id}`,
-  updateSchool: (id: string | number) => `/api/v1/schools/${id}`,
+  updateSchool: (id: string | number) => `/api/v1/schools/${id}?schoolId=${id}`,
   schoolPartners: (id: string | number) => `/api/v1/schools/${id}/partners`,
   schoolProviders: (id: string | number) => `/api/v1/schools/${id}/providers`,
   schoolReach: (id: string | number) => `/api/v1/schools/${id}/reach`,

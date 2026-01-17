@@ -95,12 +95,6 @@ const PhotoStep = ({ profilePhoto, onChange, onNext, onBack }: PhotoStepProps) =
         return;
       }
 
-      console.log("📸 Cropped Blob Details:", {
-        size: croppedBlob.size,
-        type: croppedBlob.type,
-        dimensions: croppedAreaPixels
-      });
-
       // Convert Blob to File to ensure consistent handling by backend
       const file = new File([croppedBlob], "profile-photo.jpg", { type: "image/jpeg" });
 

@@ -123,5 +123,7 @@ export const handleTokenExpiration = async () => {
 };
 
 export const isAuthError = (status: number): boolean => {
-  return status === 401 || status === 403;
+  // Only 401 (Unauthorized) is an auth error that requires token refresh
+  // 403 (Forbidden) means user is authenticated but lacks permission - don't refresh/logout
+  return status === 401;
 };

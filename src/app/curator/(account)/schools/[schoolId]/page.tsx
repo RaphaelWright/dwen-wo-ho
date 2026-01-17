@@ -219,8 +219,8 @@ export default function SchoolDetailsPage() {
 
   const tabs = [
     { id: "overview" as TabType, label: "Overview", icon: MdSchool },
-    { id: "providers" as TabType, label: "Providers", icon: Users, count: providers.length },
-    { id: "partners" as TabType, label: "Partners", icon: Handshake, count: partners.length },
+    { id: "providers" as TabType, label: "Providers", icon: Users, count: school?.totalProviders ?? providers.length },
+    { id: "partners" as TabType, label: "Partners", icon: Handshake, count: school?.totalPartners ?? partners.length },
     { id: "reach" as TabType, label: "Reach", icon: TrendingUp, count: reach?.reach },
   ];
 

@@ -55,7 +55,6 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
 
       // Check if user not found - redirect to signup
       if (errorMessage.includes("User not found")) {
-        console.log("✅ User not found, proceeding to create account");
         onEmailSubmit(email, false);
         return;
       }

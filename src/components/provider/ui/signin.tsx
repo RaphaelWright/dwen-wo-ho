@@ -90,7 +90,6 @@ const SignInContent = ({
         password: values.password,
       });
 
-      console.log("✅ Sign in response:", response);
 
       if (response.success) {
         if (response.data?.userData) {

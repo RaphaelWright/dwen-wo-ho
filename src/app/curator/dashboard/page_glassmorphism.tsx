@@ -586,7 +586,7 @@ const CuratorDashboard = () => {
           setShowCreateModal(true);
         }}
         onSchoolCreated={(school) => {
-          console.log("School created:", school);
+          // console.log("School created:", school);
           setShowSchoolModal(false);
           setShowCreateModal(true);
         }}
@@ -599,7 +599,7 @@ const CuratorDashboard = () => {
           setShowCreateModal(true);
         }}
         onMemberCreated={(member) => {
-          console.log("Member created:", member);
+          // console.log("Member created:", member);
           setShowMemberModal(false);
           setShowCreateModal(true);
         }}
@@ -634,7 +634,7 @@ const CuratorDashboard = () => {
           setShowCreateModal(true);
         }}
         onPartnerCreated={(partner) => {
-          console.log("Partner created:", partner);
+          // console.log("Partner created:", partner);
           setShowPartnerModal(false);
           setShowCreateModal(true);
         }}

@@ -54,7 +54,8 @@ const createSchool = async (data: ICreateSchool): Promise<School> => {
   formData.append("type", data.type);
   formData.append("baseline", data.baseline);
   formData.append("motto", data.motto);
-  formData.append("campuses", JSON.stringify(data.campuses));
+  // Send campuses as comma-separated string instead of JSON.stringify
+  formData.append("campuses", data.campuses.join(","));
   
   if (data.logo) {
     formData.append("logo", data.logo);
@@ -65,16 +66,17 @@ const createSchool = async (data: ICreateSchool): Promise<School> => {
 };
 
 const updateSchool = async (data: IUpdateSchool): Promise<School> => {
-  const formData = new FormData();
-  if (data.name !== undefined) formData.append("name", data.name);
-  if (data.nickname !== undefined) formData.append("nickname", data.nickname);
-  if (data.type !== undefined) formData.append("type", data.type);
-  if (data.baseline !== undefined) formData.append("baseline", data.baseline);
-  if (data.motto !== undefined) formData.append("motto", data.motto);
-  if (data.campuses !== undefined) formData.append("campuses", JSON.stringify(data.campuses));
-  if (data.logo) formData.append("logo", data.logo);
+  // Update school uses JSON body, not FormData, and doesn't include logo
+  const body: Record<string, unknown> = {};
+  if (data.name !== undefined) body.name = data.name;
+  if (data.nickname !== undefined) body.nickname = data.nickname;
+  if (data.type !== undefined) body.type = data.type;
+  if (data.baseline !== undefined) body.baseline = data.baseline;
+  if (data.motto !== undefined) body.motto = data.motto;
+  // Send campuses as array directly in JSON, not stringified
+  if (data.campuses !== undefined) body.campuses = data.campuses;
 
-  const response = await axiosFormData.put(ENDPOINTS.updateSchool(data.id), formData);
+  const response = await axiosInstance.put(ENDPOINTS.updateSchool(data.id), body);
   return checkResponse(response, 200);
 };
 

@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { toast } from "sonner";
 import { School } from "@/types/school";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProviderDetailsModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const ProviderDetailsModal = ({
   const { useProvider, approveProvider, rejectProvider } = useProvidersQuery();
   const { data: providerData, isLoading: isQueryLoading } = useProvider(providerEmail);
   const { data: allSchools = [] } = useSchools();
+  const queryClient = useQueryClient();
   
   const [activeTab, setActiveTab] = useState<TabType>("overview");
   const [associatedSchools, setAssociatedSchools] = useState<AssociatedSchool[]>([]);
@@ -57,6 +59,8 @@ const ProviderDetailsModal = ({
   const [partnerToRemove, setPartnerToRemove] = useState<AssociatedPartner | null>(null);
   const [isLoadingSchools, setIsLoadingSchools] = useState(false);
   const [isLoadingPartners, setIsLoadingPartners] = useState(false);
+  const [isAddingSchool, setIsAddingSchool] = useState(false);
+  const [isRemovingSchool, setIsRemovingSchool] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
 
@@ -65,7 +69,16 @@ const ProviderDetailsModal = ({
       loadProviderSchools();
       loadAllPartners();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, providerEmail]);
+
+  useEffect(() => {
+    // Reload provider schools when allSchools changes to update available schools list
+    if (isOpen && providerEmail && allSchools.length > 0) {
+      loadProviderSchools();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allSchools.length, isOpen, providerEmail]);
 
   useEffect(() => {
     if (isOpen && providerEmail && allPartners.length > 0) {
@@ -85,10 +98,20 @@ const ProviderDetailsModal = ({
   const loadProviderSchools = async () => {
     setIsLoadingSchools(true);
     try {
-      const response = await api(ENDPOINTS.provider(providerEmail));
+      // Invalidate and refetch provider query cache to ensure fresh data
+      await queryClient.invalidateQueries({ 
+        queryKey: ["providers", providerEmail] 
+      });
+      await queryClient.refetchQueries({ 
+        queryKey: ["providers", providerEmail] 
+      });
+      
+      // Fetch fresh provider data with cache-busting timestamp
+      const response = await api(`${ENDPOINTS.provider(providerEmail)}?_t=${Date.now()}`);
       if (response?.success && response.data) {
         const providerSchools = response.data.schools || [];
-        const associatedIds = new Set(providerSchools.map((s: { id: string }) => s.id));
+        // Convert all IDs to strings for consistent comparison
+        const associatedIds = new Set(providerSchools.map((s: School | { id: string | number }) => String(s.id)));
         
         const associated: AssociatedSchool[] = providerSchools.map((s: School) => ({
           id: String(s.id),
@@ -97,8 +120,12 @@ const ProviderDetailsModal = ({
           isAssociated: true,
         }));
 
+        // Filter out schools that are already associated with this provider
         const available: AssociatedSchool[] = allSchools
-          .filter((s) => !associatedIds.has(String(s.id)))
+          .filter((s) => {
+            const schoolId = String(s.id);
+            return !associatedIds.has(schoolId);
+          })
           .map((s) => ({
             id: String(s.id),
             name: s.name,
@@ -216,6 +243,14 @@ const ProviderDetailsModal = ({
   ];
 
   const handleAddSchool = async (school: AssociatedSchool) => {
+    // Prevent adding schools to rejected providers
+    if (provider?.applicationStatus === "REJECTED") {
+      toast.error("Cannot add schools to rejected providers");
+      setSchoolToAdd(null);
+      return;
+    }
+
+    setIsAddingSchool(true);
     try {
       const response = await api(ENDPOINTS.addSchoolToProvider(school.id, providerEmail), {
         method: "POST",
@@ -223,16 +258,30 @@ const ProviderDetailsModal = ({
       
       if (response?.success) {
         toast.success(`School "${school.name}" added successfully`);
+        // Invalidate provider query cache first
+        await queryClient.invalidateQueries({ 
+          queryKey: ["providers", providerEmail] 
+        });
+        // Then reload provider schools with fresh data
         await loadProviderSchools();
         setSchoolToAdd(null);
       }
     } catch (error: unknown) {
       const err = error as Error;
-      toast.error(err.message || "Failed to add school");
+      const errorMessage = err.message || "Failed to add school";
+      // Check for provider not active error
+      if (errorMessage.includes("Provider is not active") || errorMessage.includes("not active")) {
+        toast.error("Cannot add schools to rejected providers");
+      } else {
+        toast.error(errorMessage);
+      }
+    } finally {
+      setIsAddingSchool(false);
     }
   };
 
   const handleRemoveSchool = async (school: AssociatedSchool) => {
+    setIsRemovingSchool(true);
     try {
       const response = await api(ENDPOINTS.removeSchoolFromProvider(school.id, providerEmail), {
         method: "POST",
@@ -240,12 +289,19 @@ const ProviderDetailsModal = ({
       
       if (response?.success) {
         toast.success(`School "${school.name}" removed successfully`);
+        // Invalidate provider query cache first
+        await queryClient.invalidateQueries({ 
+          queryKey: ["providers", providerEmail] 
+        });
+        // Then reload provider schools with fresh data
         await loadProviderSchools();
         setSchoolToRemove(null);
       }
     } catch (error: unknown) {
       const err = error as Error;
       toast.error(err.message || "Failed to remove school");
+    } finally {
+      setIsRemovingSchool(false);
     }
   };
 
@@ -604,8 +660,17 @@ const ProviderDetailsModal = ({
                             </p>
                     ) : (
                       <div className="space-y-3">
-                              {filteredAvailableSchools.map((school) => (
-                                <div key={school.id} className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+                              {filteredAvailableSchools.map((school) => {
+                                const isRejected = provider?.applicationStatus === "REJECTED";
+                                return (
+                                <div 
+                                  key={school.id} 
+                                  className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${
+                                    isRejected 
+                                      ? "bg-gray-100 border-gray-300 opacity-60 cursor-not-allowed" 
+                                      : "bg-gray-50 border-gray-200 hover:bg-gray-100"
+                                  }`}
+                                >
                             <div className="flex items-center gap-3">
                                     {school.logo ? (
                                       <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
@@ -623,18 +688,27 @@ const ProviderDetailsModal = ({
                               </div>
                                     )}
                               <div>
-                                <p className="font-semibold text-gray-900">{school.name}</p>
+                                <p className={`font-semibold ${isRejected ? "text-gray-500" : "text-gray-900"}`}>{school.name}</p>
+                                {isRejected && (
+                                  <p className="text-xs text-gray-400 mt-1">Cannot add schools to rejected providers</p>
+                                )}
                               </div>
                             </div>
                                   <button 
-                                    onClick={() => setSchoolToAdd(school)} 
-                                    className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-green-400 text-green-500 hover:bg-green-50 transition-colors" 
+                                    onClick={() => !isRejected && setSchoolToAdd(school)} 
+                                    disabled={isRejected}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-full border-2 transition-colors ${
+                                      isRejected
+                                        ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                                        : "border-green-400 text-green-500 hover:bg-green-50"
+                                    }`}
                                     aria-label="Add school"
                                   >
                                     <FiPlus className="w-4 h-4" />
                             </button>
                           </div>
-                        ))}
+                        );
+                              })}
                       </div>
                     )}
                         </>
@@ -872,23 +946,25 @@ const ProviderDetailsModal = ({
       {/* Add School Confirmation Modal */}
       <ConfirmationModal
         isOpen={schoolToAdd !== null}
-        onClose={() => setSchoolToAdd(null)}
+        onClose={() => !isAddingSchool && setSchoolToAdd(null)}
         onConfirm={() => schoolToAdd && handleAddSchool(schoolToAdd)}
         title="Add School Confirmation"
         message={`Are you sure you want to add ${schoolToAdd?.name} to ${provider?.fullName || "this provider"}?`}
         confirmText="Yes, Add School"
         variant="success"
+        isLoading={isAddingSchool}
       />
 
       {/* Remove School Confirmation Modal */}
       <ConfirmationModal
         isOpen={schoolToRemove !== null}
-        onClose={() => setSchoolToRemove(null)}
+        onClose={() => !isRemovingSchool && setSchoolToRemove(null)}
         onConfirm={() => schoolToRemove && handleRemoveSchool(schoolToRemove)}
         title="Remove School Confirmation"
         message={`Are you sure you want to remove ${schoolToRemove?.name} from ${provider?.fullName || "this provider"}?`}
         confirmText="Yes, Remove School"
         variant="danger"
+        isLoading={isRemovingSchool}
       />
 
       {/* Add Partner Confirmation Modal */}
