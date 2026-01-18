@@ -5,9 +5,9 @@ import PendingVerificationModal from "@/components/modals/pending-verification";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { calculateTimeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
-
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import WidthConstraint from "@/components/ui/width-constraint";
 
 const ProviderHomePage = () => {
     const router = useRouter();
@@ -60,35 +60,28 @@ const ProviderHomePage = () => {
 
             // If local storage has pending user data, use it to show modal immediately
             if (pendingUserStr) {
-            // console.log("HOME PAGE: Found pending user data, parsing...");
-            try {
-                const pendingData = JSON.parse(pendingUserStr);
-                // console.log("HOME PAGE: Parsed pending data:", pendingData);
+                try {
+                    const pendingData = JSON.parse(pendingUserStr);
 
-                const isPending =
-                    pendingData.applicationStatus === "PENDING" ||
-                    pendingData.status === "PENDING" ||
-                    pendingData.isVerified === false;
+                    const isPending =
+                        pendingData.applicationStatus === "PENDING" ||
+                        pendingData.status === "PENDING" ||
+                        pendingData.isVerified === false;
 
-                // console.log("HOME PAGE: isPending check result:", isPending);
-
-                if (isPending) {
-                    // console.log("HOME PAGE: User is pending, showing modal");
-                    setUserInfo({
-                        name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
-                        title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
-                        specialty: pendingData.specialty || "",
-                        profileImage: pendingData.profilePhotoURL || pendingData.profileURL,
-                        timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
-                    });
-                    setShowPendingModal(true);
-                } else {
-                    // console.log("HOME PAGE: User data exists but not pending");
+                    if (isPending) {
+                        setUserInfo({
+                            name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
+                            title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
+                            specialty: pendingData.specialty || "",
+                            profileImage: pendingData.profilePhotoURL || pendingData.profileURL,
+                            timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
+                        });
+                        setShowPendingModal(true);
+                    }
+                } catch (e) {
+                    console.error("HOME PAGE: Failed to parse pending user data", e);
                 }
-            } catch (e) {
-                console.error("HOME PAGE: Failed to parse pending user data", e);
             }
-        }
         };
         
         checkAuth();
@@ -125,7 +118,7 @@ const ProviderHomePage = () => {
                 localStorage.removeItem("pendingUser");
 
                 // Check for incomplete profile logic (mirrors signin.tsx)
-                const email = data.email || ""; // Ensure we have an email if possible
+                const email = data.email || "";
                 const emailParams = email ? `email=${encodeURIComponent(email)}&` : "";
 
                 if (!data.profilePhotoURL && !data.profileURL) {
@@ -139,8 +132,6 @@ const ProviderHomePage = () => {
                 }
 
                 if ((!data.specialty || !data.specialty.trim()) && (!data.professionalTitle || !data.professionalTitle.trim())) {
-                    // Note: Checking specific fields. Adjust based on exact API response keys.
-                    // Assuming 'specialty' is the key.
                     router.replace(`/provider/signup?${emailParams}step=specialty`);
                     return;
                 }
@@ -150,7 +141,6 @@ const ProviderHomePage = () => {
         // Handle API errors - don't redirect on auth errors if we have pendingUser
         if (getProfileQuery.error) {
             const error = getProfileQuery.error as any;
-            // If it's an auth error but we have pendingUser, show the modal
             const pendingUserStr = localStorage.getItem("pendingUser");
             if (pendingUserStr && (error?.message?.includes("401") || error?.message?.includes("Invalid"))) {
                 try {
@@ -173,37 +163,60 @@ const ProviderHomePage = () => {
         }
     }, [getProfileQuery.data, getProfileQuery.error, router]);
 
+    const isApproved = getProfileQuery.data?.applicationStatus === "APPROVED";
+    const isLoading = getProfileQuery.isLoading;
+
+    // Show pending modal and coming soon if not approved
+    if (!isApproved && !isLoading) {
+        return (
+            <>
+                <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
+                    <div className="text-center space-y-6 max-w-2xl px-6">
+                        <div className="flex justify-center mb-8">
+                            <JustGoHealth />
+                        </div>
+
+                        <h1 className="text-5xl font-extrabold text-[#955aa4] tracking-tight">
+                            Coming Soon
+                        </h1>
+
+                        <p className="text-xl text-gray-600 font-medium leading-relaxed">
+                            We are working hard to build your provider dashboard. <br />
+                            Stay tuned for updates!
+                        </p>
+
+                        <div className="w-24 h-1 bg-[#2bb673] mx-auto rounded-full my-8"></div>
+                    </div>
+                </main>
+
+                <PendingVerificationModal
+                    isOpen={showPendingModal}
+                    isLoading={isLoading && !showPendingModal}
+                    onClose={() => {
+                        // Prevent closing to enforce pending state view
+                    }}
+                    userInfo={userInfo}
+                />
+            </>
+        );
+    }
+
+    // Show actual content when approved - redirect to schools page
+    useEffect(() => {
+        if (isApproved && !isLoading) {
+            router.replace("/provider/schools");
+        }
+    }, [isApproved, isLoading, router]);
 
     return (
-        <>
-            <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
-                <div className="text-center space-y-6 max-w-2xl px-6">
-                    <div className="flex justify-center mb-8">
-                        <JustGoHealth />
-                    </div>
-
-                    <h1 className="text-5xl font-extrabold text-[#955aa4] tracking-tight">
-                        Coming Soon
-                    </h1>
-
-                    <p className="text-xl text-gray-600 font-medium leading-relaxed">
-                        We are working hard to build your provider dashboard. <br />
-                        Stay tuned for updates!
-                    </p>
-
-                    <div className="w-24 h-1 bg-[#2bb673] mx-auto rounded-full my-8"></div>
+        <WidthConstraint>
+            <div className="p-8">
+                <div className="mb-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+                    <p className="text-gray-600">Welcome back!</p>
                 </div>
-            </main>
-
-            <PendingVerificationModal
-                isOpen={showPendingModal}
-                isLoading={getProfileQuery.isLoading && !showPendingModal} // Only show loading if modal isn't already shown via fallback
-                onClose={() => {
-                    // Prevent closing to enforce pending state view
-                }}
-                userInfo={userInfo}
-            />
-        </>
+            </div>
+        </WidthConstraint>
     );
 };
 

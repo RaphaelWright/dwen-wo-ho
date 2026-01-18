@@ -6,31 +6,24 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import JustGoHealthBlack from "@/components/logo-black";
 import {
-  FiFileText,
-  FiPlus,
   FiLogOut,
   FiArrowRight,
   FiMenu,
+  FiUser,
 } from "react-icons/fi";
-import { MdSchool, MdHealthAndSafety } from "react-icons/md";
+import { MdSchool } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 
-interface SidebarProps {
+interface ProviderSidebarProps {
   schoolCount: number;
-  providerCount: number;
-  partnerCount: number;
-  onCreateClick: () => void;
   onLogout: () => void;
 }
 
-export const CuratorSidebar = ({
+export const ProviderSidebar = ({
   schoolCount,
-  providerCount,
-  partnerCount,
-  onCreateClick,
   onLogout,
-}: SidebarProps) => {
+}: ProviderSidebarProps) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const pathname = usePathname();
@@ -89,11 +82,11 @@ export const CuratorSidebar = ({
         <div className="flex-1 px-4 py-6">
           <nav className="space-y-3">
             <Link
-              href="/curator/schools"
+              href="/provider/schools"
               onClick={() => setIsMobileSidebarOpen(false)}
               className={cn(
                 "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/curator/schools")
+                isActive("/provider/schools") || isActive("/provider/home")
                   ? "bg-[#955aa4] text-white shadow-md"
                   : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
               )}
@@ -105,7 +98,7 @@ export const CuratorSidebar = ({
                 </div>
                 <span className={cn(
                   "text-sm px-2 py-1 rounded-full",
-                  isActive("/curator/schools")
+                  isActive("/provider/schools") || isActive("/provider/home")
                     ? "bg-white/20 text-white"
                     : "bg-gray-200 text-gray-700"
                 )}>
@@ -114,82 +107,20 @@ export const CuratorSidebar = ({
               </div>
             </Link>
             <Link
-              href="/curator/providers"
+              href="/provider/profile"
               onClick={() => setIsMobileSidebarOpen(false)}
               className={cn(
                 "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/curator/providers")
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <MdHealthAndSafety className="text-xl" />
-                  <span className="text-lg">Providers</span>
-                </div>
-                <span className={cn(
-                  "text-sm px-2 py-1 rounded-full",
-                  isActive("/curator/providers")
-                    ? "bg-white/20 text-white"
-                    : "bg-gray-200 text-gray-700"
-                )}>
-                  {providerCount}
-                </span>
-              </div>
-            </Link>
-            <Link
-              href="/curator/partners"
-              onClick={() => setIsMobileSidebarOpen(false)}
-              className={cn(
-                "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/curator/partners")
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <MdHealthAndSafety className="text-xl" />
-                  <span className="text-lg">Partners</span>
-                </div>
-                <span className={cn(
-                  "text-sm px-2 py-1 rounded-full",
-                  isActive("/curator/partners")
-                    ? "bg-white/20 text-white"
-                    : "bg-gray-200 text-gray-700"
-                )}>
-                  {partnerCount}
-                </span>
-              </div>
-            </Link>
-            <Link
-              href="/curator/pages"
-              onClick={() => setIsMobileSidebarOpen(false)}
-              className={cn(
-                "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/curator/pages")
+                isActive("/provider/profile")
                   ? "bg-[#955aa4] text-white shadow-md"
                   : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
               )}
             >
               <div className="flex items-center gap-3">
-                <FiFileText className="text-xl" />
-                <span className="text-lg">Pages</span>
+                <FiUser className="text-xl" />
+                <span className="text-lg">Profile</span>
               </div>
             </Link>
-            <button
-              onClick={() => {
-                onCreateClick();
-                setIsMobileSidebarOpen(false);
-              }}
-              className="w-full text-left px-4 py-3 rounded-lg font-bold text-gray-700 hover:bg-gray-100 hover:text-[#955aa4] transition-all duration-200"
-            >
-              <div className="flex items-center gap-3">
-                <FiPlus className="text-xl" />
-                <span className="text-lg">Create</span>
-              </div>
-            </button>
           </nav>
         </div>
 
@@ -216,9 +147,9 @@ export const CuratorSidebar = ({
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={() => {
-                  onLogout();
-                  setShowLogoutModal(false);
-                }}
+          onLogout();
+          setShowLogoutModal(false);
+        }}
         title="Logout Confirmation"
         message="Are you sure you want to log out?"
         confirmText="Yes, Logout"

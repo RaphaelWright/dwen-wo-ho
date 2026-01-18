@@ -14,6 +14,7 @@ export interface Provider {
   specialty?: string | null;
   officePhoneNumber?: string | null;
   bio?: string | null;
+  status?: string | null;
   applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
   applicationDate: string;
   lastActive?: string;

@@ -214,7 +214,7 @@ const ProviderDetailsModal = ({
         providerTitle: getProviderTitle(providerData.providerName, providerData.providerTitle) || undefined,
         professionalTitle: providerData.specialty || "",
         profileImage: providerData.profilePhotoURL || undefined,
-        status: providerData.bio || undefined, // Use bio from API if available, otherwise undefined
+        status: providerData.status || providerData.bio || undefined, // Use status from API, fallback to bio if available
         officePhoneNumber: providerData.officePhoneNumber || undefined,
         specialties: providerData.specialty ? [providerData.specialty] : undefined,
         createdAt: providerData.applicationDate,

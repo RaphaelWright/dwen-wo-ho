@@ -23,6 +23,7 @@ export const ROUTES = {
     dashboard: "/curator/dashboard",
     schools: "/curator/schools",
     providers: "/curator/providers",
+    partners: "/curator/partners",
     providerDetails: "/curator/provider",
   },
 };

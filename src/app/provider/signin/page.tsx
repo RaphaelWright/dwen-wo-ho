@@ -66,23 +66,23 @@ const SignInContent = () => {
         body: JSON.stringify(values),
       });
 
-      console.log("✅ Sign in response:", response);
+      // console.log(" Sign in response:", response);
 
       if (response?.success) {
-        // console.log("✅ Sign in successful, processing response...");
-        // console.log("📦 Response data:", response?.data);
+        // console.log(" Sign in successful, processing response...");
+        // console.log("Response data:", response?.data);
 
         // Store token if needed
         if (response?.data?.token) {
-          // console.log("🔑 Token received, storing in localStorage");
+          // console.log("Token received, storing in localStorage");
           localStorage.setItem("token", response?.data?.token);
         } else {
-          // console.log("⚠️ No token in response");
+          // console.log("No token in response");
         }
 
         // Store refresh token if available
         if (response?.data?.refreshToken) {
-          // console.log("🔑 Refresh token received, storing in localStorage");
+          // console.log("Refresh token received, storing in localStorage");
           localStorage.setItem("refreshToken", response?.data?.refreshToken);
         }
 
