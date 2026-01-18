@@ -45,6 +45,7 @@ export default function SchoolsPage() {
 
     return filtered;
   }, [allSchools, activeFilter, searchQuery]);
+  // "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqZ29oZWFsdGhAZ21haWwuY29tIiwiaWF0IjoxNzY4Njc0NDMxLCJleHAiOjE3NzM4NTg0MzEsInJvbGUiOiJST0xFX0NVUkFUT1IiLCJ1c2VySWQiOiJhMWI0OTExMC1jY2MyLTQ5NTItOTQxNi04ZjQ3YzQwNWViNjQiLCJ0eXBlIjoicmVmcmVzaCJ9.3q5Ik7x_yGhKiaGobF9jyB7F9E8rDfL_vPa9i17DGLckEB8uY2WqBaUXw3DKbgBG",
 
  
 
