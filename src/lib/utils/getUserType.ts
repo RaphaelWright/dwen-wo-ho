@@ -66,6 +66,13 @@ export const getUserType = (): "curator" | "provider" | "patient" | null => {
 
   // Check for provider token
   const providerToken = localStorage.getItem("token");
+  const refreshToken = localStorage.getItem("refreshToken");
+  
+  // If we have refreshToken and stored type is provider, return provider
+  if (refreshToken && storedUserType === "provider") {
+    return "provider";
+  }
+  
   if (providerToken) {
     setUserType("provider");
     return "provider";
@@ -79,7 +86,6 @@ export const getUserType = (): "curator" | "provider" | "patient" | null => {
   }
 
   // Check for refresh token - if exists, return stored type or null
-  const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken && storedUserType) {
     return storedUserType;
   }

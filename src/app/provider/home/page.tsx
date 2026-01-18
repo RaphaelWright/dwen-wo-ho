@@ -31,27 +31,35 @@ const ProviderHomePage = () => {
 
     // Protect route and handle pending state from LocalStorage (Fallback)
     useEffect(() => {
-        // console.log("HOME PAGE: useEffect triggered");
-        const refreshToken = localStorage.getItem("refreshToken");
-        const pendingUserStr = localStorage.getItem("pendingUser");
+        let isMounted = true;
+        let hasChecked = false;
+        
+        const checkAuth = () => {
+            if (hasChecked) return;
+            hasChecked = true;
+            
+            const refreshToken = localStorage.getItem("refreshToken");
+            const token = localStorage.getItem("token");
+            const pendingUserStr = localStorage.getItem("pendingUser");
 
-        // console.log("HOME PAGE: Token exists?", !!refreshToken);
-        // console.log("HOME PAGE: PendingUser exists?", !!pendingUserStr);
-        // console.log("HOME PAGE: PendingUser data:", pendingUserStr);
+            // Check if we have any token (refreshToken or token)
+            const hasAnyToken = refreshToken || token;
 
-        if (!refreshToken && !pendingUserStr) {
-            // console.log("HOME PAGE: No token AND no pendingUser - REDIRECTING to auth");
-            router.push(`${ROUTES.provider.auth}?step=sign-in`);
-            return;
-        }
+            if (!hasAnyToken && !pendingUserStr) {
+                // No tokens and no pending user - redirect to auth
+                if (isMounted) {
+                    router.replace(`${ROUTES.provider.auth}?step=sign-in`);
+                }
+                return;
+            }
 
-        if (refreshToken) {
-            // console.log("HOME PAGE: Token found, enabling user query");
-            setHasToken(true);
-        }
+            // If we have any token, enable query (don't redirect even if API fails)
+            if (hasAnyToken && isMounted) {
+                setHasToken(true);
+            }
 
-        // If local storage has pending user data, use it to show modal immediately
-        if (pendingUserStr) {
+            // If local storage has pending user data, use it to show modal immediately
+            if (pendingUserStr) {
             // console.log("HOME PAGE: Found pending user data, parsing...");
             try {
                 const pendingData = JSON.parse(pendingUserStr);
@@ -81,6 +89,13 @@ const ProviderHomePage = () => {
                 console.error("HOME PAGE: Failed to parse pending user data", e);
             }
         }
+        };
+        
+        checkAuth();
+        
+        return () => {
+            isMounted = false;
+        };
     }, [router]);
 
     // Update with real data from API if available
@@ -114,24 +129,49 @@ const ProviderHomePage = () => {
                 const emailParams = email ? `email=${encodeURIComponent(email)}&` : "";
 
                 if (!data.profilePhotoURL && !data.profileURL) {
-                    router.push(`/provider/signup?${emailParams}step=photo`);
+                    router.replace(`/provider/signup?${emailParams}step=photo`);
                     return;
                 }
 
                 if (!data.officePhoneNumber && !data.phoneNumber) {
-                    router.push(`/provider/signup?${emailParams}step=bio`);
+                    router.replace(`/provider/signup?${emailParams}step=bio`);
                     return;
                 }
 
                 if ((!data.specialty || !data.specialty.trim()) && (!data.professionalTitle || !data.professionalTitle.trim())) {
                     // Note: Checking specific fields. Adjust based on exact API response keys.
                     // Assuming 'specialty' is the key.
-                    router.push(`/provider/signup?${emailParams}step=specialty`);
+                    router.replace(`/provider/signup?${emailParams}step=specialty`);
                     return;
                 }
             }
         }
-    }, [getProfileQuery.data, router]);
+        
+        // Handle API errors - don't redirect on auth errors if we have pendingUser
+        if (getProfileQuery.error) {
+            const error = getProfileQuery.error as any;
+            // If it's an auth error but we have pendingUser, show the modal
+            const pendingUserStr = localStorage.getItem("pendingUser");
+            if (pendingUserStr && (error?.message?.includes("401") || error?.message?.includes("Invalid"))) {
+                try {
+                    const pendingData = JSON.parse(pendingUserStr);
+                    const isPending = pendingData.applicationStatus === "PENDING" || pendingData.status === "PENDING";
+                    if (isPending) {
+                        setUserInfo({
+                            name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
+                            title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
+                            specialty: pendingData.specialty || "",
+                            profileImage: pendingData.profilePhotoURL || pendingData.profileURL,
+                            timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
+                        });
+                        setShowPendingModal(true);
+                    }
+                } catch (e) {
+                    // Ignore parse errors
+                }
+            }
+        }
+    }, [getProfileQuery.data, getProfileQuery.error, router]);
 
 
     return (

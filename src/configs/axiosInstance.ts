@@ -33,16 +33,24 @@ export const axiosFormData = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Request interceptor - Add refresh token to all requests
+// Request interceptor - Add token to all requests (prioritize refreshToken after signin, token during signup)
 axiosInstance.interceptors.request.use(
   (config) => {
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("token")
+        : null;
     const refreshToken =
       typeof window !== "undefined"
         ? localStorage.getItem("refreshToken")
         : null;
 
+    // If refreshToken exists, use it (means signup is complete and we've signed in)
+    // Otherwise, use token (during signup flow before signin)
     if (refreshToken) {
       config.headers.Authorization = `Bearer ${refreshToken}`;
+    } else if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -52,16 +60,24 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Request interceptor for form data - Add refresh token
+// Request interceptor for form data - Add token (prioritize refreshToken after signin, token during signup)
 axiosFormData.interceptors.request.use(
   (config) => {
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("token")
+        : null;
     const refreshToken =
       typeof window !== "undefined"
         ? localStorage.getItem("refreshToken")
         : null;
 
+    // If refreshToken exists, use it (means signup is complete and we've signed in)
+    // Otherwise, use token (during signup flow before signin)
     if (refreshToken) {
       config.headers.Authorization = `Bearer ${refreshToken}`;
+    } else if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;

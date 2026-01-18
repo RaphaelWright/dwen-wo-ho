@@ -31,6 +31,9 @@ const prepareRequestBody = (body: unknown): BodyInit | undefined => {
 };
 
 const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, string> => {
+  const token = typeof window !== "undefined" 
+    ? localStorage.getItem("token")
+    : null;
   const refreshToken = typeof window !== "undefined" 
     ? localStorage.getItem("refreshToken")
     : null;
@@ -43,8 +46,17 @@ const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, 
     headers["Content-Type"] = "application/json";
   }
 
-  if (refreshToken && !headers.Authorization && !isPublicEndpoint(endpoint)) {
-    headers.Authorization = `Bearer ${refreshToken}`;
+  // For provider signup flow, prioritize token from OTP verification over refreshToken
+  // Token is set after OTP verification and should be used for subsequent signup requests
+  // After signin endpoint returns refreshToken, we switch to using refreshToken
+  if (!headers.Authorization && !isPublicEndpoint(endpoint)) {
+    // If refreshToken exists, use it (means signup is complete and we've signed in)
+    // Otherwise, use token (during signup flow before signin)
+    if (refreshToken) {
+      headers.Authorization = `Bearer ${refreshToken}`;
+    } else if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
   }
 
   return headers;
@@ -54,7 +66,9 @@ const extractErrorFromResponse = async (response: Response): Promise<Error> => {
   const responseText = await response.text();
   const isExpectedFlow = 
     responseText.includes("ACCOUNT PENDING") || 
-    responseText.includes("User not found");
+    responseText.includes("User not found") ||
+    responseText.includes("Profile is not complete") ||
+    responseText.includes("Invalid or missing Authorization header");
 
   if (!isExpectedFlow) {
     console.error(`API Error [${response.status}]:`, responseText);
