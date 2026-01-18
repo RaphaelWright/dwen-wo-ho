@@ -25,47 +25,62 @@ const ProviderAuthPageContent = () => {
 
   // Check for existing tokens and auto-signin
   useEffect(() => {
+    let isMounted = true;
+    let hasRedirected = false;
+    
     const checkAuthAndRedirect = async () => {
       // Small delay to ensure localStorage is available
       await new Promise((resolve) => setTimeout(resolve, 100));
 
+      if (!isMounted || hasRedirected) return;
+
       const userType = getUserType();
       const hasToken = hasValidToken();
 
+      // Only redirect if we have a valid token and user type
+      // Use router.replace to prevent adding to history and causing loops
       if (hasToken && userType === "curator") {
-        // Curator token found - redirect to curator pages
-        router.push(ROUTES.curator.schools);
+        hasRedirected = true;
+        router.replace(ROUTES.curator.schools);
         return;
       }
 
       if (hasToken && userType === "provider") {
-        // Provider token found - redirect to provider home
-        router.push(ROUTES.provider.home);
+        hasRedirected = true;
+        router.replace(ROUTES.provider.home);
         return;
       }
 
       // If refresh token exists but no access token, try to refresh
       if (hasToken && !userType) {
         const refreshedToken = await refreshToken();
-        if (refreshedToken) {
+        if (refreshedToken && isMounted && !hasRedirected) {
           // Token refreshed, check user type again
           const newUserType = getUserType();
           if (newUserType === "curator") {
-            router.push(ROUTES.curator.schools);
+            hasRedirected = true;
+            router.replace(ROUTES.curator.schools);
             return;
           }
           if (newUserType === "provider") {
-            router.push(ROUTES.provider.home);
+            hasRedirected = true;
+            router.replace(ROUTES.provider.home);
             return;
           }
         }
       }
 
       // No valid token or couldn't determine type - proceed with auth flow
-      setIsCheckingAuth(false);
+      if (isMounted) {
+        setIsCheckingAuth(false);
+      }
     };
 
     checkAuthAndRedirect();
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   useEffect(() => {

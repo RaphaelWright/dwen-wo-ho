@@ -13,6 +13,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { calculateTimeAgo } from "@/lib/utils";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { ROUTES } from "@/constants/routes";
+import { setUserType } from "@/lib/utils/getUserType";
 
 interface SignUpProfileProps {
   email: string;
@@ -119,18 +120,18 @@ const SignUpProfile = ({
   const handleNext = async () => {
     // Validation
     if (currentStep === 0 && !profileData.photo) {
-      alert("Please upload a profile photo");
+      toast.error("Please upload a profile photo");
       return;
     }
     if (
       currentStep === 1 &&
       (!profileData.bio.trim() || !profileData.phoneNumber.trim())
     ) {
-      alert("Please fill in all required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
     if (currentStep === 2 && !profileData.specialty) {
-      alert("Please select a specialty");
+      toast.error("Please select a specialty");
       return;
     }
 
@@ -194,10 +195,26 @@ const SignUpProfile = ({
             });
 
             if (loginResponse.success) {
-              const { token } = loginResponse.data;
-              if (token) {
+              const { token, refreshToken: refreshTokenValue, userData } = loginResponse.data;
+              
+              // After signin, switch to refreshToken and remove the temporary token
+              if (refreshTokenValue) {
+                localStorage.setItem("refreshToken", refreshTokenValue);
+                // Remove the temporary token used during signup
+                localStorage.removeItem("token");
+              } else if (token) {
+                // Fallback if refreshToken not available
                 localStorage.setItem("token", token);
               }
+              
+              // Set user type
+              if (userData?.userRole === "ROLE_CURATOR") {
+                localStorage.setItem("curatorToken", token || refreshTokenValue);
+                setUserType("curator");
+              } else {
+                setUserType("provider");
+              }
+              
               router.push(ROUTES.provider.home);
             } else {
               // Login failed logically? Fallback to auth page
