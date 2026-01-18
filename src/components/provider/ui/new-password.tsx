@@ -16,6 +16,7 @@ import { DevTool } from "@hookform/devtools";
 import { recoverSteps } from "@/lib/utils";
 import Stepper from "@/components/stepper";
 import { api } from "@/lib/api";
+import { setUserType } from "@/lib/utils/getUserType";
 
 const SignUpSchema = z.object({
   email: z.email().min(1, { message: "Please enter your email" }),
@@ -70,6 +71,9 @@ const NewPasswordContent = () => {
           localStorage.setItem("token", token);
           if (userData?.userRole === "ROLE_CURATOR") {
             localStorage.setItem("curatorToken", token);
+            setUserType("curator");
+          } else {
+            setUserType("provider");
           }
         }
 

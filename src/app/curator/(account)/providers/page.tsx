@@ -8,7 +8,7 @@ import ProviderCard from "@/components/curator/provider-card";
 import { useProvidersQuery, Provider } from "@/hooks/queries/useProvidersQuery";
 import { IProvider } from "@/types/provider.type";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { formatProviderName } from "@/lib/utils/formatProviderName";
+import { formatProviderName, getProviderTitle } from "@/lib/utils/formatProviderName";
 
 export default function ProvidersPage() {
   const [filter, setFilter] = useState("All");
@@ -249,7 +249,7 @@ export default function ProvidersPage() {
                     id: foundProvider.email,
                     email: foundProvider.email,
                     fullName: formatProviderName(foundProvider.providerName, foundProvider.providerTitle),
-                    providerTitle: foundProvider.providerTitle || undefined,
+                    providerTitle: getProviderTitle(foundProvider.providerName, foundProvider.providerTitle) || undefined,
                     professionalTitle: foundProvider.specialty || undefined,
                     profileImage: foundProvider.profilePhotoURL || undefined,
                     officePhoneNumber: foundProvider.officePhoneNumber || undefined,
