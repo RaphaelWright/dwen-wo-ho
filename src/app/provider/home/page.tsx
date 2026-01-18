@@ -8,10 +8,14 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
+import { Button } from "@/components/ui/button";
+import { FiLogOut } from "react-icons/fi";
 
 const ProviderHomePage = () => {
     const router = useRouter();
     const [showPendingModal, setShowPendingModal] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const [hasToken, setHasToken] = useState(false);
 
@@ -33,11 +37,11 @@ const ProviderHomePage = () => {
     useEffect(() => {
         let isMounted = true;
         let hasChecked = false;
-        
+
         const checkAuth = () => {
             if (hasChecked) return;
             hasChecked = true;
-            
+
             const refreshToken = localStorage.getItem("refreshToken");
             const token = localStorage.getItem("token");
             const pendingUserStr = localStorage.getItem("pendingUser");
@@ -60,39 +64,39 @@ const ProviderHomePage = () => {
 
             // If local storage has pending user data, use it to show modal immediately
             if (pendingUserStr) {
-            // console.log("HOME PAGE: Found pending user data, parsing...");
-            try {
-                const pendingData = JSON.parse(pendingUserStr);
-                // console.log("HOME PAGE: Parsed pending data:", pendingData);
+                // console.log("HOME PAGE: Found pending user data, parsing...");
+                try {
+                    const pendingData = JSON.parse(pendingUserStr);
+                    // console.log("HOME PAGE: Parsed pending data:", pendingData);
 
-                const isPending =
-                    pendingData.applicationStatus === "PENDING" ||
-                    pendingData.status === "PENDING" ||
-                    pendingData.isVerified === false;
+                    const isPending =
+                        pendingData.applicationStatus === "PENDING" ||
+                        pendingData.status === "PENDING" ||
+                        pendingData.isVerified === false;
 
-                // console.log("HOME PAGE: isPending check result:", isPending);
+                    // console.log("HOME PAGE: isPending check result:", isPending);
 
-                if (isPending) {
-                    // console.log("HOME PAGE: User is pending, showing modal");
-                    setUserInfo({
-                        name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
-                        title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
-                        specialty: pendingData.specialty || "",
-                        profileImage: pendingData.profilePhotoURL || pendingData.profileURL,
-                        timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
-                    });
-                    setShowPendingModal(true);
-                } else {
-                    // console.log("HOME PAGE: User data exists but not pending");
+                    if (isPending) {
+                        // console.log("HOME PAGE: User is pending, showing modal");
+                        setUserInfo({
+                            name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
+                            title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
+                            specialty: pendingData.specialty || "",
+                            profileImage: pendingData.profilePhotoURL || pendingData.profileURL,
+                            timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
+                        });
+                        setShowPendingModal(true);
+                    } else {
+                        // console.log("HOME PAGE: User data exists but not pending");
+                    }
+                } catch (e) {
+                    console.error("HOME PAGE: Failed to parse pending user data", e);
                 }
-            } catch (e) {
-                console.error("HOME PAGE: Failed to parse pending user data", e);
             }
-        }
         };
-        
+
         checkAuth();
-        
+
         return () => {
             isMounted = false;
         };
@@ -146,7 +150,7 @@ const ProviderHomePage = () => {
                 }
             }
         }
-        
+
         // Handle API errors - don't redirect on auth errors if we have pendingUser
         if (getProfileQuery.error) {
             const error = getProfileQuery.error as any;
@@ -173,10 +177,17 @@ const ProviderHomePage = () => {
         }
     }, [getProfileQuery.data, getProfileQuery.error, router]);
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("pendingUser");
+        router.push(ROUTES.provider.auth);
+    };
+
 
     return (
         <>
-            <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
+            <main className="relative min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
                 <div className="text-center space-y-6 max-w-2xl px-6">
                     <div className="flex justify-center mb-8">
                         <JustGoHealth />
@@ -193,7 +204,33 @@ const ProviderHomePage = () => {
 
                     <div className="w-24 h-1 bg-[#2bb673] mx-auto rounded-full my-8"></div>
                 </div>
+
+                <div className="absolute bottom-10 w-full flex justify-center pb-4">
+                    <Button
+                        onClick={() => setShowLogoutModal(true)}
+                        variant="ghost"
+                        className="text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors text-lg px-8 py-6 h-auto font-medium"
+                    >
+                        <div className="flex items-center gap-3">
+                            <FiLogOut className="text-2xl" />
+                            <span>Log Out</span>
+                        </div>
+                    </Button>
+                </div>
             </main>
+
+            <ConfirmationModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={() => {
+                    handleLogout();
+                    setShowLogoutModal(false);
+                }}
+                title="Logout Confirmation"
+                message="Are you sure you want to log out?"
+                confirmText="Yes, Logout"
+                variant="danger"
+            />
 
             <PendingVerificationModal
                 isOpen={showPendingModal}
