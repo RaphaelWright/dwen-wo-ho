@@ -86,22 +86,15 @@ const PartnerDetailsModal = ({
   useEffect(() => {
     if (isOpen && partnerId) {
       loadPartnerDetails();
-      loadPartnerSchools();
-      loadPartnerProviders();
     }
   }, [isOpen, partnerId]);
 
   useEffect(() => {
-    if (isOpen && allSchools.length > 0) {
-      loadPartnerSchools();
+    // Reload available schools/providers when allSchools or providers change
+    if (isOpen && partnerId && (allSchools.length > 0 || (providers?.data && Array.isArray(providers.data) && providers.data.length > 0))) {
+      loadPartnerDetails();
     }
-  }, [allSchools.length, isOpen]);
-
-  useEffect(() => {
-    if (isOpen && providers?.data && Array.isArray(providers.data) && providers.data.length > 0) {
-      loadPartnerProviders();
-    }
-  }, [providers?.data, isOpen]);
+  }, [allSchools.length, providers?.data, isOpen, partnerId]);
 
   useEffect(() => {
     if (isOpen) {
@@ -112,94 +105,69 @@ const PartnerDetailsModal = ({
   }, [isOpen]);
 
   const loadPartnerDetails = async () => {
+    setIsLoadingSchools(true);
+    setIsLoadingProviders(true);
     try {
       const response = await api(ENDPOINTS.partner(partnerId));
       if (response?.success && response.data) {
-        setPartner(response.data);
+        const partnerData = response.data;
+        setPartner(partnerData);
+
+        // Extract schools from partner response
+        const partnerSchools: AssociatedSchool[] = partnerData.schools && Array.isArray(partnerData.schools)
+          ? partnerData.schools.map((s: { id: string | number; name: string; logo?: string }) => ({
+              id: s.id,
+              name: s.name,
+              logo: s.logo,
+            }))
+          : [];
+
+        setAssociatedSchools(partnerSchools);
+        
+        // Get available schools from all schools list
+        const associatedSchoolIds = new Set(partnerSchools.map((s) => String(s.id)));
+        const available = allSchools
+          .filter((s) => !associatedSchoolIds.has(String(s.id)))
+          .map((s) => ({
+            id: s.id,
+            name: s.name,
+            logo: s.logo || undefined,
+          }));
+        setAvailableSchools(available);
+
+        // Extract providers from partner response
+        const partnerProviders: AssociatedProvider[] = partnerData.providers && Array.isArray(partnerData.providers)
+          ? partnerData.providers.map((p: any) => ({
+              id: p.id || p.email,
+              email: p.email,
+              providerName: p.providerName || p.fullName,
+              providerTitle: p.providerTitle || p.title,
+              specialty: p.specialty,
+              profilePhotoURL: p.profilePhotoURL || p.profileImage,
+            }))
+          : [];
+
+        setAssociatedProviders(partnerProviders);
+        
+        // Get available providers from all providers list
+        const providersList = providers?.data && Array.isArray(providers.data) ? providers.data : [];
+        const associatedProviderIds = new Set(partnerProviders.map((p) => p.email));
+        const availableProviders = providersList
+          .filter((p: any) => !associatedProviderIds.has(p.email))
+          .map((p: any) => ({
+            id: p.email,
+            email: p.email,
+            providerName: p.providerName,
+            providerTitle: p.providerTitle,
+            specialty: p.specialty,
+            profilePhotoURL: p.profilePhotoURL,
+          }));
+        setAvailableProviders(availableProviders);
       }
     } catch (error) {
       console.error("Failed to load partner details:", error);
-    }
-  };
-
-  const loadPartnerSchools = async () => {
-    setIsLoadingSchools(true);
-    try {
-      const response = await api(ENDPOINTS.partnerSchools(partnerId));
-      const partnerSchools: AssociatedSchool[] = response?.success && response.data?.schools
-        ? response.data.schools.map((s: { id: string | number; name: string; logo?: string }) => ({
-            id: s.id,
-            name: s.name,
-            logo: s.logo,
-          }))
-        : response?.data && Array.isArray(response.data)
-        ? response.data.map((s: { id: string | number; name: string; logo?: string }) => ({
-            id: s.id,
-            name: s.name,
-            logo: s.logo,
-          }))
-        : [];
-
-      setAssociatedSchools(partnerSchools);
-      
-      const associatedIds = new Set(partnerSchools.map((s) => String(s.id)));
-      const available = allSchools
-        .filter((s) => !associatedIds.has(String(s.id)))
-        .map((s) => ({
-          id: s.id,
-          name: s.name,
-          logo: s.logo || undefined,
-        }));
-      setAvailableSchools(available);
-    } catch (error) {
-      console.error("Failed to load partner schools:", error);
     } finally {
       setIsLoadingSchools(false);
-    }
-  };
-
-  const loadPartnerProviders = async () => {
-    setIsLoadingProviders(true);
-    try {
-      const response = await api(ENDPOINTS.partnerProviders(partnerId));
-      const partnerProviders: AssociatedProvider[] = response?.success && response.data?.providers
-        ? response.data.providers.map((p: any) => ({
-            id: p.id || p.email,
-            email: p.email,
-            providerName: p.providerName || p.fullName,
-            providerTitle: p.providerTitle || p.title,
-            specialty: p.specialty,
-            profilePhotoURL: p.profilePhotoURL || p.profileImage,
-          }))
-        : response?.data && Array.isArray(response.data)
-        ? response.data.map((p: any) => ({
-            id: p.id || p.email,
-            email: p.email,
-            providerName: p.providerName || p.fullName,
-            providerTitle: p.providerTitle || p.title,
-            specialty: p.specialty,
-            profilePhotoURL: p.profilePhotoURL || p.profileImage,
-          }))
-        : [];
-
-      setAssociatedProviders(partnerProviders);
-      
-      const providersList = providers?.data && Array.isArray(providers.data) ? providers.data : [];
-      const associatedIds = new Set(partnerProviders.map((p) => p.email));
-      const available = providersList
-        .filter((p: any) => !associatedIds.has(p.email))
-        .map((p: any) => ({
-          id: p.email,
-          email: p.email,
-          providerName: p.providerName,
-          providerTitle: p.providerTitle,
-          specialty: p.specialty,
-          profilePhotoURL: p.profilePhotoURL,
-        }));
-      setAvailableProviders(available);
-    } catch (error) {
-      console.error("Failed to load partner providers:", error);
-    } finally {
       setIsLoadingProviders(false);
     }
   };
@@ -214,7 +182,7 @@ const PartnerDetailsModal = ({
       if (response?.success) {
         toast.success(`School "${school.name}" added successfully`);
         await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
-        await loadPartnerSchools();
+        await loadPartnerDetails();
         setSchoolToAdd(null);
       }
     } catch (error: unknown) {
@@ -235,7 +203,7 @@ const PartnerDetailsModal = ({
       if (response?.success) {
         toast.success(`School "${school.name}" removed successfully`);
         await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
-        await loadPartnerSchools();
+        await loadPartnerDetails();
         setSchoolToRemove(null);
       }
     } catch (error: unknown) {
@@ -256,7 +224,7 @@ const PartnerDetailsModal = ({
       if (response?.success) {
         toast.success(`Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" added successfully`);
         await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
-        await loadPartnerProviders();
+        await loadPartnerDetails();
         setProviderToAdd(null);
       }
     } catch (error: unknown) {
@@ -277,7 +245,7 @@ const PartnerDetailsModal = ({
       if (response?.success) {
         toast.success(`Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" removed successfully`);
         await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
-        await loadPartnerProviders();
+        await loadPartnerDetails();
         setProviderToRemove(null);
       }
     } catch (error: unknown) {
@@ -680,7 +648,7 @@ const PartnerDetailsModal = ({
           }}
           school={selectedSchool}
           onSchoolUpdated={async () => {
-            await loadPartnerSchools();
+            await loadPartnerDetails();
             setShowSchoolModal(false);
             setSelectedSchool(null);
           }}
