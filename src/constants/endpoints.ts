@@ -39,4 +39,5 @@ export const ENDPOINTS = {
 
   // Partners endpoints
   partners: "/api/v1/partners",
+  disablePartner: (id: string | number) => `/api/v1/partners/${id}/disable`,
 };

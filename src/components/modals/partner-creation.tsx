@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { X, Upload, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useCreatePartner, ICreatePartner } from "@/hooks/queries/usePartnersQuery";
 
 interface PartnerCreationModalProps {
   isOpen: boolean;
@@ -17,23 +18,45 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
   const [nickname, setNickname] = useState("");
   const [slogan, setSlogan] = useState("");
   const [logo, setLogo] = useState<string | undefined>(undefined);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  
+  const createPartnerMutation = useCreatePartner();
 
   const handlePickLogo = () => fileInputRef.current?.click();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setLogoFile(file);
     const reader = new FileReader();
     reader.onload = () => setLogo(reader.result as string);
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onPartnerCreated?.({ name, nickname, logo });
-    onClose();
+
+    const partnerData: ICreatePartner = {
+      name: name.trim(),
+      nickname: nickname.trim() || undefined,
+      slogan: slogan.trim() || undefined,
+      logo: logoFile,
+    };
+
+    createPartnerMutation.mutate(partnerData, {
+      onSuccess: (data) => {
+        onPartnerCreated?.({ name: data.name, nickname: data.nickname, logo: data.logo });
+        // Reset form
+        setName("");
+        setNickname("");
+        setSlogan("");
+        setLogo(undefined);
+        setLogoFile(null);
+        onClose();
+      },
+    });
   };
 
   return (
@@ -158,10 +181,17 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
                 <Button
                   type="submit"
                   form="partner-form"
-                  disabled={!name.trim()}
+                  disabled={!name.trim() || createPartnerMutation.isPending}
                   className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:shadow-none"
                 >
-                  Create Partner
+                  {createPartnerMutation.isPending ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Creating...
+                    </div>
+                  ) : (
+                    "Create Partner"
+                  )}
                 </Button>
               </div>
             </div>
