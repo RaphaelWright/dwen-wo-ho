@@ -7,6 +7,8 @@ export interface IProvider {
   applicationDate: string;
   applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
   profilePhotoURL: string;
+  status?: string | null;
+  bio?: string | null;
 }
 
 export interface IProviderResponse {

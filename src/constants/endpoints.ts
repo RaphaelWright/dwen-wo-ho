@@ -39,5 +39,14 @@ export const ENDPOINTS = {
 
   // Partners endpoints
   partners: "/api/v1/partners",
+  partner: (id: string | number) => `/api/v1/partners/${id}`,
   disablePartner: (id: string | number) => `/api/v1/partners/${id}/disable`,
+  addPartnerToSchool: (schoolId: string | number, partnerId: string | number) => `/api/v1/schools/${schoolId}/add-partner?partnerId=${partnerId}`,
+  removePartnerFromSchool: (schoolId: string | number, partnerId: string | number) => `/api/v1/schools/${schoolId}/remove-partner?partnerId=${partnerId}`,
+  partnerSchools: (partnerId: string | number) => `/api/v1/partners/${partnerId}/schools`,
+  partnerProviders: (partnerId: string | number) => `/api/v1/partners/${partnerId}/providers`,
+  addSchoolToPartner: (partnerId: string | number, schoolId: string | number) => `/api/v1/partners/${partnerId}/add-school?schoolId=${schoolId}`,
+  removeSchoolFromPartner: (partnerId: string | number, schoolId: string | number) => `/api/v1/partners/${partnerId}/remove-school?schoolId=${schoolId}`,
+  addProviderToPartner: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/add-provider?providerId=${providerId}`,
+  removeProviderFromPartner: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
 };

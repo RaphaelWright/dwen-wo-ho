@@ -11,6 +11,8 @@ import ReachModal from "@/components/modals/reach";
 import { useSchools } from "@/hooks/queries/useSchools";
 import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
 import SchoolCreationModal from "@/components/modals/school-creation";
+import { api } from "@/lib/api";
+import { ENDPOINTS } from "@/constants/endpoints";
 
 
 export default function DashboardLayout({
@@ -44,6 +46,22 @@ export default function DashboardLayout({
 
   const { schools, isLoading: schoolsLoading } = useSchools();
   const { providers, isLoading: providersLoading } = useProvidersQuery();
+  const [partnerCount, setPartnerCount] = useState(0);
+
+  useEffect(() => {
+    const loadPartnerCount = async () => {
+      try {
+        const response = await api(ENDPOINTS.partners);
+        if (response?.success && response.data) {
+          const partnersList = Array.isArray(response.data) ? response.data : [];
+          setPartnerCount(partnersList.length);
+        }
+      } catch (error) {
+        console.error("Failed to load partner count:", error);
+      }
+    };
+    loadPartnerCount();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -78,6 +96,7 @@ export default function DashboardLayout({
       <CuratorSidebar
         schoolCount={schoolCount}
         providerCount={providerCount}
+        partnerCount={partnerCount}
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
@@ -139,8 +158,17 @@ export default function DashboardLayout({
           setShowPartnerModal(false);
           setShowCreateModal(true);
         }}
-        onPartnerCreated={(partner) => {
-          // console.log("Partner created:", partner);
+        onPartnerCreated={async (partner) => {
+          // Refresh partner count
+          try {
+            const response = await api(ENDPOINTS.partners);
+            if (response?.success && response.data) {
+              const partnersList = Array.isArray(response.data) ? response.data : [];
+              setPartnerCount(partnersList.length);
+            }
+          } catch (error) {
+            console.error("Failed to refresh partner count:", error);
+          }
           setShowPartnerModal(false);
           setShowCreateModal(true);
         }}
