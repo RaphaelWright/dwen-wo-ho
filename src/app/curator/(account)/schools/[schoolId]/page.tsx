@@ -25,7 +25,7 @@ import {
   SchoolReachResponse,
 } from "@/components/curator/school-detail-tabs";
 import { ProviderDetails } from "@/types/provider";
-import { formatProviderName } from "@/lib/utils/formatProviderName";
+import { formatProviderName, getProviderTitle } from "@/lib/utils/formatProviderName";
 
 type TabType = "overview" | "providers" | "partners" | "reach";
 
@@ -412,7 +412,7 @@ export default function SchoolDetailsPage() {
                   id: foundProvider.id,
                   email: foundProvider.email,
                   fullName: formatProviderName(foundProvider.providerName, foundProvider.providerTitle),
-                  providerTitle: foundProvider.providerTitle || undefined,
+                  providerTitle: getProviderTitle(foundProvider.providerName, foundProvider.providerTitle) || undefined,
                   professionalTitle: foundProvider.specialty || undefined,
                   profileImage: foundProvider.profilePhotoURL || undefined,
                   createdAt: "",

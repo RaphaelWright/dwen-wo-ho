@@ -14,6 +14,7 @@ import {
   ProviderLoginFormData,
 } from "@/schemas/provider.auth.schema";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import { setUserType } from "@/lib/utils/getUserType";
 
 import LoadingOverlay from "@/components/ui/loading-overlay";
 
@@ -99,6 +100,9 @@ const SignInContent = ({
             localStorage.setItem("token", token);
             if (userData?.userRole === "ROLE_CURATOR") {
               localStorage.setItem("curatorToken", token);
+              setUserType("curator");
+            } else {
+              setUserType("provider");
             }
           }
 

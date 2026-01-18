@@ -1,6 +1,7 @@
 import { ROUTES } from "@/constants/routes";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { api } from "./api";
+import { setUserType, getStoredUserType } from "./utils/getUserType";
 
 let isHandlingAuthError = false;
 let isRefreshingToken = false;
@@ -39,11 +40,18 @@ export const refreshToken = async (): Promise<string | null> => {
         const newRefreshToken = response.data.refreshToken;
 
         if (newAccessToken) {
-          const isCurator = localStorage.getItem("curatorToken");
+          // Check stored user type first, then fallback to curatorToken check
+          const storedUserType = getStoredUserType();
+          const isCurator = storedUserType === "curator" || localStorage.getItem("curatorToken");
+          
           if (isCurator) {
             localStorage.setItem("curatorToken", newAccessToken);
+            setUserType("curator");
           } else {
             localStorage.setItem("token", newAccessToken);
+            if (!storedUserType) {
+              setUserType("provider");
+            }
           }
         }
 
@@ -102,6 +110,7 @@ export const handleTokenExpiration = async () => {
   localStorage.removeItem("token");
   localStorage.removeItem("curatorToken");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("userType");
 
   const currentPath = window.location.pathname;
   const isAuthPage = 
