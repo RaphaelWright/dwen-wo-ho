@@ -115,7 +115,6 @@ const PhotoStep = ({ profilePhoto, onChange, onNext, onBack }: PhotoStepProps) =
         onNext();
 
       } catch (error) {
-        console.error("Photo upload error:", error);
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (error as any)?.message || "Failed to upload photo. Please try again."
@@ -124,7 +123,6 @@ const PhotoStep = ({ profilePhoto, onChange, onNext, onBack }: PhotoStepProps) =
 
 
     } catch (error) {
-      console.error("Photo processing error:", error);
       toast.error("Failed to process image");
     }
   };

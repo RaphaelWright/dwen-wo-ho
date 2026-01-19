@@ -106,12 +106,9 @@ const SignInContent = () => {
           router.push(ROUTES.provider.home);
         }
       } else {
-        console.error("❌ Sign in failed:", response?.message);
         setErrorMessage(response?.message ?? "Sign in failed");
       }
     } catch (error: any) {
-      console.error("❌ Sign in error:", error);
-      console.error("Error message:", error.message);
 
       const errorMsg = error.message || "Sign in failed. Please try again.";
 

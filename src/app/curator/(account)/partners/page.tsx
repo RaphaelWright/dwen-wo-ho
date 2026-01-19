@@ -37,7 +37,7 @@ export default function PartnersPage() {
         setPartners(partnersList);
       }
     } catch (error) {
-      console.error("Failed to load partners:", error);
+      // Note: User will see empty state or loading state
     } finally {
       setIsLoading(false);
     }

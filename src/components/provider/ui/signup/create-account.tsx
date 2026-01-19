@@ -13,6 +13,7 @@ import {
   ProviderSignUpSchema,
   ProviderSignUpFormData,
 } from "@/schemas/provider.auth.schema";
+import { toast } from "sonner";
 
 interface CreateAccountProps {
   email?: string;
@@ -83,14 +84,12 @@ const CreateAccount = ({
           password: values.password,
         });
       } else {
-        console.error("❌ Signup failed - no success flag");
         const errorResponse = response as { message?: string } | null | undefined;
-        setErrorMessage(errorResponse?.message || "Failed to create account");
+        const errorMsg = errorResponse?.message || "Failed to create account";
+        setErrorMessage(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error: any) {
-      console.error("❌ Signup error:", error);
-      console.error("Error response:", error.response);
-      console.error("Error message:", error.message);
 
       let errorMsg = "Failed to create account. Please try again.";
 

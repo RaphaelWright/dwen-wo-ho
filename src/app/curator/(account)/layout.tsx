@@ -57,7 +57,7 @@ export default function DashboardLayout({
           setPartnerCount(partnersList.length);
         }
       } catch (error) {
-        console.error("Failed to load partner count:", error);
+        // Note: Background data loading error, badge will show 0
       }
     };
     loadPartnerCount();
@@ -167,7 +167,7 @@ export default function DashboardLayout({
               setPartnerCount(partnersList.length);
             }
           } catch (error) {
-            console.error("Failed to refresh partner count:", error);
+            // Note: Background data loading error, badge count may be stale
           }
           setShowPartnerModal(false);
           setShowCreateModal(true);

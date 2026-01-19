@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DevTool } from "@hookform/devtools";
+import { toast } from "sonner";
 import { recoverSteps } from "@/lib/utils";
 import Stepper from "@/components/stepper";
 import { api } from "@/lib/api";
@@ -90,13 +91,14 @@ const NewPasswordContent = () => {
           router.push(ROUTES.provider.home);
         }
       } else {
-        console.error(response.message || "Password reset failed");
+        const errorMsg = response.message || "Password reset failed";
+        toast.error(errorMsg);
       }
     } catch (error) {
       const errorMsg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error as any)?.response?.data?.message || "Password reset failed. Please try again.";
-      console.error(errorMsg);
+      toast.error(errorMsg);
     }
   };
 

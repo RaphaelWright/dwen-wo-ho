@@ -13,6 +13,7 @@ import Stepper from "@/components/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
+import { toast } from "sonner";
 
 interface VerifyPasswordResetProps {
   email: string;
@@ -61,13 +62,14 @@ const VerifyContent = ({
         if (response.success) {
           // console.log("Email sent");
         } else {
-          console.error(response.message || "The provided email is invalid");
+          const errorMsg = response.message || "The provided email is invalid";
+          toast.error(errorMsg);
         }
       } catch (error) {
         const errorMsg =
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (error as any)?.response?.data?.message || "Sign in failed. Please try again.";
-        console.error(errorMsg);
+        toast.error(errorMsg);
       } finally {
         // setIsLoading(false);
       }

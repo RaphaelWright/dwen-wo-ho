@@ -34,10 +34,8 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
         setErrorMessage(response.message || "Failed to verify email");
       }
     } catch (error) {
-      console.error("Error checking email:", error);
-
       // Parse error message - it might be stringified JSON
-      let errorMessage = "";
+      let errorMessage = "Failed to verify email. Please try again.";
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rawError = (error as any)?.message || "";
 
@@ -53,7 +51,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
         errorMessage = rawError || "Failed to verify email";
       }
 
-      // Check if user not found - redirect to signup
+      // Check if user not found - redirect to signup (expected flow, don't log)
       if (errorMessage.includes("User not found")) {
         onEmailSubmit(email, false);
         return;

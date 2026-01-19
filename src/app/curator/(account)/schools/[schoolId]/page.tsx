@@ -156,7 +156,7 @@ export default function SchoolDetailsPage() {
         setAllPartners(partnersList);
       }
     } catch (error) {
-      console.error("Failed to load all partners:", error);
+      // Note: Background data loading error
     }
   };
 

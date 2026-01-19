@@ -165,7 +165,7 @@ const PartnerDetailsModal = ({
         setAvailableProviders(availableProviders);
       }
     } catch (error) {
-      console.error("Failed to load partner details:", error);
+      // Note: Background data loading error, user sees loading state
     } finally {
       setIsLoadingSchools(false);
       setIsLoadingProviders(false);
@@ -264,7 +264,7 @@ const PartnerDetailsModal = ({
         setShowSchoolModal(true);
       }
     } catch (error) {
-      console.error("Failed to load school details:", error);
+      // Fallback to navigation if modal fails
       router.push(`${ROUTES.curator.schools}/${school.id}`);
     }
   };

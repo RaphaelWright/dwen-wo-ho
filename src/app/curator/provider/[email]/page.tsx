@@ -152,8 +152,8 @@ const ProviderDetails = () => {
         setErrorMessage(response.message || "Failed to approve provider");
       }
     } catch (error: any) {
-      console.error("Error approving provider:", error);
-      setErrorMessage("Failed to approve provider. Please try again.");
+      const errorMsg = error?.message || "Failed to approve provider. Please try again.";
+      setErrorMessage(errorMsg);
     } finally {
       setIsActionLoading(false);
     }
@@ -182,8 +182,8 @@ const ProviderDetails = () => {
         setErrorMessage(response.message || "Failed to reject provider");
       }
     } catch (error: any) {
-      console.error("Error rejecting provider:", error);
-      setErrorMessage("Failed to reject provider. Please try again.");
+      const errorMsg = error?.message || "Failed to reject provider. Please try again.";
+      setErrorMessage(errorMsg);
     } finally {
       setIsActionLoading(false);
     }

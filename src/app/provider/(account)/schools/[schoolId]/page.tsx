@@ -54,7 +54,7 @@ export default function ProviderSchoolDetailsPage() {
         setSchool(response.data);
       }
     } catch (error) {
-      console.error("Failed to load school details:", error);
+      // Note: This is a background operation, user will see loading state
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +71,7 @@ export default function ProviderSchoolDetailsPage() {
       const mockStudents: Student[] = [];
       setStudents(mockStudents);
     } catch (error) {
-      console.error("Failed to load students:", error);
+      // Note: This is a background operation, user will see loading state
     } finally {
       setStudentsLoading(false);
     }

@@ -64,7 +64,6 @@ export const refreshToken = async (): Promise<string | null> => {
 
       return null;
     } catch (error) {
-      console.error("Token refresh failed:", error);
       // Clear refresh token if refresh fails
       if (typeof window !== "undefined") {
         localStorage.removeItem("refreshToken");
