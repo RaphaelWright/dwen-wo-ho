@@ -46,7 +46,6 @@ const WaitListModal = ({
         throw new Error(error.response.message);
       }
     } catch (err: unknown) {
-      console.error(err);
       if (err instanceof Error) {
         if (err.message.includes("duplicate key")) {
           toast.error("You have already joined the waitlist");

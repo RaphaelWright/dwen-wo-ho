@@ -79,7 +79,7 @@ const ProviderHomePage = () => {
                         setShowPendingModal(true);
                     }
                 } catch (e) {
-                    console.error("HOME PAGE: Failed to parse pending user data", e);
+                    // Ignore parse errors for pending user data
                 }
             }
         };
@@ -89,7 +89,7 @@ const ProviderHomePage = () => {
         return () => {
             isMounted = false;
         };
-    }, [router]);
+    }, []); // Empty dependency array - router is stable and we only want to check once
 
     // Update with real data from API if available
     useEffect(() => {

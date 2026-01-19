@@ -13,6 +13,7 @@ import Stepper from "@/components/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
+import { toast } from "sonner";
 
 const VerifyContent = () => {
   const [isRunning, setIsRunning] = useState(true);
@@ -52,12 +53,13 @@ const VerifyContent = () => {
         if (response.success) {
           // console.log("Email sent");
         } else {
-          console.error(response.message || "The provided email is invalid");
+          const errorMsg = response.message || "The provided email is invalid";
+          toast.error(errorMsg);
         }
       } catch (error: unknown) {
         const errorMsg =
           (error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Sign in failed. Please try again.";
-        console.error(errorMsg);
+        toast.error(errorMsg);
       } finally {
         // setIsLoading(false);
       }

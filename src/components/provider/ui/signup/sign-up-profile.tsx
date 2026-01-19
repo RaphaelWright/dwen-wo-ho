@@ -118,9 +118,18 @@ const SignUpProfile = ({
   };
 
   const handleNext = async () => {
-    // Validation
-    if (currentStep === 0 && !profileData.photo) {
-      toast.error("Please upload a profile photo");
+    // Skip validation for photo step - PhotoStep handles upload and auto-advances
+    // Validation only needed if user manually navigates without uploading
+    if (currentStep === 0) {
+      // Photo step auto-advances after upload, so if we reach here without photo,
+      // it means user hasn't uploaded yet - but PhotoStep should handle this
+      // Only validate if photo is truly missing and we're not coming from upload
+      if (!profileData.photo) {
+        // Don't show error - PhotoStep will handle the upload flow
+        return;
+      }
+      // Photo exists, proceed to next step
+      setCurrentStep((prev) => prev + 1);
       return;
     }
     if (
@@ -165,7 +174,6 @@ const SignUpProfile = ({
         toast.success("Profile updated successfully!");
         setCurrentStep(currentStep + 1);
       } catch (error) {
-        console.error("Profile update error:", error);
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (error as any)?.message || "Failed to update profile. Please try again."
@@ -218,11 +226,11 @@ const SignUpProfile = ({
               router.push(ROUTES.provider.home);
             } else {
               // Login failed logically? Fallback to auth page
-              console.warn("Auto-login returned failure:", loginResponse);
+              toast.error("Auto-login failed. Please sign in manually.");
               router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
             }
           } catch (loginError) {
-            console.error("Auto-login error:", loginError);
+            toast.error("Auto-login failed. Please sign in manually.");
             // If login fails (e.g. 401), fallback to sign-in page
             router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
           }
@@ -232,7 +240,6 @@ const SignUpProfile = ({
         }
 
       } catch (error) {
-        console.error("Specialty submission error:", error);
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (error as any)?.message || "Failed to add specialty. Please try again."
@@ -240,12 +247,6 @@ const SignUpProfile = ({
       } finally {
         setIsSubmitting(false);
       }
-      return;
-    }
-
-    // if it is an image, move on to the next since we already uploaded image in the photo step
-    if (currentStep === 0) {
-      setCurrentStep((prev) => prev + 1);
       return;
     }
 

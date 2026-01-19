@@ -70,10 +70,6 @@ const extractErrorFromResponse = async (response: Response): Promise<Error> => {
     responseText.includes("Profile is not complete") ||
     responseText.includes("Invalid or missing Authorization header");
 
-  if (!isExpectedFlow) {
-    console.error(`API Error [${response.status}]:`, responseText);
-  }
-
   try {
     const errorData = JSON.parse(responseText);
     return new Error(JSON.stringify(errorData));

@@ -1,15 +1,17 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import CheckEmail from "@/components/provider/ui/check-email";
 import SignIn from "@/components/provider/ui/signin";
 import SignUp from "@/components/provider/ui/sign-up";
 import VerifyPasswordReset from "@/components/provider/ui/verify-password-reset";
 import { useSearchParams } from "next/navigation";
-import { getUserType, hasValidToken } from "@/lib/utils/getUserType";
+import { getUserType, hasValidToken, setUserType } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/constants/routes";
 import { refreshToken } from "@/lib/auth-utils";
+import { api } from "@/lib/api";
+import { ENDPOINTS } from "@/constants/endpoints";
 
 type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
 
@@ -22,56 +24,107 @@ const ProviderAuthPageContent = () => {
   const [step, setStep] = useState<AuthStep>("check-email");
   const [email, setEmail] = useState<string>(initialEmail || "");
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const hasCheckedRef = useRef(false);
+  const hasRedirectedRef = useRef(false);
+  const isCheckingRef = useRef(false);
 
-  // Check for existing tokens and auto-signin
+  // Check for existing tokens and auto-signin - only run once on mount
   useEffect(() => {
+    // Prevent multiple checks
+    if (hasCheckedRef.current || isCheckingRef.current) return;
+    hasCheckedRef.current = true;
+    isCheckingRef.current = true;
+
     let isMounted = true;
-    let hasRedirected = false;
     
     const checkAuthAndRedirect = async () => {
-      // Small delay to ensure localStorage is available
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      if (!isMounted || hasRedirected) return;
-
-      const userType = getUserType();
-      const hasToken = hasValidToken();
-
-      // Only redirect if we have a valid token and user type
-      // Use router.replace to prevent adding to history and causing loops
-      if (hasToken && userType === "curator") {
-        hasRedirected = true;
-        router.replace(ROUTES.curator.schools);
+      // Double-check mounted state and redirect flag
+      if (!isMounted || hasRedirectedRef.current) {
+        if (isMounted && !hasRedirectedRef.current) {
+          isCheckingRef.current = false;
+          setIsCheckingAuth(false);
+        }
         return;
       }
 
-      if (hasToken && userType === "provider") {
-        hasRedirected = true;
-        router.replace(ROUTES.provider.home);
-        return;
-      }
+      // Helper function to clear auth and proceed to login
+      const clearAuthAndProceed = () => {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          localStorage.removeItem("curatorToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("userType");
+          localStorage.removeItem("pendingUser");
+        }
+        setUserType(null);
+        if (isMounted && !hasRedirectedRef.current) {
+          isCheckingRef.current = false;
+          setIsCheckingAuth(false);
+        }
+      };
 
-      // If refresh token exists but no access token, try to refresh
-      if (hasToken && !userType) {
+      // Helper function to verify profile and redirect
+      const verifyProfileAndRedirect = async () => {
+        try {
+          // Make request to profile endpoint to verify token is valid
+          const profileResponse = await api(ENDPOINTS.profile, { method: "GET" });
+          
+          // If profile request succeeds (200), user is authenticated
+          if (profileResponse?.success && profileResponse.data) {
+            const userType = getUserType();
+            
+            if (userType === "curator" && !hasRedirectedRef.current) {
+              hasRedirectedRef.current = true;
+              isCheckingRef.current = false;
+              window.location.href = ROUTES.curator.schools;
+              return true;
+            }
+            
+            if (userType === "provider" && !hasRedirectedRef.current) {
+              hasRedirectedRef.current = true;
+              isCheckingRef.current = false;
+              window.location.href = ROUTES.provider.home;
+              return true;
+            }
+          }
+          
+          // If profile request doesn't succeed, user is logged out
+          clearAuthAndProceed();
+          return false;
+        } catch (error) {
+          // Profile request failed - user is logged out
+          clearAuthAndProceed();
+          return false;
+        }
+      };
+
+      // First, check if refreshToken exists - if so, immediately refresh to get new access token
+      const refreshTokenValue = typeof window !== "undefined" 
+        ? localStorage.getItem("refreshToken") 
+        : null;
+
+      if (refreshTokenValue) {
+        // Immediately try to refresh the token
         const refreshedToken = await refreshToken();
-        if (refreshedToken && isMounted && !hasRedirected) {
-          // Token refreshed, check user type again
-          const newUserType = getUserType();
-          if (newUserType === "curator") {
-            hasRedirected = true;
-            router.replace(ROUTES.curator.schools);
-            return;
-          }
-          if (newUserType === "provider") {
-            hasRedirected = true;
-            router.replace(ROUTES.provider.home);
-            return;
-          }
+        if (refreshedToken && isMounted && !hasRedirectedRef.current) {
+          // Token refreshed successfully, verify profile and redirect
+          await verifyProfileAndRedirect();
+          return;
         }
       }
 
-      // No valid token or couldn't determine type - proceed with auth flow
-      if (isMounted) {
+      // If no refreshToken or refresh failed, check for existing access tokens
+      const hasToken = hasValidToken();
+      
+      if (hasToken) {
+        // We have a token, verify it's still valid by checking profile
+        await verifyProfileAndRedirect();
+        return;
+      }
+
+      // No valid token - proceed with auth flow
+      if (isMounted && !hasRedirectedRef.current) {
+        isCheckingRef.current = false;
         setIsCheckingAuth(false);
       }
     };
@@ -80,8 +133,9 @@ const ProviderAuthPageContent = () => {
 
     return () => {
       isMounted = false;
+      isCheckingRef.current = false;
     };
-  }, [router]);
+  }, []); // Empty dependency array - only run once on mount
 
   useEffect(() => {
     if (isCheckingAuth) return;

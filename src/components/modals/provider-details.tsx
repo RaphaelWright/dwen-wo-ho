@@ -138,7 +138,7 @@ const ProviderDetailsModal = ({
         setAvailableSchools(available);
       }
     } catch (error) {
-      console.error("Failed to load provider schools:", error);
+      // Note: Background data loading error, user sees loading state
     } finally {
       setIsLoadingSchools(false);
     }
@@ -157,7 +157,7 @@ const ProviderDetailsModal = ({
         })));
       }
     } catch (error) {
-      console.error("Failed to load all partners:", error);
+      // Note: Background data loading error, user sees loading state
     }
   };
 
@@ -184,7 +184,7 @@ const ProviderDetailsModal = ({
         setAvailablePartners(available);
       }
     } catch (error) {
-      console.error("Failed to load provider partners:", error);
+      // Note: Background data loading error, user sees loading state
     } finally {
       setIsLoadingPartners(false);
     }

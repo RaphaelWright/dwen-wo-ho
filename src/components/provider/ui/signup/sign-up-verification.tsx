@@ -70,19 +70,15 @@ const SignUpVerification = ({
           // Proceed to next step
           onNext();
         } else {
-          console.error("❌ Verification successful but no token found:", verifyResponse);
           setErrorMessage("Verification succeeded but login failed. Please try logging in.");
           toast.error("Verification error: No token received");
         }
       } else {
-        console.error("❌ Verification failed - success flag false");
         const msg = verifyResponse?.message || "Verification failed. Please try again.";
         setErrorMessage(msg);
         toast.error(msg);
       }
     } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      console.error("❌ ERROR during verification/signup process:", error);
-
       let errorMsg = "Verification failed. Please try again.";
 
       // Try to extract message from different possible error structures
