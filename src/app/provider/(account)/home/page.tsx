@@ -72,6 +72,7 @@ const ProviderHomePage = () => {
                     const isPending =
                         pendingData.applicationStatus === "PENDING" ||
                         pendingData.status === "PENDING" ||
+                        pendingData.applicationStatus === "REJECTED" ||
                         pendingData.isVerified === false;
 
                     // console.log("HOME PAGE: isPending check result:", isPending);
@@ -110,6 +111,7 @@ const ProviderHomePage = () => {
             const isPending =
                 data.applicationStatus === "PENDING" ||
                 data.status === "PENDING" ||
+                data.applicationStatus === "REJECTED" ||
                 (data as any).isVerified === false;
 
             if (isPending) {
@@ -159,7 +161,7 @@ const ProviderHomePage = () => {
             if (pendingUserStr && (error?.message?.includes("401") || error?.message?.includes("Invalid"))) {
                 try {
                     const pendingData = JSON.parse(pendingUserStr);
-                    const isPending = pendingData.applicationStatus === "PENDING" || pendingData.status === "PENDING";
+                    const isPending = pendingData.applicationStatus === "PENDING" || pendingData.status === "PENDING" || pendingData.applicationStatus === "REJECTED";
                     if (isPending) {
                         setUserInfo({
                             name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,

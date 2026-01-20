@@ -208,6 +208,7 @@ const SignInContent = ({
 
           // If status is REJECTED, allow sign-in but redirect to home (pending page)
           if (userData.applicationStatus === "REJECTED") {
+            localStorage.setItem("pendingUser", JSON.stringify(userData));
             setIsRedirecting(true);
             router.push(ROUTES.provider.home);
             return;

@@ -47,7 +47,7 @@ const useAuthQuery = () => {
 
   const resetPasswordMutation = useMutation({
     mutationKey: ["auth", "resetPassword"],
-    mutationFn: (data: { password: string; confirmPassword: string }) =>
+    mutationFn: (data: { password: string; confirmPassword: string; token?: string }) =>
       resetPassword(data),
   });
 
@@ -132,10 +132,20 @@ const useAuthQuery = () => {
   async function resetPassword(data: {
     password: string;
     confirmPassword: string;
+    token?: string;
   }) {
+    const headers: Record<string, string> = {};
+    if (data.token) {
+      headers.Authorization = `Bearer ${data.token}`;
+    }
+
     return api(ENDPOINTS.resetPassword, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      }),
+      headers,
     });
   }
 
