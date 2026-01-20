@@ -73,9 +73,10 @@ const PendingVerificationModal = ({
               {/* Logout Button - Top Right */}
               <button
                 onClick={() => setShowLogoutModal(true)}
-                className="text-gray-400 hover:text-red-500 transition-colors p-2"
+                className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors p-2"
                 title="Log Out"
               >
+                <span className="font-medium">Log out</span>
                 <FiLogOut size={24} />
               </button>
             </div>
