@@ -202,7 +202,7 @@ const SignInContent = ({
             }
 
             setIsRedirecting(true);
-            router.push(ROUTES.provider.profile);
+            router.push(ROUTES.provider.home);
             return;
           }
 
