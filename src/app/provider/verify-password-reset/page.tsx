@@ -1,5 +1,7 @@
 "use client";
 
+import Layout from "@/app/provider/auth/layout";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import JustGoHealth from "@/components/logo-purple";
@@ -166,9 +168,11 @@ const VerifyContent = () => {
 
 const Verify = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <VerifyContent />
-    </Suspense>
+    <Layout>
+      <Suspense fallback={<div>Loading...</div>}>
+        <VerifyContent />
+      </Suspense>
+    </Layout>
   );
 };
 

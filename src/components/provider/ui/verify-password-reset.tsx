@@ -45,36 +45,7 @@ const VerifyContent = ({
     return () => clearInterval(intervalId);
   }, [isRunning, seconds]);
 
-  useEffect(() => {
-    (async () => {
-      if (!email) {
-        router.push(ROUTES.provider.checkEmail);
-      }
 
-      // Make a request to sent email to user before countdown starts
-
-      try {
-        const response = await api(ENDPOINTS.recoverAccount, {
-          method: "POST",
-          body: JSON.stringify({ email: email as string }),
-        });
-
-        if (response.success) {
-          // console.log("Email sent");
-        } else {
-          const errorMsg = response.message || "The provided email is invalid";
-          toast.error(errorMsg);
-        }
-      } catch (error) {
-        const errorMsg =
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (error as any)?.response?.data?.message || "Sign in failed. Please try again.";
-        toast.error(errorMsg);
-      } finally {
-        // setIsLoading(false);
-      }
-    })();
-  }, [email, router]);
 
   return (
     <div className="h-full flex flex-col justify-between">
