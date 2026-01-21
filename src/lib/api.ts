@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-    "https://justgo.up.railway.app";
+  "https://justgo.up.railway.app";
 
 const PUBLIC_ENDPOINTS = [
   "/api/v1/auth/check-email",
@@ -13,7 +13,6 @@ const PUBLIC_ENDPOINTS = [
   "/api/v1/email/send-verification",
   "/api/v1/auth/recover-account",
   "/api/v1/auth/submit-account-recovery-code",
-  "/api/v1/auth/reset-password",
   "/api/v1/auth/refresh-token",
 ];
 
@@ -31,10 +30,10 @@ const prepareRequestBody = (body: unknown): BodyInit | undefined => {
 };
 
 const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, string> => {
-  const token = typeof window !== "undefined" 
+  const token = typeof window !== "undefined"
     ? localStorage.getItem("token")
     : null;
-  const refreshToken = typeof window !== "undefined" 
+  const refreshToken = typeof window !== "undefined"
     ? localStorage.getItem("refreshToken")
     : null;
   const headers: Record<string, string> = {
@@ -64,8 +63,8 @@ const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, 
 
 const extractErrorFromResponse = async (response: Response): Promise<Error> => {
   const responseText = await response.text();
-  const isExpectedFlow = 
-    responseText.includes("ACCOUNT PENDING") || 
+  const isExpectedFlow =
+    responseText.includes("ACCOUNT PENDING") ||
     responseText.includes("User not found") ||
     responseText.includes("Profile is not complete") ||
     responseText.includes("Invalid or missing Authorization header");
@@ -83,9 +82,9 @@ const parseSuccessResponse = async (response: Response) => {
   if (contentType?.includes("application/json")) {
     const data = await response.json();
     // Handle cases where token/userData might be at root level or in data property
-    return { 
-      success: true, 
-      message: data.message, 
+    return {
+      success: true,
+      message: data.message,
       data: data.data || data // Fallback to root data if data.data is undefined
     };
   }
@@ -111,7 +110,7 @@ export async function api(endpoint: string, options: RequestInit = {}) {
         }
       }
       throw await extractErrorFromResponse(response);
-      }
+    }
 
     return await parseSuccessResponse(response);
   } catch (error) {

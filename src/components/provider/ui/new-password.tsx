@@ -18,6 +18,8 @@ import { recoverSteps } from "@/lib/utils";
 import Stepper from "@/components/stepper";
 import { api } from "@/lib/api";
 import { setUserType } from "@/lib/utils/getUserType";
+import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import LoadingOverlay from "@/components/ui/loading-overlay";
 
 const SignUpSchema = z.object({
   email: z.email().min(1, { message: "Please enter your email" }),
@@ -30,11 +32,20 @@ const NewPasswordContent = () => {
   /* const [errorMessage, setErrorMessage] = useState<string>(""); */
   const email = useGetSearchParams("email");
   const router = useRouter();
+  const { resetPasswordMutation } = useAuthQuery();
   /* const [isLoading, setIsLoading] = useState<boolean>(false); */
 
   useEffect(() => {
     if (!email) {
       router.push(ROUTES.provider.checkEmail);
+      return;
+    }
+
+    // Check if recovery token exists, otherwise redirect to verify step to prevent 401
+    const storedToken = localStorage.getItem("recoveryToken");
+    if (!storedToken) {
+      toast.error("Session expired or invalid. Please verify code again.");
+      router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
     }
   }, [email, router]);
 
@@ -54,20 +65,22 @@ const NewPasswordContent = () => {
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
     try {
-      const response = await api(ENDPOINTS.resetPassword, {
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-          password: values.password,
-          confirmPassword: values.repeatPassword as string,
-        }),
+      const storedToken = localStorage.getItem("recoveryToken");
+
+      const response = await resetPasswordMutation.mutateAsync({
+        password: values.password,
+        confirmPassword: values.repeatPassword,
+        token: storedToken || undefined,
       });
 
       if (response.success) {
+        // Clear the temporary recovery token
+        localStorage.removeItem("recoveryToken");
+
         // Auto sign-in after password reset
         const token = response.data?.token;
         const userData = response.data?.userData || response.data;
-        
+
         if (token) {
           localStorage.setItem("token", token);
           if (userData?.userRole === "ROLE_CURATOR") {
@@ -84,6 +97,8 @@ const NewPasswordContent = () => {
           localStorage.setItem("refreshToken", refreshTokenValue);
         }
 
+        toast.success("Password changed successfully");
+
         // Redirect based on application status
         if (userData?.applicationStatus === "APPROVED") {
           router.push(ROUTES.provider.profile);
@@ -97,7 +112,7 @@ const NewPasswordContent = () => {
     } catch (error) {
       const errorMsg =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error as any)?.response?.data?.message || "Password reset failed. Please try again.";
+        (error as any)?.response?.data?.message || (error as any)?.message || "Password reset failed. Please try again.";
       toast.error(errorMsg);
     }
   };
@@ -113,7 +128,7 @@ const NewPasswordContent = () => {
           Sign in
         </Link>
       </div>
-      <form id="login-form" onSubmit={handleSubmit(onSubmit)} className="px-22">
+      <form id="login-form" onSubmit={handleSubmit(onSubmit, (errors) => console.log("Form Validation Errors:", errors))} className="px-22">
         <h1 className="text-5xl text-center font-extrabold">
           Create New Password
         </h1>
@@ -166,6 +181,7 @@ const NewPasswordContent = () => {
         />
       </div>
       <DevTool control={control} />
+      <LoadingOverlay isVisible={resetPasswordMutation.isPending} text="Updating password..." />
     </div>
   );
 };
