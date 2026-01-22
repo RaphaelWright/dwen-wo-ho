@@ -27,9 +27,35 @@ const SignUpSchema = z.object({
   repeatPassword: z.string().min(6, { message: "Please enter your password" }),
 });
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const getCleanErrorMessage = (error: any): string => {
+  let message = "An unexpected error occurred.";
+
+  if (typeof error === "string") {
+    message = error;
+  } else if (error?.response?.data?.message) {
+    message = error.response.data.message;
+  } else if (error?.message) {
+    message = error.message;
+  }
+
+  // Try to parse if it looks like a JSON string
+  if (typeof message === "string" && message.trim().startsWith("{")) {
+    try {
+      const parsed = JSON.parse(message);
+      if (parsed.message) return parsed.message;
+      if (parsed.error) return parsed.error;
+    } catch {
+      // Not JSON, continue with original message
+    }
+  }
+
+  return message;
+};
+
 const NewPasswordContent = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  /* const [errorMessage, setErrorMessage] = useState<string>(""); */
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const email = useGetSearchParams("email");
   const router = useRouter();
   const { resetPasswordMutation } = useAuthQuery();
@@ -44,6 +70,7 @@ const NewPasswordContent = () => {
     // Check if recovery token exists, otherwise redirect to verify step to prevent 401
     const storedToken = localStorage.getItem("recoveryToken");
     if (!storedToken) {
+      // Keep this toast as it's a redirect/session issue, not a form submission error
       toast.error("Session expired or invalid. Please verify code again.");
       router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
     }
@@ -64,6 +91,7 @@ const NewPasswordContent = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
+    setErrorMessage("");
     try {
       const storedToken = localStorage.getItem("recoveryToken");
 
@@ -106,14 +134,10 @@ const NewPasswordContent = () => {
           router.push(ROUTES.provider.home);
         }
       } else {
-        const errorMsg = response.message || "Password reset failed";
-        toast.error(errorMsg);
+        setErrorMessage(getCleanErrorMessage(response.message || "Password reset failed"));
       }
     } catch (error) {
-      const errorMsg =
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error as any)?.response?.data?.message || (error as any)?.message || "Password reset failed. Please try again.";
-      toast.error(errorMsg);
+      setErrorMessage(getCleanErrorMessage(error));
     }
   };
 
@@ -164,6 +188,14 @@ const NewPasswordContent = () => {
             </button>
           </div>
         </div>
+
+        {errorMessage && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 text-center font-medium">
+              {errorMessage}
+            </p>
+          </div>
+        )}
       </form>
       <div className="flex border-t border-gray-500 px-10 p-8 items-center justify-between">
         <Button
