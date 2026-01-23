@@ -22,8 +22,9 @@ export const ENDPOINTS = {
   provider: (email: string) => `/api/v1/providers/${email}`,
   approveProvider: (email: string) => `/api/v1/providers/${email}/approve`,
   rejectProvider: (email: string) => `/api/v1/providers/${email}/reject`,
-  addSchoolToProvider: (schoolId: string | number, providerEmail: string) => `/api/v1/schools/${schoolId}/add-provider?providerEmail=${providerEmail}`,
-  removeSchoolFromProvider: (schoolId: string | number, providerEmail: string) => `/api/v1/schools/${schoolId}/remove-provider?providerEmail=${providerEmail}`,
+  updateProviderActivity: "/api/v1/providers/activity",
+  addSchoolToProvider: (providerId: string | number) => `/api/v1/curator/providers/${providerId}/schools`,
+  removeSchoolFromProvider: (providerId: string | number, schoolId: string | number) => `/api/v1/curator/providers/${providerId}/schools/${schoolId}`,
   addPartnerToProvider: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/add-provider?providerId=${providerId}`,
   removePartnerFromProvider: (partnerId: string | number, providerId: string | number) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
 
@@ -34,8 +35,19 @@ export const ENDPOINTS = {
   schoolPartners: (id: string | number) => `/api/v1/schools/${id}/partners`,
   schoolProviders: (id: string | number) => `/api/v1/schools/${id}/providers`,
   schoolReach: (id: string | number) => `/api/v1/schools/${id}/reach`,
-  getSchoolLockIn: (id: string) => `/api/v1/lockin/${id}`,
+  getSchoolLockIn: (id: string | number) => `/api/v1/lockin/${id}`,
+  submitLockIn: "/api/v1/lockin",
   disableSchool: (id: string | number) => `/api/v1/schools/${id}/disable`,
+  // Patient Results endpoints
+  createPatientResult: "/api/v1/patient-results",
+  openPatientResult: (resultId: string | number) => `/api/v1/patient-results/${resultId}/open`,
+  updateActionStatus: (resultId: string | number) => `/api/v1/patient-results/${resultId}/action-status`,
+  setReferredProvider: (resultId: string | number) => `/api/v1/patient-results/${resultId}/referred-provider`,
+  getPatientResult: (resultId: string | number) => `/api/v1/patient-results/${resultId}`,
+  getSchoolPatientResults: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}`,
+  getNewSchoolPatientResults: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}/new`,
+  getProviderTreatingResults: (providerId: string | number) => `/api/v1/patient-results/provider/${providerId}/treating`,
+  incrementSchoolVisit: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}/visit`,
 
   // Partners endpoints
   partners: "/api/v1/partners",

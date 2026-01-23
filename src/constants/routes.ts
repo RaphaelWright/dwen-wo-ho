@@ -18,6 +18,8 @@ export const ROUTES = {
     verifyEmail: "/patient/verifyEmail",
     verifyPasswordReset: "/patient/verify-password-reset",
     newPassword: "/patient/new-password",
+    lockIn: "/patient/lock-in",
+    waitingRoom: "/patient/waiting-room",
   },
   curator: {
     dashboard: "/curator/dashboard",

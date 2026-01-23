@@ -17,7 +17,7 @@ const Layout = ({ children }: IProps) => {
           </div>
         </div>
       </section>
-      <section className="h-full w-full md:w-1/2 pt-10 pb-5 overflow-hidden">
+      <section className="h-full w-full md:w-1/2 pt-10 pb-5 overflow-y-auto">
         {children}
       </section>
     </main>

@@ -1,6 +1,5 @@
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
 import PendingVerificationModal from "@/components/modals/pending-verification";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { calculateTimeAgo } from "@/lib/utils";
@@ -179,70 +178,38 @@ const ProviderHomePage = () => {
         }
     }, [getProfileQuery.data, getProfileQuery.error, router]);
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("pendingUser");
-        router.push(ROUTES.provider.auth);
-    };
+    const isApproved = getProfileQuery.data?.applicationStatus === "APPROVED";
+    const isLoading = getProfileQuery.isLoading;
 
+    // Redirect approved providers to schools page immediately
+    useEffect(() => {
+        if (isApproved && !isLoading) {
+            router.replace("/provider/schools");
+        }
+    }, [isApproved, isLoading, router]);
 
-    return (
-        <>
-            <main className="relative min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
-                <div className="text-center space-y-6 max-w-2xl px-6">
-                    <div className="flex justify-center mb-8">
-                        <JustGoHealth />
-                    </div>
-
-                    <h1 className="text-5xl font-extrabold text-[#955aa4] tracking-tight">
-                        Coming Soon
-                    </h1>
-
-                    <p className="text-xl text-gray-600 font-medium leading-relaxed">
-                        We are working hard to build your provider dashboard. <br />
-                        Stay tuned for updates!
-                    </p>
-
-                    <div className="w-24 h-1 bg-[#2bb673] mx-auto rounded-full my-8"></div>
-                </div>
-
-                <div className="absolute bottom-10 w-full flex justify-center pb-4">
-                    <Button
-                        onClick={() => setShowLogoutModal(true)}
-                        variant="ghost"
-                        className="text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors text-lg px-8 py-6 h-auto font-medium"
-                    >
-                        <div className="flex items-center gap-3">
-                            <FiLogOut className="text-2xl" />
-                            <span>Log Out</span>
-                        </div>
-                    </Button>
-                </div>
-            </main>
-
-            <ConfirmationModal
-                isOpen={showLogoutModal}
-                onClose={() => setShowLogoutModal(false)}
-                onConfirm={() => {
-                    handleLogout();
-                    setShowLogoutModal(false);
-                }}
-                title="Logout Confirmation"
-                message="Are you sure you want to log out?"
-                confirmText="Yes, Logout"
-                variant="danger"
-            />
-
+    // Show pending modal if not approved (no "Coming Soon" text)
+    if (!isApproved && !isLoading) {
+        return (
             <PendingVerificationModal
                 isOpen={showPendingModal}
-                isLoading={getProfileQuery.isLoading && !showPendingModal} // Only show loading if modal isn't already shown via fallback
+                isLoading={isLoading && !showPendingModal}
                 onClose={() => {
                     // Prevent closing to enforce pending state view
                 }}
                 userInfo={userInfo}
             />
-        </>
+        );
+    }
+
+    // Show loading state while checking approval status
+    return (
+        <div className="h-screen bg-white flex items-center justify-center">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+                <p className="text-gray-500">Loading...</p>
+            </div>
+        </div>
     );
 };
 

@@ -1,7 +1,9 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Provider as ReduxProvider } from "react-redux";
 import { ReactNode, useState } from "react";
+import { store } from "@/store";
 
 interface IProps {
   children: ReactNode;
@@ -22,7 +24,11 @@ const Providers = ({ children }: IProps) => {
       })
   );
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </ReduxProvider>
+  );
 };
 
 export default Providers;

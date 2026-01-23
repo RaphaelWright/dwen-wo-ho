@@ -143,14 +143,19 @@ const PatientsHero = () => {
               </p>
               <motion.div
                 variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="flex flex-col gap-3 items-center"
               >
                 <Button 
                   onClick={() => router.push(ROUTES.patient.checkEmail)}
                   className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
                 >
                   Get Started
+                </Button>
+                <Button 
+                  onClick={() => router.push(ROUTES.patient.lockIn)}
+                  className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
+                >
+                  Lock In
                 </Button>
               </motion.div>
             </motion.div>
