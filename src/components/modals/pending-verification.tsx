@@ -3,6 +3,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import JustGoHealth from "../logo-purple";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
+import { FiLogOut } from "react-icons/fi";
 
 interface PendingVerificationModalProps {
   isOpen: boolean;
@@ -27,6 +32,17 @@ const PendingVerificationModal = ({
     timeAgo: "2 hours ago",
   },
 }: PendingVerificationModalProps) => {
+  const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("pendingUser");
+    localStorage.removeItem("curatorToken"); // Just in case, though this is provider side
+    router.push(ROUTES.provider.auth);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -53,6 +69,16 @@ const PendingVerificationModal = ({
                   Pending Page
                 </span>
               )}
+
+              {/* Logout Button - Top Right */}
+              <button
+                onClick={() => setShowLogoutModal(true)}
+                className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors p-2"
+                title="Log Out"
+              >
+                <span className="font-medium">Log out</span>
+                <FiLogOut size={24} />
+              </button>
             </div>
 
             {/* Content */}
@@ -140,6 +166,19 @@ const PendingVerificationModal = ({
           </motion.div>
         </motion.div>
       )}
+
+      <ConfirmationModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={() => {
+          handleLogout();
+          setShowLogoutModal(false);
+        }}
+        title="Logout Confirmation"
+        message="Are you sure you want to log out?"
+        confirmText="Yes, Logout"
+        variant="danger"
+      />
     </AnimatePresence>
   );
 };

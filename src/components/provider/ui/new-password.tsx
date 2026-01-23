@@ -18,6 +18,8 @@ import { recoverSteps } from "@/lib/utils";
 import Stepper from "@/components/stepper";
 import { api } from "@/lib/api";
 import { setUserType } from "@/lib/utils/getUserType";
+import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import LoadingOverlay from "@/components/ui/loading-overlay";
 
 const SignUpSchema = z.object({
   email: z.email().min(1, { message: "Please enter your email" }),
@@ -25,16 +27,52 @@ const SignUpSchema = z.object({
   repeatPassword: z.string().min(6, { message: "Please enter your password" }),
 });
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const getCleanErrorMessage = (error: any): string => {
+  let message = "An unexpected error occurred.";
+
+  if (typeof error === "string") {
+    message = error;
+  } else if (error?.response?.data?.message) {
+    message = error.response.data.message;
+  } else if (error?.message) {
+    message = error.message;
+  }
+
+  // Try to parse if it looks like a JSON string
+  if (typeof message === "string" && message.trim().startsWith("{")) {
+    try {
+      const parsed = JSON.parse(message);
+      if (parsed.message) return parsed.message;
+      if (parsed.error) return parsed.error;
+    } catch {
+      // Not JSON, continue with original message
+    }
+  }
+
+  return message;
+};
+
 const NewPasswordContent = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  /* const [errorMessage, setErrorMessage] = useState<string>(""); */
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const email = useGetSearchParams("email");
   const router = useRouter();
+  const { resetPasswordMutation } = useAuthQuery();
   /* const [isLoading, setIsLoading] = useState<boolean>(false); */
 
   useEffect(() => {
     if (!email) {
       router.push(ROUTES.provider.checkEmail);
+      return;
+    }
+
+    // Check if recovery token exists, otherwise redirect to verify step to prevent 401
+    const storedToken = localStorage.getItem("recoveryToken");
+    if (!storedToken) {
+      // Keep this toast as it's a redirect/session issue, not a form submission error
+      toast.error("Session expired or invalid. Please verify code again.");
+      router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
     }
   }, [email, router]);
 
@@ -53,21 +91,24 @@ const NewPasswordContent = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
+    setErrorMessage("");
     try {
-      const response = await api(ENDPOINTS.resetPassword, {
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-          password: values.password,
-          confirmPassword: values.repeatPassword as string,
-        }),
+      const storedToken = localStorage.getItem("recoveryToken");
+
+      const response = await resetPasswordMutation.mutateAsync({
+        password: values.password,
+        confirmPassword: values.repeatPassword,
+        token: storedToken || undefined,
       });
 
       if (response.success) {
+        // Clear the temporary recovery token
+        localStorage.removeItem("recoveryToken");
+
         // Auto sign-in after password reset
         const token = response.data?.token;
         const userData = response.data?.userData || response.data;
-        
+
         if (token) {
           localStorage.setItem("token", token);
           if (userData?.userRole === "ROLE_CURATOR") {
@@ -84,6 +125,8 @@ const NewPasswordContent = () => {
           localStorage.setItem("refreshToken", refreshTokenValue);
         }
 
+        toast.success("Password changed successfully");
+
         // Redirect based on application status
         if (userData?.applicationStatus === "APPROVED") {
           router.push(ROUTES.provider.profile);
@@ -91,14 +134,10 @@ const NewPasswordContent = () => {
           router.push(ROUTES.provider.home);
         }
       } else {
-        const errorMsg = response.message || "Password reset failed";
-        toast.error(errorMsg);
+        setErrorMessage(getCleanErrorMessage(response.message || "Password reset failed"));
       }
     } catch (error) {
-      const errorMsg =
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error as any)?.response?.data?.message || "Password reset failed. Please try again.";
-      toast.error(errorMsg);
+      setErrorMessage(getCleanErrorMessage(error));
     }
   };
 
@@ -113,7 +152,7 @@ const NewPasswordContent = () => {
           Sign in
         </Link>
       </div>
-      <form id="login-form" onSubmit={handleSubmit(onSubmit)} className="px-22">
+      <form id="login-form" onSubmit={handleSubmit(onSubmit, (errors) => console.log("Form Validation Errors:", errors))} className="px-22">
         <h1 className="text-5xl text-center font-extrabold">
           Create New Password
         </h1>
@@ -149,6 +188,14 @@ const NewPasswordContent = () => {
             </button>
           </div>
         </div>
+
+        {errorMessage && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-red-600 text-center font-medium">
+              {errorMessage}
+            </p>
+          </div>
+        )}
       </form>
       <div className="flex border-t border-gray-500 px-10 p-8 items-center justify-between">
         <Button
@@ -166,6 +213,7 @@ const NewPasswordContent = () => {
         />
       </div>
       <DevTool control={control} />
+      <LoadingOverlay isVisible={resetPasswordMutation.isPending} text="Updating password..." />
     </div>
   );
 };

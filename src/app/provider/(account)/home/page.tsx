@@ -4,12 +4,17 @@ import PendingVerificationModal from "@/components/modals/pending-verification";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { calculateTimeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
+import { Button } from "@/components/ui/button";
+import { FiLogOut } from "react-icons/fi";
 
 const ProviderHomePage = () => {
     const router = useRouter();
     const [showPendingModal, setShowPendingModal] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const [hasToken, setHasToken] = useState(false);
 
@@ -31,11 +36,11 @@ const ProviderHomePage = () => {
     useEffect(() => {
         let isMounted = true;
         let hasChecked = false;
-        
+
         const checkAuth = () => {
             if (hasChecked) return;
             hasChecked = true;
-            
+
             const refreshToken = localStorage.getItem("refreshToken");
             const token = localStorage.getItem("token");
             const pendingUserStr = localStorage.getItem("pendingUser");
@@ -58,15 +63,21 @@ const ProviderHomePage = () => {
 
             // If local storage has pending user data, use it to show modal immediately
             if (pendingUserStr) {
+                // console.log("HOME PAGE: Found pending user data, parsing...");
                 try {
                     const pendingData = JSON.parse(pendingUserStr);
+                    // console.log("HOME PAGE: Parsed pending data:", pendingData);
 
                     const isPending =
                         pendingData.applicationStatus === "PENDING" ||
                         pendingData.status === "PENDING" ||
+                        pendingData.applicationStatus === "REJECTED" ||
                         pendingData.isVerified === false;
 
+                    // console.log("HOME PAGE: isPending check result:", isPending);
+
                     if (isPending) {
+                        // console.log("HOME PAGE: User is pending, showing modal");
                         setUserInfo({
                             name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,
                             title: pendingData.professionalTitle || pendingData.specialty || "Health Provider",
@@ -75,19 +86,21 @@ const ProviderHomePage = () => {
                             timeAgo: pendingData.applicationTimestamp ? calculateTimeAgo(pendingData.applicationTimestamp) : "Recently",
                         });
                         setShowPendingModal(true);
+                    } else {
+                        // console.log("HOME PAGE: User data exists but not pending");
                     }
                 } catch (e) {
-                    // Ignore parse errors for pending user data
+                    console.error("HOME PAGE: Failed to parse pending user data", e);
                 }
             }
         };
-        
+
         checkAuth();
-        
+
         return () => {
             isMounted = false;
         };
-    }, []); // Empty dependency array - router is stable and we only want to check once
+    }, [router]);
 
     // Update with real data from API if available
     useEffect(() => {
@@ -97,6 +110,7 @@ const ProviderHomePage = () => {
             const isPending =
                 data.applicationStatus === "PENDING" ||
                 data.status === "PENDING" ||
+                data.applicationStatus === "REJECTED" ||
                 (data as any).isVerified === false;
 
             if (isPending) {
@@ -116,7 +130,7 @@ const ProviderHomePage = () => {
                 localStorage.removeItem("pendingUser");
 
                 // Check for incomplete profile logic (mirrors signin.tsx)
-                const email = data.email || "";
+                const email = data.email || ""; // Ensure we have an email if possible
                 const emailParams = email ? `email=${encodeURIComponent(email)}&` : "";
 
                 if (!data.profilePhotoURL && !data.profileURL) {
@@ -130,20 +144,23 @@ const ProviderHomePage = () => {
                 }
 
                 if ((!data.specialty || !data.specialty.trim()) && (!data.professionalTitle || !data.professionalTitle.trim())) {
+                    // Note: Checking specific fields. Adjust based on exact API response keys.
+                    // Assuming 'specialty' is the key.
                     router.replace(`/provider/signup?${emailParams}step=specialty`);
                     return;
                 }
             }
         }
-        
+
         // Handle API errors - don't redirect on auth errors if we have pendingUser
         if (getProfileQuery.error) {
             const error = getProfileQuery.error as any;
+            // If it's an auth error but we have pendingUser, show the modal
             const pendingUserStr = localStorage.getItem("pendingUser");
             if (pendingUserStr && (error?.message?.includes("401") || error?.message?.includes("Invalid"))) {
                 try {
                     const pendingData = JSON.parse(pendingUserStr);
-                    const isPending = pendingData.applicationStatus === "PENDING" || pendingData.status === "PENDING";
+                    const isPending = pendingData.applicationStatus === "PENDING" || pendingData.status === "PENDING" || pendingData.applicationStatus === "REJECTED";
                     if (isPending) {
                         setUserInfo({
                             name: `${pendingData.title ? `${pendingData.title} ` : ""}${pendingData.providerName || pendingData.fullName || "Provider"}`,

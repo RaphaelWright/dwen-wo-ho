@@ -1,5 +1,7 @@
 "use client";
 
+import Layout from "@/app/provider/auth/layout";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import JustGoHealth from "@/components/logo-purple";
@@ -14,12 +16,68 @@ import { ArrowRightIcon } from "lucide-react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { toast } from "sonner";
+import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import LoadingOverlay from "@/components/ui/loading-overlay";
 
 const VerifyContent = () => {
   const [isRunning, setIsRunning] = useState(true);
   const [seconds, setSeconds] = useState(120); // 2 minutes
   const email = useGetSearchParams("email");
   const router = useRouter();
+
+  const { submitRecoveryCodeMutation, recoverAccountMutation } = useAuthQuery();
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const handleVerifyCode = async (code: string) => {
+    if (!email) {
+      toast.error("Email is missing");
+      return;
+    }
+
+    setIsVerifying(true);
+    try {
+      const response = await submitRecoveryCodeMutation.mutateAsync({
+        code,
+        email: email,
+      });
+
+      console.log("Submit Recovery Code Response:", response);
+      if (response.success && response.data?.token) {
+        // Store the token for the next step (reset password)
+        // Using a distinct key to avoid conflicts with main auth token
+        console.log("Setting recoveryToken:", response.data.token);
+        localStorage.setItem("recoveryToken", response.data.token);
+        const savedToken = localStorage.getItem("recoveryToken");
+        console.log("Verified saved recoveryToken:", savedToken);
+
+        localStorage.removeItem("refreshToken");
+
+        toast.success("Code verified successfully");
+        router.push(`${ROUTES.provider.newPassword}?email=${email}`);
+      } else {
+        toast.error(response.message || "Invalid code");
+      }
+    } catch (error: any) {
+      const errorMsg = error?.response?.data?.message || error?.message || "Verification failed";
+      toast.error(errorMsg);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (!email) return;
+
+    setSeconds(120);
+    setIsRunning(true);
+
+    try {
+      await recoverAccountMutation.mutateAsync({ email });
+      toast.success("Code resent successfully");
+    } catch (error) {
+      toast.error("Failed to resend code");
+    }
+  };
 
 
   useEffect(() => {
@@ -36,35 +94,13 @@ const VerifyContent = () => {
     return () => clearInterval(intervalId);
   }, [isRunning, seconds]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     (async () => {
       if (!email) {
         router.push(ROUTES.provider.checkEmail);
       }
-
-      // Make a request to sent email to user before countdown starts
-
-      try {
-        const response = await api(ENDPOINTS.recoverAccount, {
-          method: "POST",
-          body: JSON.stringify({ email: email as string }),
-        });
-
-        if (response.success) {
-          // console.log("Email sent");
-        } else {
-          const errorMsg = response.message || "The provided email is invalid";
-          toast.error(errorMsg);
-        }
-      } catch (error: unknown) {
-        const errorMsg =
-          (error as { response?: { data?: { message?: string } } })?.response?.data?.message || "Sign in failed. Please try again.";
-        toast.error(errorMsg);
-      } finally {
-        // setIsLoading(false);
-      }
     })();
-  }, [email, router]);
+  }, [email, router]); */
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -89,9 +125,8 @@ const VerifyContent = () => {
           <InputOTP
             className="text-green-600"
             maxLength={6}
-            onComplete={() =>
-              router.push(`${ROUTES.provider.newPassword}?email=${email}`)
-            }
+            disabled={isVerifying}
+            onComplete={(code) => handleVerifyCode(code)}
           >
             <InputOTPSlot index={0} className="otp-slot" />
             <InputOTPSlot index={1} className="otp-slot" />
@@ -102,11 +137,8 @@ const VerifyContent = () => {
           </InputOTP>
           <div>
             <Button
-              disabled={seconds > 0}
-              onClick={() => {
-                setSeconds(120);
-                setIsRunning(true);
-              }}
+              disabled={seconds > 0 || recoverAccountMutation.isPending}
+              onClick={handleResendCode}
               className="rounded-md mt-4 bg-[#2b3990] disabled:bg-[#2b3990]/50"
             >
               Resend code <ArrowRightIcon className="w-4 h-4" />
@@ -129,15 +161,18 @@ const VerifyContent = () => {
           Next
         </Button>
       </div>
+      <LoadingOverlay isVisible={isVerifying} text="Verifying code..." />
     </div>
   );
 };
 
 const Verify = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <VerifyContent />
-    </Suspense>
+    <Layout>
+      <Suspense fallback={<div>Loading...</div>}>
+        <VerifyContent />
+      </Suspense>
+    </Layout>
   );
 };
 
