@@ -252,10 +252,12 @@ const ProviderDetailsModal = ({
       return;
     }
 
+    const providerId = provider?.id || providerEmail;
     setIsAddingSchool(true);
     try {
-      const response = await api(ENDPOINTS.addSchoolToProvider(school.id, providerEmail), {
+      const response = await api(ENDPOINTS.addSchoolToProvider(providerId), {
         method: "POST",
+        body: JSON.stringify({ schoolId: school.id }),
       });
       
       if (response?.success) {
@@ -283,10 +285,11 @@ const ProviderDetailsModal = ({
   };
 
   const handleRemoveSchool = async (school: AssociatedSchool) => {
+    const providerId = provider?.id || providerEmail;
     setIsRemovingSchool(true);
     try {
-      const response = await api(ENDPOINTS.removeSchoolFromProvider(school.id, providerEmail), {
-        method: "POST",
+      const response = await api(ENDPOINTS.removeSchoolFromProvider(providerId, school.id), {
+        method: "DELETE",
       });
       
       if (response?.success) {

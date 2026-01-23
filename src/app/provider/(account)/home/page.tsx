@@ -1,13 +1,11 @@
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
 import PendingVerificationModal from "@/components/modals/pending-verification";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { calculateTimeAgo } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
-import WidthConstraint from "@/components/ui/width-constraint";
 
 const ProviderHomePage = () => {
     const router = useRouter();
@@ -166,57 +164,35 @@ const ProviderHomePage = () => {
     const isApproved = getProfileQuery.data?.applicationStatus === "APPROVED";
     const isLoading = getProfileQuery.isLoading;
 
-    // Show pending modal and coming soon if not approved
-    if (!isApproved && !isLoading) {
-        return (
-            <>
-                <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">
-                    <div className="text-center space-y-6 max-w-2xl px-6">
-                        <div className="flex justify-center mb-8">
-                            <JustGoHealth />
-                        </div>
-
-                        <h1 className="text-5xl font-extrabold text-[#955aa4] tracking-tight">
-                            Coming Soon
-                        </h1>
-
-                        <p className="text-xl text-gray-600 font-medium leading-relaxed">
-                            We are working hard to build your provider dashboard. <br />
-                            Stay tuned for updates!
-                        </p>
-
-                        <div className="w-24 h-1 bg-[#2bb673] mx-auto rounded-full my-8"></div>
-                    </div>
-                </main>
-
-                <PendingVerificationModal
-                    isOpen={showPendingModal}
-                    isLoading={isLoading && !showPendingModal}
-                    onClose={() => {
-                        // Prevent closing to enforce pending state view
-                    }}
-                    userInfo={userInfo}
-                />
-            </>
-        );
-    }
-
-    // Show actual content when approved - redirect to schools page
+    // Redirect approved providers to schools page immediately
     useEffect(() => {
         if (isApproved && !isLoading) {
             router.replace("/provider/schools");
         }
     }, [isApproved, isLoading, router]);
 
+    // Show pending modal if not approved (no "Coming Soon" text)
+    if (!isApproved && !isLoading) {
+        return (
+            <PendingVerificationModal
+                isOpen={showPendingModal}
+                isLoading={isLoading && !showPendingModal}
+                onClose={() => {
+                    // Prevent closing to enforce pending state view
+                }}
+                userInfo={userInfo}
+            />
+        );
+    }
+
+    // Show loading state while checking approval status
     return (
-        <WidthConstraint>
-            <div className="p-8">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-                    <p className="text-gray-600">Welcome back!</p>
-                </div>
+        <div className="h-screen bg-white flex items-center justify-center">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+                <p className="text-gray-500">Loading...</p>
             </div>
-        </WidthConstraint>
+        </div>
     );
 };
 
