@@ -78,12 +78,26 @@ export default function ProviderSchoolDetailsPage() {
   const [studentsLoading, setStudentsLoading] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
 
+  // Check access before loading - redirect if not authorized
   useEffect(() => {
     if (schoolId && getProfileQuery.data) {
+      const providerSchools = getProfileQuery.data.schools || [];
+      const schoolsArray = Array.isArray(providerSchools) ? providerSchools : [];
+      const hasAccess = schoolsArray.some(
+        (s: { id: string | number }) => String(s.id) === String(schoolId)
+      );
+
+      if (!hasAccess) {
+        // Redirect immediately if provider doesn't have access
+        router.replace("/provider/schools");
+        return;
+      }
+
+      // If access is confirmed, load the school details
       loadSchoolDetails();
       loadStudents();
     }
-  }, [schoolId, getProfileQuery.data]);
+  }, [schoolId, getProfileQuery.data, router]);
 
   const loadSchoolDetails = async () => {
     setIsLoading(true);
@@ -104,6 +118,20 @@ export default function ProviderSchoolDetailsPage() {
             errorData.message?.includes("You're not permitted");
           
           if (isAccessDenied) {
+            // Try to redirect first, but keep accessDenied as fallback
+            const providerSchools = getProfileQuery.data?.schools || [];
+            const schoolsArray = Array.isArray(providerSchools) ? providerSchools : [];
+            const hasAccess = schoolsArray.some(
+              (s: { id: string | number }) => String(s.id) === String(schoolId)
+            );
+            
+            if (!hasAccess) {
+              // Redirect if we can confirm no access
+              router.replace("/provider/schools");
+              return;
+            }
+            
+            // Fallback: show error message if redirect didn't work
             setAccessDenied(true);
             setSchool(null);
             return;
@@ -111,6 +139,19 @@ export default function ProviderSchoolDetailsPage() {
         } catch {
           // If error message is not JSON, check the raw message
           if (error.message.includes("not permitted") || error.message.includes("not allowed")) {
+            // Try to redirect first
+            const providerSchools = getProfileQuery.data?.schools || [];
+            const schoolsArray = Array.isArray(providerSchools) ? providerSchools : [];
+            const hasAccess = schoolsArray.some(
+              (s: { id: string | number }) => String(s.id) === String(schoolId)
+            );
+            
+            if (!hasAccess) {
+              router.replace("/provider/schools");
+              return;
+            }
+            
+            // Fallback: show error message
             setAccessDenied(true);
             setSchool(null);
             return;

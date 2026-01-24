@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "DWEN WO HO | JustGo Health",
   description: "DWEN WO HO | JustGo Health",
+  icons: {
+    icon: "/logos/logo-purple.png",
+  },
 };
 
 export default function RootLayout({
