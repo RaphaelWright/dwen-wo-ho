@@ -356,8 +356,8 @@ export default function ProviderSchoolsPage() {
 
                   {/* Top Left - Alert Bar */}
                   {school.newPatientName && (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-4 rounded-lg shadow-md border-2 border-black w-[200px]">
-                      <span className="text-xl font-semibold block truncate">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-4 rounded-lg shadow-md border-2 border-black w-[350px]">
+                      <span className="text-base font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{school.newPatientName}</span>
                       </span>
