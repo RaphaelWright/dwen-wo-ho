@@ -365,7 +365,7 @@ export default function ProviderSchoolsPage() {
                   )}
 
                   {/* Top Right - Student Count Badge */}
-                  <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-gray-400 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                  <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-[#2bb673] backdrop-blur-sm flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-sm">
                       {school.studentCount ?? 0}
                     </span>
