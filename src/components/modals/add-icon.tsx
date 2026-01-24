@@ -109,7 +109,7 @@ export default function AddIconModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-[#955aa4]">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[85vh] overflow-hidden flex flex-col border-2 border-[#955aa4]">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <button
@@ -132,10 +132,10 @@ export default function AddIconModal({
 
         {/* Content - Two Column Layout */}
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
             {/* Left Side - Preview */}
-            <div className="space-y-4">
-              <div className="relative w-full h-96 rounded-xl overflow-hidden border-2 border-gray-200 bg-gray-100">
+            <div className="flex flex-col space-y-4 h-full">
+              <div className="relative w-full flex-1 min-h-[400px] rounded-xl overflow-hidden border-2 border-gray-200 bg-gray-100">
                 {photoPreview ? (
                   <>
                     <button
@@ -150,7 +150,7 @@ export default function AddIconModal({
                       />
                     </button>
                     {/* Rank Badge */}
-                    <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
+                    <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
                       <span className="text-black font-bold text-lg">#{rank}</span>
                     </div>
                     {/* Name Overlay */}
@@ -240,10 +240,10 @@ export default function AddIconModal({
                     {lockIns.map((lockIn, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-2 text-sm text-gray-700"
+                        className="flex items-center justify-between text-sm text-gray-700"
                       >
-                        <Lock className="w-4 h-4 text-yellow-500 flex-shrink-0" />
-                        <span className="flex-1 truncate">{lockIn.studentName}</span>
+                        <span className="flex-1 text-left">{lockIn.studentName}</span>
+                        <Lock className="w-4 h-4 text-yellow-500 flex-shrink-0 ml-2" />
                       </div>
                     ))}
                   </div>

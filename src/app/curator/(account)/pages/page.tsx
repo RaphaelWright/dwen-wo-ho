@@ -549,7 +549,7 @@ export default function CuratorPagesPage() {
 
         {/* Selector Bar - Always visible, positioned at bottom center */}
         {(activeTab === "cover-page" || activeTab === "icons") && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="fixed bottom-16 left-1/2 transform -translate-x-1/2 z-10 scale-[1.2]">
             <Button
               onClick={() => setShowSchoolModal(true)}
               className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-6 py-3 rounded-full shadow-lg"
