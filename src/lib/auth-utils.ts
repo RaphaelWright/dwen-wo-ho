@@ -2,6 +2,7 @@ import { ROUTES } from "@/constants/routes";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { api } from "./api";
 import { setUserType, getStoredUserType } from "./utils/getUserType";
+import type { QueryClient } from "@tanstack/react-query";
 
 let isHandlingAuthError = false;
 let isRefreshingToken = false;
@@ -144,7 +145,7 @@ export const isAuthError = (status: number): boolean => {
  * @param redirectTo - Optional route to redirect to after logout (defaults to provider auth)
  */
 export const performLogout = (
-  queryClient?: { clear: () => void; resetQueries: (filters?: unknown) => void },
+  queryClient?: QueryClient,
   redirectTo?: string
 ) => {
   if (typeof window === "undefined") {
