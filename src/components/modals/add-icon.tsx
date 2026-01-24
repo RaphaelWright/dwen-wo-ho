@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { School } from "@/types/school";
-import { Lock } from "lucide-react";
+import { Lock, X } from "lucide-react";
 
 interface AddIconModalProps {
   isOpen: boolean;
@@ -13,20 +13,16 @@ interface AddIconModalProps {
     name: string;
     slogan: string;
     rank: number;
+    lockIns: string[];
   }) => void;
   editData?: {
     photoPreview: string;
     name: string;
     slogan: string;
     rank: number;
+    lockIns?: string[];
   } | null;
   selectedSchool: School | null;
-  lockIns: Array<{
-    studentName: string;
-    lockinScore: number;
-    lockedInInterpretation: string;
-    lockedInColor: string;
-  }>;
 }
 
 export default function AddIconModal({
@@ -35,13 +31,14 @@ export default function AddIconModal({
   onComplete,
   editData = null,
   selectedSchool,
-  lockIns,
 }: AddIconModalProps) {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [slogan, setSlogan] = useState("");
   const [rank, setRank] = useState(1);
+  const [lockIns, setLockIns] = useState<string[]>([]);
+  const [newLockInInput, setNewLockInInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load edit data when modal opens
@@ -51,6 +48,7 @@ export default function AddIconModal({
       setName(editData.name);
       setSlogan(editData.slogan);
       setRank(editData.rank);
+      setLockIns(editData.lockIns || []);
     } else if (isOpen && !editData) {
       // Reset for new icon
       setSelectedPhoto(null);
@@ -58,11 +56,30 @@ export default function AddIconModal({
       setName("");
       setSlogan("");
       setRank(1);
+      setLockIns([]);
+      setNewLockInInput("");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     }
   }, [isOpen, editData]);
+
+  const handleAddLockIn = () => {
+    if (newLockInInput.trim()) {
+      setLockIns([...lockIns, newLockInInput.trim()]);
+      setNewLockInInput("");
+    }
+  };
+
+  const handleUpdateLockIn = (index: number, value: string) => {
+    const updated = [...lockIns];
+    updated[index] = value;
+    setLockIns(updated);
+  };
+
+  const handleRemoveLockIn = (index: number) => {
+    setLockIns(lockIns.filter((_, i) => i !== index));
+  };
 
   const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -83,6 +100,7 @@ export default function AddIconModal({
         name: name.trim(),
         slogan: slogan.trim(),
         rank,
+        lockIns: lockIns.filter((item) => item.trim() !== ""),
       });
       // Reset state
       setSelectedPhoto(null);
@@ -90,6 +108,8 @@ export default function AddIconModal({
       setName("");
       setSlogan("");
       setRank(1);
+      setLockIns([]);
+      setNewLockInInput("");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -132,10 +152,10 @@ export default function AddIconModal({
 
         {/* Content - Two Column Layout */}
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+          <div className="flex gap-6 h-full">
             {/* Left Side - Preview */}
-            <div className="flex flex-col space-y-4 h-full">
-              <div className="relative w-full flex-1 min-h-[400px] rounded-xl overflow-hidden border-2 border-gray-200 bg-gray-100">
+            <div className="flex flex-col space-y-4 flex-1 h-full">
+              <div className="relative w-full flex-1 min-h-[400px] rounded-xl overflow-hidden bg-gray-100">
                 {photoPreview ? (
                   <>
                     <button
@@ -203,9 +223,9 @@ export default function AddIconModal({
 
               {/* School Info */}
               {selectedSchool && (
-                <div className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl">
+                <div className="flex items-center gap-3 p-4 bg-white rounded-xl">
                   {selectedSchool.logo ? (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
                       <Image
                         src={selectedSchool.logo}
                         alt={selectedSchool.name}
@@ -231,30 +251,68 @@ export default function AddIconModal({
               )}
 
               {/* Lock-ins Section */}
-              <div className="p-4 bg-white border border-gray-200 rounded-xl">
+              <div className="p-4">
                 <h3 className="font-bold text-gray-900 mb-3">
                   Lock-ins ({lockIns.length})
                 </h3>
-                {lockIns.length > 0 ? (
-                  <div className="space-y-2">
+                {lockIns.length > 0 && (
+                  <div className="space-y-2 mb-3">
                     {lockIns.map((lockIn, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between text-sm text-gray-700"
+                        className="flex items-center justify-between gap-2"
                       >
-                        <span className="flex-1 text-left">{lockIn.studentName}</span>
-                        <Lock className="w-4 h-4 text-yellow-500 flex-shrink-0 ml-2" />
+                        <input
+                          type="text"
+                          value={lockIn}
+                          onChange={(e) => handleUpdateLockIn(index, e.target.value)}
+                          className="flex-1 px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4]"
+                        />
+                        <button
+                          onClick={() => handleRemoveLockIn(index)}
+                          className="p-1 hover:bg-gray-200 rounded transition-colors"
+                        >
+                          <X className="w-4 h-4 text-gray-500" />
+                        </button>
+                        <Lock className="w-4 h-4 text-yellow-500 flex-shrink-0" />
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <p className="text-sm text-gray-500">No lock-ins yet</p>
                 )}
+                {/* Add Lock-in Input */}
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    value={newLockInInput}
+                    onChange={(e) => setNewLockInInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleAddLockIn();
+                      }
+                    }}
+                    placeholder="Enter lock-in..."
+                    className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] placeholder-gray-400"
+                  />
+                  <button
+                    onClick={handleAddLockIn}
+                    disabled={!newLockInInput.trim()}
+                    className={`w-full px-4 py-2 rounded-lg font-semibold transition-colors ${
+                      !newLockInInput.trim()
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-100 border border-gray-200 text-gray-900 hover:bg-gray-200"
+                    }`}
+                  >
+                    + Add
+                  </button>
+                </div>
               </div>
             </div>
 
+            {/* Separator Line */}
+            <div className="hidden lg:block w-px bg-gray-200 flex-shrink-0"></div>
+
             {/* Right Side - Form */}
-            <div className="space-y-6">
+            <div className="flex-1 space-y-6">
               {/* Name Input */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-3">
