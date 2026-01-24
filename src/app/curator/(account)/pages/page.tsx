@@ -33,7 +33,7 @@ interface Icon {
   slogan: string;
   rank: number;
   schoolId: number | null;
-  lockInsCount: number;
+  lockIns: string[];
 }
 
 interface LockInStudent {
@@ -146,9 +146,9 @@ export default function CuratorPagesPage() {
     name: string;
     slogan: string;
     rank: number;
+    lockIns: string[];
   }) => {
     const targetSchoolId = selectedSchool?.id || null;
-    const currentLockIns = lockInsBySchool.get(targetSchoolId) || [];
     
     if (editingIcon) {
       // Update existing icon
@@ -161,7 +161,7 @@ export default function CuratorPagesPage() {
           name: data.name,
           slogan: data.slogan,
           rank: data.rank,
-          lockInsCount: currentLockIns.length,
+          lockIns: data.lockIns,
         };
         setIcons(icons.map((icon) => 
           icon.id === editingIcon.id ? updatedIcon : icon
@@ -179,7 +179,7 @@ export default function CuratorPagesPage() {
           name: data.name,
           slogan: data.slogan,
           rank: data.rank,
-          lockInsCount: currentLockIns.length,
+          lockIns: data.lockIns,
         };
         setIcons(icons.map((icon) => 
           icon.id === editingIcon.id ? updatedIcon : icon
@@ -200,7 +200,7 @@ export default function CuratorPagesPage() {
             slogan: data.slogan,
             rank: data.rank,
             schoolId: targetSchoolId,
-            lockInsCount: currentLockIns.length,
+            lockIns: data.lockIns,
           };
           setIcons([...icons, newIcon]);
           setShowAddIconModal(false);
@@ -528,7 +528,7 @@ export default function CuratorPagesPage() {
                               <p className="text-white text-3xl font-bold">{icon.name}</p>
                               <div className="flex items-center gap-2 mt-2">
                                 <span className="text-white/90 text-sm">
-                                  {icon.lockInsCount} Lock-ins
+                                  {icon.lockIns.length} Lock-ins
                                 </span>
                                 <Lock className="w-4 h-4 text-yellow-500" />
                               </div>
@@ -594,14 +594,9 @@ export default function CuratorPagesPage() {
             name: editingIcon.name,
             slogan: editingIcon.slogan,
             rank: editingIcon.rank,
+            lockIns: editingIcon.lockIns || [],
           } : null}
           selectedSchool={selectedSchool}
-          lockIns={(lockInsBySchool.get(selectedSchool?.id || null) || []).map((lockIn) => ({
-            studentName: lockIn.studentName,
-            lockinScore: lockIn.lockinScore,
-            lockedInInterpretation: lockIn.lockedInInterpretation,
-            lockedInColor: lockIn.lockedInColor,
-          }))}
         />
       </div>
     </WidthConstraint>
