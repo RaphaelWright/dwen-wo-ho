@@ -101,6 +101,11 @@ export default function ProviderSchoolsPage() {
             schoolData.studentCount = lockInData.students?.length || 0;
           }
         } catch (error) {
+          // Silently handle "No lockins found" - this is expected for schools without lock-ins
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          if (!errorMessage.includes("No lockins found")) {
+            // Only log if it's not the expected "no lockins" case
+          }
           schoolData.studentCount = 0;
         }
 
@@ -361,7 +366,7 @@ export default function ProviderSchoolsPage() {
                   </div>
 
                   {/* Bottom Content - School Name and Motto */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
                     <h3 className="text-white font-bold text-xl mb-2 leading-tight">
                       {displayName}
                     </h3>
