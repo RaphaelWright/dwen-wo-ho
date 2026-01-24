@@ -196,19 +196,13 @@ export default function AddIconModal({
                       onClick={() => fileInputRef.current?.click()}
                       className="text-gray-400 hover:text-gray-600 transition-colors"
                     >
-                      <svg
-                        className="w-16 h-16"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
+                      <Image
+                        src="/logos/logo-purple.png"
+                        alt="Add icon"
+                        width={24}
+                        height={24}
+                        className="w-10 h-10 object-contain item-center justify-center"
+                      />
                     </button>
                     <input
                       ref={fileInputRef}
