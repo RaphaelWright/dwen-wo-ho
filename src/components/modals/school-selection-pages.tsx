@@ -1,13 +1,21 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { X } from "lucide-react";
 import Image from "next/image";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { School } from "@/types/school";
 import { FiSearch } from "react-icons/fi";
 import { MdSchool } from "react-icons/md";
+
+type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University" | "COLLEGE";
+
+const filterOptions: { label: string; value: FilterType }[] = [
+  { label: "All", value: "all" },
+  { label: "JHS", value: "JHS" },
+  { label: "SHS", value: "SHS" },
+  { label: "COLLEGE", value: "COLLEGE" },
+];
 
 interface SchoolSelectionModalProps {
   isOpen: boolean;
@@ -23,6 +31,7 @@ export default function SchoolSelectionModal({
   const [schools, setSchools] = useState<School[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
   useEffect(() => {
     if (isOpen) {
@@ -48,21 +57,25 @@ export default function SchoolSelectionModal({
   };
 
   const filteredSchools = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return schools;
+    let filtered = activeFilter === "all"
+      ? schools
+      : schools.filter((school) => school.type === activeFilter);
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter((school) => {
+        const nameMatch = school.name?.toLowerCase().includes(query);
+        const nicknameMatch = school.nickname?.toLowerCase().includes(query);
+        const typeMatch = school.type?.toLowerCase().includes(query);
+        const campusesMatch = school.campuses?.some((campus: string) =>
+          campus.toLowerCase().includes(query)
+        );
+        return nameMatch || nicknameMatch || typeMatch || campusesMatch;
+      });
     }
 
-    const query = searchQuery.toLowerCase().trim();
-    return schools.filter((school) => {
-      const nameMatch = school.name?.toLowerCase().includes(query);
-      const nicknameMatch = school.nickname?.toLowerCase().includes(query);
-      const typeMatch = school.type?.toLowerCase().includes(query);
-      const campusesMatch = school.campuses?.some((campus: string) =>
-        campus.toLowerCase().includes(query)
-      );
-      return nameMatch || nicknameMatch || typeMatch || campusesMatch;
-    });
-  }, [schools, searchQuery]);
+    return filtered;
+  }, [schools, searchQuery, activeFilter]);
 
   const handleSchoolClick = (school: School) => {
     onSelect(school);
@@ -77,22 +90,15 @@ export default function SchoolSelectionModal({
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 100 100"
+            <Image
+              src="/arrow-diagonal-white.svg"
+              alt="Back"
+              width={20}
+              height={20}
               className="rotate-180"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M66.92,39.4a29.45,29.45,0,0,0,5,4.54H3.5V56H71.94a29.39,29.39,0,0,0-5,4.53c-12.6,14.46-9.44,37.08-9.3,38.1l8.79,0c0-.21-2.73-20.94,7.22-32.33C78,61.41,84,56.05,92.07,56.05H96.5V43.9H92.07C84,43.9,78,38.54,73.63,33.59c-9.95-11.38-7.25-32-7.22-32.21l-8.79-.07C57.48,2.33,54.32,24.94,66.92,39.4Z"
-                fill="currentColor"
-                className="text-gray-900"
-              />
-            </svg>
+            />
           </button>
           <h2 className="text-2xl font-bold text-gray-900">Select School</h2>
           <div className="w-10" /> {/* Spacer for centering */}
@@ -101,21 +107,40 @@ export default function SchoolSelectionModal({
         {/* Search Bar */}
         <div className="p-6 border-b border-gray-200">
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FiSearch className="h-5 w-5 text-gray-400" />
+            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+              <FiSearch className="h-5 w-5 text-black" />
             </div>
             <input
               type="text"
               placeholder="Search schools"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+              className="w-full pl-4 pr-12 py-3 bg-gray-100 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
             />
           </div>
         </div>
 
-        {/* Schools List */}
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* Filter Buttons */}
+        <div className="px-6 pt-4 pb-2 border-b border-gray-200">
+          <div className="flex flex-wrap gap-2">
+            {filterOptions.map((filter) => (
+              <button
+                key={filter.value}
+                onClick={() => setActiveFilter(filter.value)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  activeFilter === filter.value
+                    ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
+                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Schools List - Fixed height to show 6 cards (3 rows × 2 columns), rest scrollable */}
+        <div className="p-6 overflow-y-auto" style={{ maxHeight: "20rem" }}>
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <div className="text-center">
@@ -141,10 +166,10 @@ export default function SchoolSelectionModal({
                 <button
                   key={school.id}
                   onClick={() => handleSchoolClick(school)}
-                  className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-[#955aa4]/30 hover:shadow-md transition-all text-left"
+                  className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20"
                 >
                   {school.logo ? (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                       <Image
                         src={school.logo}
                         alt={school.name}
@@ -154,7 +179,7 @@ export default function SchoolSelectionModal({
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                       <MdSchool className="w-6 h-6 text-gray-400" />
                     </div>
                   )}
@@ -166,20 +191,6 @@ export default function SchoolSelectionModal({
                       <p className="text-sm text-gray-500">{school.type}</p>
                     )}
                   </div>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 100 100"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="flex-shrink-0"
-                  >
-                    <path
-                      d="M66.92,39.4a29.45,29.45,0,0,0,5,4.54H3.5V56H71.94a29.39,29.39,0,0,0-5,4.53c-12.6,14.46-9.44,37.08-9.3,38.1l8.79,0c0-.21-2.73-20.94,7.22-32.33C78,61.41,84,56.05,92.07,56.05H96.5V43.9H92.07C84,43.9,78,38.54,73.63,33.59c-9.95-11.38-7.25-32-7.22-32.21l-8.79-.07C57.48,2.33,54.32,24.94,66.92,39.4Z"
-                      fill="currentColor"
-                      className="text-gray-400"
-                    />
-                  </svg>
                 </button>
               ))}
             </div>

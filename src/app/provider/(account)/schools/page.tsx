@@ -28,6 +28,9 @@ interface SchoolWithExtras extends School {
   studentCount?: number;
   newPatientName?: string;
   latestLockInDate?: string;
+  providerCount?: number;
+  newProviderName?: string;
+  latestProviderDate?: string;
 }
 
 interface PatientResult {
@@ -152,12 +155,15 @@ export default function ProviderSchoolsPage() {
     );
 
 
-    // Sort schools by latest lock-in date (most recent first)
+    // Sort schools by latest activity (patient or provider) - most recent first
     schoolsWithData.sort((a, b) => {
-      if (!a.latestLockInDate && !b.latestLockInDate) return 0;
-      if (!a.latestLockInDate) return 1;
-      if (!b.latestLockInDate) return -1;
-      return new Date(b.latestLockInDate).getTime() - new Date(a.latestLockInDate).getTime();
+      const aLatestDate = a.latestLockInDate || a.latestProviderDate;
+      const bLatestDate = b.latestLockInDate || b.latestProviderDate;
+      
+      if (!aLatestDate && !bLatestDate) return 0;
+      if (!aLatestDate) return 1;
+      if (!bLatestDate) return -1;
+      return new Date(bLatestDate).getTime() - new Date(aLatestDate).getTime();
     });
 
     // Update cache map
@@ -316,12 +322,12 @@ export default function ProviderSchoolsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {schoolsList.map((school) => {
               const firstCampus = getFirstCampus(school.campuses);
-              const displayName = firstCampus 
-                ? `${school.name} (${firstCampus})`
-                : school.name;
+              const displayNickname = school.nickname 
+                ? (firstCampus ? `${school.nickname} (${firstCampus})` : school.nickname)
+                : (firstCampus ? `(${firstCampus})` : "");
 
               return (
                 <button
@@ -350,8 +356,8 @@ export default function ProviderSchoolsPage() {
 
                   {/* Top Left - Alert Bar */}
                   {school.newPatientName && (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black">
-                      <span className="text-xs font-semibold">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black max-w-[70%]">
+                      <span className="text-xs font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{school.newPatientName}</span>
                       </span>
@@ -365,11 +371,16 @@ export default function ProviderSchoolsPage() {
                     </span>
                   </div>
 
-                  {/* Bottom Content - School Name and Motto */}
+                  {/* Bottom Content - School Name, Nickname, and Motto */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
-                    <h3 className="text-white font-bold text-xl mb-2 leading-tight">
-                      {displayName}
+                    <h3 className="text-white font-bold text-xl mb-1 leading-tight">
+                      {school.name}
                     </h3>
+                    {displayNickname && (
+                      <p className="text-white/95 text-sm font-medium mb-1">
+                        {displayNickname}
+                      </p>
+                    )}
                     {school.motto && (
                       <p className="text-white/90 text-sm font-medium italic">
                         {school.motto}
