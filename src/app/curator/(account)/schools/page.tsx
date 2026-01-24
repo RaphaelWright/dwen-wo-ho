@@ -19,6 +19,9 @@ interface SchoolWithExtras extends School {
   studentCount?: number;
   newPatientName?: string;
   latestLockInDate?: string;
+  providerCount?: number;
+  newProviderName?: string;
+  latestProviderDate?: string;
 }
 
 interface PatientResult {
@@ -26,6 +29,14 @@ interface PatientResult {
   patientName: string;
   createdAt: string;
   visibilityStatus: string;
+}
+
+interface ProviderResult {
+  id: string;
+  fullName: string;
+  email: string;
+  createdAt?: string;
+  addedAt?: string;
 }
 
 interface LockInData {
@@ -103,6 +114,18 @@ export default function SchoolsPage() {
           schoolData.studentCount = 0;
         }
 
+        // Fetch provider count
+        try {
+          const providersResponse = await api(ENDPOINTS.schoolProviders(school.id));
+          if (providersResponse?.success && providersResponse.data) {
+            const providersData = providersResponse.data as { providers?: ProviderResult[] } | ProviderResult[];
+            const providers = Array.isArray(providersData) ? providersData : (providersData.providers || []);
+            schoolData.providerCount = providers.length;
+          }
+        } catch (error) {
+          schoolData.providerCount = 0;
+        }
+
         try {
           // Focus on "new" endpoint for latest updates
           const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
@@ -141,16 +164,62 @@ export default function SchoolsPage() {
           // Error fetching results
         }
 
+        // Fetch new providers
+        try {
+          const newProvidersResponse = await api(ENDPOINTS.getNewSchoolProviders(school.id));
+          if (newProvidersResponse?.success && newProvidersResponse.data) {
+            const newProviders = newProvidersResponse.data as ProviderResult[];
+            if (newProviders.length > 0) {
+              const latestProvider = newProviders.sort((a, b) => {
+                const aDate = a.createdAt || a.addedAt || "";
+                const bDate = b.createdAt || b.addedAt || "";
+                return new Date(bDate).getTime() - new Date(aDate).getTime();
+              })[0];
+              schoolData.newProviderName = latestProvider.fullName;
+              schoolData.latestProviderDate = latestProvider.createdAt || latestProvider.addedAt;
+
+              // Check if this is a new provider (not in cache)
+              if (!isInitialLoadRef.current && isBackground) {
+                const prevSchool = previousSchoolsRef.current.get(Number(school.id));
+                if (prevSchool?.newProviderName !== latestProvider.fullName) {
+                  toast.success(`New provider: ${latestProvider.fullName} at ${school.name}`);
+                }
+              }
+            } else {
+              // If no new providers, get latest from all providers
+              const allProvidersResponse = await api(ENDPOINTS.schoolProviders(school.id));
+              if (allProvidersResponse?.success && allProvidersResponse.data) {
+                const providersData = allProvidersResponse.data as { providers?: ProviderResult[] } | ProviderResult[];
+                const providers = Array.isArray(providersData) ? providersData : (providersData.providers || []);
+                if (providers.length > 0) {
+                  const latestProvider = providers.sort((a, b) => {
+                    const aDate = a.createdAt || a.addedAt || "";
+                    const bDate = b.createdAt || b.addedAt || "";
+                    return new Date(bDate).getTime() - new Date(aDate).getTime();
+                  })[0];
+                  schoolData.newProviderName = latestProvider.fullName;
+                  schoolData.latestProviderDate = latestProvider.createdAt || latestProvider.addedAt;
+                }
+              }
+            }
+          }
+        } catch (error) {
+          // Error fetching providers - endpoint might not exist yet
+        }
+
         return schoolData;
       })
     );
 
-    // Sort schools by latest lock-in date (most recent first)
+    // Sort schools by latest activity (patient or provider) - most recent first
     enrichedSchools.sort((a, b) => {
-      if (!a.latestLockInDate && !b.latestLockInDate) return 0;
-      if (!a.latestLockInDate) return 1;
-      if (!b.latestLockInDate) return -1;
-      return new Date(b.latestLockInDate).getTime() - new Date(a.latestLockInDate).getTime();
+      const aLatestDate = a.latestLockInDate || a.latestProviderDate;
+      const bLatestDate = b.latestLockInDate || b.latestProviderDate;
+      
+      if (!aLatestDate && !bLatestDate) return 0;
+      if (!aLatestDate) return 1;
+      if (!bLatestDate) return -1;
+      return new Date(bLatestDate).getTime() - new Date(aLatestDate).getTime();
     });
 
     // Update cache map
@@ -287,13 +356,19 @@ export default function SchoolsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {schoolsList.map((school) => {
               const firstCampus = getFirstCampus(school.campuses);
-              const displayName = firstCampus 
-                ? `${school.name} (${firstCampus})`
-                : school.name;
               const schoolWithExtras = school as SchoolWithExtras;
+              
+              // Determine which is latest: patient or provider
+              const hasLatestPatient = schoolWithExtras.latestLockInDate && 
+                (!schoolWithExtras.latestProviderDate || 
+                 new Date(schoolWithExtras.latestLockInDate).getTime() >= new Date(schoolWithExtras.latestProviderDate).getTime());
+              
+              const displayNickname = school.nickname 
+                ? (firstCampus ? `${school.nickname} (${firstCampus})` : school.nickname)
+                : (firstCampus ? `(${firstCampus})` : "");
 
               return (
                 <Link
@@ -320,28 +395,40 @@ export default function SchoolsPage() {
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
 
-                  {/* Top Left - Alert Bar */}
-                  {schoolWithExtras.newPatientName && (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black">
-                      <span className="text-xs font-semibold">
+                  {/* Top Left - Alert Bar (Patient or Provider) */}
+                  {(hasLatestPatient && schoolWithExtras.newPatientName) ? (
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black max-w-[70%]">
+                      <span className="text-xs font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{schoolWithExtras.newPatientName}</span>
                       </span>
                     </div>
-                  )}
+                  ) : (schoolWithExtras.newProviderName && !hasLatestPatient) ? (
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black max-w-[70%]">
+                      <span className="text-xs font-semibold block truncate">
+                        <span className="text-[#955aa4]">New Provider.</span>{" "}
+                        <span className="text-black">{schoolWithExtras.newProviderName}</span>
+                      </span>
+                    </div>
+                  ) : null}
 
-                  {/* Top Right - Student Count Badge */}
+                  {/* Top Right - Count Badge (Student or Provider based on latest) */}
                   <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-gray-400 backdrop-blur-sm flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-sm">
-                      {schoolWithExtras.studentCount ?? 0}
+                      {hasLatestPatient ? (schoolWithExtras.studentCount ?? 0) : (schoolWithExtras.providerCount ?? 0)}
                     </span>
                   </div>
 
-                  {/* Bottom Content - School Name and Motto */}
+                  {/* Bottom Content - School Name, Nickname, and Motto */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
-                    <h3 className="text-white font-bold text-xl mb-2 leading-tight">
-                      {displayName}
+                    <h3 className="text-white font-bold text-xl mb-1 leading-tight">
+                      {school.name}
                     </h3>
+                    {displayNickname && (
+                      <p className="text-white/95 text-sm font-medium mb-1">
+                        {displayNickname}
+                      </p>
+                    )}
                     {school.motto && (
                       <p className="text-white/90 text-sm font-medium italic">
                         {school.motto}

@@ -136,7 +136,7 @@ export default function CuratorPagesPage() {
         {/* Header with Logo and School Info */}
         <div className="mb-8">
           {selectedSchool ? (
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center justify-center gap-4 mb-6">
               {selectedSchool.logo ? (
                 <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200">
                   <Image
@@ -157,13 +157,13 @@ export default function CuratorPagesPage() {
               </h1>
             </div>
           ) : (
-            <div className="mb-6">
+            <div className="mb-6 flex justify-center">
               <JustGoHealth />
             </div>
           )}
 
-          {/* Tabs with School Selector */}
-          <div className="flex items-center gap-3">
+          {/* Tabs - Centered */}
+          <div className="flex items-center justify-center gap-3">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -177,15 +177,6 @@ export default function CuratorPagesPage() {
                 {tab.label}
               </button>
             ))}
-            {selectedSchool && (
-              <Button
-                onClick={() => setShowSchoolModal(true)}
-                variant="outline"
-                className="ml-auto border-[#955aa4] text-[#955aa4] hover:bg-[#955aa4]/10"
-              >
-                {selectedSchool.name}
-              </Button>
-            )}
           </div>
         </div>
 
@@ -197,11 +188,11 @@ export default function CuratorPagesPage() {
                 <p className="text-4xl font-bold text-gray-400 mb-4">
                   Nothing to see yet.
                 </p>
-                <p className="text-lg text-gray-600 mb-6">
+                <p className="text-lg text-gray-600 mb-4">
                   You can{" "}
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="px-3 py-1.5 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                    className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
                   >
                     + ADD
                   </button>{" "}
@@ -210,7 +201,7 @@ export default function CuratorPagesPage() {
                 {!selectedSchool && (
                   <Button
                     onClick={() => setShowSchoolModal(true)}
-                    className="bg-yellow-200 hover:bg-yellow-300 text-gray-800 font-semibold px-6 py-3 rounded-lg"
+                    className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-6 py-3 rounded-full"
                   >
                     Select school &gt;
                   </Button>
@@ -333,7 +324,7 @@ export default function CuratorPagesPage() {
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
             <Button
               onClick={() => setShowSchoolModal(true)}
-              className="bg-yellow-200 hover:bg-yellow-300 text-gray-800 font-semibold px-6 py-3 rounded-lg shadow-lg"
+              className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-6 py-3 rounded-full shadow-lg"
             >
               {selectedSchool.name} &gt;
             </Button>

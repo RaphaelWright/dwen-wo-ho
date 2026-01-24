@@ -46,6 +46,7 @@ export const ENDPOINTS = {
   getPatientResult: (resultId: string | number) => `/api/v1/patient-results/${resultId}`,
   getSchoolPatientResults: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}`,
   getNewSchoolPatientResults: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}/new`,
+  getNewSchoolProviders: (schoolId: string | number) => `/api/v1/schools/${schoolId}/providers/new`,
   getProviderTreatingResults: (providerId: string | number) => `/api/v1/patient-results/provider/${providerId}/treating`,
   incrementSchoolVisit: (schoolId: string | number) => `/api/v1/patient-results/school/${schoolId}/visit`,
 
