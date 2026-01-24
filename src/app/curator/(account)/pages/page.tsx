@@ -273,19 +273,17 @@ export default function CuratorPagesPage() {
     }
   }, [allSchools]);
 
-  // Load lock-ins when tab is active or in background
+  // Load lock-ins only when lock-ins tab is active
   useEffect(() => {
-    if (allSchools.length > 0) {
-      if (activeTab === "lock-ins" || activeTab === "icons") {
-        loadAllLockIns(activeTab !== "lock-ins"); // Background load for icons tab
-      }
+    if (allSchools.length > 0 && activeTab === "lock-ins") {
+      loadAllLockIns(false);
     }
   }, [activeTab, loadAllLockIns, allSchools.length]);
 
-  // Background refresh every 30 seconds for active tabs
+  // Background refresh every 30 seconds for lock-ins tab only
   useEffect(() => {
     if (allSchools.length === 0) return;
-    if (activeTab === "lock-ins" || activeTab === "icons") {
+    if (activeTab === "lock-ins") {
       const interval = setInterval(() => {
         loadAllLockIns(true);
       }, 30000);
