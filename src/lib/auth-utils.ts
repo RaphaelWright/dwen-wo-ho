@@ -135,3 +135,85 @@ export const isAuthError = (status: number): boolean => {
   // 403 (Forbidden) means user is authenticated but lacks permission - don't refresh/logout
   return status === 401;
 };
+
+/**
+ * Comprehensive logout function that clears all authentication data,
+ * cache, and storage to prevent auth confusion between different users.
+ * 
+ * @param queryClient - Optional React Query client to clear query cache
+ * @param redirectTo - Optional route to redirect to after logout (defaults to provider auth)
+ */
+export const performLogout = (
+  queryClient?: { clear: () => void; resetQueries: (filters?: unknown) => void },
+  redirectTo?: string
+) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  // Clear all localStorage items related to auth
+  const authKeys = [
+    "token",
+    "curatorToken",
+    "refreshToken",
+    "userType",
+    "pendingUser",
+    "recoveryToken",
+    "profileCompletionEmail",
+    "authToken",
+  ];
+
+  // Remove all auth-related keys
+  authKeys.forEach((key) => {
+    localStorage.removeItem(key);
+  });
+
+  // Clear any cached form data (lock-in forms, etc.)
+  try {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key &&
+        (key.startsWith("lockin-form-") ||
+          key.startsWith("cached-") ||
+          key.includes("auth") ||
+          key.includes("token") ||
+          key.includes("user"))
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+  } catch (error) {
+    // Silently handle errors when clearing cache
+  }
+
+  // Clear all sessionStorage
+  try {
+    sessionStorage.clear();
+  } catch (error) {
+    // Silently handle errors when clearing sessionStorage
+  }
+
+  // Clear React Query cache if provided
+  if (queryClient) {
+    try {
+      queryClient.clear();
+      queryClient.resetQueries();
+    } catch (error) {
+      // Silently handle errors when clearing query cache
+    }
+  }
+
+  // Reset auth state flags
+  isHandlingAuthError = false;
+  isRefreshingToken = false;
+  refreshPromise = null;
+
+  // Redirect to auth page
+  const redirectPath = redirectTo || ROUTES.provider.auth;
+  
+  // Use window.location for a hard redirect to ensure complete state reset
+  window.location.href = redirectPath;
+};

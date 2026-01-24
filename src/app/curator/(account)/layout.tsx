@@ -5,6 +5,7 @@ import { CuratorSidebar } from "@/components/curator/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
 import CreateModal from "@/components/curator/ui/create-modal";
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import MemberCreationModal from "@/components/modals/member-creation";
 import PartnerCreationModal from "@/components/modals/partner-creation";
 import ReachModal from "@/components/modals/reach";
@@ -13,6 +14,7 @@ import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
 import SchoolCreationModal from "@/components/modals/school-creation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
+import { performLogout } from "@/lib/auth-utils";
 
 
 export default function DashboardLayout({
@@ -21,6 +23,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
   
@@ -64,10 +67,7 @@ export default function DashboardLayout({
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("curatorToken");
-    localStorage.removeItem("refreshToken");
-    router.push(ROUTES.provider.auth);
+    performLogout(queryClient, ROUTES.provider.auth);
   };
 
   const schoolCount = Array.isArray(schools) ? schools.length : 0;
