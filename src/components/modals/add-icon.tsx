@@ -170,7 +170,7 @@ export default function AddIconModal({
                       />
                     </button>
                     {/* Rank Badge */}
-                    <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
+                    <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
                       <span className="text-black font-bold text-lg">#{rank}</span>
                     </div>
                     {/* Name Overlay */}
