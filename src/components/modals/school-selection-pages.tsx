@@ -20,7 +20,7 @@ const filterOptions: { label: string; value: FilterType }[] = [
 interface SchoolSelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (school: School) => void;
+  onSelect: (school: School | null) => void;
 }
 
 export default function SchoolSelectionModal({
@@ -79,6 +79,10 @@ export default function SchoolSelectionModal({
 
   const handleSchoolClick = (school: School) => {
     onSelect(school);
+  };
+
+  const handleSelectPlatform = () => {
+    onSelect(null); // null means platform/default
   };
 
   if (!isOpen) return null;
@@ -161,38 +165,55 @@ export default function SchoolSelectionModal({
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredSchools.map((school) => (
-                <button
-                  key={school.id}
-                  onClick={() => handleSchoolClick(school)}
-                  className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20"
-                >
-                  {school.logo ? (
-                    <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                      <Image
-                        src={school.logo}
-                        alt={school.name}
-                        width={48}
-                        height={48}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <MdSchool className="w-6 h-6 text-gray-400" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 truncate">
-                      {school.name}
-                    </p>
-                    {school.type && (
-                      <p className="text-sm text-gray-500">{school.type}</p>
+            <div className="space-y-4">
+              {/* Platform/Default Option */}
+              <button
+                onClick={handleSelectPlatform}
+                className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20 w-full"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#955aa4] flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-lg">+</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900">Platform (Default)</p>
+                  <p className="text-sm text-gray-500">Default cover page for all schools</p>
+                </div>
+              </button>
+
+              {/* Schools List */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredSchools.map((school) => (
+                  <button
+                    key={school.id}
+                    onClick={() => handleSchoolClick(school)}
+                    className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20"
+                  >
+                    {school.logo ? (
+                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                        <Image
+                          src={school.logo}
+                          alt={school.name}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        <MdSchool className="w-6 h-6 text-gray-400" />
+                      </div>
                     )}
-                  </div>
-                </button>
-              ))}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 truncate">
+                        {school.name}
+                      </p>
+                      {school.type && (
+                        <p className="text-sm text-gray-500">{school.type}</p>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

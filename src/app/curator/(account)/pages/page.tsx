@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/button";
 import { School } from "@/types/school";
 import SchoolSelectionModal from "@/components/modals/school-selection-pages";
 import AddCoverPageModal from "@/components/modals/add-cover-page";
+import AddIconModal from "@/components/modals/add-icon";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { useSchools } from "@/hooks/queries/useSchoolsQuery";
+import { Lock } from "lucide-react";
 
 type TabType = "cover-page" | "icons" | "lock-ins";
 
@@ -21,6 +23,17 @@ interface CoverPage {
   color: string;
   slogan: string;
   schoolId: number | null;
+}
+
+interface Icon {
+  id: string;
+  photo: File | string;
+  photoPreview: string;
+  name: string;
+  slogan: string;
+  rank: number;
+  schoolId: number | null;
+  lockInsCount: number;
 }
 
 interface LockInStudent {
@@ -37,41 +50,175 @@ export default function CuratorPagesPage() {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [showSchoolModal, setShowSchoolModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddIconModal, setShowAddIconModal] = useState(false);
   const [coverPages, setCoverPages] = useState<CoverPage[]>([]);
+  const [icons, setIcons] = useState<Icon[]>([]);
   const [allLockIns, setAllLockIns] = useState<LockInStudent[]>([]);
   const [lockInsLoading, setLockInsLoading] = useState(false);
+  const [lockInsBySchool, setLockInsBySchool] = useState<Map<number | null, LockInStudent[]>>(new Map());
   const { data: allSchools = [] } = useSchools();
 
-  const handleSchoolSelect = (school: School) => {
-    setSelectedSchool(school);
-    setShowSchoolModal(false);
-  };
+  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(null);
+  const [editingIcon, setEditingIcon] = useState<Icon | null>(null);
 
   const handleCoverPageComplete = (data: {
     photo: File | null;
     color: string;
     slogan: string;
   }) => {
-    if (data.photo) {
+    const targetSchoolId = selectedSchool?.id || null;
+    
+    if (editingCoverPage) {
+      // Update existing cover page
       const reader = new FileReader();
       reader.onloadend = () => {
-        const newCoverPage: CoverPage = {
-          id: Date.now().toString(),
-          photo: data.photo!,
-          photoPreview: reader.result as string,
+        const updatedCoverPage: CoverPage = {
+          ...editingCoverPage,
+          photo: data.photo || editingCoverPage.photo,
+          photoPreview: data.photo ? (reader.result as string) : editingCoverPage.photoPreview,
           color: data.color,
           slogan: data.slogan,
-          schoolId: selectedSchool?.id || null,
         };
-        setCoverPages([...coverPages, newCoverPage]);
+        setCoverPages(coverPages.map((page) => 
+          page.id === editingCoverPage.id ? updatedCoverPage : page
+        ));
         setShowAddModal(false);
+        setEditingCoverPage(null);
       };
-      reader.readAsDataURL(data.photo);
+      
+      if (data.photo) {
+        reader.readAsDataURL(data.photo);
+      } else {
+        // No new photo, just update other fields
+        const updatedCoverPage: CoverPage = {
+          ...editingCoverPage,
+          color: data.color,
+          slogan: data.slogan,
+        };
+        setCoverPages(coverPages.map((page) => 
+          page.id === editingCoverPage.id ? updatedCoverPage : page
+        ));
+        setShowAddModal(false);
+        setEditingCoverPage(null);
+      }
+    } else {
+      // Create new cover page
+      if (data.photo) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          // Remove existing cover page for this school/platform
+          const filteredPages = coverPages.filter(
+            (page) => page.schoolId !== targetSchoolId
+          );
+          
+          const newCoverPage: CoverPage = {
+            id: Date.now().toString(),
+            photo: data.photo!,
+            photoPreview: reader.result as string,
+            color: data.color,
+            slogan: data.slogan,
+            schoolId: targetSchoolId,
+          };
+          setCoverPages([...filteredPages, newCoverPage]);
+          setShowAddModal(false);
+        };
+        reader.readAsDataURL(data.photo);
+      }
     }
   };
 
-  const loadAllLockIns = useCallback(async () => {
-    setLockInsLoading(true);
+  const handleCoverPageClick = (coverPage: CoverPage) => {
+    setEditingCoverPage(coverPage);
+    setShowAddModal(true);
+  };
+
+  const handleSchoolSelect = (school: School | null) => {
+    setSelectedSchool(school);
+    setShowSchoolModal(false);
+  };
+
+  const handleClearSchool = () => {
+    setSelectedSchool(null);
+  };
+
+  const handleIconComplete = (data: {
+    photo: File | null;
+    name: string;
+    slogan: string;
+    rank: number;
+  }) => {
+    const targetSchoolId = selectedSchool?.id || null;
+    const currentLockIns = lockInsBySchool.get(targetSchoolId) || [];
+    
+    if (editingIcon) {
+      // Update existing icon
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const updatedIcon: Icon = {
+          ...editingIcon,
+          photo: data.photo || editingIcon.photo,
+          photoPreview: data.photo ? (reader.result as string) : editingIcon.photoPreview,
+          name: data.name,
+          slogan: data.slogan,
+          rank: data.rank,
+          lockInsCount: currentLockIns.length,
+        };
+        setIcons(icons.map((icon) => 
+          icon.id === editingIcon.id ? updatedIcon : icon
+        ));
+        setShowAddIconModal(false);
+        setEditingIcon(null);
+      };
+      
+      if (data.photo) {
+        reader.readAsDataURL(data.photo);
+      } else {
+        // No new photo, just update other fields
+        const updatedIcon: Icon = {
+          ...editingIcon,
+          name: data.name,
+          slogan: data.slogan,
+          rank: data.rank,
+          lockInsCount: currentLockIns.length,
+        };
+        setIcons(icons.map((icon) => 
+          icon.id === editingIcon.id ? updatedIcon : icon
+        ));
+        setShowAddIconModal(false);
+        setEditingIcon(null);
+      }
+    } else {
+      // Create new icon
+      if (data.photo) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const newIcon: Icon = {
+            id: Date.now().toString(),
+            photo: data.photo!,
+            photoPreview: reader.result as string,
+            name: data.name,
+            slogan: data.slogan,
+            rank: data.rank,
+            schoolId: targetSchoolId,
+            lockInsCount: currentLockIns.length,
+          };
+          setIcons([...icons, newIcon]);
+          setShowAddIconModal(false);
+        };
+        reader.readAsDataURL(data.photo);
+      }
+    }
+  };
+
+  const handleIconClick = (icon: Icon) => {
+    setEditingIcon(icon);
+    setShowAddIconModal(true);
+  };
+
+  const loadAllLockIns = useCallback(async (isBackground = false) => {
+    if (!isBackground) {
+      setLockInsLoading(true);
+    }
     try {
       const lockInsPromises = allSchools.map(async (school: School) => {
         try {
@@ -86,11 +233,14 @@ export default function CuratorPagesPage() {
                 lockedInColor: string;
               }>;
             };
-            return (lockInData.students || []).map((student) => ({
-              ...student,
+            return {
               schoolId: school.id,
-              schoolName: lockInData.schoolName,
-            }));
+              students: (lockInData.students || []).map((student) => ({
+                ...student,
+                schoolId: school.id,
+                schoolName: lockInData.schoolName,
+              })),
+            };
           }
         } catch (error) {
           // Silently handle "No lockins found"
@@ -99,24 +249,49 @@ export default function CuratorPagesPage() {
             // Only log if it's not the expected "no lockins" case
           }
         }
-        return [];
+        return { schoolId: school.id, students: [] };
       });
 
       const results = await Promise.all(lockInsPromises);
-      const allStudents = results.flat();
+      const allStudents = results.flatMap((r) => r.students);
       setAllLockIns(allStudents);
+
+      // Store lock-ins by school for icons
+      const lockInsMap = new Map<number | null, LockInStudent[]>();
+      results.forEach((result) => {
+        lockInsMap.set(result.schoolId, result.students);
+      });
+      // Also store platform lock-ins (all schools combined)
+      lockInsMap.set(null, allStudents);
+      setLockInsBySchool(lockInsMap);
     } catch (error) {
       // Error loading lock-ins
     } finally {
-      setLockInsLoading(false);
+      if (!isBackground) {
+        setLockInsLoading(false);
+      }
     }
   }, [allSchools]);
 
+  // Load lock-ins when tab is active or in background
   useEffect(() => {
-    if (activeTab === "lock-ins" && allSchools.length > 0) {
-      loadAllLockIns();
+    if (allSchools.length > 0) {
+      if (activeTab === "lock-ins" || activeTab === "icons") {
+        loadAllLockIns(activeTab !== "lock-ins"); // Background load for icons tab
+      }
     }
   }, [activeTab, loadAllLockIns, allSchools.length]);
+
+  // Background refresh every 30 seconds for active tabs
+  useEffect(() => {
+    if (allSchools.length === 0) return;
+    if (activeTab === "lock-ins" || activeTab === "icons") {
+      const interval = setInterval(() => {
+        loadAllLockIns(true);
+      }, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, allSchools.length, loadAllLockIns]);
 
   const tabs = [
     { id: "cover-page" as TabType, label: "Cover Page" },
@@ -124,11 +299,10 @@ export default function CuratorPagesPage() {
     { id: "lock-ins" as TabType, label: "Lock-ins" },
   ];
 
-  const currentCoverPage = coverPages.find(
-    (page) => page.schoolId === (selectedSchool?.id || null)
-  );
-  const platformCoverPage = coverPages.find((page) => page.schoolId === null);
-  const displayCoverPage = currentCoverPage || platformCoverPage;
+  // Get cover page for current context (selected school or platform)
+  const displayCoverPage = selectedSchool
+    ? coverPages.find((page) => page.schoolId === selectedSchool.id)
+    : coverPages.find((page) => page.schoolId === null);
 
   return (
     <WidthConstraint>
@@ -191,26 +365,24 @@ export default function CuratorPagesPage() {
                 <p className="text-lg text-gray-600 mb-4">
                   You can{" "}
                   <button
-                    onClick={() => setShowAddModal(true)}
+                    onClick={() => {
+                      setEditingCoverPage(null);
+                      setShowAddModal(true);
+                    }}
                     className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
                   >
                     + ADD
                   </button>{" "}
                   a new cover page.
                 </p>
-                {!selectedSchool && (
-                  <Button
-                    onClick={() => setShowSchoolModal(true)}
-                    className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-6 py-3 rounded-full"
-                  >
-                    Select school &gt;
-                  </Button>
-                )}
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Cover Page Display */}
-                <div className="relative w-full rounded-xl overflow-hidden border-2 border-[#955aa4]">
+                {/* Cover Page Display - Clickable to Edit */}
+                <button
+                  onClick={() => handleCoverPageClick(displayCoverPage)}
+                  className="relative w-full rounded-xl overflow-hidden border-2 border-[#955aa4] hover:border-[#955aa4]/70 transition-all cursor-pointer"
+                >
                   <div
                     className="w-full h-96 relative"
                     style={{ backgroundColor: `#${displayCoverPage.color}` }}
@@ -231,15 +403,7 @@ export default function CuratorPagesPage() {
                       </p>
                     </div>
                   )}
-                </div>
-                {!displayCoverPage && (
-                  <Button
-                    onClick={() => setShowAddModal(true)}
-                    className="bg-black text-white hover:bg-gray-800"
-                  >
-                    + ADD Cover Page
-                  </Button>
-                )}
+                </button>
               </div>
             )}
           </>
@@ -312,21 +476,85 @@ export default function CuratorPagesPage() {
         )}
 
         {activeTab === "icons" && (
-          <div className="flex flex-col items-center justify-center py-20 min-h-[400px]">
-            <p className="text-4xl font-bold text-gray-400 mb-4">
-              Coming soon...
-            </p>
-          </div>
+          <>
+            {(() => {
+              const currentIcons = selectedSchool
+                ? icons.filter((icon) => icon.schoolId === selectedSchool.id)
+                : icons.filter((icon) => icon.schoolId === null);
+              
+              return currentIcons.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 min-h-[400px]">
+                  <p className="text-4xl font-bold text-gray-400 mb-4">
+                    Nothing to see yet.
+                  </p>
+                  <p className="text-lg text-gray-600 mb-4">
+                    You can{" "}
+                    <button
+                      onClick={() => {
+                        setEditingIcon(null);
+                        setShowAddIconModal(true);
+                      }}
+                      className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                    >
+                      + ADD
+                    </button>{" "}
+                    new Icons.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {currentIcons
+                    .sort((a, b) => a.rank - b.rank)
+                    .map((icon) => (
+                      <button
+                        key={icon.id}
+                        onClick={() => handleIconClick(icon)}
+                        className="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-96"
+                      >
+                        {icon.photoPreview ? (
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={icon.photoPreview}
+                              alt={icon.name}
+                              fill
+                              className="object-cover"
+                            />
+                            {/* Rank Badge */}
+                            <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
+                              <span className="text-black font-bold text-lg">#{icon.rank}</span>
+                            </div>
+                            {/* Name and Lock-ins Overlay */}
+                            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                              <p className="text-white text-3xl font-bold">{icon.name}</p>
+                              <div className="flex items-center gap-2 mt-2">
+                                <span className="text-white/90 text-sm">
+                                  {icon.lockInsCount} Lock-ins
+                                </span>
+                                <Lock className="w-4 h-4 text-yellow-500" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                            <p className="text-gray-400">{icon.name}</p>
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                </div>
+              );
+            })()}
+          </>
         )}
 
-        {/* Selector Bar - Shows school name when selected, positioned at bottom center */}
-        {selectedSchool && (
+        {/* Selector Bar - Always visible, positioned at bottom center */}
+        {(activeTab === "cover-page" || activeTab === "icons") && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
             <Button
               onClick={() => setShowSchoolModal(true)}
               className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-6 py-3 rounded-full shadow-lg"
             >
-              {selectedSchool.name} &gt;
+              {selectedSchool ? `${selectedSchool.name} >` : "Select school >"}
             </Button>
           </div>
         )}
@@ -341,8 +569,39 @@ export default function CuratorPagesPage() {
         {/* Add Cover Page Modal */}
         <AddCoverPageModal
           isOpen={showAddModal}
-          onClose={() => setShowAddModal(false)}
+          onClose={() => {
+            setShowAddModal(false);
+            setEditingCoverPage(null);
+          }}
           onComplete={handleCoverPageComplete}
+          editData={editingCoverPage ? {
+            photoPreview: editingCoverPage.photoPreview,
+            color: editingCoverPage.color,
+            slogan: editingCoverPage.slogan,
+          } : null}
+        />
+
+        {/* Add Icon Modal */}
+        <AddIconModal
+          isOpen={showAddIconModal}
+          onClose={() => {
+            setShowAddIconModal(false);
+            setEditingIcon(null);
+          }}
+          onComplete={handleIconComplete}
+          editData={editingIcon ? {
+            photoPreview: editingIcon.photoPreview,
+            name: editingIcon.name,
+            slogan: editingIcon.slogan,
+            rank: editingIcon.rank,
+          } : null}
+          selectedSchool={selectedSchool}
+          lockIns={(lockInsBySchool.get(selectedSchool?.id || null) || []).map((lockIn) => ({
+            studentName: lockIn.studentName,
+            lockinScore: lockIn.lockinScore,
+            lockedInInterpretation: lockIn.lockedInInterpretation,
+            lockedInColor: lockIn.lockedInColor,
+          }))}
         />
       </div>
     </WidthConstraint>
