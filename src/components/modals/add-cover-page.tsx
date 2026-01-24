@@ -8,6 +8,11 @@ interface AddCoverPageModalProps {
   isOpen: boolean;
   onClose: () => void;
   onComplete: (data: { photo: File | null; color: string; slogan: string }) => void;
+  editData?: {
+    photoPreview: string;
+    color: string;
+    slogan: string;
+  } | null;
 }
 
 interface ColorOption {
@@ -32,6 +37,7 @@ export default function AddCoverPageModal({
   isOpen,
   onClose,
   onComplete,
+  editData = null,
 }: AddCoverPageModalProps) {
   const [step, setStep] = useState<Step>("photo-color");
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
@@ -41,6 +47,26 @@ export default function AddCoverPageModal({
   const [slogan, setSlogan] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const colorDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Load edit data when modal opens
+  useEffect(() => {
+    if (isOpen && editData) {
+      setPhotoPreview(editData.photoPreview);
+      setSelectedColor(editData.color);
+      setSlogan(editData.slogan);
+      setStep("slogan"); // Start at slogan step if editing
+    } else if (isOpen && !editData) {
+      // Reset for new cover page
+      setStep("photo-color");
+      setSelectedPhoto(null);
+      setPhotoPreview(null);
+      setSelectedColor("");
+      setSlogan("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [isOpen, editData]);
 
   // Close color dropdown when clicking outside
   useEffect(() => {
@@ -132,7 +158,7 @@ export default function AddCoverPageModal({
             />
           </button>
           <h2 className="text-2xl font-bold text-gray-900">
-            {step === "photo-color" ? "Add Cover Page" : "Slogan"}
+            {editData ? "Edit Cover Page" : step === "photo-color" ? "Add Cover Page" : "Slogan"}
           </h2>
           <button
             onClick={step === "photo-color" ? handleGoToSlogan : handleSubmit}
@@ -263,7 +289,21 @@ export default function AddCoverPageModal({
             </div>
           ) : (
             <div className="space-y-6">
-              {/* Image Preview - Still visible in slogan step */}
+              {/* Slogan Input - On Top */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-3">
+                  Slogan
+                </label>
+                <input
+                  type="text"
+                  value={slogan}
+                  onChange={(e) => setSlogan(e.target.value)}
+                  placeholder="Enter slogan..."
+                  className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+                />
+              </div>
+
+              {/* Image Preview - Below Slogan */}
               <div>
                 <div
                   className="w-full h-64 rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
@@ -286,20 +326,6 @@ export default function AddCoverPageModal({
                     </p>
                   )}
                 </div>
-              </div>
-
-              {/* Slogan Input */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-3">
-                  Slogan
-                </label>
-                <input
-                  type="text"
-                  value={slogan}
-                  onChange={(e) => setSlogan(e.target.value)}
-                  placeholder="Enter slogan..."
-                  className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
-                />
               </div>
             </div>
           )}
