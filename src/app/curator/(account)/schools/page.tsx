@@ -397,14 +397,14 @@ export default function SchoolsPage() {
 
                   {/* Top Left - Alert Bar (Patient or Provider) */}
                   {(hasLatestPatient && schoolWithExtras.newPatientName) ? (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black max-w-[70%]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black w-[200px]">
                       <span className="text-xs font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{schoolWithExtras.newPatientName}</span>
                       </span>
                     </div>
                   ) : (schoolWithExtras.newProviderName && !hasLatestPatient) ? (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black max-w-[70%]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black w-[200px]">
                       <span className="text-xs font-semibold block truncate">
                         <span className="text-[#955aa4]">New Provider.</span>{" "}
                         <span className="text-black">{schoolWithExtras.newProviderName}</span>
