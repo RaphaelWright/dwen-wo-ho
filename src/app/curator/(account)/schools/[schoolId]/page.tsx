@@ -13,6 +13,7 @@ import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
+import PatientDetailsModal from "@/components/modals/patient-details-curator";
 import { useDisableSchool } from "@/hooks/queries/useSchoolsQuery";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import {
@@ -30,7 +31,7 @@ import { toast } from "sonner";
 import { FiPlus, FiMinus, FiSearch, FiUsers } from "react-icons/fi";
 import { useQueryClient } from "@tanstack/react-query";
 
-type TabType = "overview" | "providers" | "partners" | "reach";
+type TabType = "overview" | "providers" | "partners" | "reach" | "patients";
 
 interface SchoolProvidersResponse {
   id: number;
@@ -131,6 +132,25 @@ export default function SchoolDetailsPage() {
     }
   }, [schoolId]);
 
+  const loadPatients = async () => {
+    setPatientsLoading(true);
+    try {
+      const response = await api(ENDPOINTS.getSchoolPatientResults(schoolId));
+      if (response?.success && response.data) {
+        const patientsList = Array.isArray(response.data) ? response.data : [];
+        // Sort by newest first
+        patientsList.sort((a: { createdAt: string }, b: { createdAt: string }) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setPatients(patientsList);
+      }
+    } catch (error) {
+      // Error loading patients
+    } finally {
+      setPatientsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === "providers" && providers.length === 0 && !providersLoading) {
       loadProviders();
@@ -145,6 +165,9 @@ export default function SchoolDetailsPage() {
     }
     if (activeTab === "reach" && !reach && !reachLoading) {
       loadReach();
+    }
+    if (activeTab === "patients" && patients.length === 0 && !patientsLoading) {
+      loadPatients();
     }
   }, [activeTab, schoolId]);
 
@@ -299,11 +322,35 @@ export default function SchoolDetailsPage() {
     }
   };
 
+  const [patients, setPatients] = useState<Array<{
+    id: number;
+    patientName: string;
+    patientAge: number;
+    patientSex: string;
+    createdAt: string;
+    visibilityStatus: string;
+    starProvider: {
+      id: string;
+      fullName: string;
+      email: string;
+      professionalTitle: string;
+      specialty: string;
+    } | null;
+    referredProvider: {
+      id: string;
+      fullName: string;
+      email: string;
+    } | null;
+  }>>([]);
+  const [patientsLoading, setPatientsLoading] = useState(false);
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
+
   const tabs = [
     { id: "overview" as TabType, label: "Overview", icon: MdSchool },
     { id: "providers" as TabType, label: "Providers", icon: Users, count: school?.totalProviders ?? providers.length },
     { id: "partners" as TabType, label: "Partners", icon: Handshake, count: school?.totalPartners ?? partners.length },
     { id: "reach" as TabType, label: "Reach", icon: TrendingUp, count: reach?.reach },
+    { id: "patients" as TabType, label: "Patients", icon: Users, count: patients.length },
   ];
 
   if (isLoading) {
@@ -573,9 +620,71 @@ export default function SchoolDetailsPage() {
               </div>
             )}
             {activeTab === "reach" && <ReachTab reach={reach} isLoading={reachLoading} />}
+            {activeTab === "patients" && (
+              <div className="space-y-6">
+                {patientsLoading ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-2"></div>
+                    <p>Loading patients...</p>
+                  </div>
+                ) : patients.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Users className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                    <p>No patients found for this school</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {patients.map((patient) => (
+                      <button
+                        key={patient.id}
+                        onClick={() => setSelectedPatientId(patient.id)}
+                        className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors text-left"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#955aa4] to-[#7a4a88] flex items-center justify-center text-white font-bold text-lg">
+                            {patient.patientName.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900">{patient.patientName}</p>
+                            <p className="text-sm text-gray-600">
+                              {patient.patientAge} years old • {patient.patientSex}
+                            </p>
+                            {patient.starProvider && (
+                              <p className="text-xs text-[#955aa4] mt-1">
+                                Assigned to: {patient.starProvider.fullName}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          {patient.visibilityStatus === "NEW" && (
+                            <span className="px-2 py-1 rounded-full bg-[#955aa4]/10 text-[#955aa4] text-xs font-semibold">
+                              New
+                            </span>
+                          )}
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                          </svg>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Patient Details Modal */}
+      {selectedPatientId && (
+        <PatientDetailsModal
+          isOpen={!!selectedPatientId}
+          onClose={() => setSelectedPatientId(null)}
+          patientId={selectedPatientId}
+          schoolId={schoolId}
+        />
+      )}
 
       {school && (
         <>

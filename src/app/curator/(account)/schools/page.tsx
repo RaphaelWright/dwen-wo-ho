@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { MdSchool, MdLocationOn } from "react-icons/md";
 import { FiCalendar, FiSearch } from "react-icons/fi";
 import Image from "next/image";
@@ -9,8 +9,34 @@ import { School } from "@/types/school";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { useSchools } from "@/hooks/queries/useSchoolsQuery";
+import { api } from "@/lib/api";
+import { ENDPOINTS } from "@/constants/endpoints";
+import { toast } from "sonner";
 
 type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
+
+interface SchoolWithExtras extends School {
+  studentCount?: number;
+  newPatientName?: string;
+  latestLockInDate?: string;
+}
+
+interface PatientResult {
+  id: number;
+  patientName: string;
+  createdAt: string;
+  visibilityStatus: string;
+}
+
+interface LockInData {
+  schoolName: string;
+  students: Array<{
+    studentName: string;
+    lockinScore: number;
+    lockedInInterpretation: string;
+    lockedInColor: string;
+  }>;
+}
 
 const filterOptions: { label: string; value: FilterType }[] = [
   { label: "All", value: "all" },
@@ -23,12 +49,147 @@ const filterOptions: { label: string; value: FilterType }[] = [
 export default function SchoolsPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: allSchools = [], isLoading, isError } = useSchools();
+  const { data: allSchools = [], isLoading: schoolsLoading, isError } = useSchools();
+  const [schoolsWithData, setSchoolsWithData] = useState<SchoolWithExtras[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
+  const isInitialLoadRef = useRef(true);
+
+  const loadSchoolsWithData = useCallback(async (isBackground = false) => {
+    if (allSchools.length === 0) return;
+
+    if (!isBackground) {
+      setIsLoadingData(true);
+    }
+
+    const currentSchoolIds = new Set(allSchools.map((s: School) => Number(s.id)));
+
+    // Check for removed schools (compare with cached schools)
+    if (!isInitialLoadRef.current && isBackground && previousSchoolsRef.current.size > 0) {
+      previousSchoolsRef.current.forEach((prevSchool, id) => {
+        if (!currentSchoolIds.has(id)) {
+          toast.error(`${prevSchool.name} is no longer available`);
+        }
+      });
+    }
+
+    // Check for newly added schools
+    if (!isInitialLoadRef.current && isBackground) {
+      allSchools.forEach((newSchool: School) => {
+        if (!previousSchoolsRef.current.has(Number(newSchool.id))) {
+          toast.success(`New school added: ${newSchool.name}`);
+        }
+      });
+    }
+
+    // Fetch lock-in data and patient results for each school
+    const enrichedSchools = await Promise.all(
+      allSchools.map(async (school: School) => {
+        const schoolData: SchoolWithExtras = { ...school };
+
+        try {
+          // Fetch lock-in data to get count
+          const lockInResponse = await api(ENDPOINTS.getSchoolLockIn(school.id));
+          if (lockInResponse?.success && lockInResponse.data) {
+            const lockInData = lockInResponse.data as LockInData;
+            schoolData.studentCount = lockInData.students?.length || 0;
+          }
+        } catch (error) {
+          // Silently handle "No lockins found" - this is expected for schools without lock-ins
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          if (!errorMessage.includes("No lockins found")) {
+            // Only log if it's not the expected "no lockins" case
+          }
+          schoolData.studentCount = 0;
+        }
+
+        try {
+          // Focus on "new" endpoint for latest updates
+          const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
+          if (newResultsResponse?.success && newResultsResponse.data) {
+            const newResults = newResultsResponse.data as PatientResult[];
+            if (newResults.length > 0) {
+              const latestNewResult = newResults.sort(
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              )[0];
+              schoolData.newPatientName = latestNewResult.patientName;
+              schoolData.latestLockInDate = latestNewResult.createdAt;
+
+              // Check if this is a new patient (not in cache)
+              if (!isInitialLoadRef.current && isBackground) {
+                const prevSchool = previousSchoolsRef.current.get(Number(school.id));
+                if (prevSchool?.newPatientName !== latestNewResult.patientName) {
+                  toast.success(`New patient: ${latestNewResult.patientName} at ${school.name}`);
+                }
+              }
+            } else {
+              // If no new patients, get latest from all results
+              const allResultsResponse = await api(ENDPOINTS.getSchoolPatientResults(school.id));
+              if (allResultsResponse?.success && allResultsResponse.data) {
+                const results = allResultsResponse.data as PatientResult[];
+                if (results.length > 0) {
+                  const latestResult = results.sort(
+                    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                  )[0];
+                  schoolData.newPatientName = latestResult.patientName;
+                  schoolData.latestLockInDate = latestResult.createdAt;
+                }
+              }
+            }
+          }
+        } catch (error) {
+          // Error fetching results
+        }
+
+        return schoolData;
+      })
+    );
+
+    // Sort schools by latest lock-in date (most recent first)
+    enrichedSchools.sort((a, b) => {
+      if (!a.latestLockInDate && !b.latestLockInDate) return 0;
+      if (!a.latestLockInDate) return 1;
+      if (!b.latestLockInDate) return -1;
+      return new Date(b.latestLockInDate).getTime() - new Date(a.latestLockInDate).getTime();
+    });
+
+    // Update cache map
+    const newCacheMap = new Map<number, SchoolWithExtras>();
+    enrichedSchools.forEach((school) => {
+      newCacheMap.set(Number(school.id), school);
+    });
+    previousSchoolsRef.current = newCacheMap;
+
+    setSchoolsWithData(enrichedSchools);
+    if (!isBackground) {
+      setIsLoadingData(false);
+    }
+    isInitialLoadRef.current = false;
+  }, [allSchools]);
+
+  // Initial load
+  useEffect(() => {
+    if (allSchools.length > 0) {
+      loadSchoolsWithData(false);
+    }
+  }, [allSchools.length, loadSchoolsWithData]);
+
+  // Background polling for new lock-ins (every 30 seconds) - no loading state
+  useEffect(() => {
+    if (allSchools.length === 0) return;
+
+    const interval = setInterval(() => {
+      loadSchoolsWithData(true); // Background update
+    }, 30000); // Poll every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [allSchools.length, loadSchoolsWithData]);
 
   const schoolsList = useMemo(() => {
+    const source = schoolsWithData.length > 0 ? schoolsWithData : allSchools;
     let filtered = activeFilter === "all"
-      ? allSchools
-      : allSchools.filter((school) => school.type === activeFilter);
+      ? source
+      : source.filter((school) => school.type === activeFilter);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -44,10 +205,14 @@ export default function SchoolsPage() {
     }
 
     return filtered;
-  }, [allSchools, activeFilter, searchQuery]);
-  // "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqZ29oZWFsdGhAZ21haWwuY29tIiwiaWF0IjoxNzY4Njc0NDMxLCJleHAiOjE3NzM4NTg0MzEsInJvbGUiOiJST0xFX0NVUkFUT1IiLCJ1c2VySWQiOiJhMWI0OTExMC1jY2MyLTQ5NTItOTQxNi04ZjQ3YzQwNWViNjQiLCJ0eXBlIjoicmVmcmVzaCJ9.3q5Ik7x_yGhKiaGobF9jyB7F9E8rDfL_vPa9i17DGLckEB8uY2WqBaUXw3DKbgBG",
+  }, [schoolsWithData, allSchools, activeFilter, searchQuery]);
 
- 
+  const getFirstCampus = (campuses: string[] | null | undefined): string => {
+    if (campuses && Array.isArray(campuses) && campuses.length > 0) {
+      return campuses[0];
+    }
+    return "";
+  };
 
   if (isError) {
     return (
@@ -61,27 +226,15 @@ export default function SchoolsPage() {
 
   return (
     <WidthConstraint>
-      <div className="flex flex-col gap-8 p-8">
+      <div className="p-8">
         {/* Header */}
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-extrabold text-[#955aa4] flex items-center gap-3">
-                <MdSchool className="text-4xl" />
-                Schools
-                <span className="text-2xl text-gray-400 font-medium">
-                  ({schoolsList.length})
-                </span>
-              </h1>
-              <p className="text-gray-500 mt-2 text-lg">
-                Manage and view all registered educational institutions.
-              </p>
-            </div>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Schools</h1>
+          <p className="text-gray-600">Manage and view all registered educational institutions</p>
+        </div>
 
-
-
-          {/* Search Bar */}
+        {/* Search Bar */}
+        <div className="mb-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <FiSearch className="h-5 w-5 text-gray-400" />
@@ -94,146 +247,110 @@ export default function SchoolsPage() {
               className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
             />
           </div>
-
-          {/* Filters */}
-          <div className="flex flex-wrap gap-2">
-            {filterOptions.map((filter) => (
-              <button
-                key={filter.value}
-                onClick={() => setActiveFilter(filter.value)}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  activeFilter === filter.value
-                    ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
         </div>
 
-     
-        {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col relative overflow-hidden animate-pulse"
-              >
-                <div className="flex items-start gap-4">
-                  {/* Skeleton Logo */}
-                  <div className="w-20 h-20 rounded-2xl bg-gray-200 flex-shrink-0"></div>
-
-                  {/* Skeleton Content */}
-                  <div className="flex-1 min-w-0 space-y-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="h-6 w-16 bg-gray-200 rounded-full"></div>
-                      <div className="h-4 w-20 bg-gray-200 rounded"></div>
-                    </div>
-                    <div className="h-6 w-3/4 bg-gray-200 rounded"></div>
-                    <div className="h-4 w-1/2 bg-gray-200 rounded"></div>
-                  </div>
-                </div>
-
-                {/* Skeleton Footer */}
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="h-5 w-1/3 bg-gray-200 rounded"></div>
-                  <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      
+        {/* Filters */}
+        <div className="mb-8 flex flex-wrap gap-2">
+          {filterOptions.map((filter) => (
+            <button
+              key={filter.value}
+              onClick={() => setActiveFilter(filter.value)}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                activeFilter === filter.value
+                  ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
+                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
 
         {/* Schools Grid */}
-        {!isLoading && schoolsList.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {schoolsList.map((school: School) => (
-              <div
-                key={school.id}
-                className="group bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:border-[#955aa4]/30 transition-all duration-300 flex flex-col relative overflow-hidden"
-              >
-                <div className="flex items-start gap-4">
-                  {/* Logo Section */}
-                  <div className="w-20 h-20 rounded-2xl bg-gray-50 p-4 border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300">
-                    {school.logo ? (
+        {(schoolsLoading || isLoadingData) && isInitialLoadRef.current ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+              <p className="text-gray-500">Loading schools...</p>
+            </div>
+          </div>
+        ) : schoolsList.length === 0 ? (
+          <div className="text-center py-20">
+            <MdSchool className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              {activeFilter === "all" ? "No schools found" : "No schools found"}
+            </h3>
+            <p className="text-gray-500">
+              {activeFilter === "all"
+                ? "There are no schools registered yet."
+                : `There are no schools under the ${filterOptions.find((f) => f.value === activeFilter)?.label} category.`}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {schoolsList.map((school) => {
+              const firstCampus = getFirstCampus(school.campuses);
+              const displayName = firstCampus 
+                ? `${school.name} (${firstCampus})`
+                : school.name;
+              const schoolWithExtras = school as SchoolWithExtras;
+
+              return (
+                <Link
+                  key={school.id}
+                  href={`${ROUTES.curator.schools}/${school.id}`}
+                  className="relative group h-80 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 block"
+                >
+                  {/* Background Image */}
+                  {school.logo ? (
+                    <div className="absolute inset-0">
                       <Image
-                        width={80}
-                        height={80}
                         src={school.logo}
                         alt={school.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
-                    ) : (
-                      <MdSchool className="text-gray-300 text-4xl" />
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                      <MdSchool className="w-20 h-20 text-gray-400" />
+                    </div>
+                  )}
 
-                  {/* Content Section */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#955aa4]/10 text-[#955aa4]">
-                        {school.type}
-                      </span>
-                      <span className="text-xs text-gray-400 font-medium flex items-center gap-1">
-                        <FiCalendar className="w-3 h-3" />
-                        {new Date(school.createdAt).toLocaleDateString()}
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+
+                  {/* Top Left - Alert Bar */}
+                  {schoolWithExtras.newPatientName && (
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md border-2 border-black">
+                      <span className="text-xs font-semibold">
+                        <span className="text-[#955aa4]">New Patient.</span>{" "}
+                        <span className="text-black">{schoolWithExtras.newPatientName}</span>
                       </span>
                     </div>
-                    
-                    <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 line-clamp-2">
-                      {school.name}
+                  )}
+
+                  {/* Top Right - Student Count Badge */}
+                  <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-gray-400 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-sm">
+                      {schoolWithExtras.studentCount ?? 0}
+                    </span>
+                  </div>
+
+                  {/* Bottom Content - School Name and Motto */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
+                    <h3 className="text-white font-bold text-xl mb-2 leading-tight">
+                      {displayName}
                     </h3>
-                    {school.nickname && (
-                      <p className="text-gray-500 text-sm font-medium">
-                        &quot;{school.nickname}&quot;
+                    {school.motto && (
+                      <p className="text-white/90 text-sm font-medium italic">
+                        {school.motto}
                       </p>
                     )}
                   </div>
-                </div>
-
-                {/* Footer / Location */}
-                <div className="mt-6 flex items-center justify-between">
-                  <div className="flex-1 min-w-0 mr-4">
-                    {/* {school.campuses && Array.isArray(school.campuses) && school.campuses.length > 0 ? (
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <MdLocationOn className="text-[#955aa4] w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm font-medium truncate">
-                          {school.campuses.join(", ")}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-gray-400 italic">No campus location</span>
-                    )} */}
-                  </div>
-
-                  <Link href={`${ROUTES.curator.schools}/${school.id}`}>
-                  <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#955aa4] group-hover:text-white transition-all duration-300 shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!isLoading && schoolsList.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-              <MdSchool className="text-4xl text-gray-300" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No schools found</h3>
-            <p className="text-gray-500 max-w-md">
-              {activeFilter === "all"
-                ? "There are no schools registered yet."
-                : `There are no schools registered under the ${filterOptions.find((f) => f.value === activeFilter)?.label} category yet.`}
-            </p>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

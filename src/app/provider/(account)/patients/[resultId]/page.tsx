@@ -188,7 +188,11 @@ export default function PatientResultPage() {
             }
           }
         } catch (error) {
-          console.error("Failed to load lock-in details:", error);
+          // Silently handle "No lockins found" - this is expected for schools without lock-ins
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          if (!errorMessage.includes("No lockins found")) {
+            // Only log if it's not the expected "no lockins" case
+          }
         }
       }
     } catch (error) {

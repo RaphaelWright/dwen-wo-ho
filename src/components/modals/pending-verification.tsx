@@ -5,9 +5,11 @@ import Image from "next/image";
 import JustGoHealth from "../logo-purple";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { ROUTES } from "@/constants/routes";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { FiLogOut } from "react-icons/fi";
+import { performLogout } from "@/lib/auth-utils";
 
 interface PendingVerificationModalProps {
   isOpen: boolean;
@@ -33,14 +35,11 @@ const PendingVerificationModal = ({
   },
 }: PendingVerificationModalProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("pendingUser");
-    localStorage.removeItem("curatorToken"); // Just in case, though this is provider side
-    router.push(ROUTES.provider.auth);
+    performLogout(queryClient, ROUTES.provider.auth);
   };
 
   return (

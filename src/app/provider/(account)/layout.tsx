@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { ProviderSidebar } from "@/components/provider/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import useUserQuery from "@/hooks/queries/useUserQuery";
+import { performLogout } from "@/lib/auth-utils";
 
 export default function ProviderLayout({
   children,
@@ -12,6 +14,7 @@ export default function ProviderLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
   const [schoolCount, setSchoolCount] = useState(0);
@@ -45,11 +48,7 @@ export default function ProviderLayout({
   }, [getProfileQuery.data]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userType");
-    localStorage.removeItem("pendingUser");
-    router.push(ROUTES.provider.auth);
+    performLogout(queryClient, ROUTES.provider.auth);
   };
 
   // Show loading state only after mount to prevent hydration mismatch

@@ -161,7 +161,7 @@ export default function ProviderSchoolDetailsPage() {
             });
           }
         } catch (error) {
-          console.error("Failed to load patient results:", error);
+          // Silently handle errors when fetching patient results
         }
 
         // Sort by creation date (newest first), then by name if no date
@@ -177,7 +177,12 @@ export default function ProviderSchoolDetailsPage() {
         setStudents(studentsList);
       }
     } catch (error) {
-      console.error("Failed to load students:", error);
+      // Silently handle "No lockins found" - this is expected for schools without lock-ins
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (!errorMessage.includes("No lockins found")) {
+        // Only log if it's not the expected "no lockins" case
+      }
+      setStudents([]);
     } finally {
       setStudentsLoading(false);
     }

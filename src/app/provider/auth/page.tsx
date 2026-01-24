@@ -174,35 +174,49 @@ const ProviderAuthPageContent = () => {
     setProfileStep(step);
   };
 
-  // Show loading while checking authentication
-  if (isCheckingAuth) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-          <p className="text-gray-500">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
+  // Render the auth form content, but show loading overlay when checking
+  const renderAuthContent = () => {
+    if (step === "check-email") {
+      return <CheckEmail onEmailSubmit={handleEmailSubmit} />;
+    } else if (step === "sign-in") {
+      return (
+        <SignIn
+          email={email}
+          onBack={handleBackToEmail}
+          onForgotPassword={handleForgotPassword}
+          onProfileIncomplete={(step) => handleProfileIncomplete(step)}
+        />
+      );
+    } else if (step === "reset-password") {
+      return <VerifyPasswordReset email={email} onBack={() => setStep("sign-in")} />;
+    } else {
+      return (
+        <SignUp
+          email={email}
+          onBack={() => setStep("check-email")}
+          profileStep={profileStep}
+        />
+      );
+    }
+  };
 
-  return step === "check-email" ? (
-    <CheckEmail onEmailSubmit={handleEmailSubmit} />
-  ) : step === "sign-in" ? (
-    <SignIn
-      email={email}
-      onBack={handleBackToEmail}
-      onForgotPassword={handleForgotPassword}
-      onProfileIncomplete={(step) => handleProfileIncomplete(step)}
-    />
-  ) : step === "reset-password" ? (
-    <VerifyPasswordReset email={email} onBack={() => setStep("sign-in")} />
-  ) : (
-    <SignUp
-      email={email}
-      onBack={() => setStep("check-email")}
-      profileStep={profileStep}
-    />
+  return (
+    <div className="relative w-full h-full">
+      {/* Loading overlay - only shows when checking auth, doesn't replace content */}
+      {isCheckingAuth && (
+        <div className="absolute inset-0 z-50 bg-white/95 backdrop-blur-sm flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+            <p className="text-gray-500">Checking authentication...</p>
+          </div>
+        </div>
+      )}
+      
+      {/* Auth form content - always rendered, just hidden behind overlay when checking */}
+      <div className={isCheckingAuth ? "opacity-0 pointer-events-none" : "opacity-100"}>
+        {renderAuthContent()}
+      </div>
+    </div>
   );
 };
 
