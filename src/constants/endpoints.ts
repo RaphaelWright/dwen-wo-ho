@@ -36,6 +36,11 @@ export const ENDPOINTS = {
   schoolProviders: (id: string | number) => `/api/v1/schools/${id}/providers`,
   schoolReach: (id: string | number) => `/api/v1/schools/${id}/reach`,
   getSchoolLockIn: (id: string | number) => `/api/v1/lockin/${id}`,
+  getLockInUpdate: (lockinId: string | number) => `/api/v1/lockin/updates/${lockinId}`,
+  updateLockInComment: (lockinId: string | number) => `/api/v1/lockin/updates/${lockinId}/comment`,
+  getLockInBenchmarks: (schoolType: string) => `/api/v1/lockin/benchmarks/${schoolType}`,
+  getUrgentCare: (schoolId: string | number) => `/api/v1/lockin/urgent-care/${schoolId}`,
+  getUrgentCareTreating: (schoolId: string | number) => `/api/v1/lockin/urgent-care/${schoolId}/treating`,
   submitLockIn: "/api/v1/lockin",
   disableSchool: (id: string | number) => `/api/v1/schools/${id}/disable`,
   // Patient Results endpoints

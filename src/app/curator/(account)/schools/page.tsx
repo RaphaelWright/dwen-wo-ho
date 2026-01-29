@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { MdSchool, MdLocationOn } from "react-icons/md";
-import { FiCalendar, FiSearch } from "react-icons/fi";
+import { MdSchool } from "react-icons/md";
+import { FiSearch } from "react-icons/fi";
 import Image from "next/image";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { School } from "@/types/school";
@@ -12,6 +12,8 @@ import { useSchools } from "@/hooks/queries/useSchoolsQuery";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setSchools, setLoading } from "@/store/slices/curatorSchoolsSlice";
 
 type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
 
@@ -58,20 +60,23 @@ const filterOptions: { label: string; value: FilterType }[] = [
 ];
 
 export default function SchoolsPage() {
+  const dispatch = useAppDispatch();
+  const { schools: cachedSchools, isLoading: reduxLoading } = useAppSelector(
+    (state) => state.curatorSchools
+  );
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const { data: allSchools = [], isLoading: schoolsLoading, isError } = useSchools();
-  const [schoolsWithData, setSchoolsWithData] = useState<SchoolWithExtras[]>([]);
-  const [isLoadingData, setIsLoadingData] = useState(false);
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
   const isInitialLoadRef = useRef(true);
 
-  const loadSchoolsWithData = useCallback(async (isBackground = false) => {
-    if (allSchools.length === 0) return;
+  const loadSchoolsWithData = useCallback(
+    async (isBackground = false) => {
+      if (allSchools.length === 0) return;
 
-    if (!isBackground) {
-      setIsLoadingData(true);
-    }
+      if (!isBackground) {
+        dispatch(setLoading(true));
+      }
 
     const currentSchoolIds = new Set(allSchools.map((s: School) => Number(s.id)));
 
@@ -229,18 +234,20 @@ export default function SchoolsPage() {
     });
     previousSchoolsRef.current = newCacheMap;
 
-    setSchoolsWithData(enrichedSchools);
+    dispatch(setSchools(enrichedSchools));
     if (!isBackground) {
-      setIsLoadingData(false);
+      dispatch(setLoading(false));
     }
     isInitialLoadRef.current = false;
-  }, [allSchools]);
+    },
+    [allSchools, dispatch]
+  );
 
-  // Initial load
+  // Initial load: if we have cached schools, show them and refresh in background; else show loading and fetch
   useEffect(() => {
-    if (allSchools.length > 0) {
-      loadSchoolsWithData(false);
-    }
+    if (allSchools.length === 0) return;
+    const hasCache = cachedSchools.length > 0;
+    loadSchoolsWithData(hasCache);
   }, [allSchools.length, loadSchoolsWithData]);
 
   // Background polling for new lock-ins (every 30 seconds) - no loading state
@@ -254,11 +261,21 @@ export default function SchoolsPage() {
     return () => clearInterval(interval);
   }, [allSchools.length, loadSchoolsWithData]);
 
+  // Merge allSchools with cache: use cached enriched data when available so list loads fast
+  const mergedSchools = useMemo(() => {
+    if (allSchools.length === 0) return [];
+    if (cachedSchools.length === 0) return allSchools as SchoolWithExtras[];
+    return allSchools.map((school) => {
+      const cached = cachedSchools.find((c) => String(c.id) === String(school.id));
+      return cached ? { ...school, ...cached } : (school as SchoolWithExtras);
+    });
+  }, [allSchools, cachedSchools]);
+
   const schoolsList = useMemo(() => {
-    const source = schoolsWithData.length > 0 ? schoolsWithData : allSchools;
-    let filtered = activeFilter === "all"
-      ? source
-      : source.filter((school) => school.type === activeFilter);
+    let filtered =
+      activeFilter === "all"
+        ? mergedSchools
+        : mergedSchools.filter((school) => school.type === activeFilter);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -266,15 +283,15 @@ export default function SchoolsPage() {
         const nameMatch = school.name?.toLowerCase().includes(query);
         const nicknameMatch = school.nickname?.toLowerCase().includes(query);
         const typeMatch = school.type?.toLowerCase().includes(query);
-        const campusesMatch = school.campuses?.some(campus => 
-          campus.toLowerCase().includes(query)
+        const campusesMatch = school.campuses?.some((campus) =>
+          String(campus).toLowerCase().includes(query)
         );
         return nameMatch || nicknameMatch || typeMatch || campusesMatch;
       });
     }
 
     return filtered;
-  }, [schoolsWithData, allSchools, activeFilter, searchQuery]);
+  }, [mergedSchools, activeFilter, searchQuery]);
 
   const getFirstCampus = (campuses: string[] | null | undefined): string => {
     if (campuses && Array.isArray(campuses) && campuses.length > 0) {
@@ -335,8 +352,8 @@ export default function SchoolsPage() {
           ))}
         </div>
 
-        {/* Schools Grid */}
-        {(schoolsLoading || isLoadingData) && isInitialLoadRef.current ? (
+        {/* Schools Grid - show loading only when no cache and we're fetching */}
+        {(schoolsLoading || reduxLoading) && cachedSchools.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
@@ -397,7 +414,7 @@ export default function SchoolsPage() {
 
                   {/* Top Left - Alert Bar (Patient or Provider) */}
                   {(hasLatestPatient && schoolWithExtras.newPatientName) ? (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-4 rounded-lg shadow-md border-2 border-black w-[350px]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border-2 border-black w-[350px]">
                       <span className="text-base font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{schoolWithExtras.newPatientName}</span>

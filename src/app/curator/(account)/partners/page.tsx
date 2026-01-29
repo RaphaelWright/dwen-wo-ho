@@ -1,49 +1,53 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { Building2, Search } from "lucide-react";
 import Image from "next/image";
 import PartnerDetailsModal from "@/components/modals/partner-details";
-
-interface Partner {
-  id: string | number;
-  name: string;
-  nickname?: string;
-  slogan?: string;
-  logo?: string;
-}
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setPartners, setLoading } from "@/store/slices/curatorPartnersSlice";
+import type { Partner } from "@/store/slices/curatorPartnersSlice";
 
 export default function PartnersPage() {
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const { partners: cachedPartners, isLoading: reduxLoading } = useAppSelector(
+    (state) => state.curatorPartners
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [showPartnerModal, setShowPartnerModal] = useState(false);
   const [selectedPartnerId, setSelectedPartnerId] = useState<string | number>("");
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
 
-  useEffect(() => {
-    loadPartners();
-  }, []);
-
-  const loadPartners = async () => {
-    setIsLoading(true);
+  const loadPartners = useCallback(async (isBackground = false) => {
+    if (!isBackground) {
+      dispatch(setLoading(true));
+    }
     try {
       const response = await api(ENDPOINTS.partners);
       if (response?.success && response.data) {
         const partnersList = Array.isArray(response.data) ? response.data : [];
-        setPartners(partnersList);
+        dispatch(setPartners(partnersList));
       }
     } catch (error) {
-      // Note: User will see empty state or loading state
+      // User will see empty state or cached state
     } finally {
-      setIsLoading(false);
+      if (!isBackground) {
+        dispatch(setLoading(false));
+      }
     }
-  };
+  }, [dispatch]);
 
-  const filteredPartners = partners.filter((partner) =>
+  // Initial load: if we have cached partners, show them and refresh in background; else show loading and fetch
+  useEffect(() => {
+    const hasCache = cachedPartners.length > 0;
+    loadPartners(hasCache);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const filteredPartners = cachedPartners.filter((partner) =>
     partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     partner.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     partner.slogan?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -72,8 +76,8 @@ export default function PartnersPage() {
           </div>
         </div>
 
-        {/* Partners Grid */}
-        {isLoading ? (
+        {/* Partners Grid - show loading only when no cache and we're fetching */}
+        {reduxLoading && cachedPartners.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
@@ -146,6 +150,7 @@ export default function PartnersPage() {
           setShowPartnerModal(false);
           setSelectedPartnerId("");
           setSelectedPartner(undefined);
+          loadPartners(true); // Refresh cache in background after modal close
         }}
         partnerId={selectedPartnerId}
         partner={selectedPartner}

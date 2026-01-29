@@ -209,11 +209,12 @@ export default function ProviderSchoolsPage() {
     });
   }, [getProfileQuery.data]);
 
-  // Initial load
+  // Initial load: if we have cached schools, show them and refresh in background; else show loading and fetch
   useEffect(() => {
-    if (getProfileQuery.data) {
-      loadSchoolsWithData(false);
-    }
+    if (!getProfileQuery.data) return;
+    const hasCache = cachedSchools.length > 0;
+    loadSchoolsWithData(hasCache);
+    // Run when profile is ready; hasCache is read at run time so returning users see cache first
   }, [getProfileQuery.data, loadSchoolsWithData]);
 
   // Background polling for new lock-ins (every 30 seconds) - no loading state
@@ -301,8 +302,8 @@ export default function ProviderSchoolsPage() {
           ))}
         </div>
 
-        {/* Schools Grid */}
-        {reduxLoading && isInitialLoadRef.current ? (
+        {/* Schools Grid - show loading only when no cache and we're fetching */}
+        {(reduxLoading || getProfileQuery.isLoading) && cachedSchools.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
@@ -356,7 +357,7 @@ export default function ProviderSchoolsPage() {
 
                   {/* Top Left - Alert Bar */}
                   {school.newPatientName && (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-4 rounded-lg shadow-md border-2 border-black w-[350px]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border-2 border-black w-[350px]">
                       <span className="text-base font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{school.newPatientName}</span>

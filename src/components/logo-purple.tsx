@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const JustGoHealth = () => {
+interface JustGoHealthProps {
+  className?: string;
+}
+
+const JustGoHealth = ({ className }: JustGoHealthProps) => {
   return (
-    <Link href="/">
+    <Link href="/" className={className}>
       <Image
         priority
         src="/logos/logo-purple.png"
