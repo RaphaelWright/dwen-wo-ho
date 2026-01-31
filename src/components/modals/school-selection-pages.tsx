@@ -57,9 +57,10 @@ export default function SchoolSelectionModal({
   };
 
   const filteredSchools = useMemo(() => {
-    let filtered = activeFilter === "all"
-      ? schools
-      : schools.filter((school) => school.type === activeFilter);
+    let filtered =
+      activeFilter === "all"
+        ? schools
+        : schools.filter((school) => school.type === activeFilter);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -68,7 +69,7 @@ export default function SchoolSelectionModal({
         const nicknameMatch = school.nickname?.toLowerCase().includes(query);
         const typeMatch = school.type?.toLowerCase().includes(query);
         const campusesMatch = school.campuses?.some((campus: string) =>
-          campus.toLowerCase().includes(query)
+          campus.toLowerCase().includes(query),
         );
         return nameMatch || nicknameMatch || typeMatch || campusesMatch;
       });
@@ -125,8 +126,8 @@ export default function SchoolSelectionModal({
         </div>
 
         {/* Filter Buttons */}
-        <div className="px-6 pt-4 pb-2 border-b border-gray-200">
-          <div className="flex flex-wrap gap-2">
+        <div className="px-6 pt-2 pb-2 border-b border-gray-200 ">
+          <div className="flex flex-wrap gap-2 justify-center">
             {filterOptions.map((filter) => (
               <button
                 key={filter.value}
@@ -175,21 +176,25 @@ export default function SchoolSelectionModal({
                   <span className="text-white font-bold text-lg">+</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900">Platform (Default)</p>
-                  <p className="text-sm text-gray-500">Default cover page for all schools</p>
+                  <p className="font-semibold text-gray-900">
+                    Platform (Default)
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Default cover page for all schools
+                  </p>
                 </div>
               </button>
 
               {/* Schools List */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
                 {filteredSchools.map((school) => (
                   <button
                     key={school.id}
                     onClick={() => handleSchoolClick(school)}
-                    className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20"
+                    className="flex items-center gap-6 p-4 bg-black rounded-full hover:bg-gray-200 transition-all text-left h-14 w-80"
                   >
                     {school.logo ? (
-                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                         <Image
                           src={school.logo}
                           alt={school.name}
@@ -199,12 +204,12 @@ export default function SchoolSelectionModal({
                         />
                       </div>
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                         <MdSchool className="w-6 h-6 text-gray-400" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 truncate">
+                      <p className="font-semibold text-gray-500 truncate">
                         {school.name}
                       </p>
                       {school.type && (

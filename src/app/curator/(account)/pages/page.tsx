@@ -42,7 +42,9 @@ export default function CuratorPagesPage() {
   const [coverPages, setCoverPages] = useState<CoverPage[]>([]);
   const [icons, setIcons] = useState<Icon[]>([]);
 
-  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(null);
+  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(
+    null,
+  );
   const [editingIcon, setEditingIcon] = useState<Icon | null>(null);
 
   const handleCoverPageComplete = (data: {
@@ -51,7 +53,7 @@ export default function CuratorPagesPage() {
     slogan: string;
   }) => {
     const targetSchoolId = selectedSchool?.id || null;
-    
+
     if (editingCoverPage) {
       // Update existing cover page
       const reader = new FileReader();
@@ -59,17 +61,21 @@ export default function CuratorPagesPage() {
         const updatedCoverPage: CoverPage = {
           ...editingCoverPage,
           photo: data.photo || editingCoverPage.photo,
-          photoPreview: data.photo ? (reader.result as string) : editingCoverPage.photoPreview,
+          photoPreview: data.photo
+            ? (reader.result as string)
+            : editingCoverPage.photoPreview,
           color: data.color,
           slogan: data.slogan,
         };
-        setCoverPages(coverPages.map((page) => 
-          page.id === editingCoverPage.id ? updatedCoverPage : page
-        ));
+        setCoverPages(
+          coverPages.map((page) =>
+            page.id === editingCoverPage.id ? updatedCoverPage : page,
+          ),
+        );
         setShowAddModal(false);
         setEditingCoverPage(null);
       };
-      
+
       if (data.photo) {
         reader.readAsDataURL(data.photo);
       } else {
@@ -79,9 +85,11 @@ export default function CuratorPagesPage() {
           color: data.color,
           slogan: data.slogan,
         };
-        setCoverPages(coverPages.map((page) => 
-          page.id === editingCoverPage.id ? updatedCoverPage : page
-        ));
+        setCoverPages(
+          coverPages.map((page) =>
+            page.id === editingCoverPage.id ? updatedCoverPage : page,
+          ),
+        );
         setShowAddModal(false);
         setEditingCoverPage(null);
       }
@@ -128,7 +136,7 @@ export default function CuratorPagesPage() {
     lockIns: string[];
   }) => {
     const targetSchoolId = selectedSchool?.id || null;
-    
+
     if (editingIcon) {
       // Update existing icon
       const reader = new FileReader();
@@ -136,19 +144,23 @@ export default function CuratorPagesPage() {
         const updatedIcon: Icon = {
           ...editingIcon,
           photo: data.photo || editingIcon.photo,
-          photoPreview: data.photo ? (reader.result as string) : editingIcon.photoPreview,
+          photoPreview: data.photo
+            ? (reader.result as string)
+            : editingIcon.photoPreview,
           name: data.name,
           slogan: data.slogan,
           rank: data.rank,
           lockIns: data.lockIns,
         };
-        setIcons(icons.map((icon) => 
-          icon.id === editingIcon.id ? updatedIcon : icon
-        ));
+        setIcons(
+          icons.map((icon) =>
+            icon.id === editingIcon.id ? updatedIcon : icon,
+          ),
+        );
         setShowAddIconModal(false);
         setEditingIcon(null);
       };
-      
+
       if (data.photo) {
         reader.readAsDataURL(data.photo);
       } else {
@@ -160,9 +172,11 @@ export default function CuratorPagesPage() {
           rank: data.rank,
           lockIns: data.lockIns,
         };
-        setIcons(icons.map((icon) => 
-          icon.id === editingIcon.id ? updatedIcon : icon
-        ));
+        setIcons(
+          icons.map((icon) =>
+            icon.id === editingIcon.id ? updatedIcon : icon,
+          ),
+        );
         setShowAddIconModal(false);
         setEditingIcon(null);
       }
@@ -209,7 +223,7 @@ export default function CuratorPagesPage() {
     <WidthConstraint>
       <div className="p-8 overflow-x-hidden">
         {/* Header with Logo and School Info - scaled 1.2 */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex items-center justify-center min-h-[120px]">
           {selectedSchool ? (
             <div className="flex items-center justify-center gap-4 mb-6 scale-[1.2] origin-center">
               {selectedSchool.logo ? (
@@ -223,7 +237,7 @@ export default function CuratorPagesPage() {
                   />
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
                   <span className="text-2xl">🏫</span>
                 </div>
               )}
@@ -238,22 +252,27 @@ export default function CuratorPagesPage() {
           )}
         </div>
 
-          {/* Tabs - Centered */}
-          <div className="flex items-center justify-center gap-3">
-            {tabs.map((tab) => (
+        {/* Tabs - Centered (matches reference) */}
+        <div className="flex items-center justify-center gap-4 mt-2">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-                }`}
+                className={`px-8 py-3 rounded-full text-base font-semibold transition-all
+                  ${
+                    isActive
+                      ? "bg-[#955aa4] text-white"
+                      : "bg-[#a3a3a3] text-white/90 hover:bg-[#8f8f8f]"
+                  }
+                `}
               >
                 {tab.label}
               </button>
-            ))}
-          </div>
+            );
+          })}
+        </div>
 
         {/* Content Area */}
         {activeTab === "cover-page" && (
@@ -261,23 +280,22 @@ export default function CuratorPagesPage() {
             {displayCoverPages.length === 0 ? (
               /* No cover pages: "Nothing to see yet" on top, then Add below */
               <>
-                <div className="flex flex-col items-center justify-center py-16 min-h-[300px]">
-                  <p className="text-2xl font-bold text-gray-400">
+                <div className="flex flex-col items-center justify-center py-10">
+                  <h2 className="text-[70px] font-extrabold text-gray-400 text-center leading-tight">
                     Nothing to see yet.
-                  </p>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <p className="text-lg text-gray-600 mb-2">
-                    You can{" "}
+                  </h2>
+
+                  <p className="mt-6 text-lg text-gray-1000 flex items-center gap-2">
+                    You can
                     <button
                       onClick={() => {
                         setEditingCoverPage(null);
                         setShowAddModal(true);
                       }}
-                      className="py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors px-4"
+                      className="px-5 py-2 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition"
                     >
-                      + ADD
-                    </button>{" "}
+                      + A D D
+                    </button>
                     a new cover page.
                   </p>
                 </div>
@@ -350,30 +368,14 @@ export default function CuratorPagesPage() {
 
         {activeTab === "icons" && (
           <>
-            {/* Add new - always on top */}
-            <div className="flex flex-col items-center justify-center mb-6">
-              <p className="text-lg text-gray-600 mb-2">
-                You can{" "}
-                <button
-                  onClick={() => {
-                    setEditingIcon(null);
-                    setShowAddIconModal(true);
-                  }}
-                  className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
-                >
-                  + ADD
-                </button>{" "}
-                new Icons.
-              </p>
-            </div>
             {(() => {
               const currentIcons = selectedSchool
                 ? icons.filter((icon) => icon.schoolId === selectedSchool.id)
                 : icons.filter((icon) => icon.schoolId === null);
-              
+
               return currentIcons.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 min-h-[300px]">
-                  <p className="text-2xl font-bold text-gray-400">
+                <div className="flex flex-col items-center justify-center py-2 min-h-[200px]">
+                  <p className="text-[70px] font-bold text-gray-400">
                     Nothing to see yet.
                   </p>
                 </div>
@@ -397,21 +399,30 @@ export default function CuratorPagesPage() {
                             />
                             {/* Rank Badge */}
                             <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
-                              <span className="text-black font-bold text-lg">#{icon.rank}</span>
+                              <span className="text-black font-bold text-lg">
+                                #{icon.rank}
+                              </span>
                             </div>
                             {/* Name and Lock-ins Overlay - centered, lock-ins under name */}
                             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center justify-end text-center">
-                              <p className="text-white text-3xl font-bold">{icon.name}</p>
+                              <p className="text-white text-3xl font-bold">
+                                {icon.name}
+                              </p>
                               <div className="flex flex-col items-center gap-1 mt-2">
                                 {(icon.lockIns || []).length > 0 ? (
                                   (icon.lockIns || []).map((item, i) => (
-                                    <span key={i} className="text-white/90 text-sm flex items-center gap-1.5">
+                                    <span
+                                      key={i}
+                                      className="text-white/90 text-sm flex items-center gap-1.5"
+                                    >
                                       <Lock className="w-3.5 h-3.5 text-yellow-500 flex-shrink-0" />
                                       {item}
                                     </span>
                                   ))
                                 ) : (
-                                  <span className="text-white/70 text-sm">No lock-ins</span>
+                                  <span className="text-white/70 text-sm">
+                                    No lock-ins
+                                  </span>
                                 )}
                               </div>
                             </div>
@@ -426,18 +437,36 @@ export default function CuratorPagesPage() {
                 </div>
               );
             })()}
+
+            <div className="flex flex-col items-center justify-center mb-2">
+              <p className="text-lg text-gray-1000 mb-2">
+                You can{" "}
+                <button
+                  onClick={() => {
+                    setEditingIcon(null);
+                    setShowAddIconModal(true);
+                  }}
+                  className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                >
+                  + A D D
+                </button>{" "}
+                new Icons.
+              </p>
+            </div>
           </>
         )}
 
         {/* Select school - centered like logo and tabs, scaled 1.4 */}
         {(activeTab === "cover-page" || activeTab === "icons") && (
-          <div className="flex justify-center mt-8 relative top-2">
+          <div className="flex justify-center mt-4 relative top-2">
             <div className="scale-[1.4] origin-center">
               <Button
                 onClick={() => setShowSchoolModal(true)}
                 className="bg-[#f6f9e6] hover:bg-[#f6f9e6]/90 text-gray-800 font-semibold px-8 py-3 rounded-full shadow-lg text-lg"
               >
-                {selectedSchool ? `${selectedSchool.name} >` : "Select school >"}
+                {selectedSchool
+                  ? `${selectedSchool.name} >`
+                  : "Select school >"}
               </Button>
             </div>
           </div>
@@ -458,11 +487,15 @@ export default function CuratorPagesPage() {
             setEditingCoverPage(null);
           }}
           onComplete={handleCoverPageComplete}
-          editData={editingCoverPage ? {
-            photoPreview: editingCoverPage.photoPreview,
-            color: editingCoverPage.color,
-            slogan: editingCoverPage.slogan,
-          } : null}
+          editData={
+            editingCoverPage
+              ? {
+                  photoPreview: editingCoverPage.photoPreview,
+                  color: editingCoverPage.color,
+                  slogan: editingCoverPage.slogan,
+                }
+              : null
+          }
         />
 
         {/* Add Icon Modal */}
@@ -473,13 +506,17 @@ export default function CuratorPagesPage() {
             setEditingIcon(null);
           }}
           onComplete={handleIconComplete}
-          editData={editingIcon ? {
-            photoPreview: editingIcon.photoPreview,
-            name: editingIcon.name,
-            slogan: editingIcon.slogan,
-            rank: editingIcon.rank,
-            lockIns: editingIcon.lockIns || [],
-          } : null}
+          editData={
+            editingIcon
+              ? {
+                  photoPreview: editingIcon.photoPreview,
+                  name: editingIcon.name,
+                  slogan: editingIcon.slogan,
+                  rank: editingIcon.rank,
+                  lockIns: editingIcon.lockIns || [],
+                }
+              : null
+          }
           selectedSchool={selectedSchool}
         />
       </div>
