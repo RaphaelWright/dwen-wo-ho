@@ -78,6 +78,11 @@ export default function SchoolsPage() {
         dispatch(setLoading(true));
       }
 
+    //   console.log("📦 Cached Schools (from previousSchoolsRef):", Array.from(previousSchoolsRef.current.values()));
+    //   console.log("📦 Cached Schools (from Redux):", cachedSchools);
+    //     // Log new schools from API
+    // console.log("🆕 New Schools (from API):", allSchools);
+
     const currentSchoolIds = new Set(allSchools.map((s: School) => Number(s.id)));
 
     // Check for removed schools (compare with cached schools)
@@ -132,35 +137,42 @@ export default function SchoolsPage() {
         }
 
         try {
-          // Focus on "new" endpoint for latest updates
-          const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
-          if (newResultsResponse?.success && newResultsResponse.data) {
-            const newResults = newResultsResponse.data as PatientResult[];
-            if (newResults.length > 0) {
-              const latestNewResult = newResults.sort(
+          // Always fetch all patient results to get the latest student's createdAt for sorting
+          const allResultsResponse = await api(ENDPOINTS.getSchoolPatientResults(school.id));
+          if (allResultsResponse?.success && allResultsResponse.data) {
+            const results = allResultsResponse.data as PatientResult[];
+            if (results.length > 0) {
+              // Sort by createdAt to get the latest student
+              const sortedResults = results.sort(
                 (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-              )[0];
-              schoolData.newPatientName = latestNewResult.patientName;
-              schoolData.latestLockInDate = latestNewResult.createdAt;
+              );
+              const latestResult = sortedResults[0];
+              
+              // Use the latest student's createdAt for sorting schools
+              schoolData.latestLockInDate = latestResult.createdAt;
+              schoolData.newPatientName = latestResult.patientName;
 
-              // Check if this is a new patient (not in cache)
+              // Check for new patients using the "new" endpoint for notifications
               if (!isInitialLoadRef.current && isBackground) {
-                const prevSchool = previousSchoolsRef.current.get(Number(school.id));
-                if (prevSchool?.newPatientName !== latestNewResult.patientName) {
-                  toast.success(`New patient: ${latestNewResult.patientName} at ${school.name}`);
-                }
-              }
-            } else {
-              // If no new patients, get latest from all results
-              const allResultsResponse = await api(ENDPOINTS.getSchoolPatientResults(school.id));
-              if (allResultsResponse?.success && allResultsResponse.data) {
-                const results = allResultsResponse.data as PatientResult[];
-                if (results.length > 0) {
-                  const latestResult = results.sort(
-                    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                  )[0];
-                  schoolData.newPatientName = latestResult.patientName;
-                  schoolData.latestLockInDate = latestResult.createdAt;
+                try {
+                  const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
+                  if (newResultsResponse?.success && newResultsResponse.data) {
+                    const newResults = newResultsResponse.data as PatientResult[];
+                    if (newResults.length > 0) {
+                      const latestNewResult = newResults.sort(
+                        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                      )[0];
+                      const prevSchool = previousSchoolsRef.current.get(Number(school.id));
+                      if (prevSchool?.newPatientName !== latestNewResult.patientName) {
+                        toast.success(`New patient: ${latestNewResult.patientName} at ${school.name}`);
+                        // Update with the new patient info for display
+                        schoolData.newPatientName = latestNewResult.patientName;
+                        schoolData.latestLockInDate = latestNewResult.createdAt;
+                      }
+                    }
+                  }
+                } catch (error) {
+                  // Silently handle errors when checking for new patients
                 }
               }
             }
@@ -216,15 +228,30 @@ export default function SchoolsPage() {
       })
     );
 
-    // Sort schools by latest activity (patient or provider) - most recent first
+    // Sort schools by latest student's createdAt (most recent first)
+    // Prioritize student dates over provider dates
     enrichedSchools.sort((a, b) => {
-      const aLatestDate = a.latestLockInDate || a.latestProviderDate;
-      const bLatestDate = b.latestLockInDate || b.latestProviderDate;
+      // Get the latest student createdAt (from patient results)
+      const aStudentDate = a.latestLockInDate;
+      const bStudentDate = b.latestLockInDate;
       
-      if (!aLatestDate && !bLatestDate) return 0;
-      if (!aLatestDate) return 1;
-      if (!bLatestDate) return -1;
-      return new Date(bLatestDate).getTime() - new Date(aLatestDate).getTime();
+      // If both have student dates, compare them
+      if (aStudentDate && bStudentDate) {
+        return new Date(bStudentDate).getTime() - new Date(aStudentDate).getTime();
+      }
+      
+      // If only one has a student date, prioritize it
+      if (aStudentDate && !bStudentDate) return -1;
+      if (!aStudentDate && bStudentDate) return 1;
+      
+      // If neither has student date, fall back to provider dates
+      const aProviderDate = a.latestProviderDate;
+      const bProviderDate = b.latestProviderDate;
+      
+      if (!aProviderDate && !bProviderDate) return 0;
+      if (!aProviderDate) return 1;
+      if (!bProviderDate) return -1;
+      return new Date(bProviderDate).getTime() - new Date(aProviderDate).getTime();
     });
 
     // Update cache map
@@ -391,7 +418,7 @@ export default function SchoolsPage() {
                 <Link
                   key={school.id}
                   href={`${ROUTES.curator.schools}/${school.id}`}
-                  className="relative group h-80 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 block"
+                  className="relative group h-80 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-105 hover:brightness-110 transition-all duration-300 block"
                 >
                   {/* Background Image */}
                   {school.logo ? (
@@ -414,7 +441,7 @@ export default function SchoolsPage() {
 
                   {/* Top Left - Alert Bar (Patient or Provider) */}
                   {(hasLatestPatient && schoolWithExtras.newPatientName) ? (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border-2 border-black w-[350px]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border-none w-[350px]">
                       <span className="text-base font-semibold block truncate">
                         <span className="text-[#955aa4]">New Patient.</span>{" "}
                         <span className="text-black">{schoolWithExtras.newPatientName}</span>
@@ -438,7 +465,7 @@ export default function SchoolsPage() {
 
                   {/* Bottom Content - School Name, Nickname, and Motto */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
-                    <h3 className="text-white font-bold text-xl mb-1 leading-tight">
+                    <h3 className="text-white font-bold text-4xl mb-1 leading-tight">
                       {school.name}
                     </h3>
                     {displayNickname && (
