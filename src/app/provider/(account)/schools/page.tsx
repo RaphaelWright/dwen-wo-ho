@@ -400,7 +400,7 @@ export default function ProviderSchoolsPage() {
                       {school.name}
                     </h3>
                     {displayNickname && (
-                      <p className="text-white/95 text-sm font-medium mb-1">
+                      <p className="text-white/95 text-2xl font-medium mb-1">
                         {displayNickname}
                       </p>
                     )}
