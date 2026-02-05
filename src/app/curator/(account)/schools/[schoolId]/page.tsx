@@ -153,24 +153,35 @@ export default function SchoolDetailsPage() {
         api(ENDPOINTS.getSchoolPatientResults(schoolId)),
         api(ENDPOINTS.getSchoolLockIn(schoolId)).catch(() => null),
       ]);
+      
+      // console.log("🏥 Patient Results API Response:", resResults);
+      // console.log("🔒 Lock-In API Response:", resLockIn);
+      
       if (resResults?.success && resResults.data) {
         const list = Array.isArray(resResults.data) ? resResults.data : [];
+        // console.log("📋 Raw Patient List:", list);
+        
         list.sort((a: { createdAt: string }, b: { createdAt: string }) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-        setPatients(
-          list.map((p: { id: number; lockinId: number; patientName: string; createdAt: string; visibilityStatus: string; treatingProviders?: Array<{ id: string; fullName: string }> }) => ({
-            id: p.id,
-            lockinId: p.lockinId,
-            patientName: p.patientName,
-            createdAt: p.createdAt,
-            visibilityStatus: p.visibilityStatus,
-            treatingProviders: p.treatingProviders ?? [],
-          }))
-        );
+        // console.log("📋 Sorted Patient List (by createdAt):", list);
+        
+        const processedPatients = list.map((p: { id: number; lockinId: number; patientName: string; createdAt: string; visibilityStatus: string; treatingProviders?: Array<{ id: string; fullName: string }> }) => ({
+          id: p.id,
+          lockinId: p.lockinId,
+          patientName: p.patientName,
+          createdAt: p.createdAt,
+          visibilityStatus: p.visibilityStatus,
+          treatingProviders: p.treatingProviders ?? [],
+        }));
+        
+        // console.log("✅ Processed Patients Data:", processedPatients);
+        setPatients(processedPatients);
       }
       if (resLockIn?.success && (resLockIn.data as { students?: LockInStudent[] })?.students) {
-        setLockinStudents((resLockIn.data as { students: LockInStudent[] }).students);
+        const students = (resLockIn.data as { students: LockInStudent[] }).students;
+        // console.log("👥 Lock-In Students Data:", students);
+        setLockinStudents(students);
       }
       if (resResults?.success && resResults.data) {
         const list = Array.isArray(resResults.data) ? resResults.data : [];
@@ -188,7 +199,12 @@ export default function SchoolDetailsPage() {
             }
           })
         );
-        setPatientComments((prev) => ({ ...prev, ...comments } as Record<number, string | null>));
+        // console.log("💬 Loaded Patient Comments:", comments);
+        setPatientComments((prev) => {
+          const updated = { ...prev, ...comments } as Record<number, string | null>;
+          // console.log("💬 Updated Patient Comments State:", updated);
+          return updated;
+        });
       }
     } catch {
       // silent
@@ -275,11 +291,17 @@ export default function SchoolDetailsPage() {
     };
   });
 
+  // console.log("🎯 Patients with Score (enriched data):", patientsWithScore);
+  // console.log("💬 Patient Comments:", patientComments);
+
   const filteredPatients = searchQuery.trim()
     ? patientsWithScore.filter((p) =>
         p.patientName.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : patientsWithScore;
+
+  // console.log("🔍 Filtered Patients (displayed on page):", filteredPatients);
+  // console.log("🔎 Search Query:", searchQuery);
 
   const handleProviderClick = (provider: SchoolProvider) => {
     setSelectedProviderEmail(provider.email);
