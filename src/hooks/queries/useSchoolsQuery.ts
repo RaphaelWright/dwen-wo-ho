@@ -14,6 +14,7 @@ const getSchools = async (): Promise<School[]> => {
   const result = await api(`/api/v1/schools`);
 
   if (result?.success && Array.isArray(result.data)) {
+    
     return result.data;
   }
   
