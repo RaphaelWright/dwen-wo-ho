@@ -124,13 +124,11 @@ export default function ProviderSchoolsPage() {
               );
               const latestResult = sortedResults[0];
               
-              // Always use the absolute latest patient's createdAt from all results for sorting
-              // This ensures schools are sorted by the most recent patient activity
+              // Use the latest student's createdAt for sorting schools
               schoolData.latestLockInDate = latestResult.createdAt;
               schoolData.newPatientName = latestResult.patientName;
 
-              // Check for new patients using the "new" endpoint for notifications only
-              // Don't overwrite latestLockInDate - keep using the absolute latest from all results
+              // Check for new patients using the "new" endpoint for notifications
               if (!isInitialLoadRef.current && isBackground) {
                 try {
                   const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
@@ -143,9 +141,9 @@ export default function ProviderSchoolsPage() {
                       const prevSchool = previousSchoolsRef.current.get(Number(school.id));
                       if (prevSchool?.newPatientName !== latestNewResult.patientName) {
                         toast.success(`New patient: ${latestNewResult.patientName} at ${school.name}`);
-                        // Only update display name for new patient notification
-                        // Keep latestLockInDate as the absolute latest from all results for proper sorting
+                        // Update with the new patient info for display
                         schoolData.newPatientName = latestNewResult.patientName;
+                        schoolData.latestLockInDate = latestNewResult.createdAt;
                       }
                     }
                   }
@@ -233,20 +231,20 @@ export default function ProviderSchoolsPage() {
     });
   }, [getProfileQuery.data]);
 
-// Initial load: if we have cached schools, show them and refresh in background; else show loading and fetch
-useEffect(() => {
-  if (!getProfileQuery.data) return;
-  const hasCache = cachedSchools.length > 0;
-  loadSchoolsWithData(hasCache);
-}, [getProfileQuery.data, loadSchoolsWithData, cachedSchools.length]); // Add cachedSchools.length
+  // Initial load: if we have cached schools, show them and refresh in background; else show loading and fetch
+  useEffect(() => {
+    if (!getProfileQuery.data) return;
+    const hasCache = cachedSchools.length > 0;
+    loadSchoolsWithData(hasCache);
+    // Run when profile is ready; hasCache is read at run time so returning users see cache first
+  }, [getProfileQuery.data, loadSchoolsWithData]);
 
   // Background polling for new lock-ins (every 30 seconds) - no loading state
   useEffect(() => {
     if (!getProfileQuery.data) return;
 
     const interval = setInterval(() => {
-      loadSchoolsWithData(true);
-      console.log("Background update"); // Background update
+      loadSchoolsWithData(true); // Background update
     }, 30000); // Poll every 30 seconds
 
     return () => clearInterval(interval);
