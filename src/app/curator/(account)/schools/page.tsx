@@ -78,11 +78,6 @@ export default function SchoolsPage() {
         dispatch(setLoading(true));
       }
 
-    //   console.log("📦 Cached Schools (from previousSchoolsRef):", Array.from(previousSchoolsRef.current.values()));
-    //   console.log("📦 Cached Schools (from Redux):", cachedSchools);
-    //     // Log new schools from API
-    // console.log("🆕 New Schools (from API):", allSchools);
-
     const currentSchoolIds = new Set(allSchools.map((s: School) => Number(s.id)));
 
     // Check for removed schools (compare with cached schools)
@@ -142,17 +137,19 @@ export default function SchoolsPage() {
           if (allResultsResponse?.success && allResultsResponse.data) {
             const results = allResultsResponse.data as PatientResult[];
             if (results.length > 0) {
-              // Sort by createdAt to get the latest student
+              // Sort by createdAt to get the latest student (most recent first)
               const sortedResults = results.sort(
                 (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
               );
               const latestResult = sortedResults[0];
               
-              // Use the latest student's createdAt for sorting schools
+              // Always use the absolute latest patient's createdAt from all results for sorting
+              // This ensures schools are sorted by the most recent patient activity
               schoolData.latestLockInDate = latestResult.createdAt;
               schoolData.newPatientName = latestResult.patientName;
 
-              // Check for new patients using the "new" endpoint for notifications
+              // Check for new patients using the "new" endpoint for notifications only
+              // Don't overwrite latestLockInDate - keep using the absolute latest from all results
               if (!isInitialLoadRef.current && isBackground) {
                 try {
                   const newResultsResponse = await api(ENDPOINTS.getNewSchoolPatientResults(school.id));
@@ -165,9 +162,9 @@ export default function SchoolsPage() {
                       const prevSchool = previousSchoolsRef.current.get(Number(school.id));
                       if (prevSchool?.newPatientName !== latestNewResult.patientName) {
                         toast.success(`New patient: ${latestNewResult.patientName} at ${school.name}`);
-                        // Update with the new patient info for display
+                        // Only update display name for new patient notification
+                        // Keep latestLockInDate as the absolute latest from all results for proper sorting
                         schoolData.newPatientName = latestNewResult.patientName;
-                        schoolData.latestLockInDate = latestNewResult.createdAt;
                       }
                     }
                   }
@@ -228,30 +225,36 @@ export default function SchoolsPage() {
       })
     );
 
-    // Sort schools by latest student's createdAt (most recent first)
-    // Prioritize student dates over provider dates
+    // Sort schools by latest patient activity (most recent first)
+    // Priority: Latest patient createdAt > Latest provider date > No activity (stays at bottom)
     enrichedSchools.sort((a, b) => {
-      // Get the latest student createdAt (from patient results)
-      const aStudentDate = a.latestLockInDate;
-      const bStudentDate = b.latestLockInDate;
+      const aPatientDate = a.latestLockInDate;
+      const bPatientDate = b.latestLockInDate;
       
-      // If both have student dates, compare them
-      if (aStudentDate && bStudentDate) {
-        return new Date(bStudentDate).getTime() - new Date(aStudentDate).getTime();
+      // Both have patient activity - compare patient dates (most recent first)
+      if (aPatientDate && bPatientDate) {
+        return new Date(bPatientDate).getTime() - new Date(aPatientDate).getTime();
       }
       
-      // If only one has a student date, prioritize it
-      if (aStudentDate && !bStudentDate) return -1;
-      if (!aStudentDate && bStudentDate) return 1;
+      // Only one has patient activity - prioritize it (put it first)
+      if (aPatientDate && !bPatientDate) return -1;
+      if (!aPatientDate && bPatientDate) return 1;
       
-      // If neither has student date, fall back to provider dates
+      // Neither has patient activity - fall back to provider dates
       const aProviderDate = a.latestProviderDate;
       const bProviderDate = b.latestProviderDate;
       
-      if (!aProviderDate && !bProviderDate) return 0;
-      if (!aProviderDate) return 1;
-      if (!bProviderDate) return -1;
-      return new Date(bProviderDate).getTime() - new Date(aProviderDate).getTime();
+      // Both have provider activity - compare provider dates (most recent first)
+      if (aProviderDate && bProviderDate) {
+        return new Date(bProviderDate).getTime() - new Date(aProviderDate).getTime();
+      }
+      
+      // Only one has provider activity - prioritize it (put it first)
+      if (aProviderDate && !bProviderDate) return -1;
+      if (!aProviderDate && bProviderDate) return 1;
+      
+      // Neither has any activity - maintain current order
+      return 0;
     });
 
     // Update cache map
@@ -288,14 +291,15 @@ export default function SchoolsPage() {
     return () => clearInterval(interval);
   }, [allSchools.length, loadSchoolsWithData]);
 
-  // Merge allSchools with cache: use cached enriched data when available so list loads fast
+  // Use cached schools (which are already sorted) when available, otherwise use allSchools
   const mergedSchools = useMemo(() => {
     if (allSchools.length === 0) return [];
-    if (cachedSchools.length === 0) return allSchools as SchoolWithExtras[];
-    return allSchools.map((school) => {
-      const cached = cachedSchools.find((c) => String(c.id) === String(school.id));
-      return cached ? { ...school, ...cached } : (school as SchoolWithExtras);
-    });
+    // If we have cached schools, use them directly as they're already sorted and enriched
+    if (cachedSchools.length > 0) {
+      return cachedSchools;
+    }
+    // Otherwise use allSchools as fallback
+    return allSchools as SchoolWithExtras[];
   }, [allSchools, cachedSchools]);
 
   const schoolsList = useMemo(() => {
