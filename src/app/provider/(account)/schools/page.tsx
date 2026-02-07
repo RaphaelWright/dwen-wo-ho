@@ -407,7 +407,7 @@ export default function ProviderSchoolsPage() {
                   {school.newPatientName && !school.isLoading && (
                     <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-[240px]">
                       <span className="text-base font-semibold block truncate">
-                        <span className="text-[#955aa4]">New Patient.</span>{" "}
+                        <span className="text-[#e92229]">New Patient.</span>{" "}
                         <span className="text-black">{school.newPatientName}</span>
                       </span>
                     </div>
@@ -415,7 +415,7 @@ export default function ProviderSchoolsPage() {
 
                   {/* Top Right - Student Count Badge */}
                   {!school.isLoading && (
-                    <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-[#2bb673] backdrop-blur-sm flex items-center justify-center shadow-lg">
+                    <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-[#e92229] backdrop-blur-sm flex items-center justify-center shadow-lg">
                       <span className="text-white font-bold text-sm">
                         {school.studentCount ?? 0}
                       </span>
