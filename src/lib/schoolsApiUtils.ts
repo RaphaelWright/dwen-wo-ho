@@ -68,12 +68,15 @@ export async function processBatch<T, R>(
 }
 
 // Optimized API calls with caching
-export async function getSchoolLockInCount(schoolId: string | number): Promise<number> {
+export async function getSchoolLockInCount(schoolId: string | number, skipCache: boolean = false): Promise<number> {
   const cacheKey = `lockin-${schoolId}`;
-  const cached = lockInCache.get(cacheKey);
   
-  if (cached !== null) {
-    return cached;
+  // Skip cache if requested (for real-time updates)
+  if (!skipCache) {
+    const cached = lockInCache.get(cacheKey);
+    if (cached !== null) {
+      return cached;
+    }
   }
 
   try {
@@ -91,15 +94,18 @@ export async function getSchoolLockInCount(schoolId: string | number): Promise<n
   }
 }
 
-export async function getLatestPatientResult(schoolId: string | number): Promise<{
+export async function getLatestPatientResult(schoolId: string | number, skipCache: boolean = false): Promise<{
   patientName: string;
   createdAt: string;
 } | null> {
   const cacheKey = `latest-patient-${schoolId}`;
-  const cached = patientResultsCache.get(cacheKey);
   
-  if (cached !== null) {
-    return cached;
+  // Skip cache if requested (for real-time updates)
+  if (!skipCache) {
+    const cached = patientResultsCache.get(cacheKey);
+    if (cached !== null) {
+      return cached;
+    }
   }
 
   try {
