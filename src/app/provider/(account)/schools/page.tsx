@@ -42,7 +42,7 @@ interface SchoolWithExtras extends School {
 
 // Configuration
 const BATCH_SIZE = 5;
-const POLL_INTERVAL = 15000; // 60 seconds
+const POLL_INTERVAL = 60000; // 60 seconds
 
 export default function ProviderSchoolsPage() {
   const router = useRouter();
