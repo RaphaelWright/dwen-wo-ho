@@ -37,9 +37,10 @@ const providerSchoolsSlice = createSlice({
     updateSchool: (state, action: PayloadAction<{ id: string | number; data: Partial<SchoolWithExtras> }>) => {
       const index = state.schools.findIndex((s) => s.id === action.payload.id);
       if (index !== -1) {
+        // Update existing school in place to preserve order
         state.schools[index] = { ...state.schools[index], ...action.payload.data };
       } else {
-        // If school doesn't exist, add it (for incremental loading)
+        // If school doesn't exist, add it to the end (backend will reorder on next full load)
         const newSchool = action.payload.data as SchoolWithExtras;
         if (newSchool.id) {
           state.schools.push(newSchool);
