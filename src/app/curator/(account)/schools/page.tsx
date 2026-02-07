@@ -67,7 +67,7 @@ const filterOptions: { label: string; value: FilterType }[] = [
 
 // Configuration
 const BATCH_SIZE = 5;
-const POLL_INTERVAL = 15000; // 30 seconds
+const POLL_INTERVAL = 15000; // 15 seconds
 
 export default function SchoolsPage() {
   const dispatch = useAppDispatch();
@@ -81,6 +81,29 @@ export default function SchoolsPage() {
   const isInitialLoadRef = useRef(true);
   const abortControllerRef = useRef<AbortController | null>(null);
   const lastPollRef = useRef<number>(0);
+
+  // Helper function to sort schools
+  const sortSchools = useCallback((schools: SchoolWithExtras[]) => {
+    return [...schools].sort((a, b) => {
+      const aStudentDate = a.latestLockInDate;
+      const bStudentDate = b.latestLockInDate;
+      
+      if (aStudentDate && bStudentDate) {
+        return new Date(bStudentDate).getTime() - new Date(aStudentDate).getTime();
+      }
+      
+      if (aStudentDate && !bStudentDate) return -1;
+      if (!aStudentDate && bStudentDate) return 1;
+      
+      const aProviderDate = a.latestProviderDate;
+      const bProviderDate = b.latestProviderDate;
+      
+      if (!aProviderDate && !bProviderDate) return 0;
+      if (!aProviderDate) return 1;
+      if (!bProviderDate) return -1;
+      return new Date(bProviderDate).getTime() - new Date(aProviderDate).getTime();
+    });
+  }, []);
 
   // Fetch data for a single school with optimized API calls
   const fetchSchoolData = useCallback(async (
@@ -157,45 +180,30 @@ export default function SchoolsPage() {
         async (school: School, index: number) => {
           const schoolData = await fetchSchoolData(school, isBackground);
           
-          // Incrementally update Redux for real-time display
-          if (!isBackground || index < 10) {
-            dispatch(updateSchool({ id: school.id, data: schoolData }));
+          // Update cache map immediately
+          previousSchoolsRef.current.set(Number(school.id), schoolData);
+          
+          // Get current schools from Redux and add/update this one
+          const currentSchools = [...cachedSchools];
+          const existingIndex = currentSchools.findIndex(s => s.id === school.id);
+          
+          if (existingIndex !== -1) {
+            currentSchools[existingIndex] = schoolData;
+          } else {
+            currentSchools.push(schoolData);
           }
+          
+          // Sort immediately and dispatch for real-time display
+          const sortedSchools = sortSchools(currentSchools);
+          dispatch(setSchools(sortedSchools));
           
           return schoolData;
         }
       );
 
-      // Sort schools by latest activity
-      enrichedSchools.sort((a, b) => {
-        const aStudentDate = a.latestLockInDate;
-        const bStudentDate = b.latestLockInDate;
-        
-        if (aStudentDate && bStudentDate) {
-          return new Date(bStudentDate).getTime() - new Date(aStudentDate).getTime();
-        }
-        
-        if (aStudentDate && !bStudentDate) return -1;
-        if (!aStudentDate && bStudentDate) return 1;
-        
-        const aProviderDate = a.latestProviderDate;
-        const bProviderDate = b.latestProviderDate;
-        
-        if (!aProviderDate && !bProviderDate) return 0;
-        if (!aProviderDate) return 1;
-        if (!bProviderDate) return -1;
-        return new Date(bProviderDate).getTime() - new Date(aProviderDate).getTime();
-      });
-
-      // Update cache map
-      const newCacheMap = new Map<number, SchoolWithExtras>();
-      enrichedSchools.forEach((school) => {
-        newCacheMap.set(Number(school.id), school);
-      });
-      previousSchoolsRef.current = newCacheMap;
-
-      // Final batch update to Redux
-      dispatch(setSchools(enrichedSchools));
+      // Final sorted update to ensure consistency
+      const finalSorted = sortSchools(enrichedSchools);
+      dispatch(setSchools(finalSorted));
       
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
@@ -209,7 +217,7 @@ export default function SchoolsPage() {
       }
       isInitialLoadRef.current = false;
     }
-  }, [allSchools, dispatch, fetchSchoolData]);
+  }, [allSchools, dispatch, fetchSchoolData, cachedSchools, sortSchools]);
 
   // Initial load
   useEffect(() => {
