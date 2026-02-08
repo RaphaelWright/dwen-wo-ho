@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, X, MapPin } from "lucide-react";
+import { ChevronDown, X, MapPin, Ban } from "lucide-react";
 import Image from "next/image";
 import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/types/school";
@@ -14,6 +14,7 @@ interface SchoolEditModalProps {
   onClose: () => void;
   school: School;
   onSchoolUpdated?: () => void;
+  onDisableSchool?: () => void;
 }
 
 const campusOptions = [
@@ -42,6 +43,7 @@ const SchoolEditModal = ({
   onClose,
   school,
   onSchoolUpdated,
+  onDisableSchool,
 }: SchoolEditModalProps) => {
   const [showCampusDropdown, setShowCampusDropdown] = useState(false);
   const [selectedCampuses, setSelectedCampuses] = useState<string[]>([]);
@@ -88,7 +90,6 @@ const SchoolEditModal = ({
     );
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -116,6 +117,10 @@ const SchoolEditModal = ({
     );
   };
 
+  const handleDisable = () => {
+    onClose();
+    onDisableSchool?.();
+  };
 
   return (
     <AnimatePresence>
@@ -300,14 +305,15 @@ const SchoolEditModal = ({
                 </form>
               </div>
 
-              <div className="px-8 py-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3">
+              <div className="px-8 py-6 border-t border-gray-100 bg-gray-50/50 flex justify-between items-center">
                 <Button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleDisable}
                   variant="ghost"
-                  className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  className="px-6 font-medium text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center gap-2"
                 >
-                  Cancel
+                  <Ban className="w-4 h-4" />
+                  Disable School
                 </Button>
                 <Button
                   type="submit"
@@ -327,4 +333,3 @@ const SchoolEditModal = ({
 };
 
 export default SchoolEditModal;
-

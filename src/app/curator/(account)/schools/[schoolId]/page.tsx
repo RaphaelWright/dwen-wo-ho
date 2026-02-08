@@ -7,7 +7,7 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ROUTES } from "@/constants/routes";
 import { School } from "@/types/school";
-import { ArrowLeft, Search, Users, Pencil, Ban, Lock } from "lucide-react";
+import { Search, Users, Pencil, Ban, Lock } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import SchoolEditModal from "@/components/modals/school-edit";
@@ -112,12 +112,10 @@ export default function SchoolDetailsPage() {
   const [showProviderModal, setShowProviderModal] = useState(false);
   const [selectedProviderEmail, setSelectedProviderEmail] = useState("");
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
-  const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddIconModal, setShowAddIconModal] = useState(false);
   const [editingIcon, setEditingIcon] = useState<IconItem | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const disableSchoolMutation = useDisableSchool();
 
@@ -255,21 +253,6 @@ export default function SchoolDetailsPage() {
     if (schoolId) loadUrgentCare();
   }, [schoolId, loadUrgentCare]);
 
-  useEffect(() => {
-    if (!searchExpanded) return;
-    searchInputRef.current?.focus();
-  }, [searchExpanded]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setSearchExpanded(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const patientsWithScore = patients.map((p) => {
     const match = lockinStudents.find(
       (s) => s.studentName.trim().toLowerCase() === p.patientName.trim().toLowerCase()
@@ -365,7 +348,7 @@ export default function SchoolDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-[#faf9f7]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
           <p className="text-gray-500">Loading school details...</p>
@@ -376,138 +359,116 @@ export default function SchoolDetailsPage() {
 
   if (error || !school) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50">
-        <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="mb-4">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Schools
-        </Button>
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-[#faf9f7]">
+        <button
+          onClick={() => router.push(ROUTES.curator.schools)}
+          className="mb-4 text-gray-600 hover:text-gray-900"
+        >
+          ← Back to Schools
+        </button>
         <p className="text-red-500">{error || "School not found"}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Go Back Button */}
-      <div className="p-6 pb-0">
-        <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="w-fit">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Schools
-        </Button>
-      </div>
-
+    <div className="min-h-screen flex flex-col bg-[#faf9f7]">
       <div className="flex-1 flex relative">
-        {/* Background logo - low opacity */}
+        {/* Background logo - very low opacity watermark */}
         {school.logo && (
           <div
-            className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]"
+            className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04]"
             aria-hidden
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <Image
                 src={school.logo}
                 alt=""
-                width={600}
-                height={600}
-                className="object-contain w-[600px] h-[600px]"
+                width={800}
+                height={800}
+                className="object-contain w-[800px] h-[800px]"
               />
             </div>
           </div>
         )}
 
-        {/* Main content */}
-        <div className="flex-1 min-w-0 flex flex-col p-6 relative z-10">
-          {/* Header: logo, name, campus, motto, search (expandable overlay) */}
-          <div ref={searchContainerRef} className="relative flex items-start justify-between gap-6 mb-8">
-            <div className="flex items-start gap-6 min-w-0 flex-1">
+        {/* Main content - centered with margins */}
+        <div className="flex-1 min-w-0 flex flex-col px-16 py-8 relative z-10 max-w-7xl mx-auto w-full">
+          {/* Header */}
+          <div className="relative flex items-start justify-between gap-8 mb-10">
+            <div className="flex items-start gap-8 min-w-0 flex-1">
+              {/* Logo and Info - clickable to edit */}
               <div
                 onClick={() => setShowEditModal(true)}
-                className="flex items-start gap-6 min-w-0 flex-1 group cursor-pointer hover:opacity-80 transition-opacity"
+                className="flex items-start gap-8 min-w-0 flex-1 group cursor-pointer"
               >
                 {school.logo ? (
-                  <div className="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-gray-200 bg-white group-hover:border-[#955aa4] transition-colors">
-                    <Image src={school.logo} alt={school.name} width={128} height={128} className="w-full h-full object-cover" />
+                  <div className="w-40 h-40 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-gray-300 bg-white group-hover:border-[#955aa4] transition-all">
+                    <Image src={school.logo} alt={school.name} width={160} height={160} className="w-full h-full object-cover" />
                   </div>
                 ) : (
-                  <div className="w-32 h-32 rounded-2xl bg-gray-100 flex items-center justify-center flex-shrink-0 group-hover:bg-gray-200 transition-colors">
-                    <MdSchool className="text-6xl text-gray-400" />
+                  <div className="w-40 h-40 rounded-2xl bg-gray-200 flex items-center justify-center flex-shrink-0 border-2 border-gray-300 group-hover:border-[#955aa4] transition-all">
+                    <MdSchool className="text-7xl text-gray-400" />
                   </div>
                 )}
                 <div className="min-w-0 pt-2">
-                  <h1 className="text-4xl font-bold text-gray-900 truncate group-hover:text-[#955aa4] transition-colors">{school.name}</h1>
-                  {campusLabel && (
-                    <p className="text-gray-600 text-base mt-1">({campusLabel})</p>
+                  <h1 className="text-5xl font-bold text-gray-900 mb-1 group-hover:text-[#955aa4] transition-colors">
+                    {school.name}
+                  </h1>
+                  {school.nickname && (
+                    <p className="text-2xl font-bold text-gray-900 mt-2">{school.nickname}</p>
                   )}
                   {school.motto && (
-                    <p className="text-gray-500 text-base mt-2 italic">{school.motto}</p>
+                    <p className="text-xl text-gray-600 italic mt-2">{school.motto}</p>
                   )}
-                  <div className="flex gap-3 mt-4">
-                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-sm text-gray-600">
-                      <Pencil className="w-3.5 h-3.5" />
-                      Click to edit
-                    </span>
-                  </div>
                 </div>
               </div>
-              <button
-                onClick={handleDisableSchool}
-                disabled={disableSchoolMutation.isPending}
-                className="inline-flex items-center gap-2 px-4 py-2 h-fit rounded-lg bg-white border border-red-200 text-sm text-red-600 hover:bg-red-50 transition-colors flex-shrink-0 mt-2"
-              >
-                <Ban className="w-4 h-4" />
-                {disableSchoolMutation.isPending ? "Disabling..." : "Disable School"}
-              </button>
             </div>
 
-            {searchExpanded ? (
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="absolute inset-0 w-full py-3 pl-4 pr-10 rounded-xl border-2 border-[#955aa4] bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/30 z-20 text-gray-900 placeholder-gray-400"
-              />
-            ) : (
-              <button
-                type="button"
-                onClick={() => setSearchExpanded(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm flex-shrink-0 mt-2"
-              >
-                <Search className="w-4 h-4" />
-                Search
-              </button>
-            )}
+            {/* Search - always open */}
+            <div className="w-96 flex-shrink-0">
+              <div className="relative">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search"
+                  className="w-full py-3.5 pl-5 pr-14 rounded-full border-2 border-gray-300 bg-white shadow-md focus:outline-none focus:border-gray-400 text-gray-900 placeholder-gray-400 text-lg"
+                />
+                <Search className="w-6 h-6 text-gray-400 absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
           </div>
 
-          {/* Tabs: Patients, Icons, Providers */}
-          <div className="flex gap-2 mb-6">
+          {/* Tabs */}
+          <div className="flex gap-4 mb-8">
             <button
               onClick={() => setActiveTab("patients")}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+              className={`px-8 py-4 rounded-full text-base font-semibold transition-all ${
                 activeTab === "patients"
-                  ? "bg-[#955aa4] text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-[#955aa4] text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
               {patients.length} Patients
             </button>
             <button
               onClick={() => setActiveTab("icons")}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+              className={`px-8 py-4 rounded-full text-base font-semibold transition-all ${
                 activeTab === "icons"
-                  ? "bg-[#955aa4] text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-[#955aa4] text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
               {schoolIcons.length} Icons
             </button>
             <button
               onClick={() => setActiveTab("providers")}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+              className={`px-8 py-4 rounded-full text-base font-semibold transition-all ${
                 activeTab === "providers"
-                  ? "bg-[#955aa4] text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-[#955aa4] text-white shadow-md"
+                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
               {providers.length} Providers
@@ -516,7 +477,7 @@ export default function SchoolDetailsPage() {
 
           {/* Tab content */}
           {activeTab === "patients" && (
-            <div className="space-y-3">
+            <div className="divide-y divide-black">
               {patientsLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4]" />
@@ -530,28 +491,33 @@ export default function SchoolDetailsPage() {
                 filteredPatients.map((patient) => (
                   <div
                     key={patient.id}
-                    className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-[#955aa4]/30 transition-colors"
+                    className="flex items-center gap-6 py-5"
                   >
-                    <div className="w-14 h-14 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold text-lg">
+                    {/* Lock-in score */}
+                    <div className="w-24 h-24 rounded-xl bg-black flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-4xl">
                         {patient.lockinScore != null ? patient.lockinScore.toFixed(1) : "–"}
                       </span>
                     </div>
+                    
+                    {/* Patient info */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900">
+                      <p className="font-semibold text-gray-900 text-xl mb-1">
                         {patient.patientName}. {compactTimeAgo(patient.createdAt)}
                       </p>
-                      <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">
+                      <p className="text-base text-gray-600 line-clamp-2">
                         {patient.comment ? `"${patient.comment}"` : "—"}
                       </p>
                     </div>
+                    
+                    {/* Action button */}
                     <Button
                       onClick={() => setSelectedPatientId(patient.id)}
-                      className={`flex-shrink-0 rounded-lg ${
+                      className={`flex-shrink-0 rounded-full px-8 py-3 font-medium text-base ${
                         (patient.treatingProviders?.length ?? 0) > 0
-                          ? "bg-gray-500 text-white hover:bg-gray-600"
+                          ? "bg-gray-400 text-white hover:bg-gray-500"
                           : patient.visibilityStatus === "SEEN"
-                            ? "bg-gray-500 text-white hover:bg-gray-600"
+                            ? "bg-gray-400 text-white hover:bg-gray-500"
                             : "bg-black text-white hover:bg-gray-800"
                       }`}
                     >
@@ -595,21 +561,21 @@ export default function SchoolDetailsPage() {
                           setEditingIcon(icon);
                           setShowAddIconModal(true);
                         }}
-                        className="rounded-xl overflow-hidden border border-gray-200 hover:border-[#955aa4]/50 transition-colors text-left"
+                        className="rounded-2xl overflow-hidden border border-gray-200 hover:border-[#955aa4]/50 hover:shadow-md transition-all text-left bg-white"
                       >
                         <div className="aspect-[4/3] relative bg-gray-100">
                           {icon.photoPreview && (
                             <Image src={icon.photoPreview} alt={icon.name} fill className="object-cover" />
                           )}
-                          <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-xs font-bold">
+                          <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center text-sm font-bold shadow-md">
                             #{icon.rank}
                           </div>
                         </div>
-                        <div className="p-3">
-                          <p className="font-semibold text-gray-900">{icon.name}</p>
-                          <div className="flex flex-col items-start gap-0.5 mt-1">
+                        <div className="p-4">
+                          <p className="font-semibold text-gray-900 mb-2">{icon.name}</p>
+                          <div className="flex flex-col items-start gap-1">
                             {(icon.lockIns || []).slice(0, 2).map((item, i) => (
-                              <span key={i} className="text-xs text-gray-600 flex items-center gap-1">
+                              <span key={i} className="text-xs text-gray-600 flex items-center gap-1.5">
                                 <Lock className="w-3 h-3" />
                                 {item}
                               </span>
@@ -632,36 +598,46 @@ export default function SchoolDetailsPage() {
           )}
         </div>
 
-        {/* Urgent Care Sidebar */}
-        <aside className="w-80 flex-shrink-0 border-l border-gray-200 bg-gray-50/80 p-6 relative z-10">
-          <div className="mb-4">
-            <JustGoHealth className="mb-2 scale-90 origin-left" />
-            <p className="text-red-600 font-bold text-lg">
+        {/* Urgent Care Sidebar - with beige background */}
+        <aside className="w-96 flex-shrink-0 border-l border-gray-300 bg-[#f5f1e8] p-6 relative z-10">
+          {/* Logo with click to go back */}
+          <div 
+            onClick={() => router.push(ROUTES.curator.schools)}
+            className="mb-6 cursor-pointer hover:opacity-70 transition-opacity"
+          >
+            <JustGoHealth className="scale-90 origin-left" />
+          </div>
+          
+          {/* Urgent Care header */}
+          <div className="mb-6">
+            <p className="text-red-600 font-bold text-xl">
               Urgent Care. {urgentLoading ? "…" : urgentCare.totalUrgentCarePatients}
             </p>
           </div>
+          
+          {/* Urgent Care list */}
           {urgentLoading ? (
             <div className="animate-pulse space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+                <div key={i} className="h-16 bg-gray-200 rounded-xl" />
               ))}
             </div>
           ) : urgentCare.patients.length === 0 ? (
             <p className="text-gray-500 text-sm">No urgent care patients</p>
           ) : (
-            <ul className="space-y-3">
+            <ul className="divide-y divide-black">
               {urgentCare.patients.map((p, i) => (
                 <li
                   key={i}
-                  className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200"
+                  className="flex items-center gap-3 py-3"
                 >
-                  <div className="w-10 h-10 rounded bg-black flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-sm font-bold">
+                  <div className="w-14 h-14 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-xl font-bold">
                       {p.lockinScore != null ? p.lockinScore.toFixed(1) : "–"}
                     </span>
                   </div>
-                  <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{p.patientName ?? "Patient"}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-red-600 truncate text-base">{p.patientName ?? "Patient"}</p>
                     <p className="text-xs text-gray-500">
                       {p.lockinDate || p.createdAt
                         ? timeAgo(p.lockinDate || p.createdAt || "")
@@ -682,6 +658,7 @@ export default function SchoolDetailsPage() {
             onClose={() => setShowEditModal(false)}
             school={school}
             onSchoolUpdated={handleSchoolUpdated}
+            onDisableSchool={handleDisableSchool}
           />
           <ConfirmationModal
             isOpen={showDisableModal}
