@@ -12,7 +12,6 @@ import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
-import PatientDetailsModal from "@/components/modals/patient-details-curator";
 import AddIconModal from "@/components/modals/add-icon";
 import { useDisableSchool } from "@/hooks/queries/useSchoolsQuery";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
@@ -139,9 +138,6 @@ export default function SchoolDetailsPage() {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showProviderModal, setShowProviderModal] = useState(false);
   const [selectedProviderEmail, setSelectedProviderEmail] = useState("");
-  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(
-    null,
-  );
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddIconModal, setShowAddIconModal] = useState(false);
   const [editingIcon, setEditingIcon] = useState<IconItem | null>(null);
@@ -643,7 +639,11 @@ export default function SchoolDetailsPage() {
 
                     {/* Action button */}
                     <Button
-                      onClick={() => setSelectedPatientId(patient.id)}
+                      onClick={() =>
+                        router.push(
+                          `/curator/schools/${schoolId}/patients/${patient.id}`,
+                        )
+                      }
                       className={`flex-shrink-0 rounded-full px-5 sm:px-7 lg:px-9 py-2.5 sm:py-3 lg:py-4 font-medium text-sm sm:text-base lg:text-lg ${
                         (patient.treatingProviders?.length ?? 0) > 0
                           ? "bg-gray-400 text-white hover:bg-gray-500"
@@ -829,15 +829,6 @@ export default function SchoolDetailsPage() {
             isLoading={isActionLoading}
           />
         </>
-      )}
-
-      {selectedPatientId && (
-        <PatientDetailsModal
-          isOpen={!!selectedPatientId}
-          onClose={() => setSelectedPatientId(null)}
-          patientId={selectedPatientId}
-          schoolId={schoolId}
-        />
       )}
 
       <ProviderDetailsModal

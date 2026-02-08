@@ -16,7 +16,6 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { performLogout } from "@/lib/auth-utils";
 
-
 export default function DashboardLayout({
   children,
 }: {
@@ -27,18 +26,18 @@ export default function DashboardLayout({
   const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
       const refreshToken = localStorage.getItem("refreshToken");
-      
+
       if (!refreshToken) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;
       }
-      
+
       setIsAuthenticated(true);
     }
   }, [router]);
@@ -57,7 +56,9 @@ export default function DashboardLayout({
       try {
         const response = await api(ENDPOINTS.partners);
         if (response?.success && response.data) {
-          const partnersList = Array.isArray(response.data) ? response.data : [];
+          const partnersList = Array.isArray(response.data)
+            ? response.data
+            : [];
           setPartnerCount(partnersList.length);
         }
       } catch (error) {
@@ -72,12 +73,18 @@ export default function DashboardLayout({
   };
 
   const schoolCount = Array.isArray(schools) ? schools.length : 0;
-  const providerCount = providers?.data && Array.isArray(providers.data) 
-    ? providers.data.length 
-    : 0;
+  const providerCount =
+    providers?.data && Array.isArray(providers.data)
+      ? providers.data.length
+      : 0;
 
   // Check if current page is school details page
   const isSchoolDetailPage = pathname?.match(/\/curator\/schools\/\d+$/);
+
+  // Check if current page is patient details page
+  const isPatientDetailPage = pathname?.match(
+    /\/curator\/schools\/\d+\/patients\/\d+$/,
+  );
 
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
@@ -96,12 +103,10 @@ export default function DashboardLayout({
   }
 
   // Layout for school details page (no sidebar)
-  if (isSchoolDetailPage) {
+  if (isSchoolDetailPage || isPatientDetailPage) {
     return (
       <div className="h-screen bg-white">
-        <div className="h-full overflow-y-auto bg-gray-50">
-          {children}
-        </div>
+        <div className="h-full overflow-y-auto bg-gray-50">{children}</div>
 
         {showCreateModal && (
           <CreateModal
@@ -159,7 +164,9 @@ export default function DashboardLayout({
             try {
               const response = await api(ENDPOINTS.partners);
               if (response?.success && response.data) {
-                const partnersList = Array.isArray(response.data) ? response.data : [];
+                const partnersList = Array.isArray(response.data)
+                  ? response.data
+                  : [];
                 setPartnerCount(partnersList.length);
               }
             } catch (error) {
@@ -251,7 +258,9 @@ export default function DashboardLayout({
           try {
             const response = await api(ENDPOINTS.partners);
             if (response?.success && response.data) {
-              const partnersList = Array.isArray(response.data) ? response.data : [];
+              const partnersList = Array.isArray(response.data)
+                ? response.data
+                : [];
               setPartnerCount(partnersList.length);
             }
           } catch (error) {
