@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ProviderSidebar } from "@/components/provider/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
 import { useState, useEffect } from "react";
@@ -14,6 +14,7 @@ export default function ProviderLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -51,6 +52,10 @@ export default function ProviderLayout({
     performLogout(queryClient, ROUTES.provider.auth);
   };
 
+  // Check if current page is school details page or patient details page
+  const isSchoolDetailPage = pathname?.match(/\/provider\/schools\/\d+$/);
+  const isPatientDetailPage = pathname?.match(/\/provider\/patients\/\d+$/);
+
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
     return (
@@ -86,6 +91,17 @@ export default function ProviderLayout({
   // If not approved, don't show sidebar - let children handle the pending state
   if (!isApproved && getProfileQuery.data) {
     return <>{children}</>;
+  }
+
+  // Layout for school details page or patient details page (no sidebar)
+  if (isSchoolDetailPage || isPatientDetailPage) {
+    return (
+      <div className="h-screen bg-white">
+        <div className="h-full overflow-y-auto bg-gray-50">
+          {children}
+        </div>
+      </div>
+    );
   }
 
   // Show sidebar and content when approved
