@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { CuratorSidebar } from "@/components/curator/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
 import CreateModal from "@/components/curator/ui/create-modal";
@@ -23,6 +23,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -75,6 +76,9 @@ export default function DashboardLayout({
     ? providers.data.length 
     : 0;
 
+  // Check if current page is school details page
+  const isSchoolDetailPage = pathname?.match(/\/curator\/schools\/\d+$/);
+
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
     return (
@@ -91,6 +95,93 @@ export default function DashboardLayout({
     return null;
   }
 
+  // Layout for school details page (no sidebar)
+  if (isSchoolDetailPage) {
+    return (
+      <div className="h-screen bg-white">
+        <div className="h-full overflow-y-auto bg-gray-50">
+          {children}
+        </div>
+
+        {showCreateModal && (
+          <CreateModal
+            setShowCreateModal={setShowCreateModal}
+            onOpenSchoolModal={() => {
+              setShowCreateModal(false);
+              setShowSchoolModal(true);
+            }}
+            onOpenMemberModal={() => {
+              setShowCreateModal(false);
+              setShowMemberModal(true);
+            }}
+            onOpenPartnerModal={() => {
+              setShowCreateModal(false);
+              setShowPartnerModal(true);
+            }}
+            onOpenReachModal={() => {
+              setShowCreateModal(false);
+              setShowReachModal(true);
+            }}
+          />
+        )}
+
+        <SchoolCreationModal
+          isOpen={showSchoolModal}
+          onClose={() => {
+            setShowSchoolModal(false);
+            setShowCreateModal(true);
+          }}
+          onSchoolCreated={() => {
+            setShowSchoolModal(false);
+            setShowCreateModal(true);
+          }}
+        />
+
+        <MemberCreationModal
+          isOpen={showMemberModal}
+          onClose={() => {
+            setShowMemberModal(false);
+            setShowCreateModal(true);
+          }}
+          onMemberCreated={(member) => {
+            setShowMemberModal(false);
+            setShowCreateModal(true);
+          }}
+        />
+
+        <PartnerCreationModal
+          isOpen={showPartnerModal}
+          onClose={() => {
+            setShowPartnerModal(false);
+            setShowCreateModal(true);
+          }}
+          onPartnerCreated={async (partner) => {
+            try {
+              const response = await api(ENDPOINTS.partners);
+              if (response?.success && response.data) {
+                const partnersList = Array.isArray(response.data) ? response.data : [];
+                setPartnerCount(partnersList.length);
+              }
+            } catch (error) {
+              // Note: Background data loading error, badge count may be stale
+            }
+            setShowPartnerModal(false);
+            setShowCreateModal(true);
+          }}
+        />
+
+        <ReachModal
+          isOpen={showReachModal}
+          onClose={() => {
+            setShowReachModal(false);
+            setShowCreateModal(true);
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Default layout with sidebar
   return (
     <div className="h-screen bg-white flex">
       <CuratorSidebar
@@ -133,7 +224,6 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onSchoolCreated={() => {
-          // console.log("School created:", schools);
           setShowSchoolModal(false);
           setShowCreateModal(true);
         }}
@@ -146,7 +236,6 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onMemberCreated={(member) => {
-          // console.log("Member created:", member);
           setShowMemberModal(false);
           setShowCreateModal(true);
         }}
@@ -159,7 +248,6 @@ export default function DashboardLayout({
           setShowCreateModal(true);
         }}
         onPartnerCreated={async (partner) => {
-          // Refresh partner count
           try {
             const response = await api(ENDPOINTS.partners);
             if (response?.success && response.data) {

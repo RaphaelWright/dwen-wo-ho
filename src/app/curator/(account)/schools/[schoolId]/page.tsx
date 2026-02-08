@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import WidthConstraint from "@/components/ui/width-constraint";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ROUTES } from "@/constants/routes";
@@ -154,17 +153,12 @@ export default function SchoolDetailsPage() {
         api(ENDPOINTS.getSchoolLockIn(schoolId)).catch(() => null),
       ]);
       
-      // console.log("🏥 Patient Results API Response:", resResults);
-      // console.log("🔒 Lock-In API Response:", resLockIn);
-      
       if (resResults?.success && resResults.data) {
         const list = Array.isArray(resResults.data) ? resResults.data : [];
-        // console.log("📋 Raw Patient List:", list);
         
         list.sort((a: { createdAt: string }, b: { createdAt: string }) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-        // console.log("📋 Sorted Patient List (by createdAt):", list);
         
         const processedPatients = list.map((p: { id: number; lockinId: number; patientName: string; createdAt: string; visibilityStatus: string; treatingProviders?: Array<{ id: string; fullName: string }> }) => ({
           id: p.id,
@@ -175,12 +169,10 @@ export default function SchoolDetailsPage() {
           treatingProviders: p.treatingProviders ?? [],
         }));
         
-        // console.log("✅ Processed Patients Data:", processedPatients);
         setPatients(processedPatients);
       }
       if (resLockIn?.success && (resLockIn.data as { students?: LockInStudent[] })?.students) {
         const students = (resLockIn.data as { students: LockInStudent[] }).students;
-        // console.log("👥 Lock-In Students Data:", students);
         setLockinStudents(students);
       }
       if (resResults?.success && resResults.data) {
@@ -199,10 +191,8 @@ export default function SchoolDetailsPage() {
             }
           })
         );
-        // console.log("💬 Loaded Patient Comments:", comments);
         setPatientComments((prev) => {
           const updated = { ...prev, ...comments } as Record<number, string | null>;
-          // console.log("💬 Updated Patient Comments State:", updated);
           return updated;
         });
       }
@@ -291,17 +281,11 @@ export default function SchoolDetailsPage() {
     };
   });
 
-  // console.log("🎯 Patients with Score (enriched data):", patientsWithScore);
-  // console.log("💬 Patient Comments:", patientComments);
-
   const filteredPatients = searchQuery.trim()
     ? patientsWithScore.filter((p) =>
         p.patientName.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : patientsWithScore;
-
-  // console.log("🔍 Filtered Patients (displayed on page):", filteredPatients);
-  // console.log("🔎 Search Query:", searchQuery);
 
   const handleProviderClick = (provider: SchoolProvider) => {
     setSelectedProviderEmail(provider.email);
@@ -381,320 +365,314 @@ export default function SchoolDetailsPage() {
 
   if (isLoading) {
     return (
-      <WidthConstraint>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-            <p className="text-gray-500">Loading school details...</p>
-          </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+          <p className="text-gray-500">Loading school details...</p>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
   if (error || !school) {
     return (
-      <WidthConstraint>
-        <div className="flex flex-col items-center justify-center min-h-screen p-8">
-          <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Schools
-          </Button>
-          <p className="text-red-500">{error || "School not found"}</p>
-        </div>
-      </WidthConstraint>
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50">
+        <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="mb-4">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Schools
+        </Button>
+        <p className="text-red-500">{error || "School not found"}</p>
+      </div>
     );
   }
 
   return (
-    <WidthConstraint>
-      <div className="min-h-screen flex flex-col">
-        {/* Top bar */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-          <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="w-fit">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Schools
-          </Button>
-          <div className="flex gap-3">
-            <Button
-              onClick={() => setShowEditModal(true)}
-              variant="outline"
-              className="w-fit border-[#955aa4] text-[#955aa4] hover:bg-[#955aa4]/10"
-            >
-              <Pencil className="w-4 h-4 mr-2" />
-              Edit School
-            </Button>
-            <Button
-              onClick={handleDisableSchool}
-              variant="outline"
-              disabled={disableSchoolMutation.isPending}
-              className="w-fit border-red-500 text-red-500 hover:bg-red-50"
-            >
-              <Ban className="w-4 h-4 mr-2" />
-              {disableSchoolMutation.isPending ? "Disabling..." : "Disable"}
-            </Button>
-          </div>
-        </div>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Go Back Button */}
+      <div className="p-6 pb-0">
+        <Button onClick={() => router.push(ROUTES.curator.schools)} variant="outline" className="w-fit">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Schools
+        </Button>
+      </div>
 
-        <div className="flex-1 flex relative">
-          {/* Background logo - low opacity */}
-          {school.logo && (
-            <div
-              className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]"
-              aria-hidden
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Image
-                  src={school.logo}
-                  alt=""
-                  width={400}
-                  height={400}
-                  className="object-contain w-[400px] h-[400px]"
-                />
+      <div className="flex-1 flex relative">
+        {/* Background logo - low opacity */}
+        {school.logo && (
+          <div
+            className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]"
+            aria-hidden
+          >
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Image
+                src={school.logo}
+                alt=""
+                width={600}
+                height={600}
+                className="object-contain w-[600px] h-[600px]"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main content */}
+        <div className="flex-1 min-w-0 flex flex-col p-6 relative z-10">
+          {/* Header: logo, name, campus, motto, search (expandable overlay) */}
+          <div ref={searchContainerRef} className="relative flex items-start justify-between gap-6 mb-8">
+            <div className="flex items-start gap-6 min-w-0 flex-1">
+              <div
+                onClick={() => setShowEditModal(true)}
+                className="flex items-start gap-6 min-w-0 flex-1 group cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                {school.logo ? (
+                  <div className="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-gray-200 bg-white group-hover:border-[#955aa4] transition-colors">
+                    <Image src={school.logo} alt={school.name} width={128} height={128} className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 rounded-2xl bg-gray-100 flex items-center justify-center flex-shrink-0 group-hover:bg-gray-200 transition-colors">
+                    <MdSchool className="text-6xl text-gray-400" />
+                  </div>
+                )}
+                <div className="min-w-0 pt-2">
+                  <h1 className="text-4xl font-bold text-gray-900 truncate group-hover:text-[#955aa4] transition-colors">{school.name}</h1>
+                  {campusLabel && (
+                    <p className="text-gray-600 text-base mt-1">({campusLabel})</p>
+                  )}
+                  {school.motto && (
+                    <p className="text-gray-500 text-base mt-2 italic">{school.motto}</p>
+                  )}
+                  <div className="flex gap-3 mt-4">
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-sm text-gray-600">
+                      <Pencil className="w-3.5 h-3.5" />
+                      Click to edit
+                    </span>
+                  </div>
+                </div>
               </div>
+              <button
+                onClick={handleDisableSchool}
+                disabled={disableSchoolMutation.isPending}
+                className="inline-flex items-center gap-2 px-4 py-2 h-fit rounded-lg bg-white border border-red-200 text-sm text-red-600 hover:bg-red-50 transition-colors flex-shrink-0 mt-2"
+              >
+                <Ban className="w-4 h-4" />
+                {disableSchoolMutation.isPending ? "Disabling..." : "Disable School"}
+              </button>
+            </div>
+
+            {searchExpanded ? (
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="absolute inset-0 w-full py-3 pl-4 pr-10 rounded-xl border-2 border-[#955aa4] bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/30 z-20 text-gray-900 placeholder-gray-400"
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setSearchExpanded(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm flex-shrink-0 mt-2"
+              >
+                <Search className="w-4 h-4" />
+                Search
+              </button>
+            )}
+          </div>
+
+          {/* Tabs: Patients, Icons, Providers */}
+          <div className="flex gap-2 mb-6">
+            <button
+              onClick={() => setActiveTab("patients")}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                activeTab === "patients"
+                  ? "bg-[#955aa4] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {patients.length} Patients
+            </button>
+            <button
+              onClick={() => setActiveTab("icons")}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                activeTab === "icons"
+                  ? "bg-[#955aa4] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {schoolIcons.length} Icons
+            </button>
+            <button
+              onClick={() => setActiveTab("providers")}
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                activeTab === "providers"
+                  ? "bg-[#955aa4] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {providers.length} Providers
+            </button>
+          </div>
+
+          {/* Tab content */}
+          {activeTab === "patients" && (
+            <div className="space-y-3">
+              {patientsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4]" />
+                </div>
+              ) : filteredPatients.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <Users className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                  <p>No patients for this school</p>
+                </div>
+              ) : (
+                filteredPatients.map((patient) => (
+                  <div
+                    key={patient.id}
+                    className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-[#955aa4]/30 transition-colors"
+                  >
+                    <div className="w-14 h-14 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+                      <span className="text-white font-bold text-lg">
+                        {patient.lockinScore != null ? patient.lockinScore.toFixed(1) : "–"}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900">
+                        {patient.patientName}. {compactTimeAgo(patient.createdAt)}
+                      </p>
+                      <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">
+                        {patient.comment ? `"${patient.comment}"` : "—"}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => setSelectedPatientId(patient.id)}
+                      className={`flex-shrink-0 rounded-lg ${
+                        (patient.treatingProviders?.length ?? 0) > 0
+                          ? "bg-gray-500 text-white hover:bg-gray-600"
+                          : patient.visibilityStatus === "SEEN"
+                            ? "bg-gray-500 text-white hover:bg-gray-600"
+                            : "bg-black text-white hover:bg-gray-800"
+                      }`}
+                    >
+                      {(patient.treatingProviders?.length ?? 0) > 0
+                        ? "Treating"
+                        : patient.visibilityStatus === "SEEN"
+                          ? "Opened"
+                          : "Open >"}
+                    </Button>
+                  </div>
+                ))
+              )}
             </div>
           )}
 
-          {/* Main content */}
-          <div className="flex-1 min-w-0 flex flex-col p-6 relative z-10">
-            {/* Header: logo, name, campus, motto, search (expandable overlay) */}
-            <div ref={searchContainerRef} className="relative flex items-start justify-between gap-4 mb-6">
-              <div className="flex items-start gap-4 min-w-0 flex-1">
-                {school.logo ? (
-                  <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200 bg-white">
-                    <Image src={school.logo} alt={school.name} width={80} height={80} className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-                    <MdSchool className="text-4xl text-gray-400" />
-                  </div>
-                )}
-                <div className="min-w-0">
-                  <h1 className="text-2xl font-bold text-gray-900 truncate">{school.name}</h1>
-                  {campusLabel && (
-                    <p className="text-gray-600 text-sm">({campusLabel})</p>
-                  )}
-                  {school.motto && (
-                    <p className="text-gray-500 text-sm mt-0.5 italic">{school.motto}</p>
-                  )}
-                </div>
-              </div>
-
-              {searchExpanded ? (
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="absolute inset-0 w-full py-3 pl-4 pr-10 rounded-xl border-2 border-[#955aa4] bg-white shadow-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/30 z-20 text-gray-900 placeholder-gray-400"
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setSearchExpanded(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm flex-shrink-0"
+          {activeTab === "icons" && (
+            <div className="space-y-4">
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => {
+                    setEditingIcon(null);
+                    setShowAddIconModal(true);
+                  }}
+                  className="bg-black text-white hover:bg-gray-800 rounded-full px-6"
                 >
-                  <Search className="w-4 h-4" />
-                  Search
-                </button>
+                  + ADD Icon
+                </Button>
+              </div>
+              {schoolIcons.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <p>No icons yet. Add one above.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {schoolIcons
+                    .sort((a, b) => a.rank - b.rank)
+                    .map((icon) => (
+                      <button
+                        key={icon.id}
+                        onClick={() => {
+                          setEditingIcon(icon);
+                          setShowAddIconModal(true);
+                        }}
+                        className="rounded-xl overflow-hidden border border-gray-200 hover:border-[#955aa4]/50 transition-colors text-left"
+                      >
+                        <div className="aspect-[4/3] relative bg-gray-100">
+                          {icon.photoPreview && (
+                            <Image src={icon.photoPreview} alt={icon.name} fill className="object-cover" />
+                          )}
+                          <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-xs font-bold">
+                            #{icon.rank}
+                          </div>
+                        </div>
+                        <div className="p-3">
+                          <p className="font-semibold text-gray-900">{icon.name}</p>
+                          <div className="flex flex-col items-start gap-0.5 mt-1">
+                            {(icon.lockIns || []).slice(0, 2).map((item, i) => (
+                              <span key={i} className="text-xs text-gray-600 flex items-center gap-1">
+                                <Lock className="w-3 h-3" />
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
               )}
             </div>
+          )}
 
-            {/* Tabs: Patients, Icons, Providers */}
-            <div className="flex gap-2 mb-6">
-              <button
-                onClick={() => setActiveTab("patients")}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  activeTab === "patients"
-                    ? "bg-[#955aa4] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {patients.length} Patients
-              </button>
-              <button
-                onClick={() => setActiveTab("icons")}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  activeTab === "icons"
-                    ? "bg-[#955aa4] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {schoolIcons.length} Icons
-              </button>
-              <button
-                onClick={() => setActiveTab("providers")}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  activeTab === "providers"
-                    ? "bg-[#955aa4] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {providers.length} Providers
-              </button>
-            </div>
-
-            {/* Tab content */}
-            {activeTab === "patients" && (
-              <div className="space-y-3">
-                {patientsLoading ? (
-                  <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4]" />
-                  </div>
-                ) : filteredPatients.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500">
-                    <Users className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                    <p>No patients for this school</p>
-                  </div>
-                ) : (
-                  filteredPatients.map((patient) => (
-                    <div
-                      key={patient.id}
-                      className="flex items-center gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-[#955aa4]/30 transition-colors"
-                    >
-                      <div className="w-14 h-14 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-bold text-lg">
-                          {patient.lockinScore != null ? patient.lockinScore.toFixed(1) : "–"}
-                        </span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900">
-                          {patient.patientName}. {compactTimeAgo(patient.createdAt)}
-                        </p>
-                        <p className="text-sm text-gray-600 mt-0.5 line-clamp-2">
-                          {patient.comment ? `"${patient.comment}"` : "—"}
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() => setSelectedPatientId(patient.id)}
-                        className={`flex-shrink-0 rounded-lg ${
-                          (patient.treatingProviders?.length ?? 0) > 0
-                            ? "bg-gray-500 text-white hover:bg-gray-600"
-                            : patient.visibilityStatus === "SEEN"
-                              ? "bg-gray-500 text-white hover:bg-gray-600"
-                              : "bg-black text-white hover:bg-gray-800"
-                        }`}
-                      >
-                        {(patient.treatingProviders?.length ?? 0) > 0
-                          ? "Treating"
-                          : patient.visibilityStatus === "SEEN"
-                            ? "Opened"
-                            : "Open >"}
-                      </Button>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-
-            {activeTab === "icons" && (
-              <div className="space-y-4">
-                <div className="flex justify-center">
-                  <Button
-                    onClick={() => {
-                      setEditingIcon(null);
-                      setShowAddIconModal(true);
-                    }}
-                    className="bg-black text-white hover:bg-gray-800 rounded-full px-6"
-                  >
-                    + ADD Icon
-                  </Button>
-                </div>
-                {schoolIcons.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500">
-                    <p>No icons yet. Add one above.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {schoolIcons
-                      .sort((a, b) => a.rank - b.rank)
-                      .map((icon) => (
-                        <button
-                          key={icon.id}
-                          onClick={() => {
-                            setEditingIcon(icon);
-                            setShowAddIconModal(true);
-                          }}
-                          className="rounded-xl overflow-hidden border border-gray-200 hover:border-[#955aa4]/50 transition-colors text-left"
-                        >
-                          <div className="aspect-[4/3] relative bg-gray-100">
-                            {icon.photoPreview && (
-                              <Image src={icon.photoPreview} alt={icon.name} fill className="object-cover" />
-                            )}
-                            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-xs font-bold">
-                              #{icon.rank}
-                            </div>
-                          </div>
-                          <div className="p-3">
-                            <p className="font-semibold text-gray-900">{icon.name}</p>
-                            <div className="flex flex-col items-start gap-0.5 mt-1">
-                              {(icon.lockIns || []).slice(0, 2).map((item, i) => (
-                                <span key={i} className="text-xs text-gray-600 flex items-center gap-1">
-                                  <Lock className="w-3 h-3" />
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </button>
-                      ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === "providers" && (
-              <ProvidersTab
-                providers={providers}
-                isLoading={providersLoading}
-                onProviderClick={handleProviderClick}
-              />
-            )}
-          </div>
-
-          {/* Urgent Care Sidebar */}
-          <aside className="w-80 flex-shrink-0 border-l border-gray-200 bg-gray-50/80 p-6 relative z-10">
-            <div className="mb-4">
-              <JustGoHealth className="mb-2 scale-90 origin-left" />
-              <p className="text-red-600 font-bold text-lg">
-                Urgent Care. {urgentLoading ? "…" : urgentCare.totalUrgentCarePatients}
-              </p>
-            </div>
-            {urgentLoading ? (
-              <div className="animate-pulse space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded-lg" />
-                ))}
-              </div>
-            ) : urgentCare.patients.length === 0 ? (
-              <p className="text-gray-500 text-sm">No urgent care patients</p>
-            ) : (
-              <ul className="space-y-3">
-                {urgentCare.patients.map((p, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200"
-                  >
-                    <div className="w-10 h-10 rounded bg-black flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-sm font-bold">
-                        {p.lockinScore != null ? p.lockinScore.toFixed(1) : "–"}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{p.patientName ?? "Patient"}</p>
-                      <p className="text-xs text-gray-500">
-                        {p.lockinDate || p.createdAt
-                          ? timeAgo(p.lockinDate || p.createdAt || "")
-                          : "—"}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </aside>
+          {activeTab === "providers" && (
+            <ProvidersTab
+              providers={providers}
+              isLoading={providersLoading}
+              onProviderClick={handleProviderClick}
+            />
+          )}
         </div>
+
+        {/* Urgent Care Sidebar */}
+        <aside className="w-80 flex-shrink-0 border-l border-gray-200 bg-gray-50/80 p-6 relative z-10">
+          <div className="mb-4">
+            <JustGoHealth className="mb-2 scale-90 origin-left" />
+            <p className="text-red-600 font-bold text-lg">
+              Urgent Care. {urgentLoading ? "…" : urgentCare.totalUrgentCarePatients}
+            </p>
+          </div>
+          {urgentLoading ? (
+            <div className="animate-pulse space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+              ))}
+            </div>
+          ) : urgentCare.patients.length === 0 ? (
+            <p className="text-gray-500 text-sm">No urgent care patients</p>
+          ) : (
+            <ul className="space-y-3">
+              {urgentCare.patients.map((p, i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200"
+                >
+                  <div className="w-10 h-10 rounded bg-black flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-sm font-bold">
+                      {p.lockinScore != null ? p.lockinScore.toFixed(1) : "–"}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium text-gray-900 truncate">{p.patientName ?? "Patient"}</p>
+                    <p className="text-xs text-gray-500">
+                      {p.lockinDate || p.createdAt
+                        ? timeAgo(p.lockinDate || p.createdAt || "")
+                        : "—"}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
       </div>
 
       {school && (
@@ -777,6 +755,6 @@ export default function SchoolDetailsPage() {
         }
         selectedSchool={school}
       />
-    </WidthConstraint>
+    </div>
   );
 }

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
-import WidthConstraint from "@/components/ui/width-constraint";
 import { ArrowLeft, Users } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
@@ -292,27 +291,25 @@ export default function ProviderSchoolDetailsPage() {
 
   if (isLoading) {
     return (
-      <WidthConstraint>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-            <p className="text-gray-500">Loading school details...</p>
-          </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+          <p className="text-gray-500">Loading school details...</p>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
   if (accessDenied) {
     return (
-      <WidthConstraint>
-        <div className="p-8">
-          {/* Back button positioned like "My Schools" heading */}
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-8">
+          {/* Back button */}
           <div className="mb-8">
             <Button
               onClick={() => router.push("/provider/schools")}
-              variant="ghost"
-              className="mb-4"
+              variant="outline"
+              className="w-fit"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Schools
@@ -332,20 +329,20 @@ export default function ProviderSchoolDetailsPage() {
             </div>
           </div>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
   if (!school) {
     return (
-      <WidthConstraint>
-        <div className="p-8">
-          {/* Back button positioned like "My Schools" heading */}
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-8">
+          {/* Back button */}
           <div className="mb-8">
             <Button
               onClick={() => router.push("/provider/schools")}
-              variant="ghost"
-              className="mb-4"
+              variant="outline"
+              className="w-fit"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Schools
@@ -365,39 +362,42 @@ export default function ProviderSchoolDetailsPage() {
             </div>
           </div>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
   return (
-    <WidthConstraint>
-      <div className="p-8">
-        {/* Header */}
-        <div className="mb-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto p-8">
+        {/* Back Button */}
+        <div className="mb-6">
           <Button
             onClick={() => router.push("/provider/schools")}
-            variant="ghost"
-            className="mb-4"
+            variant="outline"
+            className="w-fit"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Schools
           </Button>
-          
-          <div className="flex items-start gap-4">
+        </div>
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-start gap-6">
             {school.logo ? (
-              <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200">
+              <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-2 border-gray-200 bg-white flex-shrink-0">
                 <Image src={school.logo} alt={school.name} fill className="object-cover" />
               </div>
             ) : (
-              <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                <MdSchool className="w-10 h-10 text-gray-400" />
+              <div className="w-32 h-32 bg-gray-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <MdSchool className="w-16 h-16 text-gray-400" />
               </div>
             )}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{school.name}</h1>
-              {school.nickname && <p className="text-gray-600">@{school.nickname}</p>}
+            <div className="pt-2">
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{school.name}</h1>
+              {school.nickname && <p className="text-gray-600 text-base">@{school.nickname}</p>}
               {school.type && (
-                <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                <span className="inline-block mt-3 px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
                   {school.type}
                 </span>
               )}
@@ -482,6 +482,6 @@ export default function ProviderSchoolDetailsPage() {
           )}
         </div>
       </div>
-    </WidthConstraint>
+    </div>
   );
-}
+} 

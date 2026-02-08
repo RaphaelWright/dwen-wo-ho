@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
-import WidthConstraint from "@/components/ui/width-constraint";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useUserQuery from "@/hooks/queries/useUserQuery";
@@ -247,26 +246,24 @@ export default function PatientResultPage() {
 
   if (isLoading) {
     return (
-      <WidthConstraint>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-            <p className="text-gray-500">Loading patient details...</p>
-          </div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+          <p className="text-gray-500">Loading patient details...</p>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
   if (!patientResult) {
     return (
-      <WidthConstraint>
-        <div className="p-8">
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-8">
           <div className="mb-8">
             <Button
               onClick={() => router.back()}
-              variant="ghost"
-              className="mb-4"
+              variant="outline"
+              className="w-fit"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
@@ -276,7 +273,7 @@ export default function PatientResultPage() {
             <p className="text-gray-500">Patient result not found</p>
           </div>
         </div>
-      </WidthConstraint>
+      </div>
     );
   }
 
@@ -285,14 +282,14 @@ export default function PatientResultPage() {
   );
 
   return (
-    <WidthConstraint>
-      <div className="p-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto p-8">
         {/* Header */}
         <div className="mb-8">
           <Button
             onClick={() => router.back()}
-            variant="ghost"
-            className="mb-4"
+            variant="outline"
+            className="w-fit mb-6"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
@@ -300,8 +297,8 @@ export default function PatientResultPage() {
 
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{patientResult.patientName}</h1>
-              <div className="flex items-center gap-4 text-gray-600">
+              <h1 className="text-4xl font-bold text-gray-900 mb-3">{patientResult.patientName}</h1>
+              <div className="flex items-center gap-4 text-gray-600 text-base">
                 <p>{patientResult.patientAge} years old</p>
                 <span>•</span>
                 <p>{patientResult.patientSex}</p>
@@ -311,12 +308,12 @@ export default function PatientResultPage() {
             </div>
             <div className="flex items-center gap-2">
               {patientResult.visibilityStatus === "NEW" && (
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                <span className="px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
                   New
                 </span>
               )}
               {isTreating && (
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                <span className="px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                   Treating
                 </span>
               )}
@@ -330,7 +327,7 @@ export default function PatientResultPage() {
             <Button
               onClick={() => handleUpdateActionStatus("TREATING")}
               disabled={isUpdating}
-              className="bg-[#955aa4] hover:bg-[#955aa4]/90"
+              className="bg-[#955aa4] hover:bg-[#955aa4]/90 px-6 py-2.5"
             >
               {isUpdating ? "Updating..." : "Start Treating"}
             </Button>
@@ -458,6 +455,6 @@ export default function PatientResultPage() {
           </div>
         )}
       </div>
-    </WidthConstraint>
+    </div>
   );
 }
