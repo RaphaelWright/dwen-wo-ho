@@ -93,6 +93,19 @@ export const useSchools = () => {
   });
 };
 
+// Add this helper to force bypass cache
+export const useSchoolsWithRefetch = () => {
+  const queryClient = useQueryClient();
+  const query = useSchools();
+  
+  const forceRefetch = async () => {
+    await queryClient.invalidateQueries({ queryKey: [SCHOOLS_QUERY_KEY] });
+    return query.refetch();
+  };
+  
+  return { ...query, forceRefetch };
+};
+
 export const useSchool = (schoolId: string) => {
   return useQuery({
     queryKey: [SCHOOLS_QUERY_KEY, schoolId],

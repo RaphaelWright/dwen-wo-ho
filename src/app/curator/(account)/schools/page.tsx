@@ -8,7 +8,7 @@ import WidthConstraint from "@/components/ui/width-constraint";
 import { School } from "@/types/school";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
-import { useSchools } from "@/hooks/queries/useSchoolsQuery";
+import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSchools, setLoading, updateSchool } from "@/store/slices/curatorSchoolsSlice";
@@ -19,6 +19,7 @@ import {
   clearAllCaches,
   patientResultsCache,
 } from "@/lib/schoolsApiUtils";
+import { useQueryClient } from "@tanstack/react-query";
 
 type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
 
@@ -67,16 +68,16 @@ const filterOptions: { label: string; value: FilterType }[] = [
 
 // Configuration
 const BATCH_SIZE = 5;
-const POLL_INTERVAL = 15000; // 15 seconds
-
+const POLL_INTERVAL = 10000; // 10 seconds
 export default function SchoolsPage() {
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient(); // ✅ Call hook at component level
   const { schools: cachedSchools, isLoading: reduxLoading } = useAppSelector(
     (state) => state.curatorSchools
   );
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: allSchools = [], isLoading: schoolsLoading, isError } = useSchools();
+  const { data: allSchools = [], isLoading: schoolsLoading, isError, refetch: refetchSchools, forceRefetch } = useSchoolsWithRefetch();
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
   const isInitialLoadRef = useRef(true);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -88,27 +89,41 @@ export default function SchoolsPage() {
     isBackground: boolean = false
   ): Promise<SchoolWithExtras> => {
     const schoolData: SchoolWithExtras = { ...school, isLoading: true };
-    
+
     try {
       // Check for new patients first during background updates
       let forceRefresh = false;
       if (!isInitialLoadRef.current && isBackground) {
         const prevSchool = previousSchoolsRef.current.get(Number(school.id));
-        
+
         if (prevSchool?.newPatientName) {
           // Check for new patients using the API
           const latestCheck = await getLatestPatientResult(school.id, true); // Skip cache
-          
+
           if (latestCheck && latestCheck.patientName !== prevSchool.newPatientName) {
+            // console.log('🔔 NEW LOCK-IN DETECTED:', {
+            //   schoolId: school.id,
+            //   schoolName: school.name,
+            //   previousPatient: prevSchool.newPatientName,
+            //   newPatient: latestCheck.patientName,
+            //   previousDate: prevSchool.latestLockInDate,
+            //   newDate: latestCheck.createdAt,
+            //   timestamp: new Date().toISOString(),
+            // });
             toast.success(`New patient: ${latestCheck.patientName} at ${school.name}`);
             forceRefresh = true; // Force cache refresh to get updated counts
+
+            // Invalidate React Query cache and refetch all schools from backend
+            // console.log('🔄 INVALIDATING CACHE AND REFETCHING ALL SCHOOLS FROM BACKEND...');
+            await queryClient.invalidateQueries({ queryKey: ['schools'] }); // ✅ Use queryClient from component scope
+            await forceRefetch();
           }
         }
       }
 
       // Parallel fetch of lock-in count and latest patient (skip cache if new patient detected)
       const [studentCount, latestPatient] = await Promise.all([
-        forceRefresh 
+        forceRefresh
           ? getSchoolLockInCount(school.id, true) // Force fresh data
           : getSchoolLockInCount(school.id),
         forceRefresh
@@ -117,10 +132,19 @@ export default function SchoolsPage() {
       ]);
 
       schoolData.studentCount = studentCount;
-      
+
       if (latestPatient) {
         schoolData.latestLockInDate = latestPatient.createdAt;
         schoolData.newPatientName = latestPatient.patientName;
+      }
+
+      // Log all the complete school data when new data is fetched after detecting a new lock-in
+      if (forceRefresh) {
+        // console.log('📊 NEW DATA FETCHED AFTER LOCK-IN - Complete School Data:', {
+        //   ...schoolData,
+        //   previousData: previousSchoolsRef.current.get(Number(school.id)),
+        //   timestamp: new Date().toISOString(),
+        // });
       }
     } catch (error) {
       console.error(`Error fetching data for school ${school.id}:`, error);
@@ -128,7 +152,9 @@ export default function SchoolsPage() {
 
     schoolData.isLoading = false;
     return schoolData;
-  }, []);
+  }, [queryClient, refetchSchools]); // ✅ Add dependencies
+
+
 
   // Load schools with incremental updates and batching
   const loadSchoolsWithData = useCallback(async (isBackground = false) => {
@@ -168,20 +194,20 @@ export default function SchoolsPage() {
         BATCH_SIZE,
         async (school: School, index: number) => {
           const schoolData = await fetchSchoolData(school, isBackground);
-          
+
           // Update cache map immediately
           previousSchoolsRef.current.set(Number(school.id), schoolData);
-          
+
           // Update individual school in Redux for real-time card updates
           dispatch(updateSchool({ id: school.id, data: schoolData }));
-          
+
           return schoolData;
         }
       );
 
       // Final update with complete data in backend order
       dispatch(setSchools(enrichedSchools));
-      
+
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         return;
@@ -199,15 +225,22 @@ export default function SchoolsPage() {
   // Initial load
   useEffect(() => {
     if (allSchools.length === 0) return;
-    
+
     const hasCache = cachedSchools.length > 0;
-    
+
+    // Log when allSchools changes (including after refetch)
+    // console.log('📋 ALL SCHOOLS UPDATED FROM BACKEND:', {
+    //   schoolCount: allSchools.length,
+    //   schools: allSchools.map(s => ({ id: s.id, name: s.name })),
+    //   timestamp: new Date().toISOString(),
+    // });
+
     if (hasCache) {
       loadSchoolsWithData(true);
     } else {
       loadSchoolsWithData(false);
     }
-  }, [allSchools.length]);
+  }, [allSchools]);
 
   // Background polling for general data updates
   useEffect(() => {
@@ -215,7 +248,7 @@ export default function SchoolsPage() {
 
     const interval = setInterval(() => {
       const now = Date.now();
-      
+
       if (now - lastPollRef.current >= POLL_INTERVAL) {
         lastPollRef.current = now;
         loadSchoolsWithData(true);
@@ -316,11 +349,10 @@ export default function SchoolsPage() {
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeFilter === filter.value
-                  ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-              }`}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeFilter === filter.value
+                ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
+                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                }`}
             >
               {filter.label}
             </button>
@@ -351,7 +383,7 @@ export default function SchoolsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {schoolsList.map((school) => {
               const firstCampus = getFirstCampus(school.campuses);
-              const displayNickname = school.nickname 
+              const displayNickname = school.nickname
                 ? (firstCampus ? `${school.nickname} (${firstCampus})` : school.nickname)
                 : (firstCampus ? `(${firstCampus})` : "");
 
