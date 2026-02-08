@@ -28,7 +28,7 @@ const campusOptions = [
   "Sunyani",
 ];
 
-const schoolTypes = ["JHS", "SHS", "NMTC", "University"];
+const schoolTypes = ["JHS", "SHS", "COLLEGE"];
 
 type SchoolFormData = {
   name: string;
@@ -57,6 +57,7 @@ const SchoolEditModal = ({
 
   const updateSchoolMutation = useUpdateSchool();
   const campusDropdownRef = useRef<HTMLDivElement>(null);
+  const [hasChanges, setHasChanges] = useState(false);
 
   useClickOutside(campusDropdownRef, () => {
     setShowCampusDropdown(false);
@@ -72,22 +73,26 @@ const SchoolEditModal = ({
         type: school.type || "",
       });
       setSelectedCampuses(school.campuses || []);
+      setHasChanges(false);
     }
   }, [school, isOpen]);
 
   const handleInputChange = (field: string, value: string) => {
+    const processedValue = field === "motto" ? value.toUpperCase() : value;
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: processedValue,
     }));
+    setHasChanges(true);
   };
 
   const handleCampusToggle = (campus: string) => {
     setSelectedCampuses((prev) =>
       prev.includes(campus)
         ? prev.filter((c) => c !== campus)
-        : [...prev, campus]
+        : [...prev, campus],
     );
+    setHasChanges(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,7 +118,7 @@ const SchoolEditModal = ({
           onSchoolUpdated?.();
           onClose();
         },
-      }
+      },
     );
   };
 
@@ -145,8 +150,12 @@ const SchoolEditModal = ({
               <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                 <div className="flex items-center gap-4">
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">Edit School</h2>
-                    <p className="text-sm text-gray-500">Update school information</p>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Edit School
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Update school information
+                    </p>
                   </div>
                 </div>
                 <button
@@ -158,7 +167,11 @@ const SchoolEditModal = ({
               </div>
 
               <div className="flex-1 overflow-y-auto p-8">
-                <form id="school-edit-form" onSubmit={handleSubmit} className="space-y-8">
+                <form
+                  id="school-edit-form"
+                  onSubmit={handleSubmit}
+                  className="space-y-8"
+                >
                   <div className="grid grid-cols-1 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700">
@@ -167,7 +180,9 @@ const SchoolEditModal = ({
                       <input
                         type="text"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
                         placeholder="e.g. Achimota School"
                       />
@@ -179,7 +194,9 @@ const SchoolEditModal = ({
                       <input
                         type="text"
                         value={formData.nickname}
-                        onChange={(e) => handleInputChange("nickname", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("nickname", e.target.value)
+                        }
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
                         placeholder="e.g. Motown"
                       />
@@ -193,7 +210,9 @@ const SchoolEditModal = ({
                     </label>
                     <textarea
                       value={formData.motto}
-                      onChange={(e) => handleInputChange("motto", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("motto", e.target.value)
+                      }
                       className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
                       placeholder="Enter school motto"
                       rows={3}
@@ -201,7 +220,9 @@ const SchoolEditModal = ({
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <label className="text-lg font-bold text-gray-900 w-24">Type</label>
+                    <label className="text-lg font-bold text-gray-900 w-24">
+                      Type
+                    </label>
                     <div className="flex-1 flex gap-4 flex-wrap">
                       {schoolTypes.map((type) => (
                         <button
@@ -222,7 +243,9 @@ const SchoolEditModal = ({
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <label className="text-sm font-semibold text-gray-700">Campuses</label>
+                      <label className="text-sm font-semibold text-gray-700">
+                        Campuses
+                      </label>
                       {selectedCampuses.length > 0 && (
                         <span className="text-xs font-medium text-[#955aa4] bg-[#955aa4]/10 px-2 py-1 rounded-full">
                           {selectedCampuses.length} selected
@@ -232,14 +255,18 @@ const SchoolEditModal = ({
                     <div className="relative" ref={campusDropdownRef}>
                       <button
                         type="button"
-                        onClick={() => setShowCampusDropdown(!showCampusDropdown)}
+                        onClick={() =>
+                          setShowCampusDropdown(!showCampusDropdown)
+                        }
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
                       >
                         <div className="flex items-center gap-2 text-gray-600">
                           <MapPin className="w-4 h-4" />
                           <span
                             className={
-                              selectedCampuses.length > 0 ? "text-gray-900" : "text-gray-500"
+                              selectedCampuses.length > 0
+                                ? "text-gray-900"
+                                : "text-gray-500"
                             }
                           >
                             {selectedCampuses.length > 0
@@ -286,7 +313,9 @@ const SchoolEditModal = ({
 
                   {school.logo && (
                     <div className="space-y-3">
-                      <label className="text-sm font-semibold text-gray-700">School Logo</label>
+                      <label className="text-sm font-semibold text-gray-700">
+                        School Logo
+                      </label>
                       <div className="flex items-center gap-6">
                         <div className="flex-1">
                           <div className="inline-block">
@@ -318,10 +347,12 @@ const SchoolEditModal = ({
                 <Button
                   type="submit"
                   form="school-edit-form"
-                  disabled={updateSchoolMutation.isPending}
-                  className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20"
+                  disabled={updateSchoolMutation.isPending || !hasChanges}
+                  className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {updateSchoolMutation.isPending ? "Updating..." : "Update School"}
+                  {updateSchoolMutation.isPending
+                    ? "Updating..."
+                    : "Update School"}
                 </Button>
               </div>
             </div>
