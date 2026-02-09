@@ -113,17 +113,24 @@ export default function PatientDetailsPage() {
   const loadPatientDetails = async () => {
     setIsLoading(true);
     try {
+      console.log("Fetching patient result for ID:", patientId);
       const resultResponse = await api(
         ENDPOINTS.getPatientResult(Number(patientId)),
       );
+      console.log("Patient Result Response:", resultResponse);
+      
       if (resultResponse?.success && resultResponse.data) {
         const resultData = resultResponse.data as PatientResult;
+        console.log("Patient Result Data:", resultData);
         setPatientResult(resultData);
 
         try {
+          console.log("Fetching lock-in assessment for school ID:", resultData.schoolId);
           const lockInResponse = await api(
             ENDPOINTS.getSchoolLockIn(resultData.schoolId),
           );
+          console.log("Lock-In Response:", lockInResponse);
+          
           if (lockInResponse?.success && lockInResponse.data) {
             const lockInData = lockInResponse.data as {
               schoolName: string;
@@ -134,11 +141,15 @@ export default function PatientDetailsPage() {
                 lockedInColor: string;
               }>;
             };
+            console.log("Lock-In Data:", lockInData);
+            
             const student = lockInData.students?.find(
               (s) => s.studentName === resultData.patientName,
             );
+            console.log("Found Student:", student);
+            
             if (student) {
-              setLockInAssessment({
+              const assessment = {
                 fullName: resultData.patientName,
                 age: resultData.patientAge,
                 sex: resultData.patientSex,
@@ -179,11 +190,13 @@ export default function PatientDetailsPage() {
                 procrastinationScore: "N/A",
                 procrastinationScoreDescription: "N/A",
                 procrastinationColor: "gray",
-              });
+              };
+              console.log("Lock-In Assessment:", assessment);
+              setLockInAssessment(assessment);
             }
           }
         } catch (error) {
-          // Silently handle
+          console.error("Error fetching lock-in data:", error);
         }
       }
     } catch (error) {
@@ -192,6 +205,15 @@ export default function PatientDetailsPage() {
       setIsLoading(false);
     }
   };
+
+  // Console log whenever state updates
+  useEffect(() => {
+    console.log("Patient Result State:", patientResult);
+  }, [patientResult]);
+
+  useEffect(() => {
+    console.log("Lock-In Assessment State:", lockInAssessment);
+  }, [lockInAssessment]);
 
   if (isLoading) {
     return (
@@ -205,6 +227,7 @@ export default function PatientDetailsPage() {
   }
 
   if (!patientResult || !lockInAssessment) {
+    console.warn("Missing data - patientResult:", patientResult, "lockInAssessment:", lockInAssessment);
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#faf9f7]">
         <button
@@ -290,8 +313,10 @@ export default function PatientDetailsPage() {
     },
   ];
 
+  console.log("Metrics:", metrics);
+
   return (
-    <div className="h-screen overflow-y-auto xl:overflow-hidden xl:h-screen w-full flex flex-col xl:flex-row xl:items-stretch justify-between bg-[#faf9f7]">
+    <div className="h-screen overflow-y-auto xl:overflow-hidden xl:h-screen w-full flex flex-col xl:flex-row xl:items-stretch justify-between bg-[#F6F9E6]">
       <div className="w-full xl:w-6/10 xl:h-full">
         {/* User details */}
         <div className="w-full h-auto xl:h-[52%] bg-[#F6F9E6] px-6 xl:px-24 py-2 xl:py-6">
@@ -323,11 +348,11 @@ export default function PatientDetailsPage() {
                 backgroundColor: generateColor(lockInAssessment.lockedInColor),
               }}
             >
-              <p className="font-bold text-lg xl:text-xl">Locked In</p>
+              <p className="font-bold text-2xl xl:text-3xl">Locked In</p>
               <h3 className="font-bold text-5xl xl:text-6xl leading-none">
                 {lockInAssessment.lockedInScore.split("/")[0]}
               </h3>
-              <p className="font-bold text-lg xl:text-xl">Score</p>
+              <p className="font-bold text-xl xl:text-2xl">Score</p>
             </div>
             <div className="flex flex-col gap-4 pt-2">
               <div>
