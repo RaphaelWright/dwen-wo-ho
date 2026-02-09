@@ -292,67 +292,74 @@ export default function PatientDetailsPage() {
 
   return (
     <div className="h-screen overflow-y-auto xl:overflow-hidden xl:h-screen w-full flex flex-col xl:flex-row xl:items-stretch justify-between bg-[#faf9f7]">
-      <div className="w-full xl:w-7/10 xl:h-full">
+      <div className="w-full xl:w-6/10 xl:h-full">
         {/* User details */}
-        <div className="w-full h-auto xl:h-[52%] bg-[#F6F9E6] px-6 xl:px-24 py-4 xl:py-12">
-          <button
-            onClick={() => router.push(`/curator/schools/${schoolId}`)}
-            className="mb-4 text-gray-600 hover:text-gray-900 text-sm flex items-center gap-1"
-          >
-            <ChevronLeft className="w-4 h-4" /> Back to School
-          </button>
+        <div className="w-full h-auto xl:h-[52%] bg-[#F6F9E6] px-6 xl:px-24 py-2 xl:py-6">
+          <div className="mb-6">
+            <button
+              onClick={() => router.push(`/curator/schools/${schoolId}`)}
+              className="hover:opacity-70 transition-opacity"
+            >
+              <JustGoHealth className="scale-75 sm:scale-85 lg:scale-90 origin-left" />
+            </button>
+          </div>
           <div className="">
-            <h3 className="text-2xl xl:text-5xl font-bold text-[#993399]">
-              {patientResult?.patientName} (Health results)
+            <h3 className="text-5xl xl:text-7xl font-black text-[#993399] mb-3">
+              {patientResult?.patientName}
             </h3>
-            <p className="font-bold text-xl xl:text-2xl">
-              {patientResult?.patientAge} year old {patientResult?.patientSex},{" "}
-              {patientResult?.schoolName}
+            <p className="font-black text-2xl xl:text-3xl mb-1">
+              {patientResult?.patientAge} year old {patientResult?.patientSex}{" "}
+              (0555 555 555)
+            </p>
+            <p className="font-black text-2xl xl:text-3xl">
+              Year 2, {patientResult?.schoolName}
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-start xl:items-center justify-start gap-4 xl:gap-16 mt-4 xl:mt-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-stretch justify-start gap-6 xl:gap-8 mt-8 xl:mt-10">
             <div
-              className="p-4 px-8 xl:p-8 rounded-[20px] text-white gap-4 flex flex-col items-center justify-center"
+              className="p-6 px-8 xl:p-6 rounded-2xl text-white gap-1 flex flex-col items-center justify-center flex-shrink-0"
               style={{
                 backgroundColor: generateColor(lockInAssessment.lockedInColor),
               }}
             >
-              <p className="font-bold text-xs">Locked In</p>
-              <h3 className="font-bold text-5xl xl:text-7xl">
+              <p className="font-bold text-lg xl:text-xl">Locked In</p>
+              <h3 className="font-bold text-5xl xl:text-6xl leading-none">
                 {lockInAssessment.lockedInScore.split("/")[0]}
               </h3>
-              <p className="font-bold text-xs -mt-4">Score</p>
+              <p className="font-bold text-lg xl:text-xl">Score</p>
             </div>
-            <div>
-              <p className="text-2xl xl:text-3xl font-bold mb-2 xl:mb-3">
-                Status:{" "}
-                <span className="text-[#993399]">
-                  {patientResult.visibilityStatus}
-                </span>
-              </p>
-              {patientResult.starProvider && (
-                <p className="text-xl xl:text-2xl font-bold mb-2">
-                  Star Provider:{" "}
-                  <span className="text-[#993399]">
-                    {patientResult.starProvider.fullName}
+            <div className="flex flex-col gap-4 pt-2">
+              <div>
+                <p className="text-xl xl:text-3xl font-black">
+                  General Mental Health:{" "}
+                  <span className="text-[#2bb573]">
+                    {lockInAssessment.generalMentalHealth}
                   </span>
                 </p>
-              )}
-              {patientResult.treatingProviders.length > 0 && (
-                <p className="text-xl xl:text-2xl font-bold">
-                  Treating Providers:{" "}
-                  <span className="text-[#993399]">
-                    {patientResult.treatingProviders.length}
+              </div>
+              <div>
+                <p className="text-xl xl:text-3xl font-black">
+                  Exam Anxiety:{" "}
+                  <span className="text-[#2bb573]">
+                    {lockInAssessment.examAnxiety}
                   </span>
                 </p>
-              )}
+              </div>
+              <div>
+                <p className="text-xl xl:text-3xl font-black">
+                  Exam Prep:{" "}
+                  <span className="text-[#2bb573]">
+                    {lockInAssessment.examPrep}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Metrics */}
-        <div className="w-full h-auto xl:h-[48%] bg-white">
+        <div className="w-full h-auto xl:h-[48%] bg-white mt-20">
           <div className="flex p-4 p-6 px-4 xl:px-12 border-b-4 border-black flex items-center justify-between">
             <div className="flex flex-col md:flex-row xl:items-center xl:gap-2">
               <h3 className="text-xl xl:text-3xl font-bold">
@@ -442,77 +449,166 @@ export default function PatientDetailsPage() {
         </div>
       </div>
 
-      {/* Right side sidebar */}
-      <aside className="w-full xl:w-3/10 bg-white xl:h-full p-8 py-10 flex flex-col items-center justify-between border-t xl:border-t-0 xl:border-l-4 border-black">
-        <div className="">
-          <JustGoHealth className="scale-100 sm:scale-100 lg:scale-125 origin-left" />
+      {/* Right side sidebar - REMOVED LEFT BORDER & INCREASED SIZES */}
+      <aside className="w-full xl:w-4/10 bg-white xl:h-full p-6 py-8 pb-0 flex flex-col border-t xl:border-t-0 border-black">
+        {/* Action/History Toggle */}
+        <div className="flex gap-3 mb-8 justify-center">
+          <button className="bg-[#2bb573] text-white font-bold py-3 px-8 rounded-full text-xl">
+            Action
+          </button>
+          <button className="bg-gray-400 text-white font-bold py-3 px-8 rounded-full text-xl">
+            History
+          </button>
         </div>
 
-        <div className="mt-8 text-center">
-          <h2 className="text-3xl xl:text-4xl font-bold text-[#993399] mb-6">
-            Patient Information
-          </h2>
-          <div className="space-y-6 text-left">
-            {patientResult.starProvider && (
-              <div className="p-6 bg-gray-50 rounded-lg">
-                <p className="font-semibold text-lg text-gray-700">
-                  Star Provider
-                </p>
-                <p className="text-base text-gray-600 mt-1">
-                  {patientResult.starProvider.fullName}
-                </p>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  {patientResult.starProvider.specialty}
-                </p>
+        {/* Actions List - SIGNIFICANTLY INCREASED SIZES */}
+        <div
+          className="flex-1 overflow-y-auto overflow-x-hidden space-y-6 scrollbar-hide px-6"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
+          {/* Group Therapy */}
+          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
+            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
+              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
+                <svg
+                  className="w-full h-full text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
               </div>
-            )}
-            {patientResult.referredProvider && (
-              <div className="p-6 bg-blue-50 rounded-lg">
-                <p className="font-semibold text-lg text-blue-700">
-                  Referred Provider
-                </p>
-                <p className="text-base text-blue-600 mt-1">
-                  {patientResult.referredProvider.fullName}
-                </p>
-              </div>
-            )}
-            {patientResult.treatingProviders.length > 0 && (
-              <div className="p-6 bg-green-50 rounded-lg">
-                <p className="font-semibold text-lg text-green-700">
-                  Treating Providers
-                </p>
-                <div className="space-y-2 mt-3">
-                  {patientResult.treatingProviders.map((provider) => (
-                    <p key={provider.id} className="text-base text-green-600">
-                      {provider.fullName}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="p-6 bg-gray-50 rounded-lg">
-              <p className="font-semibold text-lg text-gray-700 mb-3">
-                Timeline
-              </p>
-              <p className="text-sm text-gray-600 mb-2">
-                Created:{" "}
-                {new Date(patientResult.createdAt).toLocaleDateString()}
-              </p>
-              {patientResult.firstOpenedAt && (
-                <p className="text-sm text-gray-600">
-                  First Opened:{" "}
-                  {new Date(patientResult.firstOpenedAt).toLocaleDateString()}
-                </p>
-              )}
             </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
+              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
+                <span className="text-2xl">👥</span> Group Therapy
+              </p>
+              <p className="text-lg text-gray-600">
+                Jan 3rd, 2026. (Virtual - 2pm)
+              </p>
+            </div>
+          </div>
+
+          {/* Cognitive Behavioral Therapy */}
+          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
+            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
+              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
+                <svg
+                  className="w-full h-full text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-2xl mb-1">Dr. James Nuamah</h3>
+              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
+                <span className="text-2xl">💡</span> Cognitive Behavioral
+                Therapy
+              </p>
+              <p className="text-lg text-gray-600">
+                Dec 20th, 2025. (In-Person - 4pm)
+              </p>
+            </div>
+            <div className="text-[#2bb573] text-3xl">✓</div>
+          </div>
+
+          {/* Clinical Evaluation */}
+          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
+            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
+              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
+                <svg
+                  className="w-full h-full text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
+              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
+                <span className="text-2xl">🔍</span> Clinical Evaluation
+              </p>
+              <p className="text-lg text-gray-600">
+                Jan 3rd, 2026. (Virtual - 2pm)
+              </p>
+            </div>
+            <div className="text-[#2bb573] text-3xl">✓</div>
+          </div>
+
+          {/* Crisis Management */}
+          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
+            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
+              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
+                <svg
+                  className="w-full h-full text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
+              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
+                <span className="text-2xl">🚨</span> Crisis Management
+              </p>
+              <p className="text-lg text-gray-600">
+                Jan 3rd, 2026. (Virtual - 2pm)
+              </p>
+            </div>
+            <div className="text-[#2bb573] text-3xl">✓</div>
+          </div>
+
+          {/* Additional action item */}
+          <div className="flex items-start gap-5 pb-6">
+            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
+              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
+                <svg
+                  className="w-full h-full text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
+              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
+                <span className="text-2xl">💬</span> Follow-up Session
+              </p>
+              <p className="text-lg text-gray-600">
+                Jan 3rd, 2026. (Virtual - 2pm)
+              </p>
+            </div>
+            <div className="text-[#2bb573] text-3xl">✓</div>
           </div>
         </div>
 
-        <button
-          onClick={() => router.push(`/curator/schools/${schoolId}`)}
-          className="mt-12 w-full px-6 py-4 bg-[#993399] text-white text-lg font-semibold rounded-lg hover:bg-[#8a3a8a] transition-colors"
-        >
-          Back to School
+        {/* Add Action Button - Full width, no margins */}
+        <button className="w-auto px-12 mx-auto mb-5 bg-[#ff3333] hover:bg-[#e62e2e] text-white font-bold py-5 text-2xl flex items-center justify-center gap-3 rounded-full transition-colors">
+          Add Action
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <svg
+              className="w-6 h-6 text-[#ff3333]"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
         </button>
       </aside>
     </div>
