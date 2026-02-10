@@ -11,14 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  FiFileText,
-  FiPlus,
-  FiLogOut,
-  FiMenu,
-  FiX,
-  FiBell,
-} from "react-icons/fi";
+import { FiFileText, FiLogOut, FiMenu, FiX, FiBell } from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { cn } from "@/lib/utils";
