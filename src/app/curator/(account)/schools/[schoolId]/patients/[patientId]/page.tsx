@@ -581,7 +581,7 @@ export default function PatientDetailsPage() {
                 ))}
               </div>
 
-              <button className="sm:relative sm:-bottom-20 mt-6 w-full py-3 rounded-xl bg-[#955aa4] text-white font-bold text-sm hover:bg-[#864e94] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-200">
+              <button className="sm:relative sm:-bottom-20 mt-6 w-full py-3 rounded-xl bg-destructive text-white font-bold text-sm hover:bg-[#864e94] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-200">
                 <Plus className="w-4 h-4" /> Add Action
               </button>
             </div>
