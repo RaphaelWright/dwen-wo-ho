@@ -11,12 +11,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { FiFileText, FiPlus, FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import {
+  FiFileText,
+  FiPlus,
+  FiLogOut,
+  FiMenu,
+  FiX,
+  FiBell,
+} from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { motion, AnimatePresence } from "framer-motion";
+import { NotificationSheet } from "./notification-sheet";
+import { useNotification } from "@/context/notification-context";
 
 interface SidebarProps {
   schoolCount: number;
@@ -277,6 +286,7 @@ export const CuratorSidebar = ({
 
       {/* Bottom section: collapse toggle + logout */}
       <div className="border-t border-gray-100 p-2 space-y-1">
+        {/* Notification Button - Desktop */}
         {/* Collapse toggle — desktop only */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -294,6 +304,40 @@ export const CuratorSidebar = ({
             </>
           )}
         </button>
+
+        {/* Notification Button - Desktop */}
+        <NotificationSheet
+          notifications={notifications}
+          onClear={clearNotifications}
+          onDismiss={dismissNotification}
+          trigger={
+            <button
+              className={cn(
+                "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-[#955aa4]/10 hover:text-[#955aa4] transition-all duration-200 group",
+                collapsed && "justify-center px-0 w-10 h-10 mx-auto",
+              )}
+            >
+              <FiBell className="text-lg flex-shrink-0 group-hover:text-[#955aa4] transition-colors" />
+              {!collapsed && (
+                <span className="group-hover:text-[#955aa4] transition-colors">
+                  Notifications
+                </span>
+              )}
+              {unreadCount > 0 && (
+                <span
+                  className={cn(
+                    "flex items-center justify-center min-w-[1.5rem] h-5 rounded-full text-[10px] font-bold bg-[#e92229] text-white",
+                    collapsed
+                      ? "absolute top-1 right-1 w-4 h-4"
+                      : "ml-auto px-1.5",
+                  )}
+                >
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
+          }
+        />
 
         {/* Logout button */}
         {collapsed ? (
@@ -324,6 +368,13 @@ export const CuratorSidebar = ({
     </div>
   );
 
+  const {
+    notifications,
+    clearNotifications,
+    dismissNotification,
+    unreadCount,
+  } = useNotification();
+
   return (
     <TooltipProvider>
       {/* Mobile Header */}
@@ -342,7 +393,13 @@ export const CuratorSidebar = ({
           width={120}
           height={28}
         />
-        <div className="w-9" />
+        <div className="w-9">
+          <NotificationSheet
+            notifications={notifications}
+            onClear={clearNotifications}
+            onDismiss={dismissNotification}
+          />
+        </div>
       </div>
 
       {/* Mobile Overlay */}
@@ -369,7 +426,33 @@ export const CuratorSidebar = ({
         className="hidden md:flex flex-col h-screen bg-white border-r border-gray-200/60 flex-shrink-0 overflow-hidden relative"
       >
         <SidebarContent collapsed={isCollapsed} />
+
+        {/* Notification integrated into sidebar bottom or specific area if needed, 
+            but for better UX, let's put it top-right of the sidebar or similar?
+            Actually, the design often has notifications in the top bar. 
+            Since we don't have a top bar in desktop layout (it's sidebar + content),
+            we should probably add it to the sidebar actions.
+        */}
       </motion.aside>
+
+      {/* We need a place for the notification bell in Desktop. 
+          Usually it's in a header. Since this app seems to have a sidebar-only layout,
+          maybe we can add it to the bottom of the sidebar near logout, or create a mini-header in the main content area?
+          
+          Looking at the design, `SchoolsPage` had it in its own header.
+          If we want it global, we should probably have a persistent top bar in the layout, OR add it to the sidebar.
+          
+          Let's add it to the sidebar for now as a "Notification" item or a standalone trigger.
+      */}
+
+      {/* Floating Notification Trigger for Desktop if not in sidebar list? 
+          Or maybe just append it to the nav list? 
+          Let's try appending it to the nav list or a separate action area.
+      */}
+
+      <div className="fixed bottom-4 right-4 z-50 md:hidden">
+        {/* Mobile FAB if needed, but we put it in header already */}
+      </div>
 
       {/* Mobile Sidebar (drawer) */}
       <AnimatePresence>
