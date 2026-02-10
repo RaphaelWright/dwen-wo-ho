@@ -2,12 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import { ChevronLeft } from "lucide-react";
+import {
+  ChevronLeft,
+  User,
+  MapPin,
+  Calendar,
+  School,
+  Activity,
+  Brain,
+  BookOpen,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  Plus,
+  Users,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
-import { ROUTES } from "@/constants/routes";
-import JustGoHealth from "@/components/logo-purple";
+import { Button } from "@/components/ui/button";
 
 interface PatientResult {
   id: number;
@@ -84,7 +98,7 @@ interface LockInAssessment {
 const generateColor = (color: string) => {
   let code = "";
   if (color === "yellow") code = "#ff9900";
-  if (color === "green") code = "#2bb573";
+  if (color === "green") code = "#081c05";
   if (color === "purple") code = "#993399";
   if (color === "red") code = "#ff0000";
   if (color === "light green") code = "#66ff66";
@@ -96,7 +110,6 @@ export default function PatientDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const patientId = params.patientId as string;
-  const schoolId = params.schoolId as string;
 
   const [patientResult, setPatientResult] = useState<PatientResult | null>(
     null,
@@ -104,7 +117,9 @@ export default function PatientDetailsPage() {
   const [lockInAssessment, setLockInAssessment] =
     useState<LockInAssessment | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [resultIndex, setResultIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState<"assessment" | "history">(
+    "assessment",
+  );
 
   useEffect(() => {
     loadPatientDetails();
@@ -118,19 +133,22 @@ export default function PatientDetailsPage() {
         ENDPOINTS.getPatientResult(Number(patientId)),
       );
       console.log("Patient Result Response:", resultResponse);
-      
+
       if (resultResponse?.success && resultResponse.data) {
         const resultData = resultResponse.data as PatientResult;
         console.log("Patient Result Data:", resultData);
         setPatientResult(resultData);
 
         try {
-          console.log("Fetching lock-in assessment for school ID:", resultData.schoolId);
+          console.log(
+            "Fetching lock-in assessment for school ID:",
+            resultData.schoolId,
+          );
           const lockInResponse = await api(
             ENDPOINTS.getSchoolLockIn(resultData.schoolId),
           );
           console.log("Lock-In Response:", lockInResponse);
-          
+
           if (lockInResponse?.success && lockInResponse.data) {
             const lockInData = lockInResponse.data as {
               schoolName: string;
@@ -142,12 +160,12 @@ export default function PatientDetailsPage() {
               }>;
             };
             console.log("Lock-In Data:", lockInData);
-            
+
             const student = lockInData.students?.find(
               (s) => s.studentName === resultData.patientName,
             );
             console.log("Found Student:", student);
-            
+
             if (student) {
               const assessment = {
                 fullName: resultData.patientName,
@@ -227,7 +245,12 @@ export default function PatientDetailsPage() {
   }
 
   if (!patientResult || !lockInAssessment) {
-    console.warn("Missing data - patientResult:", patientResult, "lockInAssessment:", lockInAssessment);
+    console.warn(
+      "Missing data - patientResult:",
+      patientResult,
+      "lockInAssessment:",
+      lockInAssessment,
+    );
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#faf9f7]">
         <button
@@ -315,327 +338,256 @@ export default function PatientDetailsPage() {
 
   console.log("Metrics:", metrics);
 
-  return (
-    <div className="h-screen overflow-y-auto xl:overflow-hidden xl:h-screen w-full flex flex-col xl:flex-row xl:items-stretch justify-between bg-[#F6F9E6]">
-      <div className="w-full xl:w-6/10 xl:h-full">
-        {/* User details */}
-        <div className="w-full h-auto xl:h-[52%] bg-[#F6F9E6] px-6 xl:px-24 py-2 xl:py-6">
-          <div className="mb-6">
-            <button
-              onClick={() => router.push(`/curator/schools/${schoolId}`)}
-              className="hover:opacity-70 transition-opacity"
-            >
-              <JustGoHealth className="scale-75 sm:scale-85 lg:scale-90 origin-left" />
-            </button>
-          </div>
-          <div className="">
-            <h3 className="text-5xl xl:text-7xl font-black text-[#993399] mb-3">
-              {patientResult?.patientName}
-            </h3>
-            <p className="font-black text-2xl xl:text-3xl mb-1">
-              {patientResult?.patientAge} year old {patientResult?.patientSex}{" "}
-              (0555 555 555)
-            </p>
-            <p className="font-black text-2xl xl:text-3xl">
-              Year 2, {patientResult?.schoolName}
-            </p>
-          </div>
+  // Helper helper to get simplified color for UI
+  const getProgressColor = (color: string) => {
+    switch (color) {
+      case "red":
+        return "bg-red-500";
+      case "yellow":
+        return "bg-yellow-500";
+      case "green":
+        return "bg-green-500";
+      case "purple":
+        return "bg-purple-500";
+      case "light green":
+        return "bg-emerald-400";
+      default:
+        return "bg-gray-300";
+    }
+  };
 
-          <div className="flex flex-col lg:flex-row items-start lg:items-stretch justify-start gap-6 xl:gap-8 mt-8 xl:mt-10">
-            <div
-              className="p-6 px-8 xl:p-6 rounded-2xl text-white gap-1 flex flex-col items-center justify-center flex-shrink-0"
-              style={{
-                backgroundColor: generateColor(lockInAssessment.lockedInColor),
-              }}
-            >
-              <p className="font-bold text-2xl xl:text-3xl">Locked In</p>
-              <h3 className="font-bold text-5xl xl:text-6xl leading-none">
-                {lockInAssessment.lockedInScore.split("/")[0]}
-              </h3>
-              <p className="font-bold text-xl xl:text-2xl">Score</p>
+  const getScoreColor = (score: string) => {
+    // Logic to determine color based on score if needed, or mapping API colors
+    return "text-gray-900";
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50/50 flex flex-col">
+      {/* Top Navigation / Breadcrumb area could go here if needed, but we have a header card */}
+
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {/* Header Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8 pt-2! relative overflow-hidden">
+          <Button
+            onClick={() => router.back()}
+            className="rounded-md mb-2 transition-colors gap-2 w-24 md:w-32 bg-red-50 text-destructive hover:bg-destructive hover:text-white"
+          >
+            <ChevronLeft className="size-5" /> Back
+          </Button>
+
+          <div className="flex flex-col md:flex-row gap-8 items-start md:items-center mt-6 md:mt-0">
+            {/* Avatar / Initials */}
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-[#955aa4] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-purple-200">
+              <User className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
             </div>
-            <div className="flex flex-col gap-4 pt-2">
-              <div>
-                <p className="text-xl xl:text-3xl font-black">
-                  General Mental Health:{" "}
-                  <span className="text-[#2bb573]">
-                    {lockInAssessment.generalMentalHealth}
+
+            {/* Patient Info */}
+            <div className="flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                {patientResult?.patientName}
+              </h1>
+              <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-4 justify-center sm:justify-start">
+                <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                  <Activity className="w-4 h-4 text-purple-500" />
+                  <span>
+                    {patientResult?.patientAge} yrs, {patientResult?.patientSex}
                   </span>
-                </p>
+                </div>
+                <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                  <School className="w-4 h-4 text-purple-500" />
+                  <span>{patientResult?.schoolName}</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                  <Calendar className="w-4 h-4 text-purple-500" />
+                  <span>
+                    Joined{" "}
+                    {new Date(
+                      patientResult?.createdAt || "",
+                    ).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
-              <div>
-                <p className="text-xl xl:text-3xl font-black">
-                  Exam Anxiety:{" "}
-                  <span className="text-[#2bb573]">
-                    {lockInAssessment.examAnxiety}
-                  </span>
-                </p>
+            </div>
+
+            {/* Locked-In Score Indicator */}
+            <div className="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 min-w-[140px] mx-auto sm:mx-0">
+              <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
+                Locked In
+              </span>
+              <div className="flex items-end gap-1">
+                <span className="text-4xl font-bold text-[#955aa4]">
+                  {lockInAssessment?.lockedInScore.split("/")[0]}
+                </span>
+                <span className="text-lg text-gray-400 mb-1">/ 10</span>
               </div>
-              <div>
-                <p className="text-xl xl:text-3xl font-black">
-                  Exam Prep:{" "}
-                  <span className="text-[#2bb573]">
-                    {lockInAssessment.examPrep}
-                  </span>
-                </p>
+              <div
+                className="mt-2 px-3 py-2 rounded-full text-xs font-bold text-white uppercase tracking-wide"
+                style={{
+                  backgroundColor: generateColor(
+                    lockInAssessment?.lockedInColor || "gray",
+                  ),
+                }}
+              >
+                {lockInAssessment?.lockedInScoreDescription || "Unknown"}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Metrics */}
-        <div className="w-full h-auto xl:h-[48%] bg-white mt-20">
-          <div className="flex p-4 p-6 px-4 xl:px-12 border-b-4 border-black flex items-center justify-between">
-            <div className="flex flex-col md:flex-row xl:items-center xl:gap-2">
-              <h3 className="text-xl xl:text-3xl font-bold">
-                {metrics[resultIndex].name}:
-              </h3>
-              <p className="text-xl xl:text-3xl font-bold">
-                {metrics[resultIndex].description} ({metrics[resultIndex].score}
-                )
-              </p>
-            </div>
-            {/* Navigation */}
-            <div className="flex items-center gap-4">
-              <button
-                className={`bg-black hover:cursor-pointer text-white p-2 rounded-full transition-opacity ${
-                  resultIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                disabled={resultIndex === 0}
-                onClick={() => setResultIndex((prev) => --prev)}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Assessment Data */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Detailed Metrics Cards */}
+            {metrics.map((category, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
               >
-                <ChevronLeft className="!w-6 !h-6 xl:!w-9 xl:!h-9" />
-              </button>
-              <button
-                className={`bg-black hover:cursor-pointer text-white p-2 rounded-full transition-opacity ${
-                  resultIndex >= metrics.length - 1
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                disabled={resultIndex >= metrics.length - 1}
-                onClick={() => setResultIndex((prev) => ++prev)}
-              >
-                <svg
-                  className="!w-6 !h-6 xl:!w-9 xl:!h-9 fill-current"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M9 6l6 6-6 6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+                <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/30 flex items-center gap-3">
+                  <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-100">
+                    {idx === 0 ? (
+                      <Brain className="w-5 h-5 text-purple-600" />
+                    ) : idx === 1 ? (
+                      <AlertCircle className="w-5 h-5 text-purple-600" />
+                    ) : (
+                      <BookOpen className="w-5 h-5 text-purple-600" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg">
+                      {category.name}
+                    </h3>
+                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                      {category.description} • Score: {category.score}
+                    </p>
+                  </div>
+                </div>
 
-          {/* Slider */}
-          <div className="w-full h-full xl:overflow-hidden">
-            <div
-              className={`grid-cols-3 h-full grid items-stretch justify-between transition-all duration-300 ease-in-out`}
-              style={{
-                marginLeft: `-${100 * resultIndex}%`,
-                width: `${metrics.length * 100}%`,
-              }}
-            >
-              {metrics.map((metric, index) => {
-                return (
-                  <div
-                    className="w-full h-full flex flex-col md:flex-row md:items-stretch justify-start"
-                    key={index}
-                  >
-                    {metric.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className={`w-full flex items-center justify-start flex-col h-full border-black gap-2 p-6 md:p-8 ${
-                          idx !== metric.items.length - 1 ? "md:border-r-4" : ""
-                        } border-b-4 xl:border-b-0`}
-                      >
-                        <h1 className="text-2xl xl:text-4xl text-center font-bold">
+                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {(category.items as any[]).map((item: any, i: number) => (
+                    <div key={i} className="flex flex-col gap-2">
+                      <div className="flex justify-between items-end mb-1">
+                        <span className="font-medium text-gray-700">
                           {item.name}
-                        </h1>
-                        <p className="text-base xl:text-2xl text-center">
-                          {item.description}
-                        </p>
-                        <div
-                          className="w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold"
+                        </span>
+                        <span
+                          className="text-sm font-bold px-2 py-0.5 rounded text-white"
                           style={{ backgroundColor: item.color }}
                         >
-                          {item.value.replace(/\ /g, "")}
-                        </div>
+                          {item.value}
+                        </span>
                       </div>
-                    ))}
+                      <p className="text-xs text-gray-500 line-clamp-2 min-h-[2.5em]">
+                        {item.description}
+                      </p>
+                      <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden mt-1">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: "100%" }}
+                          className="h-full rounded-full opacity-50"
+                          style={{ backgroundColor: item.color }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right Column: Actions & History */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 h-full flex flex-col">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-gray-900">
+                  Actions History
+                </h2>
+                <button className="text-sm text-[#955aa4] font-medium hover:underline">
+                  View All
+                </button>
+              </div>
+
+              {/* Tabs Switcher for this card */}
+              <div className="flex p-1 bg-gray-100 rounded-lg mb-6">
+                <button
+                  onClick={() => setActiveTab("assessment")}
+                  className={cn(
+                    "flex-1 py-1.5 text-xs font-bold rounded-md transition-all",
+                    activeTab === "assessment"
+                      ? "bg-white shadow text-gray-900"
+                      : "text-gray-500 hover:text-gray-700",
+                  )}
+                >
+                  Pending
+                </button>
+                <button
+                  onClick={() => setActiveTab("history")}
+                  className={cn(
+                    "flex-1 py-1.5 text-xs font-bold rounded-md transition-all",
+                    activeTab === "history"
+                      ? "bg-white shadow text-gray-900"
+                      : "text-gray-500 hover:text-gray-700",
+                  )}
+                >
+                  History
+                </button>
+              </div>
+
+              <div className="space-y-4 flex-1 overflow-y-auto max-h-[600px] pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+                {[
+                  {
+                    title: "Group Therapy",
+                    subtitle: "Dr. Francis Nkrumah",
+                    date: "Jan 3rd, 2026",
+                    type: "Therapy",
+                    icon: Users,
+                  },
+                  {
+                    title: "CBT Session",
+                    subtitle: "Dr. James Nuamah",
+                    date: "Dec 20th, 2025",
+                    type: "Therapy",
+                    icon: Brain,
+                  },
+                  {
+                    title: "Clinical Eval",
+                    subtitle: "Dr. Francis Nkrumah",
+                    date: "Jan 3rd, 2026",
+                    type: "Evaluation",
+                    icon: Activity,
+                  },
+                ].map((action, i) => (
+                  <div
+                    key={i}
+                    className="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-[#955aa4] group-hover:bg-[#955aa4] group-hover:text-white transition-colors">
+                      <action.icon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-bold text-gray-900">
+                        {action.title}
+                      </h4>
+                      <p className="text-xs text-gray-500">{action.subtitle}</p>
+                      <div className="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+                        <Clock className="w-3 h-3" />{" "}
+                        <p className="pt-0.5">{action.date}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end justify-between">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    </div>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+
+              <button className="sm:relative sm:-bottom-20 mt-6 w-full py-3 rounded-xl bg-[#955aa4] text-white font-bold text-sm hover:bg-[#864e94] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-purple-200">
+                <Plus className="w-4 h-4" /> Add Action
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Right side sidebar - REMOVED LEFT BORDER & INCREASED SIZES */}
-      <aside className="w-full xl:w-4/10 bg-white xl:h-full p-6 py-8 pb-0 flex flex-col border-t xl:border-t-0 border-black">
-        {/* Action/History Toggle */}
-        <div className="flex gap-3 mb-8 justify-center">
-          <button className="bg-[#2bb573] text-white font-bold py-3 px-8 rounded-full text-xl">
-            Action
-          </button>
-          <button className="bg-gray-400 text-white font-bold py-3 px-8 rounded-full text-xl">
-            History
-          </button>
-        </div>
-
-        {/* Actions List - SIGNIFICANTLY INCREASED SIZES */}
-        <div
-          className="flex-1 overflow-y-auto overflow-x-hidden space-y-6 scrollbar-hide px-6"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          <style jsx>{`
-            div::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
-          {/* Group Therapy */}
-          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
-            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
-              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
-                <svg
-                  className="w-full h-full text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
-              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
-                <span className="text-2xl">👥</span> Group Therapy
-              </p>
-              <p className="text-lg text-gray-600">
-                Jan 3rd, 2026. (Virtual - 2pm)
-              </p>
-            </div>
-          </div>
-
-          {/* Cognitive Behavioral Therapy */}
-          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
-            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
-              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
-                <svg
-                  className="w-full h-full text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-2xl mb-1">Dr. James Nuamah</h3>
-              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
-                <span className="text-2xl">💡</span> Cognitive Behavioral
-                Therapy
-              </p>
-              <p className="text-lg text-gray-600">
-                Dec 20th, 2025. (In-Person - 4pm)
-              </p>
-            </div>
-            <div className="text-[#2bb573] text-3xl">✓</div>
-          </div>
-
-          {/* Clinical Evaluation */}
-          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
-            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
-              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
-                <svg
-                  className="w-full h-full text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
-              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
-                <span className="text-2xl">🔍</span> Clinical Evaluation
-              </p>
-              <p className="text-lg text-gray-600">
-                Jan 3rd, 2026. (Virtual - 2pm)
-              </p>
-            </div>
-            <div className="text-[#2bb573] text-3xl">✓</div>
-          </div>
-
-          {/* Crisis Management */}
-          <div className="flex items-start gap-5 pb-6 border-b-2 border-gray-200">
-            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
-              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
-                <svg
-                  className="w-full h-full text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
-              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
-                <span className="text-2xl">🚨</span> Crisis Management
-              </p>
-              <p className="text-lg text-gray-600">
-                Jan 3rd, 2026. (Virtual - 2pm)
-              </p>
-            </div>
-            <div className="text-[#2bb573] text-3xl">✓</div>
-          </div>
-
-          {/* Additional action item */}
-          <div className="flex items-start gap-5 pb-6">
-            <div className="w-24 h-24 rounded-full border-4 border-gray-400 flex-shrink-0 p-1">
-              <div className="w-full h-full rounded-full bg-gray-300 overflow-hidden">
-                <svg
-                  className="w-full h-full text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-2xl mb-1">Dr. Francis Nkrumah</h3>
-              <p className="text-[#2bb573] font-semibold text-xl flex items-center gap-2 mb-1">
-                <span className="text-2xl">💬</span> Follow-up Session
-              </p>
-              <p className="text-lg text-gray-600">
-                Jan 3rd, 2026. (Virtual - 2pm)
-              </p>
-            </div>
-            <div className="text-[#2bb573] text-3xl">✓</div>
-          </div>
-        </div>
-
-        {/* Add Action Button - Full width, no margins */}
-        <button className="w-auto px-12 mx-auto mb-5 bg-[#ff3333] hover:bg-[#e62e2e] text-white font-bold py-5 text-2xl flex items-center justify-center gap-3 rounded-full transition-colors">
-          Add Action
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <svg
-              className="w-6 h-6 text-[#ff3333]"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </div>
-        </button>
-      </aside>
+      </main>
     </div>
   );
 }
