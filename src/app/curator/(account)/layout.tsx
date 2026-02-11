@@ -15,6 +15,7 @@ import SchoolCreationModal from "@/components/modals/school-creation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { performLogout } from "@/lib/auth-utils";
+import { hasValidToken } from "@/lib/utils/getUserType";
 
 export default function DashboardLayout({
   children,
@@ -30,9 +31,7 @@ export default function DashboardLayout({
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      const refreshToken = localStorage.getItem("refreshToken");
-
-      if (!refreshToken) {
+      if (!hasValidToken()) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;
@@ -47,8 +46,12 @@ export default function DashboardLayout({
   const [showPartnerModal, setShowPartnerModal] = useState(false);
   const [showReachModal, setShowReachModal] = useState(false);
 
-  const { schools, isLoading: schoolsLoading } = useSchools();
-  const { providers, isLoading: providersLoading } = useProvidersQuery();
+  const { schools, isLoading: schoolsLoading } = useSchools({
+    enabled: isAuthenticated === true,
+  });
+  const { providers, isLoading: providersLoading } = useProvidersQuery({
+    enabled: isAuthenticated === true,
+  });
   const [partnerCount, setPartnerCount] = useState(0);
 
   useEffect(() => {
@@ -102,92 +105,6 @@ export default function DashboardLayout({
     return null;
   }
 
-  // Layout for school details page (no sidebar)
-  if (isSchoolDetailPage || isPatientDetailPage) {
-    return (
-      <div className="h-screen bg-white">
-        <div className="h-full overflow-y-auto bg-gray-50">{children}</div>
-
-        {showCreateModal && (
-          <CreateModal
-            setShowCreateModal={setShowCreateModal}
-            onOpenSchoolModal={() => {
-              setShowCreateModal(false);
-              setShowSchoolModal(true);
-            }}
-            onOpenMemberModal={() => {
-              setShowCreateModal(false);
-              setShowMemberModal(true);
-            }}
-            onOpenPartnerModal={() => {
-              setShowCreateModal(false);
-              setShowPartnerModal(true);
-            }}
-            onOpenReachModal={() => {
-              setShowCreateModal(false);
-              setShowReachModal(true);
-            }}
-          />
-        )}
-
-        <SchoolCreationModal
-          isOpen={showSchoolModal}
-          onClose={() => {
-            setShowSchoolModal(false);
-            setShowCreateModal(true);
-          }}
-          onSchoolCreated={() => {
-            setShowSchoolModal(false);
-            setShowCreateModal(true);
-          }}
-        />
-
-        <MemberCreationModal
-          isOpen={showMemberModal}
-          onClose={() => {
-            setShowMemberModal(false);
-            setShowCreateModal(true);
-          }}
-          onMemberCreated={(member) => {
-            setShowMemberModal(false);
-            setShowCreateModal(true);
-          }}
-        />
-
-        <PartnerCreationModal
-          isOpen={showPartnerModal}
-          onClose={() => {
-            setShowPartnerModal(false);
-            setShowCreateModal(true);
-          }}
-          onPartnerCreated={async (partner) => {
-            try {
-              const response = await api(ENDPOINTS.partners);
-              if (response?.success && response.data) {
-                const partnersList = Array.isArray(response.data)
-                  ? response.data
-                  : [];
-                setPartnerCount(partnersList.length);
-              }
-            } catch (error) {
-              // Note: Background data loading error, badge count may be stale
-            }
-            setShowPartnerModal(false);
-            setShowCreateModal(true);
-          }}
-        />
-
-        <ReachModal
-          isOpen={showReachModal}
-          onClose={() => {
-            setShowReachModal(false);
-            setShowCreateModal(true);
-          }}
-        />
-      </div>
-    );
-  }
-
   // Default layout with sidebar
   return (
     <div className="h-screen bg-white flex">
@@ -198,7 +115,7 @@ export default function DashboardLayout({
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
-      <div className="flex-1 overflow-y-auto bg-gray-50 pt-16 md:pt-0">
+      <div className="flex-1 overflow-y-auto bg-gray-50 pt-14 md:pt-0">
         {children}
       </div>
 

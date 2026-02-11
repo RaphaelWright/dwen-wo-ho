@@ -7,39 +7,41 @@ const SCHOOLS_QUERY_KEY = "schools";
 
 const getSchools = async (): Promise<School[]> => {
   const result = await api("/api/v1/schools");
-  
+
   if (result?.success && Array.isArray(result.data)) {
     return result.data;
   }
-  
+
   if (Array.isArray(result)) {
     return result;
   }
-  
+
   return [];
 };
 
 const getSchool = async (schoolId: string): Promise<School> => {
   const result = await api(`/api/v1/schools/${schoolId}`);
-  
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to fetch school");
 };
 
 const disableSchool = async (schoolId: string): Promise<School> => {
-  const result = await api(`/api/v1/schools/${schoolId}/disable`, { method: "PUT" });
-  
+  const result = await api(`/api/v1/schools/${schoolId}/disable`, {
+    method: "PUT",
+  });
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to disable school");
 };
 
-export const useSchools = () => {
+export const useSchools = (options?: { enabled?: boolean }) => {
   const queryClient = useQueryClient();
 
   const schoolsQuery = useQuery({
@@ -47,6 +49,7 @@ export const useSchools = () => {
     queryFn: getSchools,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
   });
 
   // Get single school

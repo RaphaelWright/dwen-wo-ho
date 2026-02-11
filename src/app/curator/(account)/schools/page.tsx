@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import Image from "next/image";
@@ -9,9 +15,13 @@ import { School } from "@/types/school";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
-import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSchools, setLoading, updateSchool } from "@/store/slices/curatorSchoolsSlice";
+import {
+  setSchools,
+  setLoading,
+  updateSchool,
+} from "@/store/slices/curatorSchoolsSlice";
+import { useNotification } from "@/context/notification-context";
 import {
   processBatch,
   getSchoolLockInCount,
@@ -73,154 +83,179 @@ export default function SchoolsPage() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient(); // ✅ Call hook at component level
   const { schools: cachedSchools, isLoading: reduxLoading } = useAppSelector(
-    (state) => state.curatorSchools
+    (state) => state.curatorSchools,
   );
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: allSchools = [], isLoading: schoolsLoading, isError, refetch: refetchSchools, forceRefetch } = useSchoolsWithRefetch();
+  const { addNotification } = useNotification();
+  const {
+    data: allSchools = [],
+    isLoading: schoolsLoading,
+    isError,
+    refetch: refetchSchools,
+    forceRefetch,
+  } = useSchoolsWithRefetch();
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
   const isInitialLoadRef = useRef(true);
   const abortControllerRef = useRef<AbortController | null>(null);
   const lastPollRef = useRef<number>(0);
 
   // Fetch data for a single school with optimized API calls
-  const fetchSchoolData = useCallback(async (
-    school: School,
-    isBackground: boolean = false
-  ): Promise<SchoolWithExtras> => {
-    const schoolData: SchoolWithExtras = { ...school, isLoading: true };
+  const fetchSchoolData = useCallback(
+    async (
+      school: School,
+      isBackground: boolean = false,
+    ): Promise<SchoolWithExtras> => {
+      const schoolData: SchoolWithExtras = { ...school, isLoading: true };
 
-    try {
-      // Check for new patients first during background updates
-      let forceRefresh = false;
-      if (!isInitialLoadRef.current && isBackground) {
-        const prevSchool = previousSchoolsRef.current.get(Number(school.id));
+      try {
+        // Check for new patients first during background updates
+        let forceRefresh = false;
+        if (!isInitialLoadRef.current && isBackground) {
+          const prevSchool = previousSchoolsRef.current.get(Number(school.id));
 
-        if (prevSchool?.newPatientName) {
-          // Check for new patients using the API
-          const latestCheck = await getLatestPatientResult(school.id, true); // Skip cache
+          if (prevSchool?.newPatientName) {
+            // Check for new patients using the API
+            const latestCheck = await getLatestPatientResult(school.id, true); // Skip cache
 
-          if (latestCheck && latestCheck.patientName !== prevSchool.newPatientName) {
-            // console.log('🔔 NEW LOCK-IN DETECTED:', {
-            //   schoolId: school.id,
-            //   schoolName: school.name,
-            //   previousPatient: prevSchool.newPatientName,
-            //   newPatient: latestCheck.patientName,
-            //   previousDate: prevSchool.latestLockInDate,
-            //   newDate: latestCheck.createdAt,
-            //   timestamp: new Date().toISOString(),
-            // });
-            toast.success(`New patient: ${latestCheck.patientName} at ${school.name}`);
-            forceRefresh = true; // Force cache refresh to get updated counts
+            if (
+              latestCheck &&
+              latestCheck.patientName !== prevSchool.newPatientName
+            ) {
+              // console.log('🔔 NEW LOCK-IN DETECTED:', {
+              //   schoolId: school.id,
+              //   schoolName: school.name,
+              //   previousPatient: prevSchool.newPatientName,
+              //   newPatient: latestCheck.patientName,
+              //   previousDate: prevSchool.latestLockInDate,
+              //   newDate: latestCheck.createdAt,
+              //   timestamp: new Date().toISOString(),
+              // });
+              addNotification(
+                "success",
+                `New patient: ${latestCheck.patientName} at ${school.name}`,
+              );
+              forceRefresh = true; // Force cache refresh to get updated counts
 
-            // Invalidate React Query cache and refetch all schools from backend
-            // console.log('🔄 INVALIDATING CACHE AND REFETCHING ALL SCHOOLS FROM BACKEND...');
-            await queryClient.invalidateQueries({ queryKey: ['schools'] }); // ✅ Use queryClient from component scope
-            await forceRefetch();
+              // Invalidate React Query cache and refetch all schools from backend
+              // console.log('🔄 INVALIDATING CACHE AND REFETCHING ALL SCHOOLS FROM BACKEND...');
+              await queryClient.invalidateQueries({ queryKey: ["schools"] }); // ✅ Use queryClient from component scope
+              await forceRefetch();
+            }
           }
         }
+
+        // Parallel fetch of lock-in count and latest patient (skip cache if new patient detected)
+        const [studentCount, latestPatient] = await Promise.all([
+          forceRefresh
+            ? getSchoolLockInCount(school.id, true) // Force fresh data
+            : getSchoolLockInCount(school.id),
+          forceRefresh
+            ? getLatestPatientResult(school.id, true) // Force fresh data
+            : getLatestPatientResult(school.id),
+        ]);
+
+        schoolData.studentCount = studentCount;
+
+        if (latestPatient) {
+          schoolData.latestLockInDate = latestPatient.createdAt;
+          schoolData.newPatientName = latestPatient.patientName;
+        }
+
+        // Log all the complete school data when new data is fetched after detecting a new lock-in
+        if (forceRefresh) {
+          // console.log('📊 NEW DATA FETCHED AFTER LOCK-IN - Complete School Data:', {
+          //   ...schoolData,
+          //   previousData: previousSchoolsRef.current.get(Number(school.id)),
+          //   timestamp: new Date().toISOString(),
+          // });
+        }
+      } catch (error) {
+        console.error(`Error fetching data for school ${school.id}:`, error);
       }
 
-      // Parallel fetch of lock-in count and latest patient (skip cache if new patient detected)
-      const [studentCount, latestPatient] = await Promise.all([
-        forceRefresh
-          ? getSchoolLockInCount(school.id, true) // Force fresh data
-          : getSchoolLockInCount(school.id),
-        forceRefresh
-          ? getLatestPatientResult(school.id, true) // Force fresh data
-          : getLatestPatientResult(school.id),
-      ]);
-
-      schoolData.studentCount = studentCount;
-
-      if (latestPatient) {
-        schoolData.latestLockInDate = latestPatient.createdAt;
-        schoolData.newPatientName = latestPatient.patientName;
-      }
-
-      // Log all the complete school data when new data is fetched after detecting a new lock-in
-      if (forceRefresh) {
-        // console.log('📊 NEW DATA FETCHED AFTER LOCK-IN - Complete School Data:', {
-        //   ...schoolData,
-        //   previousData: previousSchoolsRef.current.get(Number(school.id)),
-        //   timestamp: new Date().toISOString(),
-        // });
-      }
-    } catch (error) {
-      console.error(`Error fetching data for school ${school.id}:`, error);
-    }
-
-    schoolData.isLoading = false;
-    return schoolData;
-  }, [queryClient, refetchSchools]); // ✅ Add dependencies
-
-
+      schoolData.isLoading = false;
+      return schoolData;
+    },
+    [queryClient, refetchSchools, addNotification],
+  ); // ✅ Add dependencies
 
   // Load schools with incremental updates and batching
-  const loadSchoolsWithData = useCallback(async (isBackground = false) => {
-    if (allSchools.length === 0) return;
+  const loadSchoolsWithData = useCallback(
+    async (isBackground = false) => {
+      if (allSchools.length === 0) return;
 
-    // Cancel any ongoing requests
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    abortControllerRef.current = new AbortController();
+      // Cancel any ongoing requests
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
 
-    if (!isBackground) {
-      dispatch(setLoading(true));
-    }
+      if (!isBackground) {
+        dispatch(setLoading(true));
+      }
 
-    const currentSchoolIds = new Set(allSchools.map((s: School) => Number(s.id)));
-
-    // Check for removed/added schools
-    if (!isInitialLoadRef.current && isBackground && previousSchoolsRef.current.size > 0) {
-      previousSchoolsRef.current.forEach((prevSchool, id) => {
-        if (!currentSchoolIds.has(id)) {
-          toast.error(`${prevSchool.name} is no longer available`);
-        }
-      });
-
-      allSchools.forEach((newSchool: School) => {
-        if (!previousSchoolsRef.current.has(Number(newSchool.id))) {
-          toast.success(`New school added: ${newSchool.name}`);
-        }
-      });
-    }
-
-    try {
-      // Process schools in batches with incremental updates
-      const enrichedSchools = await processBatch(
-        allSchools,
-        BATCH_SIZE,
-        async (school: School, index: number) => {
-          const schoolData = await fetchSchoolData(school, isBackground);
-
-          // Update cache map immediately
-          previousSchoolsRef.current.set(Number(school.id), schoolData);
-
-          // Update individual school in Redux for real-time card updates
-          dispatch(updateSchool({ id: school.id, data: schoolData }));
-
-          return schoolData;
-        }
+      const currentSchoolIds = new Set(
+        allSchools.map((s: School) => Number(s.id)),
       );
 
-      // Final update with complete data in backend order
-      dispatch(setSchools(enrichedSchools));
+      // Check for removed/added schools
+      if (
+        !isInitialLoadRef.current &&
+        isBackground &&
+        previousSchoolsRef.current.size > 0
+      ) {
+        previousSchoolsRef.current.forEach((prevSchool, id) => {
+          if (!currentSchoolIds.has(id)) {
+            addNotification(
+              "error",
+              `${prevSchool.name} is no longer available`,
+            );
+          }
+        });
 
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        return;
+        allSchools.forEach((newSchool: School) => {
+          if (!previousSchoolsRef.current.has(Number(newSchool.id))) {
+            addNotification("success", `New school added: ${newSchool.name}`);
+          }
+        });
       }
-      console.error("Error loading schools:", error);
-      toast.error("Failed to load some school data");
-    } finally {
-      if (!isBackground) {
-        dispatch(setLoading(false));
+
+      try {
+        // Process schools in batches with incremental updates
+        const enrichedSchools = await processBatch(
+          allSchools,
+          BATCH_SIZE,
+          async (school: School, index: number) => {
+            const schoolData = await fetchSchoolData(school, isBackground);
+
+            // Update cache map immediately
+            previousSchoolsRef.current.set(Number(school.id), schoolData);
+
+            // Update individual school in Redux for real-time card updates
+            dispatch(updateSchool({ id: school.id, data: schoolData }));
+
+            return schoolData;
+          },
+        );
+
+        // Final update with complete data in backend order
+        dispatch(setSchools(enrichedSchools));
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+        console.error("Error loading schools:", error);
+        addNotification("error", "Failed to load some school data");
+      } finally {
+        if (!isBackground) {
+          dispatch(setLoading(false));
+        }
+        isInitialLoadRef.current = false;
       }
-      isInitialLoadRef.current = false;
-    }
-  }, [allSchools, dispatch, fetchSchoolData]);
+    },
+    [allSchools, dispatch, fetchSchoolData, addNotification],
+  );
 
   // Initial load
   useEffect(() => {
@@ -292,7 +327,7 @@ export default function SchoolsPage() {
         const nicknameMatch = school.nickname?.toLowerCase().includes(query);
         const typeMatch = school.type?.toLowerCase().includes(query);
         const campusesMatch = school.campuses?.some((campus) =>
-          String(campus).toLowerCase().includes(query)
+          String(campus).toLowerCase().includes(query),
         );
         return nameMatch || nicknameMatch || typeMatch || campusesMatch;
       });
@@ -323,8 +358,12 @@ export default function SchoolsPage() {
       <div className="p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Schools</h1>
-          <p className="text-gray-600">Manage and view all registered educational institutions</p>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Schools</h1>
+            <p className="text-gray-600">
+              Manage and view all registered educational institutions
+            </p>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -349,10 +388,11 @@ export default function SchoolsPage() {
             <button
               key={filter.value}
               onClick={() => setActiveFilter(filter.value)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeFilter === filter.value
-                ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-                }`}
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                activeFilter === filter.value
+                  ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
+                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+              }`}
             >
               {filter.label}
             </button>
@@ -384,8 +424,12 @@ export default function SchoolsPage() {
             {schoolsList.map((school) => {
               const firstCampus = getFirstCampus(school.campuses);
               const displayNickname = school.nickname
-                ? (firstCampus ? `${school.nickname} (${firstCampus})` : school.nickname)
-                : (firstCampus ? `(${firstCampus})` : "");
+                ? firstCampus
+                  ? `${school.nickname} (${firstCampus})`
+                  : school.nickname
+                : firstCampus
+                  ? `(${firstCampus})`
+                  : "";
 
               return (
                 <Link
@@ -424,7 +468,9 @@ export default function SchoolsPage() {
                     <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-[240px]">
                       <span className="text-base font-semibold block truncate">
                         <span className="text-[#e92229]">New Patient.</span>{" "}
-                        <span className="text-black">{school.newPatientName}</span>
+                        <span className="text-black">
+                          {school.newPatientName}
+                        </span>
                       </span>
                     </div>
                   )}
