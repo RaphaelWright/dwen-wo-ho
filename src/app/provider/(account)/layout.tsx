@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { performLogout } from "@/lib/auth-utils";
+import { hasValidToken } from "@/lib/utils/getUserType";
 
 export default function ProviderLayout({
   children,
@@ -19,7 +20,7 @@ export default function ProviderLayout({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
   const [schoolCount, setSchoolCount] = useState(0);
-  
+
   const { getProfileQuery } = useUserQuery({
     enabled: mounted,
   });
@@ -27,14 +28,12 @@ export default function ProviderLayout({
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      const refreshToken = localStorage.getItem("refreshToken");
-      
-      if (!refreshToken) {
+      if (!hasValidToken()) {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;
       }
-      
+
       setIsAuthenticated(true);
     }
   }, [router]);
@@ -97,9 +96,7 @@ export default function ProviderLayout({
   if (isSchoolDetailPage || isPatientDetailPage) {
     return (
       <div className="h-screen bg-white">
-        <div className="h-full overflow-y-auto bg-gray-50">
-          {children}
-        </div>
+        <div className="h-full overflow-y-auto bg-gray-50">{children}</div>
       </div>
     );
   }
@@ -107,10 +104,7 @@ export default function ProviderLayout({
   // Show sidebar and content when approved
   return (
     <div className="h-screen bg-white flex">
-      <ProviderSidebar
-        schoolCount={schoolCount}
-        onLogout={handleLogout}
-      />
+      <ProviderSidebar schoolCount={schoolCount} onLogout={handleLogout} />
       <div className="flex-1 overflow-y-auto bg-gray-50 pt-16 md:pt-0">
         {children}
       </div>

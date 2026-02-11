@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JustGo Health Provider Approval</title>
+    <title>JustGo Health Provider Rejection</title>
     <style type="text/css">
       body,
       table,
@@ -124,7 +124,7 @@
                     <td
                       width="12"
                       style="
-                        background-color: #22c55e;
+                        background-color: red;
                         width: 12px;
                         border-top-left-radius: 12px;
                         border-bottom-left-radius: 12px;
@@ -133,7 +133,7 @@
                     <!-- Content -->
                     <td
                       style="
-                        background-color: #dcfce7;
+                        background-color: rgb(243, 211, 211);
                         padding: 40px 20px;
                         text-align: center;
                         border-top-right-radius: 12px;
@@ -148,21 +148,20 @@
                         style="margin: 0 auto"
                       >
                         <tr>
-                          <td
-                            style="padding-right: 15px; vertical-align: middle"
-                          >
+                          <td style="vertical-align: middle">
                             <span
                               style="
                                 display: inline-block;
-                                width: 40px;
-                                height: 40px;
-                                line-height: 40px;
+                                width: 55px;
+                                height: 55px;
+                                line-height: 55px;
                                 text-align: center;
-                                font-size: 40px;
+                                font-size: 55px;
                                 font-weight: 900;
-                                color: #374151;
+                                color: rgb(245, 62, 62);
+                                margin-top: -11px;
                               "
-                              >&#x2714;</span
+                              >&times</span
                             >
                           </td>
                           <td style="vertical-align: middle">
@@ -190,16 +189,13 @@
             <!-- Main Content -->
             <tr>
               <td style="padding-bottom: 25px">
-                <h2
-                  style="
-                    margin: 0 0 15px 0;
-                    font-size: 20px;
-                    font-weight: 700;
-                    color: #111827;
-                  "
-                >
-                  Congratulations, {{NAME}}!
-                </h2>
+                <p style="margin: 0 0 15px 0; font-size: large;">
+                  Sorry,
+                  <span
+                    style="font-size: 20px; font-weight: 700; color: #111827"
+                    >{{NAME}}</span
+                  >
+                </>
                 <p
                   style="
                     margin: 0;
@@ -208,9 +204,9 @@
                     color: #374151;
                   "
                 >
-                  You have successfully joined JustGo Health as a
-                  <strong>Provider ({{SPECIALTY}})</strong>. We're happy to have
-                  you on board.
+                  Your application to join JustGO Health as a
+                  <strong>Provider ({{SPECIALTY}})</strong>.was not approved at this
+                  time. You may review your application and make necessary updates.
                 </p>
               </td>
             </tr>
@@ -241,7 +237,7 @@
                           background-color: #955aa4;
                           border: 1px solid #955aa4;
                         "
-                        >Open Profile
+                        >Review Application
                         <img
                           src="https://dwen-wo-ho-nine.vercel.app/arrow-diagonal-white.svg"
                           alt=""

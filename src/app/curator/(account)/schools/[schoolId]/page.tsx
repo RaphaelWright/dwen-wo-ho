@@ -7,8 +7,16 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ROUTES } from "@/constants/routes";
 import { School } from "@/types/school";
-import { Search, Users, Pencil, Ban, Lock } from "lucide-react";
-import { MdSchool } from "react-icons/md";
+import {
+  Search,
+  Users,
+  Pencil,
+  Ban,
+  Lock,
+  Star,
+  Stethoscope,
+} from "lucide-react";
+import { MdSchool, MdHealthAndSafety } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
@@ -26,6 +34,8 @@ import {
 import { timeAgo } from "@/lib/utils/timeAgo";
 import { ProviderDetails } from "@/types/provider";
 import JustGoHealth from "@/components/logo-purple";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 // Add custom CSS for hiding scrollbar
 if (typeof document !== "undefined") {
@@ -432,380 +442,509 @@ export default function SchoolDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf9f7]">
-      <div className="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
-        {/* Background logo - very low opacity watermark */}
-        {school.logo && (
-          <div
-            className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.04]"
-            aria-hidden
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Image
-                src={school.logo}
-                alt=""
-                width={720}
-                height={720}
-                className="object-contain w-[360px] h-[360px] md:w-[540px] md:h-[540px] lg:w-[720px] lg:h-[720px]"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Main content - centered with margins */}
-        <div className="flex-1 min-w-0 flex flex-col px-3 py-3 sm:px-5 sm:py-5 lg:px-10 lg:py-6 xl:px-14 relative z-10 max-w-7xl mx-auto w-full">
-          {/* Header */}
-          <div className="relative flex items-start gap-3 sm:gap-5 lg:gap-8 mb-5 lg:mb-8">
-            {/* Logo - clickable to edit */}
-            <div
-              onClick={() => setShowEditModal(true)}
-              className="group cursor-pointer flex-shrink-0"
-            >
-              {school.logo ? (
-                <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 xl:w-40 xl:h-40 rounded-lg lg:rounded-xl overflow-hidden border-2 border-gray-300 bg-white group-hover:border-[#955aa4] transition-all">
-                  <Image
-                    src={school.logo}
-                    alt={school.name}
-                    width={160}
-                    height={160}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 xl:w-40 xl:h-40 rounded-lg lg:rounded-xl bg-gray-200 flex items-center justify-center border-2 border-gray-300 group-hover:border-[#955aa4] transition-all">
-                  <MdSchool className="text-3xl sm:text-5xl lg:text-7xl xl:text-8xl text-gray-400" />
-                </div>
-              )}
+    <div className="min-h-screen flex flex-col bg-gray-50/50">
+      <div className="flex-1 flex flex-col lg:flex-row items-start relative">
+        {/* Main content */}
+        <div className="flex-1 min-w-0 flex flex-col px-4 py-6 sm:px-6 lg:px-8 xl:px-10 relative z-10 max-w-7xl mx-auto w-full">
+          {/* Header Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <MdSchool className="text-9xl text-[#955aa4]" />
             </div>
 
-            {/* School Info and Search */}
-            <div className="min-w-0 flex-1 pt-0 sm:pt-1 lg:pt-1.5">
-              {/* School Name - clickable to edit */}
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+              {/* Logo */}
               <div
                 onClick={() => setShowEditModal(true)}
-                className="group cursor-pointer inline-block"
+                className="cursor-pointer relative"
               >
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-0.5 sm:mb-1 group-hover:text-[#955aa4] transition-colors line-clamp-2">
-                  {school.name}
-                </h1>
-                {campusLabel && (
-                  <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-500 mt-1">
-                    📍 {campusLabel}
-                  </p>
-                )}
-              </div>
-
-              {/* Nickname, Motto, and Search in same row */}
-              <div className="flex items-start gap-2 sm:gap-3 mt-1 sm:mt-1.5">
-                <div className="min-w-0 flex-1">
-                  {school.nickname && (
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 line-clamp-1">
-                      {school.nickname}
-                    </p>
-                  )}
-                  {school.motto && (
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 italic mt-0.5 line-clamp-2">
-                      {school.motto}
-                    </p>
-                  )}
-                </div>
-
-                {/* Search Input - self-expandable */}
-                <div className="flex-shrink-0">
-                  <div
-                    className={`relative transition-all duration-300 ease-in-out ${
-                      isSearchOpen ? "w-56 sm:w-72 md:w-80" : "w-28 sm:w-32"
-                    }`}
-                  >
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onClick={() => {
-                        if (!isSearchOpen) {
-                          setIsSearchOpen(true);
-                        }
-                      }}
-                      onBlur={() => {
-                        setTimeout(() => {
-                          if (!searchQuery) {
-                            setIsSearchOpen(false);
-                          }
-                        }, 150);
-                      }}
-                      placeholder="Search"
-                      className="w-full py-1.5 sm:py-2 lg:py-2.5 pl-3 sm:pl-4 pr-8 sm:pr-10 rounded-full border-2 border-gray-300 bg-gray-100 shadow-sm focus:shadow-md focus:outline-none focus:border-gray-400 text-gray-900 placeholder-gray-400 text-sm sm:text-base lg:text-base transition-all duration-300 cursor-pointer hover:border-gray-400"
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border-4 border-white shadow-lg bg-white group-hover:shadow-xl transition-all duration-300">
+                  {school.logo ? (
+                    <Image
+                      src={school.logo}
+                      alt={school.name}
+                      fill
+                      className="object-cover"
                     />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSearchQuery("");
-                        setIsSearchOpen(false);
-                      }}
-                      className={`absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 ${
-                        isSearchOpen
-                          ? "pointer-events-auto"
-                          : "pointer-events-none"
-                      }`}
-                    >
-                      {isSearchOpen ? (
-                        <span className="text-gray-400 hover:text-gray-600 text-lg sm:text-xl">
-                          ×
-                        </span>
-                      ) : (
-                        <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" />
-                      )}
-                    </button>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-300">
+                      <MdSchool className="text-5xl" />
+                    </div>
+                  )}
+
+                  {/* Edit Overlay */}
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
+                    <Pencil className="text-white w-6 h-6" />
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Tabs - centered */}
-          <div className="flex gap-2 sm:gap-3 lg:gap-4 mb-5 sm:mb-6 lg:mb-8 overflow-x-auto pb-2 scrollbar-hide justify-center">
-            <button
-              onClick={() => setActiveTab("patients")}
-              className={`px-5 sm:px-7 lg:px-10 py-2.5 sm:py-3 lg:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all whitespace-nowrap ${
-                activeTab === "patients"
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              {patients.length} Patients
-            </button>
-            <button
-              onClick={() => setActiveTab("icons")}
-              className={`px-5 sm:px-7 lg:px-10 py-2.5 sm:py-3 lg:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all whitespace-nowrap ${
-                activeTab === "icons"
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              {schoolIcons.length} Icons
-            </button>
-            <button
-              onClick={() => setActiveTab("providers")}
-              className={`px-5 sm:px-7 lg:px-10 py-2.5 sm:py-3 lg:py-4 rounded-full text-sm sm:text-base lg:text-lg font-semibold transition-all whitespace-nowrap ${
-                activeTab === "providers"
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              {providers.length} Providers
-            </button>
-          </div>
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div
+                  onClick={() => setShowEditModal(true)}
+                  className="cursor-pointer group/title"
+                >
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight group-hover/title:text-[#955aa4] transition-colors">
+                    {school.name}
+                  </h1>
+                  {campusLabel && (
+                    <div className="flex items-center gap-2 text-gray-500 mt-2 text-sm font-medium">
+                      <span className="bg-gray-100 px-2 py-0.5 rounded text-xs uppercase tracking-wider text-gray-600">
+                        Campus
+                      </span>
+                      {campusLabel}
+                    </div>
+                  )}
+                </div>
 
-          {/* Tab content */}
-          {activeTab === "patients" && (
-            <div className="divide-y divide-black">
-              {patientsLoading ? (
-                <div className="flex items-center justify-center py-6 sm:py-10">
-                  <div className="animate-spin rounded-full h-9 w-9 sm:h-10 sm:w-10 border-b-2 border-[#955aa4]" />
-                </div>
-              ) : filteredPatients.length === 0 ? (
-                <div className="text-center py-6 sm:py-10 text-gray-500">
-                  <Users className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 text-gray-300" />
-                  <p className="text-sm sm:text-base">
-                    No patients for this school
-                  </p>
-                </div>
-              ) : (
-                filteredPatients.map((patient) => (
-                  <div
-                    key={patient.id}
-                    className="flex items-center gap-3 sm:gap-5 lg:gap-6 py-3 sm:py-5 lg:py-6"
-                  >
-                    {/* Lock-in score */}
-                    <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-lg sm:rounded-xl bg-black flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold text-2xl sm:text-3xl lg:text-4xl">
-                        {patient.lockinScore != null
-                          ? patient.lockinScore.toFixed(1)
-                          : "–"}
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-sm text-gray-600">
+                  {school.nickname && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#955aa4]" />
+                      <span className="font-medium text-gray-900">
+                        {school.nickname}
                       </span>
                     </div>
-
-                    {/* Patient info - with left margin for spacing */}
-                    <div className="flex-1 min-w-0 ml-14 sm:ml-16 lg:ml-18">
-                      <p className="font-bold text-red-600 text-lg sm:text-xl lg:text-2xl xl:text-3xl mb-0.5 sm:mb-1.5">
-                        {patient.patientName}.{" "}
-                        {compactTimeAgo(patient.createdAt)}
-                      </p>
-                      <p className="text-sm sm:text-base lg:text-lg text-gray-600 line-clamp-2">
-                        {patient.comment ? `"${patient.comment}"` : "—"}
-                      </p>
+                  )}
+                  {school.motto && (
+                    <div className="italic text-gray-500 border-l border-gray-300 pl-4">
+                      "{school.motto}"
                     </div>
+                  )}
+                </div>
+              </div>
 
-                    {/* Action button */}
+              {/* Actions/Search */}
+              <div className="flex flex-col items-end gap-3 w-full md:w-auto mt-4 md:mt-0">
+                <div className="relative group/search w-full md:w-64">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within/search:text-[#955aa4] transition-colors" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search patients..."
+                    className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-transparent focus:bg-white focus:border-[#955aa4]/20 rounded-xl text-sm transition-all outline-none focus:ring-4 focus:ring-[#955aa4]/10"
+                  />
+                </div>
+                <div className="flex gap-4 mx-auto sm:mx-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDisableSchool}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-100"
+                  >
+                    <Ban className="w-4 h-4 mr-2" />
+                    Disable
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => setShowEditModal(true)}
+                    className="bg-white text-gray-700 border hover:bg-gray-50 shadow-sm"
+                  >
+                    <Pencil className="w-4 h-4 mr-2" />
+                    Edit Details
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats/Tabs Navigation */}
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+            <div className="flex w-full sm:w-auto p-1 bg-gray-100/80 rounded-xl">
+              {(["patients", "icons", "providers"] as const).map((tab) => {
+                const tabInfo = {
+                  patients: {
+                    label: "Patients",
+                    icon: Users,
+                    count: patients.length,
+                  },
+                  icons: {
+                    label: "Icons",
+                    icon: Star,
+                    count: schoolIcons.length,
+                  },
+                  providers: {
+                    label: "Providers",
+                    icon: Stethoscope,
+                    count: providers.length,
+                  },
+                }[tab];
+                const Icon = tabInfo.icon;
+
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={cn(
+                      "relative flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#955aa4]/20",
+                      activeTab === tab
+                        ? "text-[#955aa4]"
+                        : "text-gray-500 hover:text-gray-700",
+                    )}
+                  >
+                    {activeTab === tab && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-white rounded-lg shadow-sm"
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
+                      />
+                    )}
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <Icon className="w-4 h-4" />
+                      <span className="hidden sm:inline capitalize">
+                        {tabInfo.label}
+                      </span>
+                      <span
+                        className={cn(
+                          "px-2 py-0.5 rounded-full text-[10px] font-bold",
+                          activeTab === tab
+                            ? "bg-[#955aa4]/10 text-[#955aa4]"
+                            : "bg-gray-200 text-gray-600",
+                        )}
+                      >
+                        {tabInfo.count}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Context Actions based on Tab */}
+            <AnimatePresence mode="wait">
+              {activeTab === "icons" && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <Button
+                    onClick={() => {
+                      setEditingIcon(null);
+                      setShowAddIconModal(true);
+                    }}
+                    className="bg-[#955aa4] hover:bg-[#864e94] text-white shadow-md shadow-[#955aa4]/20 rounded-xl"
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    Add Icon
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Content Area */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 min-h-[400px] p-1">
+            {activeTab === "patients" && (
+              <div className="flex flex-col gap-3 p-4 sm:p-6">
+                {patientsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4]" />
+                  </div>
+                ) : filteredPatients.length === 0 ? (
+                  <div className="text-center py-12 text-gray-500">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Users className="w-8 h-8 text-gray-300" />
+                    </div>
+                    <p className="text-gray-900 font-medium">
+                      No patients found
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Try adjusting your search or add a new patient.
+                    </p>
+                  </div>
+                ) : (
+                  filteredPatients.map((patient) => {
+                    const isTreating =
+                      (patient.treatingProviders?.length ?? 0) > 0;
+                    const isSeen = patient.visibilityStatus === "SEEN";
+
+                    return (
+                      <motion.div
+                        key={patient.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="group bg-white rounded-xl border border-gray-100 p-4 sm:p-5 hover:shadow-md hover:border-[#955aa4]/30 transition-all duration-200 flex flex-col sm:flex-row gap-4 sm:items-center"
+                      >
+                        {/* Lock-in score Badge */}
+                        <div
+                          className={cn(
+                            "w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center flex-shrink-0 shadow-inner",
+                            patient.lockinScore != null
+                              ? "bg-gray-900 text-white"
+                              : "bg-gray-100 text-gray-400",
+                          )}
+                        >
+                          <span className="font-bold text-2xl sm:text-3xl">
+                            {patient.lockinScore != null
+                              ? patient.lockinScore.toFixed(1)
+                              : "–"}
+                          </span>
+                        </div>
+
+                        {/* Patient info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-bold text-gray-900 text-lg sm:text-xl group-hover:text-[#955aa4] transition-colors">
+                              {patient.patientName}
+                            </h3>
+                            <span className="text-xs font-medium text-gray-400 px-2 py-0.5 bg-gray-50 rounded-full border border-gray-100">
+                              {compactTimeAgo(patient.createdAt)} ago
+                            </span>
+                          </div>
+
+                          <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                            {patient.comment ? (
+                              <span className="italic">
+                                "{patient.comment}"
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 italic">
+                                No comments
+                              </span>
+                            )}
+                          </p>
+
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={cn(
+                                "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide",
+                                isTreating
+                                  ? "bg-purple-50 text-purple-700 border border-purple-100"
+                                  : isSeen
+                                    ? "bg-blue-50 text-blue-700 border border-blue-100"
+                                    : "bg-green-50 text-green-700 border border-green-100",
+                              )}
+                            >
+                              {isTreating
+                                ? "Treating"
+                                : isSeen
+                                  ? "Opened"
+                                  : "New"}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action button */}
+                        <Button
+                          onClick={() =>
+                            router.push(
+                              `/curator/schools/${schoolId}/patients/${patient.id}`,
+                            )
+                          }
+                          className={cn(
+                            "sm:self-center shrink-0 rounded-lg px-6 w-full sm:w-auto",
+                            isTreating || isSeen
+                              ? "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                              : "bg-black text-white hover:bg-gray-800",
+                          )}
+                        >
+                          {isTreating || isSeen ? "View Details" : "Open Case"}
+                        </Button>
+                      </motion.div>
+                    );
+                  })
+                )}
+              </div>
+            )}
+
+            {activeTab === "icons" && (
+              <div className="p-4 sm:p-6">
+                {schoolIcons.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
+                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                      <Users className="w-8 h-8 text-gray-300" />
+                    </div>
+                    <p className="text-gray-900 font-medium mb-1">
+                      No icons added yet
+                    </p>
+                    <p className="text-sm text-gray-500 mb-6">
+                      Add icons to highlight school features.
+                    </p>
                     <Button
-                      onClick={() =>
-                        router.push(
-                          `/curator/schools/${schoolId}/patients/${patient.id}`,
-                        )
-                      }
-                      className={`flex-shrink-0 rounded-full px-5 sm:px-7 lg:px-9 py-2.5 sm:py-3 lg:py-4 font-medium text-sm sm:text-base lg:text-lg ${
-                        (patient.treatingProviders?.length ?? 0) > 0
-                          ? "bg-gray-400 text-white hover:bg-gray-500"
-                          : patient.visibilityStatus === "SEEN"
-                            ? "bg-gray-400 text-white hover:bg-gray-500"
-                            : "bg-black text-white hover:bg-gray-800"
-                      }`}
+                      onClick={() => {
+                        setEditingIcon(null);
+                        setShowAddIconModal(true);
+                      }}
+                      className="bg-black text-white hover:bg-gray-800 rounded-lg px-6"
                     >
-                      {(patient.treatingProviders?.length ?? 0) > 0
-                        ? "Treating"
-                        : patient.visibilityStatus === "SEEN"
-                          ? "Opened"
-                          : "Open >"}
+                      + Add First Icon
                     </Button>
                   </div>
-                ))
-              )}
-            </div>
-          )}
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {schoolIcons
+                      .sort((a, b) => a.rank - b.rank)
+                      .map((icon) => (
+                        <motion.button
+                          layout
+                          key={icon.id}
+                          onClick={() => {
+                            setEditingIcon(icon);
+                            setShowAddIconModal(true);
+                          }}
+                          className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white text-left transition-all hover:border-[#955aa4]/50 hover:shadow-lg"
+                        >
+                          <div className="aspect-[4/3] relative bg-gray-100 overflow-hidden">
+                            {icon.photoPreview ? (
+                              <Image
+                                src={icon.photoPreview}
+                                alt={icon.name}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                <Users className="w-12 h-12" />
+                              </div>
+                            )}
+                            <div className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-xs font-bold shadow-sm text-gray-900">
+                              #{icon.rank}
+                            </div>
 
-          {activeTab === "icons" && (
-            <div className="space-y-4 sm:space-y-5">
-              <div className="flex justify-center">
-                <Button
-                  onClick={() => {
-                    setEditingIcon(null);
-                    setShowAddIconModal(true);
-                  }}
-                  className="bg-black text-white hover:bg-gray-800 rounded-full px-5 sm:px-7 lg:px-9 py-2.5 sm:py-3 lg:py-3.5 text-sm sm:text-base lg:text-lg"
-                >
-                  + ADD Icon
-                </Button>
+                            {/* Hover Edit Overlay */}
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                              <Pencil className="text-white w-6 h-6" />
+                            </div>
+                          </div>
+
+                          <div className="p-4 flex-1 flex flex-col">
+                            <h3 className="font-bold text-gray-900 mb-2 truncate group-hover:text-[#955aa4] transition-colors">
+                              {icon.name}
+                            </h3>
+
+                            <div className="mt-auto flex flex-wrap gap-1.5">
+                              {(icon.lockIns || [])
+                                .slice(0, 3)
+                                .map((item, i) => (
+                                  <span
+                                    key={i}
+                                    className="inline-flex items-center gap-1 rounded bg-gray-50 px-1.5 py-0.5 text-[10px] font-medium text-gray-600 border border-gray-100"
+                                  >
+                                    <Lock className="w-2.5 h-2.5" />
+                                    <span className="truncate max-w-[80px]">
+                                      {item}
+                                    </span>
+                                  </span>
+                                ))}
+                              {(icon.lockIns?.length || 0) > 3 && (
+                                <span className="text-[10px] text-gray-400 self-center">
+                                  +{icon.lockIns.length - 3}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </motion.button>
+                      ))}
+                  </div>
+                )}
               </div>
-              {schoolIcons.length === 0 ? (
-                <div className="text-center py-8 sm:py-12 text-gray-500">
-                  <p className="text-sm sm:text-base lg:text-lg">
-                    No icons yet. Add one above.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
-                  {schoolIcons
-                    .sort((a, b) => a.rank - b.rank)
-                    .map((icon) => (
-                      <button
-                        key={icon.id}
-                        onClick={() => {
-                          setEditingIcon(icon);
-                          setShowAddIconModal(true);
-                        }}
-                        className="rounded-lg sm:rounded-xl overflow-hidden border border-gray-200 hover:border-[#955aa4]/50 hover:shadow-md transition-all text-left bg-white"
-                      >
-                        <div className="aspect-[4/3] relative bg-gray-100">
-                          {icon.photoPreview && (
-                            <Image
-                              src={icon.photoPreview}
-                              alt={icon.name}
-                              fill
-                              className="object-cover"
-                            />
-                          )}
-                          <div className="absolute top-2.5 sm:top-3 right-2.5 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 flex items-center justify-center text-xs sm:text-sm font-bold shadow-md">
-                            #{icon.rank}
-                          </div>
-                        </div>
-                        <div className="p-3 sm:p-4 lg:p-5">
-                          <p className="font-semibold text-gray-900 mb-1.5 sm:mb-2 text-sm sm:text-base lg:text-lg">
-                            {icon.name}
-                          </p>
-                          <div className="flex flex-col items-start gap-1 sm:gap-1.5">
-                            {(icon.lockIns || []).slice(0, 2).map((item, i) => (
-                              <span
-                                key={i}
-                                className="text-xs sm:text-xs text-gray-600 flex items-center gap-1"
-                              >
-                                <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                                {item}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                </div>
-              )}
-            </div>
-          )}
+            )}
 
-          {activeTab === "providers" && (
-            <ProvidersTab
-              providers={providers}
-              isLoading={providersLoading}
-              onProviderClick={handleProviderClick}
-            />
-          )}
+            {activeTab === "providers" && (
+              <div className="p-4 sm:p-6">
+                <ProvidersTab
+                  providers={providers}
+                  isLoading={providersLoading}
+                  onProviderClick={handleProviderClick}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Urgent Care Sidebar - responsive placement */}
-        <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-gray-300 bg-[#f5f1e8] p-4 sm:p-5 lg:p-6 relative z-10 order-last lg:order-none">
-          {/* Logo with click to go back */}
-          <div
-            onClick={() => router.push(ROUTES.curator.schools)}
-            className="mb-4 sm:mb-5 lg:mb-6 cursor-pointer hover:opacity-70 transition-opacity"
-          >
-            <JustGoHealth className="scale-75 sm:scale-85 lg:scale-90 origin-left" />
-          </div>
+        <aside className="w-11/12 lg:w-96 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-gray-200 bg-white p-6 relative z-10 order-last lg:order-none flex flex-col lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden  mx-auto rounded-2xl sm:mx-0 sm:rounded-none mb-4 sm:mb-0 border sm:border-0">
+          {/* Logo with click to go back and Title */}
+          <div className="mb-8">
+            <div
+              onClick={() => router.push(ROUTES.curator.schools)}
+              className="mb-6 cursor-pointer hover:opacity-70 transition-opacity inline-block"
+            >
+              <JustGoHealth className="scale-75 origin-left" />
+            </div>
 
-          {/* Urgent Care header */}
-          <div className="mb-4 sm:mb-5 lg:mb-6">
-            <p className="text-red-600 font-bold text-lg sm:text-xl lg:text-2xl">
-              Urgent Care.{" "}
-              {urgentLoading ? "…" : urgentCare.totalUrgentCarePatients}
-            </p>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Urgent Care</h2>
+              <span
+                className={cn(
+                  "px-2.5 py-1 rounded-full text-xs font-bold",
+                  urgentCare.totalUrgentCarePatients > 0
+                    ? "bg-red-100 text-red-600"
+                    : "bg-gray-100 text-gray-500",
+                )}
+              >
+                {urgentLoading ? "..." : urgentCare.totalUrgentCarePatients}{" "}
+                Active
+              </span>
+            </div>
           </div>
 
           {/* Urgent Care list */}
-          {urgentLoading ? (
-            <div className="animate-pulse space-y-2.5 sm:space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="h-14 sm:h-16 lg:h-20 bg-gray-200 rounded-lg sm:rounded-xl"
-                />
-              ))}
-            </div>
-          ) : urgentCare.patients.length === 0 ? (
-            <p className="text-gray-500 text-xs sm:text-sm lg:text-base">
-              No urgent care patients
-            </p>
-          ) : (
-            <ul className="divide-y divide-black">
-              {urgentCare.patients.map((p, i) => (
-                <li
-                  key={i}
-                  className="flex items-center gap-2.5 sm:gap-3 lg:gap-4 py-2.5 sm:py-3 lg:py-4"
-                >
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-lg sm:rounded-xl bg-black flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-lg sm:text-xl lg:text-2xl font-bold">
-                      {p.lockedInScore != null
-                        ? p.lockedInScore.toFixed(1)
-                        : "–"}
-                    </span>
+          <div className="flex-1 overflow-y-auto pr-2 -mr-2">
+            {urgentLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-20 bg-gray-50 rounded-xl animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : urgentCare.patients.length === 0 ? (
+              <div className="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
+                  <MdHealthAndSafety className="text-gray-400" />
+                </div>
+                <p className="text-sm text-gray-500 font-medium">
+                  No urgent care patients
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {urgentCare.patients.map((p, i) => (
+                  <div
+                    key={i}
+                    className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-100 hover:bg-red-50/30 transition-all duration-200 bg-white shadow-sm"
+                  >
+                    <div className="w-12 h-12 rounded-lg bg-gray-900 text-white flex items-center justify-center flex-shrink-0 shadow-md group-hover:bg-red-600 transition-colors">
+                      <span className="font-bold text-lg">
+                        {p.lockedInScore != null
+                          ? p.lockedInScore.toFixed(1)
+                          : "-"}
+                      </span>
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-gray-900 truncate text-base group-hover:text-red-700 transition-colors">
+                        {p.patientName ?? "Patient"}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                        <p className="text-xs text-gray-500">
+                          {p.urgentCareEnteredAt || p.lockinDate || p.createdAt
+                            ? compactTimeAgo(
+                                (p.urgentCareEnteredAt ||
+                                  p.lockinDate ||
+                                  p.createdAt ||
+                                  "") as string,
+                              )
+                            : "Recently"}{" "}
+                          ago
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-red-600 truncate text-xl sm:text-base lg:text-2xl">
-                      {p.patientName ?? "Patient"}
-                    </p>
-                    <p className="text-xs sm:text-xs lg:text-sm text-gray-500">
-                      {p.urgentCareEnteredAt || p.lockinDate || p.createdAt
-                        ? timeAgo(
-                            p.urgentCareEnteredAt ||
-                              p.lockinDate ||
-                              p.createdAt ||
-                              "",
-                          )
-                        : "—"}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </aside>
       </div>
 

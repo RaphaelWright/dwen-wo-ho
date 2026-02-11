@@ -22,13 +22,13 @@ export interface Provider {
 
 const getProviders = async (): Promise<IProviderResponse> => {
   try {
-  const response = await axiosInstance.get(ENDPOINTS.providers);
+    const response = await axiosInstance.get(ENDPOINTS.providers);
     const data = checkResponse(response, 200);
-    
+
     if (data && typeof data === "object" && "data" in data) {
       return data as IProviderResponse;
     }
-    
+
     if (Array.isArray(data)) {
       return {
         success: true,
@@ -36,7 +36,7 @@ const getProviders = async (): Promise<IProviderResponse> => {
         message: "",
       };
     }
-    
+
     return {
       success: true,
       data: [],
@@ -61,37 +61,37 @@ const getProviders = async (): Promise<IProviderResponse> => {
 
 const getProvider = async (email: string): Promise<Provider> => {
   const result = await api(ENDPOINTS.provider(email));
-  
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to fetch provider");
 };
 
 const approveProvider = async (email: string): Promise<Provider> => {
   const result = await api(ENDPOINTS.approveProvider(email), { method: "PUT" });
-  
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to approve provider");
 };
 
 const rejectProvider = async (email: string): Promise<Provider> => {
   const result = await api(ENDPOINTS.rejectProvider(email), { method: "PUT" });
-  
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to reject provider");
 };
 
 const PROVIDERS_QUERY_KEY = "providers";
 
-export const useProvidersQuery = () => {
+export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   const queryClient = useQueryClient();
 
   const providersQuery = useQuery({
@@ -99,6 +99,7 @@ export const useProvidersQuery = () => {
     queryFn: getProviders,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
   });
 
   // Get single provider
@@ -163,6 +164,7 @@ export const useProvidersQuery = () => {
         onSettled: options?.onSettled,
       });
     },
-    isModerating: approveProviderMutation.isPending || rejectProviderMutation.isPending,
+    isModerating:
+      approveProviderMutation.isPending || rejectProviderMutation.isPending,
   };
 };
