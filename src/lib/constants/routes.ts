@@ -29,3 +29,5 @@ export const ROUTES = {
     providerDetails: "/curator/provider",
   },
 };
+
+

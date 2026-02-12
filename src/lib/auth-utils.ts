@@ -1,5 +1,5 @@
-import { ROUTES } from "@/constants/routes";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ROUTES } from "@/lib/constants/routes";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "./api";
 import { setUserType, getStoredUserType } from "./utils/getUserType";
 import type { QueryClient } from "@tanstack/react-query";
@@ -218,3 +218,5 @@ export const performLogout = (
   // Use window.location for a hard redirect to ensure complete state reset
   window.location.href = redirectPath;
 };
+
+

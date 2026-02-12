@@ -1,0 +1,268 @@
+src\app\curator\(account)\layout.tsx:    if (typeof window !== "undefined") {
+src\app\curator\(account)\page.tsx:    if (typeof window !== "undefined") {
+src\app\curator\(account)\page.tsx:    if (typeof window !== "undefined" && isChecking) {
+src\app\curator\(account)\pages\page.tsx:type TabType = "cover-page" | "icons" | "lock-ins";
+src\app\curator\(account)\partners\page.tsx:              type="text"
+src\app\curator\(account)\schools\page.tsx:type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
+src\app\curator\(account)\schools\page.tsx:        : mergedSchools.filter((school) => school.type === activeFilter);
+src\app\curator\(account)\schools\page.tsx:        const typeMatch = school.type?.toLowerCase().includes(query);
+src\app\curator\(account)\schools\page.tsx:              type="text"
+src\app\curator\(account)\schools\[schoolId]\page.tsx:type TabType = "patients" | "icons" | "providers";
+src\app\curator\(account)\schools\[schoolId]\page.tsx:    if (typeof c === "string" && c.trim().startsWith("[")) {
+src\app\curator\(account)\schools\[schoolId]\page.tsx:                    type="text"
+src\app\curator\(account)\schools\[schoolId]\patients\[patientId]\page.tsx:interface PatientResult {
+src\app\curator\(account)\schools\[schoolId]\patients\[patientId]\page.tsx:interface LockInAssessment {
+src\app\curator\layout.tsx:interface IProps {
+src\app\curator\provider\[email]\page.tsx:interface ProviderDetails {
+src\app\curator\provider\[email]\page.tsx:    if (typeof window !== "undefined") {
+src\app\curator\provider\[email]\page.tsx:    if (typeof window !== "undefined") {
+src\app\curator\provider\[email]\page.tsx:          if (typeof window !== "undefined") {
+src\app\curator\provider\[email]\page.tsx:      if (typeof window !== "undefined") {
+src\app\patient\check-email\page.tsx:  const onSubmit = (values: z.infer<typeof FormSchema>) => {
+src\app\patient\check-email\page.tsx:                type="submit"
+src\app\patient\layout.tsx:interface IProps {
+src\app\patient\lock-in\page.tsx:      const typeMatch = school.type?.toLowerCase().includes(query);
+src\app\patient\lock-in\page.tsx:                type="text"
+src\app\patient\lock-in\[schoolId]\page.tsx:type LockInFormData = z.infer<typeof lockInSchema>;
+src\app\patient\lock-in\[schoolId]\page.tsx:interface CachedFormData {
+src\app\patient\lock-in\[schoolId]\page.tsx:    if (typeof window === "undefined") return null;
+src\app\patient\lock-in\[schoolId]\page.tsx:    if (typeof window === "undefined") return;
+src\app\patient\lock-in\[schoolId]\page.tsx:    if (typeof window !== "undefined") {
+src\app\patient\lock-in\[schoolId]\page.tsx:      if (hasData && typeof window !== "undefined") {
+src\app\patient\lock-in\[schoolId]\page.tsx:                    type="number"
+src\app\patient\lock-in\[schoolId]\page.tsx:                type="button"
+src\app\patient\lock-in\[schoolId]\page.tsx:                type="submit"
+src\app\patient\new-password\page.tsx:  const onSubmit = (values: z.infer<typeof SignUpSchema>) => {
+src\app\patient\new-password\page.tsx:              type={showPassword ? "text" : "password"}
+src\app\patient\new-password\page.tsx:              type="button"
+src\app\patient\new-password\page.tsx:              type={showPassword ? "text" : "password"}
+src\app\patient\new-password\page.tsx:              type="button"
+src\app\patient\new-password\page.tsx:          type="submit"
+src\app\patient\signup\page.tsx:  const onSubmit = (values: z.infer<typeof SignUpSchema>) => {
+src\app\patient\signup\page.tsx:              type="tel"
+src\app\patient\signup\page.tsx:              type={showPassword ? "text" : "password"}
+src\app\patient\signup\page.tsx:              type="button"
+src\app\patient\signup\page.tsx:          type="submit"
+src\app\provider\(account)\layout.tsx:    if (typeof window !== "undefined") {
+src\app\provider\(account)\schools\page.tsx:type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
+src\app\provider\(account)\schools\page.tsx:        : cachedSchools.filter((school) => school.type === activeFilter);
+src\app\provider\(account)\schools\page.tsx:        const typeMatch = school.type?.toLowerCase().includes(query);
+src\app\provider\(account)\schools\page.tsx:              type="text"
+src\app\provider\auth\layout.tsx:interface IProps {
+src\app\provider\auth\page.tsx:type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
+src\app\provider\auth\page.tsx:        if (typeof window !== "undefined") {
+src\app\provider\auth\page.tsx:        typeof window !== "undefined"
+src\app\provider\signin\page.tsx:  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+src\app\provider\signin\page.tsx:                type={showPassword ? "text" : "password"}
+src\app\provider\signin\page.tsx:                type="button"
+src\app\provider\signin\page.tsx:          type="submit"
+src\app\provider\signup\[email]\password\page.tsx:type PasswordFormData = z.infer<typeof PasswordSchema>;
+src\app\provider\signup\[email]\password\page.tsx:              type={showPassword ? "text" : "password"}
+src\app\provider\signup\[email]\password\page.tsx:              type="button"
+src\app\provider\signup\[email]\password\page.tsx:              type={showConfirmPassword ? "text" : "password"}
+src\app\provider\signup\[email]\password\page.tsx:              type="button"
+src\app\provider\signup\[email]\password\page.tsx:          type="submit"
+src\atoms\curator-partners.ts:export interface Partner {
+src\atoms\curator-partners.ts:interface CuratorPartnersState {
+src\atoms\curator-schools.ts:export interface SchoolWithExtras extends School {
+src\atoms\curator-schools.ts:interface CuratorSchoolsState {
+src\atoms\provider-schools.ts:export interface SchoolWithExtras extends School {
+src\atoms\provider-schools.ts:interface ProviderSchoolsState {
+src\components\AppProviders.tsx:interface IProps {
+src\components\memoriam.tsx:interface MemoriamProps {
+src\components\modals\add-cover-page.tsx:interface AddCoverPageModalProps {
+src\components\modals\add-cover-page.tsx:interface ColorOption {
+src\components\modals\add-cover-page.tsx:type Step = "photo-color" | "edit-image" | "slogan";
+src\components\modals\add-cover-page.tsx:                    type="file"
+src\components\modals\add-cover-page.tsx:                  type="button"
+src\components\modals\add-cover-page.tsx:                  type="button"
+src\components\modals\add-cover-page.tsx:                  type="button"
+src\components\modals\add-cover-page.tsx:                  type="button"
+src\components\modals\add-cover-page.tsx:                  type="button"
+src\components\modals\add-cover-page.tsx:                  type="text"
+src\components\modals\add-icon.tsx:                      type="file"
+src\components\modals\add-icon.tsx:                      type="file"
+src\components\modals\add-icon.tsx:                          type="text"
+src\components\modals\add-icon.tsx:                    type="text"
+src\components\modals\add-icon.tsx:                  type="text"
+src\components\modals\add-icon.tsx:                  type="text"
+src\components\modals\add-icon.tsx:                  type="file"
+src\components\modals\feature-coming-soon.tsx:interface FeatureComingSoonModalProps {
+src\components\modals\lineup.tsx:interface LineupModalProps {
+src\components\modals\lineup.tsx:                  type="button"
+src\components\modals\member-creation.tsx:interface MemberCreationModalProps {
+src\components\modals\member-creation.tsx:                          type="button"
+src\components\modals\member-creation.tsx:                        type="text"
+src\components\modals\member-creation.tsx:                  type="button"
+src\components\modals\member-creation.tsx:                  type="submit"
+src\components\modals\partner-creation.tsx:interface PartnerCreationModalProps {
+src\components\modals\partner-creation.tsx:                      type="file"
+src\components\modals\partner-creation.tsx:                      type="button"
+src\components\modals\partner-creation.tsx:                  type="button"
+src\components\modals\partner-creation.tsx:                  type="submit"
+src\components\modals\partner-details.tsx:interface PartnerDetailsModalProps {
+src\components\modals\partner-details.tsx:type TabType = "overview" | "schools" | "providers";
+src\components\modals\partner-details.tsx:interface AssociatedSchool {
+src\components\modals\partner-details.tsx:interface AssociatedProvider {
+src\components\modals\partner-details.tsx:                      type="text"
+src\components\modals\partner-details.tsx:                      type="text"
+src\components\modals\patient-details-curator.tsx:interface PatientDetailsModalProps {
+src\components\modals\patient-details-curator.tsx:interface PatientResult {
+src\components\modals\patient-details-curator.tsx:interface LockInAssessment {
+src\components\modals\pending-verification.tsx:interface PendingVerificationModalProps {
+src\components\modals\professional-title.tsx:interface ProfessionalTitleModalProps {
+src\components\modals\provider-details.tsx:interface ProviderDetailsModalProps {
+src\components\modals\provider-details.tsx:type TabType = "overview" | "schools" | "partners";
+src\components\modals\provider-details.tsx:                              type="text"
+src\components\modals\provider-details.tsx:                              type="text"
+src\components\modals\reach.tsx:interface ReachModalProps {
+src\components\modals\school-creation.tsx:interface SchoolCreationModalProps {
+src\components\modals\school-creation.tsx:type SchoolFormData = {
+src\components\modals\school-creation.tsx:  const isFormValid = formData.name.trim() !== "" && formData.type !== "" && formData.motto.trim() !== "";
+src\components\modals\school-creation.tsx:                        type="text"
+src\components\modals\school-creation.tsx:                        type="text"
+src\components\modals\school-creation.tsx:                    {schoolTypes.map((type) => (
+src\components\modals\school-creation.tsx:                        type="button"
+src\components\modals\school-creation.tsx:                              formData.type === type
+src\components\modals\school-creation.tsx:                        type="button"
+src\components\modals\school-creation.tsx:                                  type="button"
+src\components\modals\school-creation.tsx:                                  type="file"
+src\components\modals\school-creation.tsx:                                  type="button"
+src\components\modals\school-creation.tsx:                          type="file"
+src\components\modals\school-creation.tsx:                      type="button"
+src\components\modals\school-creation.tsx:                      type="button"
+src\components\modals\school-creation.tsx:                      type="button"
+src\components\modals\school-creation.tsx:                  type="button"
+src\components\modals\school-creation.tsx:                        type="button"
+src\components\modals\school-edit.tsx:interface SchoolEditModalProps {
+src\components\modals\school-edit.tsx:type SchoolFormData = {
+src\components\modals\school-edit.tsx:                        type="text"
+src\components\modals\school-edit.tsx:                        type="text"
+src\components\modals\school-edit.tsx:                      {schoolTypes.map((type) => (
+src\components\modals\school-edit.tsx:                          type="button"
+src\components\modals\school-edit.tsx:                            formData.type === type
+src\components\modals\school-edit.tsx:                        type="button"
+src\components\modals\school-edit.tsx:                                  type="button"
+src\components\modals\school-edit.tsx:                  type="button"
+src\components\modals\school-edit.tsx:                  type="submit"
+src\components\modals\school-selection-pages.tsx:type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University" | "COLLEGE";
+src\components\modals\school-selection-pages.tsx:interface SchoolSelectionModalProps {
+src\components\modals\school-selection-pages.tsx:        : schools.filter((school) => school.type === activeFilter);
+src\components\modals\school-selection-pages.tsx:        const typeMatch = school.type?.toLowerCase().includes(query);
+src\components\modals\school-selection-pages.tsx:              type="text"
+src\components\modals\waitlist.tsx:                type="text"
+src\components\modals\waitlist.tsx:                type="tel"
+src\components\modals\waitlist.tsx:                type="email"
+src\components\modals\waitlist.tsx:                type="submit"
+src\components\shared\Logo.tsx:interface LogoProps {
+src\components\stepper.tsx:type ValueOf<T extends string[]> = T[number];
+src\components\stepper.tsx:interface IProps<T extends string[]> {
+src\components\ui\confirmation-modal.tsx:interface ConfirmationModalProps {
+src\components\ui\form-input.tsx:interface FormInputProps extends React.ComponentProps<"input"> {
+src\components\ui\form-select.tsx:interface FormSelectProps {
+src\components\ui\input.tsx:      type={type}
+src\components\ui\loading-overlay.tsx:interface LoadingOverlayProps {
+src\configs\axiosInstance.ts:      typeof window !== "undefined"
+src\configs\axiosInstance.ts:      typeof window !== "undefined"
+src\configs\axiosInstance.ts:      typeof window !== "undefined"
+src\configs\axiosInstance.ts:      typeof window !== "undefined"
+src\configs\axiosInstance.ts:        if (typeof window !== "undefined") {
+src\configs\axiosInstance.ts:        if (typeof window !== "undefined") {
+src\context\notification-context.tsx:interface NotificationContextType {
+src\context\notification-context.tsx:  addNotification: (type: Notification["type"], message: string) => void;
+src\context\notification-context.tsx:    (type: Notification["type"], message: string) => {
+src\features\auth\components\BaseSignInForm.tsx:interface BaseSignInFormProps {
+src\features\auth\components\BaseSignInForm.tsx:                type={showPassword ? "text" : "password"}
+src\features\auth\components\BaseSignInForm.tsx:                type="button"
+src\features\auth\components\BaseSignInForm.tsx:                type="button"
+src\features\auth\components\BaseSignInForm.tsx:          type="submit"
+src\features\auth\hooks\usePatientSignIn.ts:interface UsePatientSignInProps {
+src\features\auth\hooks\usePatientSignIn.ts:  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+src\features\auth\hooks\useProviderSignIn.ts:interface UseProviderSignInProps {
+src\features\auth\hooks\useProviderSignIn.ts:    if (typeof error === "string") {
+src\features\auth\hooks\useProviderSignIn.ts:    if (typeof message === "string" && message.trim().startsWith("{")) {
+src\features\curator\components\provider-card.tsx:interface ProviderCardProps {
+src\features\curator\components\school-detail-tabs.tsx:    if (typeof campus === "string" && campus.trim().startsWith("[")) {
+src\features\curator\components\ui\create-modal.tsx:interface ICreateModal {
+src\features\curator\components\ui\create-modal.tsx:  const handleItemClick = (item: typeof menuItems[0]) => {
+src\features\curator\components\ui\notification-sheet.tsx:export interface Notification {
+src\features\curator\components\ui\notification-sheet.tsx:interface NotificationSheetProps {
+src\features\curator\components\ui\notification-sheet.tsx:const typeConfig = {
+src\features\curator\components\ui\sidebar.tsx:interface SidebarProps {
+src\features\curator\components\ui\sidebar.tsx:interface NavItem {
+src\features\provider\components\ui\check-email.tsx:interface CheckEmailProps {
+src\features\provider\components\ui\check-email.tsx:                          type="submit"
+src\features\provider\components\ui\new-password.tsx:  if (typeof error === "string") {
+src\features\provider\components\ui\new-password.tsx:  if (typeof message === "string" && message.trim().startsWith("{")) {
+src\features\provider\components\ui\new-password.tsx:  const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
+src\features\provider\components\ui\new-password.tsx:              type={showPassword ? "text" : "password"}
+src\features\provider\components\ui\new-password.tsx:              type="button"
+src\features\provider\components\ui\new-password.tsx:              type={showPassword ? "text" : "password"}
+src\features\provider\components\ui\new-password.tsx:              type="button"
+src\features\provider\components\ui\new-password.tsx:          type="submit"
+src\features\provider\components\ui\sidebar.tsx:interface ProviderSidebarProps {
+src\features\provider\components\ui\sign-up.tsx:interface ProviderSignUpProps {
+src\features\provider\components\ui\sign-up.tsx:type SignUpStep = "create" | "verify" | "profile";
+src\features\provider\components\ui\sign-up.tsx:              type="submit"
+src\features\provider\components\ui\signin.tsx:interface ProviderSignInProps {
+src\features\provider\components\ui\signup\create-account.tsx:interface CreateAccountProps {
+src\features\provider\components\ui\signup\create-account.tsx:              type={showPassword ? "text" : "password"}
+src\features\provider\components\ui\signup\create-account.tsx:              type="button"
+src\features\provider\components\ui\signup\sign-up-profile.tsx:interface SignUpProfileProps {
+src\features\provider\components\ui\signup\sign-up-verification.tsx:interface SignUpVerificationProps {
+src\features\provider\components\ui\signup\steps\bio-step.tsx:interface BioStepProps {
+src\features\provider\components\ui\signup\steps\bio-step.tsx:            type="tel"
+src\features\provider\components\ui\signup\steps\photo-step.tsx:type Point = { x: number; y: number };
+src\features\provider\components\ui\signup\steps\photo-step.tsx:type Area = { x: number; y: number; width: number; height: number };
+src\features\provider\components\ui\signup\steps\photo-step.tsx:interface PhotoStepProps {
+src\features\provider\components\ui\signup\steps\photo-step.tsx:        type="file"
+src\features\provider\components\ui\signup\steps\photo-step.tsx:                        type="range"
+src\features\provider\components\ui\signup\steps\specialty-step.tsx:interface SpecialtyStepProps {
+src\features\provider\components\ui\verify-password-reset.tsx:interface VerifyPasswordResetProps {
+src\hooks\queries\usePartnersQuery.ts:export interface Partner {
+src\hooks\queries\usePartnersQuery.ts:export interface ICreatePartner {
+src\hooks\queries\useProvidersQuery.ts:    if (data && typeof data === "object" && "data" in data) {
+src\hooks\queries\useSchoolsQuery.ts:  if (data.type !== undefined) body.type = data.type;
+src\lib\api.ts:  if (typeof body === "object") return JSON.stringify(body);
+src\lib\api.ts:  const token = typeof window !== "undefined"
+src\lib\api.ts:  const refreshToken = typeof window !== "undefined"
+src\lib\api.ts:        if (typeof window !== "undefined") {
+src\lib\auth-utils.ts:      if (typeof window === "undefined") {
+src\lib\auth-utils.ts:      if (typeof window !== "undefined") {
+src\lib\auth-utils.ts:  if (typeof window === "undefined") {
+src\lib\auth-utils.ts:  if (typeof window === "undefined") {
+src\lib\utils\formatProviderName.ts:  if (!name || typeof name !== "string") {
+src\lib\utils\getUserType.ts:  if (typeof window === "undefined") {
+src\lib\utils\getUserType.ts:  if (typeof window === "undefined") {
+src\lib\utils\getUserType.ts:  if (typeof window === "undefined") {
+src\lib\utils\getUserType.ts:  if (typeof window === "undefined") {
+src\lib\utils\timeAgo.ts:  const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+src\schemas\curator.auth.schema.ts:export type CuratorEmailFormData = z.infer<typeof CuratorEmailSchema>;
+src\schemas\curator.auth.schema.ts:export type CuratorLoginFormData = z.infer<typeof CuratorLoginSchema>;
+src\schemas\provider.auth.schema.ts:export type ProviderEmailFormData = z.infer<typeof ProviderEmailSchema>;
+src\schemas\provider.auth.schema.ts:export type ProviderLoginFormData = z.infer<typeof ProviderLoginSchema>;
+src\schemas\provider.auth.schema.ts:export type ProviderSignUpFormData = z.infer<typeof ProviderSignUpSchema>;
+src\types\curator.ts:export interface CoverPage {
+src\types\curator.ts:export interface OverviewTabProps {
+src\types\curator.ts:export interface ProvidersTabProps {
+src\types\curator.ts:export interface PartnersTabProps {
+src\types\curator.ts:export interface ReachTabProps {
+src\types\curator.ts:export interface AddIconModalProps {
+src\types\lockin.ts:export interface LockInStudent {
+src\types\lockin.ts:export interface LockInData {
+src\types\lockin.ts:export interface LockInAssessment {
+src\types\patient.ts:export interface PatientResult {
+src\types\patient.ts:export interface PatientResultItem {
+src\types\patient.ts:export interface UrgentCarePatient {
+src\types\provider.ts:export interface ProviderDetails {
+src\types\provider.ts:export interface Provider {
+src\types\provider.ts:export interface SchoolProvider {
+src\types\provider.ts:export interface AssociatedSchool {
+src\types\provider.ts:export interface AssociatedPartner {
+src\types\provider.ts:export interface IProviderResponse {
+src\types\school.ts:export interface School {
+src\types\school.ts:export interface ICreateSchool {
+src\types\school.ts:export interface IUpdateSchool {
+src\types\school.ts:export interface SchoolIcon {
+src\types\school.ts:export interface Partner {
+src\types\school.ts:export interface SchoolReach {

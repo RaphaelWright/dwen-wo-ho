@@ -3,12 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 
-interface ProfessionalTitleModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelect: (title: string) => void;
-  selectedTitle?: string;
-}
+import { ProfessionalTitleModalProps } from "@/types/modals";
 
 const professionalTitles = [
   { value: "Dr.", label: "Dr. (Doctor)" },
@@ -43,7 +38,7 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
             onClick={onClose}
           />
-          
+
           {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -54,8 +49,12 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto">
               {/* Header */}
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900">Professional Title</h2>
-                <p className="text-gray-600 mt-1">Select your professional title</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Professional Title
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Select your professional title
+                </p>
               </div>
 
               {/* Title List */}
@@ -83,7 +82,6 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
                   ))}
                 </div>
               </div>
-
             </div>
           </motion.div>
         </>
@@ -93,3 +91,5 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
 };
 
 export default ProfessionalTitleModal;
+
+

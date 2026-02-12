@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosFormData, checkResponse } from "@/configs/axiosInstance";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 
 export interface Partner {
@@ -63,3 +63,5 @@ export const useCreatePartner = () => {
     },
   });
 };
+
+

@@ -8,7 +8,7 @@ import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
 import { formatTime, signUpSteps } from "@/lib/utils";
 import Link from "next/link";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/stepper";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 
@@ -167,3 +167,4 @@ const Verify = () => {
 };
 
 export default Verify;
+

@@ -195,3 +195,5 @@ const SignUpVerification = ({
 };
 
 export default SignUpVerification;
+
+

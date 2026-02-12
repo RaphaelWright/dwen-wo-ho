@@ -37,3 +37,5 @@ export const Logo = ({
 
   return <div className={className}>{content}</div>;
 };
+
+

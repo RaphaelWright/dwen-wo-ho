@@ -3,27 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { School } from "@/types/school";
+import { AddIconModalProps } from "@/types/modals";
 import { Lock, X } from "lucide-react";
-
-interface AddIconModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onComplete: (data: {
-    photo: File | null;
-    name: string;
-    slogan: string;
-    rank: number;
-    lockIns: string[];
-  }) => void;
-  editData?: {
-    photoPreview: string;
-    name: string;
-    slogan: string;
-    rank: number;
-    lockIns?: string[];
-  } | null;
-  selectedSchool: School | null;
-}
 
 export default function AddIconModal({
   isOpen,
@@ -171,7 +152,9 @@ export default function AddIconModal({
                     </button>
                     {/* Rank Badge */}
                     <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
-                      <span className="text-black font-bold text-lg">#{rank}</span>
+                      <span className="text-black font-bold text-lg">
+                        #{rank}
+                      </span>
                     </div>
                     {/* Name Overlay */}
                     {name && (
@@ -259,7 +242,9 @@ export default function AddIconModal({
                         <input
                           type="text"
                           value={lockIn}
-                          onChange={(e) => handleUpdateLockIn(index, e.target.value)}
+                          onChange={(e) =>
+                            handleUpdateLockIn(index, e.target.value)
+                          }
                           className="flex-1 px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4]"
                         />
                         <button
@@ -400,3 +385,5 @@ export default function AddIconModal({
     </div>
   );
 }
+
+

@@ -61,3 +61,5 @@ const Stepper = <T extends string[]>({ steps, step }: IProps<T>) => {
 };
 
 export default Stepper;
+
+

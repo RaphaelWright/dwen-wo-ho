@@ -2,7 +2,7 @@
 
 import CheckEmail from "@/features/provider/components/ui/check-email";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 
 const ProviderCheckEmailPage = () => {
   const router = useRouter();
@@ -20,3 +20,5 @@ const ProviderCheckEmailPage = () => {
 };
 
 export default ProviderCheckEmailPage;
+
+

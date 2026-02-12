@@ -24,3 +24,5 @@ const initialState: CuratorSchoolsState = {
 };
 
 export const curatorSchoolsAtom = atom<CuratorSchoolsState>(initialState);
+
+

@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { useMutation } from "@tanstack/react-query";
 import { axiosFormData, checkResponse } from "@/configs/axiosInstance";
 
@@ -186,3 +186,5 @@ const useAuthQuery = () => {
 };
 
 export default useAuthQuery;
+
+

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 
 const LoginSchema = z.object({
   email: z
@@ -66,3 +66,5 @@ export const usePatientSignIn = ({ email }: UsePatientSignInProps) => {
     errorMessage,
   };
 };
+
+

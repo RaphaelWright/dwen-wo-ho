@@ -1,8 +1,8 @@
 "use client";
 
 import { Logo } from "@/components/shared/Logo";
-import { ROUTES } from "@/constants/routes";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ROUTES } from "@/lib/constants/routes";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
@@ -227,4 +227,6 @@ const NewPassword = () => {
 };
 
 export default NewPassword;
+
+
 

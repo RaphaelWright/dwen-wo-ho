@@ -1,43 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/constants/routes";
+import { useCuratorRedirect } from "@/hooks/curator/useCuratorRedirect";
 
-const CuratorDashboard = () => {
-  const router = useRouter();
-  const [isChecking, setIsChecking] = useState(() => {
-    if (typeof window !== "undefined") {
-      const refreshToken = localStorage.getItem("refreshToken");
-      
-      if (refreshToken) {
-        router.replace(ROUTES.curator.schools);
-      } else {
-        router.replace(ROUTES.provider.auth);
-      }
-      return false;
-    }
-    return true;
-  });
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && isChecking) {
-      const refreshToken = localStorage.getItem("refreshToken");
-      
-      if (refreshToken) {
-        router.replace(ROUTES.curator.schools);
-      } else {
-        router.replace(ROUTES.provider.auth);
-      }
-      setIsChecking(false);
-    }
-  }, [router, isChecking]);
+export default function CuratorDashboard() {
+  const { isChecking } = useCuratorRedirect();
 
   if (isChecking) {
     return (
       <div className="h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
           <p className="text-gray-500">Loading...</p>
         </div>
       </div>
@@ -45,8 +17,4 @@ const CuratorDashboard = () => {
   }
 
   return null;
-};
-
-export default CuratorDashboard;
-
-
+}

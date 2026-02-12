@@ -11,7 +11,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { FiFileText, FiLogOut, FiMenu, FiX, FiBell } from "react-icons/fi";
+import {
+  FiFileText,
+  FiLogOut,
+  FiMenu,
+  FiX,
+  FiBell,
+  FiPlus,
+} from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { cn } from "@/lib/utils";
@@ -82,14 +89,14 @@ export const CuratorSidebar = ({
       label: "Pages",
       icon: <FiFileText className="text-lg flex-shrink-0" />,
     },
-    // {
-    //   label: "Create",
-    //   icon: <FiPlus className="text-lg flex-shrink-0" />,
-    //   onClick: () => {
-    //     onCreateClick();
-    //     setIsMobileSidebarOpen(false);
-    //   },
-    // },
+    {
+      label: "Create",
+      icon: <FiPlus className="text-lg flex-shrink-0" />,
+      onClick: () => {
+        onCreateClick();
+        setIsMobileSidebarOpen(false);
+      },
+    },
   ];
 
   const NavItemContent = ({

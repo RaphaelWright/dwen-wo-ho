@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState, Suspense } from "react";
 import { formatTime, recoverSteps } from "@/lib/utils";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import Stepper from "@/components/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 
 interface VerifyPasswordResetProps {
@@ -128,3 +128,5 @@ const Verify = (props: VerifyPasswordResetProps) => {
 };
 
 export default Verify;
+
+

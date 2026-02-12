@@ -185,3 +185,5 @@ const ProviderSignUp = (props: ProviderSignUpProps) => {
 };
 
 export default ProviderSignUp;
+
+

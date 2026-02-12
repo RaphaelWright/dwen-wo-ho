@@ -4,37 +4,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "@/components/shared/Logo";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { FiLogOut } from "react-icons/fi";
 import { performLogout } from "@/lib/auth-utils";
 
-interface PendingVerificationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isLoading?: boolean;
-  userInfo?: {
-    name: string;
-    title: string;
-    specialty?: string;
-    profileImage?: string;
-    timeAgo?: string;
-  };
-}
+import { PendingVerificationModalProps } from "@/types/modals";
+import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 
 const PendingVerificationModal = ({
   isOpen,
   onClose,
   isLoading = false,
-  userInfo = {
-    name: "Dr. Amanda Gorman",
-    title: "Clinical Psychologist",
-    timeAgo: "2 hours ago",
-  },
+  userInfo = DEFAULT_PENDING_USER_INFO,
 }: PendingVerificationModalProps) => {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -127,12 +111,16 @@ const PendingVerificationModal = ({
                     {/* Name and Role */}
                     <div className="text-left min-w-0">
                       {userInfo.timeAgo && (
-                        <p className="text-lg font-bold text-black mb-1">{userInfo.timeAgo}</p>
+                        <p className="text-lg font-bold text-black mb-1">
+                          {userInfo.timeAgo}
+                        </p>
                       )}
                       <h2 className="text-4xl font-bold text-black mb-1 break-words">
                         {userInfo.name}
                       </h2>
-                      <p className="text-2xl font-bold text-black opacity-80">{userInfo.title}</p>
+                      <p className="text-2xl font-bold text-black opacity-80">
+                        {userInfo.title}
+                      </p>
                     </div>
 
                     {/* Status Section */}
@@ -147,7 +135,8 @@ const PendingVerificationModal = ({
                     {/* Status Text */}
                     <div className="text-left -ml-18 -mb-2">
                       <span className="text-6xl font-extrabold text-black tracking-tight">
-                        Status: &nbsp;&nbsp; <span className="font-medium">Pending...</span>
+                        Status: &nbsp;&nbsp;{" "}
+                        <span className="font-medium">Pending...</span>
                       </span>
                     </div>
                   </div>
@@ -158,7 +147,8 @@ const PendingVerificationModal = ({
               <div className="text-left p-6 rounded-xl">
                 <p className="text-gray-700 text-center leading-relaxed text-lg">
                   You can call the JustGo Health verification team on 0538920991
-                  or email them at prince.baadu7@gmail.com to speed up the process. Thank you.
+                  or email them at prince.baadu7@gmail.com to speed up the
+                  process. Thank you.
                 </p>
               </div>
             </div>
@@ -183,4 +173,3 @@ const PendingVerificationModal = ({
 };
 
 export default PendingVerificationModal;
-

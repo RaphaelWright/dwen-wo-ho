@@ -56,3 +56,5 @@ const SpecialtyStep = ({ specialty, onChange }: SpecialtyStepProps) => {
 };
 
 export default SpecialtyStep;
+
+

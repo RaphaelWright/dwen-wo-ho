@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-// import { ENDPOINTS } from "@/constants/endpoints";
+// import { ENDPOINTS } from "@/lib/constants/endpoints";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
@@ -477,3 +477,5 @@ export default function ProviderSchoolsPage() {
     </WidthConstraint>
   );
 }
+
+

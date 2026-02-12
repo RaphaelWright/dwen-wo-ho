@@ -7,7 +7,8 @@ import {
 } from "@/schemas/provider.auth.schema";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { setUserType } from "@/lib/utils/getUserType";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
+import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 
 interface UseProviderSignInProps {
   email: string;
@@ -28,9 +29,7 @@ export const useProviderSignIn = ({
   // Pending user state
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "Dr. Amanda Gorman",
-    title: "Clinical Psychologist",
-    timeAgo: "2 hours ago",
+    ...DEFAULT_PENDING_USER_INFO,
     profileImage: undefined as string | undefined, // Added type safety
   });
 

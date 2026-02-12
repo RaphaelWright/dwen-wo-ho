@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 
 // Simple in-memory cache with TTL
 class RequestCache {
@@ -206,3 +206,4 @@ export function clearAllCaches() {
   patientResultsCache.clear();
   pendingRequests.clear();
 }
+

@@ -17,3 +17,5 @@ export const CuratorLoginSchema = z.object({
 
 export type CuratorEmailFormData = z.infer<typeof CuratorEmailSchema>;
 export type CuratorLoginFormData = z.infer<typeof CuratorLoginSchema>;
+
+

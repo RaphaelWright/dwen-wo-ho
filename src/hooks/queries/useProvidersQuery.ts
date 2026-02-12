@@ -1,24 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance, checkResponse } from "@/configs/axiosInstance";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
-import { IProviderResponse } from "@/types/provider.type";
-
-export interface Provider {
-  id?: string;
-  email: string;
-  providerName: string;
-  providerTitle?: string | null;
-  profilePhotoURL?: string | null;
-  specialty?: string | null;
-  officePhoneNumber?: string | null;
-  bio?: string | null;
-  status?: string | null;
-  applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
-  applicationDate: string;
-  lastActive?: string;
-}
+import { IProviderResponse, Provider } from "@/types/provider";
 
 const getProviders = async (): Promise<IProviderResponse> => {
   try {
@@ -168,3 +153,5 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
       approveProviderMutation.isPending || rejectProviderMutation.isPending,
   };
 };
+
+

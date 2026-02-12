@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { useQuery } from "@tanstack/react-query";
 
 const useUserQuery = (options?: { refetchInterval?: number; enabled?: boolean }) => {
@@ -20,3 +20,5 @@ const useUserQuery = (options?: { refetchInterval?: number; enabled?: boolean })
 };
 
 export default useUserQuery;
+
+

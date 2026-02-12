@@ -24,3 +24,5 @@ const initialState: ProviderSchoolsState = {
 };
 
 export const providerSchoolsAtom = atom<ProviderSchoolsState>(initialState);
+
+

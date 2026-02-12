@@ -9,12 +9,7 @@ import Image from "next/image";
 import { useCreateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { ICreateSchool } from "@/types/school";
 import { useClickOutside } from "@/hooks/useClickOutside";
-
-interface SchoolCreationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSchoolCreated?: (school: any) => void;
-}
+import { SchoolCreationModalProps } from "@/types/modals";
 
 const campusOptions = [
   "Accra",
@@ -73,7 +68,7 @@ const SchoolCreationModal = ({
     setSelectedCampuses((prev) =>
       prev.includes(campus)
         ? prev.filter((c) => c !== campus)
-        : [...prev, campus]
+        : [...prev, campus],
     );
   };
 
@@ -139,7 +134,10 @@ const SchoolCreationModal = ({
     onClose();
   };
 
-  const isFormValid = formData.name.trim() !== "" && formData.type !== "" && formData.motto.trim() !== "";
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.type !== "" &&
+    formData.motto.trim() !== "";
 
   return (
     <AnimatePresence>
@@ -168,7 +166,9 @@ const SchoolCreationModal = ({
                 <div className="flex items-center gap-4">
                   <div>
                     <h2 className="text-xl font-bold text-gray-900">
-                      {currentStep === 1 ? "New School" : "Review School Details"}
+                      {currentStep === 1
+                        ? "New School"
+                        : "Review School Details"}
                     </h2>
                     <p className="text-sm text-gray-500">
                       {currentStep === 1
@@ -234,91 +234,99 @@ const SchoolCreationModal = ({
               <div className="flex-1 overflow-y-auto p-8">
                 {currentStep === 1 ? (
                   <form id="school-form" className="space-y-8">
-                  {/* Name & Nickname */}
-                  <div className="grid grid-cols-1 gap-6">
-                    <div className="space-y-2">
+                    {/* Name & Nickname */}
+                    <div className="grid grid-cols-1 gap-6">
+                      <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">
                           School Name <span className="text-red-500">*</span>
                         </label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
-                        placeholder="e.g. Achimota School"
-                      />
-                    </div>
-                    <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) =>
+                            handleInputChange("name", e.target.value)
+                          }
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
+                          placeholder="e.g. Achimota School"
+                        />
+                      </div>
+                      <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">
                           Nickname (Optional)
                         </label>
-                      <input
-                        type="text"
-                        value={formData.nickname}
-                        onChange={(e) => handleInputChange("nickname", e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
-                        placeholder="e.g. Motown"
+                        <input
+                          type="text"
+                          value={formData.nickname}
+                          onChange={(e) =>
+                            handleInputChange("nickname", e.target.value)
+                          }
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
+                          placeholder="e.g. Motown"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Motto */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700">
+                        Motto <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        value={formData.motto}
+                        onChange={(e) =>
+                          handleInputChange("motto", e.target.value)
+                        }
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
+                        placeholder="Enter school motto"
+                        rows={3}
                       />
                     </div>
-                  </div>
 
-                  {/* Motto */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">
-                      Motto <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      value={formData.motto}
-                      onChange={(e) => handleInputChange("motto", e.target.value)}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
-                      placeholder="Enter school motto"
-                      rows={3}
-                    />
-                  </div>
-
-                {/* Type */}
+                    {/* Type */}
                     <div className="space-y-3">
                       <label className="text-sm font-semibold text-gray-700">
                         Type <span className="text-red-500">*</span>
-                  </label>
+                      </label>
                       <div className="flex gap-4">
-                    {schoolTypes.map((type) => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => handleInputChange("type", type)}
+                        {schoolTypes.map((type) => (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => handleInputChange("type", type)}
                             className={`flex-1 px-6 py-3 rounded-lg font-bold transition-colors ${
                               formData.type === type
                                 ? "bg-[#955aa4] text-white shadow-md"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                          }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-                  {/* Campuses */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
+                    {/* Campuses */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
                         <label className="text-sm font-semibold text-gray-700">
                           Campuses
                         </label>
-                      {selectedCampuses.length > 0 && (
-                        <span className="text-xs font-medium text-[#955aa4] bg-[#955aa4]/10 px-2 py-1 rounded-full">
-                          {selectedCampuses.length} selected
-                        </span>
-                      )}
-                    </div>
+                        {selectedCampuses.length > 0 && (
+                          <span className="text-xs font-medium text-[#955aa4] bg-[#955aa4]/10 px-2 py-1 rounded-full">
+                            {selectedCampuses.length} selected
+                          </span>
+                        )}
+                      </div>
                       <div className="relative" ref={campusDropdownRef}>
-                      <button
-                        type="button"
-                        onClick={() => setShowCampusDropdown(!showCampusDropdown)}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
-                      >
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <MapPin className="w-4 h-4" />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowCampusDropdown(!showCampusDropdown)
+                          }
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <MapPin className="w-4 h-4" />
                             <span
                               className={
                                 selectedCampuses.length > 0
@@ -326,55 +334,55 @@ const SchoolCreationModal = ({
                                   : "text-gray-500"
                               }
                             >
-                            {selectedCampuses.length > 0 
-                              ? selectedCampuses.join(", ")
+                              {selectedCampuses.length > 0
+                                ? selectedCampuses.join(", ")
                                 : "Select campus locations"}
-                          </span>
-                        </div>
+                            </span>
+                          </div>
                           <ChevronDown
                             className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
                               showCampusDropdown ? "rotate-180" : ""
                             }`}
                           />
-                      </button>
-                      
-                      <AnimatePresence>
-                        {showCampusDropdown && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-20 overflow-hidden"
-                          >
-                            <div className="max-h-48 overflow-y-auto p-2">
-                              {campusOptions.map((campus) => (
-                                <button
-                                  key={campus}
-                                  type="button"
-                                  onClick={() => handleCampusToggle(campus)}
-                                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
-                                    selectedCampuses.includes(campus)
-                                        ? "bg-gray-100 text-gray-900 font-medium"
-                                      : "hover:bg-gray-50 text-gray-700"
-                                  }`}
-                                >
-                                    <span>{campus}</span>
-                                </button>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
+                        </button>
 
-                  {/* Logo */}
-                  <div className="space-y-3">
+                        <AnimatePresence>
+                          {showCampusDropdown && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 10 }}
+                              className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-20 overflow-hidden"
+                            >
+                              <div className="max-h-48 overflow-y-auto p-2">
+                                {campusOptions.map((campus) => (
+                                  <button
+                                    key={campus}
+                                    type="button"
+                                    onClick={() => handleCampusToggle(campus)}
+                                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
+                                      selectedCampuses.includes(campus)
+                                        ? "bg-gray-100 text-gray-900 font-medium"
+                                        : "hover:bg-gray-50 text-gray-700"
+                                    }`}
+                                  >
+                                    <span>{campus}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+
+                    {/* Logo */}
+                    <div className="space-y-3">
                       <label className="text-sm font-semibold text-gray-700">
                         School Logo
                       </label>
-                    <div className="flex items-center gap-6">
-                      <div className="flex-1">
+                      <div className="flex items-center gap-6">
+                        <div className="flex-1">
                           {formData.logo ? (
                             <div className="relative inline-block">
                               <Image
@@ -411,20 +419,20 @@ const SchoolCreationModal = ({
                             </div>
                           ) : (
                             <>
-                        <input
-                          type="file"
-                          id="logo-upload"
-                          accept="image/*"
-                          onChange={handleLogoUpload}
-                          className="hidden"
-                        />
-                        <label
-                          htmlFor="logo-upload"
-                          className="w-full h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-[#955aa4]/30 transition-all group"
-                        >
-                              <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <Upload className="w-5 h-5 text-[#955aa4]" />
-                              </div>
+                              <input
+                                type="file"
+                                id="logo-upload"
+                                accept="image/*"
+                                onChange={handleLogoUpload}
+                                className="hidden"
+                              />
+                              <label
+                                htmlFor="logo-upload"
+                                className="w-full h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-[#955aa4]/30 transition-all group"
+                              >
+                                <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                  <Upload className="w-5 h-5 text-[#955aa4]" />
+                                </div>
                                 <span className="text-sm font-medium text-gray-600 group-hover:text-[#955aa4] transition-colors">
                                   Click to upload logo
                                 </span>
@@ -505,8 +513,8 @@ const SchoolCreationModal = ({
 
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                       <p className="text-sm text-blue-800">
-                        Please review all information carefully. Once confirmed, the school will be
-                        created and added to the system.
+                        Please review all information carefully. Once confirmed,
+                        the school will be created and added to the system.
                       </p>
                     </div>
                   </div>
@@ -546,20 +554,20 @@ const SchoolCreationModal = ({
                       Back to Edit
                     </Button>
                     <div className="flex gap-3">
-                <Button
-                  type="button"
+                      <Button
+                        type="button"
                         onClick={handleClose}
-                  variant="ghost"
-                  className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                >
-                  Cancel
-                </Button>
-                <Button
+                        variant="ghost"
+                        className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
                         type="button"
                         onClick={handleConfirm}
                         disabled={createSchoolMutation.isPending}
                         className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
+                      >
                         {createSchoolMutation.isPending ? (
                           <>
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -571,7 +579,7 @@ const SchoolCreationModal = ({
                             Confirm & Create
                           </>
                         )}
-                </Button>
+                      </Button>
                     </div>
                   </>
                 )}
@@ -585,3 +593,5 @@ const SchoolCreationModal = ({
 };
 
 export default SchoolCreationModal;
+
+

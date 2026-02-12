@@ -86,3 +86,5 @@ export const brHendrix = localFont({
   variable: '--font-brhendrix',
   display: 'swap',
 })
+
+

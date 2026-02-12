@@ -8,12 +8,13 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { useRouter } from "next/navigation";
+import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import { useEffect, useState, Suspense } from "react";
-import { ROUTES } from "@/constants/routes";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ROUTES } from "@/lib/constants/routes";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "@/lib/api";
 import PendingVerificationModal from "@/components/modals/pending-verification";
 
@@ -31,9 +32,7 @@ const SignInContent = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "Dr. Amanda Gorman",
-    title: "Clinical Psychologist",
-    timeAgo: "2 hours ago",
+    ...DEFAULT_PENDING_USER_INFO,
   });
   const { loginMutation } = useAuthQuery();
   const router = useRouter();
@@ -109,25 +108,31 @@ const SignInContent = () => {
         setErrorMessage(response?.message ?? "Sign in failed");
       }
     } catch (error: any) {
-
       const errorMsg = error.message || "Sign in failed. Please try again.";
 
       // Check if error is about incomplete profile
       if (error.message && error.message.includes("Profile is not complete")) {
-
         // Store user email for profile completion
         localStorage.setItem("profileCompletionEmail", values.email);
 
         // Determine which step to redirect to
         if (error.message.includes("upload your profile photo")) {
-          router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`);
+          router.push(
+            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
+          );
         } else if (error.message.includes("office phone number")) {
-          router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=bio`);
+          router.push(
+            `/provider/signup?email=${encodeURIComponent(values.email)}&step=bio`,
+          );
         } else if (error.message.includes("add your specialty")) {
-          router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=specialty`);
+          router.push(
+            `/provider/signup?email=${encodeURIComponent(values.email)}&step=specialty`,
+          );
         } else {
           // Default to photo step
-          router.push(`/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`);
+          router.push(
+            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
+          );
         }
       } else {
         setErrorMessage(errorMsg);
@@ -197,10 +202,11 @@ const SignInContent = () => {
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
-                className={`w-full px-4 py-3 pr-16 text-base border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors ${errors?.password?.message
-                  ? "border-red-500 bg-red-50"
-                  : "border-gray-300 bg-white hover:border-gray-400"
-                  }`}
+                className={`w-full px-4 py-3 pr-16 text-base border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors ${
+                  errors?.password?.message
+                    ? "border-red-500 bg-red-50"
+                    : "border-gray-300 bg-white hover:border-gray-400"
+                }`}
               />
               <button
                 type="button"
@@ -244,10 +250,11 @@ const SignInContent = () => {
           form="login-form"
           type="submit"
           disabled={!password.trim() || isLoading}
-          className={`text-sm sm:text-base lg:text-xl px-3 sm:px-4 lg:px-6 py-2 border-2 sm:border-4 font-bold rounded-md flex items-center gap-2 w-full sm:w-auto ${!password.trim() || isLoading
-            ? "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
-            : "border-[#2b3990] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
-            }`}
+          className={`text-sm sm:text-base lg:text-xl px-3 sm:px-4 lg:px-6 py-2 border-2 sm:border-4 font-bold rounded-md flex items-center gap-2 w-full sm:w-auto ${
+            !password.trim() || isLoading
+              ? "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
+              : "border-[#2b3990] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
+          }`}
         >
           {isLoading && (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -275,4 +282,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-

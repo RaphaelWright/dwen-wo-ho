@@ -1,67 +1,24 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { Building2, Search } from "lucide-react";
 import Image from "next/image";
 import PartnerDetailsModal from "@/components/modals/partner-details";
-import { useAtom } from "jotai";
-import { curatorPartnersAtom, Partner } from "@/atoms/curator-partners";
+import { useCuratorPartners } from "@/hooks/curator/useCuratorPartners";
 
 export default function PartnersPage() {
-  const [partnerState, setPartnerState] = useAtom(curatorPartnersAtom);
-  const { partners: cachedPartners, isLoading: atomLoading } = partnerState;
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showPartnerModal, setShowPartnerModal] = useState(false);
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string | number>(
-    "",
-  );
-  const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
-
-  const loadPartners = useCallback(
-    async (isBackground = false) => {
-      if (!isBackground) {
-        setPartnerState((prev) => ({ ...prev, isLoading: true }));
-      }
-      try {
-        const response = await api(ENDPOINTS.partners);
-        if (response?.success && response.data) {
-          const partnersList = Array.isArray(response.data)
-            ? response.data
-            : [];
-          setPartnerState((prev) => ({
-            ...prev,
-            partners: partnersList,
-            lastUpdated: Date.now(),
-          }));
-        }
-      } catch (error) {
-        // User will see empty state or cached state
-      } finally {
-        if (!isBackground) {
-          setPartnerState((prev) => ({ ...prev, isLoading: false }));
-        }
-      }
-    },
-    [setPartnerState],
-  );
-
-  // Initial load: if we have cached partners, show them and refresh in background; else show loading and fetch
-  useEffect(() => {
-    const hasCache = cachedPartners.length > 0;
-    loadPartners(hasCache);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const filteredPartners = cachedPartners.filter(
-    (partner) =>
-      partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      partner.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      partner.slogan?.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const {
+    cachedPartners,
+    filteredPartners,
+    atomLoading,
+    searchQuery,
+    setSearchQuery,
+    showPartnerModal,
+    selectedPartnerId,
+    selectedPartner,
+    handlePartnerClick,
+    handleModalClose,
+  } = useCuratorPartners();
 
   return (
     <WidthConstraint>
@@ -111,11 +68,7 @@ export default function PartnersPage() {
             {filteredPartners.map((partner) => (
               <button
                 key={partner.id}
-                onClick={() => {
-                  setSelectedPartnerId(partner.id);
-                  setSelectedPartner(partner);
-                  setShowPartnerModal(true);
-                }}
+                onClick={() => handlePartnerClick(partner)}
                 className="text-left bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow hover:border-[#955aa4]/30"
               >
                 <div className="flex items-start gap-4">
@@ -158,12 +111,7 @@ export default function PartnersPage() {
       {/* Partner Details Modal */}
       <PartnerDetailsModal
         isOpen={showPartnerModal}
-        onClose={() => {
-          setShowPartnerModal(false);
-          setSelectedPartnerId("");
-          setSelectedPartner(undefined);
-          loadPartners(true); // Refresh cache in background after modal close
-        }}
+        onClose={handleModalClose}
         partnerId={selectedPartnerId}
         partner={selectedPartner}
       />

@@ -1,13 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
 import {
   ChevronLeft,
   User,
-  MapPin,
-  Calendar,
-  School,
   Activity,
   Brain,
   BookOpen,
@@ -15,223 +10,28 @@ import {
   Clock,
   CheckCircle2,
   Plus,
-  Users,
+  School,
+  Calendar,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
 import { Button } from "@/components/ui/button";
-
-interface PatientResult {
-  id: number;
-  lockinId: number;
-  schoolId: number;
-  schoolName: string;
-  patientName: string;
-  patientAge: number;
-  patientSex: string;
-  visibilityStatus: "NEW" | "SEEN";
-  starProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-    professionalTitle: string;
-    specialty: string;
-  } | null;
-  referredProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-  } | null;
-  createdAt: string;
-  firstOpenedAt: string | null;
-  treatingProviders: Array<{
-    id: string;
-    fullName: string;
-  }>;
-}
-
-interface LockInAssessment {
-  fullName: string;
-  age: number;
-  sex: string;
-  school: string;
-  generalMentalHealth: string;
-  generalMentalHealthScore: string;
-  generalMentalHealthColor: string;
-  possibleDepressionScore: string;
-  possibleDepressionDescription: string;
-  possibleDepressionColor: string;
-  lonelinessScore: string;
-  lonelinessScoreDescription: string;
-  lonelinessColor: string;
-  suicidalRiskScore: string;
-  suicidalRiskScoreDescription: string;
-  suicidalRiskColor: string;
-  examAnxiety: string;
-  examAnxietyScore: string;
-  examAnxietyColor: string;
-  coreAnxietyScore: string;
-  coreAnxietyScoreDescription: string;
-  coreAnxietyColor: string;
-  physicalDistressScore: string;
-  physicalDistressScoreDescription: string;
-  physicalDistressColor: string;
-  examPrep: string;
-  examPrepScore: string;
-  examPrepColor: string;
-  motivationScore: string;
-  motivationScoreDescription: string;
-  motivationColor: string;
-  studySkillsScore: string;
-  studySkillsScoreDescription: string;
-  studySkillsColor: string;
-  procrastinationScore: string;
-  procrastinationScoreDescription: string;
-  procrastinationColor: string;
-  lockedInScore: string;
-  lockedInScoreDescription: string;
-  lockedInColor: string;
-}
-
-const generateColor = (color: string) => {
-  let code = "";
-  if (color === "yellow") code = "#ff9900";
-  if (color === "green") code = "#081c05";
-  if (color === "purple") code = "#993399";
-  if (color === "red") code = "#ff0000";
-  if (color === "light green") code = "#66ff66";
-  if (color === "black") code = "#000000";
-  return code;
-};
+import {
+  useCuratorPatientDetails,
+  generateColor,
+} from "@/hooks/curator/useCuratorPatientDetails";
+import { MOCK_PATIENT_ACTIONS } from "@/lib/constants/mock-data";
 
 export default function PatientDetailsPage() {
-  const params = useParams();
-  const router = useRouter();
-  const patientId = params.patientId as string;
-
-  const [patientResult, setPatientResult] = useState<PatientResult | null>(
-    null,
-  );
-  const [lockInAssessment, setLockInAssessment] =
-    useState<LockInAssessment | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"assessment" | "history">(
-    "assessment",
-  );
-
-  useEffect(() => {
-    loadPatientDetails();
-  }, [patientId]);
-
-  const loadPatientDetails = async () => {
-    setIsLoading(true);
-    try {
-      console.log("Fetching patient result for ID:", patientId);
-      const resultResponse = await api(
-        ENDPOINTS.getPatientResult(Number(patientId)),
-      );
-      console.log("Patient Result Response:", resultResponse);
-
-      if (resultResponse?.success && resultResponse.data) {
-        const resultData = resultResponse.data as PatientResult;
-        console.log("Patient Result Data:", resultData);
-        setPatientResult(resultData);
-
-        try {
-          console.log(
-            "Fetching lock-in assessment for school ID:",
-            resultData.schoolId,
-          );
-          const lockInResponse = await api(
-            ENDPOINTS.getSchoolLockIn(resultData.schoolId),
-          );
-          console.log("Lock-In Response:", lockInResponse);
-
-          if (lockInResponse?.success && lockInResponse.data) {
-            const lockInData = lockInResponse.data as {
-              schoolName: string;
-              students: Array<{
-                studentName: string;
-                lockinScore: number;
-                lockedInInterpretation: string;
-                lockedInColor: string;
-              }>;
-            };
-            console.log("Lock-In Data:", lockInData);
-
-            const student = lockInData.students?.find(
-              (s) => s.studentName === resultData.patientName,
-            );
-            console.log("Found Student:", student);
-
-            if (student) {
-              const assessment = {
-                fullName: resultData.patientName,
-                age: resultData.patientAge,
-                sex: resultData.patientSex,
-                school: resultData.schoolName,
-                lockedInScore: student.lockinScore.toFixed(2),
-                lockedInScoreDescription: student.lockedInInterpretation,
-                lockedInColor: student.lockedInColor,
-                generalMentalHealth: "N/A",
-                generalMentalHealthScore: "N/A",
-                generalMentalHealthColor: "gray",
-                possibleDepressionScore: "N/A",
-                possibleDepressionDescription: "N/A",
-                possibleDepressionColor: "gray",
-                lonelinessScore: "N/A",
-                lonelinessScoreDescription: "N/A",
-                lonelinessColor: "gray",
-                suicidalRiskScore: "N/A",
-                suicidalRiskScoreDescription: "N/A",
-                suicidalRiskColor: "gray",
-                examAnxiety: "N/A",
-                examAnxietyScore: "N/A",
-                examAnxietyColor: "gray",
-                coreAnxietyScore: "N/A",
-                coreAnxietyScoreDescription: "N/A",
-                coreAnxietyColor: "gray",
-                physicalDistressScore: "N/A",
-                physicalDistressScoreDescription: "N/A",
-                physicalDistressColor: "gray",
-                examPrep: "N/A",
-                examPrepScore: "N/A",
-                examPrepColor: "gray",
-                motivationScore: "N/A",
-                motivationScoreDescription: "N/A",
-                motivationColor: "gray",
-                studySkillsScore: "N/A",
-                studySkillsScoreDescription: "N/A",
-                studySkillsColor: "gray",
-                procrastinationScore: "N/A",
-                procrastinationScoreDescription: "N/A",
-                procrastinationColor: "gray",
-              };
-              console.log("Lock-In Assessment:", assessment);
-              setLockInAssessment(assessment);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching lock-in data:", error);
-        }
-      }
-    } catch (error) {
-      console.error("Error loading patient details:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Console log whenever state updates
-  useEffect(() => {
-    console.log("Patient Result State:", patientResult);
-  }, [patientResult]);
-
-  useEffect(() => {
-    console.log("Lock-In Assessment State:", lockInAssessment);
-  }, [lockInAssessment]);
+  const {
+    router,
+    patientResult,
+    lockInAssessment,
+    isLoading,
+    activeTab,
+    setActiveTab,
+    metrics,
+  } = useCuratorPatientDetails();
 
   if (isLoading) {
     return (
@@ -245,12 +45,6 @@ export default function PatientDetailsPage() {
   }
 
   if (!patientResult || !lockInAssessment) {
-    console.warn(
-      "Missing data - patientResult:",
-      patientResult,
-      "lockInAssessment:",
-      lockInAssessment,
-    );
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#faf9f7]">
         <button
@@ -264,107 +58,8 @@ export default function PatientDetailsPage() {
     );
   }
 
-  const metrics = [
-    {
-      name: "General Mental Health",
-      description: lockInAssessment.generalMentalHealth,
-      score: lockInAssessment.generalMentalHealthScore,
-      items: [
-        {
-          name: "Depression",
-          description: lockInAssessment.possibleDepressionDescription,
-          value: lockInAssessment.possibleDepressionScore,
-          color: generateColor(lockInAssessment.possibleDepressionColor),
-        },
-        {
-          name: "Loneliness",
-          description: lockInAssessment.lonelinessScoreDescription,
-          value: lockInAssessment.lonelinessScore,
-          color: generateColor(lockInAssessment.lonelinessColor),
-        },
-        {
-          name: "Suicidal Risk",
-          description: lockInAssessment.suicidalRiskScoreDescription,
-          value: lockInAssessment.suicidalRiskScore,
-          color: generateColor(lockInAssessment.suicidalRiskColor),
-        },
-      ],
-    },
-    {
-      name: "Exam Anxiety",
-      score: lockInAssessment.examAnxietyScore,
-      description: lockInAssessment.examAnxiety,
-      items: [
-        {
-          name: "Physical Distress",
-          description: lockInAssessment.physicalDistressScoreDescription,
-          value: lockInAssessment.physicalDistressScore,
-          color: generateColor(lockInAssessment.physicalDistressColor),
-        },
-        {
-          name: "Core Anxiety",
-          description: lockInAssessment.coreAnxietyScoreDescription,
-          value: lockInAssessment.coreAnxietyScore,
-          color: generateColor(lockInAssessment.coreAnxietyColor),
-        },
-      ],
-    },
-    {
-      name: "Exam Prep",
-      score: lockInAssessment.examPrepScore,
-      description: lockInAssessment.examPrep,
-      items: [
-        {
-          name: "Motivation",
-          description: lockInAssessment.motivationScoreDescription,
-          value: lockInAssessment.motivationScore,
-          color: generateColor(lockInAssessment.motivationColor),
-        },
-        {
-          name: "Procrastination",
-          description: lockInAssessment.procrastinationScoreDescription,
-          value: lockInAssessment.procrastinationScore,
-          color: generateColor(lockInAssessment.procrastinationColor),
-        },
-        {
-          name: "Study Skills",
-          description: lockInAssessment.studySkillsScoreDescription,
-          value: lockInAssessment.studySkillsScore,
-          color: generateColor(lockInAssessment.studySkillsColor),
-        },
-      ],
-    },
-  ];
-
-  console.log("Metrics:", metrics);
-
-  // Helper helper to get simplified color for UI
-  const getProgressColor = (color: string) => {
-    switch (color) {
-      case "red":
-        return "bg-red-500";
-      case "yellow":
-        return "bg-yellow-500";
-      case "green":
-        return "bg-green-500";
-      case "purple":
-        return "bg-purple-500";
-      case "light green":
-        return "bg-emerald-400";
-      default:
-        return "bg-gray-300";
-    }
-  };
-
-  const getScoreColor = (score: string) => {
-    // Logic to determine color based on score if needed, or mapping API colors
-    return "text-gray-900";
-  };
-
   return (
     <div className="min-h-screen bg-gray-50/50 flex flex-col">
-      {/* Top Navigation / Breadcrumb area could go here if needed, but we have a header card */}
-
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* Header Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8 pt-2! relative overflow-hidden">
@@ -410,7 +105,7 @@ export default function PatientDetailsPage() {
             </div>
 
             {/* Locked-In Score Indicator */}
-            <div className="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 min-w-[140px] mx-auto sm:mx-0">
+            <div className="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 min-w-35 mx-auto sm:mx-0">
               <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">
                 Locked In
               </span>
@@ -464,7 +159,7 @@ export default function PatientDetailsPage() {
                 </div>
 
                 <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {(category.items as any[]).map((item: any, i: number) => (
+                  {category.items.map((item, i) => (
                     <div key={i} className="flex flex-col gap-2">
                       <div className="flex justify-between items-end mb-1">
                         <span className="font-medium text-gray-700">
@@ -533,30 +228,8 @@ export default function PatientDetailsPage() {
                 </button>
               </div>
 
-              <div className="space-y-4 flex-1 overflow-y-auto max-h-[600px] pr-2 scrollbar-thin scrollbar-thumb-gray-200">
-                {[
-                  {
-                    title: "Group Therapy",
-                    subtitle: "Dr. Francis Nkrumah",
-                    date: "Jan 3rd, 2026",
-                    type: "Therapy",
-                    icon: Users,
-                  },
-                  {
-                    title: "CBT Session",
-                    subtitle: "Dr. James Nuamah",
-                    date: "Dec 20th, 2025",
-                    type: "Therapy",
-                    icon: Brain,
-                  },
-                  {
-                    title: "Clinical Eval",
-                    subtitle: "Dr. Francis Nkrumah",
-                    date: "Jan 3rd, 2026",
-                    type: "Evaluation",
-                    icon: Activity,
-                  },
-                ].map((action, i) => (
+              <div className="space-y-4 flex-1 overflow-y-auto max-h-150 pr-2 scrollbar-thin scrollbar-thumb-gray-200">
+                {MOCK_PATIENT_ACTIONS.map((action, i) => (
                   <div
                     key={i}
                     className="flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group"

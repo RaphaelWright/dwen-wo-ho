@@ -15,3 +15,5 @@ const NewPasswordPage = () => {
 };
 
 export default NewPasswordPage;
+
+

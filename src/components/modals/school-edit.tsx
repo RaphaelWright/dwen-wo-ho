@@ -8,14 +8,7 @@ import Image from "next/image";
 import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/types/school";
 import { useClickOutside } from "@/hooks/useClickOutside";
-
-interface SchoolEditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  school: School;
-  onSchoolUpdated?: () => void;
-  onDisableSchool?: () => void;
-}
+import { SchoolEditModalProps } from "@/types/modals";
 
 const campusOptions = [
   "Accra",
@@ -364,3 +357,5 @@ const SchoolEditModal = ({
 };
 
 export default SchoolEditModal;
+
+

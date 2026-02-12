@@ -5,10 +5,7 @@ import { Logo } from "@/components/shared/Logo";
 import { useState } from "react";
 import { X } from "lucide-react";
 
-interface LineupModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { LineupModalProps } from "@/types/modals";
 
 const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
   const [lineup, setLineup] = useState<string[]>([
@@ -75,7 +72,9 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                   <button
                     onClick={() => setActiveTab("lineup")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
-                      activeTab === "lineup" ? "bg-[#955aa4] text-white" : "bg-gray-100 text-gray-900"
+                      activeTab === "lineup"
+                        ? "bg-[#955aa4] text-white"
+                        : "bg-gray-100 text-gray-900"
                     }`}
                   >
                     Lineup . {lineup.length}
@@ -83,7 +82,9 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                   <button
                     onClick={() => setActiveTab("others")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
-                      activeTab === "others" ? "bg-[#955aa4] text-white" : "bg-gray-100 text-gray-900"
+                      activeTab === "others"
+                        ? "bg-[#955aa4] text-white"
+                        : "bg-gray-100 text-gray-900"
                     }`}
                   >
                     Others
@@ -128,6 +129,5 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
 };
 
 export default LineupModal;
-
 
 

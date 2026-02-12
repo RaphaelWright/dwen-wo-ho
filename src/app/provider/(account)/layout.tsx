@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { ProviderSidebar } from "@/features/provider/components/ui/sidebar";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import useUserQuery from "@/hooks/queries/useUserQuery";
@@ -111,3 +111,5 @@ export default function ProviderLayout({
     </div>
   );
 }
+
+

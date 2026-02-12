@@ -12,7 +12,7 @@ import { Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { calculateTimeAgo } from "@/lib/utils";
 import useUserQuery from "@/hooks/queries/useUserQuery";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import { setUserType } from "@/lib/utils/getUserType";
 
 interface SignUpProfileProps {
@@ -409,3 +409,5 @@ const SignUpProfile = ({
 };
 
 export default SignUpProfile;
+
+

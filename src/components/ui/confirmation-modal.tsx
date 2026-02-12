@@ -1,16 +1,6 @@
 "use client";
 
-interface ConfirmationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  title: string;
-  message: string;
-  confirmText: string;
-  cancelText?: string;
-  variant?: "success" | "danger" | "warning";
-  isLoading?: boolean;
-}
+import { ConfirmationModalProps } from "@/types/components";
 
 export const ConfirmationModal = ({
   isOpen,
@@ -29,6 +19,7 @@ export const ConfirmationModal = ({
     success: "bg-green-500 hover:bg-green-600 text-white",
     danger: "bg-red-500 hover:bg-red-600 text-white",
     warning: "bg-yellow-500 hover:bg-yellow-600 text-white",
+    info: "bg-blue-500 hover:bg-blue-600 text-white",
   };
 
   return (
@@ -67,3 +58,5 @@ export const ConfirmationModal = ({
     </div>
   );
 };
+
+

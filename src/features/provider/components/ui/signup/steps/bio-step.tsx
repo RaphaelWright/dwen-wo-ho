@@ -58,3 +58,5 @@ const BioStep = ({ phoneNumber, bio, onChange }: BioStepProps) => {
 };
 
 export default BioStep;
+
+

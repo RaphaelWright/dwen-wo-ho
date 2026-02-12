@@ -2,36 +2,55 @@
 
 import { Suspense } from "react";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
-import { BaseSignInForm } from "@/features/auth/components/BaseSignInForm";
-import { usePatientSignIn } from "@/features/auth/hooks/usePatientSignIn";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/constants/routes";
+import { usePatientSignIn } from "@/hooks/patient/usePatientSignIn";
+import { ROUTES } from "@/lib/constants/routes";
+import {
+  SignInHeader,
+  SignInForm,
+  SignInFooter,
+} from "@/features/patient/components/signin";
 
 const SignInContent = () => {
-  const router = useRouter();
   const email = useGetSearchParams("email");
 
-  const { register, errors, onSubmit, isLoading, errorMessage } =
-    usePatientSignIn({
-      email,
-    });
+  const {
+    register,
+    errors,
+    onSubmit,
+    isLoading,
+    errorMessage,
+    showPassword,
+    togglePasswordVisibility,
+    router,
+  } = usePatientSignIn({
+    email,
+  });
 
   return (
-    <BaseSignInForm
-      role="patient"
-      email={email || ""}
-      register={register}
-      errors={errors}
-      onSubmit={onSubmit}
-      onBack={() => router.back()}
-      isLoading={isLoading}
-      errorMessage={errorMessage}
-      forgotPasswordHref={`${ROUTES.patient.verifyPasswordReset}?email=${email}`}
-    />
+    <div className="h-full flex flex-col justify-between min-h-screen py-8">
+      <SignInHeader />
+
+      <SignInForm
+        email={email || ""}
+        register={register}
+        errors={errors}
+        showPassword={showPassword}
+        onTogglePassword={togglePasswordVisibility}
+        onSubmit={onSubmit}
+        errorMessage={errorMessage}
+        forgotPasswordHref={`${ROUTES.patient.verifyPasswordReset}?email=${email}`}
+      />
+
+      <SignInFooter
+        onBack={() => router.back()}
+        isLoading={isLoading}
+        errors={errors}
+      />
+    </div>
   );
 };
 
-const SignIn = () => {
+const SignInPage = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SignInContent />
@@ -39,4 +58,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInPage;

@@ -3,36 +3,13 @@
 import Image from "next/image";
 import { Users, Handshake, TrendingUp, Calendar, Quote } from "lucide-react";
 import { MdSchool, MdLocationOn } from "react-icons/md";
-import { School } from "@/types/school";
+import {
+  OverviewTabProps,
+  ProvidersTabProps,
+  PartnersTabProps,
+  ReachTabProps,
+} from "@/types/curator";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
-
-interface SchoolProvider {
-  id: string;
-  providerName: string;
-  providerTitle?: string | null;
-  email: string;
-  specialty: string | null;
-  officePhoneNumber: string | null;
-  applicationStatus: string;
-  profilePhotoURL: string | null;
-}
-
-interface Partner {
-  id: string;
-  name: string;
-  nickname: string;
-  slogan: string;
-  logo: string;
-}
-
-interface SchoolReachResponse {
-  schoolName: string;
-  reach: number;
-}
-
-interface OverviewTabProps {
-  school: School;
-}
 
 const parseCampuses = (campuses: string[] | null | undefined): string[] => {
   if (!campuses || campuses.length === 0) {
@@ -59,7 +36,9 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">School Information</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          School Information
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <MdSchool className="w-5 h-5 text-[#955aa4] mt-1" />
@@ -90,26 +69,28 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
               </div>
             </div>
           )}
-          <div className="flex items-start gap-3">
-            <Calendar className="w-5 h-5 text-[#955aa4] mt-1" />
-            <div>
-              <p className="text-sm text-gray-500">Created</p>
-              <p className="font-medium">{new Date(school.createdAt).toLocaleDateString()}</p>
+          {school.createdAt && (
+            <div className="flex items-start gap-3">
+              <Calendar className="w-5 h-5 text-[#955aa4] mt-1" />
+              <div>
+                <p className="text-sm text-gray-500">Created</p>
+                <p className="font-medium">
+                  {new Date(school.createdAt).toLocaleDateString()}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-interface ProvidersTabProps {
-  providers: SchoolProvider[];
-  isLoading: boolean;
-  onProviderClick: (provider: SchoolProvider) => void;
-}
-
-export const ProvidersTab = ({ providers, isLoading, onProviderClick }: ProvidersTabProps) => (
+export const ProvidersTab = ({
+  providers,
+  isLoading,
+  onProviderClick,
+}: ProvidersTabProps) => (
   <div>
     {isLoading ? (
       <div className="text-center py-12">
@@ -131,13 +112,18 @@ export const ProvidersTab = ({ providers, isLoading, onProviderClick }: Provider
           >
             {/* Arrow button in top right */}
             <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#955aa4] flex items-center justify-center transition-colors">
-              <svg 
-                className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </div>
 
@@ -160,7 +146,10 @@ export const ProvidersTab = ({ providers, isLoading, onProviderClick }: Provider
 
             {/* Provider name */}
             <h4 className="font-semibold text-gray-900 text-lg mb-1 group-hover:text-[#955aa4] transition-colors">
-              {formatProviderName(provider.providerName, provider.providerTitle)}
+              {formatProviderName(
+                provider.providerName,
+                provider.providerTitle,
+              )}
             </h4>
 
             {/* Specialty */}
@@ -192,11 +181,6 @@ export const ProvidersTab = ({ providers, isLoading, onProviderClick }: Provider
   </div>
 );
 
-interface PartnersTabProps {
-  partners: Partner[];
-  isLoading: boolean;
-}
-
 export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
   <div>
     {isLoading ? (
@@ -212,7 +196,10 @@ export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
     ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {partners.map((partner) => (
-          <div key={partner.id} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div
+            key={partner.id}
+            className="bg-gray-50 rounded-xl p-4 border border-gray-200"
+          >
             <div className="flex items-start gap-3">
               {partner.logo ? (
                 <Image
@@ -228,12 +215,18 @@ export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 truncate">{partner.name}</h4>
+                <h4 className="font-semibold text-gray-900 truncate">
+                  {partner.name}
+                </h4>
                 {partner.nickname && (
-                  <p className="text-sm text-gray-600 truncate">&quot;{partner.nickname}&quot;</p>
+                  <p className="text-sm text-gray-600 truncate">
+                    &quot;{partner.nickname}&quot;
+                  </p>
                 )}
                 {partner.slogan && (
-                  <p className="text-xs text-gray-500 mt-1 truncate">{partner.slogan}</p>
+                  <p className="text-xs text-gray-500 mt-1 truncate">
+                    {partner.slogan}
+                  </p>
                 )}
               </div>
             </div>
@@ -244,11 +237,6 @@ export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
   </div>
 );
 
-interface ReachTabProps {
-  reach: SchoolReachResponse | null;
-  isLoading: boolean;
-}
-
 export const ReachTab = ({ reach, isLoading }: ReachTabProps) => (
   <div>
     {isLoading ? (
@@ -258,7 +246,7 @@ export const ReachTab = ({ reach, isLoading }: ReachTabProps) => (
       </div>
     ) : reach ? (
       <div className="max-w-md mx-auto">
-        <div className="bg-gradient-to-br from-[#955aa4] to-[#7a4a88] rounded-2xl p-8 text-center text-white">
+        <div className="bg-linear-to-br from-[#955aa4] to-[#7a4a88] rounded-2xl p-8 text-center text-white">
           <TrendingUp className="w-16 h-16 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">Reach</h3>
           <p className="text-5xl font-extrabold mb-2">{reach.reach}</p>
@@ -274,5 +262,4 @@ export const ReachTab = ({ reach, isLoading }: ReachTabProps) => (
   </div>
 );
 
-export type { SchoolProvider, Partner, SchoolReachResponse };
 

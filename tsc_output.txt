@@ -1,4 +1,0 @@
-src/app/curator/(account)/schools/[schoolId]/page.tsx(36,26): error TS2307: Cannot find module '@/components/logo-purple' or its corresponding type declarations.
-src/app/curator/provider/[email]/page.tsx(7,26): error TS2307: Cannot find module '@/components/logo-purple' or its corresponding type declarations.
-src/app/patient/lock-in/[schoolId]/page.tsx(11,26): error TS2307: Cannot find module '@/components/logo-purple' or its corresponding type declarations.
-src/app/patient/signup/[email]/page.tsx(4,26): error TS2307: Cannot find module '@/components/logo-purple' or its corresponding type declarations.

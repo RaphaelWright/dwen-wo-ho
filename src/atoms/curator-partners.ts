@@ -21,3 +21,5 @@ const initialState: CuratorPartnersState = {
 };
 
 export const curatorPartnersAtom = atom<CuratorPartnersState>(initialState);
+
+
