@@ -21,6 +21,8 @@ export default function SchoolsPage() {
     isError,
   } = useCuratorSchools();
 
+  console.log(schoolsList);
+
   if (isError) {
     return (
       <WidthConstraint>

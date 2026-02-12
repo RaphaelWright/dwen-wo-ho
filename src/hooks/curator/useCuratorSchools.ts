@@ -14,14 +14,13 @@ import {
 } from "@/lib/schoolsApiUtils";
 import { useQueryClient } from "@tanstack/react-query";
 
-export type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
+export type FilterType = "all" | "JHS" | "SHS" | "COLLEGE";
 
 export const FILTER_OPTIONS: { label: string; value: FilterType }[] = [
   { label: "All", value: "all" },
   { label: "JHS", value: "JHS" },
   { label: "SHS", value: "SHS" },
-  { label: "NMTC", value: "NMTC" },
-  { label: "University", value: "University" },
+  { label: "COLLEGE", value: "COLLEGE" },
 ];
 
 // Configuration
