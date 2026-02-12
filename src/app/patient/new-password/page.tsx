@@ -1,6 +1,6 @@
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { ROUTES } from "@/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,7 @@ const SignUpContent = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <p className="font-bold">
           for <span className="text-4xl">Patients</span>
         </p>
@@ -134,3 +134,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+

@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { ROUTES } from "@/constants/routes";
@@ -72,7 +72,7 @@ const ProviderDetails = () => {
 
   useEffect(() => {
     if (isAuthenticated === false) return;
-    
+
     const loadProvider = async () => {
       try {
         const refreshToken = localStorage.getItem("refreshToken") || "";
@@ -106,26 +106,34 @@ const ProviderDetails = () => {
             setProvider({
               id: fallbackData.email || "",
               email: fallbackData.email || "",
-              fullName: formatProviderName(fallbackData.providerName || "", fallbackData.providerTitle),
+              fullName: formatProviderName(
+                fallbackData.providerName || "",
+                fallbackData.providerTitle,
+              ),
               providerTitle: fallbackData.providerTitle || undefined,
               professionalTitle: fallbackData.specialty || "",
               officePhoneNumber: fallbackData.officePhoneNumber || undefined,
-              status: (fallbackData.applicationStatus as "PENDING" | "APPROVED" | "REJECTED") || "PENDING",
+              status:
+                (fallbackData.applicationStatus as
+                  | "PENDING"
+                  | "APPROVED"
+                  | "REJECTED") || "PENDING",
               profileImage: fallbackData.profilePhotoURL || undefined,
-              createdAt: fallbackData.applicationDate || new Date().toISOString(),
-              updatedAt: fallbackData.applicationDate || new Date().toISOString(),
+              createdAt:
+                fallbackData.applicationDate || new Date().toISOString(),
+              updatedAt:
+                fallbackData.applicationDate || new Date().toISOString(),
             });
             setErrorMessage("");
             return;
-          } catch {
-          }
+          } catch {}
         }
       }
       setErrorMessage("Failed to load provider details. Please try again.");
     };
 
     if (isAuthenticated) {
-    loadProvider();
+      loadProvider();
     }
   }, [email, router, isAuthenticated]);
 
@@ -152,7 +160,8 @@ const ProviderDetails = () => {
         setErrorMessage(response.message || "Failed to approve provider");
       }
     } catch (error: any) {
-      const errorMsg = error?.message || "Failed to approve provider. Please try again.";
+      const errorMsg =
+        error?.message || "Failed to approve provider. Please try again.";
       setErrorMessage(errorMsg);
     } finally {
       setIsActionLoading(false);
@@ -182,7 +191,8 @@ const ProviderDetails = () => {
         setErrorMessage(response.message || "Failed to reject provider");
       }
     } catch (error: any) {
-      const errorMsg = error?.message || "Failed to reject provider. Please try again.";
+      const errorMsg =
+        error?.message || "Failed to reject provider. Please try again.";
       setErrorMessage(errorMsg);
     } finally {
       setIsActionLoading(false);
@@ -257,12 +267,12 @@ const ProviderDetails = () => {
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Providers</span>
               </Button>
-              <JustGoHealth />
+              <Logo />
             </div>
             <div className="flex items-center space-x-4">
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(
-                  provider.status || "PENDING"
+                  provider.status || "PENDING",
                 )}`}
               >
                 {provider.status}
@@ -294,7 +304,7 @@ const ProviderDetails = () => {
           <div className="px-6 py-8">
             <div className="flex items-start space-x-6">
               {/* Profile Image */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 {provider.profileImage ? (
                   <Image
                     src={provider.profileImage}
@@ -313,7 +323,10 @@ const ProviderDetails = () => {
               {/* Provider Info */}
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {provider.professionalTitle ? `${provider.professionalTitle} ` : ""}{provider.fullName}
+                  {provider.professionalTitle
+                    ? `${provider.professionalTitle} `
+                    : ""}
+                  {provider.fullName}
                 </h1>
                 <div className="flex items-center space-x-2 mb-4">
                   <Mail className="w-5 h-5 text-gray-400" />

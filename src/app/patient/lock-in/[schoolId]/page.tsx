@@ -8,7 +8,7 @@ import WidthConstraint from "@/components/ui/width-constraint";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,7 +45,13 @@ type LockInFormData = z.infer<typeof lockInSchema>;
 const frequencyOptions = ["never", "rarely", "sometimes", "often", "always"];
 const yesNoOptions = ["yes", "no"];
 const motivationOptions = ["none", "slightly", "moderate", "high"];
-const studyFrequencyOptions = ["never", "rarely", "occasionally", "frequently", "always"];
+const studyFrequencyOptions = [
+  "never",
+  "rarely",
+  "occasionally",
+  "frequently",
+  "always",
+];
 const timeToExamOptions = ["1d", "2d", "3d", "1w", "2w", "1m", "2m+"];
 const reasonOptions = ["exam", "assignment", "project", "other"];
 
@@ -69,14 +75,14 @@ export default function LockInFormPage() {
   const loadCachedData = (): Partial<LockInFormData> | null => {
     // Check if we're in the browser
     if (typeof window === "undefined") return null;
-    
+
     try {
       const cacheKey = getCacheKey();
       const cached = localStorage.getItem(cacheKey);
       if (!cached) return null;
 
       const cachedData: CachedFormData = JSON.parse(cached);
-      
+
       // Check if cache is for the same school
       if (cachedData.schoolId !== schoolId) {
         localStorage.removeItem(cacheKey);
@@ -108,8 +114,9 @@ export default function LockInFormPage() {
   };
 
   // Load cached data only on client side
-  const [cachedDefaults, setCachedDefaults] = useState<Partial<LockInFormData> | null>(null);
-  
+  const [cachedDefaults, setCachedDefaults] =
+    useState<Partial<LockInFormData> | null>(null);
+
   useEffect(() => {
     // Only load on client side
     if (typeof window !== "undefined") {
@@ -149,7 +156,7 @@ export default function LockInFormPage() {
     const timer = setTimeout(() => {
       // Only save if form has meaningful data (not just default campus)
       const hasData = Object.keys(formValues).some(
-        (key) => key !== "campus" && formValues[key as keyof LockInFormData]
+        (key) => key !== "campus" && formValues[key as keyof LockInFormData],
       );
       if (hasData && typeof window !== "undefined") {
         const cacheKey = getCacheKey();
@@ -214,10 +221,12 @@ export default function LockInFormPage() {
             </Button>
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Lock In Form</h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Lock In Form
+                </h1>
                 <p className="text-gray-600">Please fill out the form below</p>
               </div>
-              <JustGoHealth />
+              <Logo />
             </div>
           </div>
 
@@ -225,7 +234,9 @@ export default function LockInFormPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Personal Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Personal Information</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Personal Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="fullName">Full Name</Label>
@@ -235,7 +246,9 @@ export default function LockInFormPage() {
                     placeholder="Enter your full name"
                   />
                   {errors.fullName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.fullName.message}
+                    </p>
                   )}
                 </div>
 
@@ -248,7 +261,9 @@ export default function LockInFormPage() {
                     placeholder="Enter your age"
                   />
                   {errors.age && (
-                    <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.age.message}
+                    </p>
                   )}
                 </div>
 
@@ -265,7 +280,9 @@ export default function LockInFormPage() {
                     <option value="Other">Other</option>
                   </select>
                   {errors.sex && (
-                    <p className="text-red-500 text-sm mt-1">{errors.sex.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.sex.message}
+                    </p>
                   )}
                 </div>
 
@@ -277,7 +294,9 @@ export default function LockInFormPage() {
                     placeholder="Enter your level (e.g., 2, 3, 4)"
                   />
                   {errors.level && (
-                    <p className="text-red-500 text-sm mt-1">{errors.level.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.level.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -285,7 +304,9 @@ export default function LockInFormPage() {
 
             {/* Lock In Details */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Lock In Details</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Lock In Details
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="reasonForLockin">Reason for Lock In</Label>
@@ -302,7 +323,9 @@ export default function LockInFormPage() {
                     ))}
                   </select>
                   {errors.reasonForLockin && (
-                    <p className="text-red-500 text-sm mt-1">{errors.reasonForLockin.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.reasonForLockin.message}
+                    </p>
                   )}
                 </div>
 
@@ -321,7 +344,9 @@ export default function LockInFormPage() {
                     ))}
                   </select>
                   {errors.timeToExam && (
-                    <p className="text-red-500 text-sm mt-1">{errors.timeToExam.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.timeToExam.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -329,7 +354,9 @@ export default function LockInFormPage() {
 
             {/* Mental Health Assessment */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Mental Health Assessment</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Mental Health Assessment
+              </h2>
               <div className="space-y-4">
                 {[
                   { name: "feelingDepressed", label: "Feeling Depressed" },
@@ -388,14 +415,19 @@ export default function LockInFormPage() {
 
             {/* Exam Anxiety */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Exam Anxiety</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Exam Anxiety
+              </h2>
               <div className="space-y-4">
                 {[
                   { name: "examWorrying", label: "Exam Worrying" },
                   { name: "sleepProblems", label: "Sleep Problems" },
                   { name: "fearOfFailure", label: "Fear of Failure" },
                   { name: "feelingNervous", label: "Feeling Nervous" },
-                  { name: "sweatingOrHeartRacing", label: "Sweating or Heart Racing" },
+                  {
+                    name: "sweatingOrHeartRacing",
+                    label: "Sweating or Heart Racing",
+                  },
                   { name: "stomachUpset", label: "Stomach Upset" },
                 ].map((field) => (
                   <div key={field.name}>
@@ -424,7 +456,9 @@ export default function LockInFormPage() {
 
             {/* Study Habits */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Study Habits</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Study Habits
+              </h2>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="motivationToStudy">Motivation to Study</Label>
@@ -441,7 +475,9 @@ export default function LockInFormPage() {
                     ))}
                   </select>
                   {errors.motivationToStudy && (
-                    <p className="text-red-500 text-sm mt-1">{errors.motivationToStudy.message}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.motivationToStudy.message}
+                    </p>
                   )}
                 </div>
 
@@ -484,7 +520,11 @@ export default function LockInFormPage() {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting} className="bg-[#955aa4] hover:bg-[#955aa4]/90">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-[#955aa4] hover:bg-[#955aa4]/90"
+              >
                 {isSubmitting ? "Submitting..." : "Submit Lock In"}
               </Button>
             </div>

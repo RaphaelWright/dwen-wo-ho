@@ -4,13 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import JustGoHealthBlack from "@/components/logo-black";
-import {
-  FiLogOut,
-  FiArrowRight,
-  FiMenu,
-  FiUser,
-} from "react-icons/fi";
+import { Logo } from "@/components/shared/Logo";
+import { FiLogOut, FiArrowRight, FiMenu, FiUser } from "react-icons/fi";
 import { MdSchool } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
@@ -68,13 +63,13 @@ export const ProviderSidebar = ({
           "transition-transform duration-300 ease-in-out",
           isMobileSidebarOpen
             ? "translate-x-0"
-            : "-translate-x-full md:translate-x-0"
+            : "-translate-x-full md:translate-x-0",
         )}
       >
         {/* Logo */}
         <div className="p-4 lg:p-6 border-b border-gray-200">
           <div className="transform hover:scale-105 transition-transform duration-300 justify-center flex">
-            <JustGoHealthBlack />
+            <Logo variant="black" withLink={false} />
           </div>
         </div>
 
@@ -88,7 +83,7 @@ export const ProviderSidebar = ({
                 "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
                 isActive("/provider/schools") || isActive("/provider/home")
                   ? "bg-[#955aa4] text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]",
               )}
             >
               <div className="flex items-center justify-between">
@@ -96,12 +91,14 @@ export const ProviderSidebar = ({
                   <MdSchool className="text-xl" />
                   <span className="text-lg">Schools</span>
                 </div>
-                <span className={cn(
-                  "text-sm px-2 py-1 rounded-full",
-                  isActive("/provider/schools") || isActive("/provider/home")
-                    ? "bg-white/20 text-white"
-                    : "bg-gray-200 text-gray-700"
-                )}>
+                <span
+                  className={cn(
+                    "text-sm px-2 py-1 rounded-full",
+                    isActive("/provider/schools") || isActive("/provider/home")
+                      ? "bg-white/20 text-white"
+                      : "bg-gray-200 text-gray-700",
+                  )}
+                >
                   {schoolCount}
                 </span>
               </div>
@@ -113,7 +110,7 @@ export const ProviderSidebar = ({
                 "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
                 isActive("/provider/profile")
                   ? "bg-[#955aa4] text-white shadow-md"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-[#955aa4]",
               )}
             >
               <div className="flex items-center gap-3">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import Providers from "@/components/providers";
+import AppProviders from "@/components/AppProviders";
 import { brHendrix } from "@/lib/fonts/fonts";
 
 const geistSans = Geist({
@@ -34,7 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${brHendrix.variable} antialiased`}
       >
         <Toaster richColors position="top-right" />
-        <Providers>{children}</Providers>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

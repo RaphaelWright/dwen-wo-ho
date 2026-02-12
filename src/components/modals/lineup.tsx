@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { useState } from "react";
 import { X } from "lucide-react";
 
@@ -54,7 +54,7 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
           >
             <div className="bg-white rounded-2xl border-2 border-[#955aa4] max-w-5xl w-full p-8 max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <JustGoHealth />
+                <Logo />
                 <button
                   type="button"
                   onClick={onClose}
@@ -128,5 +128,6 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
 };
 
 export default LineupModal;
+
 
 

@@ -26,14 +26,14 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import {
   ProvidersTab,
   SchoolProvider,
-} from "@/components/curator/school-detail-tabs";
+} from "@/features/curator/components/school-detail-tabs";
 import {
   formatProviderName,
   getProviderTitle,
 } from "@/lib/utils/formatProviderName";
 import { timeAgo } from "@/lib/utils/timeAgo";
 import { ProviderDetails } from "@/types/provider";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -867,7 +867,7 @@ export default function SchoolDetailsPage() {
               onClick={() => router.push(ROUTES.curator.schools)}
               className="mb-6 cursor-pointer hover:opacity-70 transition-opacity inline-block"
             >
-              <JustGoHealth className="scale-75 origin-left" />
+              <Logo className="scale-75 origin-left" />
             </div>
 
             <div className="flex items-center justify-between">

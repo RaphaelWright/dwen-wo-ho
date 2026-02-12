@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { School } from "@/types/school";
 import SchoolSelectionModal from "@/components/modals/school-selection-pages";
@@ -247,7 +247,7 @@ export default function CuratorPagesPage() {
             </div>
           ) : (
             <div className="mb-6 flex justify-center scale-[1.2] origin-center">
-              <JustGoHealth />
+              <Logo />
             </div>
           )}
         </div>
@@ -523,3 +523,4 @@ export default function CuratorPagesPage() {
     </WidthConstraint>
   );
 }
+

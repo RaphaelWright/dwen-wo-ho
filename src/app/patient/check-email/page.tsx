@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,7 +52,7 @@ const CheckEmail = () => {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center px-4 md:px-24 py-8 md:py-12">
       <div className="absolute flex top-4 md:top-8 items-center px-4 md:px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.checkEmail}
           className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl bg-gray-300 text-[#ed1c24] rounded-full px-3 md:px-4 py-1 md:py-2"
@@ -116,3 +116,4 @@ const CheckEmail = () => {
 };
 
 export default CheckEmail;
+

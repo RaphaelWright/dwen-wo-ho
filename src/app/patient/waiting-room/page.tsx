@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import WidthConstraint from "@/components/ui/width-constraint";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Loader2, Clock, Users } from "lucide-react";
 
 export default function WaitingRoomPage() {
@@ -33,7 +33,7 @@ export default function WaitingRoomPage() {
         <div className="p-8 text-center">
           {/* Logo */}
           <div className="mb-8 flex justify-center">
-            <JustGoHealth />
+            <Logo />
           </div>
 
           {/* Main Content */}
@@ -107,3 +107,4 @@ export default function WaitingRoomPage() {
     </div>
   );
 }
+

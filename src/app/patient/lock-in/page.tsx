@@ -9,7 +9,7 @@ import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { School } from "@/types/school";
 
 export default function LockInPage() {
@@ -68,7 +68,7 @@ export default function LockInPage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Lock In</h1>
               <p className="text-gray-600">Select your school to begin</p>
             </div>
-            <JustGoHealth />
+            <Logo />
           </div>
 
           {/* Search Bar */}
@@ -151,3 +151,4 @@ export default function LockInPage() {
     </div>
   );
 }
+

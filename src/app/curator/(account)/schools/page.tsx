@@ -15,58 +15,18 @@ import { School } from "@/types/school";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  setSchools,
-  setLoading,
-  updateSchool,
-} from "@/store/slices/curatorSchoolsSlice";
+import { useAtom } from "jotai";
+import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
 import { useNotification } from "@/context/notification-context";
 import {
   processBatch,
   getSchoolLockInCount,
   getLatestPatientResult,
   clearAllCaches,
-  patientResultsCache,
 } from "@/lib/schoolsApiUtils";
 import { useQueryClient } from "@tanstack/react-query";
 
 type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University";
-
-interface SchoolWithExtras extends School {
-  studentCount?: number;
-  newPatientName?: string;
-  latestLockInDate?: string;
-  providerCount?: number;
-  newProviderName?: string;
-  latestProviderDate?: string;
-  isLoading?: boolean;
-}
-
-interface PatientResult {
-  id: number;
-  patientName: string;
-  createdAt: string;
-  visibilityStatus: string;
-}
-
-interface ProviderResult {
-  id: string;
-  fullName: string;
-  email: string;
-  createdAt?: string;
-  addedAt?: string;
-}
-
-interface LockInData {
-  schoolName: string;
-  students: Array<{
-    studentName: string;
-    lockinScore: number;
-    lockedInInterpretation: string;
-    lockedInColor: string;
-  }>;
-}
 
 const filterOptions: { label: string; value: FilterType }[] = [
   { label: "All", value: "all" },
@@ -79,12 +39,12 @@ const filterOptions: { label: string; value: FilterType }[] = [
 // Configuration
 const BATCH_SIZE = 5;
 const POLL_INTERVAL = 10000; // 10 seconds
+
 export default function SchoolsPage() {
-  const dispatch = useAppDispatch();
-  const queryClient = useQueryClient(); // ✅ Call hook at component level
-  const { schools: cachedSchools, isLoading: reduxLoading } = useAppSelector(
-    (state) => state.curatorSchools,
-  );
+  const [schoolsState, setSchoolsState] = useAtom(curatorSchoolsAtom);
+  const { schools: cachedSchools, isLoading: atomLoading } = schoolsState;
+
+  const queryClient = useQueryClient();
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const { addNotification } = useNotification();
@@ -95,10 +55,22 @@ export default function SchoolsPage() {
     refetch: refetchSchools,
     forceRefetch,
   } = useSchoolsWithRefetch();
+
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
   const isInitialLoadRef = useRef(true);
   const abortControllerRef = useRef<AbortController | null>(null);
   const lastPollRef = useRef<number>(0);
+
+  // Helper to update a single school in state
+  const updateSchoolInState = useCallback(
+    (id: number | string, data: Partial<SchoolWithExtras>) => {
+      setSchoolsState((prev) => ({
+        ...prev,
+        schools: prev.schools.map((s) => (s.id === id ? { ...s, ...data } : s)),
+      }));
+    },
+    [setSchoolsState],
+  );
 
   // Fetch data for a single school with optimized API calls
   const fetchSchoolData = useCallback(
@@ -122,15 +94,6 @@ export default function SchoolsPage() {
               latestCheck &&
               latestCheck.patientName !== prevSchool.newPatientName
             ) {
-              // console.log('🔔 NEW LOCK-IN DETECTED:', {
-              //   schoolId: school.id,
-              //   schoolName: school.name,
-              //   previousPatient: prevSchool.newPatientName,
-              //   newPatient: latestCheck.patientName,
-              //   previousDate: prevSchool.latestLockInDate,
-              //   newDate: latestCheck.createdAt,
-              //   timestamp: new Date().toISOString(),
-              // });
               addNotification(
                 "success",
                 `New patient: ${latestCheck.patientName} at ${school.name}`,
@@ -138,8 +101,7 @@ export default function SchoolsPage() {
               forceRefresh = true; // Force cache refresh to get updated counts
 
               // Invalidate React Query cache and refetch all schools from backend
-              // console.log('🔄 INVALIDATING CACHE AND REFETCHING ALL SCHOOLS FROM BACKEND...');
-              await queryClient.invalidateQueries({ queryKey: ["schools"] }); // ✅ Use queryClient from component scope
+              await queryClient.invalidateQueries({ queryKey: ["schools"] });
               await forceRefetch();
             }
           }
@@ -161,15 +123,6 @@ export default function SchoolsPage() {
           schoolData.latestLockInDate = latestPatient.createdAt;
           schoolData.newPatientName = latestPatient.patientName;
         }
-
-        // Log all the complete school data when new data is fetched after detecting a new lock-in
-        if (forceRefresh) {
-          // console.log('📊 NEW DATA FETCHED AFTER LOCK-IN - Complete School Data:', {
-          //   ...schoolData,
-          //   previousData: previousSchoolsRef.current.get(Number(school.id)),
-          //   timestamp: new Date().toISOString(),
-          // });
-        }
       } catch (error) {
         console.error(`Error fetching data for school ${school.id}:`, error);
       }
@@ -177,8 +130,8 @@ export default function SchoolsPage() {
       schoolData.isLoading = false;
       return schoolData;
     },
-    [queryClient, refetchSchools, addNotification],
-  ); // ✅ Add dependencies
+    [queryClient, refetchSchools, addNotification, forceRefetch],
+  );
 
   // Load schools with incremental updates and batching
   const loadSchoolsWithData = useCallback(
@@ -192,7 +145,7 @@ export default function SchoolsPage() {
       abortControllerRef.current = new AbortController();
 
       if (!isBackground) {
-        dispatch(setLoading(true));
+        setSchoolsState((prev) => ({ ...prev, isLoading: true }));
       }
 
       const currentSchoolIds = new Set(
@@ -222,6 +175,14 @@ export default function SchoolsPage() {
       }
 
       try {
+        // Initialize state with basic school data if empty (to show cards immediately)
+        if (schoolsState.schools.length === 0) {
+          setSchoolsState((prev) => ({
+            ...prev,
+            schools: allSchools.map((s) => ({ ...s }) as SchoolWithExtras),
+          }));
+        }
+
         // Process schools in batches with incremental updates
         const enrichedSchools = await processBatch(
           allSchools,
@@ -232,15 +193,15 @@ export default function SchoolsPage() {
             // Update cache map immediately
             previousSchoolsRef.current.set(Number(school.id), schoolData);
 
-            // Update individual school in Redux for real-time card updates
-            dispatch(updateSchool({ id: school.id, data: schoolData }));
+            // Update individual school in state for real-time card updates
+            updateSchoolInState(school.id, schoolData);
 
             return schoolData;
           },
         );
 
         // Final update with complete data in backend order
-        dispatch(setSchools(enrichedSchools));
+        setSchoolsState((prev) => ({ ...prev, schools: enrichedSchools }));
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") {
           return;
@@ -249,12 +210,19 @@ export default function SchoolsPage() {
         addNotification("error", "Failed to load some school data");
       } finally {
         if (!isBackground) {
-          dispatch(setLoading(false));
+          setSchoolsState((prev) => ({ ...prev, isLoading: false }));
         }
         isInitialLoadRef.current = false;
       }
     },
-    [allSchools, dispatch, fetchSchoolData, addNotification],
+    [
+      allSchools,
+      fetchSchoolData,
+      addNotification,
+      updateSchoolInState,
+      setSchoolsState,
+      schoolsState.schools.length,
+    ],
   );
 
   // Initial load
@@ -262,13 +230,6 @@ export default function SchoolsPage() {
     if (allSchools.length === 0) return;
 
     const hasCache = cachedSchools.length > 0;
-
-    // Log when allSchools changes (including after refetch)
-    // console.log('📋 ALL SCHOOLS UPDATED FROM BACKEND:', {
-    //   schoolCount: allSchools.length,
-    //   schools: allSchools.map(s => ({ id: s.id, name: s.name })),
-    //   timestamp: new Date().toISOString(),
-    // });
 
     if (hasCache) {
       loadSchoolsWithData(true);
@@ -400,7 +361,7 @@ export default function SchoolsPage() {
         </div>
 
         {/* Loading state */}
-        {(schoolsLoading || reduxLoading) && cachedSchools.length === 0 ? (
+        {(schoolsLoading || atomLoading) && cachedSchools.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
@@ -448,13 +409,13 @@ export default function SchoolsPage() {
                       />
                     </div>
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center">
                       <MdSchool className="w-20 h-20 text-gray-400" />
                     </div>
                   )}
 
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-black/20" />
 
                   {/* Loading Indicator */}
                   {school.isLoading && (
@@ -465,7 +426,7 @@ export default function SchoolsPage() {
 
                   {/* Top Left - New Patient Alert */}
                   {school.newPatientName && !school.isLoading && (
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-[240px]">
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-60">
                       <span className="text-base font-semibold block truncate">
                         <span className="text-[#e92229]">New Patient.</span>{" "}
                         <span className="text-black">

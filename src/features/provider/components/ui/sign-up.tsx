@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/stepper";
 import { signUpSteps } from "@/lib/utils";
@@ -133,7 +133,7 @@ const SignUpContent = ({
     <div className="h-screen flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between w-full px-8 py-4">
-        <JustGoHealth />
+        <Logo />
         <p className="text-2xl font-bold"><span className="text-sm">for</span> Providers</p>
       </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Image from "next/image";
@@ -94,7 +94,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
 
         <div className="relative z-10 flex items-center px-8 justify-between w-full pt-8">
           <div className="transform hover:scale-105 transition-transform duration-300">
-            <JustGoHealth />
+            <Logo />
           </div>
           <Link
             href={ROUTES.patient.checkEmail}
@@ -174,3 +174,4 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
 };
 
 export default CheckEmail;
+

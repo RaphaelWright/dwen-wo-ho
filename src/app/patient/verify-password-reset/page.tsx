@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState, Suspense } from "react";
@@ -39,7 +39,7 @@ const VerifyContent = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <p className="font-bold">
           for <span className="text-4xl">Patients</span>
         </p>
@@ -108,3 +108,4 @@ const Verify = () => {
 };
 
 export default Verify;
+

@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/app/provider/auth/layout";
-import NewPassword from "@/components/provider/ui/new-password";
+import NewPassword from "@/features/provider/components/ui/new-password";
 import { Suspense } from "react";
 
 const NewPasswordPage = () => {

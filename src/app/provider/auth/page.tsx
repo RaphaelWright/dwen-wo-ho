@@ -2,12 +2,16 @@
 
 import { Suspense, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import CheckEmail from "@/components/provider/ui/check-email";
-import SignIn from "@/components/provider/ui/signin";
-import SignUp from "@/components/provider/ui/sign-up";
-import VerifyPasswordReset from "@/components/provider/ui/verify-password-reset";
+import CheckEmail from "@/features/provider/components/ui/check-email";
+import SignIn from "@/features/provider/components/ui/signin";
+import SignUp from "@/features/provider/components/ui/sign-up";
+import VerifyPasswordReset from "@/features/provider/components/ui/verify-password-reset";
 import { useSearchParams } from "next/navigation";
-import { getUserType, hasValidToken, setUserType } from "@/lib/utils/getUserType";
+import {
+  getUserType,
+  hasValidToken,
+  setUserType,
+} from "@/lib/utils/getUserType";
 import { ROUTES } from "@/constants/routes";
 import { refreshToken } from "@/lib/auth-utils";
 import { api } from "@/lib/api";
@@ -36,7 +40,7 @@ const ProviderAuthPageContent = () => {
     isCheckingRef.current = true;
 
     let isMounted = true;
-    
+
     const checkAuthAndRedirect = async () => {
       // Double-check mounted state and redirect flag
       if (!isMounted || hasRedirectedRef.current) {
@@ -67,19 +71,21 @@ const ProviderAuthPageContent = () => {
       const verifyProfileAndRedirect = async () => {
         try {
           // Make request to profile endpoint to verify token is valid
-          const profileResponse = await api(ENDPOINTS.profile, { method: "GET" });
-          
+          const profileResponse = await api(ENDPOINTS.profile, {
+            method: "GET",
+          });
+
           // If profile request succeeds (200), user is authenticated
           if (profileResponse?.success && profileResponse.data) {
             const userType = getUserType();
-            
+
             if (userType === "curator" && !hasRedirectedRef.current) {
               hasRedirectedRef.current = true;
               isCheckingRef.current = false;
               window.location.href = ROUTES.curator.schools;
               return true;
             }
-            
+
             if (userType === "provider" && !hasRedirectedRef.current) {
               hasRedirectedRef.current = true;
               isCheckingRef.current = false;
@@ -87,7 +93,7 @@ const ProviderAuthPageContent = () => {
               return true;
             }
           }
-          
+
           // If profile request doesn't succeed, user is logged out
           clearAuthAndProceed();
           return false;
@@ -99,9 +105,10 @@ const ProviderAuthPageContent = () => {
       };
 
       // First, check if refreshToken exists - if so, immediately refresh to get new access token
-      const refreshTokenValue = typeof window !== "undefined" 
-        ? localStorage.getItem("refreshToken") 
-        : null;
+      const refreshTokenValue =
+        typeof window !== "undefined"
+          ? localStorage.getItem("refreshToken")
+          : null;
 
       if (refreshTokenValue) {
         // Immediately try to refresh the token
@@ -115,7 +122,7 @@ const ProviderAuthPageContent = () => {
 
       // If no refreshToken or refresh failed, check for existing access tokens
       const hasToken = hasValidToken();
-      
+
       if (hasToken) {
         // We have a token, verify it's still valid by checking profile
         await verifyProfileAndRedirect();
@@ -139,7 +146,7 @@ const ProviderAuthPageContent = () => {
 
   useEffect(() => {
     if (isCheckingAuth) return;
-    
+
     if (initialStep) {
       setStep(initialStep);
     }
@@ -188,7 +195,9 @@ const ProviderAuthPageContent = () => {
         />
       );
     } else if (step === "reset-password") {
-      return <VerifyPasswordReset email={email} onBack={() => setStep("sign-in")} />;
+      return (
+        <VerifyPasswordReset email={email} onBack={() => setStep("sign-in")} />
+      );
     } else {
       return (
         <SignUp
@@ -211,9 +220,13 @@ const ProviderAuthPageContent = () => {
           </div>
         </div>
       )}
-      
+
       {/* Auth form content - always rendered, just hidden behind overlay when checking */}
-      <div className={isCheckingAuth ? "opacity-0 pointer-events-none" : "opacity-100"}>
+      <div
+        className={
+          isCheckingAuth ? "opacity-0 pointer-events-none" : "opacity-100"
+        }
+      >
         {renderAuthContent()}
       </div>
     </div>

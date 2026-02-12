@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { CuratorSidebar } from "@/components/curator/ui/sidebar";
+import { CuratorSidebar } from "@/features/curator/components/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
-import CreateModal from "@/components/curator/ui/create-modal";
+import CreateModal from "@/features/curator/components/ui/create-modal";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import MemberCreationModal from "@/components/modals/member-creation";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { ProviderSidebar } from "@/components/provider/ui/sidebar";
+import { ProviderSidebar } from "@/features/provider/components/ui/sidebar";
 import { ROUTES } from "@/constants/routes";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState, Suspense } from "react";
@@ -50,7 +50,7 @@ const VerifyContent = ({
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex items-center p-6 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.auth}
           className="bg-gray-300 text-[#ed1c24] rounded-md px-6 py-1"

@@ -1,6 +1,6 @@
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { ROUTES } from "@/constants/routes";
 import { ENDPOINTS } from "@/constants/endpoints";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
@@ -144,7 +144,7 @@ const NewPasswordContent = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 pt-5 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.singIn}
           className="bg-gray-300 text-[#ed1c24] rounded-md px-6 py-1"
@@ -227,3 +227,4 @@ const NewPassword = () => {
 };
 
 export default NewPassword;
+

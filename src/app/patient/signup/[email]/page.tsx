@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ const Verify = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <p className="font-bold">
           for <span className="text-4xl">Patients</span>
         </p>
@@ -44,13 +44,15 @@ const Verify = () => {
           Enter Verification Code
         </h1>
         <h2 className="text-2xl text-gray-500 font-medium text-center">
-          A 6-digit verification code was just<br/> sent to{" "}
-          {decodeURIComponent(email as string)}
+          A 6-digit verification code was just
+          <br /> sent to {decodeURIComponent(email as string)}
         </h2>
         <div className="mt-5 text-center">
           <InputOTP
             maxLength={6}
-            onComplete={(value) => router.push(`${ROUTES.patient.newPassword}?email=${email}`)}
+            onComplete={(value) =>
+              router.push(`${ROUTES.patient.newPassword}?email=${email}`)
+            }
             size={40}
           >
             <InputOTPSlot index={0} className="otp-slot" />

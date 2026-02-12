@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -151,7 +151,7 @@ const SignInContent = () => {
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between w-full px-6">
-        <JustGoHealth />
+        <Logo />
         <button className="bg-gray-300 text-red-500 rounded-full px-4 py-2 text-sm font-medium hover:bg-gray-400 transition-colors">
           Switch to Patients
         </button>
@@ -275,3 +275,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+

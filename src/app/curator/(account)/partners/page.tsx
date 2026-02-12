@@ -7,38 +7,47 @@ import WidthConstraint from "@/components/ui/width-constraint";
 import { Building2, Search } from "lucide-react";
 import Image from "next/image";
 import PartnerDetailsModal from "@/components/modals/partner-details";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setPartners, setLoading } from "@/store/slices/curatorPartnersSlice";
-import type { Partner } from "@/store/slices/curatorPartnersSlice";
+import { useAtom } from "jotai";
+import { curatorPartnersAtom, Partner } from "@/atoms/curator-partners";
 
 export default function PartnersPage() {
-  const dispatch = useAppDispatch();
-  const { partners: cachedPartners, isLoading: reduxLoading } = useAppSelector(
-    (state) => state.curatorPartners
-  );
+  const [partnerState, setPartnerState] = useAtom(curatorPartnersAtom);
+  const { partners: cachedPartners, isLoading: atomLoading } = partnerState;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [showPartnerModal, setShowPartnerModal] = useState(false);
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string | number>("");
+  const [selectedPartnerId, setSelectedPartnerId] = useState<string | number>(
+    "",
+  );
   const [selectedPartner, setSelectedPartner] = useState<Partner | undefined>();
 
-  const loadPartners = useCallback(async (isBackground = false) => {
-    if (!isBackground) {
-      dispatch(setLoading(true));
-    }
-    try {
-      const response = await api(ENDPOINTS.partners);
-      if (response?.success && response.data) {
-        const partnersList = Array.isArray(response.data) ? response.data : [];
-        dispatch(setPartners(partnersList));
-      }
-    } catch (error) {
-      // User will see empty state or cached state
-    } finally {
+  const loadPartners = useCallback(
+    async (isBackground = false) => {
       if (!isBackground) {
-        dispatch(setLoading(false));
+        setPartnerState((prev) => ({ ...prev, isLoading: true }));
       }
-    }
-  }, [dispatch]);
+      try {
+        const response = await api(ENDPOINTS.partners);
+        if (response?.success && response.data) {
+          const partnersList = Array.isArray(response.data)
+            ? response.data
+            : [];
+          setPartnerState((prev) => ({
+            ...prev,
+            partners: partnersList,
+            lastUpdated: Date.now(),
+          }));
+        }
+      } catch (error) {
+        // User will see empty state or cached state
+      } finally {
+        if (!isBackground) {
+          setPartnerState((prev) => ({ ...prev, isLoading: false }));
+        }
+      }
+    },
+    [setPartnerState],
+  );
 
   // Initial load: if we have cached partners, show them and refresh in background; else show loading and fetch
   useEffect(() => {
@@ -47,10 +56,11 @@ export default function PartnersPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const filteredPartners = cachedPartners.filter((partner) =>
-    partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    partner.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    partner.slogan?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPartners = cachedPartners.filter(
+    (partner) =>
+      partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      partner.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      partner.slogan?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -77,7 +87,7 @@ export default function PartnersPage() {
         </div>
 
         {/* Partners Grid - show loading only when no cache and we're fetching */}
-        {reduxLoading && cachedPartners.length === 0 ? (
+        {atomLoading && cachedPartners.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
@@ -110,7 +120,7 @@ export default function PartnersPage() {
               >
                 <div className="flex items-start gap-4">
                   {partner.logo ? (
-                    <div className="relative w-16 h-16 flex-shrink-0">
+                    <div className="relative w-16 h-16 shrink-0">
                       <Image
                         src={partner.logo}
                         alt={partner.name}
@@ -119,7 +129,7 @@ export default function PartnersPage() {
                       />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-16 h-16 shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
                       <Building2 className="w-8 h-8 text-gray-400" />
                     </div>
                   )}
@@ -128,7 +138,9 @@ export default function PartnersPage() {
                       {partner.name}
                     </h3>
                     {partner.nickname && (
-                      <p className="text-sm text-gray-500 mb-1">@{partner.nickname}</p>
+                      <p className="text-sm text-gray-500 mb-1">
+                        @{partner.nickname}
+                      </p>
                     )}
                     {partner.slogan && (
                       <p className="text-sm text-gray-600 mt-2 line-clamp-2">

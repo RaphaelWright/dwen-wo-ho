@@ -1,15 +1,14 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Provider as ReduxProvider } from "react-redux";
 import { ReactNode, useState } from "react";
-import { store } from "@/store";
+import { NotificationProvider } from "@/context/notification-context";
 
 interface IProps {
   children: ReactNode;
 }
 
-const Providers = ({ children }: IProps) => {
+const AppProviders = ({ children }: IProps) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,14 +20,14 @@ const Providers = ({ children }: IProps) => {
             refetchOnWindowFocus: false,
           },
         },
-      })
+      }),
   );
 
   return (
-    <ReduxProvider store={store}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </ReduxProvider>
+    <QueryClientProvider client={queryClient}>
+      <NotificationProvider>{children}</NotificationProvider>
+    </QueryClientProvider>
   );
 };
 
-export default Providers;
+export default AppProviders;

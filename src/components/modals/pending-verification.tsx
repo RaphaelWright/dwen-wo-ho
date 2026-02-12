@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import JustGoHealth from "../logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -61,7 +61,7 @@ const PendingVerificationModal = ({
             {/* Header */}
             <div className="relative bg-white px-8 py-4 flex items-center justify-between border-b-0">
               <div className="flex items-center gap-3">
-                <JustGoHealth />
+                <Logo />
               </div>
               {!isLoading && (
                 <span className="text-[#955aa4] font-bold text-lg absolute top-7 left-1/2 -translate-x-1/2">
@@ -183,3 +183,4 @@ const PendingVerificationModal = ({
 };
 
 export default PendingVerificationModal;
+

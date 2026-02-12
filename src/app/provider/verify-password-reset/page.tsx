@@ -4,7 +4,7 @@ import Layout from "@/app/provider/auth/layout";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState, Suspense } from "react";
@@ -105,7 +105,7 @@ const VerifyContent = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.singIn}
           className="bg-gray-300 text-[#ed1c24] rounded-full px-4 py-1"
@@ -177,3 +177,4 @@ const Verify = () => {
 };
 
 export default Verify;
+
