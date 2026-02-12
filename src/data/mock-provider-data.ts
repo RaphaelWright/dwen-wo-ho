@@ -41,3 +41,5 @@ export const mockPartners: AssociatedPartner[] = [
     isAssociated: false,
   },
 ];
+
+

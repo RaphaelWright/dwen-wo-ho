@@ -2,23 +2,25 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { ChevronDown, ZoomIn, ZoomOut, RotateCcw, RotateCw, Maximize2 } from "lucide-react";
+import {
+  ChevronDown,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  RotateCw,
+  Maximize2,
+} from "lucide-react";
 
-interface AddCoverPageModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onComplete: (data: { photo: File | null; color: string; slogan: string }) => void;
-  editData?: {
-    photoPreview: string;
-    color: string;
-    slogan: string;
-  } | null;
-}
+import {
+  AddCoverPageModalProps,
+  ColorOption,
+  CoverPageStep,
+} from "@/types/modals";
 
-interface ColorOption {
-  hex: string;
-  name: string;
-}
+const EDIT_FRAME_ASPECT = 16 / 9;
+const MIN_SCALE = 0.2;
+const MAX_SCALE = 3;
+const SCALE_STEP = 0.15;
 
 const colors: ColorOption[] = [
   { hex: "faf5f9", name: "Soft Lavender" },
@@ -31,20 +33,13 @@ const colors: ColorOption[] = [
   { hex: "2bb673", name: "Green" },
 ];
 
-type Step = "photo-color" | "edit-image" | "slogan";
-
-const EDIT_FRAME_ASPECT = 16 / 9;
-const MIN_SCALE = 0.2;
-const MAX_SCALE = 3;
-const SCALE_STEP = 0.15;
-
 export default function AddCoverPageModal({
   isOpen,
   onClose,
   onComplete,
   editData = null,
 }: AddCoverPageModalProps) {
-  const [step, setStep] = useState<Step>("photo-color");
+  const [step, setStep] = useState<CoverPageStep>("photo-color");
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -58,9 +53,16 @@ export default function AddCoverPageModal({
   const [rotation, setRotation] = useState(0);
   const [posX, setPosX] = useState(0);
   const [posY, setPosY] = useState(0);
-  const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
+  const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(
+    null,
+  );
   const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef<{ posX: number; posY: number; clientX: number; clientY: number }>({ posX: 0, posY: 0, clientX: 0, clientY: 0 });
+  const dragStartRef = useRef<{
+    posX: number;
+    posY: number;
+    clientX: number;
+    clientY: number;
+  }>({ posX: 0, posY: 0, clientX: 0, clientY: 0 });
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorImageRef = useRef<HTMLImageElement>(null);
 
@@ -153,7 +155,8 @@ export default function AddCoverPageModal({
   }, [imageSize]);
 
   useEffect(() => {
-    if (step !== "edit-image" || !imageSize || !editorContainerRef.current) return;
+    if (step !== "edit-image" || !imageSize || !editorContainerRef.current)
+      return;
     setFitToFrame();
   }, [step, imageSize, setFitToFrame]);
 
@@ -167,7 +170,12 @@ export default function AddCoverPageModal({
   const handlePanStart = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsDragging(true);
-    dragStartRef.current = { posX, posY, clientX: e.clientX, clientY: e.clientY };
+    dragStartRef.current = {
+      posX,
+      posY,
+      clientX: e.clientX,
+      clientY: e.clientY,
+    };
   };
   const handlePanMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
@@ -199,7 +207,10 @@ export default function AddCoverPageModal({
     };
   }, [isDragging]);
 
-  const captureFrame = useCallback((): Promise<{ file: File; dataUrl: string }> => {
+  const captureFrame = useCallback((): Promise<{
+    file: File;
+    dataUrl: string;
+  }> => {
     return new Promise((resolve, reject) => {
       const container = editorContainerRef.current;
       const img = editorImageRef.current;
@@ -237,7 +248,7 @@ export default function AddCoverPageModal({
           resolve({ file, dataUrl });
         },
         "image/png",
-        0.95
+        0.95,
       );
     });
   }, [photoPreview, posX, posY, rotation, scale]);
@@ -343,7 +354,9 @@ export default function AddCoverPageModal({
               className="rotate-180"
             />
           </button>
-          <h2 className="text-2xl font-bold text-gray-900">{getHeaderTitle()}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {getHeaderTitle()}
+          </h2>
           <button
             onClick={headerAction.onClick}
             disabled={headerAction.disabled}
@@ -414,8 +427,12 @@ export default function AddCoverPageModal({
                               style={{ backgroundColor: `#${color.hex}` }}
                             />
                             <div>
-                              <p className="font-semibold text-gray-900">{color.name}</p>
-                              <p className="text-sm text-gray-500">#{color.hex}</p>
+                              <p className="font-semibold text-gray-900">
+                                {color.name}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                #{color.hex}
+                              </p>
                             </div>
                           </button>
                         ))}
@@ -429,7 +446,9 @@ export default function AddCoverPageModal({
                 <div
                   className="w-full h-64 rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
                   style={{
-                    backgroundColor: selectedColor ? `#${selectedColor}` : "#f9fafb",
+                    backgroundColor: selectedColor
+                      ? `#${selectedColor}`
+                      : "#f9fafb",
                   }}
                 >
                   {photoPreview ? (
@@ -442,7 +461,9 @@ export default function AddCoverPageModal({
                       />
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center">Add photo to get started</p>
+                    <p className="text-gray-400 text-center">
+                      Add photo to get started
+                    </p>
                   )}
                 </div>
               </div>
@@ -452,8 +473,8 @@ export default function AddCoverPageModal({
           {step === "edit-image" && photoPreview && (
             <div className="space-y-4">
               <p className="text-sm text-gray-600">
-                Zoom, rotate, or drag the image to set the focus. The rectangle is what will
-                show on the cover.
+                Zoom, rotate, or drag the image to set the focus. The rectangle
+                is what will show on the cover.
               </p>
               {/* Frame: fixed aspect, overflow hidden */}
               <div
@@ -496,7 +517,9 @@ export default function AddCoverPageModal({
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   type="button"
-                  onClick={() => setScale((s) => Math.max(MIN_SCALE, s - SCALE_STEP))}
+                  onClick={() =>
+                    setScale((s) => Math.max(MIN_SCALE, s - SCALE_STEP))
+                  }
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
                   title="Zoom out"
                 >
@@ -504,7 +527,9 @@ export default function AddCoverPageModal({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setScale((s) => Math.min(MAX_SCALE, s + SCALE_STEP))}
+                  onClick={() =>
+                    setScale((s) => Math.min(MAX_SCALE, s + SCALE_STEP))
+                  }
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
                   title="Zoom in"
                 >
@@ -557,7 +582,9 @@ export default function AddCoverPageModal({
                 <div
                   className="w-full h-[300px] rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
                   style={{
-                    backgroundColor: selectedColor ? `#${selectedColor}` : "#f9fafb",
+                    backgroundColor: selectedColor
+                      ? `#${selectedColor}`
+                      : "#f9fafb",
                   }}
                 >
                   {photoPreview ? (
@@ -570,7 +597,9 @@ export default function AddCoverPageModal({
                       />
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center">Preview will appear here</p>
+                    <p className="text-gray-400 text-center">
+                      Preview will appear here
+                    </p>
                   )}
                 </div>
               </div>
@@ -581,3 +610,5 @@ export default function AddCoverPageModal({
     </div>
   );
 }
+
+

@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import WidthConstraint from "./ui/width-constraint";
 import { Button } from "./ui/button";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 
 const MobileMenu = ({ check }: { check: boolean }) => {
   const pathname = usePathname();
@@ -145,3 +145,5 @@ const Header = ({ className, logo }: { className?: string; logo?: string }) => {
 };
 
 export default Header;
+
+

@@ -5,22 +5,25 @@ import { useRef, useState } from "react";
 import { X, Upload, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useCreatePartner, ICreatePartner } from "@/hooks/queries/usePartnersQuery";
+import {
+  useCreatePartner,
+  ICreatePartner,
+} from "@/hooks/queries/usePartnersQuery";
 
-interface PartnerCreationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onPartnerCreated?: (partner: { name: string; nickname?: string; logo?: string }) => void;
-}
+import { PartnerCreationModalProps } from "@/types/modals";
 
-const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCreationModalProps) => {
+const PartnerCreationModal = ({
+  isOpen,
+  onClose,
+  onPartnerCreated,
+}: PartnerCreationModalProps) => {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [slogan, setSlogan] = useState("");
   const [logo, setLogo] = useState<string | undefined>(undefined);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  
+
   const createPartnerMutation = useCreatePartner();
 
   const handlePickLogo = () => fileInputRef.current?.click();
@@ -47,7 +50,11 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
 
     createPartnerMutation.mutate(partnerData, {
       onSuccess: (data) => {
-        onPartnerCreated?.({ name: data.name, nickname: data.nickname, logo: data.logo });
+        onPartnerCreated?.({
+          name: data.name,
+          nickname: data.nickname,
+          logo: data.logo,
+        });
         // Reset form
         setName("");
         setNickname("");
@@ -81,10 +88,13 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
               {/* Header */}
               <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                 <div className="flex items-center gap-4">
-                 
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">New Partner</h2>
-                    <p className="text-sm text-gray-500">Add a new partner organization</p>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      New Partner
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Add a new partner organization
+                    </p>
                   </div>
                 </div>
                 <button
@@ -97,10 +107,16 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
 
               {/* Form */}
               <div className="p-8">
-                <form id="partner-form" onSubmit={handleSubmit} className="space-y-6">
+                <form
+                  id="partner-form"
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                >
                   {/* Name */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Partner Name</label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Partner Name
+                    </label>
                     <div className="relative">
                       <input
                         value={name}
@@ -114,7 +130,9 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
 
                   {/* Nickname */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Nickname (Optional)</label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Nickname (Optional)
+                    </label>
                     <input
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
@@ -123,8 +141,10 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
                     />
                   </div>
 
-                    <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Slogan</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Slogan
+                    </label>
                     <input
                       value={slogan}
                       onChange={(e) => setSlogan(e.target.value)}
@@ -135,7 +155,9 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
 
                   {/* Logo */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">Partner Logo</label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Partner Logo
+                    </label>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -150,9 +172,16 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
                     >
                       {logo ? (
                         <div className="relative w-full h-full p-4">
-                          <Image src={logo} alt="Logo preview" fill className="object-contain" />
+                          <Image
+                            src={logo}
+                            alt="Logo preview"
+                            fill
+                            className="object-contain"
+                          />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                            <span className="opacity-0 group-hover:opacity-100 bg-white/90 px-3 py-1 rounded-full text-xs font-medium shadow-sm">Change</span>
+                            <span className="opacity-0 group-hover:opacity-100 bg-white/90 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+                              Change
+                            </span>
                           </div>
                         </div>
                       ) : (
@@ -160,7 +189,9 @@ const PartnerCreationModal = ({ isOpen, onClose, onPartnerCreated }: PartnerCrea
                           <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                             <Upload className="w-5 h-5 text-[#955aa4]" />
                           </div>
-                          <span className="text-sm font-medium text-gray-600 group-hover:text-[#955aa4] transition-colors">Click to upload logo</span>
+                          <span className="text-sm font-medium text-gray-600 group-hover:text-[#955aa4] transition-colors">
+                            Click to upload logo
+                          </span>
                         </>
                       )}
                     </button>

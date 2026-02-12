@@ -91,3 +91,5 @@ export const useSchools = (options?: { enabled?: boolean }) => {
     isDisabling: disableSchoolMutation.isPending,
   };
 };
+
+

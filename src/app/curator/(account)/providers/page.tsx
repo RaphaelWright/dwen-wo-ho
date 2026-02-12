@@ -1,127 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
 import ProviderDetailsModal from "@/components/modals/provider-details";
-import ProviderCard from "@/components/curator/provider-card";
-import { useProvidersQuery, Provider } from "@/hooks/queries/useProvidersQuery";
-import { IProvider } from "@/types/provider.type";
+import ProviderCard from "@/features/curator/components/provider-card";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { formatProviderName, getProviderTitle } from "@/lib/utils/formatProviderName";
+import { useCuratorProviders } from "@/hooks/curator/useCuratorProviders";
 
 export default function ProvidersPage() {
-  const [filter, setFilter] = useState("All");
-  const [showProviderModal, setShowProviderModal] = useState(false);
-  const [selectedProviderEmail, setSelectedProviderEmail] = useState("");
-  const [showApproveModal, setShowApproveModal] = useState(false);
-  const [showRejectModal, setShowRejectModal] = useState(false);
-  const [modalProviderEmail, setModalProviderEmail] = useState("");
-  const [currentAction, setCurrentAction] = useState<"approving" | "rejecting" | null>(null);
+  const {
+    isLoading,
+    isError,
+    error,
+    providersList,
+    filteredProviders,
+    filterOptions,
+    selectedProvider,
+    filter,
+    setFilter,
+    showProviderModal,
+    setShowProviderModal,
+    selectedProviderEmail,
+    showApproveModal,
+    setShowApproveModal,
+    showRejectModal,
+    setShowRejectModal,
+    modalProviderEmail,
+    setModalProviderEmail,
+    currentAction,
+    handleProviderSelect,
+    handleShowApproveModal,
+    handleShowRejectModal,
+    handleApproveConfirm,
+    handleRejectConfirm,
+    getProviderName,
+  } = useCuratorProviders();
 
-  // Fetch providers using the query hook
-  const { providers, isLoading, isError, error, approveProvider, rejectProvider } = useProvidersQuery();
-
-  // Map IProvider to Provider type (add id field using email)
-  const providersList: Provider[] = (providers?.data || []).map((provider: IProvider) => ({
-    id: provider.email,
-    email: provider.email,
-    providerName: provider.providerName,
-    providerTitle: provider.providerTitle || undefined,
-    profilePhotoURL: provider.profilePhotoURL || undefined,
-    specialty: provider.specialty || "",
-    applicationStatus: provider.applicationStatus,
-    applicationDate: provider.applicationDate,
-  }));
-
-  const handleProviderSelect = (providerEmail: string) => {
-    setSelectedProviderEmail(providerEmail);
-    setShowProviderModal(true);
-  };
-
-  const handleShowApproveModal = (email: string) => {
-    setModalProviderEmail(email);
-    setShowApproveModal(true);
-  };
-
-  const handleShowRejectModal = (email: string) => {
-    setModalProviderEmail(email);
-    setShowRejectModal(true);
-  };
-
-  const handleApproveConfirm = () => {
-    setShowApproveModal(false);
-    setCurrentAction("approving");
-    approveProvider(modalProviderEmail, {
-      onSettled: () => {
-        setCurrentAction(null);
-        setModalProviderEmail("");
-      },
-    });
-  };
-
-  const handleRejectConfirm = () => {
-    setShowRejectModal(false);
-    setCurrentAction("rejecting");
-    rejectProvider(modalProviderEmail, {
-      onSettled: () => {
-        setCurrentAction(null);
-        setModalProviderEmail("");
-      },
-    });
-  };
-
-  const getProviderName = (email: string) => {
-    const provider = providersList.find((p) => p.email === email);
-    if (!provider) return "";
-    return formatProviderName(provider.providerName, provider.providerTitle);
-  };
-
-  const filteredProviders = providersList?.filter((provider) => {
-    if (filter === "All") return true;
-    return provider?.applicationStatus?.toLowerCase() === filter?.toLowerCase();
-  });
-
-  // Filter configuration
-  const filterOptions = [
-    {
-      id: "All",
-      label: "All Providers",
-      color: "bg-[#955aa4]",
-      hoverColor: "hover:bg-gray-200",
-      inactiveColor: "bg-gray-100 text-gray-700",
-      count: providersList.length,
-    },
-    {
-      id: "PENDING",
-      label: "Pending",
-      color: "bg-yellow-500",
-      hoverColor: "hover:bg-gray-200",
-      inactiveColor: "bg-gray-100 text-gray-700",
-      count: providersList.filter((p) => p.applicationStatus === "PENDING")
-        .length,
-    },
-    {
-      id: "APPROVED",
-      label: "Approved",
-      color: "bg-green-600",
-      hoverColor: "hover:bg-gray-200",
-      inactiveColor: "bg-gray-100 text-gray-700",
-      count: providersList.filter((p) => p.applicationStatus === "APPROVED")
-        .length,
-    },
-    {
-      id: "REJECTED",
-      label: "Rejected",
-      color: "bg-red-600",
-      hoverColor: "hover:bg-gray-200",
-      inactiveColor: "bg-gray-100 text-gray-700",
-      count: providersList.filter((p) => p.applicationStatus === "REJECTED")
-        .length,
-    },
-  ];
-
-  // Loading state
   if (isLoading) {
     return (
       <WidthConstraint>
@@ -137,7 +51,6 @@ export default function ProvidersPage() {
     );
   }
 
-  // Error state
   if (isError) {
     return (
       <WidthConstraint>
@@ -239,27 +152,7 @@ export default function ProvidersPage() {
           isOpen={showProviderModal}
           onClose={() => setShowProviderModal(false)}
           providerEmail={selectedProviderEmail}
-          provider={
-            providersList.find((p) => p.email === selectedProviderEmail)
-              ? (() => {
-                  const foundProvider = providersList.find(
-                    (p) => p.email === selectedProviderEmail
-                  )!;
-                  return {
-                    id: foundProvider.email,
-                    email: foundProvider.email,
-                    fullName: formatProviderName(foundProvider.providerName, foundProvider.providerTitle),
-                    providerTitle: getProviderTitle(foundProvider.providerName, foundProvider.providerTitle) || undefined,
-                    professionalTitle: foundProvider.specialty || undefined,
-                    profileImage: foundProvider.profilePhotoURL || undefined,
-                    officePhoneNumber: foundProvider.officePhoneNumber || undefined,
-                    createdAt: foundProvider.applicationDate,
-                    updatedAt: foundProvider.lastActive || foundProvider.applicationDate,
-                    applicationStatus: foundProvider.applicationStatus,
-                  };
-                })()
-              : undefined
-          }
+          provider={selectedProvider}
           onShowApproveModal={handleShowApproveModal}
           onShowRejectModal={handleShowRejectModal}
           isModerating={currentAction !== null}

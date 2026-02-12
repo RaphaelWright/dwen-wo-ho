@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/app/provider/auth/layout";
-import ProviderSignUp from "@/components/provider/ui/sign-up";
+import ProviderSignUp from "@/features/provider/components/ui/sign-up";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
@@ -51,3 +51,5 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+
+

@@ -6,7 +6,7 @@ import { MdSchool } from "react-icons/md";
 import { Handshake } from "lucide-react";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
@@ -17,37 +17,14 @@ import { formatProviderName } from "@/lib/utils/formatProviderName";
 import ProviderDetailsModal from "./provider-details";
 import SchoolEditModal from "./school-edit";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 
-interface PartnerDetailsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  partnerId: string | number;
-  partner?: {
-    id: string | number;
-    name: string;
-    nickname?: string;
-    slogan?: string;
-    logo?: string;
-  };
-}
-
-type TabType = "overview" | "schools" | "providers";
-
-interface AssociatedSchool {
-  id: string | number;
-  name: string;
-  logo?: string;
-}
-
-interface AssociatedProvider {
-  id: string;
-  email: string;
-  providerName: string;
-  providerTitle?: string | null;
-  specialty?: string;
-  profilePhotoURL?: string;
-}
+import {
+  PartnerDetailsModalProps,
+  PartnerDetailsTab,
+  AssociatedSchool,
+  AssociatedProvider,
+} from "@/types/modals";
 
 const PartnerDetailsModal = ({
   isOpen,
@@ -59,19 +36,32 @@ const PartnerDetailsModal = ({
   const queryClient = useQueryClient();
   const { data: allSchools = [] } = useSchools();
   const { providers } = useProvidersQuery();
-  
+
   const [partner, setPartner] = useState(partnerProp);
-  const [activeTab, setActiveTab] = useState<TabType>("overview");
-  const [associatedSchools, setAssociatedSchools] = useState<AssociatedSchool[]>([]);
-  const [availableSchools, setAvailableSchools] = useState<AssociatedSchool[]>([]);
-  const [associatedProviders, setAssociatedProviders] = useState<AssociatedProvider[]>([]);
-  const [availableProviders, setAvailableProviders] = useState<AssociatedProvider[]>([]);
+  const [activeTab, setActiveTab] = useState<PartnerDetailsTab>("overview");
+  const [associatedSchools, setAssociatedSchools] = useState<
+    AssociatedSchool[]
+  >([]);
+  const [availableSchools, setAvailableSchools] = useState<AssociatedSchool[]>(
+    [],
+  );
+  const [associatedProviders, setAssociatedProviders] = useState<
+    AssociatedProvider[]
+  >([]);
+  const [availableProviders, setAvailableProviders] = useState<
+    AssociatedProvider[]
+  >([]);
   const [schoolSearchQuery, setSchoolSearchQuery] = useState("");
   const [providerSearchQuery, setProviderSearchQuery] = useState("");
   const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(null);
-  const [schoolToRemove, setSchoolToRemove] = useState<AssociatedSchool | null>(null);
-  const [providerToAdd, setProviderToAdd] = useState<AssociatedProvider | null>(null);
-  const [providerToRemove, setProviderToRemove] = useState<AssociatedProvider | null>(null);
+  const [schoolToRemove, setSchoolToRemove] = useState<AssociatedSchool | null>(
+    null,
+  );
+  const [providerToAdd, setProviderToAdd] = useState<AssociatedProvider | null>(
+    null,
+  );
+  const [providerToRemove, setProviderToRemove] =
+    useState<AssociatedProvider | null>(null);
   const [isLoadingSchools, setIsLoadingSchools] = useState(false);
   const [isLoadingProviders, setIsLoadingProviders] = useState(false);
   const [isAddingSchool, setIsAddingSchool] = useState(false);
@@ -91,7 +81,14 @@ const PartnerDetailsModal = ({
 
   useEffect(() => {
     // Reload available schools/providers when allSchools or providers change
-    if (isOpen && partnerId && (allSchools.length > 0 || (providers?.data && Array.isArray(providers.data) && providers.data.length > 0))) {
+    if (
+      isOpen &&
+      partnerId &&
+      (allSchools.length > 0 ||
+        (providers?.data &&
+          Array.isArray(providers.data) &&
+          providers.data.length > 0))
+    ) {
       loadPartnerDetails();
     }
   }, [allSchools.length, providers?.data, isOpen, partnerId]);
@@ -114,18 +111,23 @@ const PartnerDetailsModal = ({
         setPartner(partnerData);
 
         // Extract schools from partner response
-        const partnerSchools: AssociatedSchool[] = partnerData.schools && Array.isArray(partnerData.schools)
-          ? partnerData.schools.map((s: { id: string | number; name: string; logo?: string }) => ({
-              id: s.id,
-              name: s.name,
-              logo: s.logo,
-            }))
-          : [];
+        const partnerSchools: AssociatedSchool[] =
+          partnerData.schools && Array.isArray(partnerData.schools)
+            ? partnerData.schools.map(
+                (s: { id: string | number; name: string; logo?: string }) => ({
+                  id: s.id,
+                  name: s.name,
+                  logo: s.logo,
+                }),
+              )
+            : [];
 
         setAssociatedSchools(partnerSchools);
-        
+
         // Get available schools from all schools list
-        const associatedSchoolIds = new Set(partnerSchools.map((s) => String(s.id)));
+        const associatedSchoolIds = new Set(
+          partnerSchools.map((s) => String(s.id)),
+        );
         const available = allSchools
           .filter((s) => !associatedSchoolIds.has(String(s.id)))
           .map((s) => ({
@@ -136,22 +138,28 @@ const PartnerDetailsModal = ({
         setAvailableSchools(available);
 
         // Extract providers from partner response
-        const partnerProviders: AssociatedProvider[] = partnerData.providers && Array.isArray(partnerData.providers)
-          ? partnerData.providers.map((p: any) => ({
-              id: p.id || p.email,
-              email: p.email,
-              providerName: p.providerName || p.fullName,
-              providerTitle: p.providerTitle || p.title,
-              specialty: p.specialty,
-              profilePhotoURL: p.profilePhotoURL || p.profileImage,
-            }))
-          : [];
+        const partnerProviders: AssociatedProvider[] =
+          partnerData.providers && Array.isArray(partnerData.providers)
+            ? partnerData.providers.map((p: any) => ({
+                id: p.id || p.email,
+                email: p.email,
+                providerName: p.providerName || p.fullName,
+                providerTitle: p.providerTitle || p.title,
+                specialty: p.specialty,
+                profilePhotoURL: p.profilePhotoURL || p.profileImage,
+              }))
+            : [];
 
         setAssociatedProviders(partnerProviders);
-        
+
         // Get available providers from all providers list
-        const providersList = providers?.data && Array.isArray(providers.data) ? providers.data : [];
-        const associatedProviderIds = new Set(partnerProviders.map((p) => p.email));
+        const providersList =
+          providers?.data && Array.isArray(providers.data)
+            ? providers.data
+            : [];
+        const associatedProviderIds = new Set(
+          partnerProviders.map((p) => p.email),
+        );
         const availableProviders = providersList
           .filter((p: any) => !associatedProviderIds.has(p.email))
           .map((p: any) => ({
@@ -175,13 +183,18 @@ const PartnerDetailsModal = ({
   const handleAddSchool = async (school: AssociatedSchool) => {
     setIsAddingSchool(true);
     try {
-      const response = await api(ENDPOINTS.addSchoolToPartner(partnerId, school.id), {
-        method: "POST",
-      });
-      
+      const response = await api(
+        ENDPOINTS.addSchoolToPartner(partnerId, school.id),
+        {
+          method: "POST",
+        },
+      );
+
       if (response?.success) {
         toast.success(`School "${school.name}" added successfully`);
-        await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
+        await queryClient.invalidateQueries({
+          queryKey: ["partners", partnerId],
+        });
         await loadPartnerDetails();
         setSchoolToAdd(null);
       }
@@ -196,13 +209,18 @@ const PartnerDetailsModal = ({
   const handleRemoveSchool = async (school: AssociatedSchool) => {
     setIsRemovingSchool(true);
     try {
-      const response = await api(ENDPOINTS.removeSchoolFromPartner(partnerId, school.id), {
-        method: "POST",
-      });
-      
+      const response = await api(
+        ENDPOINTS.removeSchoolFromPartner(partnerId, school.id),
+        {
+          method: "POST",
+        },
+      );
+
       if (response?.success) {
         toast.success(`School "${school.name}" removed successfully`);
-        await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
+        await queryClient.invalidateQueries({
+          queryKey: ["partners", partnerId],
+        });
         await loadPartnerDetails();
         setSchoolToRemove(null);
       }
@@ -217,13 +235,20 @@ const PartnerDetailsModal = ({
   const handleAddProvider = async (provider: AssociatedProvider) => {
     setIsAddingProvider(true);
     try {
-      const response = await api(ENDPOINTS.addProviderToPartner(partnerId, provider.id), {
-        method: "POST",
-      });
-      
+      const response = await api(
+        ENDPOINTS.addProviderToPartner(partnerId, provider.id),
+        {
+          method: "POST",
+        },
+      );
+
       if (response?.success) {
-        toast.success(`Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" added successfully`);
-        await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
+        toast.success(
+          `Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" added successfully`,
+        );
+        await queryClient.invalidateQueries({
+          queryKey: ["partners", partnerId],
+        });
         await loadPartnerDetails();
         setProviderToAdd(null);
       }
@@ -238,13 +263,20 @@ const PartnerDetailsModal = ({
   const handleRemoveProvider = async (provider: AssociatedProvider) => {
     setIsRemovingProvider(true);
     try {
-      const response = await api(ENDPOINTS.removeProviderFromPartner(partnerId, provider.id), {
-        method: "POST",
-      });
-      
+      const response = await api(
+        ENDPOINTS.removeProviderFromPartner(partnerId, provider.id),
+        {
+          method: "POST",
+        },
+      );
+
       if (response?.success) {
-        toast.success(`Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" removed successfully`);
-        await queryClient.invalidateQueries({ queryKey: ["partners", partnerId] });
+        toast.success(
+          `Provider "${formatProviderName(provider.providerName, provider.providerTitle)}" removed successfully`,
+        );
+        await queryClient.invalidateQueries({
+          queryKey: ["partners", partnerId],
+        });
         await loadPartnerDetails();
         setProviderToRemove(null);
       }
@@ -278,24 +310,37 @@ const PartnerDetailsModal = ({
     if (!schoolSearchQuery.trim()) return availableSchools;
     const query = schoolSearchQuery.toLowerCase();
     return availableSchools.filter((school) =>
-      school.name.toLowerCase().includes(query)
+      school.name.toLowerCase().includes(query),
     );
   }, [availableSchools, schoolSearchQuery]);
 
   const filteredAvailableProviders = useMemo(() => {
     if (!providerSearchQuery.trim()) return availableProviders;
     const query = providerSearchQuery.toLowerCase();
-    return availableProviders.filter((provider) =>
-      formatProviderName(provider.providerName, provider.providerTitle).toLowerCase().includes(query) ||
-      provider.email.toLowerCase().includes(query) ||
-      provider.specialty?.toLowerCase().includes(query)
+    return availableProviders.filter(
+      (provider) =>
+        formatProviderName(provider.providerName, provider.providerTitle)
+          .toLowerCase()
+          .includes(query) ||
+        provider.email.toLowerCase().includes(query) ||
+        provider.specialty?.toLowerCase().includes(query),
     );
   }, [availableProviders, providerSearchQuery]);
 
   const tabs = [
-    { id: "overview" as TabType, label: "Overview", icon: Handshake },
-    { id: "schools" as TabType, label: "Schools", icon: MdSchool, count: associatedSchools.length },
-    { id: "providers" as TabType, label: "Providers", icon: FiUsers, count: associatedProviders.length },
+    { id: "overview" as PartnerDetailsTab, label: "Overview", icon: Handshake },
+    {
+      id: "schools" as PartnerDetailsTab,
+      label: "Schools",
+      icon: MdSchool,
+      count: associatedSchools.length,
+    },
+    {
+      id: "providers" as PartnerDetailsTab,
+      label: "Providers",
+      icon: FiUsers,
+      count: associatedProviders.length,
+    },
   ];
 
   if (!isOpen) return null;
@@ -309,7 +354,13 @@ const PartnerDetailsModal = ({
             <div className="flex items-center gap-4">
               {partner?.logo ? (
                 <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200">
-                  <Image src={partner.logo} alt={partner.name} width={64} height={64} className="w-full h-full object-cover" />
+                  <Image
+                    src={partner.logo}
+                    alt={partner.name}
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               ) : (
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
@@ -317,8 +368,12 @@ const PartnerDetailsModal = ({
                 </div>
               )}
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{partner?.name || "Partner Details"}</h2>
-                {partner?.nickname && <p className="text-sm text-gray-500">@{partner.nickname}</p>}
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {partner?.name || "Partner Details"}
+                </h2>
+                {partner?.nickname && (
+                  <p className="text-sm text-gray-500">@{partner.nickname}</p>
+                )}
               </div>
             </div>
             <button
@@ -360,8 +415,12 @@ const PartnerDetailsModal = ({
               <div className="space-y-6">
                 {partner?.slogan && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-500 mb-2">Slogan</h3>
-                    <p className="text-lg text-gray-900 italic">&quot;{partner.slogan}&quot;</p>
+                    <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                      Slogan
+                    </h3>
+                    <p className="text-lg text-gray-900 italic">
+                      &quot;{partner.slogan}&quot;
+                    </p>
                   </div>
                 )}
               </div>
@@ -371,7 +430,9 @@ const PartnerDetailsModal = ({
               <div className="space-y-6">
                 {/* Associated Schools */}
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Associated Schools</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Associated Schools
+                  </h4>
                   {isLoadingSchools ? (
                     <div className="text-center py-8 text-gray-500">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-2"></div>
@@ -393,7 +454,13 @@ const PartnerDetailsModal = ({
                           <div className="flex items-center gap-3">
                             {school.logo ? (
                               <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                                <Image src={school.logo} alt={school.name} width={48} height={48} className="w-full h-full object-cover" />
+                                <Image
+                                  src={school.logo}
+                                  alt={school.name}
+                                  width={48}
+                                  height={48}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
                               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -401,7 +468,9 @@ const PartnerDetailsModal = ({
                               </div>
                             )}
                             <div>
-                              <p className="font-semibold text-gray-900">{school.name}</p>
+                              <p className="font-semibold text-gray-900">
+                                {school.name}
+                              </p>
                             </div>
                           </div>
                           <button
@@ -422,7 +491,9 @@ const PartnerDetailsModal = ({
 
                 {/* Available Schools */}
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Available Schools</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Available Schools
+                  </h4>
                   <div className="relative mb-4">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FiSearch className="h-5 w-5 text-gray-400" />
@@ -438,16 +509,27 @@ const PartnerDetailsModal = ({
 
                   {filteredAvailableSchools.length === 0 ? (
                     <p className="text-gray-500 text-center py-4">
-                      {schoolSearchQuery ? "No schools found matching your search." : "All schools are already associated."}
+                      {schoolSearchQuery
+                        ? "No schools found matching your search."
+                        : "All schools are already associated."}
                     </p>
                   ) : (
                     <div className="space-y-3">
                       {filteredAvailableSchools.map((school) => (
-                        <div key={school.id} className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors">
+                        <div
+                          key={school.id}
+                          className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors"
+                        >
                           <div className="flex items-center gap-3">
                             {school.logo ? (
                               <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                                <Image src={school.logo} alt={school.name} width={48} height={48} className="w-full h-full object-cover" />
+                                <Image
+                                  src={school.logo}
+                                  alt={school.name}
+                                  width={48}
+                                  height={48}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
                               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -455,7 +537,9 @@ const PartnerDetailsModal = ({
                               </div>
                             )}
                             <div>
-                              <p className="font-semibold text-gray-900">{school.name}</p>
+                              <p className="font-semibold text-gray-900">
+                                {school.name}
+                              </p>
                             </div>
                           </div>
                           <button
@@ -477,7 +561,9 @@ const PartnerDetailsModal = ({
               <div className="space-y-6">
                 {/* Associated Providers */}
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Associated Providers</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Associated Providers
+                  </h4>
                   {isLoadingProviders ? (
                     <div className="text-center py-8 text-gray-500">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-2"></div>
@@ -499,7 +585,13 @@ const PartnerDetailsModal = ({
                           <div className="flex items-center gap-3">
                             {provider.profilePhotoURL ? (
                               <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
-                                <Image src={provider.profilePhotoURL} alt={provider.providerName} width={48} height={48} className="w-full h-full object-cover" />
+                                <Image
+                                  src={provider.profilePhotoURL}
+                                  alt={provider.providerName}
+                                  width={48}
+                                  height={48}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
                               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -507,8 +599,17 @@ const PartnerDetailsModal = ({
                               </div>
                             )}
                             <div>
-                              <p className="font-semibold text-gray-900">{formatProviderName(provider.providerName, provider.providerTitle)}</p>
-                              {provider.specialty && <p className="text-sm text-gray-600">{provider.specialty}</p>}
+                              <p className="font-semibold text-gray-900">
+                                {formatProviderName(
+                                  provider.providerName,
+                                  provider.providerTitle,
+                                )}
+                              </p>
+                              {provider.specialty && (
+                                <p className="text-sm text-gray-600">
+                                  {provider.specialty}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <button
@@ -529,7 +630,9 @@ const PartnerDetailsModal = ({
 
                 {/* Available Providers */}
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3">Available Providers</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Available Providers
+                  </h4>
                   <div className="relative mb-4">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FiSearch className="h-5 w-5 text-gray-400" />
@@ -545,16 +648,27 @@ const PartnerDetailsModal = ({
 
                   {filteredAvailableProviders.length === 0 ? (
                     <p className="text-gray-500 text-center py-4">
-                      {providerSearchQuery ? "No providers found matching your search." : "All providers are already associated."}
+                      {providerSearchQuery
+                        ? "No providers found matching your search."
+                        : "All providers are already associated."}
                     </p>
                   ) : (
                     <div className="space-y-3">
                       {filteredAvailableProviders.map((provider) => (
-                        <div key={provider.email} className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors">
+                        <div
+                          key={provider.email}
+                          className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors"
+                        >
                           <div className="flex items-center gap-3">
                             {provider.profilePhotoURL ? (
                               <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-gray-200">
-                                <Image src={provider.profilePhotoURL} alt={provider.providerName} width={48} height={48} className="w-full h-full object-cover" />
+                                <Image
+                                  src={provider.profilePhotoURL}
+                                  alt={provider.providerName}
+                                  width={48}
+                                  height={48}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
                               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -562,8 +676,17 @@ const PartnerDetailsModal = ({
                               </div>
                             )}
                             <div>
-                              <p className="font-semibold text-gray-900">{formatProviderName(provider.providerName, provider.providerTitle)}</p>
-                              {provider.specialty && <p className="text-sm text-gray-600">{provider.specialty}</p>}
+                              <p className="font-semibold text-gray-900">
+                                {formatProviderName(
+                                  provider.providerName,
+                                  provider.providerTitle,
+                                )}
+                              </p>
+                              {provider.specialty && (
+                                <p className="text-sm text-gray-600">
+                                  {provider.specialty}
+                                </p>
+                              )}
                             </div>
                           </div>
                           <button
@@ -592,7 +715,7 @@ const PartnerDetailsModal = ({
         title="Add School"
         message={`Are you sure you want to add "${schoolToAdd?.name}" to this partner?`}
         confirmText="Yes, Add"
-            variant="success"
+        variant="success"
         isLoading={isAddingSchool}
       />
 
@@ -614,14 +737,16 @@ const PartnerDetailsModal = ({
         title="Add Provider"
         message={`Are you sure you want to add "${providerToAdd ? formatProviderName(providerToAdd.providerName, providerToAdd.providerTitle) : ""}" to this partner?`}
         confirmText="Yes, Add"
-            variant="success"
+        variant="success"
         isLoading={isAddingProvider}
       />
 
       <ConfirmationModal
         isOpen={!!providerToRemove}
         onClose={() => setProviderToRemove(null)}
-        onConfirm={() => providerToRemove && handleRemoveProvider(providerToRemove)}
+        onConfirm={() =>
+          providerToRemove && handleRemoveProvider(providerToRemove)
+        }
         title="Remove Provider"
         message={`Are you sure you want to remove "${providerToRemove ? formatProviderName(providerToRemove.providerName, providerToRemove.providerTitle) : ""}" from this partner?`}
         confirmText="Yes, Remove"
@@ -659,3 +784,5 @@ const PartnerDetailsModal = ({
 };
 
 export default PartnerDetailsModal;
+
+

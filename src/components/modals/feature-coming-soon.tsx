@@ -1,11 +1,7 @@
 import React from "react";
 import { FiX, FiClock } from "react-icons/fi";
 
-interface FeatureComingSoonModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  featureName: string;
-}
+import { FeatureComingSoonModalProps } from "@/types/modals";
 
 const FeatureComingSoonModal = ({
   isOpen,
@@ -16,7 +12,7 @@ const FeatureComingSoonModal = ({
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-[60] p-4">
-      <div 
+      <div
         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col items-center text-center p-8"
         onClick={(e) => e.stopPropagation()}
       >
@@ -32,12 +28,13 @@ const FeatureComingSoonModal = ({
           <FiClock className="w-10 h-10 text-[#955aa4]" />
         </div>
 
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">
-          Coming Soon
-        </h3>
-        
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">Coming Soon</h3>
+
         <p className="text-gray-600 mb-6">
-          The <span className="font-semibold text-[#955aa4]">{featureName}</span> feature is currently under development. We're working hard to bring this to you!
+          The{" "}
+          <span className="font-semibold text-[#955aa4]">{featureName}</span>{" "}
+          feature is currently under development. We're working hard to bring
+          this to you!
         </p>
 
         <button
@@ -52,3 +49,5 @@ const FeatureComingSoonModal = ({
 };
 
 export default FeatureComingSoonModal;
+
+

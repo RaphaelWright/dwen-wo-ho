@@ -7,7 +7,7 @@ import WidthConstraint from "../ui/width-constraint";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 
 const PatientsHero = () => {
   const router = useRouter();
@@ -168,3 +168,5 @@ const PatientsHero = () => {
 };
 
 export default PatientsHero;
+
+

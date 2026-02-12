@@ -2,30 +2,37 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { signUpSteps } from "@/lib/utils";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/stepper";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const PasswordSchema = z.object({
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-  confirmPassword: z.string().min(6, { message: "Please confirm your password" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const PasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Please confirm your password" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type PasswordFormData = z.infer<typeof PasswordSchema>;
 
 const PasswordSetup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [signupData, setSignupData] = useState<any>(null);
 
@@ -76,7 +83,7 @@ const PasswordSetup = () => {
 
         // Store the token for future API calls
         if (response.data?.token) {
-          localStorage.setItem('authToken', response.data.token);
+          localStorage.setItem("authToken", response.data.token);
         }
 
         router.push(`${ROUTES.provider.signUp}/${email}/profile`);
@@ -84,7 +91,9 @@ const PasswordSetup = () => {
         setErrorMessage(response.message || "Account creation failed");
       }
     } catch (error: any) {
-      const errorMsg = (error as any)?.response?.data?.message || "Account creation failed. Please try again.";
+      const errorMsg =
+        (error as any)?.response?.data?.message ||
+        "Account creation failed. Please try again.";
       setErrorMessage(errorMsg);
     }
   };
@@ -95,13 +104,17 @@ const PasswordSetup = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <p className="font-bold">
           for <span className="text-4xl">Providers</span>
         </p>
       </div>
 
-      <form id="password-form" onSubmit={handleSubmit(onSubmit)} className="px-12">
+      <form
+        id="password-form"
+        onSubmit={handleSubmit(onSubmit)}
+        className="px-12"
+      >
         <h1 className="text-5xl font-extrabold">Set Your Password</h1>
         <div className="my-16 space-y-5">
           <div className="relative flex flex-col">
@@ -112,8 +125,11 @@ const PasswordSetup = () => {
               {...register("password")}
               placeholder="Enter your password (6 or more characters)"
               type={showPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 ${errors?.password?.message ? "border-red-500" : "border-green-600"
-                } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              className={`font-bold w-full rounded-xl border-4 ${
+                errors?.password?.message
+                  ? "border-red-500"
+                  : "border-green-600"
+              } text-2xl text-gray-500 p-4 bg-gray-200/50`}
             />
             <button
               type="button"
@@ -123,7 +139,9 @@ const PasswordSetup = () => {
               {!showPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.password?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
@@ -135,8 +153,11 @@ const PasswordSetup = () => {
               {...register("confirmPassword")}
               placeholder="Confirm your password"
               type={showConfirmPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 ${errors?.confirmPassword?.message ? "border-red-500" : "border-green-600"
-                } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              className={`font-bold w-full rounded-xl border-4 ${
+                errors?.confirmPassword?.message
+                  ? "border-red-500"
+                  : "border-green-600"
+              } text-2xl text-gray-500 p-4 bg-gray-200/50`}
             />
             <button
               type="button"
@@ -146,14 +167,18 @@ const PasswordSetup = () => {
               {!showConfirmPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.confirmPassword?.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
             )}
           </div>
         </div>
 
         {errorMessage && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p className="text-red-600 text-center font-medium">{errorMessage}</p>
+            <p className="text-red-600 text-center font-medium">
+              {errorMessage}
+            </p>
           </div>
         )}
       </form>
@@ -170,10 +195,11 @@ const PasswordSetup = () => {
           form="password-form"
           type="submit"
           disabled={!password || !confirmPassword || signupMutation.isPending}
-          className={`text-xl px-6 py-2 border-4 font-bold rounded-md flex items-center gap-2 ${password && confirmPassword && !signupMutation.isPending
-            ? "border-[#955aa4] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
-            : "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
-            }`}
+          className={`text-xl px-6 py-2 border-4 font-bold rounded-md flex items-center gap-2 ${
+            password && confirmPassword && !signupMutation.isPending
+              ? "border-[#955aa4] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
+              : "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
+          }`}
         >
           {signupMutation.isPending && (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -186,3 +212,4 @@ const PasswordSetup = () => {
 };
 
 export default PasswordSetup;
+

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Home, ArrowLeft, Search, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -19,7 +19,7 @@ export default function NotFound() {
           transition={{ duration: 0.5 }}
           className="mb-8 flex justify-center"
         >
-          <JustGoHealth />
+          <Logo />
         </motion.div>
 
         {/* Animated 404 */}
@@ -176,3 +176,6 @@ export default function NotFound() {
     </div>
   );
 }
+
+
+

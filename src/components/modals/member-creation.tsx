@@ -6,35 +6,35 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2Icon, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface MemberCreationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onMemberCreated?: (member: any) => void;
-}
+import { MemberCreationModalProps } from "@/types/modals";
 
-const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreationModalProps) => {
+const MemberCreationModal = ({
+  isOpen,
+  onClose,
+  onMemberCreated,
+}: MemberCreationModalProps) => {
   const [formData, setFormData] = useState({
     title: "",
-    name: ""
+    name: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const memberTitles = ["Coach", "Advisor", "Ambassador"];
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.name.trim()) return;
-    
+
     // Simulate API call
     setIsSubmitted(true);
-    
+
     // Reset form after 2 seconds
     setTimeout(() => {
       setIsSubmitted(false);
@@ -55,7 +55,7 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
             className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
             onClick={onClose}
           />
-          
+
           {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -68,10 +68,13 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
               {/* Header */}
               <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                 <div className="flex items-center gap-4">
-                  
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">New Member</h2>
-                    <p className="text-sm text-gray-500">Add a team member to your organization</p>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      New Member
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Add a team member to your organization
+                    </p>
                   </div>
                 </div>
                 <button
@@ -84,10 +87,16 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
 
               {/* Form */}
               <div className="p-8">
-                <form id="member-form" onSubmit={handleSubmit} className="space-y-8">
+                <form
+                  id="member-form"
+                  onSubmit={handleSubmit}
+                  className="space-y-8"
+                >
                   {/* Title Selection */}
                   <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-700">Role / Title</label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Role / Title
+                    </label>
                     <div className="grid grid-cols-3 gap-3">
                       {memberTitles.map((title) => (
                         <button
@@ -108,12 +117,16 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
 
                   {/* Name Input */}
                   <div className="space-y-3">
-                    <label className="text-sm font-semibold text-gray-700">Full Name</label>
+                    <label className="text-sm font-semibold text-gray-700">
+                      Full Name
+                    </label>
                     <div className="relative">
                       <input
                         type="text"
                         value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
                         placeholder="Enter member's full name"
                       />
@@ -133,7 +146,10 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
                         <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700">
                           <CheckCircle2Icon className="w-5 h-5 flex-shrink-0" />
                           <p className="font-medium text-sm">
-                            <span className="font-bold">{formData.title} {formData.name}</span> has been added successfully!
+                            <span className="font-bold">
+                              {formData.title} {formData.name}
+                            </span>{" "}
+                            has been added successfully!
                           </p>
                         </div>
                       </motion.div>
@@ -155,7 +171,9 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
                 <Button
                   type="submit"
                   form="member-form"
-                  disabled={!formData.title || !formData.name.trim() || isSubmitted}
+                  disabled={
+                    !formData.title || !formData.name.trim() || isSubmitted
+                  }
                   className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:shadow-none"
                 >
                   {isSubmitted ? "Added" : "Add Member"}
@@ -170,3 +188,5 @@ const MemberCreationModal = ({ isOpen, onClose, onMemberCreated }: MemberCreatio
 };
 
 export default MemberCreationModal;
+
+

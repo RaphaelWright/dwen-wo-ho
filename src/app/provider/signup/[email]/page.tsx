@@ -2,13 +2,13 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState } from "react";
 import { formatTime, signUpSteps } from "@/lib/utils";
 import Link from "next/link";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/stepper";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 
@@ -50,7 +50,9 @@ const Verify = () => {
           localStorage.setItem("token", response.data.token);
         }
         // Redirect to profile setup (photo step)
-        router.push(`${ROUTES.provider.signUp}?email=${encodeURIComponent(email as string)}&step=photo`);
+        router.push(
+          `${ROUTES.provider.signUp}?email=${encodeURIComponent(email as string)}&step=photo`,
+        );
       } else {
         setErrorMessage(response.message || "Verification failed");
       }
@@ -65,7 +67,7 @@ const Verify = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-4 sm:px-6 lg:px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.singIn}
           className="bg-gray-300 text-red-500 rounded-full px-4 py-2 text-sm font-medium hover:bg-gray-400 transition-colors"
@@ -165,3 +167,4 @@ const Verify = () => {
 };
 
 export default Verify;
+

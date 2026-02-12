@@ -75,3 +75,5 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
 };
 
 export default LoadingOverlay;
+
+

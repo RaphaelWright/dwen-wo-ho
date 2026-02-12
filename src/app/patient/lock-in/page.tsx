@@ -1,62 +1,20 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
-import WidthConstraint from "@/components/ui/width-constraint";
+import Image from "next/image";
 import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import JustGoHealth from "@/components/logo-purple";
-import { School } from "@/types/school";
+import { Logo } from "@/components/shared/Logo";
+import WidthConstraint from "@/components/ui/width-constraint";
+import { useLockInSchools } from "@/hooks/patient/useLockInSchools";
 
 export default function LockInPage() {
-  const router = useRouter();
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    loadSchools();
-  }, []);
-
-  const loadSchools = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api(ENDPOINTS.schools);
-      if (response?.success && response.data) {
-        const schoolsList = Array.isArray(response.data) ? response.data : [];
-        setSchools(schoolsList);
-      }
-    } catch (error) {
-      console.error("Failed to load schools:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filteredSchools = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return schools;
-    }
-
-    const query = searchQuery.toLowerCase().trim();
-    return schools.filter((school) => {
-      const nameMatch = school.name?.toLowerCase().includes(query);
-      const nicknameMatch = school.nickname?.toLowerCase().includes(query);
-      const typeMatch = school.type?.toLowerCase().includes(query);
-      const campusesMatch = school.campuses?.some((campus: string) =>
-        campus.toLowerCase().includes(query)
-      );
-      return nameMatch || nicknameMatch || typeMatch || campusesMatch;
-    });
-  }, [schools, searchQuery]);
-
-  const handleSchoolSelect = (schoolId: number) => {
-    router.push(`/patient/lock-in/${schoolId}`);
-  };
+  const {
+    isLoading,
+    searchQuery,
+    setSearchQuery,
+    filteredSchools,
+    handleSchoolSelect,
+  } = useLockInSchools();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -68,7 +26,7 @@ export default function LockInPage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Lock In</h1>
               <p className="text-gray-600">Select your school to begin</p>
             </div>
-            <JustGoHealth />
+            <Logo />
           </div>
 
           {/* Search Bar */}
@@ -98,7 +56,9 @@ export default function LockInPage() {
           ) : filteredSchools.length === 0 ? (
             <div className="text-center py-20">
               <MdSchool className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No schools found</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No schools found
+              </h3>
               <p className="text-gray-500">
                 {searchQuery
                   ? "Try adjusting your search query."
@@ -115,7 +75,7 @@ export default function LockInPage() {
                 >
                   <div className="flex items-start gap-4">
                     {school.logo ? (
-                      <div className="relative w-16 h-16 flex-shrink-0">
+                      <div className="relative w-16 h-16 shrink-0">
                         <Image
                           src={school.logo}
                           alt={school.name}
@@ -124,7 +84,7 @@ export default function LockInPage() {
                         />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <div className="w-16 h-16 shrink-0 bg-gray-100 rounded-lg flex items-center justify-center">
                         <MdSchool className="w-8 h-8 text-gray-400" />
                       </div>
                     )}
@@ -133,7 +93,9 @@ export default function LockInPage() {
                         {school.name}
                       </h3>
                       {school.nickname && (
-                        <p className="text-sm text-gray-500 mb-1">@{school.nickname}</p>
+                        <p className="text-sm text-gray-500 mb-1">
+                          @{school.nickname}
+                        </p>
                       )}
                       {school.type && (
                         <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700">

@@ -7,21 +7,20 @@ import {
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 import { ICreateSchool, IUpdateSchool, School } from "@/types/school";
-import { ENDPOINTS } from "@/constants/endpoints";
-import { ILockIn } from "@/types/lockin.type";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { LockInData } from "@/types/lockin";
 
 const getSchools = async (): Promise<School[]> => {
   const result = await api(`/api/v1/schools`);
 
   if (result?.success && Array.isArray(result.data)) {
-    
     return result.data;
   }
-  
+
   if (Array.isArray(result)) {
     return result;
   }
-  
+
   return [];
 };
 
@@ -29,9 +28,9 @@ const getSchool = async (schoolId: string): Promise<School> => {
   const result = await api(`/api/v1/schools/${schoolId}`);
 
   if (result?.success && result.data) {
-  return result.data;
+    return result.data;
   }
-  
+
   throw new Error("Failed to fetch school");
 };
 
@@ -40,11 +39,11 @@ const disableSchool = async (schoolId: string): Promise<School> => {
     method: "POST",
     body: JSON.stringify({ id: schoolId }),
   });
-  
+
   if (result?.success && result.data) {
-  return result.data;
+    return result.data;
   }
-  
+
   throw new Error("Failed to disable school");
 };
 
@@ -57,7 +56,7 @@ const createSchool = async (data: ICreateSchool): Promise<School> => {
   formData.append("motto", data.motto);
   // Send campuses as comma-separated string instead of JSON.stringify
   formData.append("campuses", data.campuses.join(","));
-  
+
   if (data.logo) {
     formData.append("logo", data.logo);
   }
@@ -77,7 +76,10 @@ const updateSchool = async (data: IUpdateSchool): Promise<School> => {
   // Send campuses as array directly in JSON, not stringified
   if (data.campuses !== undefined) body.campuses = data.campuses;
 
-  const response = await axiosInstance.put(ENDPOINTS.updateSchool(data.id), body);
+  const response = await axiosInstance.put(
+    ENDPOINTS.updateSchool(data.id),
+    body,
+  );
   return checkResponse(response, 200);
 };
 
@@ -97,12 +99,12 @@ export const useSchools = () => {
 export const useSchoolsWithRefetch = () => {
   const queryClient = useQueryClient();
   const query = useSchools();
-  
+
   const forceRefetch = async () => {
     await queryClient.invalidateQueries({ queryKey: [SCHOOLS_QUERY_KEY] });
     return query.refetch();
   };
-  
+
   return { ...query, forceRefetch };
 };
 
@@ -116,11 +118,11 @@ export const useSchool = (schoolId: string) => {
 
 const getSchoolLockIn = async (schoolId: string) => {
   const result = await api(ENDPOINTS.getSchoolLockIn(schoolId));
-  
+
   if (result?.success && result.data) {
     return result.data;
   }
-  
+
   throw new Error("Failed to fetch school lockin");
 };
 
@@ -182,3 +184,5 @@ export const useUpdateSchool = () => {
     },
   });
 };
+
+

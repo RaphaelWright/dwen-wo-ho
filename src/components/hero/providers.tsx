@@ -6,7 +6,7 @@ import WidthConstraint from "../ui/width-constraint";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import { useRouter } from "next/navigation";
 import Header from "../header";
 
@@ -92,3 +92,5 @@ const ProvidersHero = () => {
 };
 
 export default ProvidersHero;
+
+

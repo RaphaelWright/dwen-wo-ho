@@ -1,0 +1,33 @@
+export const ROUTES = {
+  provider: {
+    singIn: "/provider/auth?step=sign-in",
+    signUp: "/provider/signup",
+    checkEmail: "/provider/check-email",
+    verifyEmail: "/provider/verifyEmail",
+    verifyPasswordReset: "/provider/verify-password-reset",
+    newPassword: "/provider/new-password",
+    auth: "/provider/auth",
+    profile: "/provider/profile",
+    dashboard: "/provider/dashboard",
+    home: "/provider/home",
+  },
+  patient: {
+    singIn: "/patient/signin",
+    signUp: "/patient/signup",
+    checkEmail: "/patient/check-email",
+    verifyEmail: "/patient/verifyEmail",
+    verifyPasswordReset: "/patient/verify-password-reset",
+    newPassword: "/patient/new-password",
+    lockIn: "/patient/lock-in",
+    waitingRoom: "/patient/waiting-room",
+  },
+  curator: {
+    dashboard: "/curator/dashboard",
+    schools: "/curator/schools",
+    providers: "/curator/providers",
+    partners: "/curator/partners",
+    providerDetails: "/curator/provider",
+  },
+};
+
+

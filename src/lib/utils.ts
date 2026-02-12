@@ -25,6 +25,8 @@ export function calculateTimeAgo(dateString: string): string {
   return `${days}d ago`;
 }
 
-export const signUpSteps = ["Create", "Verify", "Profile"];
+import { SIGNUP_STEPS, RECOVER_STEPS } from "@/lib/constants/mock-data";
 
-export const recoverSteps = ["Verify", "New Password"];
+export const signUpSteps = SIGNUP_STEPS;
+
+export const recoverSteps = RECOVER_STEPS;

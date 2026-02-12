@@ -7,7 +7,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import { Notification } from "@/components/curator/ui/notification-sheet";
+import { Notification } from "@/features/curator/components/ui/notification-sheet";
 
 interface NotificationContextType {
   notifications: Notification[];
@@ -71,3 +71,5 @@ export const useNotification = () => {
   }
   return context;
 };
+
+

@@ -3,12 +3,11 @@
 import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { School } from "@/types/school";
 import { FiSearch } from "react-icons/fi";
 import { MdSchool } from "react-icons/md";
-
-type FilterType = "all" | "JHS" | "SHS" | "NMTC" | "University" | "COLLEGE";
+import { SchoolSelectionModalProps, FilterType } from "@/types/modals";
 
 const filterOptions: { label: string; value: FilterType }[] = [
   { label: "All", value: "all" },
@@ -16,12 +15,6 @@ const filterOptions: { label: string; value: FilterType }[] = [
   { label: "SHS", value: "SHS" },
   { label: "COLLEGE", value: "COLLEGE" },
 ];
-
-interface SchoolSelectionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSelect: (school: School | null) => void;
-}
 
 export default function SchoolSelectionModal({
   isOpen,
@@ -226,3 +219,5 @@ export default function SchoolSelectionModal({
     </div>
   );
 }
+
+

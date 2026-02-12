@@ -4,17 +4,17 @@ import Layout from "@/app/provider/auth/layout";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { useEffect, useState, Suspense } from "react";
 import { formatTime, recoverSteps } from "@/lib/utils";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import Stepper from "@/components/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import LoadingOverlay from "@/components/ui/loading-overlay";
@@ -105,7 +105,7 @@ const VerifyContent = () => {
   return (
     <div className="h-full flex flex-col justify-between">
       <div className="flex items-center px-8 justify-between w-full">
-        <JustGoHealth />
+        <Logo />
         <Link
           href={ROUTES.provider.singIn}
           className="bg-gray-300 text-[#ed1c24] rounded-full px-4 py-1"
@@ -177,3 +177,6 @@ const Verify = () => {
 };
 
 export default Verify;
+
+
+

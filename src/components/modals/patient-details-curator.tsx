@@ -3,88 +3,15 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/constants/endpoints";
+import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-interface PatientDetailsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  patientId: number;
-  schoolId: string | number;
-}
-
-interface PatientResult {
-  id: number;
-  lockinId: number;
-  schoolId: number;
-  schoolName: string;
-  patientName: string;
-  patientAge: number;
-  patientSex: string;
-  visibilityStatus: "NEW" | "SEEN";
-  starProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-    professionalTitle: string;
-    specialty: string;
-  } | null;
-  referredProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-  } | null;
-  createdAt: string;
-  firstOpenedAt: string | null;
-  treatingProviders: Array<{
-    id: string;
-    fullName: string;
-  }>;
-}
-
-interface LockInAssessment {
-  fullName: string;
-  age: number;
-  sex: string;
-  school: string;
-  generalMentalHealth: string;
-  generalMentalHealthScore: string;
-  generalMentalHealthColor: string;
-  possibleDepressionScore: string;
-  possibleDepressionDescription: string;
-  possibleDepressionColor: string;
-  lonelinessScore: string;
-  lonelinessScoreDescription: string;
-  lonelinessColor: string;
-  suicidalRiskScore: string;
-  suicidalRiskScoreDescription: string;
-  suicidalRiskColor: string;
-  examAnxiety: string;
-  examAnxietyScore: string;
-  examAnxietyColor: string;
-  coreAnxietyScore: string;
-  coreAnxietyScoreDescription: string;
-  coreAnxietyColor: string;
-  physicalDistressScore: string;
-  physicalDistressScoreDescription: string;
-  physicalDistressColor: string;
-  examPrep: string;
-  examPrepScore: string;
-  examPrepColor: string;
-  motivationScore: string;
-  motivationScoreDescription: string;
-  motivationColor: string;
-  studySkillsScore: string;
-  studySkillsScoreDescription: string;
-  studySkillsColor: string;
-  procrastinationScore: string;
-  procrastinationScoreDescription: string;
-  procrastinationColor: string;
-  lockedInScore: string;
-  lockedInScoreDescription: string;
-  lockedInColor: string;
-}
+import {
+  PatientDetailsModalProps,
+  PatientResult,
+  LockInAssessment,
+} from "@/types/modals";
 
 const getColorClass = (color: string): string => {
   switch (color.toLowerCase()) {
@@ -111,8 +38,11 @@ export default function PatientDetailsModal({
   patientId,
   schoolId,
 }: PatientDetailsModalProps) {
-  const [patientResult, setPatientResult] = useState<PatientResult | null>(null);
-  const [lockInAssessment, setLockInAssessment] = useState<LockInAssessment | null>(null);
+  const [patientResult, setPatientResult] = useState<PatientResult | null>(
+    null,
+  );
+  const [lockInAssessment, setLockInAssessment] =
+    useState<LockInAssessment | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -136,7 +66,9 @@ export default function PatientDetailsModal({
 
         // Try to get lock-in assessment details from school lock-in endpoint
         try {
-          const lockInResponse = await api(ENDPOINTS.getSchoolLockIn(resultData.schoolId));
+          const lockInResponse = await api(
+            ENDPOINTS.getSchoolLockIn(resultData.schoolId),
+          );
           if (lockInResponse?.success && lockInResponse.data) {
             const lockInData = lockInResponse.data as {
               schoolName: string;
@@ -149,7 +81,7 @@ export default function PatientDetailsModal({
             };
             // Find the student matching this patient
             const student = lockInData.students?.find(
-              (s) => s.studentName === resultData.patientName
+              (s) => s.studentName === resultData.patientName,
             );
             if (student) {
               // Create a simplified assessment object with available data
@@ -201,7 +133,8 @@ export default function PatientDetailsModal({
           }
         } catch (error) {
           // Silently handle "No lockins found" - this is expected for schools without lock-ins
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
           if (!errorMessage.includes("No lockins found")) {
             // Only log if it's not the expected "no lockins" case
           }
@@ -248,19 +181,28 @@ export default function PatientDetailsModal({
                     {patientResult.patientName.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold mb-2">{patientResult.patientName}</h3>
+                    <h3 className="text-2xl font-bold mb-2">
+                      {patientResult.patientName}
+                    </h3>
                     <p className="text-white/90">
-                      {patientResult.patientAge} years old • {patientResult.patientSex}
+                      {patientResult.patientAge} years old •{" "}
+                      {patientResult.patientSex}
                     </p>
-                    <p className="text-white/80 mt-1">{patientResult.schoolName}</p>
+                    <p className="text-white/80 mt-1">
+                      {patientResult.schoolName}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Provider Info */}
-              {(patientResult.starProvider || patientResult.referredProvider || patientResult.treatingProviders.length > 0) && (
+              {(patientResult.starProvider ||
+                patientResult.referredProvider ||
+                patientResult.treatingProviders.length > 0) && (
                 <div className="bg-gray-50 rounded-xl p-6">
-                  <h4 className="font-semibold text-gray-900 mb-4">Provider Information</h4>
+                  <h4 className="font-semibold text-gray-900 mb-4">
+                    Provider Information
+                  </h4>
                   <div className="space-y-3">
                     {patientResult.starProvider && (
                       <div className="flex items-center gap-3">
@@ -268,9 +210,12 @@ export default function PatientDetailsModal({
                           ⭐
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">Star Provider</p>
+                          <p className="font-medium text-gray-900">
+                            Star Provider
+                          </p>
                           <p className="text-sm text-gray-600">
-                            {patientResult.starProvider.fullName} ({patientResult.starProvider.specialty})
+                            {patientResult.starProvider.fullName} (
+                            {patientResult.starProvider.specialty})
                           </p>
                         </div>
                       </div>
@@ -281,21 +226,32 @@ export default function PatientDetailsModal({
                           →
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">Referred Provider</p>
-                          <p className="text-sm text-gray-600">{patientResult.referredProvider.fullName}</p>
+                          <p className="font-medium text-gray-900">
+                            Referred Provider
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {patientResult.referredProvider.fullName}
+                          </p>
                         </div>
                       </div>
                     )}
                     {patientResult.treatingProviders.length > 0 && (
                       <div>
-                        <p className="font-medium text-gray-900 mb-2">Treating Providers</p>
+                        <p className="font-medium text-gray-900 mb-2">
+                          Treating Providers
+                        </p>
                         <div className="space-y-2">
                           {patientResult.treatingProviders.map((provider) => (
-                            <div key={provider.id} className="flex items-center gap-3">
+                            <div
+                              key={provider.id}
+                              className="flex items-center gap-3"
+                            >
                               <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-semibold text-xs">
                                 ✓
                               </div>
-                              <p className="text-sm text-gray-600">{provider.fullName}</p>
+                              <p className="text-sm text-gray-600">
+                                {provider.fullName}
+                              </p>
                             </div>
                           ))}
                         </div>
@@ -307,90 +263,172 @@ export default function PatientDetailsModal({
 
               {/* Assessment Scores */}
               <div>
-                <h4 className="font-semibold text-gray-900 mb-4">Lock-In Assessment Results</h4>
+                <h4 className="font-semibold text-gray-900 mb-4">
+                  Lock-In Assessment Results
+                </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* General Mental Health */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.generalMentalHealthColor)}`}>
-                    <p className="text-sm font-medium mb-1">General Mental Health</p>
-                    <p className="text-lg font-bold">{lockInAssessment.generalMentalHealth}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.generalMentalHealthScore}</p>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.generalMentalHealthColor)}`}
+                  >
+                    <p className="text-sm font-medium mb-1">
+                      General Mental Health
+                    </p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.generalMentalHealth}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.generalMentalHealthScore}
+                    </p>
                   </div>
 
                   {/* Possible Depression */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.possibleDepressionColor)}`}>
-                    <p className="text-sm font-medium mb-1">Possible Depression</p>
-                    <p className="text-lg font-bold">{lockInAssessment.possibleDepressionDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.possibleDepressionScore}</p>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.possibleDepressionColor)}`}
+                  >
+                    <p className="text-sm font-medium mb-1">
+                      Possible Depression
+                    </p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.possibleDepressionDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.possibleDepressionScore}
+                    </p>
                   </div>
 
                   {/* Loneliness */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.lonelinessColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.lonelinessColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Loneliness</p>
-                    <p className="text-lg font-bold">{lockInAssessment.lonelinessScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.lonelinessScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.lonelinessScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.lonelinessScore}
+                    </p>
                   </div>
 
                   {/* Suicidal Risk */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.suicidalRiskColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.suicidalRiskColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Suicidal Risk</p>
-                    <p className="text-lg font-bold">{lockInAssessment.suicidalRiskScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.suicidalRiskScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.suicidalRiskScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.suicidalRiskScore}
+                    </p>
                   </div>
 
                   {/* Exam Anxiety */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.examAnxietyColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.examAnxietyColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Exam Anxiety</p>
-                    <p className="text-lg font-bold">{lockInAssessment.examAnxiety}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.examAnxietyScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.examAnxiety}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.examAnxietyScore}
+                    </p>
                   </div>
 
                   {/* Core Anxiety */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.coreAnxietyColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.coreAnxietyColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Core Anxiety</p>
-                    <p className="text-lg font-bold">{lockInAssessment.coreAnxietyScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.coreAnxietyScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.coreAnxietyScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.coreAnxietyScore}
+                    </p>
                   </div>
 
                   {/* Physical Distress */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.physicalDistressColor)}`}>
-                    <p className="text-sm font-medium mb-1">Physical Distress</p>
-                    <p className="text-lg font-bold">{lockInAssessment.physicalDistressScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.physicalDistressScore}</p>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.physicalDistressColor)}`}
+                  >
+                    <p className="text-sm font-medium mb-1">
+                      Physical Distress
+                    </p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.physicalDistressScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.physicalDistressScore}
+                    </p>
                   </div>
 
                   {/* Exam Prep */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.examPrepColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.examPrepColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Exam Preparation</p>
-                    <p className="text-lg font-bold">{lockInAssessment.examPrep}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.examPrepScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.examPrep}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.examPrepScore}
+                    </p>
                   </div>
 
                   {/* Motivation */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.motivationColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.motivationColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Motivation</p>
-                    <p className="text-lg font-bold">{lockInAssessment.motivationScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.motivationScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.motivationScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.motivationScore}
+                    </p>
                   </div>
 
                   {/* Study Skills */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.studySkillsColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.studySkillsColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Study Skills</p>
-                    <p className="text-lg font-bold">{lockInAssessment.studySkillsScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.studySkillsScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.studySkillsScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.studySkillsScore}
+                    </p>
                   </div>
 
                   {/* Procrastination */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.procrastinationColor)}`}>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.procrastinationColor)}`}
+                  >
                     <p className="text-sm font-medium mb-1">Procrastination</p>
-                    <p className="text-lg font-bold">{lockInAssessment.procrastinationScoreDescription}</p>
-                    <p className="text-xs mt-1">{lockInAssessment.procrastinationScore}</p>
+                    <p className="text-lg font-bold">
+                      {lockInAssessment.procrastinationScoreDescription}
+                    </p>
+                    <p className="text-xs mt-1">
+                      {lockInAssessment.procrastinationScore}
+                    </p>
                   </div>
 
                   {/* Locked In Score */}
-                  <div className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.lockedInColor)} md:col-span-2`}>
-                    <p className="text-sm font-medium mb-1">Overall Lock-In Score</p>
-                    <p className="text-2xl font-bold">{lockInAssessment.lockedInScoreDescription}</p>
-                    <p className="text-sm mt-1">{lockInAssessment.lockedInScore}</p>
+                  <div
+                    className={`p-4 rounded-lg border-2 ${getColorClass(lockInAssessment.lockedInColor)} md:col-span-2`}
+                  >
+                    <p className="text-sm font-medium mb-1">
+                      Overall Lock-In Score
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {lockInAssessment.lockedInScoreDescription}
+                    </p>
+                    <p className="text-sm mt-1">
+                      {lockInAssessment.lockedInScore}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -426,3 +464,5 @@ export default function PatientDetailsModal({
     </div>
   );
 }
+
+

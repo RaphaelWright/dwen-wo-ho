@@ -30,3 +30,5 @@ export const ProviderSignUpSchema = z.object({
 export type ProviderEmailFormData = z.infer<typeof ProviderEmailSchema>;
 export type ProviderLoginFormData = z.infer<typeof ProviderLoginSchema>;
 export type ProviderSignUpFormData = z.infer<typeof ProviderSignUpSchema>;
+
+

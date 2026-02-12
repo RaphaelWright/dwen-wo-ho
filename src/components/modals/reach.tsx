@@ -1,13 +1,17 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Users, Activity, FileText, CheckCircle, School } from "lucide-react";
+import {
+  X,
+  Users,
+  Activity,
+  FileText,
+  CheckCircle,
+  School,
+} from "lucide-react";
 import { useState } from "react";
 
-interface ReachModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ReachModalProps } from "@/types/modals";
 
 const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
   const [baseline, setBaseline] = useState("");
@@ -21,10 +25,34 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
   ];
 
   const metrics = [
-    { label: "Visits", value: "0", icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Screened", value: "0", icon: Activity, color: "text-purple-600", bg: "bg-purple-50" },
-    { label: "Results", value: "0", icon: FileText, color: "text-orange-600", bg: "bg-orange-50" },
-    { label: "Active", value: "0", icon: CheckCircle, color: "text-green-600", bg: "bg-green-50" },
+    {
+      label: "Visits",
+      value: "0",
+      icon: Users,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    {
+      label: "Screened",
+      value: "0",
+      icon: Activity,
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+    },
+    {
+      label: "Results",
+      value: "0",
+      icon: FileText,
+      color: "text-orange-600",
+      bg: "bg-orange-50",
+    },
+    {
+      label: "Active",
+      value: "0",
+      icon: CheckCircle,
+      color: "text-green-600",
+      bg: "bg-green-50",
+    },
   ];
 
   return (
@@ -49,10 +77,13 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
               {/* Header */}
               <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                 <div className="flex items-center gap-4">
-                  
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">Reach Overview</h2>
-                    <p className="text-sm text-gray-500">Impact and engagement metrics</p>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      Reach Overview
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Impact and engagement metrics
+                    </p>
                   </div>
                 </div>
                 <button
@@ -69,9 +100,13 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                 <div className="flex flex-col md:flex-row gap-8 mb-10">
                   <div className="flex-1 bg-[#955aa4] rounded-2xl p-6 text-white shadow-lg shadow-[#955aa4]/20 relative overflow-hidden">
                     <div className="relative z-10">
-                      <p className="text-white/80 font-medium mb-1">Total Student Reach</p>
+                      <p className="text-white/80 font-medium mb-1">
+                        Total Student Reach
+                      </p>
                       <h3 className="text-5xl font-bold mb-2">293,894</h3>
-                      <p className="text-white/60 text-sm">Across all partner institutions</p>
+                      <p className="text-white/60 text-sm">
+                        Across all partner institutions
+                      </p>
                     </div>
                     <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
                       <Users className="w-48 h-48" />
@@ -79,7 +114,9 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                   </div>
 
                   <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Set Baseline Target</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Set Baseline Target
+                    </label>
                     <div className="flex gap-3">
                       <input
                         value={baseline}
@@ -92,7 +129,8 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                       </button>
                     </div>
                     <p className="text-xs text-gray-500 mt-3">
-                      This baseline will be used to calculate progress percentages across all schools.
+                      This baseline will be used to calculate progress
+                      percentages across all schools.
                     </p>
                   </div>
                 </div>
@@ -100,12 +138,21 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                 {/* Metrics Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                   {metrics.map((metric) => (
-                    <div key={metric.label} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                      <div className={`w-10 h-10 ${metric.bg} ${metric.color} rounded-lg flex items-center justify-center mb-3`}>
+                    <div
+                      key={metric.label}
+                      className="bg-gray-50 rounded-xl p-5 border border-gray-100"
+                    >
+                      <div
+                        className={`w-10 h-10 ${metric.bg} ${metric.color} rounded-lg flex items-center justify-center mb-3`}
+                      >
                         <metric.icon className="w-5 h-5" />
                       </div>
-                      <p className="text-gray-500 text-sm font-medium">{metric.label}</p>
-                      <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                      <p className="text-gray-500 text-sm font-medium">
+                        {metric.label}
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {metric.value}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -118,11 +165,16 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {schools.map((school, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-xl hover:border-gray-200 hover:shadow-sm transition-all">
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-xl hover:border-gray-200 hover:shadow-sm transition-all"
+                      >
                         <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 font-bold text-sm">
                           {school.charAt(0)}
                         </div>
-                        <span className="font-medium text-gray-700">{school}</span>
+                        <span className="font-medium text-gray-700">
+                          {school}
+                        </span>
                       </div>
                     ))}
                   </div>

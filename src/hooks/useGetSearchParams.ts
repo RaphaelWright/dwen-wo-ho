@@ -6,3 +6,4 @@ const useGetSearchParams = (query: string): string => {
 };
 
 export default useGetSearchParams;
+

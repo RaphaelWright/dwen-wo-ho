@@ -109,3 +109,5 @@ export const hasValidToken = (): boolean => {
 
   return !!(curatorToken || providerToken || patientToken || refreshToken);
 };
+
+

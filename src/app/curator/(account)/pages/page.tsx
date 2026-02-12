@@ -1,233 +1,49 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-import JustGoHealth from "@/components/logo-purple";
+import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { School } from "@/types/school";
 import SchoolSelectionModal from "@/components/modals/school-selection-pages";
 import AddCoverPageModal from "@/components/modals/add-cover-page";
 import AddIconModal from "@/components/modals/add-icon";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { Lock } from "lucide-react";
-
-type TabType = "cover-page" | "icons" | "lock-ins";
-
-interface CoverPage {
-  id: string;
-  photo: File | string;
-  photoPreview: string;
-  color: string;
-  slogan: string;
-  schoolId: number | null;
-}
-
-interface Icon {
-  id: string;
-  photo: File | string;
-  photoPreview: string;
-  name: string;
-  slogan: string;
-  rank: number;
-  schoolId: number | null;
-  lockIns: string[];
-}
+import { useCuratorPages } from "@/hooks/curator/useCuratorPages";
 
 export default function CuratorPagesPage() {
-  const [activeTab, setActiveTab] = useState<TabType>("cover-page");
-  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
-  const [showSchoolModal, setShowSchoolModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showAddIconModal, setShowAddIconModal] = useState(false);
-  const [coverPages, setCoverPages] = useState<CoverPage[]>([]);
-  const [icons, setIcons] = useState<Icon[]>([]);
-
-  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(
-    null,
-  );
-  const [editingIcon, setEditingIcon] = useState<Icon | null>(null);
-
-  const handleCoverPageComplete = (data: {
-    photo: File | null;
-    color: string;
-    slogan: string;
-  }) => {
-    const targetSchoolId = selectedSchool?.id || null;
-
-    if (editingCoverPage) {
-      // Update existing cover page
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedCoverPage: CoverPage = {
-          ...editingCoverPage,
-          photo: data.photo || editingCoverPage.photo,
-          photoPreview: data.photo
-            ? (reader.result as string)
-            : editingCoverPage.photoPreview,
-          color: data.color,
-          slogan: data.slogan,
-        };
-        setCoverPages(
-          coverPages.map((page) =>
-            page.id === editingCoverPage.id ? updatedCoverPage : page,
-          ),
-        );
-        setShowAddModal(false);
-        setEditingCoverPage(null);
-      };
-
-      if (data.photo) {
-        reader.readAsDataURL(data.photo);
-      } else {
-        // No new photo, just update other fields
-        const updatedCoverPage: CoverPage = {
-          ...editingCoverPage,
-          color: data.color,
-          slogan: data.slogan,
-        };
-        setCoverPages(
-          coverPages.map((page) =>
-            page.id === editingCoverPage.id ? updatedCoverPage : page,
-          ),
-        );
-        setShowAddModal(false);
-        setEditingCoverPage(null);
-      }
-    } else {
-      // Create new cover page (append to list; backend will return list when we fetch)
-      if (data.photo) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const newCoverPage: CoverPage = {
-            id: Date.now().toString(),
-            photo: data.photo!,
-            photoPreview: reader.result as string,
-            color: data.color,
-            slogan: data.slogan,
-            schoolId: targetSchoolId,
-          };
-          setCoverPages([...coverPages, newCoverPage]);
-          setShowAddModal(false);
-        };
-        reader.readAsDataURL(data.photo);
-      }
-    }
-  };
-
-  const handleCoverPageClick = (coverPage: CoverPage) => {
-    setEditingCoverPage(coverPage);
-    setShowAddModal(true);
-  };
-
-  const handleSchoolSelect = (school: School | null) => {
-    setSelectedSchool(school);
-    setShowSchoolModal(false);
-  };
-
-  const handleClearSchool = () => {
-    setSelectedSchool(null);
-  };
-
-  const handleIconComplete = (data: {
-    photo: File | null;
-    name: string;
-    slogan: string;
-    rank: number;
-    lockIns: string[];
-  }) => {
-    const targetSchoolId = selectedSchool?.id || null;
-
-    if (editingIcon) {
-      // Update existing icon
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedIcon: Icon = {
-          ...editingIcon,
-          photo: data.photo || editingIcon.photo,
-          photoPreview: data.photo
-            ? (reader.result as string)
-            : editingIcon.photoPreview,
-          name: data.name,
-          slogan: data.slogan,
-          rank: data.rank,
-          lockIns: data.lockIns,
-        };
-        setIcons(
-          icons.map((icon) =>
-            icon.id === editingIcon.id ? updatedIcon : icon,
-          ),
-        );
-        setShowAddIconModal(false);
-        setEditingIcon(null);
-      };
-
-      if (data.photo) {
-        reader.readAsDataURL(data.photo);
-      } else {
-        // No new photo, just update other fields
-        const updatedIcon: Icon = {
-          ...editingIcon,
-          name: data.name,
-          slogan: data.slogan,
-          rank: data.rank,
-          lockIns: data.lockIns,
-        };
-        setIcons(
-          icons.map((icon) =>
-            icon.id === editingIcon.id ? updatedIcon : icon,
-          ),
-        );
-        setShowAddIconModal(false);
-        setEditingIcon(null);
-      }
-    } else {
-      // Create new icon
-      if (data.photo) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const newIcon: Icon = {
-            id: Date.now().toString(),
-            photo: data.photo!,
-            photoPreview: reader.result as string,
-            name: data.name,
-            slogan: data.slogan,
-            rank: data.rank,
-            schoolId: targetSchoolId,
-            lockIns: data.lockIns,
-          };
-          setIcons([...icons, newIcon]);
-          setShowAddIconModal(false);
-        };
-        reader.readAsDataURL(data.photo);
-      }
-    }
-  };
-
-  const handleIconClick = (icon: Icon) => {
-    setEditingIcon(icon);
-    setShowAddIconModal(true);
-  };
-
-  const tabs = [
-    { id: "cover-page" as TabType, label: "Cover Page" },
-    { id: "icons" as TabType, label: "Icons" },
-    { id: "lock-ins" as TabType, label: "Lock-ins" },
-  ];
-
-  // Cover pages for current context (selected school or platform) – list for backend/fetch
-  const displayCoverPages = selectedSchool
-    ? coverPages.filter((page) => page.schoolId === selectedSchool.id)
-    : coverPages.filter((page) => page.schoolId === null);
+  const {
+    activeTab,
+    setActiveTab,
+    selectedSchool,
+    showSchoolModal,
+    setShowSchoolModal,
+    showAddModal,
+    showAddIconModal,
+    coverPages: displayCoverPages,
+    icons: displayIcons,
+    editingCoverPage,
+    editingIcon,
+    tabs,
+    handleCoverPageComplete,
+    handleCoverPageClick,
+    handleSchoolSelect,
+    handleIconComplete,
+    handleIconClick,
+    openAddCoverPage,
+    closeAddCoverPage,
+    openAddIcon,
+    closeAddIcon,
+  } = useCuratorPages();
 
   return (
     <WidthConstraint>
       <div className="p-8 overflow-x-hidden">
         {/* Header with Logo and School Info - scaled 1.2 */}
-        <div className="mb-8 flex items-center justify-center min-h-[120px]">
+        <div className="mb-8 flex items-center justify-center min-h-30">
           {selectedSchool ? (
             <div className="flex items-center justify-center gap-4 mb-6 scale-[1.2] origin-center">
               {selectedSchool.logo ? (
-                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-gray-200">
+                <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-gray-200">
                   <Image
                     src={selectedSchool.logo}
                     alt={selectedSchool.name}
@@ -247,7 +63,7 @@ export default function CuratorPagesPage() {
             </div>
           ) : (
             <div className="mb-6 flex justify-center scale-[1.2] origin-center">
-              <JustGoHealth />
+              <Logo />
             </div>
           )}
         </div>
@@ -278,7 +94,6 @@ export default function CuratorPagesPage() {
         {activeTab === "cover-page" && (
           <>
             {displayCoverPages.length === 0 ? (
-              /* No cover pages: "Nothing to see yet" on top, then Add below */
               <>
                 <div className="flex flex-col items-center justify-center py-10">
                   <h2 className="text-[70px] font-extrabold text-gray-400 text-center leading-tight">
@@ -288,10 +103,7 @@ export default function CuratorPagesPage() {
                   <p className="mt-6 text-lg text-gray-1000 flex items-center gap-2">
                     You can
                     <button
-                      onClick={() => {
-                        setEditingCoverPage(null);
-                        setShowAddModal(true);
-                      }}
+                      onClick={openAddCoverPage}
                       className="px-5 py-2 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition"
                     >
                       + A D D
@@ -301,16 +113,12 @@ export default function CuratorPagesPage() {
                 </div>
               </>
             ) : (
-              /* Has cover pages: Add on top, then list all cover pages below */
               <>
                 <div className="flex flex-col items-center justify-center mb-6">
                   <p className="text-lg text-gray-600 mb-2">
                     You can{" "}
                     <button
-                      onClick={() => {
-                        setEditingCoverPage(null);
-                        setShowAddModal(true);
-                      }}
+                      onClick={openAddCoverPage}
                       className="py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors px-4"
                     >
                       + ADD
@@ -339,7 +147,7 @@ export default function CuratorPagesPage() {
                         )}
                       </div>
                       {page.slogan && (
-                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent">
+                        <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/70 to-transparent">
                           <p className="text-white text-2xl font-bold">
                             {page.slogan}
                           </p>
@@ -368,84 +176,75 @@ export default function CuratorPagesPage() {
 
         {activeTab === "icons" && (
           <>
-            {(() => {
-              const currentIcons = selectedSchool
-                ? icons.filter((icon) => icon.schoolId === selectedSchool.id)
-                : icons.filter((icon) => icon.schoolId === null);
-
-              return currentIcons.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-2 min-h-[200px]">
-                  <p className="text-[70px] font-bold text-gray-400">
-                    Nothing to see yet.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {currentIcons
-                    .sort((a, b) => a.rank - b.rank)
-                    .map((icon) => (
-                      <button
-                        key={icon.id}
-                        onClick={() => handleIconClick(icon)}
-                        className="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-96"
-                      >
-                        {icon.photoPreview ? (
-                          <div className="relative w-full h-full">
-                            <Image
-                              src={icon.photoPreview}
-                              alt={icon.name}
-                              fill
-                              className="object-cover"
-                            />
-                            {/* Rank Badge */}
-                            <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
-                              <span className="text-black font-bold text-lg">
-                                #{icon.rank}
-                              </span>
-                            </div>
-                            {/* Name and Lock-ins Overlay - centered, lock-ins under name */}
-                            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center justify-end text-center">
-                              <p className="text-white text-3xl font-bold">
-                                {icon.name}
-                              </p>
-                              <div className="flex flex-col items-center gap-1 mt-2">
-                                {(icon.lockIns || []).length > 0 ? (
-                                  (icon.lockIns || []).map((item, i) => (
-                                    <span
-                                      key={i}
-                                      className="text-white/90 text-sm flex items-center gap-1.5"
-                                    >
-                                      <Lock className="w-3.5 h-3.5 text-yellow-500 flex-shrink-0" />
-                                      {item}
-                                    </span>
-                                  ))
-                                ) : (
-                                  <span className="text-white/70 text-sm">
-                                    No lock-ins
+            {displayIcons.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-2 min-h-50">
+                <p className="text-[70px] font-bold text-gray-400">
+                  Nothing to see yet.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {displayIcons
+                  .sort((a, b) => a.rank - b.rank)
+                  .map((icon) => (
+                    <button
+                      key={icon.id}
+                      onClick={() => handleIconClick(icon)}
+                      className="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-96"
+                    >
+                      {icon.photoPreview ? (
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={icon.photoPreview}
+                            alt={icon.name}
+                            fill
+                            className="object-cover"
+                          />
+                          {/* Rank Badge */}
+                          <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
+                            <span className="text-black font-bold text-lg">
+                              #{icon.rank}
+                            </span>
+                          </div>
+                          {/* Name and Lock-ins Overlay */}
+                          <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/70 to-transparent flex flex-col items-center justify-end text-center">
+                            <p className="text-white text-3xl font-bold">
+                              {icon.name}
+                            </p>
+                            <div className="flex flex-col items-center gap-1 mt-2">
+                              {(icon.lockIns || []).length > 0 ? (
+                                (icon.lockIns || []).map((item, i) => (
+                                  <span
+                                    key={i}
+                                    className="text-white/90 text-sm flex items-center gap-1.5"
+                                  >
+                                    <Lock className="w-3.5 h-3.5 text-yellow-500 shrink-0" />
+                                    {item}
                                   </span>
-                                )}
-                              </div>
+                                ))
+                              ) : (
+                                <span className="text-white/70 text-sm">
+                                  No lock-ins
+                                </span>
+                              )}
                             </div>
                           </div>
-                        ) : (
-                          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                            <p className="text-gray-400">{icon.name}</p>
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                </div>
-              );
-            })()}
+                        </div>
+                      ) : (
+                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                          <p className="text-gray-400">{icon.name}</p>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+              </div>
+            )}
 
             <div className="flex flex-col items-center justify-center mb-2">
               <p className="text-lg text-gray-1000 mb-2">
                 You can{" "}
                 <button
-                  onClick={() => {
-                    setEditingIcon(null);
-                    setShowAddIconModal(true);
-                  }}
+                  onClick={openAddIcon}
                   className="px-3 py-1.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-colors"
                 >
                   + A D D
@@ -482,10 +281,7 @@ export default function CuratorPagesPage() {
         {/* Add Cover Page Modal */}
         <AddCoverPageModal
           isOpen={showAddModal}
-          onClose={() => {
-            setShowAddModal(false);
-            setEditingCoverPage(null);
-          }}
+          onClose={closeAddCoverPage}
           onComplete={handleCoverPageComplete}
           editData={
             editingCoverPage
@@ -501,10 +297,7 @@ export default function CuratorPagesPage() {
         {/* Add Icon Modal */}
         <AddIconModal
           isOpen={showAddIconModal}
-          onClose={() => {
-            setShowAddIconModal(false);
-            setEditingIcon(null);
-          }}
+          onClose={closeAddIcon}
           onComplete={handleIconComplete}
           editData={
             editingIcon
