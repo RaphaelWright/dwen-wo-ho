@@ -1,16 +1,14 @@
+import "@/styles/globals.css";
+import JsonLd from "@/components/json-ld";
 import type { Metadata } from "next";
-import "./globals.css";
 import { Toaster } from "sonner";
 import AppProviders from "@/components/AppProviders";
 import { brHendrix, geistMono, geistSans } from "@/lib/fonts/fonts";
 
-export const metadata: Metadata = {
-  title: "DWEN WO HO | JustGo Health",
-  description: "DWEN WO HO | JustGo Health",
-  icons: {
-    icon: "/logos/logo-purple.ico",
-  },
-};
+import { getMetadata } from "@/lib/metadata";
+import { JSON_LD_ROOT_LAYOUT } from "@/lib/constants/json-ld";
+
+export const metadata: Metadata = getMetadata();
 
 export default function RootLayout({
   children,
@@ -24,6 +22,7 @@ export default function RootLayout({
       >
         <Toaster richColors position="top-right" />
         <AppProviders>{children}</AppProviders>
+        <JsonLd data={JSON_LD_ROOT_LAYOUT} />
       </body>
     </html>
   );

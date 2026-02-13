@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /provider
+Disallow: /curator
+Disallow: /patient
+Disallow: /api
+
+# Host
+Host: http://localhost:3000
+
+# Sitemaps
+Sitemap: http://localhost:3000/sitemap.xml
