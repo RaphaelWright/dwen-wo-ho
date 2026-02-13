@@ -164,7 +164,7 @@ export default function ProviderSchoolDetailsPage() {
                   className="w-full text-left flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-[#955aa4]/30 hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center">
                       <span className="text-white font-semibold">
                         {student.studentName.charAt(0).toUpperCase()}
                       </span>

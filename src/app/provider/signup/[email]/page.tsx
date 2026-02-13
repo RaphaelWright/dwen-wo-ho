@@ -1,68 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
-import { useEffect, useState } from "react";
 import { formatTime, signUpSteps } from "@/lib/utils";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/stepper";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import { useProviderVerifyEmail } from "@/hooks/provider/useProviderVerifyEmail";
 
 const Verify = () => {
-  const [isRunning, setIsRunning] = useState(true);
-  const [seconds, setSeconds] = useState(120); // 2 minutes
-  const [errorMessage, setErrorMessage] = useState("");
-  const params = useParams();
-  const { email } = params;
-  const { verifyEmailMutation } = useAuthQuery();
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    if (isRunning && seconds > 0) {
-      intervalId = setInterval(() => {
-        setSeconds((prev) => prev - 1);
-      }, 1000);
-    } else if (seconds === 0) {
-      setIsRunning(false);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isRunning, seconds]);
-
-  const router = useRouter();
-
-  const handleOTPComplete = async (value: string) => {
-    setErrorMessage("");
-
-    try {
-      const response = await verifyEmailMutation.mutateAsync({
-        code: value,
-        email: decodeURIComponent(email as string),
-      });
-
-      if (response.success) {
-        if (response.data?.token) {
-          localStorage.setItem("token", response.data.token);
-        }
-        // Redirect to profile setup (photo step)
-        router.push(
-          `${ROUTES.provider.signUp}?email=${encodeURIComponent(email as string)}&step=photo`,
-        );
-      } else {
-        setErrorMessage(response.message || "Verification failed");
-      }
-    } catch (error) {
-      const errorMsg =
-        (error as any)?.response?.data?.message ||
-        "Verification failed. Please try again.";
-      setErrorMessage(errorMsg);
-    }
-  };
+  const {
+    email,
+    seconds,
+    errorMessage,
+    handleOTPComplete,
+    resetTimer,
+    verifyEmailMutation,
+    router,
+  } = useProviderVerifyEmail();
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -121,10 +77,7 @@ const Verify = () => {
                 <div className="flex items-center justify-center gap-4">
                   <Button
                     disabled={seconds > 0}
-                    onClick={() => {
-                      setSeconds(120);
-                      setIsRunning(true);
-                    }}
+                    onClick={resetTimer}
                     className="rounded-lg px-4 py-2 text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
                   >
                     Resend code →
@@ -167,4 +120,3 @@ const Verify = () => {
 };
 
 export default Verify;
-

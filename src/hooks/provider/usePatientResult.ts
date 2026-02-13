@@ -10,6 +10,9 @@ import { toast } from "sonner";
 import { PatientResult } from "@/types/patient";
 import { LockInAssessment } from "@/types/lockin";
 
+export type { PatientResult } from "@/types/patient";
+export type { LockInAssessment } from "@/types/lockin";
+
 export function usePatientResult() {
   const params = useParams();
   const router = useRouter();

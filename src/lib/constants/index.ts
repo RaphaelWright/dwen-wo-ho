@@ -7,8 +7,6 @@ export const NAV_ITEMS = [
   },
   {
     name: "Providers",
-    path: "/providers",
+    path: "/for-providers",
   },
 ];
-
-

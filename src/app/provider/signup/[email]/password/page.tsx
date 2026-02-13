@@ -1,102 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { signUpSteps } from "@/lib/utils";
-import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/stepper";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const PasswordSchema = z
-  .object({
-    password: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: "Please confirm your password" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type PasswordFormData = z.infer<typeof PasswordSchema>;
+import { useProviderPassword } from "@/hooks/provider/useProviderPassword";
 
 const PasswordSetup = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [signupData, setSignupData] = useState<any>(null);
-
-  const params = useParams();
-  const { email } = params;
-  const router = useRouter();
-  const { signupMutation } = useAuthQuery();
-
   const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<z.infer<typeof PasswordSchema>>({
-    resolver: zodResolver(PasswordSchema),
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
+    form: {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
     },
-  });
-
-  useEffect(() => {
-    const data = localStorage.getItem("signupData");
-    if (data) {
-      setSignupData(JSON.parse(data));
-    }
-  }, []);
-
-  const onSubmit = async (values: PasswordFormData) => {
-    if (!signupData) {
-      setErrorMessage("Signup data not found. Please start over.");
-      return;
-    }
-
-    setErrorMessage("");
-
-    try {
-      // Complete the account creation with password
-      const response = await signupMutation.mutateAsync({
-        email: signupData.email,
-        password: values.password,
-        fullName: signupData.fullName,
-        professionalTitle: signupData.professionalTitle,
-      });
-
-      if (response.success) {
-        localStorage.removeItem("signupData");
-
-        // Store the token for future API calls
-        if (response.data?.token) {
-          localStorage.setItem("authToken", response.data.token);
-        }
-
-        router.push(`${ROUTES.provider.signUp}/${email}/profile`);
-      } else {
-        setErrorMessage(response.message || "Account creation failed");
-      }
-    } catch (error: any) {
-      const errorMsg =
-        (error as any)?.response?.data?.message ||
-        "Account creation failed. Please try again.";
-      setErrorMessage(errorMsg);
-    }
-  };
+    onSubmit,
+    showPassword,
+    togglePasswordVisibility,
+    showConfirmPassword,
+    toggleConfirmPasswordVisibility,
+    errorMessage,
+    signupMutation,
+    router,
+  } = useProviderPassword();
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -133,7 +59,7 @@ const PasswordSetup = () => {
             />
             <button
               type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={togglePasswordVisibility}
               className="absolute top-10 right-4 transform -translate-y-1/2"
             >
               {!showPassword ? <span>SHOW</span> : <span>HIDE</span>}
@@ -161,7 +87,7 @@ const PasswordSetup = () => {
             />
             <button
               type="button"
-              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              onClick={toggleConfirmPasswordVisibility}
               className="absolute top-10 right-4 transform -translate-y-1/2"
             >
               {!showConfirmPassword ? <span>SHOW</span> : <span>HIDE</span>}
@@ -212,4 +138,3 @@ const PasswordSetup = () => {
 };
 
 export default PasswordSetup;
-

@@ -1,156 +1,33 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { Logo } from "@/components/shared/Logo";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
-import { useRouter } from "next/navigation";
-import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
-import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
 import Link from "next/link";
-import useGetSearchParams from "@/hooks/useGetSearchParams";
-import { useEffect, useState, Suspense } from "react";
+import { Logo } from "@/components/shared/Logo";
+import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/constants/routes";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { api } from "@/lib/api";
 import PendingVerificationModal from "@/components/modals/pending-verification";
-
-const LoginSchema = z.object({
-  email: z
-    .email({ message: "Please enter a valid email" })
-    .min(1, "Please enter your email address"),
-  password: z.string().min(1, { message: "Please enter password" }),
-});
+import { useProviderSignIn } from "@/hooks/provider/useProviderSignIn";
 
 const SignInContent = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [showPendingModal, setShowPendingModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    ...DEFAULT_PENDING_USER_INFO,
-  });
-  const { loginMutation } = useAuthQuery();
-  const router = useRouter();
-
-  const email = useGetSearchParams("email");
-
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email,
-      password: "",
+    form: {
+      register,
+      handleSubmit,
+      formState: { errors },
     },
-  });
-
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true);
-    setErrorMessage("");
-
-    // console.log("=== SIGN IN STARTED ===");
-    // console.log("Email:", values.email);
-
-    try {
-      // console.log("📧 Attempting sign in...");
-      const response = await api(ENDPOINTS.login, {
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-
-      // console.log(" Sign in response:", response);
-
-      if (response?.success) {
-        // console.log(" Sign in successful, processing response...");
-        // console.log("Response data:", response?.data);
-
-        // Store token if needed
-        if (response?.data?.token) {
-          // console.log("Token received, storing in localStorage");
-          localStorage.setItem("token", response?.data?.token);
-        } else {
-          // console.log("No token in response");
-        }
-
-        // Store refresh token if available
-        if (response?.data?.refreshToken) {
-          // console.log("Refresh token received, storing in localStorage");
-          localStorage.setItem("refreshToken", response?.data?.refreshToken);
-        }
-
-        // Check for pending status (comprehensive check)
-        const userData = response?.data;
-        const isPending =
-          userData?.applicationStatus === "PENDING" ||
-          userData?.status === "PENDING" ||
-          userData?.isVerified === false ||
-          response?.message === "ACCOUNT PENDING";
-
-        if (isPending) {
-          const userDataStr = JSON.stringify(userData);
-          localStorage.setItem("pendingUser", userDataStr);
-
-          // Verify it was saved
-          const savedData = localStorage.getItem("pendingUser");
-
-          router.push(ROUTES.provider.home);
-        } else {
-          router.push(ROUTES.provider.home);
-        }
-      } else {
-        setErrorMessage(response?.message ?? "Sign in failed");
-      }
-    } catch (error: any) {
-      const errorMsg = error.message || "Sign in failed. Please try again.";
-
-      // Check if error is about incomplete profile
-      if (error.message && error.message.includes("Profile is not complete")) {
-        // Store user email for profile completion
-        localStorage.setItem("profileCompletionEmail", values.email);
-
-        // Determine which step to redirect to
-        if (error.message.includes("upload your profile photo")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
-          );
-        } else if (error.message.includes("office phone number")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=bio`,
-          );
-        } else if (error.message.includes("add your specialty")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=specialty`,
-          );
-        } else {
-          // Default to photo step
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
-          );
-        }
-      } else {
-        setErrorMessage(errorMsg);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  useEffect(() => {
-    if (!email) {
-      router.push(ROUTES.provider.checkEmail);
-    }
-  }, [email, router]);
+    onSubmit,
+    showPassword,
+    togglePasswordVisibility,
+    password,
+    handlePasswordChange,
+    isLoading,
+    errorMessage,
+    showPendingModal,
+    setShowPendingModal,
+    userInfo,
+    email,
+    router,
+  } = useProviderSignIn();
 
   return (
     <div className="h-full flex flex-col">
@@ -210,7 +87,7 @@ const SignInContent = () => {
               />
               <button
                 type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
+                onClick={togglePasswordVisibility}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-600 font-medium text-sm hover:text-purple-700 transition-colors"
               >
                 {!showPassword ? "SHOW" : "HIDE"}

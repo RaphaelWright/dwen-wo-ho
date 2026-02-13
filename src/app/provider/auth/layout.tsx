@@ -1,10 +1,6 @@
 import { ReactNode } from "react";
 
-interface IProps {
-  children: ReactNode;
-}
-
-const Layout = ({ children }: IProps) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="flex flex-col lg:flex-row w-full h-screen">
       <section className="relative h-full bg-green-400 bg-[url(/auth/lawyer.jpg)] hidden lg:block bg-no-repeat bg-cover text-white px-10 pb-10 w-1/2">
@@ -28,5 +24,3 @@ const Layout = ({ children }: IProps) => {
 };
 
 export default Layout;
-
-

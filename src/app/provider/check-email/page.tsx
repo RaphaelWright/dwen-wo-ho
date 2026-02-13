@@ -1,24 +1,12 @@
 "use client";
 
 import CheckEmail from "@/features/provider/components/ui/check-email";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/constants/routes";
+import { useProviderCheckEmailPage } from "@/hooks/provider/useProviderCheckEmailPage";
 
 const ProviderCheckEmailPage = () => {
-  const router = useRouter();
-
-  const handleEmailSubmit = (submittedEmail: string, emailExists: boolean) => {
-    const emailParams = encodeURIComponent(submittedEmail);
-    if (emailExists) {
-      router.push(`${ROUTES.provider.singIn}?email=${emailParams}`);
-    } else {
-      router.push(`${ROUTES.provider.signUp}?email=${emailParams}`);
-    }
-  };
+  const { handleEmailSubmit } = useProviderCheckEmailPage();
 
   return <CheckEmail onEmailSubmit={handleEmailSubmit} />;
 };
 
 export default ProviderCheckEmailPage;
-
-

@@ -1,86 +1,16 @@
-"use client";
-
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import Image from "next/image";
 import { ROUTES } from "@/lib/constants/routes";
-import LoadingOverlay from "@/components/ui/loading-overlay";
-import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
-import {
-  ProviderEmailSchema,
-  ProviderEmailFormData,
-} from "@/schemas/provider.auth.schema";
+import { ProviderEmailFormData } from "@/schemas/provider.auth.schema";
 import Link from "next/link";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
-
-interface CheckEmailProps {
-  onEmailSubmit: (email: string, emailExists: boolean) => void;
-}
+import { useProviderCheckEmail } from "@/hooks/provider/useProviderCheckEmail";
+import { CheckEmailProps } from "@/features/provider/types/auth";
 
 const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const { checkEmailMutation } = useAuthQuery();
-
-  const checkEmailExists = async (email: string) => {
-    try {
-      setErrorMessage("");
-      const response = await checkEmailMutation.mutateAsync({ email });
-
-      if (response.success) {
-        onEmailSubmit(email, response.data?.emailExists || false);
-      } else {
-        setErrorMessage(response.message || "Failed to verify email");
-      }
-    } catch (error) {
-      // Parse error message - it might be stringified JSON
-      let errorMessage = "Failed to verify email. Please try again.";
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rawError = (error as any)?.message || "";
-
-      // Try to parse if it's JSON
-      try {
-        if (rawError.startsWith("{")) {
-          const parsed = JSON.parse(rawError);
-          errorMessage = parsed.message || rawError;
-        } else {
-          errorMessage = rawError;
-        }
-      } catch {
-        errorMessage = rawError || "Failed to verify email";
-      }
-
-      // Check if user not found - redirect to signup (expected flow, don't log)
-      if (errorMessage.includes("User not found")) {
-        onEmailSubmit(email, false);
-        return;
-      }
-
-      // Map technical errors to user-friendly messages
-      let userFriendlyMessage = "We couldn't verify your email. Please try again.";
-
-      if (errorMessage.toLowerCase().includes("network") || errorMessage.toLowerCase().includes("failed to fetch")) {
-        userFriendlyMessage = "Network error. Please check your internet connection and try again.";
-      } else if (errorMessage.toLowerCase().includes("timeout")) {
-        userFriendlyMessage = "Request timed out. Please try again.";
-      } else if (errorMessage.toLowerCase().includes("invalid")) {
-        userFriendlyMessage = "Please enter a valid email address.";
-      } else if (errorMessage && errorMessage.length < 100 && !errorMessage.startsWith("{")) {
-        // If the error message is short, meaningful, and not JSON, show it
-        userFriendlyMessage = errorMessage;
-      }
-
-      setErrorMessage(userFriendlyMessage);
-    }
-  };
-
-  const { register, handleSubmit, errors } =
-    useSelectedValuesFromReactHookForm(ProviderEmailSchema, {
-      mode: "onChange",
-    });
-
-
+  const { checkEmailExists, isLoading, errorMessage, form } =
+    useProviderCheckEmail({ onEmailSubmit });
+  const { register, handleSubmit, errors } = form;
 
   const onSubmit = (values: ProviderEmailFormData) => {
     checkEmailExists(values.email);
@@ -109,7 +39,9 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
             <div className="bg-white/10 border border-white/20 rounded-3xl p-10">
               <div className="text-center mb-8">
                 <h1 className="text-4xl font-medium mb-4">
-                  Enter your email to <span className="text-[#955aa4]">Sign In</span> or <span className="text-[#955aa4]">Sign Up</span> as a Provider.
+                  Enter your email to{" "}
+                  <span className="text-[#955aa4]">Sign In</span> or{" "}
+                  <span className="text-[#955aa4]">Sign Up</span> as a Provider.
                 </h1>
               </div>
 
@@ -121,24 +53,31 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                 <div className="relative">
                   <div className="">
                     <div className="w-full">
-                      <label htmlFor="" className="ml-3 text-gray-500 text-xl font-semibold">Email</label>
+                      <label
+                        htmlFor=""
+                        className="ml-3 text-gray-500 text-xl font-semibold"
+                      >
+                        Email
+                      </label>
                       <div className="flex items-center bg-[#2bb673] rounded-lg p-1">
                         <input
                           {...register("email")}
                           placeholder="Enter your email address"
-                          className={`w-full px-6 py-3 rounded-lg bg-white text-[#2bb673] font-semibold text-lg placeholder-gray-500 focus:outline-none ${errors?.email ? "text-red-600" : "text-green-600"
-                            }`}
+                          className={`w-full px-6 py-3 rounded-lg bg-white text-[#2bb673] font-semibold text-lg placeholder-gray-500 focus:outline-none ${
+                            errors?.email ? "text-red-600" : "text-green-600"
+                          }`}
                         />
                         <Button
                           type="submit"
                           variant="ghost"
-                          disabled={checkEmailMutation.isPending || !!errors?.email}
-                          className={`px-6 h-auto transition-all duration-300 ${!errors?.email && !checkEmailMutation.isPending
-                            ? "bg-[#2bb673] text-white transform"
-                            : "bg-gray-400/50 text-gray-500 cursor-not-allowed"
-                            }`}
+                          disabled={isLoading || !!errors?.email}
+                          className={`px-6 h-auto transition-all duration-300 ${
+                            !errors?.email && !isLoading
+                              ? "bg-[#2bb673] text-white transform"
+                              : "bg-gray-400/50 text-gray-500 cursor-not-allowed"
+                          }`}
                         >
-                          {checkEmailMutation.isPending ? (
+                          {isLoading ? (
                             <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           ) : (
                             <Image
@@ -163,8 +102,13 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                   </div>
                 )}
               </form>
-              <h1 className="text-center text-3xl font-extrabold mt-10 text-[#955aa4]">JustGo Health Providers</h1>
-              <p className="text-center text-lg font-medium mt-3">There are thousands of students out there hoping for someone like you. Welcome</p>
+              <h1 className="text-center text-3xl font-extrabold mt-10 text-[#955aa4]">
+                JustGo Health Providers
+              </h1>
+              <p className="text-center text-lg font-medium mt-3">
+                There are thousands of students out there hoping for someone
+                like you. Welcome
+              </p>
             </div>
           </div>
         </div>
@@ -174,6 +118,3 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
 };
 
 export default CheckEmail;
-
-
-
