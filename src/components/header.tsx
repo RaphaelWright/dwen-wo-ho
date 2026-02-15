@@ -15,6 +15,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ui/theme-toggle";
 
 const Header = ({ className, logo }: { className?: string; logo?: string }) => {
   const pathname = usePathname();
@@ -149,12 +150,13 @@ const Header = ({ className, logo }: { className?: string; logo?: string }) => {
 
               {/* Right Actions */}
               <div className="flex items-center gap-4">
-                <button
+                <ThemeToggle />
+                <Button
                   onClick={() => setIsOpen(!isOpen)}
                   className="lg:hidden p-2"
                 >
                   {isOpen ? <X size={24} /> : <AlignRight size={24} />}
-                </button>
+                </Button>
                 <Button
                   onClick={handleGetStarted}
                   className="hidden lg:flex rounded-full h-9 px-5"
