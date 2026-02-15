@@ -2,6 +2,7 @@
 
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import Link from "next/link";
+import type { Route } from "next";
 import { PatientSignInFormData } from "@/hooks/patient/usePatientSignIn";
 
 interface SignInFormProps {
@@ -12,7 +13,7 @@ interface SignInFormProps {
   onTogglePassword: () => void;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   errorMessage?: string;
-  forgotPasswordHref?: string;
+  forgotPasswordHref?: Route;
 }
 
 export function SignInForm({

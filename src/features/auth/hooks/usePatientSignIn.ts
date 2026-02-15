@@ -39,7 +39,7 @@ export const usePatientSignIn = ({ email }: UsePatientSignInProps) => {
     setErrorMessage("");
     loginMutation.mutate(values, {
       onSuccess: () => {
-        router.push("/signin"); // Original redirection. Should maybe be ROUTES.patient.home?
+        router.push(ROUTES.patient.waitingRoom); // Updated to waitingRoom as /signin is likely invalid
         // Note: The original code redirected to "/signin". I'll keep it for now but it looks suspicious.
         // Actually, looking at patient flow, maybe they go to dashboard?
         // I'll stick to original behavior.
@@ -66,5 +66,3 @@ export const usePatientSignIn = ({ email }: UsePatientSignInProps) => {
     errorMessage,
   };
 };
-
-

@@ -1,13 +1,5 @@
 import { Activity, Brain, Users, LucideIcon } from "lucide-react";
 
-/**
- * Mock / placeholder data used across the application.
- * These are defaults shown before real data loads or as placeholder content.
- * Replace with real API data as features are implemented.
- */
-
-// ─── Default User Info ───────────────────────────────────────────────────────
-
 export const DEFAULT_PENDING_USER_INFO = {
   name: "Dr. Amanda Gorman",
   title: "Clinical Psychologist",
@@ -21,8 +13,6 @@ export const DEFAULT_PROVIDER_USER_INFO = {
   timeAgo: "Recently",
   profileImage: undefined as string | undefined,
 };
-
-// ─── Patient Actions History ─────────────────────────────────────────────────
 
 export interface MockAction {
   title: string;
@@ -55,8 +45,6 @@ export const MOCK_PATIENT_ACTIONS: MockAction[] = [
     icon: Activity,
   },
 ];
-
-// ─── Lock In Form Options ───────────────────────────────────────────────────
 
 export const LOCKIN_FREQUENCY_OPTIONS = [
   "never",
@@ -95,8 +83,61 @@ export const LOCKIN_TIME_TO_EXAM_OPTIONS = [
 
 export const LOCKIN_REASON_OPTIONS = ["exam", "assignment", "project", "other"];
 
-// ─── Registration & Recovery Steps ──────────────────────────────────────────
-
 export const SIGNUP_STEPS = ["Create", "Verify", "Profile"];
 
 export const RECOVER_STEPS = ["Verify", "New Password"];
+
+export const testimonials = [
+  {
+    quote:
+      "Dwen Wo Ho has been a lifeline during my final year. The ability to connect with counselors anonymously made all the difference.",
+    name: "Akosua Mensah",
+    designation: "Final Year Student, UG",
+    src: "/home/home-hero-2.jpg",
+  },
+  {
+    quote:
+      "I finally found a platform that understands the pressure students face. The community support is incredible.",
+    name: "Kwame Osei",
+    designation: "Engineering Student, KNUST",
+    src: "/home/home-hero-1.jpg",
+  },
+  {
+    quote:
+      "As a counselor, this tool allows me to reach students who wouldn't normally walk into my office. It's revolutionizing campus mental health.",
+    name: "Dr. Abena Darko",
+    designation: "Clinical Psychologist",
+    src: "/providers/clinical-psychologist.jpg",
+  },
+  {
+    quote:
+      "The self-assessment tools helped me understand my anxiety triggers. I feel more in control of my mental health now.",
+    name: "Emmanuel Tetteh",
+    designation: "Business Student, UPSA",
+    src: "/home/home-hero-3.jpg",
+  },
+  {
+    quote:
+      "A safe space where I can express myself without fear of judgment. Every student needs this app on their phone.",
+    name: "Sarah Afriyie",
+    designation: "Medical Student, UCC",
+    src: "/home/home-hero-4.jpg",
+  },
+];
+
+export const PARTNER_SCHOOLS = [
+  { name: "University of Ghana", logo: "/schools/legon.png" },
+  { name: "KNUST", logo: "/schools/knust.png" },
+  { name: "UCC", logo: "/schools/ucc.webp" },
+  { name: "UPSA", logo: "/schools/upsa.png" },
+  { name: "ATU", logo: "/schools/atu.png" },
+  { name: "UENR", logo: "/schools/uenr.png" },
+  { name: "UDS", logo: "/schools/uds.png" },
+  { name: "Achimota School", logo: "/schools/achimota.png" },
+  { name: "PRESEC Legon", logo: "/schools/presec.png" },
+  { name: "Mfantsipim School", logo: "/schools/mfantsipim.png" },
+  { name: "Wesley Girls High School", logo: "/schools/wesley-girls.png" },
+  { name: "Holy Child School", logo: "/schools/holy-child.png" },
+  { name: "Adisadel College", logo: "/schools/adisadel.png" },
+  { name: "St. James Seminary", logo: "/schools/st-james.png" },
+];

@@ -10,6 +10,7 @@ import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
+import type { Route } from "next";
 import { calculateTimeAgo } from "@/lib/utils";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { ROUTES } from "@/lib/constants/routes";
@@ -42,7 +43,8 @@ const SignUpProfile = ({
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { addSpecialtyMutation, updateProfileMutation, loginMutation } = useAuthQuery();
+  const { addSpecialtyMutation, updateProfileMutation, loginMutation } =
+    useAuthQuery();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -53,8 +55,11 @@ const SignUpProfile = ({
 
   // Watch for approval
   useEffect(() => {
-    if (getProfileQuery.data?.applicationStatus === "APPROVED" || getProfileQuery.data?.applicationStatus === "ACTIVE") {
-      router.push(ROUTES.provider.dashboard);
+    if (
+      getProfileQuery.data?.applicationStatus === "APPROVED" ||
+      getProfileQuery.data?.applicationStatus === "ACTIVE"
+    ) {
+      router.push(ROUTES.provider.home);
     }
   }, [getProfileQuery.data, router]);
 
@@ -72,7 +77,6 @@ const SignUpProfile = ({
     timeAgo: "Just now",
     profileImage: profileImage as string | undefined,
   });
-
 
   useEffect(() => {
     const isPendingParam = searchParams.get("pending") === "true";
@@ -94,15 +98,16 @@ const SignUpProfile = ({
         specialty: data.specialty || prev.specialty,
         profileImage: data.profilePhotoURL,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        timeAgo: (data as any).applicationDate ? calculateTimeAgo((data as any).applicationDate) : prev.timeAgo,
+        timeAgo: (data as any).applicationDate
+          ? calculateTimeAgo((data as any).applicationDate)
+          : prev.timeAgo,
       }));
     }
   }, [showPendingModal, getProfileQuery.data]);
 
-
   const handleChange = (
     property: keyof typeof profileData,
-    value: string | null
+    value: string | null,
   ) => {
     setProfileData((prev) => ({ ...prev, [property]: value }));
   };
@@ -157,18 +162,20 @@ const SignUpProfile = ({
         // Capture response data for Pending Modal usage
         if (response?.success && response?.data) {
           const data = response.data;
-          setUserInfo(prev => ({
+          setUserInfo((prev) => ({
             ...prev,
             name: `${(data as any).title ? `${(data as any).title} ` : ""}${data.providerName || prev.name}`,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            title: (data as any).professionalTitle || data.specialty || prev.title,
+            title:
+              (data as any).professionalTitle || data.specialty || prev.title,
             specialty: data.specialty || prev.specialty,
             profileImage: data.profilePhotoURL || prev.profileImage,
             // Calculate time ago based on application date if available, or keep existing
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            timeAgo: (data as any).applicationDate ? calculateTimeAgo((data as any).applicationDate) : prev.timeAgo,
+            timeAgo: (data as any).applicationDate
+              ? calculateTimeAgo((data as any).applicationDate)
+              : prev.timeAgo,
           }));
-
         }
 
         toast.success("Profile updated successfully!");
@@ -176,7 +183,8 @@ const SignUpProfile = ({
       } catch (error) {
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (error as any)?.message || "Failed to update profile. Please try again."
+          (error as any)?.message ||
+            "Failed to update profile. Please try again.",
         );
       } finally {
         setIsSubmitting(false);
@@ -203,8 +211,12 @@ const SignUpProfile = ({
             });
 
             if (loginResponse.success) {
-              const { token, refreshToken: refreshTokenValue, userData } = loginResponse.data;
-              
+              const {
+                token,
+                refreshToken: refreshTokenValue,
+                userData,
+              } = loginResponse.data;
+
               // After signin, switch to refreshToken and remove the temporary token
               if (refreshTokenValue) {
                 localStorage.setItem("refreshToken", refreshTokenValue);
@@ -214,35 +226,44 @@ const SignUpProfile = ({
                 // Fallback if refreshToken not available
                 localStorage.setItem("token", token);
               }
-              
+
               // Set user type
               if (userData?.userRole === "ROLE_CURATOR") {
-                localStorage.setItem("curatorToken", token || refreshTokenValue);
+                localStorage.setItem(
+                  "curatorToken",
+                  token || refreshTokenValue,
+                );
                 setUserType("curator");
               } else {
                 setUserType("provider");
               }
-              
+
               router.push(ROUTES.provider.home);
             } else {
               // Login failed logically? Fallback to auth page
               toast.error("Auto-login failed. Please sign in manually.");
-              router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+              router.push(
+                `${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route,
+              );
             }
           } catch (loginError) {
             toast.error("Auto-login failed. Please sign in manually.");
             // If login fails (e.g. 401), fallback to sign-in page
-            router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+            router.push(
+              `${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route,
+            );
           }
         } else {
           // No password (e.g. came from email link), fallback to sign-in page
-          router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}`);
+          router.push(
+            `${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route,
+          );
         }
-
       } catch (error) {
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (error as any)?.message || "Failed to add specialty. Please try again."
+          (error as any)?.message ||
+            "Failed to add specialty. Please try again.",
         );
       } finally {
         setIsSubmitting(false);
@@ -252,7 +273,6 @@ const SignUpProfile = ({
 
     // Move to next step (fallback)
     setCurrentStep((prev) => prev + 1);
-
   };
 
   const renderStepContent = () => {
@@ -307,7 +327,9 @@ const SignUpProfile = ({
         <div className="h-full flex flex-col pb-10">
           {/* Main Content */}
           <div className="flex-1  flex flex-col justify-center">
-            <div className="w-full max-w-4xl mx-auto">{renderStepContent()}</div>
+            <div className="w-full max-w-4xl mx-auto">
+              {renderStepContent()}
+            </div>
           </div>
 
           {/* Bottom Navigation - Flex column footer (pushed to bottom by flex-1 above) */}
@@ -324,14 +346,16 @@ const SignUpProfile = ({
                 {/* Photo Step */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-2 h-2 rounded-full ${currentStep >= 0 ? "bg-black" : "border-2 border-gray-400"
-                      }`}
+                    className={`w-2 h-2 rounded-full ${
+                      currentStep >= 0 ? "bg-black" : "border-2 border-gray-400"
+                    }`}
                   />
                   <span
-                    className={`${currentStep >= 0
-                      ? "font-semibold text-black"
-                      : "text-gray-400"
-                      }`}
+                    className={`${
+                      currentStep >= 0
+                        ? "font-semibold text-black"
+                        : "text-gray-400"
+                    }`}
                   >
                     1. Photo
                   </span>
@@ -341,16 +365,16 @@ const SignUpProfile = ({
                 {/* Bio Step */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-2 h-2 rounded-full ${currentStep >= 1
-                      ? "bg-black"
-                      : "border-2 border-gray-400"
-                      }`}
+                    className={`w-2 h-2 rounded-full ${
+                      currentStep >= 1 ? "bg-black" : "border-2 border-gray-400"
+                    }`}
                   />
                   <span
-                    className={`${currentStep >= 1
-                      ? "font-semibold text-black"
-                      : "text-gray-400"
-                      }`}
+                    className={`${
+                      currentStep >= 1
+                        ? "font-semibold text-black"
+                        : "text-gray-400"
+                    }`}
                   >
                     2. Bio
                   </span>
@@ -360,16 +384,16 @@ const SignUpProfile = ({
                 {/* Specialty Step */}
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-2 h-2 rounded-full ${currentStep >= 2
-                      ? "bg-black"
-                      : "border-2 border-gray-400"
-                      }`}
+                    className={`w-2 h-2 rounded-full ${
+                      currentStep >= 2 ? "bg-black" : "border-2 border-gray-400"
+                    }`}
                   />
                   <span
-                    className={`${currentStep >= 2
-                      ? "font-semibold text-black"
-                      : "text-gray-400"
-                      }`}
+                    className={`${
+                      currentStep >= 2
+                        ? "font-semibold text-black"
+                        : "text-gray-400"
+                    }`}
                   >
                     3. Specialty
                   </span>
@@ -379,7 +403,9 @@ const SignUpProfile = ({
 
             <Button
               onClick={handleNext}
-              disabled={isSubmitting || (currentStep === 2 && !profileData.specialty)}
+              disabled={
+                isSubmitting || (currentStep === 2 && !profileData.specialty)
+              }
               className="rounded-full ml-2 px-8 py-1 border-4 text-lg font-bold uppercase transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed bg-[#955aa4]/80 text-white border-[#955aa4] hover:bg-[#955aa4] disabled:hover:bg-[#955aa4]/80"
             >
               {isSubmitting ? (
@@ -409,5 +435,3 @@ const SignUpProfile = ({
 };
 
 export default SignUpProfile;
-
-

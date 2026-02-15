@@ -11,7 +11,7 @@ import { ROUTES } from "@/lib/constants/routes";
 
 const PatientsHero = () => {
   const router = useRouter();
-  
+
   const texts = [
     "Boost Your CWA/GPA 📈",
     "Lower Stress & Anxiety 😌",
@@ -21,7 +21,14 @@ const PatientsHero = () => {
     "Improve Your Roomie Vibes 🏡",
   ];
 
-  const colors = ["#2bb572", "#965ba4", "#eb2129", "#253f91", "#2BA36A", "#965ba4"];
+  const colors = [
+    "#2bb572",
+    "#965ba4",
+    "#eb2129",
+    "#253f91",
+    "#2BA36A",
+    "#965ba4",
+  ];
 
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
@@ -88,8 +95,9 @@ const PatientsHero = () => {
               <h1 className="text-4xl lg:text-5xl leading-0 font-bold text-[#2BA36A]">
                 Dwen Wo Ho
               </h1>
-              <p className="text-lg lg:text-xl font-bold lg:max-w-[400px]">
-                It&apos;s never been this easy to take care of your own mental health, and
+              <p className="text-lg lg:text-xl font-bold lg:max-w-100">
+                It&apos;s never been this easy to take care of your own mental
+                health, and
               </p>
             </motion.div>
             <motion.div
@@ -122,7 +130,10 @@ const PatientsHero = () => {
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            <motion.div variants={itemVariants} className="space-y-5 py-4 text-center">
+            <motion.div
+              variants={itemVariants}
+              className="space-y-5 py-4 text-center"
+            >
               <div className="flex items-center justify-center">
                 <AnimatePresence mode="wait">
                   <motion.h2
@@ -145,13 +156,13 @@ const PatientsHero = () => {
                 variants={itemVariants}
                 className="flex flex-col gap-3 items-center"
               >
-                <Button 
+                <Button
                   onClick={() => router.push(ROUTES.patient.checkEmail)}
                   className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
                 >
                   Get Started
                 </Button>
-                <Button 
+                <Button
                   onClick={() => router.push(ROUTES.patient.lockIn)}
                   className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
                 >
@@ -168,5 +179,3 @@ const PatientsHero = () => {
 };
 
 export default PatientsHero;
-
-

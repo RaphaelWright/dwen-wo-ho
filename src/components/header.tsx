@@ -1,148 +1,209 @@
 "use client";
+
 import { NAV_ITEMS } from "@/lib/constants";
-import { AnimatePresence, motion } from "framer-motion";
+import { ROUTES } from "@/lib/constants/routes";
+import { cn } from "@/lib/utils";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { AlignRight, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import WidthConstraint from "./ui/width-constraint";
+import { useRef, useState } from "react";
 import { Button } from "./ui/button";
-import { ROUTES } from "@/lib/constants/routes";
-
-const MobileMenu = ({ check }: { check: boolean }) => {
-  const pathname = usePathname();
-  return (
-    <WidthConstraint className="w-full">
-      <AnimatePresence>
-        {check && (
-          <motion.nav
-            key="nav"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden"
-          >
-            <ul className="flex flex-col gap-4 pt-5">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.path}
-                    className={`font-semibold ${
-                      pathname === item.path ? "text-[#2BA36A] underline" : ""
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.nav>
-        )}
-      </AnimatePresence>
-    </WidthConstraint>
-  );
-};
 
 const Header = ({ className, logo }: { className?: string; logo?: string }) => {
   const pathname = usePathname();
-  const [check, setCheck] = useState(false);
-  const navRef = useRef<HTMLHeadingElement | null>(null);
-  const [, setIsScrolling] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef<HTMLElement | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const { scrollY } = useScroll();
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (navRef.current && !navRef.current.contains(event.target as Node)) {
-      setCheck(false);
-    }
-  };
+  const isFloating = isScrolled && !isOpen;
 
-  useEffect(() => {
-    setCheck(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setCheck(false);
-      if (window.scrollY === 0) {
-        setIsScrolling(false);
-      } else {
-        setIsScrolling(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 50 && !isScrolled) setIsScrolled(true);
+    else if (latest <= 50 && isScrolled) setIsScrolled(false);
+  });
 
   const router = useRouter();
-
   const handleGetStarted = () => {
-    if (pathname === "/for-providers") {
-      router.push(ROUTES.provider.auth);
-    } else {
-      router.push(ROUTES.patient.checkEmail);
-    }
+    if (pathname === "/for-providers") router.push(ROUTES.provider.auth);
+    else router.push(ROUTES.patient.checkEmail);
   };
 
   return (
-    <header
-      className={`flex flex-col items-center z-50 overflow-clip fixed top-0 w-screen text-black ${className} bg-gray-100`}
-      ref={navRef}
-    >
-      <WidthConstraint className="flex w-full items-center justify-between gap-4">
-        <Link href="/">
-          <Image
-            src={logo || "/logos/logo-black.png"}
-            alt="dwen-wo-ho logo"
-            width={150}
-            height={60}
-          />
-        </Link>
-        <nav
-          className={`hidden lg:absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] lg:flex`}
+    <>
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+        <motion.header
+          layout
+          ref={navRef}
+          transition={{
+            layout: { duration: 0.8, ease: [0.32, 0.72, 0, 1] },
+          }}
+          className={cn(
+            "pointer-events-auto relative z-50 overflow-hidden",
+            "bg-background/90 backdrop-blur-md border border-border",
+            isFloating
+              ? "mt-2 sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
+              : "mt-0 w-full max-w-full rounded-none shadow-sm",
+            className,
+          )}
         >
-          <ul className="gap-8 flex nav-link ">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.path}
-                  className={`font-semibold underline-offset-4 ${
-                    pathname === item.path ? "text-[#2BA36A] underline" : ""
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}{" "}
-          </ul>
-        </nav>
-        <button className="flex lg:hidden" onClick={() => setCheck(!check)}>
-          {!check ? <AlignRight /> : <X />}
-        </button>
-        <div className="hidden lg:flex gap-4 items-center">
-          {/* <Link href={ROUTES.curator.signIn}>
-            <Button
-              variant="outline"
-              className="text-[#955aa4] border-[#955aa4] hover:bg-[#955aa4] hover:text-white"
+          <div className="px-6">
+            <div
+              className={cn(
+                "flex items-center justify-between h-16",
+                isFloating && "h-14.5",
+              )}
             >
-              Curator Portal
-            </Button>
-          </Link> */}
-          <Button
-            onClick={handleGetStarted}
-            className="bg-gray-300 text-black hover:bg-gray-300 "
-          >
-            Get Started
-          </Button>
-        </div>
-      </WidthConstraint>
-      {/* <MobileMenu check={check} /> */}
-    </header>
+              {/* Logo */}
+              <div className="shrink-0">
+                <Link href="/">
+                  <Image
+                    src={logo || "/logos/logo-black.png"}
+                    alt="Logo"
+                    width={160}
+                    height={50}
+                    className="w-36 h-auto object-contain"
+                  />
+                </Link>
+              </div>
+
+              {/* Desktop Nav */}
+              <nav className="hidden lg:flex items-center mx-auto">
+                <ul
+                  className="flex items-center gap-8"
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  {NAV_ITEMS.map((item, index) => {
+                    const isActive = pathname === item.path;
+                    const isHovered = hoveredIndex === index;
+
+                    return (
+                      <li
+                        key={item.name}
+                        className="relative"
+                        onMouseEnter={() => setHoveredIndex(index)}
+                      >
+                        {/* Hover Pill Effect */}
+                        {isHovered && (
+                          <motion.div
+                            layoutId="hover-pill"
+                            className="absolute -inset-x-4 -inset-y-1 bg-gray-100 rounded-full -z-10"
+                            transition={{
+                              type: "spring",
+                              stiffness: 350,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+
+                        {/* The Active Dot (Above) */}
+                        {isActive && (
+                          <motion.div
+                            layoutId="nav-dot"
+                            className="absolute -top-3 left-0 right-0 mx-auto w-1.5 h-1.5 rounded-full bg-green-600"
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+
+                        <Link
+                          href={item.path}
+                          className={cn(
+                            "text-sm font-medium transition-colors py-2 relative z-10",
+                            isActive
+                              ? "text-green-700"
+                              : "text-gray-600 hover:text-black",
+                          )}
+                        >
+                          {item.name}
+                        </Link>
+
+                        {/* The Active Underline (Below) */}
+                        {isActive && (
+                          <motion.div
+                            layoutId="nav-underline"
+                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-green-600 rounded-full"
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
+
+              {/* Right Actions */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="lg:hidden p-2"
+                >
+                  {isOpen ? <X size={24} /> : <AlignRight size={24} />}
+                </button>
+                <Button
+                  onClick={handleGetStarted}
+                  className="hidden lg:flex rounded-full h-9 px-5"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="lg:hidden bg-white border-t border-gray-100"
+              >
+                <ul className="flex flex-col p-6 gap-4">
+                  {NAV_ITEMS.map((item) => (
+                    <li
+                      key={item.name}
+                      className="border-b border-gray-50 pb-2"
+                    >
+                      <Link
+                        href={item.path}
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "font-medium",
+                          pathname === item.path
+                            ? "text-green-700"
+                            : "text-gray-900",
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.header>
+      </div>
+
+      <div className="h-16" />
+    </>
   );
 };
 

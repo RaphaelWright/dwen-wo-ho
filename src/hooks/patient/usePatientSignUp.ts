@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -63,7 +64,7 @@ export function usePatientSignUp() {
       // router.push(`${ROUTES.patient.verifyEmail}/${email}`)
 
       // I will preserve the original (slightly confusing) logic for now, but redirecting to verify is likely the goal.
-      router.push(`${ROUTES.patient.verifyEmail}/${values.email}`);
+      router.push(`${ROUTES.patient.verifyEmail}/${values.email}` as Route);
     },
     [router],
   );

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -64,7 +65,7 @@ export function useProviderPassword() {
           localStorage.setItem("authToken", response.data.token);
         }
 
-        router.push(`${ROUTES.provider.signUp}/${email}/profile`);
+        router.push(`${ROUTES.provider.signUp}/${email}/profile` as Route);
       } else {
         setErrorMessage(response.message || "Account creation failed");
       }

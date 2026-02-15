@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import type { Route } from "next";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ interface SidebarProps {
 }
 
 interface NavItem {
-  href?: string;
+  href?: Route;
   label: string;
   icon: React.ReactNode;
   count?: number;
@@ -69,29 +70,29 @@ export const CuratorSidebar = ({
     {
       href: "/curator/schools",
       label: "Schools",
-      icon: <MdSchool className="text-lg flex-shrink-0" />,
+      icon: <MdSchool className="text-lg shrink-0" />,
       count: schoolCount,
     },
     {
       href: "/curator/providers",
       label: "Providers",
-      icon: <MdHealthAndSafety className="text-lg flex-shrink-0" />,
+      icon: <MdHealthAndSafety className="text-lg shrink-0" />,
       count: providerCount,
     },
     {
       href: "/curator/partners",
       label: "Partners",
-      icon: <MdHandshake className="text-lg flex-shrink-0" />,
+      icon: <MdHandshake className="text-lg shrink-0" />,
       count: partnerCount,
     },
     {
       href: "/curator/pages",
       label: "Pages",
-      icon: <FiFileText className="text-lg flex-shrink-0" />,
+      icon: <FiFileText className="text-lg shrink-0" />,
     },
     {
       label: "Create",
-      icon: <FiPlus className="text-lg flex-shrink-0" />,
+      icon: <FiPlus className="text-lg shrink-0" />,
       onClick: () => {
         onCreateClick();
         setIsMobileSidebarOpen(false);
@@ -149,7 +150,7 @@ export const CuratorSidebar = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             className={cn(
-              "ml-auto text-xs font-semibold px-2 py-0.5 rounded-full min-w-[1.5rem] text-center",
+              "ml-auto text-xs font-semibold px-2 py-0.5 rounded-full min-w-6 text-center",
               active
                 ? "bg-[#955aa4]/20 text-[#955aa4]"
                 : "bg-gray-200/80 text-gray-600",
@@ -163,7 +164,7 @@ export const CuratorSidebar = ({
         {active && (
           <motion.div
             layoutId="activeIndicator"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#955aa4] rounded-r-full"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-[#955aa4] rounded-r-full"
             style={{ left: collapsed ? "-10px" : "-12px" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
@@ -296,10 +297,10 @@ export const CuratorSidebar = ({
           )}
         >
           {isCollapsed ? (
-            <LuChevronsRight className="text-lg flex-shrink-0" />
+            <LuChevronsRight className="text-lg shrink-0" />
           ) : (
             <>
-              <LuChevronsLeft className="text-lg flex-shrink-0" />
+              <LuChevronsLeft className="text-lg shrink-0" />
               <span className="whitespace-nowrap">Collapse</span>
             </>
           )}
@@ -317,7 +318,7 @@ export const CuratorSidebar = ({
                 collapsed && "justify-center px-0 w-10 h-10 mx-auto",
               )}
             >
-              <FiBell className="text-lg flex-shrink-0 group-hover:text-[#955aa4] transition-colors" />
+              <FiBell className="text-lg shrink-0 group-hover:text-[#955aa4] transition-colors" />
               {!collapsed && (
                 <span className="group-hover:text-[#955aa4] transition-colors">
                   Notifications
@@ -326,7 +327,7 @@ export const CuratorSidebar = ({
               {unreadCount > 0 && (
                 <span
                   className={cn(
-                    "flex items-center justify-center min-w-[1.5rem] h-5 rounded-full text-[10px] font-bold bg-[#e92229] text-white",
+                    "flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-[#e92229] text-white",
                     collapsed
                       ? "absolute top-1 right-1 w-4 h-4"
                       : "ml-auto px-1.5",
@@ -347,7 +348,7 @@ export const CuratorSidebar = ({
                 onClick={handleLogoutClick}
                 className="flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
               >
-                <FiLogOut className="text-lg flex-shrink-0" />
+                <FiLogOut className="text-lg shrink-0" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
@@ -360,7 +361,7 @@ export const CuratorSidebar = ({
             variant="ghost"
             className="w-full justify-start gap-3 px-3 py-2.5 h-auto text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
           >
-            <FiLogOut className="text-lg flex-shrink-0" />
+            <FiLogOut className="text-lg shrink-0" />
             <span>Logout</span>
           </Button>
         )}
@@ -423,7 +424,7 @@ export const CuratorSidebar = ({
           width: isCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
         }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="hidden md:flex flex-col h-screen bg-white border-r border-gray-200/60 flex-shrink-0 overflow-hidden relative"
+        className="hidden md:flex flex-col h-screen bg-white border-r border-gray-200/60 shrink-0 overflow-hidden relative"
       >
         <SidebarContent collapsed={isCollapsed} />
 

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
 import Link from "next/link";
+import type { Route } from "next";
 import { Loader2 } from "lucide-react";
 
 interface BaseSignInFormProps {
@@ -17,7 +18,7 @@ interface BaseSignInFormProps {
   isLoading: boolean;
   isRecovering?: boolean;
   errorMessage?: string;
-  forgotPasswordHref?: string;
+  forgotPasswordHref?: Route;
 }
 
 export const BaseSignInForm = ({
@@ -157,5 +158,3 @@ export const BaseSignInForm = ({
     </div>
   );
 };
-
-

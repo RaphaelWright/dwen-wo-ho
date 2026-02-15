@@ -48,12 +48,14 @@
 }
 
 :root {
+  --background: #ffff;
+  --foreground: oklch(0.145 0 0);
   --radius: 0.625rem;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #7e22ce;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -62,7 +64,7 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
+  --border: #f3e8ff;
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -78,8 +80,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
 }
 
 .dark {
@@ -89,7 +89,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: #7e22ce;
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -98,7 +98,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: #f3e8ff;
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -136,7 +136,8 @@
 
 @font-face {
   font-family: "BRHendrix-Regular";
-  src: local("BHendrix"),
+  src:
+    local("BHendrix"),
     url("/fonts/brhendrix/font/BRHendrix-Regular-BF6556d1b5096f9.woff")
       format("woff");
   font-weight: 400;
@@ -145,7 +146,8 @@
 
 @font-face {
   font-family: "BRHendrix-Bold";
-  src: local("BHendrix"),
+  src:
+    local("BHendrix"),
     url("/fonts/brhendrix/font/BRHendrix-Bold-BF6556d1b5459d3.woff")
       format("woff");
   font-weight: 700;
@@ -229,4 +231,16 @@
 
 .animate-pulse-subtle {
   animation: pulse-subtle 2.5s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  @apply bg-background w-1 h-1;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/60 rounded-4xl border-0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent cursor-grab;
 }
