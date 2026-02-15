@@ -77,7 +77,7 @@ const SkeletonOne = () => {
     <motion.div
       initial="initial"
       whileHover="animate"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2"
+      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-300 via-purple-200 to-pink-100 rounded-lg"
     >
       <motion.div
         variants={variants}
@@ -138,7 +138,7 @@ const SkeletonTwo = () => {
       initial="initial"
       animate="animate"
       whileHover="hover"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2"
+      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-200 via-purple-300 to-pink-200 rounded-lg"
     >
       <motion.div className="flex flex-row rounded-2xl p-2 items-center space-x-2  w-3/4">
         <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
@@ -344,7 +344,7 @@ const SkeletonFive = () => {
     <motion.div
       initial="initial"
       whileHover="animate"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2"
+      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-300 via-purple-200 to-pink-100 rounded-lg"
     >
       <motion.div
         variants={variants}
