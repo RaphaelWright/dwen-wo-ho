@@ -3,7 +3,7 @@
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { signUpSteps } from "@/lib/utils";
-import Stepper from "@/components/stepper";
+import Stepper from "@/components/miscellaneous/stepper";
 import { useProviderPassword } from "@/hooks/provider/useProviderPassword";
 
 const PasswordSetup = () => {

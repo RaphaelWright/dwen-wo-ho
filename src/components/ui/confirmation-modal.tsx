@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfirmationModalProps } from "@/types/components";
+import { ConfirmationModalProps } from "@/lib/types/shared-ui";
 
 export const ConfirmationModal = ({
   isOpen,
@@ -58,5 +58,3 @@ export const ConfirmationModal = ({
     </div>
   );
 };
-
-

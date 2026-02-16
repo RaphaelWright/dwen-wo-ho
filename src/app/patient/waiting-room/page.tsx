@@ -7,7 +7,7 @@ import {
   WaitingRoomStatusCard,
   WaitingRoomInfoBox,
   WaitingRoomFooter,
-} from "@/features/patient/components/waiting-room";
+} from "@/components/patient/waiting-room";
 
 export default function WaitingRoomPage() {
   const { elapsedTime, formatTime, handleBackToLockIn } =

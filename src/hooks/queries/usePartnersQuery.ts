@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosFormData, checkResponse } from "@/configs/axiosInstance";
+import { axiosFormData } from "@/configs/axiosInstance";
+import { checkResponse } from "@/lib/api-utils";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 
@@ -21,15 +22,15 @@ export interface ICreatePartner {
 const createPartner = async (data: ICreatePartner): Promise<Partner> => {
   const formData = new FormData();
   formData.append("name", data.name);
-  
+
   if (data.nickname) {
     formData.append("nickname", data.nickname);
   }
-  
+
   if (data.slogan) {
     formData.append("slogan", data.slogan);
   }
-  
+
   if (data.logo) {
     formData.append("logo", data.logo);
   }
@@ -63,5 +64,3 @@ export const useCreatePartner = () => {
     },
   });
 };
-
-

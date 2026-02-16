@@ -1,7 +1,7 @@
 "use client";
 
-import { CuratorSidebar } from "@/features/curator/components/ui/sidebar";
-import CreateModal from "@/features/curator/components/ui/create-modal";
+import { CuratorSidebar } from "@/components/ui/curator-sidebar";
+import CreateModal from "@/components/curator/create-modal";
 import MemberCreationModal from "@/components/modals/member-creation";
 import PartnerCreationModal from "@/components/modals/partner-creation";
 import ReachModal from "@/components/modals/reach";

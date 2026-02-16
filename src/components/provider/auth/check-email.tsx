@@ -1,0 +1,128 @@
+import { Logo } from "@/components/shared/Logo";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { ROUTES } from "@/lib/constants/routes";
+import { ProviderEmailFormData } from "@/lib/schemas/provider.auth.schema";
+import Link from "next/link";
+import { useProviderCheckEmail } from "@/hooks/provider/useProviderCheckEmail";
+import { CheckEmailProps } from "@/lib/types/provider/auth";
+import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/provider/auth/check-email";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
+const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
+  const { checkEmailExists, isLoading, errorMessage, form } =
+    useProviderCheckEmail({ onEmailSubmit });
+  const { register, handleSubmit, errors } = form;
+
+  const onSubmit = (values: ProviderEmailFormData) => {
+    checkEmailExists(values.email);
+  };
+
+  return (
+    <>
+      <div className="min-h-screen h-full flex flex-col justify-between relative overflow-hidden">
+        <div className="absolute inset-0 bg-white"></div>
+        <div className="absolute inset-0 backdrop-blur-[100px]"></div>
+
+        <div className="relative z-10 flex items-center px-8 justify-between w-full pt-8">
+          <div className="transform hover:scale-105 transition-transform duration-300">
+            <Logo />
+          </div>
+          <Link
+            href={ROUTES.patient.checkEmail}
+            className="bg-gray-200 text-red-500 rounded-full px-4 py-2 text-md font-semibold hover:bg-gray-300 transition-colors"
+          >
+            {CHECK_EMAIL_TEXTS.header.switchToPatients}
+          </Link>
+        </div>
+
+        <div className="relative z-10 flex-1 flex items-center justify-center px-12">
+          <div className="w-full max-w-xl">
+            <div className="bg-white/10 border border-white/20 rounded-3xl p-10">
+              <div className="text-center mb-8">
+                <h1 className="text-4xl font-medium mb-4">
+                  {CHECK_EMAIL_TEXTS.form.titlePart1}{" "}
+                  <span className="text-[#955aa4]">
+                    {CHECK_EMAIL_TEXTS.form.signIn}
+                  </span>{" "}
+                  {CHECK_EMAIL_TEXTS.form.or}{" "}
+                  <span className="text-[#955aa4]">
+                    {CHECK_EMAIL_TEXTS.form.signUp}
+                  </span>{" "}
+                  {CHECK_EMAIL_TEXTS.form.titlePart2}
+                </h1>
+              </div>
+
+              <form
+                id="email-form"
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <div className="relative">
+                  <div className="">
+                    <div className="w-full">
+                      <Label
+                        htmlFor=""
+                        className="ml-3 text-gray-500 text-xl font-semibold"
+                      >
+                        {CHECK_EMAIL_TEXTS.form.emailLabel}
+                      </Label>
+                      <div className="flex items-center bg-[#2bb673] rounded-lg p-1">
+                        <Input
+                          {...register("email")}
+                          placeholder={CHECK_EMAIL_TEXTS.form.emailPlaceholder}
+                          className={`w-full px-6 py-3 rounded-lg bg-white text-[#2bb673] font-semibold text-lg placeholder-gray-500 focus:outline-none ${
+                            errors?.email ? "text-red-600" : "text-green-600"
+                          }`}
+                        />
+                        <Button
+                          type="submit"
+                          variant="ghost"
+                          disabled={isLoading || !!errors?.email}
+                          className={`px-6 h-auto transition-all duration-300 ${
+                            !errors?.email && !isLoading
+                              ? "bg-[#2bb673] text-white transform"
+                              : "bg-gray-400/50 text-gray-500 cursor-not-allowed"
+                          }`}
+                        >
+                          {isLoading ? (
+                            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <Image
+                              src="/arrow-vertical.png"
+                              alt="Submit"
+                              width={24}
+                              height={24}
+                              className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
+                            />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="backdrop-blur-sm bg-red-500/10 border border-red-400/30 rounded-xl p-4 animate-pulse">
+                    <p className="text-red-700 text-center font-medium">
+                      {errorMessage}
+                    </p>
+                  </div>
+                )}
+              </form>
+              <h1 className="text-center text-3xl font-extrabold mt-10 text-[#955aa4]">
+                {CHECK_EMAIL_TEXTS.welcome.title}
+              </h1>
+              <p className="text-center text-lg font-medium mt-3">
+                {CHECK_EMAIL_TEXTS.welcome.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CheckEmail;

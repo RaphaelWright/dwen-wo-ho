@@ -1,5 +1,5 @@
-import { PatientResult } from "@/types/patient";
-import { LockInAssessment } from "@/types/lockin";
+import { PatientResult } from "@/lib/types/patient";
+import { LockInAssessment } from "@/lib/types/lockin";
 
 export const getPatientInfoDetails = (patientResult: PatientResult) => [
   { label: "Name", value: patientResult.patientName },

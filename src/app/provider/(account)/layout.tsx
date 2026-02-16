@@ -1,9 +1,9 @@
 "use client";
 
-import { ProviderSidebar } from "@/features/provider/components/ui/sidebar";
+import { ProviderSidebar } from "@/components/ui/provider-sidebar";
 import { useProviderLayout } from "@/hooks/provider/useProviderLayout";
 import { LoadingScreen } from "@/components/ui/loading-screen";
-import { ProviderLayoutProps } from "@/features/provider/types/layout";
+import { ProviderLayoutProps } from "@/lib/types/provider/layout";
 
 export default function ProviderLayout({ children }: ProviderLayoutProps) {
   const {

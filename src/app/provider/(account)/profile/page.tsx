@@ -6,7 +6,7 @@ import {
   ProviderProfileHeader,
   ProviderProfileCard,
   ProviderStatsGrid,
-} from "@/features/provider/components/profile";
+} from "@/components/provider/profile";
 
 export default function ProviderProfilePage() {
   const { provider, isLoading, stats } = useProviderProfile();

@@ -1,6 +1,6 @@
 import { MdSchool } from "react-icons/md";
 import { Users, Handshake } from "lucide-react";
-import { ProviderStats } from "@/features/provider/types/profile";
+import { ProviderStats } from "@/lib/types/provider/profile";
 
 export const getProviderStatItems = (stats: ProviderStats) => [
   {

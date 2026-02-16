@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { NotificationProvider } from "@/context/notification-context";
+import { NotificationProvider } from "@/components/app-providers/notification-provider";
 
 const CuratorLayout = ({ children }: { children: ReactNode }) => {
   return (

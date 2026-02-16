@@ -15,25 +15,10 @@ import { ContainerTextFlip } from "../ui/container-text-flip";
 import { MovingButton } from "../ui/moving-border";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import GhanaMap from "../ui/ghana-map";
+import { HERO_CONTENT } from "@/lib/constants/components/hero";
 
 export function HomePageHeroDraggableCards() {
-  const items = [
-    // {
-    //   image: "/home/home-hero-1.jpg",
-    //   alt: "Student reading",
-    //   className: "absolute w-2xs right-35",
-    // },
-    // {
-    //   image: "/home/home-hero-2.jpg",
-    //   alt: "Student studying",
-    //   className: "absolute top-[50%] left-0 w-2xs",
-    // },
-    {
-      image: "/home/home-hero-3.jpg",
-      alt: "Student smiling",
-      className: "relative left-20 top-25",
-    },
-  ];
+  const items = HERO_CONTENT.HOME.DRAGGABLE_CARDS;
 
   return (
     <DraggableCardContainer>
@@ -96,6 +81,7 @@ export function HomePageHeroDraggableCards() {
 // --- Main Hero Component ---
 export default function HomePageHero() {
   const router = useRouter();
+  const { HOME } = HERO_CONTENT;
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -131,13 +117,7 @@ export default function HomePageHero() {
           <motion.div variants={itemVariants}>
             <div className="inline-flex items-center rounded-full">
               <ContainerTextFlip
-                words={[
-                  "Live Your Best Life",
-                  "Student Mental Health",
-                  "Say No To Suicide",
-                  "Feel Happier",
-                  "Boost Your CWA/GPA",
-                ]}
+                words={HOME.BADGE_WORDS}
                 className="h-auto p-1.5! text-sm! md:text-sm! text-muted-foreground/90"
               />
             </div>
@@ -146,7 +126,7 @@ export default function HomePageHero() {
           {/* Heading */}
           <motion.div variants={itemVariants}>
             <h1 className="text-6xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1]">
-              Dwen Wo Ho
+              {HOME.TITLE}
             </h1>
           </motion.div>
 
@@ -155,12 +135,7 @@ export default function HomePageHero() {
             variants={itemVariants}
             className="text-lg text-muted-foreground leading-relaxed max-w-lg font-medium"
           >
-            <TextGenerateEffect
-              words={`A safe, confidential space for
-            students in Ghana to find mental support and professional care.
-            It&apos;s never been this easy to take care of your own mental
-            health.`}
-            />
+            <TextGenerateEffect words={HOME.DESCRIPTION} />
           </motion.div>
 
           {/* Buttons */}
@@ -173,7 +148,7 @@ export default function HomePageHero() {
               size="lg"
               className="rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-purple-200/50 transition-all duration-300 transform hover:-translate-y-1"
             >
-              Get Started
+              {HOME.BUTTONS.GET_STARTED}
             </Button>
             <MovingButton
               onClick={() => router.push(ROUTES.patient.lockIn)}
@@ -183,7 +158,7 @@ export default function HomePageHero() {
               containerClassName="h-13"
               className="rounded-lg border-border text-primary bg-background hover:scale-95 px-8 h-12 text-base font-bold transition-all ease-in-out duration-300"
             >
-              Lock In
+              {HOME.BUTTONS.LOCK_IN}
             </MovingButton>
           </motion.div>
 
@@ -192,11 +167,7 @@ export default function HomePageHero() {
             variants={itemVariants}
             className="flex flex-col gap-3 pt-4"
           >
-            {[
-              "100% Confidential",
-              "Licensed Professionals",
-              "Student-Friendly Content",
-            ].map((feature, idx) => (
+            {HOME.FEATURES.map((feature, idx) => (
               <div
                 key={idx}
                 className="flex items-center gap-3 text-muted-foreground font-medium"

@@ -1,12 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-interface LogoProps {
-  variant?: "black" | "purple";
-  className?: string;
-  withLink?: boolean;
-}
+import { LogoProps } from "@/lib/types/shared-ui";
 
 export const Logo = ({
   variant = "purple",
@@ -37,5 +32,3 @@ export const Logo = ({
 
   return <div className={className}>{content}</div>;
 };
-
-

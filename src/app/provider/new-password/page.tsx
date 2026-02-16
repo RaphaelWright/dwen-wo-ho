@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/app/provider/auth/layout";
-import NewPassword from "@/features/provider/components/ui/new-password";
+import NewPassword from "@/components/provider/auth/new-password";
 import { Suspense } from "react";
 
 const NewPasswordPage = () => {
@@ -15,5 +15,3 @@ const NewPasswordPage = () => {
 };
 
 export default NewPasswordPage;
-
-

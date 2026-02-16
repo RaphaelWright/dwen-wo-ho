@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { School, SchoolIcon } from "@/types/school";
-import { CoverPage } from "@/types/curator";
+import { School, SchoolIcon } from "@/lib/types/school";
+import { CoverPage } from "@/lib/types/curator";
 
 export type CuratorPagesTabType = "cover-page" | "icons" | "lock-ins";
 

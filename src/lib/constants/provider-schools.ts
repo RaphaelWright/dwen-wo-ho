@@ -1,4 +1,4 @@
-import { FilterType } from "@/features/provider/types/schools";
+import { FilterType } from "@/lib/types/provider/schools";
 
 export const filterOptions: { label: string; value: FilterType }[] = [
   { label: "All", value: "all" },

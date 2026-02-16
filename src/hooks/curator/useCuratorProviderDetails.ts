@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { ROUTES } from "@/lib/constants/routes";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
-import { ProviderDetails } from "@/types/provider";
+import { ProviderDetails } from "@/lib/types/provider";
 
 export function useCuratorProviderDetails() {
   const [provider, setProvider] = useState<ProviderDetails | null>(null);

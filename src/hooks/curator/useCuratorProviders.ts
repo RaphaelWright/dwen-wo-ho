@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
-import { Provider, Provider as ApiProvider } from "@/types/provider";
+import { Provider, Provider as ApiProvider } from "@/lib/types/provider";
 import {
   formatProviderName,
   getProviderTitle,

@@ -9,7 +9,7 @@ import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { Suspense } from "react";
 import { formatTime, recoverSteps } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants/routes";
-import Stepper from "@/components/stepper";
+import Stepper from "@/components/miscellaneous/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import LoadingOverlay from "@/components/ui/loading-overlay";
 import { useProviderVerifyPasswordReset } from "@/hooks/provider/useProviderVerifyPasswordReset";

@@ -1,9 +1,9 @@
 "use client";
-import Header from "@/components/header";
+import Header from "@/components/shared/header";
 import Services from "@/components/home/services";
 import SocialProof from "@/components/home/social-proof";
-import JsonLd from "@/components/json-ld";
-import { JSON_LD_HOME_PAGE } from "@/lib/constants/json-ld";
+import JsonLd from "@/components/miscellaneous/json-ld";
+import { JSON_LD_HOME_PAGE } from "@/configs/json-ld";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import HomePageHero from "@/components/hero/home-hero";

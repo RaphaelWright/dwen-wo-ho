@@ -1,83 +1,28 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import Image from "next/image";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { School } from "@/types/school";
 import { FiSearch } from "react-icons/fi";
 import { MdSchool } from "react-icons/md";
-import { SchoolSelectionModalProps, FilterType } from "@/types/modals";
-
-const filterOptions: { label: string; value: FilterType }[] = [
-  { label: "All", value: "all" },
-  { label: "JHS", value: "JHS" },
-  { label: "SHS", value: "SHS" },
-  { label: "COLLEGE", value: "COLLEGE" },
-];
+import { SchoolSelectionModalProps } from "@/lib/types/modals";
+import { useSchoolSelection } from "@/hooks/components/modals/use-school-selection";
+import { SCHOOL_FILTER_OPTIONS } from "@/lib/constants/components/modals/school-selection";
+import Image from "next/image";
+import { Button } from "../ui/button";
 
 export default function SchoolSelectionModal({
   isOpen,
   onClose,
   onSelect,
 }: SchoolSelectionModalProps) {
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
-
-  useEffect(() => {
-    if (isOpen) {
-      loadSchools();
-    } else {
-      setSearchQuery("");
-    }
-  }, [isOpen]);
-
-  const loadSchools = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api(ENDPOINTS.schools);
-      if (response?.success && response.data) {
-        const schoolsList = Array.isArray(response.data) ? response.data : [];
-        setSchools(schoolsList);
-      }
-    } catch (error) {
-      // Error loading schools
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filteredSchools = useMemo(() => {
-    let filtered =
-      activeFilter === "all"
-        ? schools
-        : schools.filter((school) => school.type === activeFilter);
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter((school) => {
-        const nameMatch = school.name?.toLowerCase().includes(query);
-        const nicknameMatch = school.nickname?.toLowerCase().includes(query);
-        const typeMatch = school.type?.toLowerCase().includes(query);
-        const campusesMatch = school.campuses?.some((campus: string) =>
-          campus.toLowerCase().includes(query),
-        );
-        return nameMatch || nicknameMatch || typeMatch || campusesMatch;
-      });
-    }
-
-    return filtered;
-  }, [schools, searchQuery, activeFilter]);
-
-  const handleSchoolClick = (school: School) => {
-    onSelect(school);
-  };
-
-  const handleSelectPlatform = () => {
-    onSelect(null); // null means platform/default
-  };
+  const {
+    isLoading,
+    searchQuery,
+    setSearchQuery,
+    activeFilter,
+    setActiveFilter,
+    filteredSchools,
+    handleSchoolClick,
+    handleSelectPlatform,
+  } = useSchoolSelection(isOpen, onSelect);
 
   if (!isOpen) return null;
 
@@ -86,7 +31,7 @@ export default function SchoolSelectionModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-gray-200">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <button
+          <Button
             onClick={onClose}
             className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
           >
@@ -97,7 +42,7 @@ export default function SchoolSelectionModal({
               height={20}
               className="rotate-180"
             />
-          </button>
+          </Button>
           <h2 className="text-2xl font-bold text-gray-900">Select School</h2>
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
@@ -121,8 +66,8 @@ export default function SchoolSelectionModal({
         {/* Filter Buttons */}
         <div className="px-6 pt-2 pb-2 border-b border-gray-200 ">
           <div className="flex flex-wrap gap-2 justify-center">
-            {filterOptions.map((filter) => (
-              <button
+            {SCHOOL_FILTER_OPTIONS.map((filter) => (
+              <Button
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
@@ -132,7 +77,7 @@ export default function SchoolSelectionModal({
                 }`}
               >
                 {filter.label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -161,11 +106,11 @@ export default function SchoolSelectionModal({
           ) : (
             <div className="space-y-4">
               {/* Platform/Default Option */}
-              <button
+              <Button
                 onClick={handleSelectPlatform}
                 className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20 w-full"
               >
-                <div className="w-12 h-12 rounded-full bg-[#955aa4] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-[#955aa4] flex items-center justify-center shrink-0">
                   <span className="text-white font-bold text-lg">+</span>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -176,18 +121,18 @@ export default function SchoolSelectionModal({
                     Default cover page for all schools
                   </p>
                 </div>
-              </button>
+              </Button>
 
               {/* Schools List */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
                 {filteredSchools.map((school) => (
-                  <button
+                  <Button
                     key={school.id}
                     onClick={() => handleSchoolClick(school)}
                     className="flex items-center gap-6 p-4 bg-black rounded-full hover:bg-gray-200 transition-all text-left h-14 w-80"
                   >
                     {school.logo ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
                         <Image
                           src={school.logo}
                           alt={school.name}
@@ -197,7 +142,7 @@ export default function SchoolSelectionModal({
                         />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
                         <MdSchool className="w-6 h-6 text-gray-400" />
                       </div>
                     )}
@@ -209,7 +154,7 @@ export default function SchoolSelectionModal({
                         <p className="text-sm text-gray-500">{school.type}</p>
                       )}
                     </div>
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -219,5 +164,3 @@ export default function SchoolSelectionModal({
     </div>
   );
 }
-
-

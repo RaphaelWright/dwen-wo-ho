@@ -7,7 +7,7 @@ import {
   ProviderSchoolsHeader,
   ProviderSchoolsFilter,
   ProviderSchoolsList,
-} from "@/features/provider/components/schools";
+} from "@/components/provider/schools";
 
 export default function ProviderSchoolsPage() {
   const router = useRouter();

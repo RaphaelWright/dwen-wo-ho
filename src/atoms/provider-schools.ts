@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { School } from "@/types/school";
+import { School } from "@/lib/types/school";
 
 export interface SchoolWithExtras extends School {
   studentCount?: number;
@@ -24,5 +24,3 @@ const initialState: ProviderSchoolsState = {
 };
 
 export const providerSchoolsAtom = atom<ProviderSchoolsState>(initialState);
-
-

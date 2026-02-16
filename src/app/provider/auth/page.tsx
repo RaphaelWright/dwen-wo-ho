@@ -1,10 +1,10 @@
 "use client";
 
 import { Suspense } from "react";
-import CheckEmail from "@/features/provider/components/ui/check-email";
-import SignIn from "@/features/provider/components/ui/signin";
-import SignUp from "@/features/provider/components/ui/sign-up";
-import VerifyPasswordReset from "@/features/provider/components/ui/verify-password-reset";
+import CheckEmail from "@/components/provider/auth/check-email";
+import SignIn from "@/components/provider/auth/signin";
+import SignUp from "@/components/provider/auth/sign-up";
+import VerifyPasswordReset from "@/components/provider/auth/verify-password-reset";
 import { useProviderAuth } from "@/hooks/provider/useProviderAuth";
 
 const ProviderAuthPageContent = () => {

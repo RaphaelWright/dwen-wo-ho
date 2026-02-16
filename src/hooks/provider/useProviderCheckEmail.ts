@@ -3,7 +3,7 @@
 import { useState } from "react";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
-import { ProviderEmailSchema } from "@/schemas/provider.auth.schema";
+import { ProviderEmailSchema } from "@/lib/schemas/provider.auth.schema";
 
 interface UseProviderCheckEmailProps {
   onEmailSubmit: (email: string, emailExists: boolean) => void;

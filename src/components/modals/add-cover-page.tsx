@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import {
   ChevronDown,
@@ -10,332 +9,46 @@ import {
   RotateCw,
   Maximize2,
 } from "lucide-react";
-
+import { AddCoverPageModalProps } from "@/lib/types/modals";
 import {
-  AddCoverPageModalProps,
-  ColorOption,
-  CoverPageStep,
-} from "@/types/modals";
+  COVER_PAGE_COLORS,
+  COVER_PAGE_CONSTANTS,
+} from "@/lib/constants/components/modals/add-cover-page";
+import { useAddCoverPage } from "@/hooks/components/modals/use-add-cover-page";
 
-const EDIT_FRAME_ASPECT = 16 / 9;
-const MIN_SCALE = 0.2;
-const MAX_SCALE = 3;
-const SCALE_STEP = 0.15;
+export default function AddCoverPageModal(props: AddCoverPageModalProps) {
+  const {
+    step,
+    photoPreview,
+    selectedColor,
+    showColorDropdown,
+    setShowColorDropdown,
+    slogan,
+    setSlogan,
+    fileInputRef,
+    colorDropdownRef,
+    scale,
+    setScale,
+    setRotation,
+    rotation,
+    posX,
+    posY,
+    isDragging,
+    editorContainerRef,
+    editorImageRef,
+    handleEditorImageLoad,
+    setFitToFrame,
+    handlePanStart,
+    handlePanMove,
+    handlePanEnd,
+    handlePhotoSelect,
+    handleColorSelect,
+    handleBack,
+    headerTitle,
+    headerAction,
+  } = useAddCoverPage(props);
 
-const colors: ColorOption[] = [
-  { hex: "faf5f9", name: "Soft Lavender" },
-  { hex: "ecf1f9", name: "Light Blue" },
-  { hex: "f6f9e6", name: "Pale Green" },
-  { hex: "fcf1e9", name: "Peach" },
-  { hex: "2b3990", name: "Deep Blue" },
-  { hex: "ed1c24", name: "Red" },
-  { hex: "955aa4", name: "Purple" },
-  { hex: "2bb673", name: "Green" },
-];
-
-export default function AddCoverPageModal({
-  isOpen,
-  onClose,
-  onComplete,
-  editData = null,
-}: AddCoverPageModalProps) {
-  const [step, setStep] = useState<CoverPageStep>("photo-color");
-  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string>("");
-  const [showColorDropdown, setShowColorDropdown] = useState(false);
-  const [slogan, setSlogan] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const colorDropdownRef = useRef<HTMLDivElement>(null);
-
-  // Image editor state
-  const [scale, setScale] = useState(1);
-  const [rotation, setRotation] = useState(0);
-  const [posX, setPosX] = useState(0);
-  const [posY, setPosY] = useState(0);
-  const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(
-    null,
-  );
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef<{
-    posX: number;
-    posY: number;
-    clientX: number;
-    clientY: number;
-  }>({ posX: 0, posY: 0, clientX: 0, clientY: 0 });
-  const editorContainerRef = useRef<HTMLDivElement>(null);
-  const editorImageRef = useRef<HTMLImageElement>(null);
-
-  // Load edit data when modal opens
-  useEffect(() => {
-    if (isOpen && editData) {
-      setPhotoPreview(editData.photoPreview);
-      setSelectedColor(editData.color);
-      setSlogan(editData.slogan);
-      setStep("slogan");
-    } else if (isOpen && !editData) {
-      setStep("photo-color");
-      setSelectedPhoto(null);
-      setPhotoPreview(null);
-      setSelectedColor("");
-      setSlogan("");
-      setScale(1);
-      setRotation(0);
-      setPosX(0);
-      setPosY(0);
-      setImageSize(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  }, [isOpen, editData]);
-
-  // When entering edit-image, reset transform and will set "fit" when image loads
-  useEffect(() => {
-    if (step === "edit-image" && photoPreview) {
-      setScale(1);
-      setRotation(0);
-      setPosX(0);
-      setPosY(0);
-      setImageSize(null);
-    }
-  }, [step, photoPreview]);
-
-  // Close color dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        colorDropdownRef.current &&
-        !colorDropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowColorDropdown(false);
-      }
-    };
-    if (showColorDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showColorDropdown]);
-
-  const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedPhoto(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleColorSelect = (color: ColorOption) => {
-    setSelectedColor(color.hex);
-    setShowColorDropdown(false);
-  };
-
-  const handleGoFromPhotoColor = () => {
-    if (selectedPhoto && selectedColor) {
-      setStep("edit-image");
-    }
-  };
-
-  const setFitToFrame = useCallback(() => {
-    const container = editorContainerRef.current;
-    const img = editorImageRef.current;
-    if (!container || !img || !imageSize) return;
-    const fw = container.clientWidth;
-    const fh = container.clientHeight;
-    const nw = imageSize.w;
-    const nh = imageSize.h;
-    const scaleFit = Math.min(fw / nw, fh / nh);
-    setScale(scaleFit);
-    setPosX(0);
-    setPosY(0);
-  }, [imageSize]);
-
-  useEffect(() => {
-    if (step !== "edit-image" || !imageSize || !editorContainerRef.current)
-      return;
-    setFitToFrame();
-  }, [step, imageSize, setFitToFrame]);
-
-  const handleEditorImageLoad = () => {
-    const img = editorImageRef.current;
-    if (img) {
-      setImageSize({ w: img.naturalWidth, h: img.naturalHeight });
-    }
-  };
-
-  const handlePanStart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-    dragStartRef.current = {
-      posX,
-      posY,
-      clientX: e.clientX,
-      clientY: e.clientY,
-    };
-  };
-  const handlePanMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const d = dragStartRef.current;
-    setPosX(d.posX + e.clientX - d.clientX);
-    setPosY(d.posY + e.clientY - d.clientY);
-  };
-  const handlePanEnd = () => {
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-    const onMove = (e: MouseEvent) => {
-      const d = dragStartRef.current;
-      setPosX(d.posX + e.clientX - d.clientX);
-      setPosY(d.posY + e.clientY - d.clientY);
-    };
-    const onUp = () => {
-      setIsDragging(false);
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-    };
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-    return () => {
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-    };
-  }, [isDragging]);
-
-  const captureFrame = useCallback((): Promise<{
-    file: File;
-    dataUrl: string;
-  }> => {
-    return new Promise((resolve, reject) => {
-      const container = editorContainerRef.current;
-      const img = editorImageRef.current;
-      if (!container || !img || !photoPreview) {
-        reject(new Error("Editor not ready"));
-        return;
-      }
-      const fw = container.clientWidth;
-      const fh = container.clientHeight;
-      const canvas = document.createElement("canvas");
-      canvas.width = fw;
-      canvas.height = fh;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        reject(new Error("Canvas context"));
-        return;
-      }
-      const nw = img.naturalWidth;
-      const nh = img.naturalHeight;
-      ctx.save();
-      ctx.translate(fw / 2 + posX, fh / 2 + posY);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.scale(scale, scale);
-      ctx.translate(-nw / 2, -nh / 2);
-      ctx.drawImage(img, 0, 0, nw, nh);
-      ctx.restore();
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) {
-            reject(new Error("Blob"));
-            return;
-          }
-          const file = new File([blob], "cover.png", { type: "image/png" });
-          const dataUrl = canvas.toDataURL("image/png");
-          resolve({ file, dataUrl });
-        },
-        "image/png",
-        0.95,
-      );
-    });
-  }, [photoPreview, posX, posY, rotation, scale]);
-
-  const handleApplyEditor = async () => {
-    try {
-      const { file, dataUrl } = await captureFrame();
-      setSelectedPhoto(file);
-      setPhotoPreview(dataUrl);
-      setStep("slogan");
-    } catch {
-      setStep("slogan");
-    }
-  };
-
-  const handleGoToSlogan = () => {
-    if (selectedPhoto && selectedColor) {
-      if (step === "photo-color") {
-        setStep("edit-image");
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    if (slogan.trim()) {
-      onComplete({
-        photo: selectedPhoto,
-        color: selectedColor,
-        slogan: slogan.trim(),
-      });
-      setStep("photo-color");
-      setSelectedPhoto(null);
-      setPhotoPreview(null);
-      setSelectedColor("");
-      setSlogan("");
-      setScale(1);
-      setRotation(0);
-      setPosX(0);
-      setPosY(0);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  const handleBack = () => {
-    if (step === "slogan") {
-      setStep("edit-image");
-    } else if (step === "edit-image") {
-      setStep("photo-color");
-    } else {
-      onClose();
-    }
-  };
-
-  const getHeaderTitle = () => {
-    if (editData) return "Edit Cover Page";
-    if (step === "photo-color") return "Add Cover Page";
-    if (step === "edit-image") return "Position your photo";
-    return "Slogan";
-  };
-
-  const getHeaderAction = () => {
-    if (step === "photo-color") {
-      return {
-        label: "GO",
-        onClick: handleGoFromPhotoColor,
-        disabled: !selectedPhoto || !selectedColor,
-      };
-    }
-    if (step === "edit-image") {
-      return {
-        label: "Apply",
-        onClick: handleApplyEditor,
-        disabled: false,
-      };
-    }
-    return {
-      label: "GO",
-      onClick: handleSubmit,
-      disabled: !slogan.trim(),
-    };
-  };
-
-  if (!isOpen) return null;
-
-  const headerAction = getHeaderAction();
+  if (!props.isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
@@ -354,9 +67,7 @@ export default function AddCoverPageModal({
               className="rotate-180"
             />
           </button>
-          <h2 className="text-2xl font-bold text-gray-900">
-            {getHeaderTitle()}
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900">{headerTitle}</h2>
           <button
             onClick={headerAction.onClick}
             disabled={headerAction.disabled}
@@ -403,8 +114,8 @@ export default function AddCoverPageModal({
                   >
                     <span>
                       {selectedColor
-                        ? colors.find((c) => c.hex === selectedColor)?.name ||
-                          `#${selectedColor}`
+                        ? COVER_PAGE_COLORS.find((c) => c.hex === selectedColor)
+                            ?.name || `#${selectedColor}`
                         : "Colors"}
                     </span>
                     <ChevronDown
@@ -416,14 +127,14 @@ export default function AddCoverPageModal({
                   {showColorDropdown && (
                     <div className="absolute z-10 mt-2 w-full bg-white border-2 border-gray-200 rounded-xl shadow-2xl overflow-hidden">
                       <div className="p-4 space-y-2 max-h-64 overflow-y-auto">
-                        {colors.map((color) => (
+                        {COVER_PAGE_COLORS.map((color) => (
                           <button
                             key={color.hex}
                             onClick={() => handleColorSelect(color)}
                             className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left"
                           >
                             <div
-                              className="w-12 h-12 rounded-lg border-2 border-gray-200 flex-shrink-0"
+                              className="w-12 h-12 rounded-lg border-2 border-gray-200 shrink-0"
                               style={{ backgroundColor: `#${color.hex}` }}
                             />
                             <div>
@@ -481,7 +192,7 @@ export default function AddCoverPageModal({
                 ref={editorContainerRef}
                 className="relative w-full rounded-xl border-2 border-gray-300 overflow-hidden bg-gray-100 select-none"
                 style={{
-                  aspectRatio: EDIT_FRAME_ASPECT,
+                  aspectRatio: COVER_PAGE_CONSTANTS.EDIT_FRAME_ASPECT,
                   maxHeight: 360,
                   cursor: isDragging ? "grabbing" : "grab",
                 }}
@@ -518,7 +229,12 @@ export default function AddCoverPageModal({
                 <button
                   type="button"
                   onClick={() =>
-                    setScale((s) => Math.max(MIN_SCALE, s - SCALE_STEP))
+                    setScale((s) =>
+                      Math.max(
+                        COVER_PAGE_CONSTANTS.MIN_SCALE,
+                        s - COVER_PAGE_CONSTANTS.SCALE_STEP,
+                      ),
+                    )
                   }
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
                   title="Zoom out"
@@ -528,7 +244,12 @@ export default function AddCoverPageModal({
                 <button
                   type="button"
                   onClick={() =>
-                    setScale((s) => Math.min(MAX_SCALE, s + SCALE_STEP))
+                    setScale((s) =>
+                      Math.min(
+                        COVER_PAGE_CONSTANTS.MAX_SCALE,
+                        s + COVER_PAGE_CONSTANTS.SCALE_STEP,
+                      ),
+                    )
                   }
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
                   title="Zoom in"
@@ -580,7 +301,7 @@ export default function AddCoverPageModal({
               </div>
               <div>
                 <div
-                  className="w-full h-[300px] rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
+                  className="w-full h-75 rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
                   style={{
                     backgroundColor: selectedColor
                       ? `#${selectedColor}`
@@ -610,5 +331,3 @@ export default function AddCoverPageModal({
     </div>
   );
 }
-
-

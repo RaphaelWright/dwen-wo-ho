@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { School } from "@/types/school";
-import { AddIconModalProps } from "@/types/modals";
+import { AddIconModalProps } from "@/lib/types/modals";
 import { Lock, X } from "lucide-react";
+import { useIconForm } from "@/hooks/components/modals/use-icon-form";
+import { Button } from "../ui/button";
 
 export default function AddIconModal({
   isOpen,
@@ -13,98 +13,27 @@ export default function AddIconModal({
   editData = null,
   selectedSchool,
 }: AddIconModalProps) {
-  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [slogan, setSlogan] = useState("");
-  const [rank, setRank] = useState(1);
-  const [lockIns, setLockIns] = useState<string[]>([]);
-  const [newLockInInput, setNewLockInInput] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Load edit data when modal opens
-  useEffect(() => {
-    if (isOpen && editData) {
-      setPhotoPreview(editData.photoPreview);
-      setName(editData.name);
-      setSlogan(editData.slogan);
-      setRank(editData.rank);
-      setLockIns(editData.lockIns || []);
-    } else if (isOpen && !editData) {
-      // Reset for new icon
-      setSelectedPhoto(null);
-      setPhotoPreview(null);
-      setName("");
-      setSlogan("");
-      setRank(1);
-      setLockIns([]);
-      setNewLockInInput("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  }, [isOpen, editData]);
-
-  const handleAddLockIn = () => {
-    if (newLockInInput.trim()) {
-      setLockIns([...lockIns, newLockInInput.trim()]);
-      setNewLockInInput("");
-    }
-  };
-
-  const handleUpdateLockIn = (index: number, value: string) => {
-    const updated = [...lockIns];
-    updated[index] = value;
-    setLockIns(updated);
-  };
-
-  const handleRemoveLockIn = (index: number) => {
-    setLockIns(lockIns.filter((_, i) => i !== index));
-  };
-
-  const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedPhoto(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = () => {
-    if (name.trim() && slogan.trim()) {
-      onComplete({
-        photo: selectedPhoto,
-        name: name.trim(),
-        slogan: slogan.trim(),
-        rank,
-        lockIns: lockIns.filter((item) => item.trim() !== ""),
-      });
-      // Reset state
-      setSelectedPhoto(null);
-      setPhotoPreview(null);
-      setName("");
-      setSlogan("");
-      setRank(1);
-      setLockIns([]);
-      setNewLockInInput("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  const getFirstCampus = (campuses: string[] | null | undefined): string => {
-    if (campuses && Array.isArray(campuses) && campuses.length > 0) {
-      return campuses[0];
-    }
-    return "";
-  };
-
-  const firstCampus = getFirstCampus(selectedSchool?.campuses);
+  const {
+    photoPreview,
+    name,
+    setName,
+    slogan,
+    setSlogan,
+    rank,
+    setRank,
+    lockIns,
+    newLockInInput,
+    setNewLockInInput,
+    fileInputRef,
+    handleAddLockIn,
+    handleUpdateLockIn,
+    handleRemoveLockIn,
+    handlePhotoSelect,
+    handleSubmit,
+    firstCampus,
+    headerTitle,
+    isSubmitDisabled,
+  } = useIconForm({ editData, onComplete, isOpen, selectedSchool });
 
   if (!isOpen) return null;
 
@@ -113,7 +42,7 @@ export default function AddIconModal({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[85vh] overflow-hidden flex flex-col border-2 border-[#955aa4]">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <button
+          <Button
             onClick={onClose}
             className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
           >
@@ -124,10 +53,8 @@ export default function AddIconModal({
               height={20}
               className="rotate-180"
             />
-          </button>
-          <h2 className="text-2xl font-bold text-gray-900">
-            {editData ? "Edit Icon" : "New Icons"}
-          </h2>
+          </Button>
+          <h2 className="text-2xl font-bold text-gray-900">{headerTitle}</h2>
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
@@ -136,10 +63,10 @@ export default function AddIconModal({
           <div className="flex gap-6 h-full">
             {/* Left Side - Preview */}
             <div className="flex flex-col space-y-4 flex-1 h-full">
-              <div className="relative w-full flex-1 min-h-[400px] rounded-xl overflow-hidden bg-gray-100">
+              <div className="relative w-full flex-1 min-h-100 rounded-xl overflow-hidden bg-gray-100">
                 {photoPreview ? (
                   <>
-                    <button
+                    <Button
                       onClick={() => fileInputRef.current?.click()}
                       className="absolute inset-0 z-0"
                     >
@@ -149,7 +76,7 @@ export default function AddIconModal({
                         fill
                         className="object-cover"
                       />
-                    </button>
+                    </Button>
                     {/* Rank Badge */}
                     <div className="absolute top-4 left-4 w-12 h-12 rounded-full bg-white border-2 border-black flex items-center justify-center z-10">
                       <span className="text-black font-bold text-lg">
@@ -158,7 +85,7 @@ export default function AddIconModal({
                     </div>
                     {/* Name Overlay */}
                     {name && (
-                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent z-10">
+                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/70 to-transparent z-10">
                         <p className="text-white text-3xl font-bold">{name}</p>
                         {slogan && (
                           <p className="text-white/90 text-lg mt-1">{slogan}</p>
@@ -175,7 +102,7 @@ export default function AddIconModal({
                   </>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <button
+                    <Button
                       onClick={() => fileInputRef.current?.click()}
                       className="text-gray-400 hover:text-gray-600 transition-colors"
                     >
@@ -186,7 +113,7 @@ export default function AddIconModal({
                         height={24}
                         className="w-10 h-10 object-contain item-center justify-center"
                       />
-                    </button>
+                    </Button>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -202,7 +129,7 @@ export default function AddIconModal({
               {selectedSchool && (
                 <div className="flex items-center gap-3 p-4 bg-white rounded-xl">
                   {selectedSchool.logo ? (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0">
                       <Image
                         src={selectedSchool.logo}
                         alt={selectedSchool.name}
@@ -212,7 +139,7 @@ export default function AddIconModal({
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
                       <span className="text-xl">🏫</span>
                     </div>
                   )}
@@ -247,13 +174,13 @@ export default function AddIconModal({
                           }
                           className="flex-1 px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4]"
                         />
-                        <button
+                        <Button
                           onClick={() => handleRemoveLockIn(index)}
                           className="p-1 hover:bg-gray-200 rounded transition-colors"
                         >
                           <X className="w-4 h-4 text-gray-500" />
-                        </button>
-                        <Lock className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                        </Button>
+                        <Lock className="w-4 h-4 text-yellow-500 shrink-0" />
                       </div>
                     ))}
                   </div>
@@ -272,7 +199,7 @@ export default function AddIconModal({
                     placeholder="Enter lock-in..."
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] placeholder-gray-400"
                   />
-                  <button
+                  <Button
                     onClick={handleAddLockIn}
                     disabled={!newLockInInput.trim()}
                     className={`w-full px-4 py-2 rounded-lg font-semibold transition-colors ${
@@ -282,13 +209,13 @@ export default function AddIconModal({
                     }`}
                   >
                     + Add
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
 
             {/* Separator Line */}
-            <div className="hidden lg:block w-px bg-gray-200 flex-shrink-0"></div>
+            <div className="hidden lg:block w-px bg-gray-200 shrink-0"></div>
 
             {/* Right Side - Form */}
             <div className="flex-1 space-y-6">
@@ -325,12 +252,12 @@ export default function AddIconModal({
                 <label className="block text-sm font-semibold text-gray-900 mb-3">
                   Photo
                 </label>
-                <button
+                <Button
                   onClick={() => fileInputRef.current?.click()}
                   className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-gray-900"
                 >
                   + Photo
-                </button>
+                </Button>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -346,44 +273,41 @@ export default function AddIconModal({
                   Rank
                 </label>
                 <div className="flex items-center gap-4">
-                  <button
+                  <Button
                     onClick={() => setRank(Math.max(1, rank - 1))}
                     className="w-10 h-10 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center font-semibold text-gray-900 hover:bg-gray-200 transition-colors"
                   >
                     -
-                  </button>
-                  <span className="text-2xl font-bold text-gray-900 min-w-[3rem] text-center">
+                  </Button>
+                  <span className="text-2xl font-bold text-gray-900 min-w-12 text-center">
                     {rank}
                   </span>
-                  <button
+                  <Button
                     onClick={() => setRank(rank + 1)}
                     className="w-10 h-10 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center font-semibold text-gray-900 hover:bg-gray-200 transition-colors"
                   >
                     +
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer with GO Button */}
         <div className="flex items-center justify-end p-6 border-t border-gray-200">
-          <button
+          <Button
             onClick={handleSubmit}
-            disabled={!name.trim() || !slogan.trim()}
+            disabled={isSubmitDisabled}
             className={`px-8 py-3 rounded-lg font-semibold transition-colors ${
-              !name.trim() || !slogan.trim()
+              isSubmitDisabled
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-black text-white hover:bg-gray-800"
             }`}
           >
             GO
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
-
-

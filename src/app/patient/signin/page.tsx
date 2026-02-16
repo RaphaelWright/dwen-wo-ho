@@ -8,7 +8,7 @@ import {
   SignInHeader,
   SignInForm,
   SignInFooter,
-} from "@/features/patient/components/signin";
+} from "@/components/patient/signin";
 
 const SignInContent = () => {
   const email = useGetSearchParams("email");

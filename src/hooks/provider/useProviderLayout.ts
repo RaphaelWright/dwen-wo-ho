@@ -7,7 +7,7 @@ import useUserQuery from "@/hooks/queries/useUserQuery";
 import { performLogout } from "@/lib/auth-utils";
 import { hasValidToken } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
-import { UseProviderLayoutReturn } from "@/features/provider/types/layout";
+import { UseProviderLayoutReturn } from "@/lib/types/provider/layout";
 
 export function useProviderLayout(): UseProviderLayoutReturn {
   const router = useRouter();

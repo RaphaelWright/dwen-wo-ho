@@ -1,47 +1,32 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Memoriam from "../memoriam";
+import Memoriam from "../miscellaneous/memoriam";
 import WidthConstraint from "../ui/width-constraint";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import { ROUTES } from "@/lib/constants/routes";
-import { useRouter } from "next/navigation";
-import Header from "../header";
+import Header from "../shared/header";
+import { useProvidersHero } from "@/hooks/components/hero/use-providers-hero";
 
 const ProvidersHero = () => {
-  const texts = [
-    "Psychologists",
-    "Counsellors",
-    "Therapists",
-    "Psychiatrists",
-    "Academic Coaches",
-    "Providers",
-  ];
-
-  const colors = ["#2bb572", "#965ba4", "#eb2129", "#253f91", "#2BA36A", "#965ba4"];
-
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 3000); // Change text every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [texts.length]);
-
-  const router = useRouter();
+  const {
+    TEXTS,
+    COLORS,
+    TITLE,
+    IMAGE,
+    BUTTON_TEXT,
+    currentTextIndex,
+    handleProviderAuth,
+  } = useProvidersHero();
   return (
     <>
-      <Header className="bg-gray-200" logo="/logos/logo-purple.png" />
+      <Header className="bg-gray-200" />
       <section className="bg-white">
-        <div className="relative h-[600px] lg:h-[728px] overflow-hidden">
+        <div className="relative h-150 lg:h-182 overflow-hidden">
           <div className="absolute inset-0">
             <Image
-              src="/hero/people-painting.jpeg"
-              alt="Art studio with people painting"
+              src={IMAGE.SRC}
+              alt={IMAGE.ALT}
               fill
               className="object-cover"
               priority
@@ -54,7 +39,7 @@ const ProvidersHero = () => {
               <div className="max-w-5xl mx-auto space-y-20">
                 <div className="space-y-4">
                   <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight">
-                    <span className="text-white">Calling all</span>{" "}
+                    <span className="text-white">{TITLE.PREFIX}</span>{" "}
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={currentTextIndex}
@@ -62,23 +47,22 @@ const ProvidersHero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
-                        style={{ color: colors[currentTextIndex] }}
+                        style={{ color: COLORS[currentTextIndex] }}
                         className="inline-block"
                       >
-                        {texts[currentTextIndex]}
+                        {TEXTS[currentTextIndex]}
                       </motion.span>
                     </AnimatePresence>
                   </h1>
                   <p className="text-xl lg:text-2xl text-white/90 font-bold max-w-3xl mx-auto">
-                    to bring personalized mental healthcare closer to college
-                    students.
+                    {TITLE.SUFFIX}
                   </p>
                 </div>
                 <Button
-                  onClick={() => router.push(ROUTES.provider.auth)}
+                  onClick={handleProviderAuth}
                   className="bg-gray-200 text-[#D94A54] lg:text-[17px] font-bold hover:bg-gray-300 px-8"
                 >
-                  Get Started
+                  {BUTTON_TEXT}
                 </Button>
               </div>
             </WidthConstraint>
@@ -92,5 +76,3 @@ const ProvidersHero = () => {
 };
 
 export default ProvidersHero;
-
-

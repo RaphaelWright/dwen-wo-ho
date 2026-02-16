@@ -3,28 +3,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "@/components/shared/Logo";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { ROUTES } from "@/lib/constants/routes";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { FiLogOut } from "react-icons/fi";
-import { performLogout } from "@/lib/auth-utils";
-
-import { PendingVerificationModalProps } from "@/types/modals";
+import { PendingVerificationModalProps } from "@/lib/types/modals";
 import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
+import { usePendingVerification } from "@/hooks/components/modals/use-pending-verification";
 
 const PendingVerificationModal = ({
   isOpen,
-  onClose,
   isLoading = false,
   userInfo = DEFAULT_PENDING_USER_INFO,
 }: PendingVerificationModalProps) => {
-  const queryClient = useQueryClient();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const handleLogout = () => {
-    performLogout(queryClient, ROUTES.provider.auth);
-  };
+  const { showLogoutModal, setShowLogoutModal, handleLogout } =
+    usePendingVerification();
 
   return (
     <AnimatePresence>
@@ -70,7 +61,7 @@ const PendingVerificationModal = ({
                 // Loading Skeleton State
                 <div className="animate-pulse">
                   <div className="flex items-center justify-center gap-17 mb-10">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="w-40 h-40 bg-gray-200 rounded-full"></div>
                     </div>
                     <div className="text-left space-y-3">
@@ -90,7 +81,7 @@ const PendingVerificationModal = ({
                   <div className="grid grid-cols-[160px_1fr] gap-10 items-center max-w-2xl mx-auto mb-10">
                     {/* Profile Section */}
                     {/* Profile Image */}
-                    <div className="flex justify-center flex-shrink-0">
+                    <div className="flex justify-center shrink-0">
                       {userInfo.profileImage ? (
                         <Image
                           width={170}
@@ -100,8 +91,8 @@ const PendingVerificationModal = ({
                           className="w-40 h-40 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center">
-                          <span className="text-gray-500 font-bold text-3xl">
+                        <div className="w-20 h-20 rounded-full bg-linear-to-tr from-[#955aa4] to-[#d4a5d9] flex items-center justify-center text-white text-3xl shrink-0 shadow-lg shadow-[#955aa4]/20">
+                          <span className="font-bold text-3xl">
                             {userInfo.name.charAt(0)}
                           </span>
                         </div>
@@ -115,7 +106,7 @@ const PendingVerificationModal = ({
                           {userInfo.timeAgo}
                         </p>
                       )}
-                      <h2 className="text-4xl font-bold text-black mb-1 break-words">
+                      <h2 className="text-2xl font-bold text-gray-900 group-hover:text-[#955aa4] transition-colors line-clamp-2 wrap-break-word">
                         {userInfo.name}
                       </h2>
                       <p className="text-2xl font-bold text-black opacity-80">
@@ -125,7 +116,7 @@ const PendingVerificationModal = ({
 
                     {/* Status Section */}
                     {/* Icon - Centered to match Photo */}
-                    <div className="flex justify-center flex-shrink-0">
+                    <div className="flex justify-center shrink-0">
                       <div className="relative w-12 h-12">
                         <div className="absolute inset-0 border-[6px] border-black rounded-full text-white"></div>
                         <div className="absolute inset-0 m-auto w-5 h-5 bg-black rounded-full"></div>

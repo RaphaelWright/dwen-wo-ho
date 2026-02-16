@@ -1,79 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, easeOut } from "framer-motion";
-import Memoriam from "../memoriam";
+import { motion, AnimatePresence } from "framer-motion";
+import Memoriam from "../miscellaneous/memoriam";
 import WidthConstraint from "../ui/width-constraint";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/constants/routes";
+import { usePatientsHero } from "@/hooks/components/hero/use-patients-hero";
 
 const PatientsHero = () => {
-  const router = useRouter();
-
-  const texts = [
-    "Boost Your CWA/GPA 📈",
-    "Lower Stress & Anxiety 😌",
-    "Feel Happier 😊",
-    "Ease Depression 🌧",
-    "Build Better Relationships 💞",
-    "Improve Your Roomie Vibes 🏡",
-  ];
-
-  const colors = [
-    "#2bb572",
-    "#965ba4",
-    "#eb2129",
-    "#253f91",
-    "#2BA36A",
-    "#965ba4",
-  ];
-
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
-    }, 3000); // Change text every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [texts.length]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: easeOut,
-      },
-    },
-  };
-
-  const imageVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: easeOut,
-      },
-    },
-  };
+  const {
+    PATIENTS,
+    TEXTS,
+    COLORS,
+    BUTTONS,
+    IMAGES,
+    currentTextIndex,
+    containerVariants,
+    itemVariants,
+    imageVariants,
+    handleGetStarted,
+    handleLockIn,
+  } = usePatientsHero();
 
   return (
     <section className="bg-white py-10">
@@ -93,11 +40,10 @@ const PatientsHero = () => {
               className="space-y-4 flex gap-4 flex-col text-center"
             >
               <h1 className="text-4xl lg:text-5xl leading-0 font-bold text-[#2BA36A]">
-                Dwen Wo Ho
+                {PATIENTS.TITLE}
               </h1>
               <p className="text-lg lg:text-xl font-bold lg:max-w-100">
-                It&apos;s never been this easy to take care of your own mental
-                health, and
+                {PATIENTS.SUBTITLE}
               </p>
             </motion.div>
             <motion.div
@@ -105,7 +51,7 @@ const PatientsHero = () => {
               className="aspect-video bg-gray-50 rounded-lg overflow-hidden"
             >
               <Image
-                src="/hero/lady-painting.jpeg"
+                src={IMAGES.LADY_PAINTING}
                 alt=""
                 width={500}
                 height={500}
@@ -123,7 +69,7 @@ const PatientsHero = () => {
               className="aspect-video bg-gray-50 rounded-lg overflow-hidden mt-8"
             >
               <Image
-                src="/hero/woman-painting.jpeg"
+                src={IMAGES.WOMAN_PAINTING}
                 alt=""
                 width={500}
                 height={500}
@@ -142,31 +88,31 @@ const PatientsHero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                    style={{ color: colors[currentTextIndex] }}
+                    style={{ color: COLORS[currentTextIndex] }}
                     className="text-2xl lg:text-3xl font-bold absolute"
                   >
-                    {texts[currentTextIndex]}
+                    {TEXTS[currentTextIndex]}
                   </motion.h2>
                 </AnimatePresence>
               </div>
               <p className="text-lg lg:text-xl font-bold leading-relaxed">
-                living your best life in college.
+                {PATIENTS.SUBTITLE_SUFFIX}
               </p>
               <motion.div
                 variants={itemVariants}
                 className="flex flex-col gap-3 items-center"
               >
                 <Button
-                  onClick={() => router.push(ROUTES.patient.checkEmail)}
+                  onClick={handleGetStarted}
                   className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
                 >
-                  Get Started
+                  {BUTTONS.GET_STARTED}
                 </Button>
                 <Button
-                  onClick={() => router.push(ROUTES.patient.lockIn)}
+                  onClick={handleLockIn}
                   className="bg-gray-200 text-[#D94A54] font-bold lg:text-[17px] hover:bg-gray-300 px-8"
                 >
-                  Lock In
+                  {BUTTONS.LOCK_IN}
                 </Button>
               </motion.div>
             </motion.div>

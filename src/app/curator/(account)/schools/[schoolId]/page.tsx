@@ -4,13 +4,12 @@ import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
 import AddIconModal from "@/components/modals/add-icon";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { ProvidersTab } from "@/features/curator/components/school-detail-tabs";
 import {
   formatProviderName,
   getProviderTitle,
 } from "@/lib/utils/formatProviderName";
 import { ROUTES } from "@/lib/constants/routes";
-import { ProviderDetails } from "@/types/provider";
+import { ProviderDetails } from "@/lib/types/provider";
 import { useCuratorSchoolDetails } from "@/hooks/curator/useCuratorSchoolDetails";
 import {
   SchoolHeaderCard,
@@ -18,7 +17,8 @@ import {
   PatientsTab,
   IconsTab,
   UrgentCareSidebar,
-} from "@/features/curator/components/school-details";
+  ProvidersTab,
+} from "@/components/curator/school-details";
 
 export default function SchoolDetailsPage() {
   const {

@@ -1,24 +1,6 @@
-import React from "react";
 import { ResponsiveDialog } from "../ui/responsive-dialog";
-import Memoriam from "../memoriam";
-
-const contributors = [
-  {
-    name: "DR. NATHANIEL CUDJOE,",
-    description:
-      "MD, reviewed the screening tool and gave us directions on the critical symptoms of suicide. He also attended and led workshops for thousands of students.",
-  },
-  {
-    name: "DR. NATHANIEL CUDJOE,",
-    description:
-      "MD, reviewed the screening tool and gave us directions on the critical symptoms of suicide. He also attended and led workshops for thousands of students.",
-  },
-  {
-    name: "DR. NATHANIEL CUDJOE,",
-    description:
-      "MD, reviewed the screening tool and gave us directions on the critical symptoms of suicide. He also attended and led workshops for thousands of students.",
-  },
-];
+import Memoriam from "../miscellaneous/memoriam";
+import { MEMORIAM_CONTRIBUTORS } from "@/lib/constants/components/modals/memoriam";
 
 const MemoriamModal = ({
   open,
@@ -35,11 +17,12 @@ const MemoriamModal = ({
         <hr className="border-gray-300 mb-6" />
 
         <div className="text-center text-3xl md:text-4xl font-light mb-8">
-          Made With Love <span className="text-[#D94A54]">❤️</span> by these Humans
+          Made With Love <span className="text-[#D94A54]">❤️</span> by these
+          Humans
         </div>
 
         <div className="divide-y divide-gray-300">
-          {contributors.map((c, i) => (
+          {MEMORIAM_CONTRIBUTORS.map((c, i) => (
             <div
               key={i}
               className="flex flex-col md:flex-row py-4 md:py-6 gap-2 md:gap-0"
@@ -59,5 +42,3 @@ const MemoriamModal = ({
 };
 
 export default MemoriamModal;
-
-

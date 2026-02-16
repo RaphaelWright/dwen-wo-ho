@@ -8,7 +8,7 @@ import {
   PatientInfoCard,
   ProviderInfoCard,
   LockInAssessmentCard,
-} from "@/features/provider/components/patient-result";
+} from "@/components/provider/patient-result";
 
 export default function PatientResultPage() {
   const {

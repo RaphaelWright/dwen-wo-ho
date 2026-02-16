@@ -2,35 +2,12 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "@/components/shared/Logo";
-import { useState } from "react";
+import { useLineup } from "@/hooks/components/modals/use-lineup";
 import { X } from "lucide-react";
-
-import { LineupModalProps } from "@/types/modals";
+import { LineupModalProps } from "@/lib/types/modals";
 
 const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
-  const [lineup, setLineup] = useState<string[]>([
-    "Achimota High School",
-    "Achimota High School",
-    "Achimota High School",
-    "Achimota High School",
-  ]);
-  const [others, setOthers] = useState<string[]>([
-    "Ashesi University",
-    "Ashesi University",
-    "Ashesi University",
-  ]);
-  const [activeTab, setActiveTab] = useState<"lineup" | "others">("lineup");
-
-  const handleToggle = (name: string) => {
-    // If it's already in lineup, remove and push to others; else move from others into lineup
-    if (lineup.includes(name)) {
-      setLineup((prev) => prev.filter((n) => n !== name));
-      setOthers((prev) => (prev.includes(name) ? prev : [...prev, name]));
-    } else {
-      setLineup((prev) => (prev.includes(name) ? prev : [...prev, name]));
-      setOthers((prev) => prev.filter((n) => n !== name));
-    }
-  };
+  const { lineup, others, activeTab, setActiveTab, handleToggle } = useLineup();
 
   return (
     <AnimatePresence>
@@ -129,5 +106,3 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
 };
 
 export default LineupModal;
-
-

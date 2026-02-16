@@ -7,7 +7,7 @@ import {
   useCuratorSchools,
   FILTER_OPTIONS,
 } from "@/hooks/curator/useCuratorSchools";
-import { SchoolCard } from "@/features/curator/components/SchoolCard";
+import { SchoolCard } from "@/components/curator/SchoolCard";
 
 export default function SchoolsPage() {
   const {

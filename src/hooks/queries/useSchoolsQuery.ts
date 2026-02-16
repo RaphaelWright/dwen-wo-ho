@@ -1,14 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  axiosFormData,
-  axiosInstance,
-  checkResponse,
-} from "@/configs/axiosInstance";
+import { axiosFormData, axiosInstance } from "@/configs/axiosInstance";
+import { checkError, checkResponse } from "@/lib/api-utils";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { ICreateSchool, IUpdateSchool, School } from "@/types/school";
+import { ICreateSchool, IUpdateSchool, School } from "@/lib/types/school";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { LockInData } from "@/types/lockin";
+import { LockInData } from "@/lib/types/lockin";
 
 const getSchools = async (): Promise<School[]> => {
   const result = await api(`/api/v1/schools`);
@@ -184,5 +181,3 @@ export const useUpdateSchool = () => {
     },
   });
 };
-
-

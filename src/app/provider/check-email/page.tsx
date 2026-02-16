@@ -1,6 +1,6 @@
 "use client";
 
-import CheckEmail from "@/features/provider/components/ui/check-email";
+import CheckEmail from "@/components/provider/auth/check-email";
 import { useProviderCheckEmailPage } from "@/hooks/provider/useProviderCheckEmailPage";
 
 const ProviderCheckEmailPage = () => {

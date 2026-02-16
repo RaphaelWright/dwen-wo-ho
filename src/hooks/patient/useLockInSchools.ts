@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { School } from "@/types/school";
+import { School } from "@/lib/types/school";
 
 export function useLockInSchools() {
   const router = useRouter();

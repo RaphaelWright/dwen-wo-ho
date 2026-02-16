@@ -10,7 +10,7 @@ import {
   ProviderSpecialtiesCard,
   ProviderActionButtons,
   ProviderStatusDisplay,
-} from "@/features/curator/components/provider-details";
+} from "@/components/curator/provider-details";
 
 const ProviderDetailsPage = () => {
   const {

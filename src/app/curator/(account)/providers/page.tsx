@@ -3,7 +3,7 @@
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
 import ProviderDetailsModal from "@/components/modals/provider-details";
-import ProviderCard from "@/features/curator/components/provider-card";
+import ProviderCard from "@/components/curator/provider-card";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { useCuratorProviders } from "@/hooks/curator/useCuratorProviders";
 

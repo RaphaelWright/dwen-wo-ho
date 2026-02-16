@@ -15,8 +15,8 @@ import {
   checkForNewPatients,
   clearAllCaches,
 } from "@/lib/schoolsApiUtils";
-import { School } from "@/types/school";
-import { FilterType } from "@/features/provider/types/schools";
+import { School } from "@/lib/types/school";
+import { FilterType } from "@/lib/types/provider/schools";
 import {
   BATCH_SIZE,
   POLL_INTERVAL,

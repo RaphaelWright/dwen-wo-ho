@@ -1,47 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2Icon, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import { MemberCreationModalProps } from "@/types/modals";
+import { MemberCreationModalProps } from "@/lib/types/modals";
+import { useMemberCreation } from "@/hooks/components/modals/use-member-creation";
 
 const MemberCreationModal = ({
   isOpen,
   onClose,
   onMemberCreated,
 }: MemberCreationModalProps) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    name: "",
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const memberTitles = ["Coach", "Advisor", "Ambassador"];
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.title || !formData.name.trim()) return;
-
-    // Simulate API call
-    setIsSubmitted(true);
-
-    // Reset form after 2 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      onMemberCreated?.(formData);
-      onClose();
-    }, 2000);
-  };
+  const {
+    formData,
+    isSubmitted,
+    memberTitles,
+    handleInputChange,
+    handleSubmit,
+  } = useMemberCreation({ onMemberCreated, onClose });
 
   return (
     <AnimatePresence>
@@ -144,7 +120,7 @@ const MemberCreationModal = ({
                         className="overflow-hidden"
                       >
                         <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700">
-                          <CheckCircle2Icon className="w-5 h-5 flex-shrink-0" />
+                          <CheckCircle2Icon className="w-5 h-5 shrink-0" />
                           <p className="font-medium text-sm">
                             <span className="font-bold">
                               {formData.title} {formData.name}
@@ -188,5 +164,3 @@ const MemberCreationModal = ({
 };
 
 export default MemberCreationModal;
-
-

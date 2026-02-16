@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react";
 import useUserQuery from "@/hooks/queries/useUserQuery";
-import {
-  ProviderProfile,
-  ProviderStats,
-} from "@/features/provider/types/profile";
+import { ProviderProfile, ProviderStats } from "@/lib/types/provider/profile";
 
 export function useProviderProfile() {
   const { getProfileQuery } = useUserQuery();

@@ -2,7 +2,7 @@
 
 import PendingVerificationModal from "@/components/modals/pending-verification";
 import { useProviderHome } from "@/hooks/provider/useProviderHome";
-import { ProviderHomeLoading } from "@/features/provider/components/home";
+import { ProviderHomeLoading } from "@/components/provider/home";
 
 const ProviderHomePage = () => {
   const { userInfo, showPendingModal, isLoading, isApproved } =
