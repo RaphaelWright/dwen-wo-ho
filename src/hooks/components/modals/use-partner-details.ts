@@ -20,17 +20,15 @@ import {
   AssociatedProvider,
 } from "@/lib/types/modals";
 
-interface UsePartnerDetailsProps {
-  partnerId: string;
-  partnerProp: any;
-  isOpen: boolean;
-}
-
 export const usePartnerDetails = ({
   partnerId,
   partnerProp,
   isOpen,
-}: UsePartnerDetailsProps) => {
+}: {
+  partnerId: string;
+  partnerProp: any;
+  isOpen: boolean;
+}) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: allSchools = [] } = useSchools();

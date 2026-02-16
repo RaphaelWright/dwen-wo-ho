@@ -6,19 +6,18 @@ import {
   ICreatePartner,
 } from "@/hooks/queries/usePartnersQuery";
 
-interface UsePartnerCreationProps {
+
+export const usePartnerCreation = ({
+  onPartnerCreated,
+  onClose,
+}: {
   onPartnerCreated?: (data: {
     name: string;
     nickname?: string;
     logo?: string;
   }) => void;
   onClose: () => void;
-}
-
-export const usePartnerCreation = ({
-  onPartnerCreated,
-  onClose,
-}: UsePartnerCreationProps) => {
+}) => {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [slogan, setSlogan] = useState("");

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ROUTES } from "@/lib/constants/routes";
@@ -13,7 +13,6 @@ import { ProviderPasswordSchema } from "@/lib/schemas/provider.auth.schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/new-password";
 import { setUserType } from "@/lib/utils/getUserType";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const getCleanErrorMessage = (error: any): string => {
   let message = NEW_PASSWORD_TEXTS.errors.general;
 

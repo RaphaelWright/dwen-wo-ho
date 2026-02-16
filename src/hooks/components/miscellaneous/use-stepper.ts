@@ -1,3 +1,5 @@
+"use client";
+
 export const useStepper = <T extends string[]>(steps: T, step: string) => {
   const stepStatusIndex = steps.findIndex(
     (status) => status.toLowerCase() === step?.toLowerCase(),

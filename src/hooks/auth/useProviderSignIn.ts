@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
@@ -10,31 +11,24 @@ import { setUserType } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
 import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 
-interface UseProviderSignInProps {
+export const useProviderSignIn = ({
+  email,
+  onForgotPassword,
+}: {
   email: string;
   onBack: () => void;
   onForgotPassword?: () => void;
   onProfileIncomplete?: (step: number) => void;
-}
-
-export const useProviderSignIn = ({
-  email,
-  onBack,
-  onForgotPassword,
-}: UseProviderSignInProps) => {
+}) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-
-  // Pending user state
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [userInfo, setUserInfo] = useState({
     ...DEFAULT_PENDING_USER_INFO,
-    profileImage: undefined as string | undefined, // Added type safety
+    profileImage: undefined as string | undefined,
   });
-
   const { loginMutation, recoverAccountMutation } = useAuthQuery();
-
   const { register, handleSubmit, errors, watch } =
     useSelectedValuesFromReactHookForm(ProviderLoginSchema, {
       mode: "onChange",
@@ -60,9 +54,7 @@ export const useProviderSignIn = ({
         const parsed = JSON.parse(message);
         if (parsed.message) return parsed.message;
         if (parsed.error) return parsed.error;
-      } catch {
-        // Not JSON
-      }
+      } catch {}
     }
 
     return message;
@@ -107,9 +99,6 @@ export const useProviderSignIn = ({
 
           if (isPending) {
             let timeAgo = "Recently";
-            // Date parsing logic omitted for brevity, can import from utils if needed or keep inline
-            // For now, keeping simple default or copying full logic if critical.
-            // Copying full logic for correctness:
             const createdDate =
               (userData as any).applicationTimestamp ||
               (userData as any).createdAt ||
@@ -219,7 +208,6 @@ export const useProviderSignIn = ({
         }
 
         if (response.data?.isVerified === false) {
-          // ... verified logic
           setUserInfo({
             name: `${(response.data as any)?.title ? `${(response.data as any).title} ` : ""}${response.data?.fullName || "Dr. Amanda Gorman"}`,
             title: response.data?.professionalTitle || "Clinical Psychologist",

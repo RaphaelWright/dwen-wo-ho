@@ -17,18 +17,7 @@ import {
   formatProviderName,
   getProviderTitle,
 } from "@/lib/utils/formatProviderName";
-import {
-  ProviderDetailsModalProps,
-  ProviderDetailsTab,
-} from "@/lib/types/modals";
-
-interface UseProviderDetailsProps {
-  isOpen: boolean;
-  providerEmail: string;
-  providerProp: ProviderDetails | undefined;
-  onShowApproveModal?: (email: string) => void;
-  onShowRejectModal?: (email: string) => void;
-}
+import { ProviderDetailsTab } from "@/lib/types/modals";
 
 export const useProviderDetails = ({
   isOpen,
@@ -36,7 +25,13 @@ export const useProviderDetails = ({
   providerProp,
   onShowApproveModal,
   onShowRejectModal,
-}: UseProviderDetailsProps) => {
+}: {
+  isOpen: boolean;
+  providerEmail: string;
+  providerProp: ProviderDetails | undefined;
+  onShowApproveModal?: (email: string) => void;
+  onShowRejectModal?: (email: string) => void;
+}) => {
   const { useProvider, approveProvider, rejectProvider } = useProvidersQuery();
   const { data: providerData, isLoading: isQueryLoading } =
     useProvider(providerEmail);

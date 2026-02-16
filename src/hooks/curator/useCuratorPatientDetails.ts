@@ -4,80 +4,8 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-
-interface CuratorPatientResult {
-  id: number;
-  lockinId: number;
-  schoolId: number;
-  schoolName: string;
-  patientName: string;
-  patientAge: number;
-  patientSex: string;
-  visibilityStatus: "NEW" | "SEEN";
-  starProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-    professionalTitle: string;
-    specialty: string;
-  } | null;
-  referredProvider: {
-    id: string;
-    fullName: string;
-    email: string;
-  } | null;
-  createdAt: string;
-  firstOpenedAt: string | null;
-  treatingProviders: Array<{
-    id: string;
-    fullName: string;
-  }>;
-}
-
-interface CuratorLockInAssessment {
-  fullName: string;
-  age: number;
-  sex: string;
-  school: string;
-  generalMentalHealth: string;
-  generalMentalHealthScore: string;
-  generalMentalHealthColor: string;
-  possibleDepressionScore: string;
-  possibleDepressionDescription: string;
-  possibleDepressionColor: string;
-  lonelinessScore: string;
-  lonelinessScoreDescription: string;
-  lonelinessColor: string;
-  suicidalRiskScore: string;
-  suicidalRiskScoreDescription: string;
-  suicidalRiskColor: string;
-  examAnxiety: string;
-  examAnxietyScore: string;
-  examAnxietyColor: string;
-  coreAnxietyScore: string;
-  coreAnxietyScoreDescription: string;
-  coreAnxietyColor: string;
-  physicalDistressScore: string;
-  physicalDistressScoreDescription: string;
-  physicalDistressColor: string;
-  examPrep: string;
-  examPrepScore: string;
-  examPrepColor: string;
-  motivationScore: string;
-  motivationScoreDescription: string;
-  motivationColor: string;
-  studySkillsScore: string;
-  studySkillsScoreDescription: string;
-  studySkillsColor: string;
-  procrastinationScore: string;
-  procrastinationScoreDescription: string;
-  procrastinationColor: string;
-  lockedInScore: string;
-  lockedInScoreDescription: string;
-  lockedInColor: string;
-}
-
-export type { CuratorPatientResult, CuratorLockInAssessment };
+import { CuratorPatientResult } from "@/lib/types/curator";
+import { LockInAssessment } from "@/lib/types/lockin";
 
 export function generateColor(color: string) {
   let code = "";
@@ -98,7 +26,7 @@ export function useCuratorPatientDetails() {
   const [patientResult, setPatientResult] =
     useState<CuratorPatientResult | null>(null);
   const [lockInAssessment, setLockInAssessment] =
-    useState<CuratorLockInAssessment | null>(null);
+    useState<LockInAssessment | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"assessment" | "history">(
     "assessment",

@@ -3,15 +3,13 @@
 import { useAnimationControls } from "framer-motion";
 import { useState, useEffect } from "react";
 
-interface UseMarqueeProps {
-  direction?: "left" | "right";
-  speed?: number;
-}
-
 export const useMarquee = ({
   direction = "left",
   speed = 20,
-}: UseMarqueeProps) => {
+}: {
+  direction?: "left" | "right";
+  speed?: number;
+}) => {
   const controls = useAnimationControls();
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

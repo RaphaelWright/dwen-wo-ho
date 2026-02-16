@@ -1,14 +1,12 @@
 "use client";
 
-interface UseProfessionalTitleProps {
-  onSelect: (title: string) => void;
-  onClose: () => void;
-}
-
 export const useProfessionalTitle = ({
   onSelect,
   onClose,
-}: UseProfessionalTitleProps) => {
+}: {
+  onSelect: (title: string) => void;
+  onClose: () => void;
+}) => {
   const handleTitleSelect = (title: string) => {
     onSelect(title);
     onClose();

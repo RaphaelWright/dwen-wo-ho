@@ -1,3 +1,4 @@
+"use client";
 import { ProviderCardProps } from "@/lib/types/components/curator/provider-card";
 
 export const useProviderCard = ({

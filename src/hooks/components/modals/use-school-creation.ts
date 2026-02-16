@@ -4,28 +4,24 @@ import { useState, useRef } from "react";
 import { useCreateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { ICreateSchool } from "@/lib/types/school";
 
-interface UseSchoolCreationProps {
-  onClose: () => void;
-  onSchoolCreated?: (school: ICreateSchool) => void;
-}
-
-export type SchoolFormData = {
-  name: string;
-  nickname: string;
-  motto: string;
-  campuses: string[];
-  type: string;
-  logo: File | undefined;
-};
-
 export const useSchoolCreation = ({
   onClose,
   onSchoolCreated,
-}: UseSchoolCreationProps) => {
+}: {
+  onClose: () => void;
+  onSchoolCreated?: (school: ICreateSchool) => void;
+}) => {
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const [showCampusDropdown, setShowCampusDropdown] = useState(false);
   const [selectedCampuses, setSelectedCampuses] = useState<string[]>([]);
-  const [formData, setFormData] = useState<SchoolFormData>({
+  const [formData, setFormData] = useState<{
+    name: string;
+    nickname: string;
+    motto: string;
+    campuses: string[];
+    type: string;
+    logo: File | undefined;
+  }>({
     name: "",
     nickname: "",
     motto: "",

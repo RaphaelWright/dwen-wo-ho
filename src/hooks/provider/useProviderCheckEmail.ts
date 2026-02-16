@@ -5,13 +5,11 @@ import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
 import { ProviderEmailSchema } from "@/lib/schemas/provider.auth.schema";
 
-interface UseProviderCheckEmailProps {
-  onEmailSubmit: (email: string, emailExists: boolean) => void;
-}
-
 export function useProviderCheckEmail({
   onEmailSubmit,
-}: UseProviderCheckEmailProps) {
+}: {
+  onEmailSubmit: (email: string, emailExists: boolean) => void;
+}) {
   const [errorMessage, setErrorMessage] = useState("");
   const { checkEmailMutation } = useAuthQuery();
 

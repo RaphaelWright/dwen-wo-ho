@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { easeOut } from "framer-motion";
 import { useRouter } from "next/navigation";

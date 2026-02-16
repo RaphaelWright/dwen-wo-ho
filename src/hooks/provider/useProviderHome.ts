@@ -7,19 +7,17 @@ import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { calculateTimeAgo } from "@/lib/utils";
 
-export interface ProviderUserInfo {
-  name: string;
-  title: string;
-  specialty: string;
-  profileImage?: string;
-  timeAgo: string;
-}
-
 export function useProviderHome() {
   const router = useRouter();
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [hasToken, setHasToken] = useState(false);
-  const [userInfo, setUserInfo] = useState<ProviderUserInfo>({
+  const [userInfo, setUserInfo] = useState<{
+    name: string;
+    title: string;
+    specialty: string;
+    profileImage?: string;
+    timeAgo: string;
+  }>({
     ...DEFAULT_PROVIDER_USER_INFO,
     profileImage: undefined,
   });

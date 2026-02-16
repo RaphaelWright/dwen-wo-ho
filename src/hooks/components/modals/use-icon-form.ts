@@ -3,19 +3,17 @@
 import { useState, useRef, useEffect } from "react";
 import { AddIconModalProps } from "@/lib/types/modals";
 
-interface UseIconFormProps {
-  editData: AddIconModalProps["editData"];
-  onComplete: AddIconModalProps["onComplete"];
-  isOpen: boolean;
-  selectedSchool: AddIconModalProps["selectedSchool"];
-}
-
 export const useIconForm = ({
   editData,
   onComplete,
   isOpen,
   selectedSchool,
-}: UseIconFormProps) => {
+}: {
+  editData: AddIconModalProps["editData"];
+  onComplete: AddIconModalProps["onComplete"];
+  isOpen: boolean;
+  selectedSchool: AddIconModalProps["selectedSchool"];
+}) => {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [name, setName] = useState("");

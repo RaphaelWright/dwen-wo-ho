@@ -17,9 +17,7 @@ export function useProviderPassword() {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [signupData, setSignupData] = useState<any>(null);
-
   const params = useParams();
   const { email } = params;
   const router = useRouter();

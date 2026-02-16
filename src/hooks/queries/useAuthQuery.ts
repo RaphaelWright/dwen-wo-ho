@@ -2,7 +2,7 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { useMutation } from "@tanstack/react-query";
 import { axiosFormData } from "@/configs/axiosInstance";
-import { checkError, checkResponse } from "@/lib/api-utils";
+import { checkResponse } from "@/lib/api-utils";
 
 const useAuthQuery = () => {
   const loginMutation = useMutation({

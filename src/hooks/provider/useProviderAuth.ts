@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   getUserType,
   hasValidToken,
@@ -15,7 +15,6 @@ import { ENDPOINTS } from "@/lib/constants/endpoints";
 export type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
 
 export function useProviderAuth() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const initialStep = (searchParams.get("step") as AuthStep) || "check-email";
   const initialEmail = searchParams.get("email");

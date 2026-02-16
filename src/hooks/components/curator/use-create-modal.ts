@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { CreateModalProps } from "@/lib/types/components/curator/create-modal";
 import { CREATE_MODAL_ITEMS_CONFIG } from "@/lib/constants/components/curator/create-modal";

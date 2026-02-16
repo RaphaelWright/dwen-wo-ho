@@ -5,15 +5,13 @@ import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { PatientResult, LockInAssessment } from "@/lib/types/modals";
 
-interface UsePatientDetailsCuratorProps {
-  isOpen: boolean;
-  patientId: string;
-}
-
 export const usePatientDetailsCurator = ({
   isOpen,
   patientId,
-}: UsePatientDetailsCuratorProps) => {
+}: {
+  isOpen: boolean;
+  patientId: string;
+}) => {
   const [patientResult, setPatientResult] = useState<PatientResult | null>(
     null,
   );

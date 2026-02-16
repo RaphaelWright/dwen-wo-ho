@@ -30,4 +30,31 @@ export interface ReachTabProps {
   isLoading: boolean;
 }
 
-
+export interface CuratorPatientResult {
+  id: number;
+  lockinId: number;
+  schoolId: number;
+  schoolName: string;
+  patientName: string;
+  patientAge: number;
+  patientSex: string;
+  visibilityStatus: "NEW" | "SEEN";
+  starProvider: {
+    id: string;
+    fullName: string;
+    email: string;
+    professionalTitle: string;
+    specialty: string;
+  } | null;
+  referredProvider: {
+    id: string;
+    fullName: string;
+    email: string;
+  } | null;
+  createdAt: string;
+  firstOpenedAt: string | null;
+  treatingProviders: Array<{
+    id: string;
+    fullName: string;
+  }>;
+}

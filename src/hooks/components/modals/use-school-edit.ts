@@ -4,30 +4,26 @@ import { useState, useEffect, useRef } from "react";
 import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/lib/types/school";
 
-interface UseSchoolEditProps {
-  school: School;
-  onClose: () => void;
-  onSchoolUpdated?: () => void;
-  onDisableSchool?: () => void;
-}
-
-export type SchoolFormData = {
-  name: string;
-  nickname: string;
-  motto: string;
-  campuses: string[];
-  type: string;
-};
-
 export const useSchoolEdit = ({
   school,
   onClose,
   onSchoolUpdated,
   onDisableSchool,
-}: UseSchoolEditProps) => {
+}: {
+  school: School;
+  onClose: () => void;
+  onSchoolUpdated?: () => void;
+  onDisableSchool?: () => void;
+}) => {
   const [showCampusDropdown, setShowCampusDropdown] = useState(false);
   const [selectedCampuses, setSelectedCampuses] = useState<string[]>([]);
-  const [formData, setFormData] = useState<SchoolFormData>({
+  const [formData, setFormData] = useState<{
+    name: string;
+    nickname: string;
+    motto: string;
+    campuses: string[];
+    type: string;
+  }>({
     name: "",
     nickname: "",
     motto: "",

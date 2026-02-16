@@ -6,12 +6,13 @@ import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCroppedImg, Area } from "@/lib/utils/image-utils";
 
-interface UsePhotoStepProps {
+export const usePhotoStep = ({
+  onChange,
+  onNext,
+}: {
   onChange: (field: "photo", value: string | null) => void;
   onNext: () => void;
-}
-
-export const usePhotoStep = ({ onChange, onNext }: UsePhotoStepProps) => {
+}) => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

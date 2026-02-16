@@ -7,22 +7,11 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { ROUTES } from "@/lib/constants/routes";
-
-const LoginSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Please enter a valid email" })
-    .min(1, "Please enter your email address"),
-  password: z.string().min(1, { message: "Please enter password" }),
-});
+import { LoginSchema } from "@/lib/schemas/patient.auth";
 
 export type PatientSignInFormData = z.infer<typeof LoginSchema>;
 
-interface UsePatientSignInProps {
-  email: string | null;
-}
-
-export function usePatientSignIn({ email }: UsePatientSignInProps) {
+export function usePatientSignIn({ email }: { email: string | null }) {
   const router = useRouter();
   const { loginMutation } = useAuthQuery();
   const [errorMessage, setErrorMessage] = useState<string>("");

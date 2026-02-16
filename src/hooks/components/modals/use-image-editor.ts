@@ -2,11 +2,11 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 
-interface UseImageEditorProps {
+export const useImageEditor = ({
+  photoPreview,
+}: {
   photoPreview: string | null;
-}
-
-export const useImageEditor = ({ photoPreview }: UseImageEditorProps) => {
+}) => {
   const [scale, setScale] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [posX, setPosX] = useState(0);

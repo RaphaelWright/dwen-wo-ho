@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 
-interface UseMemberCreationProps {
-  onMemberCreated?: (formData: { title: string; name: string }) => void;
-  onClose: () => void;
-}
-
 export const useMemberCreation = ({
   onMemberCreated,
   onClose,
-}: UseMemberCreationProps) => {
+}: {
+  onMemberCreated?: (formData: { title: string; name: string }) => void;
+  onClose: () => void;
+}) => {
   const [formData, setFormData] = useState({
     title: "",
     name: "",
