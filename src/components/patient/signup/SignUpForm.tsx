@@ -24,7 +24,7 @@ export function SignUpForm({
           value={email}
           placeholder={email}
           disabled
-          className={`font-bold w-full rounded-xl border-4 text-2xl text-gray-500 p-4 bg-gray-200/50 border-transparent`}
+          className={`font-bold w-full rounded-xl border-4 text-2xl text-muted-foreground p-4 bg-muted border-transparent`}
         />
 
         <div className="flex flex-col space-y-2">
@@ -32,8 +32,8 @@ export function SignUpForm({
             {...register("fullName")}
             placeholder={SIGN_UP_TEXTS.form.fullNamePlaceholder}
             className={`font-bold w-full rounded-xl border-4 ${
-              errors.fullName ? "border-red-500" : "border-transparent"
-            } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              errors.fullName ? "border-destructive" : "border-transparent"
+            } text-2xl text-muted-foreground p-4 bg-muted`}
           />
           {errors.fullName && (
             <span className="text-red-500 text-sm ml-4">
@@ -48,8 +48,8 @@ export function SignUpForm({
             type="tel"
             placeholder={SIGN_UP_TEXTS.form.phoneNumberPlaceholder}
             className={`font-bold w-full rounded-xl border-4 ${
-              errors.phoneNumber ? "border-red-500" : "border-transparent"
-            } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              errors.phoneNumber ? "border-destructive" : "border-transparent"
+            } text-2xl text-muted-foreground p-4 bg-muted`}
           />
           {errors.phoneNumber && (
             <span className="text-red-500 text-sm ml-4">
@@ -67,8 +67,8 @@ export function SignUpForm({
             placeholder={SIGN_UP_TEXTS.form.passwordPlaceholder}
             type={showPassword ? "text" : "password"}
             className={`font-bold w-full rounded-xl border-4 ${
-              errors.password ? "border-red-500" : "border-green-600"
-            } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              errors.password ? "border-destructive" : "border-success"
+            } text-2xl text-muted-foreground p-4 bg-muted`}
           />
           <Button
             type="button"
@@ -88,7 +88,7 @@ export function SignUpForm({
       <h1 className="text-2xl font-bold text-center text-gray-500">
         <Checkbox className="mr-4 rounded-none border-black" />
         {SIGN_UP_TEXTS.form.agreeTo}{" "}
-        <Link href="/" className="text-[#ed1c24]">
+        <Link href="/" className="text-destructive">
           {SIGN_UP_TEXTS.form.terms}
         </Link>
       </h1>

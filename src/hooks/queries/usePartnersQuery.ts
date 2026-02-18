@@ -5,12 +5,16 @@ import { checkResponse } from "@/lib/api-utils";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
 
-const createPartner = async (data: {
+export interface ICreatePartner {
   name: string;
   nickname?: string;
   slogan?: string;
   logo?: File | null;
-}): Promise<{
+}
+
+const createPartner = async (
+  data: ICreatePartner,
+): Promise<{
   id: string;
   name: string;
   nickname?: string;

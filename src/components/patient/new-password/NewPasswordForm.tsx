@@ -22,8 +22,10 @@ export function NewPasswordForm({
             placeholder={NEW_PASSWORD_TEXTS.form.passwordPlaceholder}
             type={showPassword ? "text" : "password"}
             className={`font-bold w-full rounded-xl border-4 ${
-              errors?.password?.message ? "border-red-500" : "border-green-600"
-            } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              errors?.password?.message
+                ? "border-destructive"
+                : "border-success"
+            } text-2xl text-foreground p-4 bg-muted/50`}
           />
           <Button
             type="button"
@@ -44,9 +46,9 @@ export function NewPasswordForm({
             type={showPassword ? "text" : "password"}
             className={`font-bold w-full rounded-xl border-4 ${
               errors?.repeatPassword?.message
-                ? "border-red-500"
-                : "border-green-600"
-            } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+                ? "border-destructive"
+                : "border-success"
+            } text-2xl text-foreground p-4 bg-muted/50`}
           />
           <Button
             type="button"

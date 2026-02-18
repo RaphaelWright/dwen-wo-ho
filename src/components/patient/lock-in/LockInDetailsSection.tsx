@@ -9,8 +9,8 @@ export function LockInDetailsSection({
   timeToExamOptions,
 }: LockInDetailsSectionProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
+    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
+      <h2 className="text-xl font-bold text-foreground mb-4">
         {LOCK_IN_TEXTS.details.title}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -21,7 +21,8 @@ export function LockInDetailsSection({
           <select
             id="reasonForLockin"
             {...register("reasonForLockin")}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4]"
+            {...register("reasonForLockin")}
+            className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
           >
             <option value="">{LOCK_IN_TEXTS.details.reasonPlaceholder}</option>
             {reasonOptions.map((reason) => (
@@ -42,7 +43,8 @@ export function LockInDetailsSection({
           <select
             id="timeToExam"
             {...register("timeToExam")}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4]"
+            {...register("timeToExam")}
+            className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
           >
             <option value="">{LOCK_IN_TEXTS.details.timePlaceholder}</option>
             {timeToExamOptions.map((time) => (

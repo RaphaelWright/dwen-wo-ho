@@ -22,14 +22,14 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
       <div className="max-w-5xl mx-auto p-4 md:p-8 overflow-y-auto relative">
         <div className="absolute top-2 md:top-5 right-5 md:right-0 ">
           <div className="flex items-center gap-2">
-            <p className="flex items-center gap-2 w-max text-black font-bold text-lg">
+            <p className="flex items-center gap-2 w-max text-foreground font-bold text-lg">
               <span className="text-2xl">{BRAND.SYMBOL}</span> {BRAND.NAME}
             </p>
           </div>
         </div>
         <div className="flex items-center pt-10 justify-between mb-2">
           <div />
-          <p className="text-xl md:text-3xl font-bold text-[#8B5CB1] text-center w-full block">
+          <p className="text-xl md:text-3xl font-bold text-primary text-center w-full block">
             {TITLE}
           </p>
         </div>
@@ -56,7 +56,7 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
                   <Input
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="border border-black rounded-lg px-4 py-3 text-lg w-full focus:outline-none"
+                    className="border border-input rounded-lg px-4 py-3 text-lg w-full focus:outline-none"
                     value={formData[field.id as keyof typeof formData]}
                     onChange={(e) =>
                       handleInputChange(field.id, e.target.value)
@@ -64,7 +64,7 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
                     required={field.required}
                   />
                   {field.helperText && (
-                    <div className="text-black text-base font-medium">
+                    <div className="text-foreground text-base font-medium">
                       {field.helperText}
                     </div>
                   )}
@@ -74,7 +74,7 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
             <div className="flex justify-end mt-2">
               <Button
                 type="submit"
-                className="bg-[#2BA36A] text-black text-2xl font-bold rounded px-6 py-2 disabled:opacity-50"
+                className="bg-success text-success-foreground text-2xl font-bold rounded px-6 py-2 disabled:opacity-50"
                 disabled={
                   loading ||
                   !formData.fullName ||
@@ -86,12 +86,14 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
               </Button>
             </div>
             {success && (
-              <div className="text-green-600 font-bold text-center">
+              <div className="text-success font-bold text-center">
                 {WAITLIST_CONTENT.MESSAGES.SUCCESS}
               </div>
             )}
             {error && (
-              <div className="text-red-600 font-bold text-center">{error}</div>
+              <div className="text-destructive font-bold text-center">
+                {error}
+              </div>
             )}
           </form>
         </div>

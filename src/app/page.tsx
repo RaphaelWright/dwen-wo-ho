@@ -1,4 +1,3 @@
-"use client";
 import Header from "@/components/shared/header";
 import Services from "@/components/home/services";
 import SocialProof from "@/components/home/social-proof";
@@ -11,7 +10,7 @@ import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
 import { testimonials } from "@/lib/constants/mock-data";
 import Footer from "@/components/shared/footer";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <JsonLd data={JSON_LD_HOME_PAGE} />

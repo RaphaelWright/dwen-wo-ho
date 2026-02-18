@@ -1,13 +1,17 @@
 "use client";
 
-import { MdSchool } from "react-icons/md";
-import { FiSearch } from "react-icons/fi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Loader2, School, Search } from "lucide-react";
 import WidthConstraint from "@/components/ui/width-constraint";
 import {
   useCuratorSchools,
   FILTER_OPTIONS,
 } from "@/hooks/curator/useCuratorSchools";
 import { SchoolCard } from "@/components/curator/SchoolCard";
+import { NotificationSheet } from "@/components/ui/notification-sheet";
+import { useNotification } from "@/components/app-providers/notification-provider";
+import { FiBell } from "react-icons/fi";
 
 export default function SchoolsPage() {
   const {
@@ -21,13 +25,23 @@ export default function SchoolsPage() {
     isError,
   } = useCuratorSchools();
 
-  console.log(schoolsList);
+  const {
+    notifications,
+    clearNotifications,
+    dismissNotification,
+    unreadCount,
+  } = useNotification();
 
   if (isError) {
     return (
       <WidthConstraint>
-        <div className="flex flex-col gap-8 p-8">
-          <div className="text-center text-red-500">Failed to load schools</div>
+        <div className="flex flex-col gap-8 p-8 items-center justify-center min-h-[40vh]">
+          <div className="text-center text-destructive font-medium">
+            Failed to load schools
+          </div>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
         </div>
       </WidthConstraint>
     );
@@ -35,74 +49,105 @@ export default function SchoolsPage() {
 
   return (
     <WidthConstraint>
-      <div className="p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Schools</h1>
-            <p className="text-gray-600">
+      <div className="p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="flex items-center justify-between">
+          {/* Header */}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+              Schools
+            </h1>
+            <p className="text-muted-foreground text-lg">
               Manage and view all registered educational institutions
             </p>
           </div>
-        </div>
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <FiSearch className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search schools by name, nickname, type, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+          {/* Header Actions */}
+          <div className="flex items-center gap-4">
+            <NotificationSheet
+              notifications={notifications}
+              onClear={clearNotifications}
+              onDismiss={dismissNotification}
+              trigger={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="relative h-10 w-10 rounded-full border-border"
+                >
+                  <FiBell className="h-5 w-5 text-muted-foreground" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-destructive border-2 border-white transform translate-x-1/4 -translate-y-1/4" />
+                  )}
+                </Button>
+              }
             />
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-8 flex flex-wrap gap-2">
-          {FILTER_OPTIONS.map((filter) => (
-            <button
-              key={filter.value}
-              onClick={() => setActiveFilter(filter.value)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeFilter === filter.value
-                  ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-              }`}
-            >
-              {filter.label}
-            </button>
-          ))}
+        {/* Search & Filters */}
+        <div className="space-y-6">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search schools by name, nickname, type, or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 h-12 text-lg bg-background border-input focus-visible:ring-primary rounded-xl shadow-sm transition-all duration-300"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {FILTER_OPTIONS.map((filter) => (
+              <Button
+                key={filter.value}
+                variant={activeFilter === filter.value ? "default" : "outline"}
+                onClick={() => setActiveFilter(filter.value)}
+                className={`rounded-full transition-all duration-300 ${
+                  activeFilter === filter.value
+                    ? "shadow-md scale-105"
+                    : "hover:bg-muted"
+                }`}
+              >
+                {filter.label}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        {/* Loading state */}
+        {/* Content */}
         {isLoading && !hasCachedData ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-              <p className="text-gray-500">Loading schools...</p>
-            </div>
-          </div>
-        ) : schoolsList.length === 0 ? (
-          <div className="text-center py-20">
-            <MdSchool className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No schools found
-            </h3>
-            <p className="text-gray-500">
-              {activeFilter === "all"
-                ? "There are no schools registered yet."
-                : `There are no schools under the ${FILTER_OPTIONS.find((f) => f.value === activeFilter)?.label} category.`}
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <p className="text-muted-foreground font-medium">
+              Loading schools...
             </p>
           </div>
+        ) : schoolsList.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center gap-4 animate-in fade-in zoom-in-95 duration-500">
+            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+              <School className="w-10 h-10 text-muted-foreground" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-foreground">
+                No schools found
+              </h3>
+              <p className="text-muted-foreground max-w-sm mx-auto">
+                {activeFilter === "all"
+                  ? "There are no schools registered yet."
+                  : `There are no schools under the "${FILTER_OPTIONS.find((f) => f.value === activeFilter)?.label}" category.`}
+              </p>
+            </div>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {schoolsList.map((school) => (
-              <SchoolCard key={school.id} school={school} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+            {schoolsList.map((school, i) => (
+              <div
+                key={school.id}
+                className="animate-in fade-in slide-in-from-bottom-8 fill-mode-backwards"
+                style={{ animationDelay: `${i * 50}ms` }}
+              >
+                <SchoolCard school={school} />
+              </div>
             ))}
           </div>
         )}

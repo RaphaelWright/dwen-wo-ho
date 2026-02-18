@@ -55,7 +55,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
               <div className="p-8 overflow-y-auto">
                 {/* Top Section: Total Reach & Baseline */}
                 <div className="flex flex-col md:flex-row gap-8 mb-10">
-                  <div className="flex-1 bg-[#955aa4] rounded-2xl p-6 text-white shadow-lg shadow-[#955aa4]/20 relative overflow-hidden">
+                  <div className="flex-1 bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg shadow-primary/20 relative overflow-hidden">
                     <div className="relative z-10">
                       <p className="text-white/80 font-medium mb-1">
                         Total Student Reach
@@ -78,7 +78,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                       <input
                         value={baseline}
                         onChange={(e) => setBaseline(e.target.value)}
-                        className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-lg font-medium"
+                        className="flex-1 px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-lg font-medium"
                         placeholder="e.g. 300,000"
                       />
                       <button className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors">

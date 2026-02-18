@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/miscellaneous/stepper";
@@ -11,6 +11,8 @@ import SignUpProfile from "./signup/sign-up-profile";
 import { ProviderSignUpProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { useProviderSignUp } from "@/hooks/components/provider/auth/use-provider-sign-up";
+import { useTheme } from "next-themes";
+import { Loader2 } from "lucide-react";
 
 const SignUpContent = (props: ProviderSignUpProps) => {
   const { specialty, profileImage, isPending, profileStep } = props;
@@ -27,8 +29,13 @@ const SignUpContent = (props: ProviderSignUpProps) => {
     handleBack,
     getCurrentStepLabel,
   } = useProviderSignUp(props);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // Render step content
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const renderStepContent = () => {
     switch (currentStep) {
       case "create":
@@ -73,49 +80,60 @@ const SignUpContent = (props: ProviderSignUpProps) => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between w-full px-8 py-4">
-        <Logo />
-        <p className="text-2xl font-bold">
-          <span className="text-sm">{SIGN_UP_TEXTS.header.for}</span>{" "}
-          {SIGN_UP_TEXTS.header.providers}
-        </p>
+      <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50 transition-all duration-300">
+        <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 py-4">
+          <Logo variant={mounted && theme === "light" ? "black" : "purple"} />
+          <p className="text-xl font-semibold hidden sm:block">
+            <span className="text-sm font-normal text-muted-foreground mr-2">
+              {SIGN_UP_TEXTS.header.for}
+            </span>
+            {SIGN_UP_TEXTS.header.providers}
+          </p>
+        </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col justify-center px-6 lg:px-0 overflow-auto">
+      <div className="flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {renderStepContent()}
       </div>
 
-      {/* Bottom Navigation - Hidden on Profile Step */}
+      {/* Bottom Navigation - Hidden on Profile Step (Profile has its own nav) */}
       {currentStep !== "profile" && (
-        <div className="flex flex-col sm:flex-row border-t border-gray-500 px-4 sm:px-6 lg:px-6 py-4 items-center justify-between space-y-4 sm:space-y-0 mt-auto">
-          <Button
-            onClick={handleBack}
-            className="rounded-full mr-2 px-8 py-1 border-4 bg-white text-[#955aa4] text-lg font-bold border-[#955aa4] uppercase flex items-center justify-center hover:bg-white"
-          >
-            {SIGN_UP_TEXTS.navigation.back}
-          </Button>
-
-          <div className="flex-1 flex justify-center">
-            <Stepper steps={signUpSteps} step={getCurrentStepLabel()} />
-          </div>
-
-          {currentStep === "create" ? (
-            <button
-              form="create-account-form"
-              type="submit"
-              disabled={!agreedToTerms || !isFormValid}
-              className="rounded-full ml-2 px-8 py-1 border-4 text-lg font-bold uppercase transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed bg-[#955aa4]/80 text-white border-[#955aa4] hover:bg-[#955aa4] disabled:hover:bg-[#955aa4]/80"
+        <div className="sticky bottom-0 z-50 bg-background/80 backdrop-blur-md border-t border-border flex flex-col sm:flex-row px-6 py-4 items-center justify-between gap-4 mt-auto transition-all duration-300">
+          <div className="flex w-full max-w-7xl mx-auto items-center justify-between gap-4 flex-col sm:flex-row">
+            <Button
+              variant="ghost"
+              onClick={handleBack}
+              className="rounded-full px-6 py-2 text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1"
             >
-              {SIGN_UP_TEXTS.navigation.next}
-            </button>
-          ) : (
-            <Button className="invisible rounded-full px-6 py-2 border-2">
-              {SIGN_UP_TEXTS.navigation.next}
+              <span className="group-hover:-translate-x-1 transition-transform">
+                ←
+              </span>{" "}
+              {SIGN_UP_TEXTS.navigation.back}
             </Button>
-          )}
+
+            <div className="flex-1 flex justify-center order-1 sm:order-2 w-full sm:w-auto">
+              <Stepper steps={signUpSteps} step={getCurrentStepLabel()} />
+            </div>
+
+            <div className="order-3 w-full sm:w-auto flex justify-end">
+              {currentStep === "create" ? (
+                <Button
+                  form="create-account-form"
+                  type="submit"
+                  disabled={!agreedToTerms || !isFormValid}
+                  className="rounded-full px-8 shadow-lg hover:shadow-xl transition-all"
+                >
+                  {SIGN_UP_TEXTS.navigation.next}{" "}
+                  <span className="ml-2">→</span>
+                </Button>
+              ) : (
+                <div className="w-25 hidden sm:block"></div> /* Spacer to balance flex layout */
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -124,7 +142,13 @@ const SignUpContent = (props: ProviderSignUpProps) => {
 
 const ProviderSignUp = (props: ProviderSignUpProps) => {
   return (
-    <Suspense fallback={<div>{SIGN_UP_TEXTS.loading}</div>}>
+    <Suspense
+      fallback={
+        <div className="h-screen w-full flex items-center justify-center bg-background">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      }
+    >
       <SignUpContent {...props} />
     </Suspense>
   );

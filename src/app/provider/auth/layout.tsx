@@ -1,22 +1,21 @@
+import Image from "next/image";
 import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="flex flex-col lg:flex-row w-full h-screen">
-      <section className="relative h-full bg-green-400 bg-[url(/auth/lawyer.jpg)] hidden lg:block bg-no-repeat bg-cover text-white px-10 pb-10 w-1/2">
-        <div className="h-full flex flex-col items-center justify-between">
-          <h1 className="text-4xl font-bold mt-10">Behind The Science</h1>
-          <h2 className="text-2xl text-center font-medium">
-            &quot;I wish I could hit pause on my life, just
-            <br /> for now, and return when the world feels right again.😔&quot;
-          </h2>
-        </div>
-        <div className="absolute top-[30%] p-2 right-10 rounded-lg bg-gray-600/50">
-          <h3 className="text-xl font-bold">Amanda Gorman</h3>
-          <p className="text-xl font-medium">Law Student</p>
-        </div>
+    <main className="flex flex-col lg:flex-row w-full h-screen overflow-hidden">
+      <section className="h-full overflow-hidden hidden lg:block w-1/2 relative">
+        <div className="absolute inset-0 bg-primary/10 z-10" />
+        <Image
+          src="/auth/mental-health-2.png"
+          alt="mental-health"
+          width={1080}
+          height={1080}
+          quality={100}
+          className="w-full h-full object-cover"
+        />
       </section>
-      <section className="h-full w-full lg:w-1/2 overflow-y-auto">
+      <section className="h-full w-full lg:w-1/2 overflow-y-auto bg-background">
         {children}
       </section>
     </main>

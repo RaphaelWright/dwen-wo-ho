@@ -15,7 +15,7 @@ export function VerifyOTPSection({
       <h1 className="text-xl lg:text-3xl md:text-3xl text-center font-extrabold">
         {SIGNUP_VERIFY_TEXTS.otpSection.title}
       </h1>
-      <h2 className="text-2xl text-gray-500 font-medium text-center">
+      <h2 className="text-2xl text-muted-foreground font-medium text-center">
         {SIGNUP_VERIFY_TEXTS.otpSection.subtitlePart1}
         <br /> {SIGNUP_VERIFY_TEXTS.otpSection.subtitlePart2} {email}
       </h2>
@@ -32,7 +32,7 @@ export function VerifyOTPSection({
           <Button
             disabled={seconds > 0}
             onClick={onResend}
-            className="rounded-md mt-4 disabled:bg-gray-300"
+            className="rounded-md mt-4 disabled:bg-muted disabled:text-muted-foreground"
           >
             {SIGNUP_VERIFY_TEXTS.otpSection.resendButton}
           </Button>

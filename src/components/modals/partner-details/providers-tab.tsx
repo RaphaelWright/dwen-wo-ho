@@ -24,8 +24,8 @@ export const ProvidersTab = ({
           Associated Providers
         </h4>
         {isLoadingProviders ? (
-          <div className="text-center py-8 text-gray-500">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-2"></div>
+          <div className="text-center py-8 text-muted-foreground">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
             <p>Loading providers...</p>
           </div>
         ) : associatedProviders.length === 0 ? (
@@ -39,7 +39,7 @@ export const ProvidersTab = ({
               <Button
                 key={provider.email}
                 onClick={() => handleProviderClick(provider)}
-                className="w-full flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors text-left"
+                className="w-full flex items-center justify-between p-4 bg-background border border-border rounded-lg hover:border-primary/30 transition-colors text-left"
               >
                 <div className="flex items-center gap-3">
                   {provider.profilePhotoURL ? (
@@ -76,7 +76,7 @@ export const ProvidersTab = ({
                     e.stopPropagation();
                     setProviderToRemove(provider);
                   }}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-red-400 text-red-500 hover:bg-red-50 transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-destructive/50 text-destructive hover:bg-destructive/10 transition-colors"
                   aria-label="Remove provider"
                 >
                   <FiMinus className="w-4 h-4" />
@@ -101,7 +101,7 @@ export const ProvidersTab = ({
             placeholder="Search providers..."
             value={providerSearchQuery}
             onChange={(e) => setProviderSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+            className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder-muted-foreground"
           />
         </div>
 
@@ -116,7 +116,7 @@ export const ProvidersTab = ({
             {filteredAvailableProviders.map((provider: AssociatedProvider) => (
               <div
                 key={provider.email}
-                className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors"
+                className="flex items-center justify-between p-4 bg-background border border-border rounded-lg hover:border-primary/30 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {provider.profilePhotoURL ? (
@@ -150,7 +150,7 @@ export const ProvidersTab = ({
                 </div>
                 <Button
                   onClick={() => setProviderToAdd(provider)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-green-400 text-green-500 hover:bg-green-50 transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-success/50 text-success hover:bg-success/10 transition-colors"
                   aria-label="Add provider"
                 >
                   <FiPlus className="w-4 h-4" />

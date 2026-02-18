@@ -26,8 +26,8 @@ export const ProviderTabs = ({
               variant="ghost"
               className={`flex items-center gap-2 px-4 py-3 font-semibold text-sm transition-all duration-200 border-b-2 rounded-none h-auto bg-transparent hover:bg-transparent ${
                 activeTab === tab.id
-                  ? "border-[#955aa4] text-[#955aa4]"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -36,8 +36,8 @@ export const ProviderTabs = ({
                 <span
                   className={`px-2 py-0.5 rounded-full text-xs ${
                     activeTab === tab.id
-                      ? "bg-[#955aa4]/10 text-[#955aa4]"
-                      : "bg-gray-100 text-gray-600"
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {count}

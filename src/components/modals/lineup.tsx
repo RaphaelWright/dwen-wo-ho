@@ -26,7 +26,7 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-white rounded-2xl border-2 border-[#955aa4] max-w-5xl w-full p-8 max-h-[80vh] overflow-y-auto">
+            <div className="bg-background rounded-2xl border-2 border-primary max-w-5xl w-full p-8 max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <Logo />
                 <button
@@ -50,8 +50,8 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                     onClick={() => setActiveTab("lineup")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
                       activeTab === "lineup"
-                        ? "bg-[#955aa4] text-white"
-                        : "bg-gray-100 text-gray-900"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     Lineup . {lineup.length}
@@ -60,8 +60,8 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                     onClick={() => setActiveTab("others")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
                       activeTab === "others"
-                        ? "bg-[#955aa4] text-white"
-                        : "bg-gray-100 text-gray-900"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     Others

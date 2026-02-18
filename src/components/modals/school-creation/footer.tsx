@@ -27,7 +27,7 @@ export const SchoolFooter = ({
             type="button"
             onClick={handleNext}
             disabled={!isFormValid}
-            className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next: Review
           </Button>
@@ -56,11 +56,11 @@ export const SchoolFooter = ({
               type="button"
               onClick={handleConfirm}
               disabled={isPending}
-              className="px-8 bg-[#955aa4] hover:bg-[#8a4d99] text-white font-semibold shadow-lg shadow-[#955aa4]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isPending ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                   Creating...
                 </>
               ) : (

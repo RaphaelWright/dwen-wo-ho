@@ -4,6 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/lib/types/school";
 
+export interface SchoolFormData {
+  name: string;
+  nickname: string;
+  motto: string;
+  campuses: string[];
+  type: string;
+}
+
 export const useSchoolEdit = ({
   school,
   onClose,
@@ -17,13 +25,7 @@ export const useSchoolEdit = ({
 }) => {
   const [showCampusDropdown, setShowCampusDropdown] = useState(false);
   const [selectedCampuses, setSelectedCampuses] = useState<string[]>([]);
-  const [formData, setFormData] = useState<{
-    name: string;
-    nickname: string;
-    motto: string;
-    campuses: string[];
-    type: string;
-  }>({
+  const [formData, setFormData] = useState<SchoolFormData>({
     name: "",
     nickname: "",
     motto: "",

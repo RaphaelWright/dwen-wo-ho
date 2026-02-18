@@ -27,6 +27,10 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { NotificationSheet } from "@/components/ui/notification-sheet";
 import { useNotification } from "@/components/app-providers/notification-provider";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
+import { Logo } from "@/components/shared/Logo";
 
 interface SidebarProps {
   schoolCount: number;
@@ -58,6 +62,18 @@ export const CuratorSidebar = ({
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const pathname = usePathname();
+  const {
+    notifications,
+    clearNotifications,
+    dismissNotification,
+    unreadCount,
+  } = useNotification();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (path: string) => pathname.startsWith(path);
 
@@ -114,8 +130,8 @@ export const CuratorSidebar = ({
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
           active
-            ? "bg-[#955aa4]/10 text-[#955aa4]"
-            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+            ? "bg-primary/10 text-primary"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
           collapsed && "justify-center px-0 w-10 h-10 mx-auto",
         )}
       >
@@ -123,8 +139,8 @@ export const CuratorSidebar = ({
           className={cn(
             "transition-colors duration-200",
             active
-              ? "text-[#955aa4]"
-              : "text-gray-500 group-hover:text-gray-700",
+              ? "text-primary"
+              : "text-muted-foreground group-hover:text-foreground",
           )}
         >
           {item.icon}
@@ -152,8 +168,8 @@ export const CuratorSidebar = ({
             className={cn(
               "ml-auto text-xs font-semibold px-2 py-0.5 rounded-full min-w-6 text-center",
               active
-                ? "bg-[#955aa4]/20 text-[#955aa4]"
-                : "bg-gray-200/80 text-gray-600",
+                ? "bg-primary/20 text-primary"
+                : "bg-muted/80 text-muted-foreground",
             )}
           >
             {item.count}
@@ -164,7 +180,7 @@ export const CuratorSidebar = ({
         {active && (
           <motion.div
             layoutId="activeIndicator"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-[#955aa4] rounded-r-full"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-primary rounded-r-full"
             style={{ left: collapsed ? "-10px" : "-12px" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
@@ -219,19 +235,18 @@ export const CuratorSidebar = ({
       {/* Logo area */}
       <div
         className={cn(
-          "flex items-center border-b border-gray-100 transition-all duration-300",
-          collapsed ? "px-2 py-4 justify-center" : "px-5 py-5",
+          "flex items-center justify-between border-b border-border transition-all duration-300",
+          collapsed ? "px-2 py-4 justify-center" : "px-4 py-4",
         )}
       >
-        <AnimatePresence mode="wait">
+        <div
+          className={cn(
+            "flex items-center",
+            collapsed ? "justify-center" : "justify-start",
+          )}
+        >
           {collapsed ? (
-            <motion.div
-              key="collapsed-logo"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
-            >
+            <Link href="/">
               <Image
                 priority
                 src="/logos/logo-purple-small.png"
@@ -240,26 +255,16 @@ export const CuratorSidebar = ({
                 width={32}
                 height={32}
               />
-            </motion.div>
+            </Link>
           ) : (
-            <motion.div
-              key="expanded-logo"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-            >
-              <Image
-                priority
-                src="/logos/logo-black.png"
-                alt="JustGo Health"
-                className="bg-contain w-auto h-auto"
-                width={160}
-                height={36}
-              />
-            </motion.div>
+            <Logo
+              variant={mounted && theme === "light" ? "black" : "purple"}
+              className="w-32"
+            />
           )}
-        </AnimatePresence>
+        </div>
+
+        {!collapsed && <ThemeToggle className="rounded-md h-8 w-8" />}
       </div>
 
       {/* Navigation section label */}
@@ -268,7 +273,7 @@ export const CuratorSidebar = ({
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400"
+            className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60"
           >
             Navigation
           </motion.p>
@@ -286,13 +291,66 @@ export const CuratorSidebar = ({
       </div>
 
       {/* Bottom section: collapse toggle + logout */}
-      <div className="border-t border-gray-100 p-2 space-y-1">
-        {/* Notification Button - Desktop */}
+      <div className="border-t border-border p-2 space-y-1">
+        {/* Notification Menu Item */}
+        <div className="pt-2 mt-2">
+          <NotificationSheet
+            notifications={notifications}
+            onClear={clearNotifications}
+            onDismiss={dismissNotification}
+            trigger={
+              <button
+                className={cn(
+                  "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
+                  collapsed
+                    ? "justify-center px-0 w-10 h-10 mx-auto text-muted-foreground hover:bg-muted"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                  <FiBell className="text-lg shrink-0" />
+                </span>
+
+                <AnimatePresence mode="wait">
+                  {!collapsed && (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="whitespace-nowrap overflow-hidden"
+                    >
+                      Notifications
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+
+                {/* Unread Badge */}
+                {!collapsed && unreadCount > 0 && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-destructive text-destructive-foreground px-1.5"
+                  >
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </motion.span>
+                )}
+
+                {/* Collapsed Badge */}
+                {collapsed && unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-destructive border-2 border-white" />
+                )}
+              </button>
+            }
+          />
+        </div>
+
         {/* Collapse toggle — desktop only */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "hidden md:flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-all duration-200",
+            "hidden md:flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200",
             collapsed && "justify-center px-0 w-10 h-10 mx-auto",
           )}
         >
@@ -306,47 +364,13 @@ export const CuratorSidebar = ({
           )}
         </button>
 
-        {/* Notification Button - Desktop */}
-        <NotificationSheet
-          notifications={notifications}
-          onClear={clearNotifications}
-          onDismiss={dismissNotification}
-          trigger={
-            <button
-              className={cn(
-                "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-[#955aa4]/10 hover:text-[#955aa4] transition-all duration-200 group",
-                collapsed && "justify-center px-0 w-10 h-10 mx-auto",
-              )}
-            >
-              <FiBell className="text-lg shrink-0 group-hover:text-[#955aa4] transition-colors" />
-              {!collapsed && (
-                <span className="group-hover:text-[#955aa4] transition-colors">
-                  Notifications
-                </span>
-              )}
-              {unreadCount > 0 && (
-                <span
-                  className={cn(
-                    "flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-[#e92229] text-white",
-                    collapsed
-                      ? "absolute top-1 right-1 w-4 h-4"
-                      : "ml-auto px-1.5",
-                  )}
-                >
-                  {unreadCount > 99 ? "99+" : unreadCount}
-                </span>
-              )}
-            </button>
-          }
-        />
-
         {/* Logout button */}
         {collapsed ? (
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <button
                 onClick={handleLogoutClick}
-                className="flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                className="flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
               >
                 <FiLogOut className="text-lg shrink-0" />
               </button>
@@ -359,7 +383,7 @@ export const CuratorSidebar = ({
           <Button
             onClick={handleLogoutClick}
             variant="ghost"
-            className="w-full justify-start gap-3 px-3 py-2.5 h-auto text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+            className="w-full justify-start gap-3 px-3 py-2.5 h-auto text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
           >
             <FiLogOut className="text-lg shrink-0" />
             <span>Logout</span>
@@ -369,30 +393,20 @@ export const CuratorSidebar = ({
     </div>
   );
 
-  const {
-    notifications,
-    clearNotifications,
-    dismissNotification,
-    unreadCount,
-  } = useNotification();
-
   return (
     <TooltipProvider>
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-lg border-b border-gray-200/60 flex items-center justify-between px-4 z-50">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-background/80 backdrop-blur-lg border-b border-border/60 flex items-center justify-between px-4 z-50">
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          className="text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="text-foreground p-2 hover:bg-accent rounded-lg transition-colors"
         >
           {isMobileSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
-        <Image
-          priority
-          src="/logos/logo-black.png"
-          alt="JustGo Health"
+        <Logo
+          variant={mounted && theme === "light" ? "black" : "purple"}
           className="h-7 w-auto"
-          width={120}
-          height={28}
+          withLink={false}
         />
         <div className="w-9">
           <NotificationSheet
@@ -424,7 +438,7 @@ export const CuratorSidebar = ({
           width: isCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
         }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="hidden md:flex flex-col h-screen bg-white border-r border-gray-200/60 shrink-0 overflow-hidden relative"
+        className="hidden md:flex flex-col h-screen bg-card border-r border-border/60 shrink-0 overflow-hidden relative"
       >
         <SidebarContent collapsed={isCollapsed} />
 
@@ -463,7 +477,7 @@ export const CuratorSidebar = ({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="md:hidden fixed top-14 left-0 bottom-0 w-72 bg-white border-r border-gray-200/60 shadow-2xl z-40 overflow-hidden"
+            className="md:hidden fixed top-14 left-0 bottom-0 w-72 bg-card border-r border-border/60 shadow-2xl z-40 overflow-hidden"
           >
             <SidebarContent collapsed={false} />
           </motion.aside>

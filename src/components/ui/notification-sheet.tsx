@@ -19,12 +19,14 @@ import {
 } from "@/components/ui/drawer";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useNotification } from "@/components/app-providers/notification-provider";
 
 export interface Notification {
   id: string;
   type: "success" | "error" | "info";
   message: string;
   timestamp: Date;
+  read: boolean;
 }
 
 interface NotificationSheetProps {
@@ -77,7 +79,8 @@ export const NotificationSheet = ({
   onDismiss,
   trigger,
 }: NotificationSheetProps) => {
-  const unreadCount = notifications.length;
+  const { markAsRead, markAllAsRead } = useNotification();
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <Drawer direction="right">
@@ -86,10 +89,10 @@ export const NotificationSheet = ({
           trigger
         ) : (
           <Button
-            className="relative p-2.5 rounded-md bg-transparent border-0 shadow-none hover:bg-purple-300 transition-all duration-200 group"
+            className="relative p-2.5 rounded-md bg-transparent border-0 shadow-none hover:bg-primary/20 transition-all duration-200 group"
             aria-label="Notifications"
           >
-            <FiBell className="w-5 h-5 transition-transform duration-200 group-hover:scale-110 text-[#955aa4]" />
+            <FiBell className="w-5 h-5 transition-transform duration-200 group-hover:scale-110 text-primary" />
 
             {/* Badge */}
             <AnimatePresence>
@@ -99,48 +102,56 @@ export const NotificationSheet = ({
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                  className="absolute -top-0.5 -right-0.5 min-w-5 h-5 flex items-center justify-center px-1 rounded-full bg-[#e92229] text-white text-[10px] font-bold shadow-md"
+                  className="absolute -top-0.5 -right-0.5 min-w-5 h-5 flex items-center justify-center px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold shadow-md"
                 >
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </motion.span>
               )}
             </AnimatePresence>
 
-            {/* Pulse animation when there are notifications */}
+            {/* Pulse animation when there are unread notifications */}
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 rounded-full bg-[#e92229]/40 animate-ping" />
+              <span className="absolute -top-0.5 -right-0.5 min-w-5 h-5 rounded-full bg-destructive/40 animate-ping" />
             )}
           </Button>
         )}
       </DrawerTrigger>
 
-      <DrawerContent className="h-full rounded-none">
+      <DrawerContent className="h-full rounded-none w-full max-w-sm">
         {/* Header */}
-        <DrawerHeader className="border-b border-gray-100 px-5 py-4">
+        <DrawerHeader className="border-b border-border px-5 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <DrawerTitle className="text-lg font-bold text-gray-900">
+              <DrawerTitle className="text-lg font-bold text-foreground">
                 Notifications
               </DrawerTitle>
               {unreadCount > 0 && (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#955aa4]/10 text-[#955aa4] text-xs font-semibold">
-                  {unreadCount}
+                <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                  {unreadCount} new
                 </span>
               )}
             </div>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
                 <button
-                  onClick={onClear}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                  onClick={markAllAsRead}
+                  className="text-xs font-medium text-primary hover:underline transition-all duration-200"
                 >
-                  <FiTrash2 className="w-3.5 h-3.5" />
-                  Clear all
+                  Mark all read
+                </button>
+              )}
+              {notifications.length > 0 && (
+                <button
+                  onClick={onClear}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
+                  title="Clear all"
+                >
+                  <FiTrash2 className="w-4 h-4" />
                 </button>
               )}
               <DrawerClose asChild>
-                <button className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all duration-200">
-                  <FiX className="w-4 h-4" />
+                <button className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200">
+                  <FiX className="w-5 h-5" />
                 </button>
               </DrawerClose>
             </div>
@@ -148,22 +159,22 @@ export const NotificationSheet = ({
         </DrawerHeader>
 
         {/* Notification list */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-muted/5">
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full py-20 px-6">
-              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <FiBell className="w-7 h-7 text-gray-300" />
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <FiBell className="w-7 h-7 text-muted-foreground/50" />
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              <h3 className="text-sm font-semibold text-foreground mb-1">
                 No notifications yet
               </h3>
-              <p className="text-xs text-gray-500 text-center max-w-50">
+              <p className="text-xs text-muted-foreground text-center max-w-50">
                 You&apos;ll see updates about new patients, schools, and system
                 events here.
               </p>
             </div>
           ) : (
-            <div className="py-2">
+            <div className="py-2 space-y-1">
               <AnimatePresence initial={false}>
                 {notifications.map((notification) => {
                   const config = typeConfig[notification.type];
@@ -180,38 +191,91 @@ export const NotificationSheet = ({
                     >
                       <div
                         className={cn(
-                          "flex items-start gap-3 px-4 py-3.5 mx-0 my-1 rounded-xl border transition-all duration-200 hover:shadow-sm",
-                          config.bg,
-                          config.border,
+                          "relative flex items-start gap-3 px-4 py-4 mx-0 rounded-xl transition-all duration-200 group hover:shadow-sm border",
+                          notification.read
+                            ? "bg-card border-transparent opacity-70 hover:opacity-100" // Read style
+                            : cn(
+                                "bg-card border shadow-sm",
+                                config.border,
+                                "border-l-4",
+                              ), // Unread style
                         )}
+                        onClick={() =>
+                          !notification.read && markAsRead(notification.id)
+                        }
                       >
                         {/* Icon */}
                         <div
                           className={cn(
                             "shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5",
-                            config.bg,
+                            notification.read
+                              ? "bg-muted text-muted-foreground"
+                              : config.bg,
                           )}
                         >
-                          <Icon className={cn("w-4 h-4", config.color)} />
+                          <Icon
+                            className={cn(
+                              "w-4 h-4",
+                              notification.read
+                                ? "text-muted-foreground"
+                                : config.color,
+                            )}
+                          />
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-800 font-medium leading-snug">
-                            {notification.message}
-                          </p>
-                          <p className="text-xs text-gray-400 mt-1">
+                        <div className="flex-1 min-w-0 cursor-pointer">
+                          <div className="flex justify-between items-start mb-1">
+                            <p
+                              className={cn(
+                                "text-sm font-medium leading-snug",
+                                notification.read
+                                  ? "text-muted-foreground"
+                                  : "text-foreground",
+                              )}
+                            >
+                              {notification.message}
+                            </p>
+                            {!notification.read && (
+                              <span
+                                className={cn(
+                                  "shrink-0 w-2 h-2 rounded-full",
+                                  config.dot,
+                                )}
+                              />
+                            )}
+                          </div>
+
+                          <p className="text-xs text-muted-foreground">
                             {formatRelativeTime(notification.timestamp)}
                           </p>
                         </div>
 
-                        {/* Dismiss */}
-                        <button
-                          onClick={() => onDismiss(notification.id)}
-                          className="shrink-0 p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-white/50 transition-all duration-200"
-                        >
-                          <FiX className="w-3.5 h-3.5" />
-                        </button>
+                        {/* Actions */}
+                        <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {!notification.read && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                markAsRead(notification.id);
+                              }}
+                              className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                              title="Mark as read"
+                            >
+                              <FiCheck className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDismiss(notification.id);
+                            }}
+                            className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                            title="Delete"
+                          >
+                            <FiX className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   );

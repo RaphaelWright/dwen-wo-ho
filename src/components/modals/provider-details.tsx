@@ -77,11 +77,11 @@ const ProviderDetailsModal = ({
   return (
     <>
       <div
-        className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4"
         onClick={onClose}
       >
         <div
-          className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+          className="relative bg-card text-foreground rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border"
           onClick={(e) => e.stopPropagation()}
         >
           {provider && applicationStatusConfig && (
@@ -102,8 +102,8 @@ const ProviderDetailsModal = ({
           <div className="flex-1 overflow-y-auto px-6 pb-6">
             {showLoading ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mb-4"></div>
-                <p className="text-gray-500 font-medium">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                <p className="text-muted-foreground font-medium">
                   Loading provider details...
                 </p>
               </div>

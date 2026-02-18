@@ -58,91 +58,58 @@ const SignUpProfile = (props: SignUpProfileProps) => {
     }
   };
 
+  const steps = [
+    { label: SIGN_UP_TEXTS.profile.steps.photo, index: 0 },
+    { label: SIGN_UP_TEXTS.profile.steps.bio, index: 1 },
+    { label: SIGN_UP_TEXTS.profile.steps.specialty, index: 2 },
+  ];
+
   return (
     <>
-      {/* Photo step has its own complete layout, render with flex wrapper to push nav to bottom */}
-      {currentStep === 0 ? (
-        <div className="h-full flex flex-col">
-          <div className="flex-1 flex flex-col justify-center">
-            {renderStepContent()}
-          </div>
+      <div className="h-full flex flex-col justify-between min-h-[80vh] animate-in fade-in zoom-in-95 duration-500">
+        <div className="flex-1 flex flex-col justify-center w-full max-w-4xl mx-auto px-4 md:px-8">
+          {renderStepContent()}
         </div>
-      ) : (
-        <div className="h-full flex flex-col pb-10">
-          {/* Main Content */}
-          <div className="flex-1  flex flex-col justify-center">
-            <div className="w-full max-w-4xl mx-auto">
-              {renderStepContent()}
-            </div>
-          </div>
 
-          {/* Bottom Navigation */}
-          <div className="flex flex-col sm:flex-row border-t border-gray-500 px-4 sm:px-6 lg:px-6 py-4 items-center justify-between space-y-4 sm:space-y-0 mt-8 fixed bottom-0 right-0 w-full lg:w-1/2 bg-white">
+        {currentStep !== 0 && (
+          <div className="border-t border-border bg-background/95 backdrop-blur-sm px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sticky bottom-0 z-10">
             <Button
+              variant="ghost"
               onClick={handleBack}
-              className="rounded-full mr-2 px-8 py-1 border-4 bg-white text-[#955aa4] text-lg font-bold border-[#955aa4] uppercase flex items-center justify-center hover:bg-white"
+              className="text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1"
             >
+              <span className="group-hover:-translate-x-1 transition-transform">
+                ←
+              </span>{" "}
               {SIGN_UP_TEXTS.navigation.back}
             </Button>
 
-            <div className="flex-1 flex justify-center">
-              <div className="flex items-center gap-4 text-sm">
-                {/* Photo Step */}
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      currentStep >= 0 ? "bg-black" : "border-2 border-gray-400"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      currentStep >= 0
-                        ? "font-semibold text-black"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {SIGN_UP_TEXTS.profile.steps.photo}
-                  </span>
+            <div className="flex items-center gap-2 sm:gap-4 order-1 sm:order-2">
+              {steps.map((step, i) => (
+                <div key={step.index} className="flex items-center">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
+                        currentStep >= step.index
+                          ? "bg-primary"
+                          : "bg-muted-foreground/30"
+                      }`}
+                    />
+                    <span
+                      className={`text-sm font-medium transition-colors duration-300 ${
+                        currentStep >= step.index
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {step.label}
+                    </span>
+                  </div>
+                  {i < steps.length - 1 && (
+                    <div className="w-8 h-px bg-border mx-2 sm:mx-4" />
+                  )}
                 </div>
-                <span className="text-gray-400">—</span>
-
-                {/* Bio Step */}
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      currentStep >= 1 ? "bg-black" : "border-2 border-gray-400"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      currentStep >= 1
-                        ? "font-semibold text-black"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {SIGN_UP_TEXTS.profile.steps.bio}
-                  </span>
-                </div>
-                <span className="text-gray-400">—</span>
-
-                {/* Specialty Step */}
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      currentStep >= 2 ? "bg-black" : "border-2 border-gray-400"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      currentStep >= 2
-                        ? "font-semibold text-black"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {SIGN_UP_TEXTS.profile.steps.specialty}
-                  </span>
-                </div>
-              </div>
+              ))}
             </div>
 
             <Button
@@ -150,7 +117,7 @@ const SignUpProfile = (props: SignUpProfileProps) => {
               disabled={
                 isSubmitting || (currentStep === 2 && !profileData.specialty)
               }
-              className="rounded-full ml-2 px-8 py-1 border-4 text-lg font-bold uppercase transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed bg-[#955aa4]/80 text-white border-[#955aa4] hover:bg-[#955aa4] disabled:hover:bg-[#955aa4]/80"
+              className="rounded-full px-8 order-3 shadow-lg hover:shadow-xl transition-all"
             >
               {isSubmitting ? (
                 <>
@@ -160,14 +127,18 @@ const SignUpProfile = (props: SignUpProfileProps) => {
               ) : currentStep === 2 ? (
                 SIGN_UP_TEXTS.profile.submit
               ) : (
-                SIGN_UP_TEXTS.navigation.next
+                <span className="flex items-center gap-2">
+                  {SIGN_UP_TEXTS.navigation.next}{" "}
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    →
+                  </span>
+                </span>
               )}
             </Button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Pending Verification Modal */}
       <PendingVerificationModal
         isOpen={showPendingModal}
         isLoading={getProfileQuery.isLoading}

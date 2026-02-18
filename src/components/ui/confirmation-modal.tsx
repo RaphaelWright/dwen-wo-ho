@@ -23,12 +23,12 @@ export const ConfirmationModal = ({
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 max-w-sm w-full shadow-xl">
-        <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-gray-800">
+    <div className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4">
+      <div className="bg-card text-foreground rounded-xl border border-border p-4 sm:p-6 max-w-sm w-full shadow-xl">
+        <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-foreground">
           {title}
         </h2>
-        <p className="text-center text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+        <p className="text-center text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
           {message}
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -49,7 +49,7 @@ export const ConfirmationModal = ({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 py-2.5 sm:py-2 text-center font-medium bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-2.5 sm:py-2 text-center font-medium bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {cancelText}
           </button>

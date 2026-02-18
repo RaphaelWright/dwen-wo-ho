@@ -9,7 +9,7 @@ export function VerifyFooter({ onBack }: VerifyFooterProps) {
     <div className="flex border-t border-gray-500 px-10 pt-5 items-center justify-between">
       <Button
         onClick={onBack}
-        className="rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase"
+        className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted transition-colors"
       >
         {SIGNUP_VERIFY_TEXTS.footer.back}
       </Button>
@@ -17,7 +17,7 @@ export function VerifyFooter({ onBack }: VerifyFooterProps) {
         steps={signUpSteps}
         step={SIGNUP_VERIFY_TEXTS.footer.step as any}
       />
-      <Button className="invisible rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase">
+      <Button className="invisible rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase">
         {SIGNUP_VERIFY_TEXTS.footer.next}
       </Button>
     </div>

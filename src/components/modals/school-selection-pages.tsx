@@ -58,7 +58,7 @@ export default function SchoolSelectionModal({
               placeholder="Search schools"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-12 py-3 bg-gray-100 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+              className="w-full pl-4 pr-12 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder-muted-foreground"
             />
           </div>
         </div>
@@ -72,8 +72,8 @@ export default function SchoolSelectionModal({
                 onClick={() => setActiveFilter(filter.value)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                   activeFilter === filter.value
-                    ? "bg-[#955aa4] text-white shadow-md shadow-[#955aa4]/20"
-                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                    : "bg-background text-muted-foreground hover:bg-muted border border-border"
                 }`}
               >
                 {filter.label}
@@ -87,8 +87,8 @@ export default function SchoolSelectionModal({
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
-                <p className="text-gray-500">Loading schools...</p>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading schools...</p>
               </div>
             </div>
           ) : filteredSchools.length === 0 ? (
@@ -108,10 +108,12 @@ export default function SchoolSelectionModal({
               {/* Platform/Default Option */}
               <Button
                 onClick={handleSelectPlatform}
-                className="flex items-center gap-4 p-4 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all text-left h-20 w-full"
+                className="flex items-center gap-4 p-4 bg-muted rounded-xl hover:bg-muted/80 transition-all text-left h-20 w-full"
               >
-                <div className="w-12 h-12 rounded-full bg-[#955aa4] flex items-center justify-center shrink-0">
-                  <span className="text-white font-bold text-lg">+</span>
+                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0">
+                  <span className="text-primary-foreground font-bold text-lg">
+                    +
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900">

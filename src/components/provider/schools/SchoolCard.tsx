@@ -36,8 +36,8 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
           />
         </div>
       ) : (
-        <div className="absolute inset-0 bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-          <MdSchool className="w-20 h-20 text-gray-400" />
+        <div className="absolute inset-0 bg-linear-to-br from-muted to-muted/50 flex items-center justify-center">
+          <MdSchool className="w-20 h-20 text-muted-foreground" />
         </div>
       )}
 
@@ -55,16 +55,16 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
       {school.newPatientName && !school.isLoading && (
         <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-60">
           <span className="text-base font-semibold block truncate">
-            <span className="text-[#e92229]">New Patient.</span>{" "}
-            <span className="text-black">{school.newPatientName}</span>
+            <span className="text-destructive">New Patient.</span>{" "}
+            <span className="text-foreground">{school.newPatientName}</span>
           </span>
         </div>
       )}
 
       {/* Top Right - Student Count Badge */}
       {!school.isLoading && (
-        <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-[#e92229] backdrop-blur-sm flex items-center justify-center shadow-lg">
-          <span className="text-white font-bold text-sm">
+        <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-destructive backdrop-blur-sm flex items-center justify-center shadow-lg">
+          <span className="text-destructive-foreground font-bold text-sm">
             {school.studentCount ?? 0}
           </span>
         </div>

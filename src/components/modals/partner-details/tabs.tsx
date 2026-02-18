@@ -15,8 +15,8 @@ export const PartnerTabs = ({
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-6 py-4 text-sm font-semibold border-b-2 transition-colors rounded-none ${
               activeTab === tab.id
-                ? "border-[#955aa4] text-[#955aa4]"
-                : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300"
             }`}
           >
             <tab.icon className="w-5 h-5" />

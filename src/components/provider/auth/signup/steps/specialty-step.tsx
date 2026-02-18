@@ -12,23 +12,26 @@ const SpecialtyStep = (props: SpecialtyStepProps) => {
   const { selectedSpecialty, handleSpecialtySelect } = useSpecialtyStep(props);
 
   return (
-    <div className="space-y-8 px-11">
-      <h1 className="text-5xl font-extrabold text-center ">
-        {SIGN_UP_TEXTS.specialtyStep.title}
-      </h1>
-      <p className="text-xl font-medium text-gray-500 text-center -mt-5">
-        {SIGN_UP_TEXTS.specialtyStep.subtitle}
-      </p>
+    <div className="space-y-8 px-4 md:px-11 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="space-y-2 text-center">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+          {SIGN_UP_TEXTS.specialtyStep.title}
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          {SIGN_UP_TEXTS.specialtyStep.subtitle}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-2 gap-3.5 max-w-2xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
         {PROVIDER_SPECIALTIES.map((specialty) => (
           <Button
             key={specialty}
             onClick={() => handleSpecialtySelect(specialty)}
-            className={`p-4 rounded-full text-center font-bold text-lg transition-all duration-200 ${
+            variant={selectedSpecialty === specialty ? "default" : "outline"}
+            className={`h-auto py-4 px-6 rounded-xl text-lg font-medium transition-all duration-200 ${
               selectedSpecialty === specialty
-                ? "bg-gray-500 text-white shadow-md active:scale-95"
-                : "bg-gray-400 text-gray-300 hover:bg-gray-400/90 active:scale-95"
+                ? "shadow-md scale-[1.02] ring-2 ring-primary ring-offset-2"
+                : "hover:bg-muted/50 hover:border-primary/50 text-muted-foreground hover:text-foreground"
             }`}
           >
             {specialty}

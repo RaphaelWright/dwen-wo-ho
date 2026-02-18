@@ -29,7 +29,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
           <div className="relative w-16 h-16">
             {/* Outer circle */}
             <motion.div
-              className="absolute inset-0 border-4 border-[#955aa4] border-t-transparent rounded-full"
+              className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full"
               animate={{ rotate: 360 }}
               transition={{
                 duration: 1.5,
@@ -39,7 +39,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
             />
             {/* Middle circle */}
             <motion.div
-              className="absolute inset-2 border-3 border-[#955aa4] border-t-transparent rounded-full"
+              className="absolute inset-2 border-3 border-primary border-t-transparent rounded-full"
               animate={{ rotate: -360 }}
               transition={{
                 duration: 1.2,
@@ -49,7 +49,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
             />
             {/* Inner circle */}
             <motion.div
-              className="absolute inset-4 border-2 border-[#955aa4] border-t-transparent rounded-full"
+              className="absolute inset-4 border-2 border-primary border-t-transparent rounded-full"
               animate={{ rotate: 360 }}
               transition={{
                 duration: 0.9,
@@ -75,5 +75,3 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
 };
 
 export default LoadingOverlay;
-
-

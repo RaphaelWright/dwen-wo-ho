@@ -40,27 +40,32 @@ const CreateAccount = (props: CreateAccountProps) => {
       <form
         id="create-account-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-xl mx-auto space-y-4 px-11"
+        className="w-full max-w-lg mx-auto space-y-8 px-8 animate-in fade-in slide-in-from-bottom-8 duration-700"
       >
         {/* Header Section */}
-        <div className="text-center">
-          <h1 className="text-3xl font-extrabold text-black mb-1">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-extrabold tracking-tight">
             {SIGN_UP_TEXTS.createAccount.title}
           </h1>
+          <p className="text-muted-foreground">
+            Complete your profile to get started
+          </p>
         </div>
 
         {/* Form Fields */}
         <div className="space-y-6">
-          <Input
-            {...register("email")}
-            value={email}
-            placeholder={SIGN_UP_TEXTS.createAccount.emailPlaceholder}
-            disabled
-            className="font-bold w-full rounded-xl text-lg text-gray-500 p-3 bg-gray-200/50 outline-none border-none"
-          />
+          <div className="space-y-2">
+            <Input
+              {...register("email")}
+              value={email}
+              placeholder={SIGN_UP_TEXTS.createAccount.emailPlaceholder}
+              disabled
+              className="h-12 bg-muted/50 border-input/20 text-lg font-medium text-muted-foreground cursor-not-allowed"
+            />
+          </div>
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-extrabold text-black">
+            <h2 className="text-xl font-bold">
               {SIGN_UP_TEXTS.createAccount.professionalTitle}
             </h2>
             <FormSelect
@@ -69,14 +74,14 @@ const CreateAccount = (props: CreateAccountProps) => {
               placeholder={
                 SIGN_UP_TEXTS.createAccount.professionalTitlePlaceholder
               }
-              className="w-full! rounded-full! text-lg! text-gray-500! p-3! bg-gray-200/50! border-2! border-gray-400! outline-none h-auto! font-bold"
+              className="w-full h-12 rounded-lg border-input text-lg bg-background focus:ring-primary"
             >
               <div className="py-1">
                 {PROFESSIONAL_TITLES.map((item) => (
                   <SelectItem
                     key={item}
                     value={item.split(" ")[0]}
-                    className="px-4 py-3 text-lg font-medium text-gray-500 data-[state=checked]:bg-[#ed1c24] data-[state=checked]:text-white focus:bg-[#ed1c24] focus:text-white cursor-pointer rounded-none"
+                    className="cursor-pointer"
                   >
                     {item}
                   </SelectItem>
@@ -89,46 +94,65 @@ const CreateAccount = (props: CreateAccountProps) => {
             <Input
               {...register("fullName")}
               placeholder={SIGN_UP_TEXTS.createAccount.fullNamePlaceholder}
-              className={`font-bold w-full rounded-xl text-lg border-2 text-gray-500 p-3 bg-gray-200/50 outline-none focus:border-[#2bb673] transition-colors ${
-                errors?.fullName ? "border-red-500" : "border-gray-400"
+              className={`h-12 text-lg transition-all duration-200 ${
+                errors?.fullName
+                  ? "border-destructive focus-visible:ring-destructive/30"
+                  : "border-input focus-visible:ring-primary/30"
               }`}
             />
             {fullName && title && (
-              <p className="text-center text-gray-500 text-lg font-bold mt-2">
+              <p className="text-center text-muted-foreground text-sm font-medium mt-2 animate-in fade-in">
                 {SIGN_UP_TEXTS.createAccount.youAre}{" "}
-                <span className="text-[#955aa4]">
+                <span className="text-primary font-bold">
                   {title} {fullName}
                 </span>
               </p>
             )}
+            {errors?.fullName && (
+              <p className="text-sm text-destructive font-medium pl-1">
+                {errors.fullName.message as string}
+              </p>
+            )}
           </div>
 
-          <div className="relative">
-            <Input
-              {...register("password")}
-              type={showPassword ? "text" : "password"}
-              placeholder={SIGN_UP_TEXTS.createAccount.passwordPlaceholder}
-              className={`font-bold w-full rounded-xl text-lg text-gray-500 p-3 bg-gray-200/50 outline-none border-2 border-gray-400 focus:border-[#2bb673] transition-colors ${
-                errors?.password ? "border-red-500" : "border-gray-400"
-              }`}
-            />
-            <Button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-xs uppercase hover:text-gray-700 transition-colors"
-              variant="ghost"
-            >
-              {showPassword
-                ? SIGN_UP_TEXTS.createAccount.hide
-                : SIGN_UP_TEXTS.createAccount.show}
-            </Button>
+          <div className="space-y-2">
+            <div className="relative">
+              <Input
+                {...register("password")}
+                type={showPassword ? "text" : "password"}
+                placeholder={SIGN_UP_TEXTS.createAccount.passwordPlaceholder}
+                className={`h-12 pl-4 pr-16 text-lg transition-all duration-200 ${
+                  errors?.password
+                    ? "border-destructive focus-visible:ring-destructive/30"
+                    : "border-input focus-visible:ring-primary/30"
+                }`}
+              />
+              <Button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+                variant="ghost"
+              >
+                {showPassword ? (
+                  <span className="text-xs font-semibold">HIDE</span>
+                ) : (
+                  <span className="text-xs font-semibold">SHOW</span>
+                )}
+              </Button>
+            </div>
+            {errors?.password && (
+              <p className="text-sm text-destructive font-medium pl-1">
+                {errors.password.message as string}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Error Message */}
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600 text-center text-sm font-medium">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3">
+            <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
+            <p className="text-destructive text-sm font-medium">
               {errorMessage}
             </p>
           </div>
@@ -141,13 +165,13 @@ const CreateAccount = (props: CreateAccountProps) => {
             onCheckedChange={(checked) =>
               onAgreedToTermsChange(checked === true)
             }
-            className="w-6 h-6 rounded border-2 border-gray-400 data-[state=checked]:bg-transparent data-[state=checked]:text-black"
+            className="w-5 h-5 border-2 border-muted-foreground data-[state=checked]:bg-primary data-[state=checked]:border-primary data-[state=checked]:text-primary-foreground"
           />
-          <p className="text-lg font-bold text-gray-500">
+          <p className="text-sm font-medium text-muted-foreground">
             {SIGN_UP_TEXTS.createAccount.agreeTo}{" "}
             <Link
               href="/"
-              className="text-[#ed1c24] hover:underline transition-colors"
+              className="text-primary hover:underline transition-colors"
             >
               {SIGN_UP_TEXTS.createAccount.terms}
             </Link>

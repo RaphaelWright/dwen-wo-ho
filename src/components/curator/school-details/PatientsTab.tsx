@@ -15,19 +15,19 @@ export function PatientsTab({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4]" />
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
       </div>
     );
   }
 
   if (patients.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
-        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
-          <Users className="w-8 h-8 text-gray-300" />
+      <div className="text-center py-12 text-muted-foreground">
+        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
+          <Users className="w-8 h-8 text-muted-foreground/50" />
         </div>
-        <p className="text-gray-900 font-medium">No patients found</p>
-        <p className="text-sm text-gray-500">
+        <p className="text-foreground font-medium">No patients found</p>
+        <p className="text-sm text-muted-foreground">
           Try adjusting your search or add a new patient.
         </p>
       </div>
@@ -45,18 +45,18 @@ export function PatientsTab({
             key={patient.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="group bg-white rounded-xl border border-gray-100 p-4 sm:p-5 hover:shadow-md hover:border-[#955aa4]/30 transition-all duration-200 flex flex-col sm:flex-row gap-4 sm:items-center"
+            className="group bg-card rounded-2xl border border-border/60 p-4 sm:p-5 hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col sm:flex-row gap-4 sm:items-center"
           >
-            {/* Lock-in score Badge */}
+            {/* Lock-in score Badge - Redesigned */}
             <div
               className={cn(
-                "w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex items-center justify-center shrink-0 shadow-inner",
+                "w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-200",
                 patient.lockinScore != null
-                  ? "bg-gray-900 text-white"
-                  : "bg-gray-100 text-gray-400",
+                  ? "bg-primary/5 border-primary/20 text-primary shadow-sm"
+                  : "bg-muted/50 border-transparent text-muted-foreground",
               )}
             >
-              <span className="font-bold text-2xl sm:text-3xl">
+              <span className="font-bold text-lg sm:text-xl">
                 {patient.lockinScore != null
                   ? patient.lockinScore.toFixed(1)
                   : "–"}
@@ -66,19 +66,21 @@ export function PatientsTab({
             {/* Patient info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-bold text-gray-900 text-lg sm:text-xl group-hover:text-[#955aa4] transition-colors">
+                <h3 className="font-bold text-foreground text-lg sm:text-xl group-hover:text-primary transition-colors">
                   {patient.patientName}
                 </h3>
-                <span className="text-xs font-medium text-gray-400 px-2 py-0.5 bg-gray-50 rounded-full border border-gray-100">
+                <span className="text-xs font-medium text-muted-foreground px-2 py-0.5 bg-muted rounded-full border border-border">
                   {compactTimeAgo(patient.createdAt || "")} ago
                 </span>
               </div>
 
-              <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+              <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                 {patient.comment ? (
                   <span className="italic">&quot;{patient.comment}&quot;</span>
                 ) : (
-                  <span className="text-gray-400 italic">No comments</span>
+                  <span className="text-muted-foreground/50 italic">
+                    No comments
+                  </span>
                 )}
               </p>
 
@@ -87,10 +89,10 @@ export function PatientsTab({
                   className={cn(
                     "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide",
                     isTreating
-                      ? "bg-purple-50 text-purple-700 border border-purple-100"
+                      ? "bg-purple-500/10 text-purple-700 border border-purple-200"
                       : isSeen
-                        ? "bg-blue-50 text-blue-700 border border-blue-100"
-                        : "bg-green-50 text-green-700 border border-green-100",
+                        ? "bg-blue-500/10 text-blue-700 border border-blue-200"
+                        : "bg-green-500/10 text-green-700 border border-green-200",
                   )}
                 >
                   {isTreating ? "Treating" : isSeen ? "Opened" : "New"}
@@ -102,10 +104,10 @@ export function PatientsTab({
             <Button
               onClick={() => onViewPatient(patient.id)}
               className={cn(
-                "sm:self-center shrink-0 rounded-lg px-6 w-full sm:w-auto",
+                "sm:self-center shrink-0 rounded-lg px-6 w-full sm:w-auto transition-all",
                 isTreating || isSeen
-                  ? "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
-                  : "bg-black text-white hover:bg-gray-800",
+                  ? "bg-background text-foreground border border-border hover:bg-muted"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20",
               )}
             >
               {isTreating || isSeen ? "View Details" : "Open Case"}

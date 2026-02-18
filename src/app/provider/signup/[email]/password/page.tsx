@@ -65,7 +65,7 @@ const PasswordSetup = () => {
               {!showPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.password?.message && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.password.message}
               </p>
             )}
@@ -93,7 +93,7 @@ const PasswordSetup = () => {
               {!showConfirmPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.confirmPassword?.message && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.confirmPassword.message}
               </p>
             )}
@@ -101,8 +101,8 @@ const PasswordSetup = () => {
         </div>
 
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p className="text-red-600 text-center font-medium">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-4">
+            <p className="text-destructive text-center font-medium">
               {errorMessage}
             </p>
           </div>
@@ -112,7 +112,7 @@ const PasswordSetup = () => {
       <div className="flex border-t border-gray-500 px-10 pt-10 items-center justify-between">
         <Button
           onClick={() => router.back()}
-          className="rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase"
+          className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase"
         >
           Back
         </Button>
@@ -123,8 +123,8 @@ const PasswordSetup = () => {
           disabled={!password || !confirmPassword || signupMutation.isPending}
           className={`text-xl px-6 py-2 border-4 font-bold rounded-md flex items-center gap-2 ${
             password && confirmPassword && !signupMutation.isPending
-              ? "border-[#955aa4] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
-              : "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
+              ? "border-primary text-primary-foreground bg-primary hover:bg-primary/90"
+              : "border-uted text-muted-foreground bg-muted cursor-not-allowed"
           }`}
         >
           {signupMutation.isPending && (

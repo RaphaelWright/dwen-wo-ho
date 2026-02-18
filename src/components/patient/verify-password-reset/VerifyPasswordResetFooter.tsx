@@ -11,7 +11,7 @@ export function VerifyPasswordResetFooter({
     <div className="flex border-t border-gray-500 px-10 pt-5 items-center justify-between">
       <Button
         onClick={onBack}
-        className="rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase"
+        className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted transition-colors"
       >
         {VERIFY_PASSWORD_RESET_TEXTS.footer.back}
       </Button>
@@ -19,7 +19,7 @@ export function VerifyPasswordResetFooter({
         steps={recoverSteps}
         step={VERIFY_PASSWORD_RESET_TEXTS.footer.step as any}
       />
-      <Button className="invisible rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase">
+      <Button className="invisible rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase">
         {VERIFY_PASSWORD_RESET_TEXTS.footer.next}
       </Button>
     </div>

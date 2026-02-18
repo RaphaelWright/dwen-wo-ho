@@ -19,67 +19,100 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
   } = useSignUpVerification(props);
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-8">
+    <div className="w-full max-w-md mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
       {/* Header Section */}
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="text-center space-y-2">
+        <h1 className="text-3xl font-extrabold tracking-tight">
           {SIGN_UP_TEXTS.verification.title}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {SIGN_UP_TEXTS.verification.subtitle}{" "}
-          <span className="font-semibold text-[#955aa4]">{email}</span>
+          <span className="font-semibold text-foreground block mt-1">
+            {email}
+          </span>
         </p>
       </div>
 
       {/* OTP Input Section */}
-      <div className="text-center space-y-6">
+      <div className="text-center space-y-8">
         {verifyEmailMutation.isPending ? (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-4 border-[#955aa4] border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-600 font-medium">
+          <div className="flex flex-col items-center gap-4 py-8">
+            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-muted-foreground font-medium animate-pulse">
               {SIGN_UP_TEXTS.verification.verifying}
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex justify-center">
               <InputOTP
                 maxLength={6}
                 onComplete={handleOTPComplete}
-                className="flex justify-center"
+                containerClassName="gap-2 flex justify-center"
               >
-                <InputOTPSlot index={0} className="otp-slot" />
-                <InputOTPSlot index={1} className="otp-slot" />
-                <InputOTPSlot index={2} className="otp-slot" />
-                <InputOTPSlot index={3} className="otp-slot" />
-                <InputOTPSlot index={4} className="otp-slot" />
-                <InputOTPSlot index={5} className="otp-slot" />
+                <InputOTPSlot
+                  index={0}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
+                <InputOTPSlot
+                  index={1}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
+                <InputOTPSlot
+                  index={2}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
+                <InputOTPSlot
+                  index={3}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
+                <InputOTPSlot
+                  index={4}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
+                <InputOTPSlot
+                  index={5}
+                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+                />
               </InputOTP>
             </div>
 
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex flex-col items-center gap-4 w-full">
               <Button
+                variant="outline"
                 disabled={
                   seconds > 0 || sendVerificationEmailMutation.isPending
                 }
                 onClick={handleResendCode}
-                className="rounded-lg px-4 py-2 text-sm font-medium bg-[#955aa4] text-white hover:bg-[#955aa4]/80 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
+                className="w-full h-12 text-base font-medium hover:bg-muted/50 transition-colors"
               >
-                {sendVerificationEmailMutation.isPending
-                  ? SIGN_UP_TEXTS.verification.sending
-                  : `${SIGN_UP_TEXTS.verification.resend} →`}
+                {sendVerificationEmailMutation.isPending ? (
+                  <span className="flex items-center gap-2">
+                    {SIGN_UP_TEXTS.verification.sending}{" "}
+                    <span className="animate-pulse">...</span>
+                  </span>
+                ) : seconds > 0 ? (
+                  <span className="flex items-center gap-2">
+                    Resend code in{" "}
+                    <span className="font-bold text-primary w-8">
+                      {formatTime(seconds)}
+                    </span>
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    {SIGN_UP_TEXTS.verification.resend} →
+                  </span>
+                )}
               </Button>
-              <span className="text-sm text-gray-500 bg-gray-100 rounded-full px-3 py-1">
-                {formatTime(seconds)}
-              </span>
             </div>
           </div>
         )}
 
         {/* Error Message */}
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600 text-center text-sm font-medium">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+            <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
+            <p className="text-destructive text-sm font-medium">
               {errorMessage}
             </p>
           </div>

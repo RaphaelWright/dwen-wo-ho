@@ -24,124 +24,118 @@ const PendingVerificationModal = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden border-4 border-[#955aa4]"
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            className="bg-card rounded-3xl shadow-2xl max-w-2xl w-full border border-border overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="relative bg-white px-8 py-4 flex items-center justify-between border-b-0">
+            <div className="bg-card px-6 py-4 flex items-center justify-between border-b border-border">
               <div className="flex items-center gap-3">
                 <Logo />
               </div>
               {!isLoading && (
-                <span className="text-[#955aa4] font-bold text-lg absolute top-7 left-1/2 -translate-x-1/2">
-                  Pending Page
+                <span className="text-muted-foreground font-semibold text-sm uppercase tracking-wider">
+                  Verification Pending
                 </span>
               )}
 
-              {/* Logout Button - Top Right */}
+              {/* Logout Button */}
               <button
                 onClick={() => setShowLogoutModal(true)}
-                className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors p-2"
+                className="flex items-center gap-2 text-muted-foreground hover:text-destructive transition-colors px-3 py-1.5 rounded-full hover:bg-destructive/10"
                 title="Log Out"
               >
-                <span className="font-medium">Log out</span>
-                <FiLogOut size={24} />
+                <span className="font-medium text-sm">Log out</span>
+                <FiLogOut size={16} />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-8 pt-2">
+            <div className="p-8">
               {isLoading ? (
                 // Loading Skeleton State
-                <div className="animate-pulse">
-                  <div className="flex items-center justify-center gap-17 mb-10">
+                <div className="animate-pulse space-y-8">
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
                     <div className="shrink-0">
-                      <div className="w-40 h-40 bg-gray-200 rounded-full"></div>
+                      <div className="w-32 h-32 bg-muted rounded-full"></div>
                     </div>
-                    <div className="text-left space-y-3">
-                      <div className="h-4 bg-gray-200 rounded w-24"></div>
-                      <div className="h-8 bg-gray-200 rounded w-64"></div>
-                      <div className="h-6 bg-gray-200 rounded w-48"></div>
+                    <div className="flex-1 space-y-3 w-full">
+                      <div className="h-4 bg-muted rounded w-24"></div>
+                      <div className="h-8 bg-muted rounded w-3/4"></div>
+                      <div className="h-6 bg-muted rounded w-1/2"></div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-center gap-4 mb-10">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
-                    <div className="h-14 bg-gray-200 rounded w-64"></div>
-                  </div>
+                  <div className="h-20 bg-muted rounded-xl w-full"></div>
                 </div>
               ) : (
                 // Loaded State
-                <>
-                  <div className="grid grid-cols-[160px_1fr] gap-10 items-center max-w-2xl mx-auto mb-10">
-                    {/* Profile Section */}
+                <div className="space-y-8">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
                     {/* Profile Image */}
-                    <div className="flex justify-center shrink-0">
+                    <div className="shrink-0">
                       {userInfo.profileImage ? (
                         <Image
-                          width={170}
-                          height={170}
+                          width={128}
+                          height={128}
                           src={userInfo.profileImage}
                           alt={userInfo.name}
-                          className="w-40 h-40 rounded-full object-cover"
+                          className="w-32 h-32 rounded-full object-cover ring-4 ring-background shadow-lg"
                         />
                       ) : (
-                        <div className="w-20 h-20 rounded-full bg-linear-to-tr from-[#955aa4] to-[#d4a5d9] flex items-center justify-center text-white text-3xl shrink-0 shadow-lg shadow-[#955aa4]/20">
-                          <span className="font-bold text-3xl">
-                            {userInfo.name.charAt(0)}
-                          </span>
+                        <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center text-primary text-4xl font-bold shadow-inner ring-4 ring-background">
+                          {userInfo.name.charAt(0)}
                         </div>
                       )}
                     </div>
 
-                    {/* Name and Role */}
-                    <div className="text-left min-w-0">
+                    {/* Info */}
+                    <div className="flex-1 text-center sm:text-left space-y-1">
                       {userInfo.timeAgo && (
-                        <p className="text-lg font-bold text-black mb-1">
-                          {userInfo.timeAgo}
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Joined {userInfo.timeAgo}
                         </p>
                       )}
-                      <h2 className="text-2xl font-bold text-gray-900 group-hover:text-[#955aa4] transition-colors line-clamp-2 wrap-break-word">
+                      <h2 className="text-2xl font-bold text-foreground">
                         {userInfo.name}
                       </h2>
-                      <p className="text-2xl font-bold text-black opacity-80">
+                      <p className="text-lg text-muted-foreground font-medium">
                         {userInfo.title}
                       </p>
-                    </div>
 
-                    {/* Status Section */}
-                    {/* Icon - Centered to match Photo */}
-                    <div className="flex justify-center shrink-0">
-                      <div className="relative w-12 h-12">
-                        <div className="absolute inset-0 border-[6px] border-black rounded-full text-white"></div>
-                        <div className="absolute inset-0 m-auto w-5 h-5 bg-black rounded-full"></div>
+                      <div className="pt-4 flex items-center justify-center sm:justify-start gap-3">
+                        <div className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                        </div>
+                        <span className="text-amber-600 font-bold bg-amber-500/10 px-3 py-1 rounded-full text-sm">
+                          Pending Review
+                        </span>
                       </div>
                     </div>
-
-                    {/* Status Text */}
-                    <div className="text-left -ml-18 -mb-2">
-                      <span className="text-6xl font-extrabold text-black tracking-tight">
-                        Status: &nbsp;&nbsp;{" "}
-                        <span className="font-medium">Pending...</span>
-                      </span>
-                    </div>
                   </div>
-                </>
-              )}
 
-              {/* Instructions */}
-              <div className="text-left p-6 rounded-xl">
-                <p className="text-gray-700 text-center leading-relaxed text-lg">
-                  You can call the JustGo Health verification team on 0538920991
-                  or email them at prince.baadu7@gmail.com to speed up the
-                  process. Thank you.
-                </p>
-              </div>
+                  {/* Instructions */}
+                  <div className="bg-muted/30 p-6 rounded-2xl border border-border text-center">
+                    <p className="text-muted-foreground leading-relaxed">
+                      You can call the JustGo Health verification team on{" "}
+                      <span className="text-foreground font-semibold">
+                        0538920991
+                      </span>
+                      <br />
+                      or email them at{" "}
+                      <span className="text-foreground font-semibold">
+                        prince.baadu7@gmail.com
+                      </span>{" "}
+                      to speed up the process.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </motion.div>

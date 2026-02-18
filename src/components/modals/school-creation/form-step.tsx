@@ -36,7 +36,7 @@ export const FormStep = ({
             type="text"
             value={formData.name}
             onChange={(e) => handleInputChange("name", e.target.value)}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
+            className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             placeholder="e.g. Achimota School"
           />
         </div>
@@ -48,7 +48,7 @@ export const FormStep = ({
             type="text"
             value={formData.nickname}
             onChange={(e) => handleInputChange("nickname", e.target.value)}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all"
+            className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             placeholder="e.g. Motown"
           />
         </div>
@@ -62,7 +62,7 @@ export const FormStep = ({
         <Textarea
           value={formData.motto}
           onChange={(e) => handleInputChange("motto", e.target.value)}
-          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all resize-none"
+          className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
           placeholder="Enter school motto"
           rows={3}
         />
@@ -81,8 +81,8 @@ export const FormStep = ({
               onClick={() => handleInputChange("type", type)}
               className={`flex-1 px-6 py-3 rounded-lg font-bold transition-colors ${
                 formData.type === type
-                  ? "bg-[#955aa4] text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
             >
               {type}
@@ -98,7 +98,7 @@ export const FormStep = ({
             Campuses
           </Label>
           {selectedCampuses.length > 0 && (
-            <span className="text-xs font-medium text-[#955aa4] bg-[#955aa4]/10 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
               {selectedCampuses.length} selected
             </span>
           )}
@@ -186,7 +186,7 @@ export const FormStep = ({
                   />
                   <Label
                     htmlFor="logo-change"
-                    className="bg-[#955aa4]/80 hover:bg-[#955aa4] text-white rounded-full p-1.5 cursor-pointer transition-colors"
+                    className="bg-primary/80 hover:bg-primary text-primary-foreground rounded-full p-1.5 cursor-pointer transition-colors"
                     title="Change logo"
                   >
                     <Upload size={12} />
@@ -212,12 +212,12 @@ export const FormStep = ({
                 />
                 <Label
                   htmlFor="logo-upload"
-                  className="w-full h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 hover:border-[#955aa4]/30 transition-all group"
+                  className="w-full h-32 bg-muted border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/80 hover:border-primary/30 transition-all group"
                 >
-                  <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Upload className="w-5 h-5 text-[#955aa4]" />
+                  <div className="w-10 h-10 bg-background rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <Upload className="w-5 h-5 text-primary" />
                   </div>
-                  <span className="text-sm font-medium text-gray-600 group-hover:text-[#955aa4] transition-colors">
+                  <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
                     Click to upload logo
                   </span>
                   <span className="text-xs text-gray-400 mt-1">

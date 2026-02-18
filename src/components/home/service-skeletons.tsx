@@ -206,7 +206,7 @@ export const SkeletonFour = () => {
         <div className="relative z-10 flex flex-col items-center">
           <div className="rounded-full h-10 w-10 bg-purple-100 flex items-center justify-center mb-2 overflow-hidden border-2 border-white shadow-sm">
             <Image
-              src="/counsellor.jpg"
+              src="/providers/counsellor.jpg"
               alt="Dr. Ama"
               width={1080}
               height={800}

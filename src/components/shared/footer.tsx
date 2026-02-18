@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FloatingDock } from "@/components/ui/floating-dock";
@@ -16,7 +18,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#202126] text-muted-foreground py-10">
+    <footer className="bg-footer-bg text-footer-foreground py-10">
       <WidthConstraint>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
           {/* About Us Section with Social Icons */}

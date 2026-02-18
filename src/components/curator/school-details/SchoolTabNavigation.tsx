@@ -27,24 +27,25 @@ export function SchoolTabNavigation({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-      <div className="flex w-full sm:w-auto p-1 bg-gray-100/80 rounded-xl">
+      <div className="flex w-full sm:w-auto p-1 bg-muted/80 rounded-xl">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
             <Button
               key={tab.key}
               onClick={() => onTabChange(tab.key)}
+              variant="ghost"
               className={cn(
-                "relative flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#955aa4]/20",
+                "relative flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-transparent",
                 activeTab === tab.key
-                  ? "text-[#955aa4]"
-                  : "text-gray-500 hover:text-gray-700",
+                  ? "text-primary hover:text-primary"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {activeTab === tab.key && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-white rounded-lg shadow-sm"
+                  className="absolute inset-0 bg-primary/5 rounded-lg shadow-sm"
                   transition={{
                     type: "spring",
                     bounce: 0.2,
@@ -59,8 +60,8 @@ export function SchoolTabNavigation({
                   className={cn(
                     "px-2 py-0.5 rounded-full text-[10px] font-bold",
                     activeTab === tab.key
-                      ? "bg-[#955aa4]/10 text-[#955aa4]"
-                      : "bg-gray-200 text-gray-600",
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted-foreground/10 text-muted-foreground",
                   )}
                 >
                   {tab.count}
@@ -81,7 +82,7 @@ export function SchoolTabNavigation({
           >
             <Button
               onClick={onAddIconClick}
-              className="bg-[#955aa4] hover:bg-[#864e94] text-white shadow-md shadow-[#955aa4]/20 rounded-xl"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
             >
               <Users className="w-4 h-4 mr-2" />
               Add Icon

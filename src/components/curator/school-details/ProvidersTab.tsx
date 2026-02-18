@@ -21,12 +21,12 @@ export const ProvidersTab = ({
         <button
           key={provider.email}
           onClick={() => onProviderClick(provider)}
-          className="relative text-center bg-white rounded-3xl p-8 hover:shadow-lg transition-all border border-gray-200 hover:border-[#955aa4] group"
+          className="relative text-center bg-card rounded-3xl p-8 hover:shadow-lg transition-all border border-border/50 hover:border-primary/50 group"
         >
           {/* Arrow button in top right */}
-          <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#955aa4] flex items-center justify-center transition-colors">
+          <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-muted group-hover:bg-primary flex items-center justify-center transition-colors">
             <svg
-              className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors"
+              className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground transition-colors"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -48,23 +48,25 @@ export const ProvidersTab = ({
                 alt={provider.providerName}
                 width={80}
                 height={80}
-                className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+                className="w-20 h-20 rounded-full object-cover border-4 border-muted"
               />
             ) : (
-              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-200">
-                <Users className="w-10 h-10 text-gray-400" />
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center border-4 border-muted">
+                <Users className="w-10 h-10 text-muted-foreground/50" />
               </div>
             )}
           </div>
 
           {/* Provider name */}
-          <h4 className="font-semibold text-gray-900 text-lg mb-1 group-hover:text-[#955aa4] transition-colors">
+          <h4 className="font-semibold text-foreground text-lg mb-1 group-hover:text-primary transition-colors">
             {formatProviderName(provider.providerName, provider.providerTitle)}
           </h4>
 
           {/* Specialty */}
           {provider.specialty && (
-            <p className="text-sm text-gray-600 mb-3">{provider.specialty}</p>
+            <p className="text-sm text-muted-foreground mb-3">
+              {provider.specialty}
+            </p>
           )}
 
           {/* Added time ago */}
@@ -77,8 +79,8 @@ export const ProvidersTab = ({
             <span
               className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
                 provider.applicationStatus === "PENDING"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-red-100 text-red-800"
+                  ? "bg-yellow-500/10 text-yellow-600 border border-yellow-200"
+                  : "bg-destructive/10 text-destructive border border-destructive/20"
               }`}
             >
               {provider.applicationStatus}

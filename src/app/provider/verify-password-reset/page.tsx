@@ -31,7 +31,7 @@ const VerifyContent = () => {
         <Logo />
         <Link
           href={ROUTES.provider.singIn}
-          className="bg-gray-300 text-[#ed1c24] rounded-full px-4 py-1"
+          className="bg-muted text-destructive rounded-full px-4 py-1 hover:bg-muted/80 transition-colors"
         >
           Sign In
         </Link>
@@ -46,7 +46,7 @@ const VerifyContent = () => {
         </h2>
         <div className="mt-5 text-center">
           <InputOTP
-            className="text-green-600"
+            className="text-success"
             maxLength={6}
             disabled={isVerifying}
             onComplete={(code) => handleVerifyCode(code)}
@@ -62,7 +62,7 @@ const VerifyContent = () => {
             <Button
               disabled={seconds > 0 || recoverAccountMutation.isPending}
               onClick={handleResendCode}
-              className="rounded-md mt-4 bg-[#2b3990] disabled:bg-[#2b3990]/50"
+              className="rounded-md mt-4 bg-secondary disabled:bg-secondary/50 hover:bg-secondary/90 text-secondary-foreground"
             >
               Resend code <ArrowRightIcon className="w-4 h-4" />
             </Button>
@@ -75,12 +75,12 @@ const VerifyContent = () => {
       <div className="flex border-t border-gray-500 px-10 pt-5 items-center justify-between">
         <Button
           onClick={handleBack}
-          className="rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase"
+          className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted transition-colors"
         >
           Back
         </Button>
         <Stepper steps={recoverSteps} step="Verify" />
-        <Button className="invisible rounded-full px-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase">
+        <Button className="invisible rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase">
           Next
         </Button>
       </div>

@@ -10,9 +10,9 @@ const BioStep = (props: BioStepProps) => {
   const { handlePhoneChange, handleBioChange } = useBioStep(props);
 
   return (
-    <div className="space-y-8 px-20 -mt-20">
+    <div className="space-y-8 px-4 md:px-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-6">
-        <div>
+        <div className="space-y-2">
           <div className="relative">
             <Input
               type="tel"
@@ -20,23 +20,33 @@ const BioStep = (props: BioStepProps) => {
               onChange={handlePhoneChange}
               placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
               maxLength={10}
-              className="w-full p-4 border-4 border-gray-400 rounded-xl text-xl bg-gray-100 focus:border-[#955aa4] focus:outline-none"
+              className="h-14 pl-4 pr-16 text-lg border-input bg-background focus-visible:ring-primary transition-all duration-200 shadow-sm"
             />
-            <p className="text-lg font-medium text-gray-400 absolute right-4 top-1/2 -translate-y-1/2">
-              {10 - phoneNumber.length}
-            </p>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+              <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
+                {10 - phoneNumber.length} left
+              </span>
+            </div>
           </div>
-          <p className="text-lg text-center font-medium text-gray-500 mt-2">
+          <p className="text-sm text-muted-foreground text-center">
             {SIGN_UP_TEXTS.bioStep.privateInfo}
           </p>
         </div>
 
-        <div>
-          <div className="flex items-center justify-between">
-            <Label className="text-lg ml-4 font-semibold text-gray-700 mb-1 block">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <Label className="text-lg font-semibold">
               {SIGN_UP_TEXTS.bioStep.status}
             </Label>
-            <span className="text-sm text-gray-500">{140 - bio.length}</span>
+            <span
+              className={`text-xs font-medium px-2 py-1 rounded-md ${
+                140 - bio.length < 10
+                  ? "bg-destructive/10 text-destructive"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {140 - bio.length} characters left
+            </span>
           </div>
           <div className="relative">
             <Textarea
@@ -44,9 +54,9 @@ const BioStep = (props: BioStepProps) => {
               onChange={handleBioChange}
               placeholder={SIGN_UP_TEXTS.bioStep.bioPlaceholder}
               maxLength={140}
-              className="w-full p-4 border-4 border-green-600 rounded-xl text-lg bg-gray-100 focus:border-[#955aa4] focus:outline-none resize-none h-36"
+              className="min-h-40 p-4 text-lg border-input bg-background focus-visible:ring-primary resize-none shadow-sm transition-all duration-200"
             />
-            <p className="text-lg text-center font-medium text-gray-500 mt-2">
+            <p className="text-sm text-muted-foreground text-center mt-2">
               {SIGN_UP_TEXTS.bioStep.bioDescription}
             </p>
           </div>

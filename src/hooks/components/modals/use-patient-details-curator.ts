@@ -99,7 +99,7 @@ export const usePatientDetailsCurator = ({
         label: "Star Provider",
         data: patientResult.starProvider,
         icon: "⭐",
-        colorClass: "bg-[#955aa4]",
+        colorClass: "bg-primary",
         getContent: (p: any) => `${p.fullName} (${p.specialty})`,
       },
       {
@@ -107,7 +107,7 @@ export const usePatientDetailsCurator = ({
         label: "Referred Provider",
         data: patientResult.referredProvider,
         icon: "→",
-        colorClass: "bg-blue-500",
+        colorClass: "bg-secondary",
         getContent: (p: any) => p.fullName,
       },
     ];

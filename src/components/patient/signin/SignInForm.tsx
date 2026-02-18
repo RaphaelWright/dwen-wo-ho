@@ -34,7 +34,7 @@ export function SignInForm({
             {...register("email")}
             value={email}
             disabled
-            className={`font-bold w-full rounded-xl border-4 text-xl md:text-2xl text-gray-500 p-4 bg-gray-200/50 border-transparent`}
+            className={`font-bold w-full rounded-xl border-4 text-xl md:text-2xl text-muted-foreground p-4 bg-muted border-transparent`}
           />
         </div>
 
@@ -49,9 +49,9 @@ export function SignInForm({
               type={showPassword ? "text" : "password"}
               className={`font-bold w-full rounded-xl border-4 ${
                 errors?.password
-                  ? "border-red-500 text-red-500"
-                  : "border-[#2bb673] text-gray-500"
-              } text-xl md:text-2xl p-4 bg-gray-200/50 outline-none`}
+                  ? "border-destructive text-destructive"
+                  : "border-success text-muted-foreground"
+              } text-xl md:text-2xl p-4 bg-muted outline-none`}
               autoFocus
             />
             <Button
@@ -72,10 +72,10 @@ export function SignInForm({
       )}
 
       <div className="text-center mt-6">
-        <h1 className="text-xl md:text-2xl font-bold text-center text-[#955aa4]">
+        <h1 className="text-xl md:text-2xl font-bold text-center text-primary">
           {SIGN_IN_TEXTS.form.recoverPrompt}{" "}
           {forgotPasswordHref && (
-            <Link href={forgotPasswordHref} className="text-[#ed1c24]">
+            <Link href={forgotPasswordHref} className="text-destructive">
               {SIGN_IN_TEXTS.form.recoverLink}
             </Link>
           )}

@@ -15,7 +15,7 @@ export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
       {partners.map((partner) => (
         <div
           key={partner.id}
-          className="bg-gray-50 rounded-xl p-4 border border-gray-200"
+          className="bg-card rounded-xl p-4 border border-border/60 hover:border-primary/30 transition-colors shadow-sm"
         >
           <div className="flex items-start gap-3">
             {partner.logo ? (
@@ -27,21 +27,21 @@ export const PartnersTab = ({ partners, isLoading }: PartnersTabProps) => (
                 className="w-12 h-12 rounded-full object-cover"
               />
             ) : (
-              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                <Handshake className="w-6 h-6 text-gray-400" />
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                <Handshake className="w-6 h-6 text-muted-foreground/50" />
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-gray-900 truncate">
+              <h4 className="font-semibold text-foreground truncate">
                 {partner.name}
               </h4>
               {partner.nickname && (
-                <p className="text-sm text-gray-600 truncate">
+                <p className="text-sm text-muted-foreground truncate">
                   &quot;{partner.nickname}&quot;
                 </p>
               )}
               {partner.slogan && (
-                <p className="text-xs text-gray-500 mt-1 truncate">
+                <p className="text-xs text-muted-foreground/80 mt-1 truncate">
                   {partner.slogan}
                 </p>
               )}

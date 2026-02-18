@@ -16,7 +16,7 @@ export const ProviderFooter = ({
     isModerating && moderatingProviderEmail === providerEmail;
 
   return (
-    <div className="border-t border-gray-200 p-6 bg-gray-50">
+    <div className="border-t border-border p-6 bg-muted/40 backdrop-blur-sm">
       <div className="flex justify-between items-center gap-3">
         {applicationStatus === "PENDING" && (
           <div className="flex gap-2 flex-1">

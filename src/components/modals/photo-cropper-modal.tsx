@@ -73,7 +73,7 @@ export const PhotoCropperModal = ({
                   step="0.1"
                   value={zoom}
                   onChange={(e) => setZoom(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#955aa4]"
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
                 />
               </div>
 
@@ -103,14 +103,14 @@ export const PhotoCropperModal = ({
               <Button
                 onClick={onCancel}
                 variant="outline"
-                className="px-8 py-1 rounded-full border-4 border-[#955aa4] text-[#955aa4] hover:bg-[#955aa4] hover:text-white uppercase font-bold"
+                className="px-8 py-1 rounded-full border-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground uppercase font-bold"
                 disabled={isSaving}
               >
                 {SIGN_UP_TEXTS.photoStep.cancel}
               </Button>
               <Button
                 onClick={onSave}
-                className="px-8 py-1 border-4 border-[#955aa4] rounded-full bg-[#955aa4]/60 hover:bg-[#955aa4]/90 text-white disabled:opacity-50 uppercase font-bold"
+                className="px-8 py-1 border-4 border-primary rounded-full bg-primary/60 hover:bg-primary/90 text-primary-foreground disabled:opacity-50 uppercase font-bold"
                 disabled={isSaving}
               >
                 {isSaving ? (

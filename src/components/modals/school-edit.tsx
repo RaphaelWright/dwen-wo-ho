@@ -51,7 +51,7 @@ const SchoolEditModal = ({
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[90vh] border border-border">
               <SchoolEditHeader onClose={onClose} />
 
               <div className="flex-1 overflow-y-auto p-8">

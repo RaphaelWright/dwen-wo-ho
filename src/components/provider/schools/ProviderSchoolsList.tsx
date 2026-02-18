@@ -13,8 +13,8 @@ export function ProviderSchoolsList({
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading schools...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading schools...</p>
         </div>
       </div>
     );
@@ -23,11 +23,11 @@ export function ProviderSchoolsList({
   if (schools.length === 0) {
     return (
       <div className="text-center py-20">
-        <MdSchool className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+        <MdSchool className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-foreground mb-2">
           {activeFilter === "all" ? "No schools assigned" : "No schools found"}
         </h3>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           {activeFilter === "all"
             ? "You haven't been assigned to any schools yet."
             : `There are no schools under the ${

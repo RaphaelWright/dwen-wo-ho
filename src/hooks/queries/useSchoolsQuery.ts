@@ -1,3 +1,4 @@
+'use client'
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosFormData, axiosInstance } from "@/configs/axiosInstance";
 import { checkError, checkResponse } from "@/lib/api-utils";

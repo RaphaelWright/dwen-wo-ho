@@ -40,10 +40,10 @@ export default function DashboardLayout({
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
     return (
-      <div className="h-screen bg-white flex items-center justify-center">
+      <div className="h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
-          <p className="text-gray-500">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -54,7 +54,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="h-screen bg-white flex">
+    <div className="h-screen bg-background flex">
       <CuratorSidebar
         schoolCount={schoolCount}
         providerCount={providerCount}
@@ -62,7 +62,7 @@ export default function DashboardLayout({
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
-      <div className="flex-1 overflow-y-auto bg-gray-50 pt-14 md:pt-0">
+      <div className="flex-1 overflow-y-auto bg-muted/10 pt-14 md:pt-0">
         {children}
       </div>
 

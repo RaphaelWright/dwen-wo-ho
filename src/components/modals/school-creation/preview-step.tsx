@@ -41,7 +41,7 @@ export const PreviewStep = ({
                 &quot;{formData.motto}&quot;
               </p>
             )}
-            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-[#955aa4]/10 text-[#955aa4]">
+            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary">
               {formData.type}
             </span>
           </div>
@@ -50,7 +50,7 @@ export const PreviewStep = ({
         {selectedCampuses.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
             <div className="flex items-start gap-2">
-              <MapPin className="w-5 h-5 text-[#955aa4] mt-0.5 shrink-0" />
+              <MapPin className="w-5 h-5 text-primary mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Campuses:
@@ -71,8 +71,8 @@ export const PreviewStep = ({
         )}
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-        <p className="text-sm text-blue-800">
+      <div className="bg-secondary/10 border border-secondary/20 rounded-xl p-4">
+        <p className="text-sm text-secondary-foreground">
           Please review all information carefully. Once confirmed, the school
           will be created and added to the system.
         </p>

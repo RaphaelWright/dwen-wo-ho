@@ -33,7 +33,7 @@ const NewPasswordContent = () => {
         <Logo />
         <Link
           href={ROUTES.provider.singIn}
-          className="bg-gray-300 text-[#ed1c24] rounded-md px-6 py-1"
+          className="bg-muted text-destructive rounded-md px-6 py-1"
         >
           {NEW_PASSWORD_TEXTS.header.signIn}
         </Link>
@@ -54,8 +54,8 @@ const NewPasswordContent = () => {
               {...register("password")}
               placeholder={NEW_PASSWORD_TEXTS.form.passwordPlaceholder}
               type={showPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 text-xl text-gray-600 p-4 bg-gray-200/50 ${
-                errors.password ? "border-red-500" : ""
+              className={`font-bold w-full rounded-xl border-4 text-xl text-muted-foreground p-4 bg-muted/50 ${
+                errors.password ? "border-destructive" : ""
               }`}
             />
             <Button
@@ -71,7 +71,7 @@ const NewPasswordContent = () => {
               )}
             </Button>
             {errors.password && (
-              <span className="text-red-500 text-sm mt-1">
+              <span className="text-destructive text-sm mt-1">
                 {errors.password.message}
               </span>
             )}
@@ -81,8 +81,8 @@ const NewPasswordContent = () => {
               {...register("confirmPassword")}
               placeholder={NEW_PASSWORD_TEXTS.form.repeatPasswordPlaceholder}
               type={showPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 text-xl text-gray-600 p-4 bg-gray-200/50 ${
-                errors.confirmPassword ? "border-red-500" : ""
+              className={`font-bold w-full rounded-xl border-4 text-xl text-muted-foreground p-4 bg-muted/50 ${
+                errors.confirmPassword ? "border-destructive" : ""
               }`}
             />
             <Button
@@ -98,7 +98,7 @@ const NewPasswordContent = () => {
               )}
             </Button>
             {errors.confirmPassword && (
-              <span className="text-red-500 text-sm mt-1">
+              <span className="text-destructive text-sm mt-1">
                 {errors.confirmPassword.message}
               </span>
             )}
@@ -106,8 +106,8 @@ const NewPasswordContent = () => {
         </div>
 
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p className="text-red-600 text-center font-medium">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-4">
+            <p className="text-destructive text-center font-medium">
               {errorMessage}
             </p>
           </div>
@@ -116,7 +116,7 @@ const NewPasswordContent = () => {
       <div className="flex border-t border-gray-500 px-10 p-8 items-center justify-between">
         <Button
           onClick={() => router.back()}
-          className="rounded-full px-8 py-1 border-4 bg-white text-[#955aa4] text-lg font-bold border-[#955aa4] uppercase flex items-center justify-center hover:bg-white"
+          className="rounded-full px-8 py-1 border-4 bg-background text-primary text-lg font-bold border-primary uppercase flex items-center justify-center hover:bg-background"
         >
           {NEW_PASSWORD_TEXTS.form.back}
         </Button>
@@ -125,7 +125,7 @@ const NewPasswordContent = () => {
           form="login-form"
           type="submit"
           value={NEW_PASSWORD_TEXTS.form.done}
-          className="text-xl px-7 py-1 border-4 font-bold border-[#955aa4] rounded-full text-white bg-[#955aa4]/60 w-auto cursor-pointer"
+          className="text-xl px-7 py-1 border-4 font-bold border-primary rounded-full text-primary-foreground bg-primary/60 w-auto cursor-pointer"
         />
       </div>
       <DevTool control={control} />

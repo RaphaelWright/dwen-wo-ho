@@ -10,7 +10,7 @@ export function SignInFooter({ onBack, isLoading, errors }: SignInFooterProps) {
     <div className="flex border-t border-gray-500 px-10 pt-10 items-center justify-between">
       <Button
         onClick={onBack}
-        className="rounded-full px-6 py-6 border-4 bg-white text-[#955aa4] text-xl font-bold border-[#955aa4] uppercase hover:bg-gray-50"
+        className="rounded-full px-6 py-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted"
       >
         {SIGN_IN_TEXTS.footer.back}
       </Button>
@@ -20,8 +20,8 @@ export function SignInFooter({ onBack, isLoading, errors }: SignInFooterProps) {
         disabled={isLoading || hasErrors}
         className={`text-xl px-8 py-3 border-4 font-bold rounded-md flex items-center gap-2 transition-colors ${
           isLoading || hasErrors
-            ? "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
-            : "border-[#955aa4] text-white bg-[#955aa4]/60 hover:bg-[#955aa4]/80"
+            ? "border-muted text-muted-foreground bg-muted-foreground/20 cursor-not-allowed"
+            : "border-primary text-primary-foreground bg-primary/60 hover:bg-primary/80"
         }`}
       >
         {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}

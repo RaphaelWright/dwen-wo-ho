@@ -19,6 +19,7 @@ import {
   UrgentCareSidebar,
   ProvidersTab,
 } from "@/components/curator/school-details";
+import { Button } from "@/components/ui/button";
 
 export default function SchoolDetailsPage() {
   const {
@@ -62,10 +63,12 @@ export default function SchoolDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#faf9f7]">
+      <div className="flex items-center justify-center min-h-screen bg-muted/5">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#955aa4] mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">Loading school details...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3" />
+          <p className="text-muted-foreground text-sm">
+            Loading school details...
+          </p>
         </div>
       </div>
     );
@@ -73,20 +76,23 @@ export default function SchoolDetailsPage() {
 
   if (error || !school) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-[#faf9f7]">
-        <button
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-muted/5">
+        <Button
           onClick={() => router.push(ROUTES.curator.schools)}
-          className="mb-3 text-gray-600 hover:text-gray-900 text-sm"
+          variant="ghost"
+          className="mb-3 text-muted-foreground hover:text-foreground"
         >
           ← Back to Schools
-        </button>
-        <p className="text-red-500 text-sm">{error || "School not found"}</p>
+        </Button>
+        <p className="text-destructive text-sm">
+          {error || "School not found"}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50/50">
+    <div className="min-h-screen flex flex-col bg-muted/5 animate-in fade-in duration-500">
       <div className="flex-1 flex flex-col lg:flex-row items-start relative">
         {/* Main content */}
         <div className="flex-1 min-w-0 flex flex-col px-4 py-6 sm:px-6 lg:px-8 xl:px-10 relative z-10 max-w-7xl mx-auto w-full">
@@ -112,7 +118,7 @@ export default function SchoolDetailsPage() {
           />
 
           {/* Content Area */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 min-h-100 p-1">
+          <div className="bg-card rounded-3xl shadow-sm border border-border min-h-125 p-1 overflow-hidden">
             {activeTab === "patients" && (
               <div className="p-4 sm:p-6">
                 <PatientsTab

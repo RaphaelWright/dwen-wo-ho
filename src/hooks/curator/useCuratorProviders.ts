@@ -105,7 +105,7 @@ export function useCuratorProviders() {
       {
         id: "All",
         label: "All Providers",
-        color: "bg-[#955aa4]",
+        color: "bg-primary",
         hoverColor: "hover:bg-gray-200",
         inactiveColor: "bg-gray-100 text-gray-700",
         count: providersList.length,

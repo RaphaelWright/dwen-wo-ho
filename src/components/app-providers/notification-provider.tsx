@@ -14,6 +14,8 @@ interface NotificationContextType {
   addNotification: (type: Notification["type"], message: string) => void;
   clearNotifications: () => void;
   dismissNotification: (id: string) => void;
+  markAsRead: (id: string) => void;
+  markAllAsRead: () => void;
   unreadCount: number;
 }
 
@@ -32,6 +34,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
           type,
           message,
           timestamp: new Date(),
+          read: false,
         },
         ...prev,
       ]);
@@ -47,12 +50,26 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
+  const markAsRead = useCallback((id: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+    );
+  }, []);
+
+  const markAllAsRead = useCallback(() => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  }, []);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
   const value = {
     notifications,
     addNotification,
     clearNotifications,
     dismissNotification,
-    unreadCount: notifications.length,
+    markAsRead,
+    markAllAsRead,
+    unreadCount,
   };
 
   return (

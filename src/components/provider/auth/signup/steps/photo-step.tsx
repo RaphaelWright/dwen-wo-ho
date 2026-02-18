@@ -32,61 +32,69 @@ const PhotoStep = ({
   return (
     <>
       {/* Main Container */}
-      <div className="w-full max-w-xl mx-auto space-y-4">
+      <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         {/* Photo Upload Section */}
-        <div className="space-y-6 text-center">
-          {/* Photo Circle */}
-          <div className="flex justify-center py-6 -mt-15">
+        <div className="space-y-8 text-center">
+          {/* Text Section */}
+          <div className="space-y-4">
             {profilePhoto ? (
-              <div onClick={handleFileClick} className="cursor-pointer">
-                <Image
-                  width={200}
-                  height={200}
-                  src={profilePhoto}
-                  alt="Profile preview"
-                  className="w-52 h-52 rounded-full object-cover border-4 border-gray-300 mx-auto hover:opacity-90 transition-opacity"
-                />
+              <>
+                <div className="flex items-center justify-center gap-3">
+                  <h1 className="text-3xl font-extrabold tracking-tight">
+                    {SIGN_UP_TEXTS.photoStep.photoAdded}
+                  </h1>
+                  <CheckCircle2 className="w-8 h-8 text-primary animate-in zoom-in spin-in-90 duration-300" />
+                </div>
+                <p className="text-muted-foreground text-lg">
+                  {SIGN_UP_TEXTS.photoStep.photoAddedDescription}
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                  {SIGN_UP_TEXTS.photoStep.addPhoto}
+                </h1>
+                <p className="text-muted-foreground text-lg px-4">
+                  {SIGN_UP_TEXTS.photoStep.photoDescription}
+                </p>
+              </>
+            )}
+          </div>
+
+          {/* Photo Circle */}
+          <div className="flex justify-center py-4">
+            {profilePhoto ? (
+              <div
+                onClick={handleFileClick}
+                className="cursor-pointer group relative"
+              >
+                <div className="w-52 h-52 rounded-full overflow-hidden border-4 border-background ring-4 ring-muted shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:ring-primary/50">
+                  <Image
+                    width={208}
+                    height={208}
+                    src={profilePhoto}
+                    alt="Profile preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span className="text-white font-medium">Change Photo</span>
+                  </div>
+                </div>
               </div>
             ) : (
               <div
                 onClick={handleUploadClick}
-                className="w-52 h-52 rounded-full border-4 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 transition-colors bg-gray-50"
+                className="w-52 h-52 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-muted/30 transition-all duration-300 bg-muted/10 group"
               >
-                <div className="w-16 h-16 rounded-full bg-white border-4 border-gray-300 flex items-center justify-center mb-2">
-                  <Upload className="w-8 h-8 text-gray-400" />
+                <div className="w-16 h-16 rounded-full bg-background shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
+                  <Upload className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
-                <span className="text-gray-500 font-bold text-lg">
+                <span className="text-muted-foreground font-medium group-hover:text-primary transition-colors">
                   {SIGN_UP_TEXTS.photoStep.addPhoto}
                 </span>
               </div>
             )}
           </div>
-
-          {/* Text below circle */}
-          {profilePhoto ? (
-            <>
-              <div className="flex items-center justify-center gap-3">
-                <h1 className="text-3xl font-extrabold text-black">
-                  {SIGN_UP_TEXTS.photoStep.photoAdded}
-                </h1>
-                <CheckCircle2 size={32} className="text-green-600" />
-              </div>
-
-              <p className="text-gray-500 text-base">
-                {SIGN_UP_TEXTS.photoStep.photoAddedDescription}
-              </p>
-            </>
-          ) : (
-            <>
-              <h1 className="text-5xl font-extrabold text-black">
-                {SIGN_UP_TEXTS.photoStep.addPhoto}
-              </h1>
-
-              <p className="text-gray-600 text-lg font-bold px-10">
-                {SIGN_UP_TEXTS.photoStep.photoDescription}
-              </p>
-            </>
-          )}
         </div>
       </div>
 
@@ -98,48 +106,7 @@ const PhotoStep = ({
         className="hidden"
       />
 
-      {/* Bottom Navigation */}
-      <div className="flex flex-col sm:flex-row border-t border-gray-500 px-4 sm:px-6 lg:px-6 py-4 items-center justify-between space-y-4 sm:space-y-0 mt-8 fixed bottom-0 right-0 w-full lg:w-1/2 bg-white">
-        <Button
-          onClick={onBack}
-          className="rounded-full mr-2 px-8 py-1 border-4 bg-white text-[#955aa4] text-lg font-bold border-[#955aa4] uppercase flex items-center justify-center hover:bg-white"
-        >
-          {SIGN_UP_TEXTS.navigation.back}
-        </Button>
-
-        <div className="flex-1 flex justify-center">
-          <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-black" />
-              <span className="font-semibold text-black">
-                {SIGN_UP_TEXTS.profile.steps.photo}
-              </span>
-            </div>
-            <span className="text-gray-400">—</span>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full border-2 border-gray-400" />
-              <span className="text-gray-400">
-                {SIGN_UP_TEXTS.profile.steps.bio}
-              </span>
-            </div>
-            <span className="text-gray-400">—</span>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full border-2 border-gray-400" />
-              <span className="text-gray-400">
-                {SIGN_UP_TEXTS.profile.steps.specialty}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <Button
-          onClick={onNext}
-          disabled={!profilePhoto}
-          className="rounded-full ml-2 px-8 py-1 border-4 text-lg font-bold uppercase transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed bg-[#955aa4]/80 text-white border-[#955aa4] hover:bg-[#955aa4] disabled:hover:bg-[#955aa4]/80"
-        >
-          {SIGN_UP_TEXTS.navigation.next}
-        </Button>
-      </div>
+      {/* Navigation is handled by parent SignUpProfile component now, removing local nav */}
 
       <PhotoCropperModal
         isOpen={isPhotoModalOpen}

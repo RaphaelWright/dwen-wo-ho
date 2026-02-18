@@ -39,17 +39,17 @@ export default function ProviderLayout({ children }: ProviderLayoutProps) {
   // Layout for school details page or patient details page (no sidebar)
   if (isSchoolDetailPage || isPatientDetailPage) {
     return (
-      <div className="h-screen bg-white">
-        <div className="h-full overflow-y-auto bg-gray-50">{children}</div>
+      <div className="h-screen bg-background">
+        <div className="h-full overflow-y-auto bg-muted/10">{children}</div>
       </div>
     );
   }
 
   // Show sidebar and content when approved
   return (
-    <div className="h-screen bg-white flex">
+    <div className="h-screen bg-background flex">
       <ProviderSidebar schoolCount={schoolCount} onLogout={handleLogout} />
-      <div className="flex-1 overflow-y-auto bg-gray-50 pt-16 md:pt-0">
+      <div className="flex-1 overflow-y-auto bg-muted/10 pt-16 md:pt-0">
         {children}
       </div>
     </div>

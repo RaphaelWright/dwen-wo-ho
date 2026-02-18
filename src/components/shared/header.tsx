@@ -10,7 +10,6 @@ import { useHeader } from "@/hooks/components/shared/use-header";
 
 const Header = ({ className }: { className?: string }) => {
   const { isOpen, setIsOpen, navRef, isFloating } = useHeader();
-
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
@@ -38,7 +37,7 @@ const Header = ({ className }: { className?: string }) => {
             >
               {/* Logo */}
               <div className="shrink-0">
-                <Logo withLink className="w-36" />
+                <Logo withLink className="w-36" variant="black" />
               </div>
 
               {/* Desktop Nav */}

@@ -14,7 +14,7 @@ export function FormActionButtons({
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="bg-[#955aa4] hover:bg-[#955aa4]/90"
+        className="bg-primary hover:bg-primary/90"
       >
         {isSubmitting
           ? LOCK_IN_TEXTS.buttons.submitting

@@ -146,7 +146,7 @@ export default function HomePageHero() {
             <Button
               onClick={() => router.push(ROUTES.patient.checkEmail)}
               size="lg"
-              className="rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-purple-200/50 transition-all duration-300 transform hover:-translate-y-1"
+              className="rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1"
             >
               {HOME.BUTTONS.GET_STARTED}
             </Button>
