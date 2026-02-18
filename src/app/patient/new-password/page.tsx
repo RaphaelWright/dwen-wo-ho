@@ -7,7 +7,7 @@ import {
   NewPasswordHeader,
   NewPasswordForm,
   NewPasswordFooter,
-} from "@/features/patient/components/new-password";
+} from "@/components/patient/new-password";
 
 const NewPasswordContent = () => {
   const {

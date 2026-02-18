@@ -5,10 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { ROUTES } from "@/lib/constants/routes";
-import { School, SchoolIcon } from "@/types/school";
-import { PatientResultItem, UrgentCarePatient } from "@/types/patient";
-import { LockInStudent } from "@/types/lockin";
-import { SchoolProvider } from "@/types/provider";
+import { School, SchoolIcon } from "@/lib/types/school";
+import { PatientResultItem, UrgentCarePatient } from "@/lib/types/patient";
+import { LockInStudent } from "@/lib/types/lockin";
+import { SchoolProvider } from "@/lib/types/provider";
 import { useDisableSchool } from "@/hooks/queries/useSchoolsQuery";
 
 export type CuratorSchoolTabType = "patients" | "icons" | "providers";

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { School } from "@/types/school";
+import { School } from "@/lib/types/school";
 import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
-import { useNotification } from "@/context/notification-context";
+import { useNotification } from "@/components/app-providers/notification-provider";
 import {
   processBatch,
   getSchoolLockInCount,

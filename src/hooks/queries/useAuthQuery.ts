@@ -1,7 +1,8 @@
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { useMutation } from "@tanstack/react-query";
-import { axiosFormData, checkResponse } from "@/configs/axiosInstance";
+import { axiosFormData } from "@/configs/axiosInstance";
+import { checkResponse } from "@/lib/api-utils";
 
 const useAuthQuery = () => {
   const loginMutation = useMutation({
@@ -47,8 +48,11 @@ const useAuthQuery = () => {
 
   const resetPasswordMutation = useMutation({
     mutationKey: ["auth", "resetPassword"],
-    mutationFn: (data: { password: string; confirmPassword: string; token?: string }) =>
-      resetPassword(data),
+    mutationFn: (data: {
+      password: string;
+      confirmPassword: string;
+      token?: string;
+    }) => resetPassword(data),
   });
 
   const addPhotoMutation = useMutation({
@@ -58,9 +62,7 @@ const useAuthQuery = () => {
 
   const updateProfileMutation = useMutation({
     mutationKey: ["auth", "updateProfile"],
-    mutationFn: (data: {
-      [key: string]: unknown;
-    }) => updateProfile(data),
+    mutationFn: (data: { [key: string]: unknown }) => updateProfile(data),
   });
 
   const addSpecialtyMutation = useMutation({
@@ -69,7 +71,10 @@ const useAuthQuery = () => {
   });
 
   async function login(data: { email: string; password: string }) {
-    const result = await api(ENDPOINTS.login, { method: "POST", body: JSON.stringify(data) });
+    const result = await api(ENDPOINTS.login, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
     return result;
   }
 
@@ -154,9 +159,7 @@ const useAuthQuery = () => {
     return checkResponse(response, 200);
   }
 
-  async function updateProfile(data: {
-    [key: string]: unknown;
-  }) {
+  async function updateProfile(data: { [key: string]: unknown }) {
     return api(ENDPOINTS.updateProfile, {
       method: "POST",
       body: JSON.stringify(data),
@@ -186,5 +189,3 @@ const useAuthQuery = () => {
 };
 
 export default useAuthQuery;
-
-

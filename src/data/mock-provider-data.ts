@@ -1,4 +1,4 @@
-import { AssociatedSchool, AssociatedPartner } from "@/types/provider";
+import { AssociatedSchool, AssociatedPartner } from "@/lib/types/provider";
 
 export const mockSchools: AssociatedSchool[] = [
   {
@@ -41,5 +41,3 @@ export const mockPartners: AssociatedPartner[] = [
     isAssociated: false,
   },
 ];
-
-

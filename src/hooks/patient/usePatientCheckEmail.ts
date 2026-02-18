@@ -2,18 +2,15 @@
 
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
+import { PatientCheckEmailFormSchema } from "@/lib/schemas/patient.auth";
 
-export const FormSchema = z.object({
-  email: z
-    .email({ message: "Please enter a valid email" })
-    .min(1, "Please enter your email address"),
-});
-
-export type PatientCheckEmailFormData = z.infer<typeof FormSchema>;
+export type PatientCheckEmailFormData = z.infer<
+  typeof PatientCheckEmailFormSchema
+>;
 
 export function usePatientCheckEmail() {
   const router = useRouter();
@@ -25,7 +22,7 @@ export function usePatientCheckEmail() {
     formState: { errors },
     watch,
   } = useForm<PatientCheckEmailFormData>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(PatientCheckEmailFormSchema),
     defaultValues: {
       email: "",
     },

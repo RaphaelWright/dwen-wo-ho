@@ -5,7 +5,7 @@ import {
   CheckEmailHeader,
   CheckEmailForm,
   CheckEmailInfo,
-} from "@/features/patient/components/check-email";
+} from "@/components/patient/check-email";
 
 const CheckEmail = () => {
   const {

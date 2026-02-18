@@ -4,35 +4,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import * as z from "zod/v4";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-
-const lockInSchema = z.object({
-  campus: z.number(),
-  reasonForLockin: z.string().min(1, "Reason is required"),
-  timeToExam: z.string().min(1, "Time to exam is required"),
-  fullName: z.string().min(1, "Full name is required"),
-  age: z.number().min(1, "Age is required").max(150, "Invalid age"),
-  sex: z.string().min(1, "Sex is required"),
-  level: z.string().min(1, "Level is required"),
-  feelingDepressed: z.string().min(1, "This field is required"),
-  lossOfInterest: z.string().min(1, "This field is required"),
-  feelingLonely: z.string().min(1, "This field is required"),
-  suicidalThoughts: z.string().min(1, "This field is required"),
-  suicidalPlans: z.string().min(1, "This field is required"),
-  examWorrying: z.string().min(1, "This field is required"),
-  sleepProblems: z.string().min(1, "This field is required"),
-  fearOfFailure: z.string().min(1, "This field is required"),
-  feelingNervous: z.string().min(1, "This field is required"),
-  sweatingOrHeartRacing: z.string().min(1, "This field is required"),
-  stomachUpset: z.string().min(1, "This field is required"),
-  motivationToStudy: z.string().min(1, "This field is required"),
-  focusWhileStudying: z.string().min(1, "This field is required"),
-  activeStudying: z.string().min(1, "This field is required"),
-  activeRecall: z.string().min(1, "This field is required"),
-  lastMinuteStudying: z.string().min(1, "This field is required"),
-});
 
 export type LockInFormData = z.infer<typeof lockInSchema>;
 
@@ -44,6 +18,7 @@ import {
   LOCKIN_TIME_TO_EXAM_OPTIONS as timeToExamOptions,
   LOCKIN_REASON_OPTIONS as reasonOptions,
 } from "@/lib/constants/mock-data";
+import { lockInSchema } from "@/lib/schemas/lockin.form.schema";
 
 export {
   frequencyOptions,
@@ -55,13 +30,7 @@ export {
 };
 
 const CACHE_KEY_PREFIX = "lockin_form_cache_";
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
-
-interface CachedFormData {
-  data: Partial<LockInFormData>;
-  timestamp: number;
-  schoolId: string;
-}
+const CACHE_DURATION = 5 * 60 * 1000;
 
 export function useLockInForm() {
   const params = useParams();
@@ -82,7 +51,11 @@ export function useLockInForm() {
       const cached = localStorage.getItem(cacheKey);
       if (!cached) return null;
 
-      const cachedData: CachedFormData = JSON.parse(cached);
+      const cachedData: {
+        data: Partial<LockInFormData>;
+        timestamp: number;
+        schoolId: string;
+      } = JSON.parse(cached);
 
       if (cachedData.schoolId !== schoolId) {
         localStorage.removeItem(cacheKey);
@@ -159,7 +132,11 @@ export function useLockInForm() {
       );
       if (hasData && typeof window !== "undefined") {
         const cacheKey = getCacheKey();
-        const cacheData: CachedFormData = {
+        const cacheData: {
+          data: Partial<LockInFormData>;
+          timestamp: number;
+          schoolId: string;
+        } = {
           data: formValues,
           timestamp: Date.now(),
           schoolId,

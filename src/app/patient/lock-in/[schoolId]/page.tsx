@@ -18,7 +18,7 @@ import {
   ExamAnxietySection,
   StudyHabitsSection,
   FormActionButtons,
-} from "@/features/patient/components/lock-in";
+} from "@/components/patient/lock-in";
 
 export default function LockInFormPage() {
   const { router, isSubmitting, register, handleSubmit, errors, onSubmit } =

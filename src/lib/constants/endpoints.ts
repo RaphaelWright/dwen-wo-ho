@@ -1,3 +1,15 @@
+export const PUBLIC_ENDPOINTS = [
+  "/api/v1/auth/check-email",
+  "/api/v1/auth/sign-in",
+  "/api/v1/auth/create-account",
+  "/api/v1/auth/submit-signup-code",
+  "/api/v1/email/send-verification",
+  "/api/v1/auth/recover-account",
+  "/api/v1/auth/submit-account-recovery-code",
+  "/api/v1/auth/reset-password",
+  "/api/v1/auth/refresh-token",
+];
+
 export const ENDPOINTS = {
   // Auth endpoints
   login: "/api/v1/auth/sign-in",
@@ -108,5 +120,3 @@ export const ENDPOINTS = {
     providerId: string | number,
   ) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
 };
-
-

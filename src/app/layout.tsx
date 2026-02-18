@@ -1,43 +1,31 @@
+import { ReactNode } from "react";
+import "@/styles/globals.css";
+import JsonLd from "@/components/miscellaneous/json-ld";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "sonner";
-import AppProviders from "@/components/AppProviders";
-import { brHendrix } from "@/lib/fonts/fonts";
+import { geistMono, geistSans, poppins } from "@/lib/fonts/fonts";
+import { getMetadata } from "@/lib/metadata";
+import { JSON_LD_ROOT_LAYOUT } from "@/configs/json-ld";
+import Providers from "@/components/app-providers/app-providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "DWEN WO HO | JustGo Health",
-  description: "DWEN WO HO | JustGo Health",
-  icons: {
-    icon: "/logos/logo-purple.ico",
-  },
-};
+export const metadata: Metadata = getMetadata();
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${brHendrix.variable} antialiased`}
+        className={`${geistSans.className} ${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
-        <Toaster richColors position="top-right" />
-        <AppProviders>{children}</AppProviders>
+        <Providers>
+          <Toaster richColors position="top-right" />
+          {children}
+        </Providers>
+        <JsonLd data={JSON_LD_ROOT_LAYOUT} />
       </body>
     </html>
   );
 }
-
-

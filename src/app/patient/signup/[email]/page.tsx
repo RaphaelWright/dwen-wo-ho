@@ -5,7 +5,7 @@ import {
   VerifyHeader,
   VerifyOTPSection,
   VerifyFooter,
-} from "@/features/patient/components/signup-verify";
+} from "@/components/patient/signup-verify";
 
 const VerifyPage = () => {
   const { email, seconds, handleComplete, handleResend, router } =

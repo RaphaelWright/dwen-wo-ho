@@ -10,7 +10,7 @@ export default function NotFound() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center">
         {/* Logo */}
         <motion.div
@@ -29,7 +29,7 @@ export default function NotFound() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-6"
         >
-          <h1 className="text-9xl md:text-[12rem] font-bold bg-gradient-to-r from-[#955aa4] via-[#22c55e] to-[#955aa4] bg-clip-text text-transparent animate-pulse">
+          <h1 className="text-9xl md:text-[12rem] font-bold bg-linear-to-r from-[#955aa4] via-[#22c55e] to-[#955aa4] bg-clip-text text-transparent animate-pulse">
             404
           </h1>
         </motion.div>
@@ -45,7 +45,8 @@ export default function NotFound() {
             Oops! Page Not Found
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            It looks like you've wandered off the path. The page you're looking for doesn't exist or has been moved.
+            It looks like you've wandered off the path. The page you're looking
+            for doesn't exist or has been moved.
           </p>
         </motion.div>
 
@@ -118,7 +119,9 @@ export default function NotFound() {
           transition={{ duration: 0.6, delay: 1 }}
           className="mt-12 pt-8 border-t border-gray-200"
         >
-          <p className="text-sm text-gray-500 mb-4">You might be looking for:</p>
+          <p className="text-sm text-gray-500 mb-4">
+            You might be looking for:
+          </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <button
               onClick={() => router.push("/")}
@@ -176,6 +179,3 @@ export default function NotFound() {
     </div>
   );
 }
-
-
-

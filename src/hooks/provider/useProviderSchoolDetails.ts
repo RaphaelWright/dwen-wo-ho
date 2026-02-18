@@ -7,9 +7,9 @@ import { ENDPOINTS } from "@/lib/constants/endpoints";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { toast } from "sonner";
 
-import { LockInData, LockInStudent } from "@/types/lockin";
-import { PatientResult } from "@/types/patient";
-import { School } from "@/types/school";
+import { LockInData, LockInStudent } from "@/lib/types/lockin";
+import { PatientResult } from "@/lib/types/patient";
+import { School } from "@/lib/types/school";
 
 export function useProviderSchoolDetails() {
   const params = useParams();

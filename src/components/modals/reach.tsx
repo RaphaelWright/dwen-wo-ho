@@ -1,59 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { X, Users, School } from "lucide-react";
+import { ReachModalProps } from "@/lib/types/modals";
+import { useReach } from "@/hooks/components/modals/use-reach";
 import {
-  X,
-  Users,
-  Activity,
-  FileText,
-  CheckCircle,
-  School,
-} from "lucide-react";
-import { useState } from "react";
-
-import { ReachModalProps } from "@/types/modals";
+  REACH_METRICS,
+  REACH_SCHOOLS,
+} from "@/lib/constants/components/modals/reach";
 
 const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
-  const [baseline, setBaseline] = useState("");
-  const schools = [
-    "Achimota High School",
-    "Presbyterian Boys' Legon",
-    "Wesley Girls' High School",
-    "Holy Child School",
-    "Mfantsipim School",
-    "Prempeh College",
-  ];
-
-  const metrics = [
-    {
-      label: "Visits",
-      value: "0",
-      icon: Users,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-    },
-    {
-      label: "Screened",
-      value: "0",
-      icon: Activity,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
-    },
-    {
-      label: "Results",
-      value: "0",
-      icon: FileText,
-      color: "text-orange-600",
-      bg: "bg-orange-50",
-    },
-    {
-      label: "Active",
-      value: "0",
-      icon: CheckCircle,
-      color: "text-green-600",
-      bg: "bg-green-50",
-    },
-  ];
+  const { baseline, setBaseline } = useReach();
 
   return (
     <AnimatePresence>
@@ -98,7 +55,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
               <div className="p-8 overflow-y-auto">
                 {/* Top Section: Total Reach & Baseline */}
                 <div className="flex flex-col md:flex-row gap-8 mb-10">
-                  <div className="flex-1 bg-[#955aa4] rounded-2xl p-6 text-white shadow-lg shadow-[#955aa4]/20 relative overflow-hidden">
+                  <div className="flex-1 bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg shadow-primary/20 relative overflow-hidden">
                     <div className="relative z-10">
                       <p className="text-white/80 font-medium mb-1">
                         Total Student Reach
@@ -121,7 +78,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                       <input
                         value={baseline}
                         onChange={(e) => setBaseline(e.target.value)}
-                        className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-lg font-medium"
+                        className="flex-1 px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-lg font-medium"
                         placeholder="e.g. 300,000"
                       />
                       <button className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors">
@@ -137,7 +94,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
 
                 {/* Metrics Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                  {metrics.map((metric) => (
+                  {REACH_METRICS.map((metric) => (
                     <div
                       key={metric.label}
                       className="bg-gray-50 rounded-xl p-5 border border-gray-100"
@@ -164,7 +121,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                     Participating Schools
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {schools.map((school, i) => (
+                    {REACH_SCHOOLS.map((school, i) => (
                       <div
                         key={i}
                         className="flex items-center gap-3 p-4 bg-white border border-gray-100 rounded-xl hover:border-gray-200 hover:shadow-sm transition-all"
@@ -189,5 +146,3 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
 };
 
 export default ReachModal;
-
-

@@ -2,18 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
-
-import { ProfessionalTitleModalProps } from "@/types/modals";
-
-const professionalTitles = [
-  { value: "Dr.", label: "Dr. (Doctor)" },
-  { value: "Prof.", label: "Prof. (Professor)" },
-  { value: "Mr.", label: "Mr." },
-  { value: "Mrs.", label: "Mrs." },
-  { value: "Ms.", label: "Ms." },
-  { value: "Miss", label: "Miss" },
-  { value: "Rev.", label: "Rev. (Reverend)" },
-];
+import { ProfessionalTitleModalProps } from "@/lib/types/modals";
+import { useProfessionalTitle } from "@/hooks/components/modals/use-professional-title";
+import { PROFESSIONAL_TITLES } from "@/lib/constants/components/modals/professional-title";
 
 const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
   isOpen,
@@ -21,10 +12,7 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
   onSelect,
   selectedTitle,
 }) => {
-  const handleTitleSelect = (title: string) => {
-    onSelect(title);
-    onClose();
-  };
+  const { handleTitleSelect } = useProfessionalTitle({ onSelect, onClose });
 
   return (
     <AnimatePresence>
@@ -60,7 +48,7 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
               {/* Title List */}
               <div className="p-6 max-h-96 overflow-y-auto">
                 <div className="space-y-2">
-                  {professionalTitles.map((title) => (
+                  {PROFESSIONAL_TITLES.map((title) => (
                     <button
                       key={title.value}
                       onClick={() => handleTitleSelect(title.value)}
@@ -91,5 +79,3 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
 };
 
 export default ProfessionalTitleModal;
-
-

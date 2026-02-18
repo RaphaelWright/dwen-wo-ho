@@ -1,163 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { Logo } from "@/components/shared/Logo";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
-import { useRouter } from "next/navigation";
-import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
-import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
 import Link from "next/link";
-import useGetSearchParams from "@/hooks/useGetSearchParams";
-import { useEffect, useState, Suspense } from "react";
+import { Logo } from "@/components/shared/Logo";
+import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/constants/routes";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { api } from "@/lib/api";
 import PendingVerificationModal from "@/components/modals/pending-verification";
-
-const LoginSchema = z.object({
-  email: z
-    .email({ message: "Please enter a valid email" })
-    .min(1, "Please enter your email address"),
-  password: z.string().min(1, { message: "Please enter password" }),
-});
+import { useProviderSignIn } from "@/hooks/provider/useProviderSignIn";
 
 const SignInContent = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [showPendingModal, setShowPendingModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    ...DEFAULT_PENDING_USER_INFO,
-  });
-  const { loginMutation } = useAuthQuery();
-  const router = useRouter();
-
-  const email = useGetSearchParams("email");
-
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email,
-      password: "",
+    form: {
+      register,
+      handleSubmit,
+      formState: { errors },
     },
-  });
-
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    setIsLoading(true);
-    setErrorMessage("");
-
-    // console.log("=== SIGN IN STARTED ===");
-    // console.log("Email:", values.email);
-
-    try {
-      // console.log("📧 Attempting sign in...");
-      const response = await api(ENDPOINTS.login, {
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-
-      // console.log(" Sign in response:", response);
-
-      if (response?.success) {
-        // console.log(" Sign in successful, processing response...");
-        // console.log("Response data:", response?.data);
-
-        // Store token if needed
-        if (response?.data?.token) {
-          // console.log("Token received, storing in localStorage");
-          localStorage.setItem("token", response?.data?.token);
-        } else {
-          // console.log("No token in response");
-        }
-
-        // Store refresh token if available
-        if (response?.data?.refreshToken) {
-          // console.log("Refresh token received, storing in localStorage");
-          localStorage.setItem("refreshToken", response?.data?.refreshToken);
-        }
-
-        // Check for pending status (comprehensive check)
-        const userData = response?.data;
-        const isPending =
-          userData?.applicationStatus === "PENDING" ||
-          userData?.status === "PENDING" ||
-          userData?.isVerified === false ||
-          response?.message === "ACCOUNT PENDING";
-
-        if (isPending) {
-          const userDataStr = JSON.stringify(userData);
-          localStorage.setItem("pendingUser", userDataStr);
-
-          // Verify it was saved
-          const savedData = localStorage.getItem("pendingUser");
-
-          router.push(ROUTES.provider.home);
-        } else {
-          router.push(ROUTES.provider.home);
-        }
-      } else {
-        setErrorMessage(response?.message ?? "Sign in failed");
-      }
-    } catch (error: any) {
-      const errorMsg = error.message || "Sign in failed. Please try again.";
-
-      // Check if error is about incomplete profile
-      if (error.message && error.message.includes("Profile is not complete")) {
-        // Store user email for profile completion
-        localStorage.setItem("profileCompletionEmail", values.email);
-
-        // Determine which step to redirect to
-        if (error.message.includes("upload your profile photo")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
-          );
-        } else if (error.message.includes("office phone number")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=bio`,
-          );
-        } else if (error.message.includes("add your specialty")) {
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=specialty`,
-          );
-        } else {
-          // Default to photo step
-          router.push(
-            `/provider/signup?email=${encodeURIComponent(values.email)}&step=photo`,
-          );
-        }
-      } else {
-        setErrorMessage(errorMsg);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  useEffect(() => {
-    if (!email) {
-      router.push(ROUTES.provider.checkEmail);
-    }
-  }, [email, router]);
+    onSubmit,
+    showPassword,
+    togglePasswordVisibility,
+    password,
+    handlePasswordChange,
+    isLoading,
+    errorMessage,
+    showPendingModal,
+    setShowPendingModal,
+    userInfo,
+    email,
+    router,
+  } = useProviderSignIn();
 
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between w-full px-6">
         <Logo />
-        <button className="bg-gray-300 text-red-500 rounded-full px-4 py-2 text-sm font-medium hover:bg-gray-400 transition-colors">
+        <button className="bg-muted text-destructive rounded-full px-4 py-2 text-sm font-medium hover:bg-muted/80 transition-colors">
           Switch to Patients
         </button>
       </div>
@@ -187,7 +64,7 @@ const SignInContent = () => {
               value={email as string}
               placeholder={email as string}
               disabled
-              className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg text-gray-500 bg-gray-200/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg text-gray-500 bg-gray-200/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
 
@@ -202,16 +79,16 @@ const SignInContent = () => {
                 onChange={handlePasswordChange}
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
-                className={`w-full px-4 py-3 pr-16 text-base border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors ${
+                className={`w-full px-4 py-3 pr-16 text-base border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${
                   errors?.password?.message
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300 bg-white hover:border-gray-400"
+                    ? "border-destructive bg-destructive/10"
+                    : "border-gray-300 bg-background hover:border-gray-400"
                 }`}
               />
               <button
                 type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-600 font-medium text-sm hover:text-purple-700 transition-colors"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary font-medium text-sm hover:text-primary/80 transition-colors"
               >
                 {!showPassword ? "SHOW" : "HIDE"}
               </button>
@@ -219,8 +96,8 @@ const SignInContent = () => {
           </div>
           {/* Error Message */}
           {errorMessage && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-600 text-center text-sm font-medium">
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+              <p className="text-destructive text-center text-sm font-medium">
                 {errorMessage}
               </p>
             </div>
@@ -230,7 +107,7 @@ const SignInContent = () => {
           <div className="text-center">
             <Link
               href={`${ROUTES.provider.verifyPasswordReset}?email=${email}`}
-              className="text-purple-600 hover:text-purple-700 text-sm font-medium transition-colors"
+              className="text-primary hover:text-primary/90 text-sm font-medium transition-colors"
             >
               Don&apos;t remember your password? Recover account →
             </Link>
@@ -242,7 +119,7 @@ const SignInContent = () => {
       <div className="flex flex-col sm:flex-row border-t border-gray-500 px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6 lg:pt-10 items-center justify-between space-y-4 sm:space-y-0">
         <Button
           onClick={() => router.back()}
-          className="rounded-full px-3 sm:px-4 lg:px-6 border-2 sm:border-4 bg-white text-[#955aa4] text-sm sm:text-base lg:text-xl font-bold border-[#955aa4] uppercase w-full sm:w-auto"
+          className="rounded-full px-3 sm:px-4 lg:px-6 border-2 sm:border-4 bg-background text-primary text-sm sm:text-base lg:text-xl font-bold border-primary uppercase w-full sm:w-auto"
         >
           Back
         </Button>
@@ -252,8 +129,8 @@ const SignInContent = () => {
           disabled={!password.trim() || isLoading}
           className={`text-sm sm:text-base lg:text-xl px-3 sm:px-4 lg:px-6 py-2 border-2 sm:border-4 font-bold rounded-md flex items-center gap-2 w-full sm:w-auto ${
             !password.trim() || isLoading
-              ? "border-gray-400 text-gray-400 bg-gray-300 cursor-not-allowed"
-              : "border-[#2b3990] text-white bg-[#955aa4] hover:bg-[#955aa4]/80"
+              ? "border-muted text-muted-foreground bg-muted-foreground/20 cursor-not-allowed"
+              : "border-primary text-primary-foreground bg-primary/60 hover:bg-primary/80"
           }`}
         >
           {isLoading && (

@@ -2,35 +2,12 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Logo } from "@/components/shared/Logo";
-import { useState } from "react";
+import { useLineup } from "@/hooks/components/modals/use-lineup";
 import { X } from "lucide-react";
-
-import { LineupModalProps } from "@/types/modals";
+import { LineupModalProps } from "@/lib/types/modals";
 
 const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
-  const [lineup, setLineup] = useState<string[]>([
-    "Achimota High School",
-    "Achimota High School",
-    "Achimota High School",
-    "Achimota High School",
-  ]);
-  const [others, setOthers] = useState<string[]>([
-    "Ashesi University",
-    "Ashesi University",
-    "Ashesi University",
-  ]);
-  const [activeTab, setActiveTab] = useState<"lineup" | "others">("lineup");
-
-  const handleToggle = (name: string) => {
-    // If it's already in lineup, remove and push to others; else move from others into lineup
-    if (lineup.includes(name)) {
-      setLineup((prev) => prev.filter((n) => n !== name));
-      setOthers((prev) => (prev.includes(name) ? prev : [...prev, name]));
-    } else {
-      setLineup((prev) => (prev.includes(name) ? prev : [...prev, name]));
-      setOthers((prev) => prev.filter((n) => n !== name));
-    }
-  };
+  const { lineup, others, activeTab, setActiveTab, handleToggle } = useLineup();
 
   return (
     <AnimatePresence>
@@ -49,7 +26,7 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-white rounded-2xl border-2 border-[#955aa4] max-w-5xl w-full p-8 max-h-[80vh] overflow-y-auto">
+            <div className="bg-background rounded-2xl border-2 border-primary max-w-5xl w-full p-8 max-h-[80vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <Logo />
                 <button
@@ -73,8 +50,8 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                     onClick={() => setActiveTab("lineup")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
                       activeTab === "lineup"
-                        ? "bg-[#955aa4] text-white"
-                        : "bg-gray-100 text-gray-900"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     Lineup . {lineup.length}
@@ -83,8 +60,8 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
                     onClick={() => setActiveTab("others")}
                     className={`w-full text-left px-6 py-3 rounded-full text-4xl font-extrabold transition-colors ${
                       activeTab === "others"
-                        ? "bg-[#955aa4] text-white"
-                        : "bg-gray-100 text-gray-900"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     Others
@@ -129,5 +106,3 @@ const LineupModal = ({ isOpen, onClose }: LineupModalProps) => {
 };
 
 export default LineupModal;
-
-

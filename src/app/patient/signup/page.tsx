@@ -7,7 +7,7 @@ import {
   SignUpHeader,
   SignUpForm,
   SignUpFooter,
-} from "@/features/patient/components/signup";
+} from "@/components/patient/signup";
 
 const SignUpContent = () => {
   const {

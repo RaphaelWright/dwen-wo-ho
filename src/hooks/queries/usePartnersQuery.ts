@@ -1,15 +1,9 @@
+"use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosFormData, checkResponse } from "@/configs/axiosInstance";
+import { axiosFormData } from "@/configs/axiosInstance";
+import { checkResponse } from "@/lib/api-utils";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "sonner";
-
-export interface Partner {
-  id: string;
-  name: string;
-  nickname?: string;
-  slogan?: string;
-  logo?: string;
-}
 
 export interface ICreatePartner {
   name: string;
@@ -18,18 +12,26 @@ export interface ICreatePartner {
   logo?: File | null;
 }
 
-const createPartner = async (data: ICreatePartner): Promise<Partner> => {
+const createPartner = async (
+  data: ICreatePartner,
+): Promise<{
+  id: string;
+  name: string;
+  nickname?: string;
+  slogan?: string;
+  logo?: string;
+}> => {
   const formData = new FormData();
   formData.append("name", data.name);
-  
+
   if (data.nickname) {
     formData.append("nickname", data.nickname);
   }
-  
+
   if (data.slogan) {
     formData.append("slogan", data.slogan);
   }
-  
+
   if (data.logo) {
     formData.append("logo", data.logo);
   }
@@ -63,5 +65,3 @@ export const useCreatePartner = () => {
     },
   });
 };
-
-

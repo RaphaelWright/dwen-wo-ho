@@ -1,70 +1,31 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useRef, useState } from "react";
 import { X, Upload, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  useCreatePartner,
-  ICreatePartner,
-} from "@/hooks/queries/usePartnersQuery";
-
-import { PartnerCreationModalProps } from "@/types/modals";
+import { PartnerCreationModalProps } from "@/lib/types/modals";
+import { usePartnerCreation } from "@/hooks/components/modals/use-partner-creation";
 
 const PartnerCreationModal = ({
   isOpen,
   onClose,
   onPartnerCreated,
 }: PartnerCreationModalProps) => {
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [slogan, setSlogan] = useState("");
-  const [logo, setLogo] = useState<string | undefined>(undefined);
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const createPartnerMutation = useCreatePartner();
-
-  const handlePickLogo = () => fileInputRef.current?.click();
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setLogoFile(file);
-    const reader = new FileReader();
-    reader.onload = () => setLogo(reader.result as string);
-    reader.readAsDataURL(file);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    const partnerData: ICreatePartner = {
-      name: name.trim(),
-      nickname: nickname.trim() || undefined,
-      slogan: slogan.trim() || undefined,
-      logo: logoFile,
-    };
-
-    createPartnerMutation.mutate(partnerData, {
-      onSuccess: (data) => {
-        onPartnerCreated?.({
-          name: data.name,
-          nickname: data.nickname,
-          logo: data.logo,
-        });
-        // Reset form
-        setName("");
-        setNickname("");
-        setSlogan("");
-        setLogo(undefined);
-        setLogoFile(null);
-        onClose();
-      },
-    });
-  };
+  const {
+    name,
+    setName,
+    nickname,
+    setNickname,
+    slogan,
+    setSlogan,
+    logo,
+    fileInputRef,
+    createPartnerMutation,
+    handlePickLogo,
+    handleFileChange,
+    handleSubmit,
+  } = usePartnerCreation({ onPartnerCreated, onClose });
 
   return (
     <AnimatePresence>
@@ -234,5 +195,3 @@ const PartnerCreationModal = ({
 };
 
 export default PartnerCreationModal;
-
-

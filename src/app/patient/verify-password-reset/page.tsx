@@ -6,7 +6,7 @@ import {
   VerifyPasswordResetHeader,
   VerifyPasswordResetOTPSection,
   VerifyPasswordResetFooter,
-} from "@/features/patient/components/verify-password-reset";
+} from "@/components/patient/verify-password-reset";
 
 const VerifyContent = () => {
   const { email, seconds, handleComplete, handleResend, router } =

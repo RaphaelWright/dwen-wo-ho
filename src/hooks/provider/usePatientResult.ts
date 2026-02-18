@@ -7,8 +7,11 @@ import { ENDPOINTS } from "@/lib/constants/endpoints";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { toast } from "sonner";
 
-import { PatientResult } from "@/types/patient";
-import { LockInAssessment } from "@/types/lockin";
+import { PatientResult } from "@/lib/types/patient";
+import { LockInAssessment } from "@/lib/types/lockin";
+
+export type { PatientResult } from "@/lib/types/patient";
+export type { LockInAssessment } from "@/lib/types/lockin";
 
 export function usePatientResult() {
   const params = useParams();

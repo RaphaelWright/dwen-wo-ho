@@ -3,17 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
-
-export const SignUpSchema = z.object({
-  email: z.email().min(1, { message: "Please enter your email" }),
-  password: z.string().min(6, { message: "Please enter your password" }),
-  repeatPassword: z.string().min(6, { message: "Please enter your password" }),
-});
+import { SignUpSchema } from "@/lib/schemas/patient.auth";
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>;
 
