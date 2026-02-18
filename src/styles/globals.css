@@ -52,6 +52,7 @@
   --color-slider-thumb-alt: var(--slider-thumb-alt);
   --color-footer-bg: var(--footer-bg);
   --color-footer-foreground: var(--footer-foreground);
+  --color-school-details-sidebar: var(--school-details-sidebar);
 }
 
 :root {
@@ -93,6 +94,7 @@
   --slider-thumb-alt: #955aa4;
   --footer-bg: #202126;
   --footer-foreground: oklch(0.985 0 0);
+  --school-details-sidebar: #faf5f9;
 }
 
 .dark {
@@ -133,6 +135,7 @@
   --slider-thumb-alt: #955aa4;
   --footer-bg: oklch(0.205 0 0);
   --footer-foreground: oklch(0.985 0 0);
+  --school-details-sidebar: oklch(0.205 0 0);
 }
 
 @layer base {
@@ -362,4 +365,3 @@
 ::view-transition-old(root) {
   animation: none;
 }
-

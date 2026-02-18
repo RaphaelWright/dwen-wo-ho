@@ -1,5 +1,4 @@
 import { MdHealthAndSafety } from "react-icons/md";
-// import { Logo } from "@/components/shared/Logo";
 import { cn } from "@/lib/utils";
 import { UrgentCareSidebarProps } from "@/lib/types/components/curator/school-details";
 import { URGENT_CARE_SKELETON_COUNT } from "@/lib/constants/components/curator/school-details";
@@ -8,10 +7,9 @@ export function UrgentCareSidebar({
   urgentCare,
   isLoading,
   compactTimeAgo,
-  onLogoClick,
 }: UrgentCareSidebarProps) {
   return (
-    <aside className="w-11/12 lg:w-96 shrink-0 border-t lg:border-t-0 lg:border-l border-border bg-card p-6 relative z-10 order-last lg:order-0 flex flex-col lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden mx-auto rounded-3xl sm:mx-0 sm:rounded-none mb-4 sm:mb-0 border sm:border-0 shadow-sm lg:shadow-none">
+    <aside className="w-11/12 lg:w-96 shrink-0 border-t lg:border-t-0 lg:border-l border-border bg-school-details-sidebar p-6 relative z-10 order-last lg:order-0 flex flex-col lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden mx-auto rounded-3xl sm:mx-0 sm:rounded-none mb-4 sm:mb-0 border sm:border-0 shadow-sm lg:shadow-none">
       {/* Title */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
