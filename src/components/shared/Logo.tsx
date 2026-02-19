@@ -9,14 +9,21 @@ export const Logo = ({
   withLink = true,
 }: LogoProps) => {
   const src =
-    variant === "black" ? "/logos/logo-black.png" : "/logos/logo-purple.png";
+    variant === "black"
+      ? "/logos/logo-black.png"
+      : variant === "white"
+        ? "/logos/logo-white.png"
+        : "/logos/logo-purple.png";
 
   const content = (
     <Image
       priority
       src={src}
       alt="JustGo Health"
-      className={cn("bg-contain w-auto h-auto", className)}
+      className={cn(
+        "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out",
+        className,
+      )}
       width={180}
       height={40}
     />

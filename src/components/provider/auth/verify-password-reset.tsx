@@ -28,7 +28,7 @@ const VerifyContent = (props: VerifyPasswordResetProps) => {
     <div className="h-full flex flex-col justify-between min-h-screen py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
       <div className="relative z-10 flex items-center px-8 justify-between w-full">
         <div className="transform hover:scale-105 transition-transform duration-300">
-          <Logo variant={mounted && theme === "light" ? "black" : "purple"} />
+          <Logo variant={mounted && theme === "light" ? "black" : "white"} />
         </div>
         <Link
           href={ROUTES.provider.auth}

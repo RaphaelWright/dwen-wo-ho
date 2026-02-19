@@ -258,7 +258,7 @@ export const CuratorSidebar = ({
             </Link>
           ) : (
             <Logo
-              variant={mounted && theme === "light" ? "black" : "purple"}
+              variant={mounted && theme === "light" ? "black" : "white"}
               className="w-32"
             />
           )}
@@ -404,7 +404,7 @@ export const CuratorSidebar = ({
           {isMobileSidebarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
         </button>
         <Logo
-          variant={mounted && theme === "light" ? "black" : "purple"}
+          variant={mounted && theme === "light" ? "black" : "white"}
           className="h-7 w-auto"
           withLink={false}
         />

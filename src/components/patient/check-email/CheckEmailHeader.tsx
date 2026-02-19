@@ -1,17 +1,29 @@
+"use client";
 import { Logo } from "@/components/shared/Logo";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/patient/check-email";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 export function CheckEmailHeader() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="absolute flex top-4 md:top-8 items-center px-4 md:px-8 justify-between w-full">
-      <Logo variant="black" />
+    <div className="flex justify-between items-center">
+      <Logo variant={mounted && theme === "light" ? "black" : "white"} />
       <Link
         href={ROUTES.provider.checkEmail}
-        className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl bg-muted text-destructive rounded-full px-3 md:px-4 py-1 md:py-2"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-200 group"
       >
         {CHECK_EMAIL_TEXTS.header.switchText}
+        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
       </Link>
     </div>
   );

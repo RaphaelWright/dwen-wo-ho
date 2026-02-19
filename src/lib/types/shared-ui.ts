@@ -1,7 +1,7 @@
 import { PARTNER_SCHOOLS } from "@/lib/constants/components/social-proof";
 
 export interface LogoProps {
-  variant?: "black" | "purple";
+  variant?: "black" | "purple" | "white";
   className?: string;
   withLink?: boolean;
 }

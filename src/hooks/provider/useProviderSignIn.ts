@@ -49,6 +49,28 @@ export function useProviderSignIn() {
     }
   }, [searchEmail, router]);
 
+  const getCleanErrorMessage = (error: any): string => {
+    let message = "An unexpected error occurred.";
+
+    if (typeof error === "string") {
+      message = error;
+    } else if (error?.response?.data?.message) {
+      message = error.response.data.message;
+    } else if (error?.message) {
+      message = error.message;
+    }
+
+    if (typeof message === "string" && message.trim().startsWith("{")) {
+      try {
+        const parsed = JSON.parse(message);
+        if (parsed.message) return parsed.message;
+        if (parsed.error) return parsed.error;
+      } catch {}
+    }
+
+    return message;
+  };
+
   const onSubmit = async (values: ProviderLoginFormData) => {
     setIsLoading(true);
     setErrorMessage("");
@@ -86,28 +108,30 @@ export function useProviderSignIn() {
           router.push(ROUTES.provider.home);
         }
       } else {
-        setErrorMessage(response?.message ?? "Sign in failed");
+        setErrorMessage(
+          getCleanErrorMessage(response?.message ?? "Sign in failed"),
+        );
       }
     } catch (error: any) {
-      const errorMsg = error.message || "Sign in failed. Please try again.";
+      const errorMsg = getCleanErrorMessage(error);
 
       // Check if error is about incomplete profile
-      if (error.message && error.message.includes("Profile is not complete")) {
+      if (errorMsg && errorMsg.includes("Profile is not complete")) {
         localStorage.setItem("profileCompletionEmail", values.email);
 
-        if (error.message.includes("upload your profile photo")) {
+        if (errorMsg.includes("upload your profile photo")) {
           router.push(
             `/provider/signup?email=${encodeURIComponent(
               values.email,
             )}&step=photo`,
           );
-        } else if (error.message.includes("office phone number")) {
+        } else if (errorMsg.includes("office phone number")) {
           router.push(
             `/provider/signup?email=${encodeURIComponent(
               values.email,
             )}&step=bio`,
           );
-        } else if (error.message.includes("add your specialty")) {
+        } else if (errorMsg.includes("add your specialty")) {
           router.push(
             `/provider/signup?email=${encodeURIComponent(
               values.email,
