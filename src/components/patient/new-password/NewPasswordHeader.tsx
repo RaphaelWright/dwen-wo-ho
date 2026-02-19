@@ -1,14 +1,29 @@
+"use client";
+
 import { Logo } from "@/components/shared/Logo";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/patient/new-password";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export function NewPasswordHeader() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="flex items-center px-8 justify-between w-full">
-      <Logo />
-      <p className="font-bold">
-        {NEW_PASSWORD_TEXTS.header.for}{" "}
-        <span className="text-4xl">{NEW_PASSWORD_TEXTS.header.patient}</span>
-      </p>
+    <div className="flex items-center justify-between w-full">
+      <Logo variant={mounted && theme === "light" ? "black" : "white"} />
+      <div className="flex items-center gap-1.5">
+        <span className="text-xs text-muted-foreground font-medium">
+          {NEW_PASSWORD_TEXTS.header.for}
+        </span>
+        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary ring-1 ring-primary/20">
+          {NEW_PASSWORD_TEXTS.header.patient}
+        </span>
+      </div>
     </div>
   );
 }

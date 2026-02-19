@@ -18,19 +18,27 @@ const CheckEmail = () => {
   } = usePatientCheckEmail();
 
   return (
-    <div className="w-full px-8 md:px-12 lg:px-16 animate-in fade-in zoom-in-95 duration-700 space-y-20 my-4">
+    <div className="w-full h-full min-h-screen flex flex-col justify-between px-8 md:px-12 lg:px-16 py-6 animate-in fade-in zoom-in-95 duration-700">
+      {/* Header */}
       <CheckEmailHeader />
-      <div className="space-y-10">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center font-bold leading-tight text-foreground tracking-tight drop-shadow-sm">
-          Enter your email to{" "}
-          <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
-            Sign In
-          </span>{" "}
-          or{" "}
-          <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
-            Sign Up
-          </span>{" "}
-          as a Patient.
+
+      <div className="flex flex-col items-center space-y-8">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl text-center font-bold leading-tight text-foreground tracking-tight flex flex-col gap-1">
+          <span>
+            Enter your email to{" "}
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
+              Sign In
+            </span>
+          </span>
+          <span className="text-muted-foreground/80 text-xl md:text-2xl font-medium">
+            or
+          </span>
+          <span>
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
+              Sign Up
+            </span>{" "}
+            as a Patient.
+          </span>
         </h1>
 
         <CheckEmailForm
@@ -41,9 +49,10 @@ const CheckEmail = () => {
           isValidEmail={isValidEmail}
           onEmailChange={handleEmailChange}
         />
-
-        <CheckEmailInfo />
       </div>
+
+      {/* Footer */}
+      <CheckEmailInfo />
     </div>
   );
 };

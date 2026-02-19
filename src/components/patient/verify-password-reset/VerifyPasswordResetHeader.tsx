@@ -1,16 +1,29 @@
+"use client";
+
 import { Logo } from "@/components/shared/Logo";
 import { VERIFY_PASSWORD_RESET_TEXTS } from "@/lib/constants/components/patient/verify-password-reset";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export function VerifyPasswordResetHeader() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="flex items-center px-8 justify-between w-full">
-      <Logo />
-      <p className="font-bold">
-        {VERIFY_PASSWORD_RESET_TEXTS.header.for}{" "}
-        <span className="text-4xl">
+    <div className="flex items-center justify-between w-full">
+      <Logo variant={mounted && theme === "light" ? "black" : "white"} />
+      <div className="flex items-center gap-1.5">
+        <span className="text-xs text-muted-foreground font-medium">
+          {VERIFY_PASSWORD_RESET_TEXTS.header.for}
+        </span>
+        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary ring-1 ring-primary/20">
           {VERIFY_PASSWORD_RESET_TEXTS.header.patient}
         </span>
-      </p>
+      </div>
     </div>
   );
 }

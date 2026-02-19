@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/patient/check-email";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 export function CheckEmailHeader() {
   const { theme } = useTheme();
@@ -18,14 +18,13 @@ export function CheckEmailHeader() {
   return (
     <div className="flex justify-between items-center">
       <Logo variant={mounted && theme === "light" ? "black" : "white"} />
-      <Button variant={"link"}>
-        <Link
-          href={ROUTES.provider.checkEmail}
-          className="text-sm sm:text-base md:text-lg font-medium transition-all duration-300 group"
-        >
-          {CHECK_EMAIL_TEXTS.header.switchText}
-        </Link>
-      </Button>
+      <Link
+        href={ROUTES.provider.checkEmail}
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-200 group"
+      >
+        {CHECK_EMAIL_TEXTS.header.switchText}
+        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+      </Link>
     </div>
   );
 }

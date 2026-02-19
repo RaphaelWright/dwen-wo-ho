@@ -38,7 +38,22 @@ export function usePatientSignIn({ email }: { email: string | null }) {
           router.push(ROUTES.curator.schools); // This was previously "/signin", let's check ROUTES
         },
         onError: (error: any) => {
-          setErrorMessage(error?.message || "Sign in failed");
+          let message = "Sign in failed";
+
+          if (error?.response?.data?.message) {
+            message = error.response.data.message;
+          } else if (error?.message) {
+            message = error.message;
+          }
+
+          if (typeof message === "string" && message.trim().startsWith("{")) {
+            try {
+              const parsed = JSON.parse(message);
+              if (parsed.message) message = parsed.message;
+            } catch {}
+          }
+
+          setErrorMessage(message);
         },
       });
     },

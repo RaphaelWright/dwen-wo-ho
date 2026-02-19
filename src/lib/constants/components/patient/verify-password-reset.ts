@@ -6,7 +6,7 @@ export const VERIFY_PASSWORD_RESET_TEXTS = {
   otpSection: {
     title: "Enter Verification Code",
     subtitlePart1: "A 6-digit verification code was just sent to",
-    resendButton: "Resend code >",
+    resendButton: "Resend code",
   },
   footer: {
     back: "Back",

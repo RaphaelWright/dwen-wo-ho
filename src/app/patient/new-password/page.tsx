@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools"; // Commented out for production feel
 import { usePatientNewPassword } from "@/hooks/patient/usePatientNewPassword";
 import {
   NewPasswordHeader,
@@ -22,20 +22,22 @@ const NewPasswordContent = () => {
   } = usePatientNewPassword();
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="w-full h-full min-h-screen flex flex-col justify-between px-6 sm:px-8 md:px-12 lg:px-16 py-6 animate-in fade-in zoom-in-95 duration-700">
       <NewPasswordHeader />
 
-      <NewPasswordForm
-        register={register}
-        errors={errors}
-        showPassword={showPassword}
-        onTogglePassword={togglePasswordVisibility}
-        onSubmit={handleSubmit(onSubmit)}
-      />
+      <div className="flex-1 flex items-center justify-center py-12">
+        <NewPasswordForm
+          register={register}
+          errors={errors}
+          showPassword={showPassword}
+          onTogglePassword={togglePasswordVisibility}
+          onSubmit={handleSubmit(onSubmit)}
+        />
+      </div>
 
       <NewPasswordFooter onBack={() => router.back()} />
 
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </div>
   );
 };

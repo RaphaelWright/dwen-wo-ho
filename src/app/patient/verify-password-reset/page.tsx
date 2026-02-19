@@ -13,15 +13,17 @@ const VerifyContent = () => {
     usePatientVerifyPasswordReset();
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="w-full h-full min-h-screen flex flex-col justify-between px-6 sm:px-8 md:px-12 lg:px-16 py-6 animate-in fade-in zoom-in-95 duration-700">
       <VerifyPasswordResetHeader />
 
-      <VerifyPasswordResetOTPSection
-        email={email}
-        seconds={seconds}
-        onComplete={handleComplete}
-        onResend={handleResend}
-      />
+      <div className="flex-1 flex items-center justify-center py-12">
+        <VerifyPasswordResetOTPSection
+          email={email}
+          seconds={seconds}
+          onComplete={handleComplete}
+          onResend={handleResend}
+        />
+      </div>
 
       <VerifyPasswordResetFooter onBack={() => router.back()} />
     </div>

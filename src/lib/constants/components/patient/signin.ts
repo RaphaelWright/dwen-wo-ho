@@ -11,7 +11,7 @@ export const SIGN_IN_TEXTS = {
     show: "SHOW",
     hide: "HIDE",
     recoverPrompt: "Don't remember password?",
-    recoverLink: "Recover account >",
+    recoverLink: "Recover account",
   },
   footer: {
     back: "Back",
