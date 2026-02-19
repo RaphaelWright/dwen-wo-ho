@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "../ui/label";
@@ -24,11 +24,16 @@ export const BaseSignInForm = ({
 }: BaseSignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { theme } = useTheme();
+ const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
   return (
     <div className="h-full flex flex-col justify-between min-h-screen py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
       <div className="flex items-center px-8 justify-between w-full">
-        <Logo variant={theme === "light" ? "black" : "purple"} />
+        <Logo variant={mounted && theme === "light" ? "black" : "white"} />
         <p className="font-bold text-2xl text-muted-foreground">
           <span className="text-sm font-normal">for </span>
           {role === "patient" ? "Patients" : "Providers"}

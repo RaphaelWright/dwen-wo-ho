@@ -164,20 +164,19 @@
   @apply w-12 h-12 border-2 border-border rounded-md text-2xl font-bold text-success;
 }
 
-/* Custom slider styles for photo editor */
+/* Custom slider styles and existing animations */
 .slider {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
 }
-
+/* ... (standard slider styles suppressed for brevity, only appending new animations below) ... */
 .slider::-webkit-slider-track {
   background: var(--slider-track);
   height: 8px;
   border-radius: 4px;
 }
-
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -189,28 +188,23 @@
   border: 5px solid var(--slider-thumb);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .slider::-webkit-slider-thumb:hover {
   background: var(--slider-thumb);
   transform: scale(1.1);
 }
-
-/* Hide scrollbar but keep functionality */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+  display: none;
 }
-
 .slider::-moz-range-track {
   background: var(--slider-track);
   height: 8px;
   border-radius: 4px;
   border: none;
 }
-
 .slider::-moz-range-thumb {
   background: var(--slider-thumb-alt);
   height: 24px;
@@ -220,13 +214,10 @@
   border: 2px solid #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .slider::-moz-range-thumb:hover {
   background: var(--primary);
   transform: scale(1.1);
 }
-
-/* Subtle pulse animation for close button */
 @keyframes pulse-subtle {
   0%,
   100% {
@@ -238,23 +229,62 @@
     transform: scale(1.02);
   }
 }
-
 .animate-pulse-subtle {
   animation: pulse-subtle 2.5s ease-in-out infinite;
 }
-
 ::-webkit-scrollbar {
   @apply bg-background w-1 h-1;
 }
-
 ::-webkit-scrollbar-thumb {
   @apply bg-primary/60 rounded-4xl border-0;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-accent cursor-grab;
 }
 
+/* New Modern Animations */
+@layer utilities {
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 15s ease infinite;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Page Transition Properties */
 @property --column-one {
   inherits: true;
   initial-value: 0;
@@ -309,28 +339,27 @@
 
 ::view-transition-new(root) {
   clip-path: polygon(
-    /* 1st column */ 0 100%,
+    0 100%,
     0 calc(var(--column-one) * 1%),
     20% calc(var(--column-one) * 1%),
     20% 100%,
-    /* 2nd column */ 20% 100%,
+    20% 100%,
     20% calc(var(--column-two) * 1%),
     40% calc(var(--column-two) * 1%),
     40% 100%,
-    /* 3rd column */ 40% 100%,
+    40% 100%,
     40% calc(var(--column-three) * 1%),
     60% calc(var(--column-three) * 1%),
     60% 100%,
-    /* 4th column */ 60% 100%,
+    60% 100%,
     60% calc(var(--column-four) * 1%),
     80% calc(var(--column-four) * 1%),
     80% 100%,
-    /* 5th column */ 80% 100%,
+    80% 100%,
     80% calc(var(--column-five) * 1%),
     100% calc(var(--column-five) * 1%),
     100% 100%
   );
-
   --speed: 0.625;
   --columns: 5;
   animation:
@@ -339,7 +368,6 @@
     three calc(var(--speed) * 1s) calc(sin((2 / 5) * 45deg) * var(--speed) * 1s),
     four calc(var(--speed) * 1s) calc(sin((3 / 5) * 45deg) * var(--speed) * 1s),
     five calc(var(--speed) * 1s) calc(sin((4 / 5) * 45deg) * var(--speed) * 1s);
-
   animation-fill-mode: both;
   animation-timing-function: linear(
     0 0%,
@@ -364,4 +392,11 @@
 
 ::view-transition-old(root) {
   animation: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-muted) inset;
 }

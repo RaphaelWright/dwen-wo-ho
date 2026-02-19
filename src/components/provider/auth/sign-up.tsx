@@ -84,7 +84,7 @@ const SignUpContent = (props: ProviderSignUpProps) => {
       {/* Header */}
       <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50 transition-all duration-300">
         <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 py-4">
-          <Logo variant={mounted && theme === "light" ? "black" : "purple"} />
+          <Logo variant={mounted && theme === "light" ? "black" : "white"} />
           <p className="text-xl font-semibold hidden sm:block">
             <span className="text-sm font-normal text-muted-foreground mr-2">
               {SIGN_UP_TEXTS.header.for}

@@ -18,13 +18,19 @@ const CheckEmail = () => {
   } = usePatientCheckEmail();
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 md:px-24 py-8 md:py-12">
+    <div className="w-full px-8 md:px-12 lg:px-16 animate-in fade-in zoom-in-95 duration-700 space-y-20 my-4">
       <CheckEmailHeader />
-
-      <div className="flex flex-col items-center justify-center space-y-6 md:space-y-8 lg:space-y-12 px-4 md:px-6 max-w-4xl mx-auto w-full mt-16 md:mt-20">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-medium leading-tight">
-          Enter your email to <span className="text-[#955aa4]">Sign In</span> or{" "}
-          <span className="text-[#955aa4]">Sign Up</span> as a Patient.
+      <div className="space-y-10">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center font-bold leading-tight text-foreground tracking-tight drop-shadow-sm">
+          Enter your email to{" "}
+          <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
+            Sign In
+          </span>{" "}
+          or{" "}
+          <span className="bg-clip-text text-transparent bg-linear-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x">
+            Sign Up
+          </span>{" "}
+          as a Patient.
         </h1>
 
         <CheckEmailForm
