@@ -10,7 +10,7 @@ import {
 } from "@/hooks/curator/useCuratorSchools";
 import { SchoolCard } from "@/components/curator/SchoolCard";
 import { NotificationSheet } from "@/components/ui/notification-sheet";
-import { useNotification } from "@/components/app-providers/notification-provider";
+import { useNotification } from "@/hooks/useNotification";
 import { FiBell } from "react-icons/fi";
 
 export default function SchoolsPage() {
@@ -30,6 +30,7 @@ export default function SchoolsPage() {
     clearNotifications,
     dismissNotification,
     unreadCount,
+    addNotification, // Added for verification
   } = useNotification();
 
   if (isError) {
@@ -63,6 +64,51 @@ export default function SchoolsPage() {
 
           {/* Header Actions */}
           <div className="flex items-center gap-4">
+            {/* Test Notification Buttons */}
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
+                onClick={() =>
+                  addNotification(
+                    "success",
+                    "New school added: Achimota School",
+                    "/curator/schools/4", // Example school ID link
+                  )
+                }
+              >
+                Test: School (Link)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
+                onClick={() =>
+                  addNotification(
+                    "info",
+                    "New patient: Maame Abena Pokuaa at Achimota School",
+                    "/curator/schools/4/patients/122", // Example patient link
+                  )
+                }
+              >
+                Test: Patient (Link)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                onClick={() =>
+                  addNotification(
+                    "error",
+                    "School removed: Mfantsipim School is no longer available",
+                    // No link for errors usually
+                  )
+                }
+              >
+                Test: Error (No Link)
+              </Button>
+            </div>
             <NotificationSheet
               notifications={notifications}
               onClear={clearNotifications}

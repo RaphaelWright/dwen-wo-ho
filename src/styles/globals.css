@@ -47,6 +47,10 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --color-success: var(--success);
+  --color-info: var(--info);
+  --color-warning: var(--warning);
+  --color-error: var(--destructive);
+  --color-loading: var(--loading);
   --color-slider-track: var(--slider-track);
   --color-slider-thumb: var(--slider-thumb);
   --color-slider-thumb-alt: var(--slider-thumb-alt);
@@ -63,7 +67,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #7e22ce;
+  --primary: #955aa4;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -82,7 +86,7 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: #2b3990;
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -95,6 +99,9 @@
   --footer-bg: #202126;
   --footer-foreground: oklch(0.985 0 0);
   --school-details-sidebar: #faf5f9;
+  --info: #2b3990;
+  --warning: #f59e0b;
+  --loading: #94a3b8;
 }
 
 .dark {
@@ -104,7 +111,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #7e22ce;
+  --primary: #955aa4;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -123,7 +130,7 @@
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary: #2b3990;
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
@@ -136,6 +143,9 @@
   --footer-bg: oklch(0.205 0 0);
   --footer-foreground: oklch(0.985 0 0);
   --school-details-sidebar: oklch(0.205 0 0);
+  --info: #2b3990;
+  --warning: #f59e0b;
+  --loading: #64748b;
 }
 
 @layer base {
@@ -387,7 +397,7 @@
     0.9922 93.75%,
     1 100%
   );
-  z-index: 2;
+  z-index: 99;
 }
 
 ::view-transition-old(root) {

@@ -4,7 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { handleTokenExpiration, isAuthError } from "@/lib/auth-utils";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { API_BASE_URL } from "@/configs/config";
 import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
 

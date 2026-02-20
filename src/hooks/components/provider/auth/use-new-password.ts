@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";

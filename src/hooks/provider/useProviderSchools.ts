@@ -7,7 +7,7 @@ import {
   providerSchoolsAtom,
   SchoolWithExtras,
 } from "@/atoms/provider-schools";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import {
   processBatch,
   getSchoolLockInCount,

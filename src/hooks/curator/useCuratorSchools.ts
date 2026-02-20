@@ -5,7 +5,7 @@ import { School } from "@/lib/types/school";
 import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
-import { useNotification } from "@/components/app-providers/notification-provider";
+import { useNotification } from "@/hooks/useNotification";
 import {
   processBatch,
   getSchoolLockInCount,
@@ -91,6 +91,7 @@ export function useCuratorSchools() {
               addNotification(
                 "success",
                 `New patient: ${latestCheck.patientName} at ${school.name}`,
+                `/curator/schools/${school.id}/patients`, // Add link to patient page
               );
               forceRefresh = true; // Force cache refresh to get updated counts
 
@@ -156,14 +157,18 @@ export function useCuratorSchools() {
           if (!currentSchoolIds.has(id)) {
             addNotification(
               "error",
-              `${prevSchool.name} is no longer available`,
+              `School removed: ${prevSchool.name} is no longer available`,
             );
           }
         });
 
         allSchools.forEach((newSchool: School) => {
           if (!previousSchoolsRef.current.has(Number(newSchool.id))) {
-            addNotification("success", `New school added: ${newSchool.name}`);
+            addNotification(
+              "success",
+              `New school added: ${newSchool.name}`,
+              `/curator/schools/${newSchool.id}`, // Add link to school page
+            );
           }
         });
       }
