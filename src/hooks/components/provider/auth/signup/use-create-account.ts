@@ -7,7 +7,7 @@ import {
   ProviderSignUpSchema,
   ProviderSignUpFormData,
 } from "@/lib/schemas/provider.auth.schema";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { CreateAccountProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSchools } from "@/hooks/queries/useSchoolsQuery";
 import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";

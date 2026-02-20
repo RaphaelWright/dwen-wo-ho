@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import useUserQuery from "@/hooks/queries/useUserQuery";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 import { PatientResult } from "@/lib/types/patient";
 import { LockInAssessment } from "@/lib/types/lockin";

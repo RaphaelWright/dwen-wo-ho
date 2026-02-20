@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { Route } from "next";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import useUserQuery from "@/hooks/queries/useUserQuery";
 import { ROUTES } from "@/lib/constants/routes";

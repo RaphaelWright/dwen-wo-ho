@@ -10,7 +10,7 @@ import {
 } from "@/lib/types/provider";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { School } from "@/lib/types/school";
 import { useQueryClient } from "@tanstack/react-query";
 import {

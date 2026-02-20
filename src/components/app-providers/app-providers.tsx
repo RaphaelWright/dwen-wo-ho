@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { NotificationProvider } from "@/components/app-providers/notification-provider";
 import { ThemeProvider } from "./theme-provider";
 import TanstackQueryProvider from "./tanstack-query-provider";
 
@@ -17,9 +16,7 @@ export default function Providers({
       enableSystem
       disableTransitionOnChange
     >
-      <TanstackQueryProvider>
-        <NotificationProvider>{children}</NotificationProvider>
-      </TanstackQueryProvider>
+      <TanstackQueryProvider>{children}</TanstackQueryProvider>
     </ThemeProvider>
   );
 }

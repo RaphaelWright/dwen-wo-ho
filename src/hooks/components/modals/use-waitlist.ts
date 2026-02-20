@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { API_URL } from "@/lib/constants";
 import { WAITLIST_CONTENT } from "@/lib/constants/components/modals/waitlist";
 

@@ -10,7 +10,7 @@ import {
 } from "@/hooks/curator/useCuratorSchools";
 import { SchoolCard } from "@/components/curator/SchoolCard";
 import { NotificationSheet } from "@/components/ui/notification-sheet";
-import { useNotification } from "@/components/app-providers/notification-provider";
+import { useNotification } from "@/hooks/useNotification";
 import { FiBell } from "react-icons/fi";
 
 export default function SchoolsPage() {
@@ -30,6 +30,7 @@ export default function SchoolsPage() {
     clearNotifications,
     dismissNotification,
     unreadCount,
+    addNotification, // Added for verification
   } = useNotification();
 
   if (isError) {
@@ -63,6 +64,15 @@ export default function SchoolsPage() {
 
           {/* Header Actions */}
           <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                addNotification("info", "Test notification w/ Open button")
+              }
+            >
+              Test Notification
+            </Button>
             <NotificationSheet
               notifications={notifications}
               onClear={clearNotifications}

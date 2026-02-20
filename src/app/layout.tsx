@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import "@/styles/globals.css";
 import JsonLd from "@/components/miscellaneous/json-ld";
 import type { Metadata } from "next";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { geistMono, geistSans, poppins } from "@/lib/fonts/fonts";
 import { getMetadata } from "@/lib/metadata";
 import { JSON_LD_ROOT_LAYOUT } from "@/configs/json-ld";

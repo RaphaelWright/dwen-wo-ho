@@ -1,9 +1,9 @@
-'use client'
+"use client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosFormData, axiosInstance } from "@/configs/axiosInstance";
 import { checkError, checkResponse } from "@/lib/api-utils";
 import { api } from "@/lib/api";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { ICreateSchool, IUpdateSchool, School } from "@/lib/types/school";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { LockInData } from "@/lib/types/lockin";

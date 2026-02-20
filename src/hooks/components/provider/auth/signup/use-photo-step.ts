@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCroppedImg, Area } from "@/lib/utils/image-utils";

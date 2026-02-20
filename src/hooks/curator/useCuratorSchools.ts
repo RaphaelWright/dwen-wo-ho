@@ -5,7 +5,7 @@ import { School } from "@/lib/types/school";
 import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
-import { useNotification } from "@/components/app-providers/notification-provider";
+import { useNotification } from "@/hooks/useNotification";
 import {
   processBatch,
   getSchoolLockInCount,

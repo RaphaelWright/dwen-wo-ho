@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  FiBell,
-  FiX,
-  FiCheck,
-  FiAlertCircle,
-  FiInfo,
-  FiTrash2,
-} from "react-icons/fi";
-import { cn } from "@/lib/utils";
+import { FiBell, FiX, FiCheck, FiTrash2 } from "react-icons/fi";
+import { cn, formatRelativeTime } from "@/lib/utils";
 import {
   Drawer,
   DrawerContent,
@@ -19,59 +12,9 @@ import {
 } from "@/components/ui/drawer";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { useNotification } from "@/components/app-providers/notification-provider";
-
-export interface Notification {
-  id: string;
-  type: "success" | "error" | "info";
-  message: string;
-  timestamp: Date;
-  read: boolean;
-}
-
-interface NotificationSheetProps {
-  notifications: Notification[];
-  onClear: () => void;
-  onDismiss: (id: string) => void;
-  trigger?: React.ReactNode;
-}
-
-const typeConfig = {
-  success: {
-    icon: FiCheck,
-    color: "text-emerald-600",
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    dot: "bg-emerald-500",
-  },
-  error: {
-    icon: FiAlertCircle,
-    color: "text-red-600",
-    bg: "bg-red-50",
-    border: "border-red-200",
-    dot: "bg-red-500",
-  },
-  info: {
-    icon: FiInfo,
-    color: "text-blue-600",
-    bg: "bg-blue-50",
-    border: "border-blue-200",
-    dot: "bg-blue-500",
-  },
-};
-
-function formatRelativeTime(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHr = Math.floor(diffMin / 60);
-
-  if (diffSec < 10) return "Just now";
-  if (diffSec < 60) return `${diffSec}s ago`;
-  if (diffMin < 60) return `${diffMin}m ago`;
-  return `${diffHr}h ago`;
-}
+import { useNotification } from "@/hooks/useNotification";
+import { NotificationSheetProps } from "@/lib/types/notification";
+import { NOTIFICATION_TYPE_CONFIG } from "@/lib/constants/notifications";
 
 export const NotificationSheet = ({
   notifications,
@@ -79,11 +22,11 @@ export const NotificationSheet = ({
   onDismiss,
   trigger,
 }: NotificationSheetProps) => {
-  const { markAsRead, markAllAsRead } = useNotification();
+  const { markAsRead, markAllAsRead, isOpen, setIsOpen } = useNotification();
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <Drawer direction="right">
+    <Drawer direction="right" open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         {trigger ? (
           trigger
@@ -120,11 +63,11 @@ export const NotificationSheet = ({
       <DrawerContent className="h-full rounded-none w-full max-w-sm">
         {/* Header */}
         <DrawerHeader className="border-b border-border px-5 py-4">
+          <DrawerTitle className="text-lg font-bold text-foreground">
+            Notifications
+          </DrawerTitle>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <DrawerTitle className="text-lg font-bold text-foreground">
-                Notifications
-              </DrawerTitle>
               {unreadCount > 0 && (
                 <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                   {unreadCount} new
@@ -135,7 +78,7 @@ export const NotificationSheet = ({
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="text-xs font-medium text-primary hover:underline transition-all duration-200"
+                  className="text-xs font-medium text-primary p-2 hover:bg-accent/50 rounded-md transition-all duration-200"
                 >
                   Mark all read
                 </button>
@@ -177,7 +120,7 @@ export const NotificationSheet = ({
             <div className="py-2 space-y-1">
               <AnimatePresence initial={false}>
                 {notifications.map((notification) => {
-                  const config = typeConfig[notification.type];
+                  const config = NOTIFICATION_TYPE_CONFIG[notification.type];
                   const Icon = config.icon;
 
                   return (
@@ -187,17 +130,17 @@ export const NotificationSheet = ({
                       animate={{ opacity: 1, x: 0, height: "auto" }}
                       exit={{ opacity: 0, x: 30, height: 0 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="px-3"
+                      className="px-2"
                     >
                       <div
                         className={cn(
-                          "relative flex items-start gap-3 px-4 py-4 mx-0 rounded-xl transition-all duration-200 group hover:shadow-sm border",
+                          "relative flex items-center justify-center gap-3 px-2 py-1 mx-0 rounded-xl transition-all duration-200 group hover:shadow-sm border",
                           notification.read
                             ? "bg-card border-transparent opacity-70 hover:opacity-100" // Read style
                             : cn(
                                 "bg-card border shadow-sm",
                                 config.border,
-                                "border-l-4",
+                                "border-l-2",
                               ), // Unread style
                         )}
                         onClick={() =>
@@ -252,7 +195,7 @@ export const NotificationSheet = ({
                         </div>
 
                         {/* Actions */}
-                        <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           {!notification.read && (
                             <button
                               onClick={(e) => {

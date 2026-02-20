@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosFormData } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export interface ICreatePartner {
   name: string;

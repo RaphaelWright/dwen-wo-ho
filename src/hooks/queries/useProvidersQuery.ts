@@ -1,10 +1,10 @@
-'use client'
+"use client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { IProviderResponse, Provider } from "@/lib/types/provider";
 
 const getProviders = async (): Promise<IProviderResponse> => {

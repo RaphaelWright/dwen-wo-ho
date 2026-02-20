@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import useAuthQuery from "@/hooks/queries/useAuthQuery";

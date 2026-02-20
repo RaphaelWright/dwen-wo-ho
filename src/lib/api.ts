@@ -1,9 +1,8 @@
 import { handleTokenExpiration, isAuthError } from "./auth-utils";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://justgo.up.railway.app";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://justgo.up.railway.app";
 
 const PUBLIC_ENDPOINTS = [
   "/api/v1/auth/check-email",
@@ -29,13 +28,14 @@ const prepareRequestBody = (body: unknown): BodyInit | undefined => {
   return body as BodyInit;
 };
 
-const prepareHeaders = (endpoint: string, options: RequestInit): Record<string, string> => {
-  const token = typeof window !== "undefined"
-    ? localStorage.getItem("token")
-    : null;
-  const refreshToken = typeof window !== "undefined"
-    ? localStorage.getItem("refreshToken")
-    : null;
+const prepareHeaders = (
+  endpoint: string,
+  options: RequestInit,
+): Record<string, string> => {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const refreshToken =
+    typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null;
   const headers: Record<string, string> = {
     Accept: "*/*",
     ...(options.headers as Record<string, string>),
@@ -73,7 +73,9 @@ const extractErrorFromResponse = async (response: Response): Promise<Error> => {
     const errorData = JSON.parse(responseText);
     return new Error(JSON.stringify(errorData));
   } catch {
-    return new Error(responseText || `API request failed with status ${response.status}`);
+    return new Error(
+      responseText || `API request failed with status ${response.status}`,
+    );
   }
 };
 
@@ -85,7 +87,7 @@ const parseSuccessResponse = async (response: Response) => {
     return {
       success: true,
       message: data.message,
-      data: data.data || data // Fallback to root data if data.data is undefined
+      data: data.data || data, // Fallback to root data if data.data is undefined
     };
   }
   return { success: true, message: "Success", data: null };
@@ -120,5 +122,3 @@ export async function api(endpoint: string, options: RequestInit = {}) {
     throw new Error("Network error");
   }
 }
-
-
