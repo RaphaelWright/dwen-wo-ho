@@ -84,25 +84,6 @@ export function SchoolHeaderCard({
               className="w-full pl-9 pr-4 py-2 bg-muted/50 border-transparent focus:bg-background focus:border-primary/20 rounded-xl text-sm transition-all focus:ring-4 focus:ring-primary/10"
             />
           </div>
-          <div className="flex gap-4 mx-auto sm:mx-0">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onDisableClick}
-              className="text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
-            >
-              <Ban className="w-4 h-4 mr-2" />
-              Disable
-            </Button>
-            <Button
-              size="sm"
-              onClick={onEditClick}
-              className="bg-accent text-foreground border border-border hover:bg-muted shadow-sm"
-            >
-              <Pencil className="w-4 h-4 mr-2" />
-              Edit Details
-            </Button>
-          </div>
         </div>
       </div>
     </div>
