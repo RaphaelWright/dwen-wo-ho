@@ -2,6 +2,7 @@ export interface Notification {
   id: string;
   type: "success" | "error" | "info";
   message: string;
+  link?: string;
   timestamp: Date;
   read: boolean;
 }

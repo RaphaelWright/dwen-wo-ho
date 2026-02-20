@@ -2,6 +2,7 @@
 
 import { FiBell, FiX, FiCheck, FiTrash2 } from "react-icons/fi";
 import { cn, formatRelativeTime } from "@/lib/utils";
+import Link from "next/link";
 import {
   Drawer,
   DrawerContent,
@@ -123,6 +124,104 @@ export const NotificationSheet = ({
                   const config = NOTIFICATION_TYPE_CONFIG[notification.type];
                   const Icon = config.icon;
 
+                  const NotificationContent = (
+                    <div
+                      className={cn(
+                        "relative flex items-center justify-center gap-3 px-2 py-1 mx-0 rounded-xl transition-all duration-200 group hover:shadow-sm border w-full text-left",
+                        notification.read
+                          ? "bg-card border-transparent opacity-70 hover:opacity-100" // Read style
+                          : cn(
+                              "bg-card border shadow-sm",
+                              config.border,
+                              "border-l-2",
+                            ), // Unread style
+                      )}
+                      onClick={(e) => {
+                        if (!notification.read) {
+                          markAsRead(notification.id);
+                        }
+                        if (notification.link) {
+                          setIsOpen(false);
+                        }
+                      }}
+                    >
+                      {/* Icon */}
+                      <div
+                        className={cn(
+                          "shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5",
+                          notification.read
+                            ? "bg-muted text-muted-foreground"
+                            : config.bg,
+                        )}
+                      >
+                        <Icon
+                          className={cn(
+                            "w-4 h-4",
+                            notification.read
+                              ? "text-muted-foreground"
+                              : config.color,
+                          )}
+                        />
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start mb-1">
+                          <p
+                            className={cn(
+                              "text-sm font-medium leading-snug",
+                              notification.read
+                                ? "text-muted-foreground"
+                                : "text-foreground group-hover:text-primary transition-colors",
+                            )}
+                          >
+                            {notification.message}
+                          </p>
+                          {!notification.read && (
+                            <span
+                              className={cn(
+                                "shrink-0 w-2 h-2 rounded-full",
+                                config.dot,
+                              )}
+                            />
+                          )}
+                        </div>
+
+                        <p className="text-xs text-muted-foreground">
+                          {formatRelativeTime(notification.timestamp)}
+                        </p>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {!notification.read && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              markAsRead(notification.id);
+                            }}
+                            className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                            title="Mark as read"
+                          >
+                            <FiCheck className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onDismiss(notification.id);
+                          }}
+                          className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          title="Delete"
+                        >
+                          <FiX className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+
                   return (
                     <motion.div
                       key={notification.id}
@@ -132,94 +231,18 @@ export const NotificationSheet = ({
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       className="px-2"
                     >
-                      <div
-                        className={cn(
-                          "relative flex items-center justify-center gap-3 px-2 py-1 mx-0 rounded-xl transition-all duration-200 group hover:shadow-sm border",
-                          notification.read
-                            ? "bg-card border-transparent opacity-70 hover:opacity-100" // Read style
-                            : cn(
-                                "bg-card border shadow-sm",
-                                config.border,
-                                "border-l-2",
-                              ), // Unread style
-                        )}
-                        onClick={() =>
-                          !notification.read && markAsRead(notification.id)
-                        }
-                      >
-                        {/* Icon */}
-                        <div
-                          className={cn(
-                            "shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5",
-                            notification.read
-                              ? "bg-muted text-muted-foreground"
-                              : config.bg,
-                          )}
+                      {notification.link ? (
+                        <Link
+                          href={notification.link as any}
+                          className="block w-full"
                         >
-                          <Icon
-                            className={cn(
-                              "w-4 h-4",
-                              notification.read
-                                ? "text-muted-foreground"
-                                : config.color,
-                            )}
-                          />
+                          {NotificationContent}
+                        </Link>
+                      ) : (
+                        <div className="block w-full cursor-pointer">
+                          {NotificationContent}
                         </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0 cursor-pointer">
-                          <div className="flex justify-between items-start mb-1">
-                            <p
-                              className={cn(
-                                "text-sm font-medium leading-snug",
-                                notification.read
-                                  ? "text-muted-foreground"
-                                  : "text-foreground",
-                              )}
-                            >
-                              {notification.message}
-                            </p>
-                            {!notification.read && (
-                              <span
-                                className={cn(
-                                  "shrink-0 w-2 h-2 rounded-full",
-                                  config.dot,
-                                )}
-                              />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-muted-foreground">
-                            {formatRelativeTime(notification.timestamp)}
-                          </p>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          {!notification.read && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                markAsRead(notification.id);
-                              }}
-                              className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                              title="Mark as read"
-                            >
-                              <FiCheck className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDismiss(notification.id);
-                            }}
-                            className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                            title="Delete"
-                          >
-                            <FiX className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
+                      )}
                     </motion.div>
                   );
                 })}

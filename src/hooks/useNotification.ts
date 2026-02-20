@@ -2,6 +2,7 @@
 
 import { useAtom } from "jotai";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/sonner";
 import {
   notificationsAtom,
@@ -12,6 +13,7 @@ import { Notification } from "@/lib/types/notification";
 export const useNotification = () => {
   const [notifications, setNotifications] = useAtom(notificationsAtom);
   const [isOpen, setIsOpen] = useAtom(notificationSheetOpenAtom);
+  const router = useRouter();
 
   const openSheet = useCallback(() => setIsOpen(true), [setIsOpen]);
   const closeSheet = useCallback(() => setIsOpen(false), [setIsOpen]);
@@ -21,26 +23,73 @@ export const useNotification = () => {
   );
 
   const addNotification = useCallback(
-    (type: Notification["type"], message: string) => {
-      setNotifications((prev) => [
-        {
-          id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-          type,
-          message,
-          timestamp: new Date(),
-          read: false,
-        },
-        ...prev,
-      ]);
+    (type: Notification["type"], message: string, link?: string) => {
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+      const newNotification = {
+        id,
+        type,
+        message,
+        link,
+        timestamp: new Date(),
+        read: false,
+      };
+      setNotifications((prev) => [newNotification, ...prev]);
 
-      toast.info(message, {
-        action: {
-          label: "Open",
-          onClick: () => setIsOpen(true),
-        },
-      });
+      newNotification.type === "success"
+        ? toast.success(message, {
+            action: {
+              label: "Open",
+              onClick: () => {
+                // Mark as read when interacted with from the toast
+                setNotifications((prev) =>
+                  prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+                );
+
+                if (link) {
+                  router.push(link as any);
+                } else {
+                  setIsOpen(true);
+                }
+              },
+            },
+          })
+        : newNotification.type === "error"
+          ? toast.error(message, {
+              action: {
+                label: "Open",
+                onClick: () => {
+                  // Mark as read when interacted with from the toast
+                  setNotifications((prev) =>
+                    prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+                  );
+
+                  if (link) {
+                    router.push(link as any);
+                  } else {
+                    setIsOpen(true);
+                  }
+                },
+              },
+            })
+          : toast.info(message, {
+              action: {
+                label: "Open",
+                onClick: () => {
+                  // Mark as read when interacted with from the toast
+                  setNotifications((prev) =>
+                    prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+                  );
+
+                  if (link) {
+                    router.push(link as any);
+                  } else {
+                    setIsOpen(true);
+                  }
+                },
+              },
+            });
     },
-    [setNotifications, setIsOpen],
+    [setNotifications, setIsOpen, router],
   );
 
   const clearNotifications = useCallback(() => {

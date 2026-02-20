@@ -64,15 +64,51 @@ export default function SchoolsPage() {
 
           {/* Header Actions */}
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                addNotification("info", "Test notification w/ Open button")
-              }
-            >
-              Test Notification
-            </Button>
+            {/* Test Notification Buttons */}
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
+                onClick={() =>
+                  addNotification(
+                    "success",
+                    "New school added: Achimota School",
+                    "/curator/schools/4", // Example school ID link
+                  )
+                }
+              >
+                Test: School (Link)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
+                onClick={() =>
+                  addNotification(
+                    "info",
+                    "New patient: Maame Abena Pokuaa at Achimota School",
+                    "/curator/schools/4/patients/122", // Example patient link
+                  )
+                }
+              >
+                Test: Patient (Link)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                onClick={() =>
+                  addNotification(
+                    "error",
+                    "School removed: Mfantsipim School is no longer available",
+                    // No link for errors usually
+                  )
+                }
+              >
+                Test: Error (No Link)
+              </Button>
+            </div>
             <NotificationSheet
               notifications={notifications}
               onClear={clearNotifications}
