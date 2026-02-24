@@ -109,7 +109,7 @@ export const ProviderSidebar = ({
               <Link href={ROUTES.provider.home}>
                 <Image
                   priority
-                  src="/logos/logo-purple.png"
+                  src="/favicons/apple-touch-icon.png"
                   alt="JustGo Health"
                   className="w-8 h-8 object-contain"
                   width={32}

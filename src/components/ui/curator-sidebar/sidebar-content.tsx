@@ -54,7 +54,7 @@ export const SidebarContent = ({
             <Link href={ROUTES.curator.dashboard as any}>
               <Image
                 priority
-                src="/logos/logo-purple.png"
+                src="/favicons/apple-touch-icon.png"
                 alt="JustGo Health"
                 className="w-8 h-8 object-contain"
                 width={32}
