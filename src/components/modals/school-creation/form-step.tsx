@@ -144,7 +144,7 @@ export const FormStep = ({
                       key={campus}
                       type="button"
                       onClick={() => handleCampusToggle(campus)}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
+                      className={`bg-transparent shadow-none border-0 w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
                         selectedCampuses.includes(campus)
                           ? "bg-gray-100 text-gray-900 font-medium"
                           : "hover:bg-gray-50 text-gray-700"
