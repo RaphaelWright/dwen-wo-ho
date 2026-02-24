@@ -65,7 +65,7 @@ export function UrgentCareSidebar({
               return (
                 <Link
                   key={i}
-                  href={href}
+                  href={href as any}
                   className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-destructive/30 hover:bg-destructive/5 transition-all duration-200 bg-card shadow-sm cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-destructive/20 bg-destructive/5 text-destructive font-bold text-sm shadow-sm">

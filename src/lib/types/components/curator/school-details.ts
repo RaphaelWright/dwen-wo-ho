@@ -52,6 +52,10 @@ export interface SchoolTabNavigationProps {
 }
 
 export interface UrgentCarePatient {
+  id?: number | string;
+  lockinId?: number | string;
+  patientResultId?: number | string;
+  schoolId?: number | string;
   patientName?: string;
   lockedInScore?: number | null;
   urgentCareEnteredAt?: string;
