@@ -1,7 +1,8 @@
 "use client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosFormData } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
+import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "@/components/ui/sonner";
 
@@ -11,6 +12,31 @@ export interface ICreatePartner {
   slogan?: string;
   logo?: File | null;
 }
+
+export interface Partner {
+  id: string | number;
+  name: string;
+  nickname?: string;
+  slogan?: string;
+  logo?: string;
+  [key: string]: unknown;
+}
+
+const fetchPartners = async (): Promise<Partner[]> => {
+  const response = await api(ENDPOINTS.partners);
+  if (response?.success && response.data) {
+    return Array.isArray(response.data) ? response.data : [];
+  }
+  return [];
+};
+
+const fetchPartner = async (partnerId: string): Promise<Partner> => {
+  const response = await api(ENDPOINTS.partner(partnerId));
+  if (response?.success && response.data) {
+    return response.data;
+  }
+  throw new Error("Failed to fetch partner");
+};
 
 const createPartner = async (
   data: ICreatePartner,
@@ -40,7 +66,7 @@ const createPartner = async (
   return checkResponse(response, 201);
 };
 
-const PARTNERS_QUERY_KEY = "partners";
+export const PARTNERS_QUERY_KEY = "partners";
 
 export const useCreatePartner = () => {
   const queryClient = useQueryClient();
@@ -63,5 +89,24 @@ export const useCreatePartner = () => {
         toast.error(errorMessage);
       }
     },
+  });
+};
+
+export const usePartnersList = () => {
+  return useQuery({
+    queryKey: [PARTNERS_QUERY_KEY],
+    queryFn: fetchPartners,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+export const usePartner = (partnerId: string) => {
+  return useQuery({
+    queryKey: [PARTNERS_QUERY_KEY, partnerId],
+    queryFn: () => fetchPartner(partnerId),
+    enabled: !!partnerId,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };

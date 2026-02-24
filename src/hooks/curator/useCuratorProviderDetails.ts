@@ -2,15 +2,26 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ROUTES } from "@/lib/constants/routes";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { ProviderDetails } from "@/lib/types/provider";
 
+// ─── Fetcher ─────────────────────────────────────────────────────────────────
+
+async function fetchProviderDetails(email: string): Promise<ProviderDetails> {
+  const response = await api(ENDPOINTS.provider(email));
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error("Failed to load provider details");
+}
+
+// ─── Hook ────────────────────────────────────────────────────────────────────
+
 export function useCuratorProviderDetails() {
-  const [provider, setProvider] = useState<ProviderDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,13 +48,13 @@ export function useCuratorProviderDetails() {
     }
   }, [router]);
 
-  const tryFallbackData = useCallback(() => {
+  const tryFallbackData = useCallback((): ProviderDetails | null => {
     if (typeof window !== "undefined") {
       const fallbackDataStr = sessionStorage.getItem(`provider_${email}`);
       if (fallbackDataStr) {
         try {
           const fallbackData = JSON.parse(fallbackDataStr);
-          setProvider({
+          return {
             id: fallbackData.email || "",
             email: fallbackData.email || "",
             fullName: formatProviderName(
@@ -66,45 +77,44 @@ export function useCuratorProviderDetails() {
             profileImage: fallbackData.profilePhotoURL || undefined,
             createdAt: fallbackData.applicationDate || new Date().toISOString(),
             updatedAt: fallbackData.applicationDate || new Date().toISOString(),
-          });
-          setErrorMessage("");
-          return;
-        } catch {}
+          };
+        } catch {
+          // ignore
+        }
       }
     }
-    setErrorMessage("Failed to load provider details. Please try again.");
+    return null;
   }, [email]);
 
-  const loadProvider = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const refreshToken = localStorage.getItem("refreshToken") || "";
+  const {
+    data: providerData,
+    isLoading,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["curator-provider-details", email],
+    queryFn: () => fetchProviderDetails(email),
+    enabled: isAuthenticated === true && !!email,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000,
+    retry: false,
+  });
 
-      const response = await api(ENDPOINTS.provider(email), {
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      });
+  // Use fallback data if query failed
+  const provider = providerData ?? tryFallbackData();
 
-      if (response.success) {
-        setProvider(response.data);
-        if (typeof window !== "undefined") {
-          sessionStorage.removeItem(`provider_${email}`);
-        }
-      } else {
-        setErrorMessage("Failed to load provider details");
-        tryFallbackData();
-      }
-    } catch (error: unknown) {
-      tryFallbackData();
-    } finally {
-      setIsLoading(false);
-    }
-  }, [email, tryFallbackData]);
-
+  // Set error message if query fails and no fallback
   useEffect(() => {
-    if (isAuthenticated === true) {
-      loadProvider();
+    if (queryError && !provider) {
+      setErrorMessage("Failed to load provider details. Please try again.");
     }
-  }, [isAuthenticated, loadProvider]);
+  }, [queryError, provider]);
+
+  // Clear session storage on successful fetch
+  useEffect(() => {
+    if (providerData && typeof window !== "undefined") {
+      sessionStorage.removeItem(`provider_${email}`);
+    }
+  }, [providerData, email]);
 
   const handleApprove = async () => {
     setIsActionLoading(true);
@@ -120,11 +130,6 @@ export function useCuratorProviderDetails() {
 
       if (response.success) {
         setSuccessMessage("Provider approved successfully!");
-        setProvider((prev) =>
-          prev
-            ? { ...prev, status: "APPROVED", applicationStatus: "APPROVED" }
-            : null,
-        );
         // Refresh the page after 2 seconds
         setTimeout(() => {
           window.location.reload();
@@ -155,11 +160,6 @@ export function useCuratorProviderDetails() {
 
       if (response.success) {
         setSuccessMessage("Provider rejected successfully!");
-        setProvider((prev) =>
-          prev
-            ? { ...prev, status: "REJECTED", applicationStatus: "REJECTED" }
-            : null,
-        );
         // Refresh the page after 2 seconds
         setTimeout(() => {
           window.location.reload();

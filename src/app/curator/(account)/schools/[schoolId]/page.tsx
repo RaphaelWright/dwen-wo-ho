@@ -99,9 +99,6 @@ export default function SchoolDetailsPage() {
           <SchoolHeaderCard
             school={school}
             campusLabel={campusLabel}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            activeTab={activeTab}
             onEditClick={() => setShowEditModal(true)}
             onDisableClick={handleDisableSchool}
           />
@@ -119,6 +116,8 @@ export default function SchoolDetailsPage() {
               setEditingIcon(null);
               setShowAddIconModal(true);
             }}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
           />
 
           {/* Content Area */}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
@@ -106,10 +107,13 @@ export const ProviderSidebar = ({
           >
             {isCollapsed ? (
               <Link href={ROUTES.provider.home}>
-                <img
-                  src="/logos/logo-purple-small.png"
+                <Image
+                  priority
+                  src="/favicons/apple-touch-icon.png"
                   alt="JustGo Health"
                   className="w-8 h-8 object-contain"
+                  width={32}
+                  height={32}
                 />
               </Link>
             ) : (

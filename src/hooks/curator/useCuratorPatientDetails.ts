@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { CuratorPatientResult } from "@/lib/types/curator";
@@ -18,110 +19,117 @@ export function generateColor(color: string) {
   return code;
 }
 
+interface PatientDetailsData {
+  patientResult: CuratorPatientResult | null;
+  lockInAssessment: LockInAssessment | null;
+}
+
+async function fetchPatientDetails(
+  patientId: string,
+): Promise<PatientDetailsData> {
+  let patientResult: CuratorPatientResult | null = null;
+  let lockInAssessment: LockInAssessment | null = null;
+
+  const resultResponse = await api(
+    ENDPOINTS.getPatientResult(Number(patientId)),
+  );
+
+  if (resultResponse?.success && resultResponse.data) {
+    const resultData = resultResponse.data as CuratorPatientResult;
+    patientResult = resultData;
+
+    try {
+      const lockInResponse = await api(
+        ENDPOINTS.getSchoolLockIn(resultData.schoolId),
+      );
+
+      if (lockInResponse?.success && lockInResponse.data) {
+        const lockInData = lockInResponse.data as {
+          schoolName: string;
+          students: Array<{
+            studentName: string;
+            lockinScore: number;
+            lockedInInterpretation: string;
+            lockedInColor: string;
+          }>;
+        };
+
+        const student = lockInData.students?.find(
+          (s) => s.studentName === resultData.patientName,
+        );
+
+        if (student) {
+          lockInAssessment = {
+            fullName: resultData.patientName,
+            age: resultData.patientAge,
+            sex: resultData.patientSex,
+            school: resultData.schoolName,
+            lockedInScore: student.lockinScore.toFixed(2),
+            lockedInScoreDescription: student.lockedInInterpretation,
+            lockedInColor: student.lockedInColor,
+            generalMentalHealth: "N/A",
+            generalMentalHealthScore: "N/A",
+            generalMentalHealthColor: "gray",
+            possibleDepressionScore: "N/A",
+            possibleDepressionDescription: "N/A",
+            possibleDepressionColor: "gray",
+            lonelinessScore: "N/A",
+            lonelinessScoreDescription: "N/A",
+            lonelinessColor: "gray",
+            suicidalRiskScore: "N/A",
+            suicidalRiskScoreDescription: "N/A",
+            suicidalRiskColor: "gray",
+            examAnxiety: "N/A",
+            examAnxietyScore: "N/A",
+            examAnxietyColor: "gray",
+            coreAnxietyScore: "N/A",
+            coreAnxietyScoreDescription: "N/A",
+            coreAnxietyColor: "gray",
+            physicalDistressScore: "N/A",
+            physicalDistressScoreDescription: "N/A",
+            physicalDistressColor: "gray",
+            examPrep: "N/A",
+            examPrepScore: "N/A",
+            examPrepColor: "gray",
+            motivationScore: "N/A",
+            motivationScoreDescription: "N/A",
+            motivationColor: "gray",
+            studySkillsScore: "N/A",
+            studySkillsScoreDescription: "N/A",
+            studySkillsColor: "gray",
+            procrastinationScore: "N/A",
+            procrastinationScoreDescription: "N/A",
+            procrastinationColor: "gray",
+          };
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching lock-in data:", error);
+    }
+  }
+
+  return { patientResult, lockInAssessment };
+}
+
 export function useCuratorPatientDetails() {
   const params = useParams();
   const router = useRouter();
   const patientId = params.patientId as string;
 
-  const [patientResult, setPatientResult] =
-    useState<CuratorPatientResult | null>(null);
-  const [lockInAssessment, setLockInAssessment] =
-    useState<LockInAssessment | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"assessment" | "history">(
     "assessment",
   );
 
-  const loadPatientDetails = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const resultResponse = await api(
-        ENDPOINTS.getPatientResult(Number(patientId)),
-      );
+  const { data, isLoading } = useQuery({
+    queryKey: ["curator-patient-details", patientId],
+    queryFn: () => fetchPatientDetails(patientId),
+    enabled: !!patientId,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
 
-      if (resultResponse?.success && resultResponse.data) {
-        const resultData = resultResponse.data as CuratorPatientResult;
-        setPatientResult(resultData);
-
-        try {
-          const lockInResponse = await api(
-            ENDPOINTS.getSchoolLockIn(resultData.schoolId),
-          );
-
-          if (lockInResponse?.success && lockInResponse.data) {
-            const lockInData = lockInResponse.data as {
-              schoolName: string;
-              students: Array<{
-                studentName: string;
-                lockinScore: number;
-                lockedInInterpretation: string;
-                lockedInColor: string;
-              }>;
-            };
-
-            const student = lockInData.students?.find(
-              (s) => s.studentName === resultData.patientName,
-            );
-
-            if (student) {
-              setLockInAssessment({
-                fullName: resultData.patientName,
-                age: resultData.patientAge,
-                sex: resultData.patientSex,
-                school: resultData.schoolName,
-                lockedInScore: student.lockinScore.toFixed(2),
-                lockedInScoreDescription: student.lockedInInterpretation,
-                lockedInColor: student.lockedInColor,
-                generalMentalHealth: "N/A",
-                generalMentalHealthScore: "N/A",
-                generalMentalHealthColor: "gray",
-                possibleDepressionScore: "N/A",
-                possibleDepressionDescription: "N/A",
-                possibleDepressionColor: "gray",
-                lonelinessScore: "N/A",
-                lonelinessScoreDescription: "N/A",
-                lonelinessColor: "gray",
-                suicidalRiskScore: "N/A",
-                suicidalRiskScoreDescription: "N/A",
-                suicidalRiskColor: "gray",
-                examAnxiety: "N/A",
-                examAnxietyScore: "N/A",
-                examAnxietyColor: "gray",
-                coreAnxietyScore: "N/A",
-                coreAnxietyScoreDescription: "N/A",
-                coreAnxietyColor: "gray",
-                physicalDistressScore: "N/A",
-                physicalDistressScoreDescription: "N/A",
-                physicalDistressColor: "gray",
-                examPrep: "N/A",
-                examPrepScore: "N/A",
-                examPrepColor: "gray",
-                motivationScore: "N/A",
-                motivationScoreDescription: "N/A",
-                motivationColor: "gray",
-                studySkillsScore: "N/A",
-                studySkillsScoreDescription: "N/A",
-                studySkillsColor: "gray",
-                procrastinationScore: "N/A",
-                procrastinationScoreDescription: "N/A",
-                procrastinationColor: "gray",
-              });
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching lock-in data:", error);
-        }
-      }
-    } catch (error) {
-      console.error("Error loading patient details:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [patientId]);
-
-  useEffect(() => {
-    loadPatientDetails();
-  }, [loadPatientDetails]);
+  const patientResult = data?.patientResult ?? null;
+  const lockInAssessment = data?.lockInAssessment ?? null;
 
   const metrics = useMemo(() => {
     if (!lockInAssessment) return [];
