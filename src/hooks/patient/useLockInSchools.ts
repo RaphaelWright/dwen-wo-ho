@@ -1,35 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { useSchools } from "@/hooks/queries/useSchoolsQuery";
 import { School } from "@/lib/types/school";
 
 export function useLockInSchools() {
   const router = useRouter();
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: schools = [], isLoading } = useSchools();
   const [searchQuery, setSearchQuery] = useState("");
-
-  const loadSchools = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await api(ENDPOINTS.schools);
-      if (response?.success && response.data) {
-        const schoolsList = Array.isArray(response.data) ? response.data : [];
-        setSchools(schoolsList);
-      }
-    } catch (error) {
-      console.error("Failed to load schools:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadSchools();
-  }, [loadSchools]);
 
   const filteredSchools = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -37,7 +16,7 @@ export function useLockInSchools() {
     }
 
     const query = searchQuery.toLowerCase().trim();
-    return schools.filter((school) => {
+    return schools.filter((school: School) => {
       const nameMatch = school.name?.toLowerCase().includes(query);
       const nicknameMatch = school.nickname?.toLowerCase().includes(query);
       const typeMatch = school.type?.toLowerCase().includes(query);

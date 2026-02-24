@@ -95,6 +95,8 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
       queryKey: [PROVIDERS_QUERY_KEY, email],
       queryFn: () => getProvider(email),
       enabled: !!email,
+      staleTime: 3 * 60 * 1000, // 3 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
     });
 
   // Approve provider mutation

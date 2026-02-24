@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "@/components/ui/sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSchools } from "@/hooks/queries/useSchoolsQuery";
 import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
 import { School } from "@/lib/types/school";
@@ -20,6 +20,54 @@ import {
   AssociatedProvider,
 } from "@/lib/types/modals";
 
+interface PartnerDetailsData {
+  partner: any;
+  associatedSchools: AssociatedSchool[];
+  associatedProviders: AssociatedProvider[];
+}
+
+async function fetchPartnerDetails(
+  partnerId: string,
+  allSchools: School[],
+  providersList: any[],
+): Promise<PartnerDetailsData> {
+  const response = await api(ENDPOINTS.partner(partnerId));
+  if (!response?.success || !response.data) {
+    throw new Error("Failed to load partner details");
+  }
+
+  const partnerData = response.data;
+
+  const partnerSchools: AssociatedSchool[] =
+    partnerData.schools && Array.isArray(partnerData.schools)
+      ? partnerData.schools.map(
+          (s: { id: string | number; name: string; logo?: string }) => ({
+            id: s.id,
+            name: s.name,
+            logo: s.logo,
+          }),
+        )
+      : [];
+
+  const partnerProviders: AssociatedProvider[] =
+    partnerData.providers && Array.isArray(partnerData.providers)
+      ? partnerData.providers.map((p: any) => ({
+          id: p.id || p.email,
+          email: p.email,
+          providerName: p.providerName || p.fullName,
+          providerTitle: p.providerTitle || p.title,
+          specialty: p.specialty,
+          profilePhotoURL: p.profilePhotoURL || p.profileImage,
+        }))
+      : [];
+
+  return {
+    partner: partnerData,
+    associatedSchools: partnerSchools,
+    associatedProviders: partnerProviders,
+  };
+}
+
 export const usePartnerDetails = ({
   partnerId,
   partnerProp,
@@ -34,20 +82,10 @@ export const usePartnerDetails = ({
   const { data: allSchools = [] } = useSchools();
   const { providers } = useProvidersQuery();
 
-  const [partner, setPartner] = useState(partnerProp);
+  const providersList =
+    providers?.data && Array.isArray(providers.data) ? providers.data : [];
+
   const [activeTab, setActiveTab] = useState<PartnerDetailsTab>("overview");
-  const [associatedSchools, setAssociatedSchools] = useState<
-    AssociatedSchool[]
-  >([]);
-  const [availableSchools, setAvailableSchools] = useState<AssociatedSchool[]>(
-    [],
-  );
-  const [associatedProviders, setAssociatedProviders] = useState<
-    AssociatedProvider[]
-  >([]);
-  const [availableProviders, setAvailableProviders] = useState<
-    AssociatedProvider[]
-  >([]);
   const [schoolSearchQuery, setSchoolSearchQuery] = useState("");
   const [providerSearchQuery, setProviderSearchQuery] = useState("");
   const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(null);
@@ -59,8 +97,6 @@ export const usePartnerDetails = ({
   );
   const [providerToRemove, setProviderToRemove] =
     useState<AssociatedProvider | null>(null);
-  const [isLoadingSchools, setIsLoadingSchools] = useState(false);
-  const [isLoadingProviders, setIsLoadingProviders] = useState(false);
   const [isAddingSchool, setIsAddingSchool] = useState(false);
   const [isRemovingSchool, setIsRemovingSchool] = useState(false);
   const [isAddingProvider, setIsAddingProvider] = useState(false);
@@ -70,99 +106,57 @@ export const usePartnerDetails = ({
   const [showSchoolModal, setShowSchoolModal] = useState(false);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
 
+  // React Query for partner details
+  const { data: partnerDetails, isLoading: isLoadingDetails } = useQuery({
+    queryKey: ["partner-details", partnerId],
+    queryFn: () => fetchPartnerDetails(partnerId, allSchools, providersList),
+    enabled: isOpen && !!partnerId,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000,
+  });
+
+  const partner = partnerDetails?.partner ?? partnerProp;
+  const associatedSchools = partnerDetails?.associatedSchools ?? [];
+  const associatedProviders = partnerDetails?.associatedProviders ?? [];
+
+  const isLoadingSchools = isLoadingDetails;
+  const isLoadingProviders = isLoadingDetails;
+
+  // Compute available schools/providers
+  const availableSchools = useMemo(() => {
+    const associatedSchoolIds = new Set(
+      associatedSchools.map((s) => String(s.id)),
+    );
+    return allSchools
+      .filter((s) => !associatedSchoolIds.has(String(s.id)))
+      .map((s) => ({
+        id: s.id,
+        name: s.name,
+        logo: s.logo || undefined,
+      }));
+  }, [allSchools, associatedSchools]);
+
+  const availableProviders = useMemo(() => {
+    const associatedProviderIds = new Set(
+      associatedProviders.map((p) => p.email),
+    );
+    return providersList
+      .filter((p: any) => !associatedProviderIds.has(p.email))
+      .map((p: any) => ({
+        id: p.email,
+        email: p.email,
+        providerName: p.providerName,
+        providerTitle: p.providerTitle,
+        specialty: p.specialty,
+        profilePhotoURL: p.profilePhotoURL,
+      }));
+  }, [providersList, associatedProviders]);
+
   const loadPartnerDetails = async () => {
-    setIsLoadingSchools(true);
-    setIsLoadingProviders(true);
-    try {
-      const response = await api(ENDPOINTS.partner(partnerId));
-      if (response?.success && response.data) {
-        const partnerData = response.data;
-        setPartner(partnerData);
-
-        const partnerSchools: AssociatedSchool[] =
-          partnerData.schools && Array.isArray(partnerData.schools)
-            ? partnerData.schools.map(
-                (s: { id: string | number; name: string; logo?: string }) => ({
-                  id: s.id,
-                  name: s.name,
-                  logo: s.logo,
-                }),
-              )
-            : [];
-
-        setAssociatedSchools(partnerSchools);
-
-        const associatedSchoolIds = new Set(
-          partnerSchools.map((s) => String(s.id)),
-        );
-        const available = allSchools
-          .filter((s) => !associatedSchoolIds.has(String(s.id)))
-          .map((s) => ({
-            id: s.id,
-            name: s.name,
-            logo: s.logo || undefined,
-          }));
-        setAvailableSchools(available);
-
-        const partnerProviders: AssociatedProvider[] =
-          partnerData.providers && Array.isArray(partnerData.providers)
-            ? partnerData.providers.map((p: any) => ({
-                id: p.id || p.email,
-                email: p.email,
-                providerName: p.providerName || p.fullName,
-                providerTitle: p.providerTitle || p.title,
-                specialty: p.specialty,
-                profilePhotoURL: p.profilePhotoURL || p.profileImage,
-              }))
-            : [];
-
-        setAssociatedProviders(partnerProviders);
-
-        const providersList =
-          providers?.data && Array.isArray(providers.data)
-            ? providers.data
-            : [];
-        const associatedProviderIds = new Set(
-          partnerProviders.map((p) => p.email),
-        );
-        const availableProviders = providersList
-          .filter((p: any) => !associatedProviderIds.has(p.email))
-          .map((p: any) => ({
-            id: p.email,
-            email: p.email,
-            providerName: p.providerName,
-            providerTitle: p.providerTitle,
-            specialty: p.specialty,
-            profilePhotoURL: p.profilePhotoURL,
-          }));
-        setAvailableProviders(availableProviders);
-      }
-    } catch (error) {
-      // Background data loading error
-    } finally {
-      setIsLoadingSchools(false);
-      setIsLoadingProviders(false);
-    }
+    await queryClient.invalidateQueries({
+      queryKey: ["partner-details", partnerId],
+    });
   };
-
-  useEffect(() => {
-    if (isOpen && partnerId) {
-      loadPartnerDetails();
-    }
-  }, [isOpen, partnerId]);
-
-  useEffect(() => {
-    if (
-      isOpen &&
-      partnerId &&
-      (allSchools.length > 0 ||
-        (providers?.data &&
-          Array.isArray(providers.data) &&
-          providers.data.length > 0))
-    ) {
-      loadPartnerDetails();
-    }
-  }, [allSchools.length, providers?.data, isOpen, partnerId]);
 
   useEffect(() => {
     if (isOpen) {

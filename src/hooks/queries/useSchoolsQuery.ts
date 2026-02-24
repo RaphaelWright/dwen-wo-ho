@@ -111,6 +111,8 @@ export const useSchool = (schoolId: string) => {
     queryKey: [SCHOOLS_QUERY_KEY, schoolId],
     queryFn: () => getSchool(schoolId),
     enabled: !!schoolId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 
@@ -129,6 +131,8 @@ export const useSchoolLockin = (schoolId: string) => {
     queryKey: [SCHOOLS_LOCKIN_QUERY_KEY, schoolId],
     queryFn: () => getSchoolLockIn(schoolId),
     enabled: !!schoolId,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
 

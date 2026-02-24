@@ -10,6 +10,8 @@ const useUserQuery = (options?: {
   const getProfileQuery = useQuery({
     queryKey: ["auth", "profile"],
     queryFn: () => getProfile(),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
     ...options,
   });
 

@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
 import { useSchools } from "@/hooks/queries/useSchoolsQuery";
+import { usePartnersList } from "@/hooks/queries/usePartnersQuery";
 import {
   AssociatedSchool,
   AssociatedPartner,
@@ -36,7 +37,21 @@ export const useProviderDetails = ({
   const { data: providerData, isLoading: isQueryLoading } =
     useProvider(providerEmail);
   const { data: allSchools = [] } = useSchools();
+  const { data: allPartnersData = [] } = usePartnersList();
   const queryClient = useQueryClient();
+
+  const allPartners: AssociatedPartner[] = useMemo(
+    () =>
+      allPartnersData.map(
+        (p: { id: string | number; name: string; logo?: string }) => ({
+          id: String(p.id),
+          name: p.name,
+          logo: p.logo,
+          isAssociated: false,
+        }),
+      ),
+    [allPartnersData],
+  );
 
   const [activeTab, setActiveTab] = useState<ProviderDetailsTab>("schools");
   const [associatedSchools, setAssociatedSchools] = useState<
@@ -51,7 +66,6 @@ export const useProviderDetails = ({
   const [availablePartners, setAvailablePartners] = useState<
     AssociatedPartner[]
   >([]);
-  const [allPartners, setAllPartners] = useState<AssociatedPartner[]>([]);
   const [schoolSearchQuery, setSchoolSearchQuery] = useState("");
   const [partnerSearchQuery, setPartnerSearchQuery] = useState("");
   const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(null);
@@ -149,27 +163,6 @@ export const useProviderDetails = ({
     }
   };
 
-  const loadAllPartners = async () => {
-    try {
-      const response = await api(ENDPOINTS.partners);
-      if (response?.success && response.data) {
-        const partnersList = Array.isArray(response.data) ? response.data : [];
-        setAllPartners(
-          partnersList.map(
-            (p: { id: string | number; name: string; logo?: string }) => ({
-              id: String(p.id),
-              name: p.name,
-              logo: p.logo,
-              isAssociated: false,
-            }),
-          ),
-        );
-      }
-    } catch {
-      // Background error
-    }
-  };
-
   const loadProviderPartners = async (
     partnersList: AssociatedPartner[] = allPartners,
   ) => {
@@ -209,7 +202,6 @@ export const useProviderDetails = ({
   useEffect(() => {
     if (isOpen && providerEmail) {
       loadProviderSchools();
-      loadAllPartners();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, providerEmail]);
