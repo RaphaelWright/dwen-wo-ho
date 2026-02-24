@@ -55,7 +55,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
               <div className="p-8 overflow-y-auto">
                 {/* Top Section: Total Reach & Baseline */}
                 <div className="flex flex-col md:flex-row gap-8 mb-10">
-                  <div className="flex-1 bg-primary rounded-2xl p-6 text-primary-foreground shadow-lg shadow-primary/20 relative overflow-hidden">
+                  <div className="flex-1 bg-secondary-accent rounded-2xl p-6 text-white shadow-lg shadow-teal-500/20 relative overflow-hidden">
                     <div className="relative z-10">
                       <p className="text-white/80 font-medium mb-1">
                         Total Student Reach

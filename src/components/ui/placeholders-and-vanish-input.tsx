@@ -10,11 +10,13 @@ export function PlaceholdersAndVanishInput({
   onSubmit,
   className,
   submitButton,
+  value,
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string; // Allow custom classes for the container
+  value?: string; // Add support for controlled external value
   submitButton?:
     | React.ReactNode
     | ((props: { value: string }) => React.ReactNode); // Allow replacing the default button with access to value
@@ -25,7 +27,7 @@ export function PlaceholdersAndVanishInput({
   const startAnimation = () => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 3000);
+    }, 4500);
   };
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
@@ -51,8 +53,15 @@ export function PlaceholdersAndVanishInput({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState("");
+  const [internalValue, setInternalValue] = useState("");
   const [animating, setAnimating] = useState(false);
+
+  // Sync with external value if provided
+  useEffect(() => {
+    if (value !== undefined) {
+      setInternalValue(value);
+    }
+  }, [value]);
 
   const draw = useCallback(() => {
     if (!inputRef.current) return;
@@ -69,7 +78,7 @@ export function PlaceholdersAndVanishInput({
     const fontSize = parseFloat(computedStyles.getPropertyValue("font-size"));
     ctx.font = `${fontSize * 2}px ${computedStyles.fontFamily}`;
     ctx.fillStyle = "#FFF";
-    ctx.fillText(value, 16, 40);
+    ctx.fillText(internalValue || "", 16, 40);
 
     const imageData = ctx.getImageData(0, 0, 800, 800);
     const pixelData = imageData.data;
@@ -147,7 +156,7 @@ export function PlaceholdersAndVanishInput({
         if (newDataRef.current.length > 0) {
           animateFrame(pos - 8);
         } else {
-          setValue("");
+          setInternalValue("");
           setAnimating(false);
         }
       });
@@ -183,8 +192,8 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
-        value && "bg-gray-50",
+        "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-xl overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
+        internalValue && "bg-gray-50",
         className,
       )}
       onSubmit={handleSubmit}
@@ -199,29 +208,29 @@ export function PlaceholdersAndVanishInput({
       <input
         onChange={(e) => {
           if (!animating) {
-            setValue(e.target.value);
+            setInternalValue(e.target.value);
             onChange && onChange(e);
           }
         }}
         onKeyDown={handleKeyDown}
         ref={inputRef}
-        value={value}
+        value={internalValue}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base border-none h-full rounded-full focus:outline-none focus:ring-0 pl-2 sm:pl-8 pr-20",
+          "w-full relative text-sm sm:text-base border-none h-full rounded-xl focus:outline-none focus:ring-0 pl-2 sm:pl-8 pr-20",
           animating && "text-transparent dark:text-transparent",
         )}
       />
 
       {submitButton ? (
         typeof submitButton === "function" ? (
-          submitButton({ value })
+          submitButton({ value: internalValue })
         ) : (
           submitButton
         )
       ) : (
         <button
-          disabled={!value}
+          disabled={!internalValue}
           type="submit"
           className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
         >
@@ -245,7 +254,7 @@ export function PlaceholdersAndVanishInput({
                 strokeDashoffset: "50%",
               }}
               animate={{
-                strokeDashoffset: value ? 0 : "50%",
+                strokeDashoffset: internalValue ? 0 : "50%",
               }}
               transition={{
                 duration: 0.3,
@@ -260,7 +269,7 @@ export function PlaceholdersAndVanishInput({
 
       <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
         <AnimatePresence mode="wait">
-          {!value && (
+          {!internalValue && (
             <motion.p
               initial={{
                 y: 5,

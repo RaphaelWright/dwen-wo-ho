@@ -41,7 +41,7 @@ export const PreviewStep = ({
                 &quot;{formData.motto}&quot;
               </p>
             )}
-            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-primary/10 text-primary">
+            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700">
               {formData.type}
             </span>
           </div>
@@ -50,7 +50,7 @@ export const PreviewStep = ({
         {selectedCampuses.length > 0 && (
           <div className="pt-4 border-t border-gray-200">
             <div className="flex items-start gap-2">
-              <MapPin className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <MapPin className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-2">
                   Campuses:

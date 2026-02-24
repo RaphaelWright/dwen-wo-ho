@@ -224,13 +224,7 @@ export interface SchoolEditModalProps {
   onDisableSchool?: () => void;
 }
 
-export type FilterType =
-  | "all"
-  | "JHS"
-  | "SHS"
-  | "NMTC"
-  | "University"
-  | "COLLEGE";
+export type FilterType = "All" | "JHS" | "SHS" | "COLLEGE";
 
 export interface SchoolSelectionModalProps {
   isOpen: boolean;

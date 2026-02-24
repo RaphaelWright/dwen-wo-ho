@@ -98,7 +98,7 @@ export const FormStep = ({
             Campuses
           </Label>
           {selectedCampuses.length > 0 && (
-            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
               {selectedCampuses.length} selected
             </span>
           )}
@@ -215,7 +215,7 @@ export const FormStep = ({
                   className="w-full h-32 bg-muted border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/80 hover:border-primary/30 transition-all group"
                 >
                   <div className="w-10 h-10 bg-background rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Upload className="w-5 h-5 text-primary" />
+                    <Upload className="w-5 h-5 text-teal-600" />
                   </div>
                   <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
                     Click to upload logo

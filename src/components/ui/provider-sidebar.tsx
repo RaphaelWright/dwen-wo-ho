@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
 import { FiLogOut, FiArrowRight, FiMenu, FiUser } from "react-icons/fi";
+import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { MdSchool } from "react-icons/md";
 import { cn } from "@/lib/utils";
+import { ROUTES } from "@/lib/constants/routes";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 
 interface ProviderSidebarProps {
@@ -21,6 +23,7 @@ export const ProviderSidebar = ({
 }: ProviderSidebarProps) => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
   const isActive = (path: string) => {
@@ -32,17 +35,36 @@ export const ProviderSidebar = ({
     setIsMobileSidebarOpen(false);
   };
 
+  // Auto-collapse sidebar on non-main pages
+  useEffect(() => {
+    const mainPages: string[] = [
+      ROUTES.provider.home,
+      ROUTES.provider.profile,
+      ROUTES.provider.schools,
+    ];
+
+    if (!mainPages.includes(pathname)) {
+      setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
+    }
+  }, [pathname]);
+
+  const onToggleCollapse = () => setIsCollapsed(!isCollapsed);
+
   return (
     <>
       {/* Mobile Header with Hamburger Menu */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-sidebar border-b border-sidebar-border flex items-center justify-between px-4 z-50 shadow-sm">
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          className="text-primary p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
+          className="text-sidebar-primary p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
         >
           <FiMenu size={24} />
         </button>
-        <h1 className="text-primary font-bold text-lg">JustGo Health</h1>
+        <h1 className="text-sidebar-primary font-bold text-lg">
+          JustGo Health
+        </h1>
         <div className="w-10" /> {/* Spacer for center alignment */}
       </div>
 
@@ -57,84 +79,154 @@ export const ProviderSidebar = ({
       {/* White Sidebar */}
       <div
         className={cn(
-          "w-64 bg-sidebar border-r border-sidebar-border",
+          "bg-sidebar border-r border-sidebar-border",
           "flex flex-col h-screen shadow-lg z-40",
           "fixed md:static",
-          "transition-transform duration-300 ease-in-out",
+          "transition-all duration-300 ease-in-out",
           isMobileSidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full md:translate-x-0",
+            ? "translate-x-0 w-64"
+            : cn(
+                "-translate-x-full md:translate-x-0",
+                isCollapsed ? "w-20" : "w-64",
+              ),
         )}
       >
         {/* Logo */}
-        <div className="p-4 lg:p-6 border-b border-sidebar-border">
-          <div className="transform hover:scale-105 transition-transform duration-300 justify-center flex">
-            <Logo variant="black" withLink={false} />
+        <div
+          className={cn(
+            "border-b border-sidebar-border transition-all duration-300",
+            isCollapsed ? "p-4 justify-center" : "p-4 lg:p-6",
+          )}
+        >
+          <div
+            className={cn(
+              "transform hover:scale-105 transition-transform duration-300 flex",
+              isCollapsed ? "justify-center" : "justify-center",
+            )}
+          >
+            {isCollapsed ? (
+              <Link href={ROUTES.provider.home}>
+                <img
+                  src="/logos/logo-purple-small.png"
+                  alt="JustGo Health"
+                  className="w-8 h-8 object-contain"
+                />
+              </Link>
+            ) : (
+              <Logo
+                variant="black"
+                withLink={true}
+                href={ROUTES.provider.home}
+              />
+            )}
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="flex-1 px-4 py-6">
+        <div
+          className={cn(
+            "flex-1 py-6 overflow-y-auto",
+            isCollapsed ? "px-2" : "px-4",
+          )}
+        >
           <nav className="space-y-3">
             <Link
-              href="/provider/schools"
+              href={ROUTES.provider.home}
               onClick={() => setIsMobileSidebarOpen(false)}
               className={cn(
-                "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/provider/schools") || isActive("/provider/home")
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary",
+                "flex items-center transition-all duration-200 rounded-lg",
+                isCollapsed
+                  ? "justify-center p-3"
+                  : "justify-between px-4 py-3",
+                isActive(ROUTES.provider.home) || isActive(ROUTES.provider.home)
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md font-bold"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary font-medium",
               )}
+              title={isCollapsed ? "Schools" : undefined}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <MdSchool className="text-xl" />
-                  <span className="text-lg">Schools</span>
-                </div>
+              <div className="flex items-center gap-3">
+                <MdSchool className="text-xl shrink-0" />
+                {!isCollapsed && <span className="text-lg">Schools</span>}
+              </div>
+              {!isCollapsed && (
                 <span
                   className={cn(
                     "text-sm px-2 py-1 rounded-full",
-                    isActive("/provider/schools") || isActive("/provider/home")
+                    isActive(ROUTES.provider.home) ||
+                      isActive(ROUTES.provider.home)
                       ? "bg-white/20 text-white"
                       : "bg-sidebar-accent text-sidebar-foreground",
                   )}
                 >
                   {schoolCount}
                 </span>
-              </div>
+              )}
             </Link>
             <Link
-              href="/provider/profile"
+              href={ROUTES.provider.profile}
               onClick={() => setIsMobileSidebarOpen(false)}
               className={cn(
-                "block px-4 py-3 font-bold transition-all duration-200 rounded-lg",
-                isActive("/provider/profile")
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary",
+                "flex items-center transition-all duration-200 rounded-lg",
+                isCollapsed ? "justify-center p-3" : "px-4 py-3",
+                isActive(ROUTES.provider.profile)
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md font-bold"
+                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary font-medium",
               )}
+              title={isCollapsed ? "Profile" : undefined}
             >
               <div className="flex items-center gap-3">
-                <FiUser className="text-xl" />
-                <span className="text-lg">Profile</span>
+                <FiUser className="text-xl shrink-0" />
+                {!isCollapsed && <span className="text-lg">Profile</span>}
               </div>
             </Link>
           </nav>
         </div>
 
-        {/* Logout */}
-        <div className="p-4 border-t border-sidebar-border">
+        {/* Bottom Section: Collapse toggle + Logout */}
+        <div className="border-t border-sidebar-border p-2 space-y-1">
+          {/* Collapse Toggle */}
+          <button
+            onClick={onToggleCollapse}
+            className={cn(
+              "hidden md:flex items-center w-full rounded-lg py-2.5 transition-all duration-200 text-sidebar-foreground hover:bg-sidebar-accent",
+              isCollapsed
+                ? "justify-center px-0 w-10 h-10 mx-auto"
+                : "px-3 gap-3",
+            )}
+            title={isCollapsed ? "Expand" : undefined}
+          >
+            {isCollapsed ? (
+              <LuChevronsRight className="text-xl shrink-0" />
+            ) : (
+              <>
+                <LuChevronsLeft className="text-xl shrink-0" />
+                <span className="font-medium">Collapse</span>
+              </>
+            )}
+          </button>
+
+          {/* Logout */}
           <Button
             onClick={handleLogoutClick}
             variant="ghost"
-            className="w-full bg-transparent hover:bg-sidebar-accent text-sidebar-foreground font-bold py-3 rounded-lg transition-all duration-200"
+            title={isCollapsed ? "Logout" : undefined}
+            className={cn(
+              "w-full bg-transparent hover:bg-sidebar-accent text-sidebar-foreground transition-all duration-200",
+              isCollapsed
+                ? "justify-center p-0 w-10 h-10 mx-auto"
+                : "justify-between px-3 py-3",
+            )}
           >
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-3">
-                <FiLogOut className="text-xl text-sidebar-foreground" />
-                <span className="text-lg text-sidebar-foreground">Logout</span>
-              </div>
-              <FiArrowRight className="w-4 h-4 text-sidebar-foreground" />
+            <div
+              className={cn(
+                "flex items-center",
+                isCollapsed ? "justify-center" : "gap-3",
+              )}
+            >
+              <FiLogOut className="text-xl shrink-0" />
+              {!isCollapsed && <span className="font-medium">Logout</span>}
             </div>
+            {!isCollapsed && <FiArrowRight className="w-4 h-4 shrink-0" />}
           </Button>
         </div>
       </div>

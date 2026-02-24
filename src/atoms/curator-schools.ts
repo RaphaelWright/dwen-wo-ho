@@ -3,6 +3,7 @@ import { School } from "@/lib/types/school";
 
 export interface SchoolWithExtras extends School {
   studentCount?: number;
+  newPatientId?: number;
   newPatientName?: string;
   latestLockInDate?: string;
   providerCount?: number;

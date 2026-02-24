@@ -16,7 +16,7 @@ const REGION_COLORS = [
   "fill-blue-500",
   "fill-indigo-500",
   "fill-violet-500",
-  "fill-purple-500",
+  "fill-teal-500",
   "fill-pink-500",
   "fill-rose-500",
   "fill-red-500",

@@ -11,7 +11,8 @@ export function PatientsTab({
   isLoading,
   compactTimeAgo,
   onViewPatient,
-}: PatientsTabProps) {
+  searchQuery = "",
+}: PatientsTabProps & { searchQuery?: string }) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -20,7 +21,17 @@ export function PatientsTab({
     );
   }
 
-  if (patients.length === 0) {
+  const filteredPatients = patients.filter((patient) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      patient.patientName?.toLowerCase().includes(query) ||
+      patient.visibilityStatus?.toLowerCase().includes(query) ||
+      patient.comment?.toLowerCase().includes(query)
+    );
+  });
+
+  if (filteredPatients.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
@@ -36,7 +47,7 @@ export function PatientsTab({
 
   return (
     <div className="flex flex-col gap-3">
-      {patients.map((patient) => {
+      {filteredPatients.map((patient) => {
         const isTreating = (patient.treatingProviders?.length ?? 0) > 0;
         const isSeen = patient.visibilityStatus === "SEEN";
 
@@ -89,7 +100,7 @@ export function PatientsTab({
                   className={cn(
                     "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide",
                     isTreating
-                      ? "bg-purple-500/10 text-purple-700 border border-purple-200"
+                      ? "bg-teal-500/10 text-teal-700 border border-teal-200"
                       : isSeen
                         ? "bg-blue-500/10 text-blue-700 border border-blue-200"
                         : "bg-green-500/10 text-green-700 border border-green-200",

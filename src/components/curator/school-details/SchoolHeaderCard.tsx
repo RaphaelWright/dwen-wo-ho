@@ -3,7 +3,7 @@ import { Search, Pencil, Ban } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { SchoolHeaderCardProps } from "@/lib/types/components/curator/school-details";
-import { Input } from "@/components/ui/input";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 export function SchoolHeaderCard({
   school,
@@ -12,7 +12,37 @@ export function SchoolHeaderCard({
   onSearchChange,
   onEditClick,
   onDisableClick,
+  activeTab = "patients",
 }: SchoolHeaderCardProps) {
+  // Determine placeholders based on active tab
+  const getPlaceholders = () => {
+    switch (activeTab) {
+      case "icons":
+        return [
+          "Search for icons...",
+          "Look up by name...",
+          "Find by lock-in tag...",
+        ];
+      case "providers":
+        return [
+          "Search for providers...",
+          "Look up by name or email...",
+          "Find by specialty...",
+          "Search by status...",
+        ];
+      case "patients":
+      default:
+        return [
+          "Search for patients...",
+          "Look up by name...",
+          "Find by visibility status...",
+          "Search in comments...",
+        ];
+    }
+  };
+
+  const currentPlaceholders = getPlaceholders();
+
   return (
     <div className="bg-card rounded-3xl shadow-sm border border-border p-6 sm:p-8 mb-8 relative overflow-hidden group">
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -58,7 +88,7 @@ export function SchoolHeaderCard({
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-sm text-muted-foreground">
             {school.nickname && (
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
                 <span className="font-medium text-foreground">
                   {school.nickname}
                 </span>
@@ -74,14 +104,26 @@ export function SchoolHeaderCard({
 
         {/* Actions/Search */}
         <div className="flex flex-col items-end gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <div className="relative group/search w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within/search:text-primary transition-colors" />
-            <Input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search patients..."
-              className="w-full pl-9 pr-4 py-2 bg-muted/50 border-transparent focus:bg-background focus:border-primary/20 rounded-xl text-sm transition-all focus:ring-4 focus:ring-primary/10"
+          <div className="w-full sm:w-80 md:w-96 relative">
+            <PlaceholdersAndVanishInput
+              placeholders={currentPlaceholders}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onSearchChange(e.target.value)
+              }
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                // The search state is already updated via onChange,
+                // this just catches the enter key submit
+              }}
+              className="w-full bg-muted/50 focus-within:bg-background border border-transparent focus-within:border-primary/20"
+              submitButton={
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition duration-200 flex items-center justify-center"
+                >
+                  <Search className="h-4 w-4" />
+                </button>
+              }
             />
           </div>
         </div>

@@ -13,7 +13,7 @@ export const useSchoolSelection = (
   const [schools, setSchools] = useState<School[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterType>("All");
 
   useEffect(() => {
     if (isOpen) {
@@ -40,7 +40,7 @@ export const useSchoolSelection = (
 
   const filteredSchools = useMemo(() => {
     let filtered =
-      activeFilter === "all"
+      activeFilter === "All"
         ? schools
         : schools.filter((school) => school.type === activeFilter);
 

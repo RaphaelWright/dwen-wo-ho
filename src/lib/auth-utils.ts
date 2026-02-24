@@ -15,7 +15,7 @@ export const refreshToken = async (): Promise<string | null> => {
   }
 
   isRefreshingToken = true;
-  
+
   refreshPromise = (async () => {
     try {
       if (typeof window === "undefined") {
@@ -24,7 +24,7 @@ export const refreshToken = async (): Promise<string | null> => {
 
       // Get refresh token from localStorage
       const refreshTokenValue = localStorage.getItem("refreshToken");
-      
+
       if (!refreshTokenValue) {
         return null;
       }
@@ -43,8 +43,10 @@ export const refreshToken = async (): Promise<string | null> => {
         if (newAccessToken) {
           // Check stored user type first, then fallback to curatorToken check
           const storedUserType = getStoredUserType();
-          const isCurator = storedUserType === "curator" || localStorage.getItem("curatorToken");
-          
+          const isCurator =
+            storedUserType === "curator" ||
+            localStorage.getItem("curatorToken");
+
           if (isCurator) {
             localStorage.setItem("curatorToken", newAccessToken);
             setUserType("curator");
@@ -90,7 +92,7 @@ export const handleTokenExpiration = async () => {
 
   // Attempt to refresh token before logging out
   const newToken = await refreshToken();
-  
+
   if (newToken) {
     // Token refreshed successfully, update localStorage
     const isCurator = localStorage.getItem("curatorToken");
@@ -113,7 +115,7 @@ export const handleTokenExpiration = async () => {
   localStorage.removeItem("userType");
 
   const currentPath = window.location.pathname;
-  const isAuthPage = 
+  const isAuthPage =
     currentPath.includes("/signin") ||
     currentPath.includes("/signup") ||
     currentPath.includes("/auth") ||
@@ -123,7 +125,7 @@ export const handleTokenExpiration = async () => {
     currentPath.includes("/recover");
 
   if (!isAuthPage) {
-    window.location.href = ROUTES.provider.auth;
+    window.location.replace(ROUTES.provider.auth);
   }
 
   setTimeout(() => {
@@ -140,13 +142,13 @@ export const isAuthError = (status: number): boolean => {
 /**
  * Comprehensive logout function that clears all authentication data,
  * cache, and storage to prevent auth confusion between different users.
- * 
+ *
  * @param queryClient - Optional React Query client to clear query cache
  * @param redirectTo - Optional route to redirect to after logout (defaults to provider auth)
  */
 export const performLogout = (
   queryClient?: QueryClient,
-  redirectTo?: string
+  redirectTo?: string,
 ) => {
   if (typeof window === "undefined") {
     return;
@@ -214,9 +216,8 @@ export const performLogout = (
 
   // Redirect to auth page
   const redirectPath = redirectTo || ROUTES.provider.auth;
-  
-  // Use window.location for a hard redirect to ensure complete state reset
-  window.location.href = redirectPath;
+
+  // Use window.location.replace for a hard redirect to ensure complete state reset
+  // and to prevent users from navigating back to the authenticated app
+  window.location.replace(redirectPath);
 };
-
-

@@ -17,6 +17,7 @@ export const ROUTES = {
     auth: "/provider/auth",
     profile: "/provider/profile",
     home: "/provider/home",
+    schools: "/provider/schools",
   },
   patient: {
     singIn: "/patient/signin",
@@ -34,5 +35,6 @@ export const ROUTES = {
     providers: "/curator/providers",
     partners: "/curator/partners",
     providerDetails: "/curator/provider",
+    pages: "/curator/pages",
   },
 } as const;

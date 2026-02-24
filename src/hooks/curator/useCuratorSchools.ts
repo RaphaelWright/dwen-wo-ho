@@ -27,11 +27,11 @@ export const FILTER_OPTIONS: { label: string; value: FilterType }[] = [
 const BATCH_SIZE = 5;
 const POLL_INTERVAL = 10000; // 10 seconds
 
-export function getFirstCampus(campuses: string[] | null | undefined): string {
-  if (campuses && Array.isArray(campuses) && campuses.length > 0) {
-    return campuses[0];
-  }
-  return "";
+import { parseCampuses } from "@/lib/utils/parseCampuses";
+
+export function getFirstCampus(campuses: any): string {
+  const parsed = parseCampuses(campuses);
+  return parsed.length > 0 ? parsed[0] : "";
 }
 
 export function useCuratorSchools() {
@@ -91,7 +91,7 @@ export function useCuratorSchools() {
               addNotification(
                 "success",
                 `New patient: ${latestCheck.patientName} at ${school.name}`,
-                `/curator/schools/${school.id}/patients`, // Add link to patient page
+                `/curator/schools/${school.id}/patients/${latestCheck.id}`, // Add link to patient page
               );
               forceRefresh = true; // Force cache refresh to get updated counts
 
@@ -116,6 +116,7 @@ export function useCuratorSchools() {
 
         if (latestPatient) {
           schoolData.latestLockInDate = latestPatient.createdAt;
+          schoolData.newPatientId = latestPatient.id;
           schoolData.newPatientName = latestPatient.patientName;
         }
       } catch (error) {

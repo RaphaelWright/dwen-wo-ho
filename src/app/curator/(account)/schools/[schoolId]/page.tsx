@@ -101,13 +101,17 @@ export default function SchoolDetailsPage() {
             campusLabel={campusLabel}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            activeTab={activeTab}
             onEditClick={() => setShowEditModal(true)}
             onDisableClick={handleDisableSchool}
           />
 
           <SchoolTabNavigation
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={(tab) => {
+              setActiveTab(tab);
+              setSearchQuery("");
+            }}
             patientsCount={patients.length}
             iconsCount={schoolIcons.length}
             providersCount={providers.length}
@@ -126,6 +130,7 @@ export default function SchoolDetailsPage() {
                   isLoading={patientsLoading}
                   schoolId={schoolId}
                   compactTimeAgo={compactTimeAgo}
+                  searchQuery={searchQuery}
                   onViewPatient={(patientId) =>
                     router.push(
                       `/curator/schools/${schoolId}/patients/${patientId}`,
@@ -139,6 +144,7 @@ export default function SchoolDetailsPage() {
               <div className="p-4 sm:p-6">
                 <IconsTab
                   icons={schoolIcons}
+                  searchQuery={searchQuery}
                   onIconClick={(icon) => {
                     setEditingIcon(icon);
                     setShowAddIconModal(true);
@@ -156,6 +162,7 @@ export default function SchoolDetailsPage() {
                 <ProvidersTab
                   providers={providers}
                   isLoading={providersLoading}
+                  searchQuery={searchQuery}
                   onProviderClick={handleProviderClick}
                 />
               </div>

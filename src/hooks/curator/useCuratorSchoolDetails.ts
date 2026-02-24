@@ -13,6 +13,8 @@ import { useDisableSchool } from "@/hooks/queries/useSchoolsQuery";
 
 export type CuratorSchoolTabType = "patients" | "icons" | "providers";
 
+import { parseCampuses } from "@/lib/utils/parseCampuses";
+
 function compactTimeAgo(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
@@ -20,21 +22,6 @@ function compactTimeAgo(dateString: string): string {
   if (seconds < 3600) return `${Math.max(1, Math.floor(seconds / 60))}h`;
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
   return `${Math.floor(seconds / 86400)}d`;
-}
-
-function parseCampuses(campuses: string[] | null | undefined): string[] {
-  if (!campuses || campuses.length === 0) return [];
-  return campuses.flatMap((c) => {
-    if (typeof c === "string" && c.trim().startsWith("[")) {
-      try {
-        const parsed = JSON.parse(c);
-        return Array.isArray(parsed) ? parsed : [c];
-      } catch {
-        return [c];
-      }
-    }
-    return [c];
-  });
 }
 
 export { compactTimeAgo, parseCampuses };

@@ -20,7 +20,7 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
             />
           </div>
         ) : (
-          <div className="w-24 h-24 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center shrink-0">
+          <div className="w-24 h-24 rounded-full bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shrink-0">
             <FiUser className="w-12 h-12 text-white" />
           </div>
         )}

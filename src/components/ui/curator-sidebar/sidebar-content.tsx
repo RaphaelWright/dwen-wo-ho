@@ -7,6 +7,7 @@ import { FiBell, FiLogOut } from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/Logo";
+import { ROUTES } from "@/lib/constants/routes";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { NotificationSheet } from "@/components/ui/notification-sheet";
 import {
@@ -50,7 +51,7 @@ export const SidebarContent = ({
           )}
         >
           {collapsed ? (
-            <Link href="/">
+            <Link href={ROUTES.curator.dashboard as any}>
               <Image
                 priority
                 src="/logos/logo-purple-small.png"
@@ -62,7 +63,8 @@ export const SidebarContent = ({
             </Link>
           ) : (
             <Logo
-              variant={mounted && theme === "light" ? "black" : "white"}
+              variant="auto"
+              href={ROUTES.curator.dashboard}
               className="w-32"
             />
           )}

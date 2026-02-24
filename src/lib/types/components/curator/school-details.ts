@@ -37,6 +37,7 @@ export interface SchoolHeaderCardProps {
   onSearchChange: (query: string) => void;
   onEditClick: () => void;
   onDisableClick: () => void;
+  activeTab?: "patients" | "icons" | "providers";
 }
 
 export type SchoolTab = "patients" | "icons" | "providers";
@@ -51,6 +52,10 @@ export interface SchoolTabNavigationProps {
 }
 
 export interface UrgentCarePatient {
+  id?: number | string;
+  lockinId?: number | string;
+  patientResultId?: number | string;
+  schoolId?: number | string;
   patientName?: string;
   lockedInScore?: number | null;
   urgentCareEnteredAt?: string;

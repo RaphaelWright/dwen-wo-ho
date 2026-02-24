@@ -40,7 +40,7 @@ export default function CurvedTextUI() {
         </svg>
         <div className="absolute bottom-0 left-[50%] -translate-x-[50%]">
           {/* Tagline */}
-          <p className="text-purple-700 text-xl font-medium mb-1">
+          <p className="text-teal-700 text-xl font-medium mb-1">
             Your story isn&apos;t over yet.
           </p>
 
@@ -50,7 +50,7 @@ export default function CurvedTextUI() {
           </p>
 
           {/* Button - Larger Text */}
-          <button className="bg-purple-700 text-white text-xl font-bold px-8 py-4 rounded-xl hover:bg-purple-800 transition">
+          <button className="bg-teal-700 text-white text-xl font-bold px-8 py-4 rounded-xl hover:bg-teal-800 transition">
             Join The Waitlist
           </button>
         </div>

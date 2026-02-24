@@ -87,7 +87,7 @@ const PendingVerificationModal = ({
                           className="w-32 h-32 rounded-full object-cover ring-4 ring-background shadow-lg"
                         />
                       ) : (
-                        <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center text-primary text-4xl font-bold shadow-inner ring-4 ring-background">
+                        <div className="w-32 h-32 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 text-4xl font-bold shadow-inner ring-4 ring-background">
                           {userInfo.name.charAt(0)}
                         </div>
                       )}

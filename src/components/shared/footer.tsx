@@ -76,7 +76,7 @@ export default function Footer() {
               {WELLNESS_TIPS.map((tip, index) => (
                 <li key={index} className="flex items-start">
                   <div className="mr-4 mt-1 shrink-0">
-                    <ArrowRight className="w-5 h-5 text-primary" />
+                    <ArrowRight className="w-5 h-5 text-teal-400" />
                   </div>
                   <div className="font-serif italic text-[15px] leading-relaxed">
                     <LinkPreview

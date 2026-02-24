@@ -14,8 +14,8 @@ export const getProviderStatItems = (stats: ProviderStats) => [
     label: "Partners",
     value: stats.partners,
     icon: Handshake,
-    bgClass: "bg-purple-100",
-    textClass: "text-purple-600",
+    bgClass: "bg-teal-100",
+    textClass: "text-teal-600",
   },
   {
     label: "Total Students",

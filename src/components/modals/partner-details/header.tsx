@@ -19,7 +19,7 @@ export const PartnerHeader = ({ partner, onClose }: PartnerHeaderProps) => {
             />
           </div>
         ) : (
-          <div className="w-16 h-16 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+          <div className="w-16 h-16 bg-linear-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center">
             <Handshake className="w-8 h-8 text-white" />
           </div>
         )}

@@ -61,14 +61,14 @@ const CreateModal = ({
                   <Button
                     key={item.id}
                     onClick={() => handleItemClick(item)}
-                    className="flex flex-col items-center group p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-100"
+                    className="bg-transparent flex flex-col items-center group p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-100"
                   >
                     <div
                       className={`w-16 h-16 rounded-2xl ${item.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200 shadow-sm`}
                     >
                       <Icon className={`w-8 h-8 ${item.color}`} />
                     </div>
-                    <h3 className="font-semibold text-gray-900 text-sm group-hover:text-[#955aa4] transition-colors">
+                    <h3 className="font-semibold text-gray-900 text-sm group-hover:text-gray-900 transition-colors">
                       {item.label}
                     </h3>
                   </Button>

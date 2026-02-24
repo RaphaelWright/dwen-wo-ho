@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { FiFileText, FiPlus } from "react-icons/fi";
+import { ROUTES } from "@/lib/constants/routes";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { useNotification } from "@/hooks/useNotification";
 import { NavItem, SidebarProps } from "@/lib/types/components/curator/sidebar";
@@ -32,6 +33,23 @@ export const useCuratorSidebar = ({
     setMounted(true);
   }, []);
 
+  // Auto-collapse sidebar on non-main pages
+  useEffect(() => {
+    const mainPages: string[] = [
+      ROUTES.curator.dashboard,
+      ROUTES.curator.schools,
+      ROUTES.curator.providers,
+      ROUTES.curator.partners,
+      ROUTES.curator.pages,
+    ];
+
+    if (!mainPages.includes(pathname)) {
+      setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
+    }
+  }, [pathname]);
+
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
     setIsMobileSidebarOpen(false);
@@ -39,25 +57,25 @@ export const useCuratorSidebar = ({
 
   const navItems: NavItem[] = [
     {
-      href: "/curator/schools",
+      href: ROUTES.curator.schools,
       label: "Schools",
       icon: <MdSchool className="text-lg shrink-0" />,
       count: schoolCount,
     },
     {
-      href: "/curator/providers",
+      href: ROUTES.curator.providers,
       label: "Providers",
       icon: <MdHealthAndSafety className="text-lg shrink-0" />,
       count: providerCount,
     },
     {
-      href: "/curator/partners",
+      href: ROUTES.curator.partners,
       label: "Partners",
       icon: <MdHandshake className="text-lg shrink-0" />,
       count: partnerCount,
     },
     {
-      href: "/curator/pages",
+      href: ROUTES.curator.pages,
       label: "Pages",
       icon: <FiFileText className="text-lg shrink-0" />,
     },

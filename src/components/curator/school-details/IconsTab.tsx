@@ -10,16 +10,25 @@ export function IconsTab({
   icons,
   onIconClick,
   onAddFirstIcon,
-}: IconsTabProps) {
-  if (icons.length === 0) {
+  searchQuery = "",
+}: IconsTabProps & { searchQuery?: string }) {
+  const filteredIcons = icons.filter((icon) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      icon.name?.toLowerCase().includes(query) ||
+      (icon.lockIns || []).some((lock) => lock.toLowerCase().includes(query))
+    );
+  });
+  if (filteredIcons.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
         <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
           <Users className="w-8 h-8 text-muted-foreground/50" />
         </div>
-        <p className="text-foreground font-medium mb-1">No icons added yet</p>
+        <p className="text-foreground font-medium mb-1">No icons found</p>
         <p className="text-sm text-muted-foreground mb-6">
-          Add icons to highlight school features.
+          Try adjusting your search or add a new icon.
         </p>
         <Button
           onClick={onAddFirstIcon}
@@ -33,7 +42,7 @@ export function IconsTab({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {icons
+      {filteredIcons
         .sort((a, b) => a.rank - b.rank)
         .map((icon) => (
           <motion.button

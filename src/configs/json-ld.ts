@@ -29,7 +29,7 @@ export const JSON_LD_HOME_PAGE = {
   },
   audience: {
     "@type": "Audience",
-    audienceType: "University Students",
+    audienceType: "College Students",
   },
   serviceType: "Mental Health Counseling",
 };
