@@ -166,7 +166,7 @@ export default function ProviderSchoolDetailsPage() {
                   className="w-full text-left flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-primary/30 hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-primary flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
                       <span className="text-white font-semibold">
                         {student.studentName.charAt(0).toUpperCase()}
                       </span>
@@ -185,7 +185,7 @@ export default function ProviderSchoolDetailsPage() {
                                 : student.lockedInColor === "green"
                                   ? "bg-green-100 text-green-800"
                                   : student.lockedInColor === "purple"
-                                    ? "bg-primary/10 text-primary"
+                                    ? "bg-teal-500/10 text-teal-700"
                                     : "bg-gray-100 text-gray-800"
                           }`}
                         >

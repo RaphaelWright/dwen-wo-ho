@@ -37,6 +37,7 @@ export interface SchoolHeaderCardProps {
   onSearchChange: (query: string) => void;
   onEditClick: () => void;
   onDisableClick: () => void;
+  activeTab?: "patients" | "icons" | "providers";
 }
 
 export type SchoolTab = "patients" | "icons" | "providers";

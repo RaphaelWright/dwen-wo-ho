@@ -12,6 +12,7 @@ import {
 } from "@/lib/constants/components/provider/auth/signup";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/constants/routes";
 import { useCreateAccount } from "@/hooks/components/provider/auth/signup/use-create-account";
 
 const CreateAccount = (props: CreateAccountProps) => {
@@ -170,7 +171,7 @@ const CreateAccount = (props: CreateAccountProps) => {
           <p className="text-sm font-medium text-muted-foreground">
             {SIGN_UP_TEXTS.createAccount.agreeTo}{" "}
             <Link
-              href="/"
+              href={ROUTES.public.landing}
               className="text-primary hover:underline transition-colors"
             >
               {SIGN_UP_TEXTS.createAccount.terms}

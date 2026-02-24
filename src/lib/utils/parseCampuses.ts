@@ -1,20 +1,36 @@
-export const parseCampuses = (
-  campuses: string[] | null | undefined,
-): string[] => {
-  if (!campuses || campuses.length === 0) {
-    return [];
-  }
+export const parseCampuses = (campuses: any): string[] => {
+  if (!campuses) return [];
 
-  return campuses.flatMap((campus) => {
-    // Handle stringified arrays like '["Cape Coast"]'
-    if (typeof campus === "string" && campus.trim().startsWith("[")) {
+  if (typeof campuses === "string") {
+    if (campuses.trim().startsWith("[")) {
       try {
-        const parsed = JSON.parse(campus);
-        return Array.isArray(parsed) ? parsed : [campus];
+        const parsed = JSON.parse(campuses);
+        if (Array.isArray(parsed)) {
+          return parsed.map((c) => String(c).trim());
+        }
       } catch {
-        return [campus];
+        // Fall back to splitting by comma if JSON parse fails
       }
     }
-    return [campus];
-  });
+    return campuses
+      .split(",")
+      .map((c) => c.trim())
+      .filter(Boolean);
+  }
+
+  if (Array.isArray(campuses)) {
+    return campuses.flatMap((campus) => {
+      if (typeof campus === "string" && campus.trim().startsWith("[")) {
+        try {
+          const parsed = JSON.parse(campus);
+          return Array.isArray(parsed) ? parsed : [campus];
+        } catch {
+          return [campus];
+        }
+      }
+      return [campus];
+    });
+  }
+
+  return [];
 };

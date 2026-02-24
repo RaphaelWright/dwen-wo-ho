@@ -51,7 +51,7 @@ export const SchoolsTab = ({
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center shrink-0">
                       <MdSchool className="w-6 h-6 text-white" />
                     </div>
                   )}
@@ -116,7 +116,7 @@ export const SchoolsTab = ({
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center shrink-0">
                       <MdSchool className="w-6 h-6 text-white" />
                     </div>
                   )}

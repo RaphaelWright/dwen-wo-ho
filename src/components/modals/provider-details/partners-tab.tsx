@@ -23,7 +23,7 @@ export const PartnersTab = ({
         </h4>
         {isLoadingPartners ? (
           <div className="text-center py-8 text-gray-500">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-2"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto mb-2"></div>
             <p>Loading partners...</p>
           </div>
         ) : associatedPartners.length === 0 ? (
@@ -36,7 +36,7 @@ export const PartnersTab = ({
             {associatedPartners.map((partner) => (
               <div
                 key={partner.id}
-                className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-[#955aa4]/30 transition-colors"
+                className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-teal-500/30 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {partner.logo ? (
@@ -50,7 +50,7 @@ export const PartnersTab = ({
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center shrink-0">
                       <FiUsers className="w-6 h-6 text-white" />
                     </div>
                   )}
@@ -93,7 +93,7 @@ export const PartnersTab = ({
                 placeholder="Search partners..."
                 value={partnerSearchQuery}
                 onChange={(e) => setPartnerSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all text-gray-900 placeholder-gray-400"
               />
             </div>
 

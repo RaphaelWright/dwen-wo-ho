@@ -77,7 +77,7 @@ export default function PatientDetailsPage() {
 
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
             {/* Avatar / Initials */}
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-primary/10 rounded-3xl flex items-center justify-center text-primary shadow-inner shrink-0 ring-1 ring-primary/20">
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-teal-500/10 rounded-3xl flex items-center justify-center text-teal-600 shadow-inner shrink-0 ring-1 ring-teal-500/20">
               <User className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
             </div>
 
@@ -88,19 +88,19 @@ export default function PatientDetailsPage() {
               </h1>
               <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
-                  <Activity className="w-4 h-4 text-primary" />
+                  <Activity className="w-4 h-4 text-teal-600" />
                   <span className="font-medium">
                     {patientResult?.patientAge} yrs, {patientResult?.patientSex}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
-                  <School className="w-4 h-4 text-primary" />
+                  <School className="w-4 h-4 text-teal-600" />
                   <span className="font-medium">
                     {patientResult?.schoolName}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
-                  <Calendar className="w-4 h-4 text-primary" />
+                  <Calendar className="w-4 h-4 text-teal-600" />
                   <span className="font-medium">
                     Joined{" "}
                     {new Date(
@@ -117,7 +117,7 @@ export default function PatientDetailsPage() {
                 Locked In Score
               </span>
               <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-5xl font-bold text-primary tracking-tight">
+                <span className="text-5xl font-bold text-teal-600 tracking-tight">
                   {lockInAssessment?.lockedInScore.split("/")[0]}
                 </span>
                 <span className="text-lg text-muted-foreground font-medium">
@@ -150,11 +150,11 @@ export default function PatientDetailsPage() {
                 <div className="px-6 py-4 border-b border-border bg-muted/20 flex items-center gap-4">
                   <div className="p-2 bg-accent rounded-xl shadow-sm border border-border group-hover:border-primary/20 transition-colors">
                     {idx === 0 ? (
-                      <Brain className="w-5 h-5 text-primary" />
+                      <Brain className="w-5 h-5 text-teal-600" />
                     ) : idx === 1 ? (
-                      <AlertCircle className="w-5 h-5 text-primary" />
+                      <AlertCircle className="w-5 h-5 text-teal-600" />
                     ) : (
-                      <BookOpen className="w-5 h-5 text-primary" />
+                      <BookOpen className="w-5 h-5 text-teal-600" />
                     )}
                   </div>
                   <div>

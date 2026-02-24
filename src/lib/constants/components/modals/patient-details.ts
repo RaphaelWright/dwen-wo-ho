@@ -7,7 +7,7 @@ export const GET_COLOR_CLASS = (color: string): string => {
     case "green":
       return "bg-green-100 text-green-800 border-green-300";
     case "purple":
-      return "bg-purple-100 text-purple-800 border-purple-300";
+      return "bg-teal-100 text-teal-800 border-teal-300";
     case "light green":
       return "bg-green-50 text-green-700 border-green-200";
     case "black":

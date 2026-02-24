@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SignUpFormProps } from "@/lib/types/components/patient/signup";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/patient/signup";
+import { ROUTES } from "@/lib/constants/routes";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -88,7 +89,7 @@ export function SignUpForm({
       <h1 className="text-2xl font-bold text-center text-gray-500">
         <Checkbox className="mr-4 rounded-none border-black" />
         {SIGN_UP_TEXTS.form.agreeTo}{" "}
-        <Link href="/" className="text-destructive">
+        <Link href={ROUTES.public.landing} className="text-destructive">
           {SIGN_UP_TEXTS.form.terms}
         </Link>
       </h1>

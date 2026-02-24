@@ -29,7 +29,7 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
         </div>
         <div className="flex items-center pt-10 justify-between mb-2">
           <div />
-          <p className="text-xl md:text-3xl font-bold text-primary text-center w-full block">
+          <p className="text-xl md:text-3xl font-bold text-teal-600 text-center w-full block">
             {TITLE}
           </p>
         </div>

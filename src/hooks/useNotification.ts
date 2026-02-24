@@ -34,6 +34,10 @@ export const useNotification = () => {
         read: false,
       };
       setNotifications((prev) => [newNotification, ...prev]);
+      // Add a slight delay before opening the sheet so the toast appears first
+      setTimeout(() => {
+        setIsOpen(true);
+      }, 500);
 
       newNotification.type === "success"
         ? toast.success(message, {

@@ -7,7 +7,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
     <div className="space-y-6">
       {/* Status Message */}
       {provider?.status && (
-        <div className="bg-primary/5 rounded-xl p-4 border border-primary/10">
+        <div className="bg-teal-50 rounded-xl p-4 border border-teal-100">
           <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
             <span className="text-lg">💬</span>
             Status Message
@@ -19,7 +19,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
       {/* Contact Info Section */}
       <div>
         <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-          <FiUsers className="w-5 h-5 text-primary" />
+          <FiUsers className="w-5 h-5 text-teal-600" />
           Contact Information
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -75,7 +75,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
         provider.specialties.some((s: string) => s && s.trim()) && (
           <div>
             <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-              <FiAward className="w-5 h-5 text-primary" />
+              <FiAward className="w-5 h-5 text-teal-600" />
               Specialties
             </h4>
             <div className="flex flex-wrap gap-2">

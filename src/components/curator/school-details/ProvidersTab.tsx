@@ -8,86 +8,96 @@ export const ProvidersTab = ({
   providers,
   isLoading,
   onProviderClick,
-}: ProvidersTabProps) => (
-  <TabContentState
-    isLoading={isLoading}
-    isEmpty={providers.length === 0}
-    loadingMessage="Loading providers..."
-    emptyMessage="No providers found for this school"
-    EmptyIcon={Users}
-  >
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {providers.map((provider) => (
-        <button
-          key={provider.email}
-          onClick={() => onProviderClick(provider)}
-          className="relative text-center bg-card rounded-3xl p-8 hover:shadow-lg transition-all border border-border/50 hover:border-primary/50 group"
-        >
-          {/* Arrow button in top right */}
-          <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-muted group-hover:bg-primary flex items-center justify-center transition-colors">
-            <svg
-              className="w-5 h-5 text-muted-foreground group-hover:text-primary-foreground transition-colors"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </div>
+  searchQuery = "",
+}: ProvidersTabProps & { searchQuery?: string }) => {
+  const filteredProviders = providers.filter((provider) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
 
-          {/* Profile photo */}
-          <div className="flex justify-center mb-4">
-            {provider.profilePhotoURL ? (
-              <Image
-                src={provider.profilePhotoURL}
-                alt={provider.providerName}
-                width={80}
-                height={80}
-                className="w-20 h-20 rounded-full object-cover border-4 border-muted"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center border-4 border-muted">
-                <Users className="w-10 h-10 text-muted-foreground/50" />
+    const nameMatch = formatProviderName(
+      provider.providerName,
+      provider.providerTitle,
+    )
+      .toLowerCase()
+      .includes(query);
+    const emailMatch = provider.email?.toLowerCase().includes(query);
+    const specialtyMatch = provider.specialty?.toLowerCase().includes(query);
+
+    return nameMatch || emailMatch || specialtyMatch;
+  });
+
+  return (
+    <TabContentState
+      isLoading={isLoading}
+      isEmpty={filteredProviders.length === 0}
+      loadingMessage="Loading providers..."
+      emptyMessage={
+        providers.length === 0
+          ? "No providers found for this school"
+          : "No providers match your search"
+      }
+      EmptyIcon={Users}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredProviders.map((provider, index) => {
+          const fullName = formatProviderName(
+            provider.providerName,
+            provider.providerTitle,
+          );
+
+          // Rotating pastel gradient backgrounds
+          const pastelColors = [
+            "from-rose-200 to-rose-100", // pink
+            "from-blue-200 to-indigo-100", // blue-lavender
+            "from-emerald-200 to-green-100", // green
+            "from-amber-200 to-yellow-100", // amber
+            "from-teal-200 to-cyan-100", // teal
+            "from-sky-200 to-cyan-100", // sky
+            "from-orange-200 to-amber-100", // orange
+            "from-fuchsia-200 to-pink-100", // fuchsia
+          ];
+          const bgGradient = pastelColors[index % pastelColors.length];
+
+          return (
+            <button
+              key={provider.email}
+              onClick={() => onProviderClick(provider)}
+              className="flex flex-col items-center text-center group transition-all duration-200"
+            >
+              {/* Pastel square with avatar */}
+              <div
+                className={`w-40 h-40 rounded-3xl bg-linear-to-br ${bgGradient} flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:scale-[1.03] transition-all duration-300`}
+              >
+                {provider.profilePhotoURL ? (
+                  <Image
+                    src={provider.profilePhotoURL}
+                    alt={provider.providerName}
+                    width={88}
+                    height={88}
+                    className="w-22 h-22 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-22 h-22 rounded-full bg-white/40 backdrop-blur-sm flex items-center justify-center">
+                    <Users className="w-10 h-10 text-foreground/40" />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Provider name */}
-          <h4 className="font-semibold text-foreground text-lg mb-1 group-hover:text-primary transition-colors">
-            {formatProviderName(provider.providerName, provider.providerTitle)}
-          </h4>
+              {/* Full name (with title) */}
+              <h4 className="font-semibold text-foreground text-base group-hover:text-primary transition-colors">
+                {fullName}
+              </h4>
 
-          {/* Specialty */}
-          {provider.specialty && (
-            <p className="text-sm text-muted-foreground mb-3">
-              {provider.specialty}
-            </p>
-          )}
-
-          {/* Added time ago */}
-          <p className="text-sm text-orange-500 font-medium mb-4">
-            Added 1d ago
-          </p>
-
-          {/* Status badge - only show if not approved */}
-          {provider.applicationStatus !== "APPROVED" && (
-            <span
-              className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                provider.applicationStatus === "PENDING"
-                  ? "bg-yellow-500/10 text-yellow-600 border border-yellow-200"
-                  : "bg-destructive/10 text-destructive border border-destructive/20"
-              }`}
-            >
-              {provider.applicationStatus}
-            </span>
-          )}
-        </button>
-      ))}
-    </div>
-  </TabContentState>
-);
+              {/* Specialty */}
+              {provider.specialty && (
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {provider.specialty}
+                </p>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </TabContentState>
+  );
+};

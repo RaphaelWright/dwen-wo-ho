@@ -7,31 +7,63 @@ export const Logo = ({
   variant = "purple",
   className,
   withLink = true,
+  href = "/",
 }: LogoProps) => {
-  const src =
-    variant === "black"
-      ? "/logos/logo-black.png"
-      : variant === "white"
-        ? "/logos/logo-white.png"
-        : "/logos/logo-purple.png";
+  let content;
 
-  const content = (
-    <Image
-      priority
-      src={src}
-      alt="JustGo Health"
-      className={cn(
-        "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out",
-        className,
-      )}
-      width={180}
-      height={40}
-    />
-  );
+  if (variant === "auto") {
+    content = (
+      <>
+        <Image
+          priority
+          src="/logos/logo-black.png"
+          alt="JustGo Health"
+          className={cn(
+            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out dark:hidden",
+            className,
+          )}
+          width={180}
+          height={40}
+        />
+        <Image
+          priority
+          src="/logos/logo-white.png"
+          alt="JustGo Health"
+          className={cn(
+            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out hidden dark:block",
+            className,
+          )}
+          width={180}
+          height={40}
+        />
+      </>
+    );
+  } else {
+    const src =
+      variant === "black"
+        ? "/logos/logo-black.png"
+        : variant === "white"
+          ? "/logos/logo-white.png"
+          : "/logos/logo-purple.png";
+
+    content = (
+      <Image
+        priority
+        src={src}
+        alt="JustGo Health"
+        className={cn(
+          "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out",
+          className,
+        )}
+        width={180}
+        height={40}
+      />
+    );
+  }
 
   if (withLink) {
     return (
-      <Link href="/" className={className}>
+      <Link href={href as any} className={className}>
         {content}
       </Link>
     );

@@ -57,6 +57,7 @@
   --color-footer-bg: var(--footer-bg);
   --color-footer-foreground: var(--footer-foreground);
   --color-school-details-sidebar: var(--school-details-sidebar);
+  --color-secondary-accent: var(--secondary-accent);
 }
 
 :root {
@@ -102,6 +103,7 @@
   --info: #2b3990;
   --warning: #f59e0b;
   --loading: #94a3b8;
+  --secondary-accent: #0d9488;
 }
 
 .dark {
@@ -146,6 +148,7 @@
   --info: #2b3990;
   --warning: #f59e0b;
   --loading: #64748b;
+  --secondary-accent: #14b8a6;
 }
 
 @layer base {

@@ -110,10 +110,8 @@ export default function SchoolSelectionModal({
                 onClick={handleSelectPlatform}
                 className="flex items-center gap-4 p-4 bg-muted rounded-xl hover:bg-muted/80 transition-all text-left h-20 w-full"
               >
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0">
-                  <span className="text-primary-foreground font-bold text-lg">
-                    +
-                  </span>
+                <div className="w-12 h-12 rounded-full bg-teal-600 flex items-center justify-center shrink-0">
+                  <span className="text-white font-bold text-lg">+</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900">

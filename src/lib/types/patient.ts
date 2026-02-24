@@ -43,7 +43,9 @@ export interface PatientResultItem {
 }
 
 export interface UrgentCarePatient {
+  id?: number;
   lockinId?: number;
+  schoolId?: number;
   patientResultId?: number;
   patientName?: string;
   patientAge?: number;
@@ -54,5 +56,3 @@ export interface UrgentCarePatient {
   createdAt?: string;
   [key: string]: unknown;
 }
-
-

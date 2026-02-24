@@ -21,8 +21,8 @@ export const REACH_METRICS = [
     label: "Screened",
     value: "0",
     icon: Activity,
-    color: "text-purple-600",
-    bg: "bg-purple-50",
+    color: "text-teal-600",
+    bg: "bg-teal-50",
   },
   {
     label: "Results",

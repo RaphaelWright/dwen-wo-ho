@@ -70,13 +70,22 @@ export default function SchoolsPage() {
                 variant="outline"
                 size="sm"
                 className="bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
-                onClick={() =>
-                  addNotification(
-                    "success",
-                    "New school added: Achimota School",
-                    "/curator/schools/4", // Example school ID link
-                  )
-                }
+                onClick={() => {
+                  if (schoolsList.length > 0) {
+                    const sampleSchool = schoolsList[0];
+                    addNotification(
+                      "success",
+                      `New school added: ${sampleSchool.name}`,
+                      `/curator/schools/${sampleSchool.id}`,
+                    );
+                  } else {
+                    addNotification(
+                      "success",
+                      "New school added: Achimota School",
+                      "/curator/schools/4",
+                    );
+                  }
+                }}
               >
                 Test: School (Link)
               </Button>
@@ -84,13 +93,24 @@ export default function SchoolsPage() {
                 variant="outline"
                 size="sm"
                 className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
-                onClick={() =>
-                  addNotification(
-                    "info",
-                    "New patient: Maame Abena Pokuaa at Achimota School",
-                    "/curator/schools/4/patients/122", // Example patient link
-                  )
-                }
+                onClick={() => {
+                  const schoolWithPatient = schoolsList.find(
+                    (s) => s.newPatientId,
+                  );
+                  if (schoolWithPatient) {
+                    addNotification(
+                      "info",
+                      `New patient: ${schoolWithPatient.newPatientName} at ${schoolWithPatient.name}`,
+                      `/curator/schools/${schoolWithPatient.id}/patients/${schoolWithPatient.newPatientId}`,
+                    );
+                  } else {
+                    addNotification(
+                      "info",
+                      "New patient: Maame Abena Pokuaa at Achimota School",
+                      "/curator/schools/4/patients/122",
+                    );
+                  }
+                }}
               >
                 Test: Patient (Link)
               </Button>

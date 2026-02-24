@@ -9,4 +9,4 @@ export const CAMPUS_OPTIONS = [
   "Sunyani",
 ];
 
-export const SCHOOL_TYPES = ["JHS", "SHS", "NMTC", "University"];
+export const SCHOOL_TYPES = ["JHS", "SHS", "College"];

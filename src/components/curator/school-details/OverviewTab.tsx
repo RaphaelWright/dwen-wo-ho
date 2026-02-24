@@ -16,7 +16,7 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
-            <MdSchool className="w-5 h-5 text-primary mt-1" />
+            <MdSchool className="w-5 h-5 text-teal-600 mt-1" />
             <div>
               <p className="text-sm text-muted-foreground">Type</p>
               <p className="font-medium text-foreground">{school.type}</p>
@@ -24,7 +24,7 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
           </div>
           {school.motto && (
             <div className="flex items-start gap-3">
-              <Quote className="w-5 h-5 text-primary mt-1" />
+              <Quote className="w-5 h-5 text-teal-600 mt-1" />
               <div>
                 <p className="text-sm text-muted-foreground">Motto</p>
                 <p className="font-medium italic text-foreground">
@@ -35,7 +35,7 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
           )}
           {parsedCampuses.length > 0 && (
             <div className="flex items-start gap-3">
-              <MdLocationOn className="w-5 h-5 text-primary mt-1" />
+              <MdLocationOn className="w-5 h-5 text-teal-600 mt-1" />
               <div>
                 <p className="text-sm text-muted-foreground">Campuses</p>
                 <ul className="list-disc list-inside font-medium text-foreground space-y-1">
@@ -48,7 +48,7 @@ export const OverviewTab = ({ school }: OverviewTabProps) => {
           )}
           {school.createdAt && (
             <div className="flex items-start gap-3">
-              <Calendar className="w-5 h-5 text-primary mt-1" />
+              <Calendar className="w-5 h-5 text-teal-600 mt-1" />
               <div>
                 <p className="text-sm text-muted-foreground">Created</p>
                 <p className="font-medium text-foreground">

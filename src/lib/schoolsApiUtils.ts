@@ -19,15 +19,15 @@ class RequestCache {
 
   get(key: string): any | null {
     const entry = this.cache.get(key);
-    
+
     if (!entry) return null;
-    
+
     // Check if cache entry has expired
     if (Date.now() - entry.timestamp > this.ttl) {
       this.cache.delete(key);
       return null;
     }
-    
+
     return entry.data;
   }
 
@@ -52,25 +52,28 @@ export const patientResultsCache = new RequestCache(2); // 2 minutes for more fr
 export async function processBatch<T, R>(
   items: T[],
   batchSize: number,
-  processor: (item: T, index: number) => Promise<R>
+  processor: (item: T, index: number) => Promise<R>,
 ): Promise<R[]> {
   const results: R[] = [];
-  
+
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
     const batchResults = await Promise.all(
-      batch.map((item, index) => processor(item, i + index))
+      batch.map((item, index) => processor(item, i + index)),
     );
     results.push(...batchResults);
   }
-  
+
   return results;
 }
 
 // Optimized API calls with caching
-export async function getSchoolLockInCount(schoolId: string | number, skipCache: boolean = false): Promise<number> {
+export async function getSchoolLockInCount(
+  schoolId: string | number,
+  skipCache: boolean = false,
+): Promise<number> {
   const cacheKey = `lockin-${schoolId}`;
-  
+
   // Skip cache if requested (for real-time updates)
   if (!skipCache) {
     const cached = lockInCache.get(cacheKey);
@@ -81,25 +84,29 @@ export async function getSchoolLockInCount(schoolId: string | number, skipCache:
 
   try {
     const response = await api(ENDPOINTS.getSchoolLockIn(schoolId));
-    
+
     if (response?.success && response.data) {
       const count = response.data.students?.length || 0;
       lockInCache.set(cacheKey, count);
       return count;
     }
-    
+
     return 0;
   } catch (error) {
     return 0;
   }
 }
 
-export async function getLatestPatientResult(schoolId: string | number, skipCache: boolean = false): Promise<{
+export async function getLatestPatientResult(
+  schoolId: string | number,
+  skipCache: boolean = false,
+): Promise<{
+  id: number;
   patientName: string;
   createdAt: string;
 } | null> {
   const cacheKey = `latest-patient-${schoolId}`;
-  
+
   // Skip cache if requested (for real-time updates)
   if (!skipCache) {
     const cached = patientResultsCache.get(cacheKey);
@@ -110,22 +117,24 @@ export async function getLatestPatientResult(schoolId: string | number, skipCach
 
   try {
     const response = await api(ENDPOINTS.getSchoolPatientResults(schoolId));
-    
+
     if (response?.success && response.data && response.data.length > 0) {
       // Sort and get the latest
       const sorted = response.data.sort(
-        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
-      
+
       const latest = {
+        id: sorted[0].id,
         patientName: sorted[0].patientName,
         createdAt: sorted[0].createdAt,
       };
-      
+
       patientResultsCache.set(cacheKey, latest);
       return latest;
     }
-    
+
     return null;
   } catch (error) {
     return null;
@@ -134,31 +143,34 @@ export async function getLatestPatientResult(schoolId: string | number, skipCach
 
 export async function checkForNewPatients(
   schoolId: string | number,
-  previousPatientName?: string
+  previousPatientName?: string,
 ): Promise<{
   hasNew: boolean;
   latestPatient?: { patientName: string; createdAt: string };
 } | null> {
   try {
     const response = await api(ENDPOINTS.getNewSchoolPatientResults(schoolId));
-    
+
     if (response?.success && response.data && response.data.length > 0) {
       const sorted = response.data.sort(
-        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
-      
+
       const latest = sorted[0];
       const hasNew = previousPatientName !== latest.patientName;
-      
+
       return {
         hasNew,
-        latestPatient: hasNew ? {
-          patientName: latest.patientName,
-          createdAt: latest.createdAt,
-        } : undefined,
+        latestPatient: hasNew
+          ? {
+              patientName: latest.patientName,
+              createdAt: latest.createdAt,
+            }
+          : undefined,
       };
     }
-    
+
     return { hasNew: false };
   } catch (error) {
     return null;
@@ -168,10 +180,10 @@ export async function checkForNewPatients(
 // Debounced function creator
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
-  
+
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);
@@ -183,7 +195,7 @@ const pendingRequests = new Map<string, Promise<any>>();
 
 export async function deduplicatedRequest<T>(
   key: string,
-  requestFn: () => Promise<T>
+  requestFn: () => Promise<T>,
 ): Promise<T> {
   // If request is already pending, return the same promise
   if (pendingRequests.has(key)) {
@@ -206,4 +218,3 @@ export function clearAllCaches() {
   patientResultsCache.clear();
   pendingRequests.clear();
 }
-

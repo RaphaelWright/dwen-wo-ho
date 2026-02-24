@@ -21,8 +21,8 @@ export const CREATE_MODAL_ITEMS_CONFIG = [
     id: "team",
     label: "New Member",
     icon: FiUsers,
-    color: "text-purple-500",
-    bgColor: "bg-purple-50",
+    color: "text-teal-500",
+    bgColor: "bg-teal-50",
     requiresHandler: true,
   },
   {

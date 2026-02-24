@@ -1,4 +1,5 @@
 import { MdHealthAndSafety } from "react-icons/md";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { UrgentCareSidebarProps } from "@/lib/types/components/curator/school-details";
 import { URGENT_CARE_SKELETON_COUNT } from "@/lib/constants/components/curator/school-details";
@@ -49,36 +50,50 @@ export function UrgentCareSidebar({
           </div>
         ) : (
           <div className="space-y-3">
-            {urgentCare.patients.map((p, i) => (
-              <div
-                key={i}
-                className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-destructive/30 hover:bg-destructive/5 transition-all duration-200 bg-card shadow-sm"
-              >
-                <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-destructive/20 bg-destructive/5 text-destructive font-bold text-sm shadow-sm">
-                  {p.lockedInScore != null ? p.lockedInScore.toFixed(1) : "-"}
-                </div>
+            {urgentCare.patients.map((p, i) => {
+              const patientIdStr = p.patientResultId || p.id || p.lockinId;
+              const schoolIdStr =
+                p.schoolId ||
+                (typeof window !== "undefined"
+                  ? window.location.pathname.split("/")[3]
+                  : "");
+              const href =
+                patientIdStr && schoolIdStr
+                  ? `/curator/schools/${schoolIdStr}/patients/${patientIdStr}`
+                  : "#";
 
-                <div className="min-w-0 flex-1">
-                  <p className="font-bold text-foreground truncate text-base group-hover:text-destructive transition-colors">
-                    {p.patientName ?? "Patient"}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
-                    <p className="text-xs text-muted-foreground">
-                      {p.urgentCareEnteredAt || p.lockinDate || p.createdAt
-                        ? compactTimeAgo(
-                            (p.urgentCareEnteredAt ||
-                              p.lockinDate ||
-                              p.createdAt ||
-                              "") as string,
-                          )
-                        : "Recently"}{" "}
-                      ago
-                    </p>
+              return (
+                <Link
+                  key={i}
+                  href={href}
+                  className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-destructive/30 hover:bg-destructive/5 transition-all duration-200 bg-card shadow-sm cursor-pointer"
+                >
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border border-destructive/20 bg-destructive/5 text-destructive font-bold text-sm shadow-sm">
+                    {p.lockedInScore != null ? p.lockedInScore.toFixed(1) : "-"}
                   </div>
-                </div>
-              </div>
-            ))}
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-bold text-foreground truncate text-base group-hover:text-destructive transition-colors">
+                      {p.patientName ?? "Patient"}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
+                      <p className="text-xs text-muted-foreground">
+                        {p.urgentCareEnteredAt || p.lockinDate || p.createdAt
+                          ? compactTimeAgo(
+                              (p.urgentCareEnteredAt ||
+                                p.lockinDate ||
+                                p.createdAt ||
+                                "") as string,
+                            )
+                          : "Recently"}{" "}
+                        ago
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

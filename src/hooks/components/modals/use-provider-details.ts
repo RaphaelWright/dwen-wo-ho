@@ -38,7 +38,7 @@ export const useProviderDetails = ({
   const { data: allSchools = [] } = useSchools();
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = useState<ProviderDetailsTab>("overview");
+  const [activeTab, setActiveTab] = useState<ProviderDetailsTab>("schools");
   const [associatedSchools, setAssociatedSchools] = useState<
     AssociatedSchool[]
   >([]);
@@ -230,7 +230,7 @@ export const useProviderDetails = ({
 
   useEffect(() => {
     if (isOpen) {
-      setActiveTab("overview");
+      setActiveTab("schools");
       setSchoolSearchQuery("");
       setPartnerSearchQuery("");
     }
