@@ -33,11 +33,8 @@ export interface SchoolHeaderCardProps {
     motto?: string;
   };
   campusLabel: string | null;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
   onEditClick: () => void;
   onDisableClick: () => void;
-  activeTab?: "patients" | "icons" | "providers";
 }
 
 export type SchoolTab = "patients" | "icons" | "providers";
@@ -49,6 +46,8 @@ export interface SchoolTabNavigationProps {
   iconsCount: number;
   providersCount: number;
   onAddIconClick: () => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 export interface UrgentCarePatient {

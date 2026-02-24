@@ -1,48 +1,14 @@
 import Image from "next/image";
-import { Search, Pencil, Ban } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { MdSchool } from "react-icons/md";
-import { Button } from "@/components/ui/button";
 import { SchoolHeaderCardProps } from "@/lib/types/components/curator/school-details";
-import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 
 export function SchoolHeaderCard({
   school,
   campusLabel,
-  searchQuery,
-  onSearchChange,
   onEditClick,
-  onDisableClick,
-  activeTab = "patients",
 }: SchoolHeaderCardProps) {
-  // Determine placeholders based on active tab
-  const getPlaceholders = () => {
-    switch (activeTab) {
-      case "icons":
-        return [
-          "Search for icons...",
-          "Look up by name...",
-          "Find by lock-in tag...",
-        ];
-      case "providers":
-        return [
-          "Search for providers...",
-          "Look up by name or email...",
-          "Find by specialty...",
-          "Search by status...",
-        ];
-      case "patients":
-      default:
-        return [
-          "Search for patients...",
-          "Look up by name...",
-          "Find by visibility status...",
-          "Search in comments...",
-        ];
-    }
-  };
-
-  const currentPlaceholders = getPlaceholders();
-
+ 
   return (
     <div className="bg-card rounded-3xl shadow-sm border border-border p-6 sm:p-8 mb-8 relative overflow-hidden group">
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -99,32 +65,6 @@ export function SchoolHeaderCard({
                 &quot;{school.motto}&quot;
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Actions/Search */}
-        <div className="flex flex-col items-end gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <div className="w-full sm:w-80 md:w-96 relative">
-            <PlaceholdersAndVanishInput
-              placeholders={currentPlaceholders}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onSearchChange(e.target.value)
-              }
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                e.preventDefault();
-                // The search state is already updated via onChange,
-                // this just catches the enter key submit
-              }}
-              className="w-full bg-muted/50 focus-within:bg-background border border-transparent focus-within:border-primary/20"
-              submitButton={
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition duration-200 flex items-center justify-center"
-                >
-                  <Search className="h-4 w-4" />
-                </button>
-              }
-            />
           </div>
         </div>
       </div>

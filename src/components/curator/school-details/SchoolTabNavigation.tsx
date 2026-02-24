@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SchoolTabNavigationProps } from "@/lib/types/components/curator/school-details";
+import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { Search } from "lucide-react";
 
 export function SchoolTabNavigation({
   activeTab,
@@ -14,6 +16,8 @@ export function SchoolTabNavigation({
   iconsCount,
   providersCount,
   onAddIconClick,
+  searchQuery,
+  setSearchQuery,
 }: SchoolTabNavigationProps) {
   const tabs = SCHOOL_TABS_CONFIG.map((tab) => ({
     ...tab,
@@ -24,6 +28,34 @@ export function SchoolTabNavigation({
           ? iconsCount
           : providersCount,
   }));
+
+  const getPlaceholders = () => {
+    switch (activeTab) {
+      case "icons":
+        return [
+          "Search for icons...",
+          "Look up by name...",
+          "Find by lock-in tag...",
+        ];
+      case "providers":
+        return [
+          "Search for providers...",
+          "Look up by name or email...",
+          "Find by specialty...",
+          "Search by status...",
+        ];
+      case "patients":
+      default:
+        return [
+          "Search for patients...",
+          "Look up by name...",
+          "Find by visibility status...",
+          "Search in comments...",
+        ];
+    }
+  };
+
+  const currentPlaceholders = getPlaceholders();
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
@@ -90,6 +122,30 @@ export function SchoolTabNavigation({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Actions/Search */}
+      <div className="flex flex-col items-end gap-3 w-full md:w-auto mt-4 md:mt-0">
+        <div className="w-full sm:w-80 md:w-96 relative">
+          <PlaceholdersAndVanishInput
+            placeholders={currentPlaceholders}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+            }}
+            className="w-full bg-muted/50 focus-within:bg-background border border-transparent focus-within:border-primary/20"
+            submitButton={
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition duration-200 flex items-center justify-center"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 }
