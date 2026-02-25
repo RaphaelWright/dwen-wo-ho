@@ -19,6 +19,8 @@ import {
   getProviderTitle,
 } from "@/lib/utils/formatProviderName";
 import { ProviderDetailsTab } from "@/lib/types/modals";
+import { usePathname } from "next/navigation";
+import { ROUTES } from "@/lib/constants/routes";
 
 export const useProviderDetails = ({
   isOpen,
@@ -33,6 +35,7 @@ export const useProviderDetails = ({
   onShowApproveModal?: (email: string) => void;
   onShowRejectModal?: (email: string) => void;
 }) => {
+  const pathname = usePathname();
   const { useProvider, approveProvider, rejectProvider } = useProvidersQuery();
   const { data: providerData, isLoading: isQueryLoading } =
     useProvider(providerEmail);
@@ -53,7 +56,9 @@ export const useProviderDetails = ({
     [allPartnersData],
   );
 
-  const [activeTab, setActiveTab] = useState<ProviderDetailsTab>("schools");
+  const [activeTab, setActiveTab] = useState<ProviderDetailsTab>(
+    pathname === ROUTES.curator.providers ? "overview" : "schools",
+  );
   const [associatedSchools, setAssociatedSchools] = useState<
     AssociatedSchool[]
   >([]);
@@ -222,7 +227,9 @@ export const useProviderDetails = ({
 
   useEffect(() => {
     if (isOpen) {
-      setActiveTab("schools");
+      setActiveTab(
+        pathname === ROUTES.curator.providers ? "overview" : "schools",
+      );
       setSchoolSearchQuery("");
       setPartnerSearchQuery("");
     }

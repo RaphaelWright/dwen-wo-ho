@@ -20,30 +20,12 @@ const ProviderCard = (props: ProviderCardProps) => {
   } = useProviderCard(props);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-[#955aa4]/50 group hover:scale-[1.02] flex flex-col items-center w-full relative">
-      {/* View Details Button - Top Right Corner */}
-      <Button
-        onClick={handleViewDetails}
-        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#955aa4] group-hover:text-white transition-all duration-300 shadow-sm z-10"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-5 h-5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-          />
-        </svg>
-      </Button>
-
+    <div
+      onClick={handleViewDetails}
+      className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 group hover:scale-[1.02] flex flex-col items-center w-full relative"
+    >
       {/* Provider Image - Centered at Top */}
-      <div className="w-16 h-16 rounded-full overflow-hidden mb-4 ring-4 ring-gray-100 group-hover:ring-[#955aa4]/20 transition-all duration-300">
+      <div className="size-16 rounded-full overflow-hidden mb-4 ring-4 ring-muted group-hover:ring-primary/20 transition-all duration-300">
         <Image
           src={provider.profilePhotoURL || DEFAULT_PROVIDER_IMAGE}
           alt={formatProviderName(
@@ -58,10 +40,10 @@ const ProviderCard = (props: ProviderCardProps) => {
 
       {/* Provider Info - Centered */}
       <div className="text-center w-full">
-        <h3 className="font-bold text-gray-900 group-hover:text-[#955aa4] transition-colors text-lg mb-2 truncate px-1">
+        <h3 className="font-bold group-hover:text-primary transition-colors text-lg mb-2 truncate px-1">
           {formatProviderName(provider.providerName, provider.providerTitle)}
         </h3>
-        <p className="text-gray-600 text-sm mb-3 truncate px-1">
+        <p className="text-muted-foreground text-sm mb-3 truncate px-1">
           {provider.specialty || "General Practice"}
         </p>
 
@@ -81,7 +63,7 @@ const ProviderCard = (props: ProviderCardProps) => {
               <Button
                 onClick={handleRejectClick}
                 disabled={isActionDisabled}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold text-sm transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
                 {isRejecting ? (
                   <>
@@ -101,7 +83,7 @@ const ProviderCard = (props: ProviderCardProps) => {
               <Button
                 onClick={handleApproveClick}
                 disabled={isActionDisabled}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
                 {isApproving ? (
                   <>
@@ -125,7 +107,7 @@ const ProviderCard = (props: ProviderCardProps) => {
               <Button
                 onClick={handleApproveClick}
                 disabled={isActionDisabled}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-black hover:bg-gray-900 text-white rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
                 {isApproving ? (
                   <>
@@ -142,7 +124,7 @@ const ProviderCard = (props: ProviderCardProps) => {
               <Button
                 onClick={handleRejectClick}
                 disabled={isActionDisabled}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-lg font-semibold text-sm transition-all duration-200 border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
                 {isRejecting ? (
                   <>

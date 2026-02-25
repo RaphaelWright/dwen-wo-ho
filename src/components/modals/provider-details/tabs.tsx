@@ -10,7 +10,7 @@ export const ProviderTabs = ({
 }: ProviderTabsProps) => {
   return (
     <div className="px-6 mt-4 mb-4">
-      <div className="flex gap-2 border-b border-gray-200 overflow-x-auto">
+      <div className="flex gap-2 border-b border-border pb-2 overflow-x-auto">
         {PROVIDER_DETAILS_TABS.map((tab) => {
           const Icon = tab.icon;
           const count =

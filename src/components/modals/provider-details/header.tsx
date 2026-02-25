@@ -9,11 +9,11 @@ export const ProviderHeader = ({
   statusConfig,
 }: ProviderHeaderProps) => {
   return (
-    <div className="relative bg-muted/40 p-6 flex items-center gap-6 border-b border-border">
+    <div className="relative bg-muted/80 p-6 flex items-center gap-6 border-b border-border">
       <Button
         onClick={onClose}
         variant="ghost"
-        className="absolute top-4 right-4 w-10 h-10 bg-background/50 hover:bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-90 p-0 border border-border/50"
+        className="absolute top-4 right-4 w-10 h-10 bg-muted/80 hover:bg-muted/50 backdrop-blur-sm text-muted-foreground hover:text-foreground rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-90 p-0 border border-border/50"
         aria-label="Close modal"
       >
         <FiX className="w-5 h-5" />
@@ -40,7 +40,7 @@ export const ProviderHeader = ({
         )}
         {statusConfig && (
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-sm font-semibold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}
           >
             {provider.applicationStatus}
           </span>

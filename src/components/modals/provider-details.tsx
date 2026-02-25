@@ -72,16 +72,18 @@ const ProviderDetailsModal = ({
 
   const showLoading = isQueryLoading && !provider;
 
-  if (!isOpen) return null;
-
   return (
     <>
       <div
-        className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4"
+        className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
         onClick={onClose}
       >
         <div
-          className="relative bg-card text-foreground rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border"
+          className={`relative bg-card text-foreground rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border transition-all duration-300 ease-in-out ${
+            isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {provider && applicationStatusConfig && (

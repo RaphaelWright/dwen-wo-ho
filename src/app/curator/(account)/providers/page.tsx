@@ -72,21 +72,21 @@ export default function ProvidersPage() {
     <WidthConstraint>
       <div className="flex flex-col gap-6 md:p-6">
         {/* Header */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <div className="bg-card rounded-xl border border-border shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                  Providers
-                </h1>
-                <p className="text-gray-500 text-sm">
+                <h1 className="text-2xl lg:text-3xl font-bold">Providers</h1>
+                <p className="text-muted-foreground text-sm">
                   Manage and review healthcare providers
                 </p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200">
-              <span className="text-gray-600 text-sm font-medium">Total:</span>
-              <span className="text-[#955aa4] text-lg font-bold">
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-card/50 rounded-lg border border-border">
+              <span className="text-muted-foreground text-sm font-medium">
+                Total:
+              </span>
+              <span className="text-primary text-lg font-bold">
                 {providersList.length}
               </span>
             </div>
@@ -108,8 +108,8 @@ export default function ProvidersPage() {
                 <span
                   className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                     filter === option.id
-                      ? "bg-white/20 text-white"
-                      : "bg-gray-200 text-gray-600"
+                      ? "bg-background/10 text-white"
+                      : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {option.count}

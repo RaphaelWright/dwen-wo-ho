@@ -1,6 +1,12 @@
 import { FiFileText, FiAward, FiUsers } from "react-icons/fi";
 import { ProviderDetailsTab } from "@/lib/types/modals";
 
+export const PROVIDER_DETAILS_TAB_VALUES = [
+  "overview",
+  "schools",
+  "partners",
+] as const;
+
 export const PROVIDER_DETAILS_TABS = [
   {
     id: "overview" as ProviderDetailsTab,
