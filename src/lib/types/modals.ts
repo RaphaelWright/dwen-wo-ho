@@ -1,6 +1,7 @@
 import { Area } from "@/lib/utils/image-utils";
 import { School } from "./school";
 import { ProviderDetails } from "./provider";
+import { PROVIDER_DETAILS_TAB_VALUES } from "../constants/components/modals/provider-details";
 
 export interface ColorOption {
   hex: string;
@@ -192,7 +193,7 @@ export interface ProviderDetailsModalProps {
   moderatingProviderEmail?: string | null;
 }
 
-export type ProviderDetailsTab = "overview" | "schools" | "partners";
+export type ProviderDetailsTab = (typeof PROVIDER_DETAILS_TAB_VALUES)[number];
 
 export interface ReachModalProps {
   isOpen: boolean;

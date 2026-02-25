@@ -8,11 +8,11 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
       {/* Status Message */}
       {provider?.status && (
         <div className="bg-teal-50 rounded-xl p-4 border border-teal-100">
-          <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+          <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
             <span className="text-lg">💬</span>
             Status Message
           </h4>
-          <p className="text-muted-foreground italic">"{provider.status}"</p>
+          <p className="text-gray-500 italic">"{provider.status}"</p>
         </div>
       )}
 
@@ -24,8 +24,8 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-            <div className="w-10 h-10 bg-background rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
-              <FiMail className="w-5 h-5" />
+            <div className="size-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
+              <FiMail className="size-5" />
             </div>
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
@@ -38,7 +38,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
           </div>
           {provider?.officePhoneNumber && (
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-              <div className="w-10 h-10 bg-background rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
+              <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
                 <FiPhone className="w-5 h-5" />
               </div>
               <div>
@@ -53,7 +53,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
           )}
           {provider?.applicationDate && (
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-              <div className="w-10 h-10 bg-background rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
+              <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
                 <FiCalendar className="w-5 h-5" />
               </div>
               <div>

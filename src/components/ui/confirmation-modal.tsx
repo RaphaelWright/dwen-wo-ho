@@ -13,8 +13,6 @@ export const ConfirmationModal = ({
   variant = "danger",
   isLoading = false,
 }: ConfirmationModalProps) => {
-  if (!isOpen) return null;
-
   const variantStyles = {
     success: "bg-green-500 hover:bg-green-600 text-white",
     danger: "bg-red-500 hover:bg-red-600 text-white",
@@ -23,8 +21,16 @@ export const ConfirmationModal = ({
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-card text-foreground rounded-xl border border-border p-4 sm:p-6 max-w-sm w-full shadow-xl">
+    <div
+      className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
+        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div
+        className={`bg-card text-foreground rounded-xl border border-border p-4 sm:p-6 max-w-sm w-full shadow-xl transition-all duration-300 ease-in-out ${
+          isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        }`}
+      >
         <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-foreground">
           {title}
         </h2>
