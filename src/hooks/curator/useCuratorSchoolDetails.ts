@@ -70,7 +70,6 @@ export function useCuratorSchoolDetails() {
   }, [rawSchool]);
 
   const patients = patientsQuery.data?.patients ?? [];
-  const lockinStudents = patientsQuery.data?.lockinStudents ?? [];
   const patientComments = patientsQuery.data?.patientComments ?? {};
   const providers = providersQuery.data ?? [];
   const urgentCare = urgentCareQuery.data ?? {
@@ -81,21 +80,18 @@ export function useCuratorSchoolDetails() {
   const error = schoolQuery.error ? "Failed to load school details" : null;
 
   // ─── Computed data ───────────────────────────────────────────────────────
+  // TODO: Backend should include lockinScore in patient-results response.
+  // Until then, patient cards will show "–" for the lock-in score.
+  // Previously we fetched GET /api/v1/lockin/{schoolId} and matched scores
+  // by student name (fragile). That call has been removed.
   const patientsWithScore = useMemo(
     () =>
-      patients.map((p) => {
-        const match = lockinStudents.find(
-          (s) =>
-            s.studentName.trim().toLowerCase() ===
-            p.patientName.trim().toLowerCase(),
-        );
-        return {
-          ...p,
-          lockinScore: match?.lockinScore,
-          comment: patientComments[p.lockinId] ?? null,
-        };
-      }),
-    [patients, lockinStudents, patientComments],
+      patients.map((p) => ({
+        ...p,
+        lockinScore: undefined, // Will be populated when backend includes it in patient-results
+        comment: patientComments[p.lockinId] ?? null,
+      })),
+    [patients, patientComments],
   );
 
   const filteredPatients = useMemo(

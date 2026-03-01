@@ -84,12 +84,13 @@ const updateSchool = async (data: IUpdateSchool): Promise<School> => {
 const SCHOOLS_QUERY_KEY = "schools";
 const SCHOOLS_LOCKIN_QUERY_KEY = "schools_lockin";
 
-export const useSchools = () => {
+export const useSchools = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: [SCHOOLS_QUERY_KEY],
     queryFn: () => getSchools(),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
   });
 };
 

@@ -11,6 +11,7 @@ import { LockInAssessment } from "@/lib/types/lockin";
 export function generateColor(color: string) {
   let code = "";
   if (color === "yellow") code = "#ff9900";
+  if (color === "orange") code = "#f97316";
   if (color === "green") code = "#081c05";
   if (color === "purple") code = "#0d9488";
   if (color === "red") code = "#ff0000";
@@ -35,76 +36,98 @@ async function fetchPatientDetails(
   );
 
   if (resultResponse?.success && resultResponse.data) {
-    const resultData = resultResponse.data as CuratorPatientResult;
-    patientResult = resultData;
+    patientResult = resultResponse.data as CuratorPatientResult;
 
+    // Fetch per-patient lock-in assessment data using the lockinId
     try {
       const lockInResponse = await api(
-        ENDPOINTS.getSchoolLockIn(resultData.schoolId),
+        ENDPOINTS.getLockInUpdate(patientResult.lockinId),
       );
 
       if (lockInResponse?.success && lockInResponse.data) {
-        const lockInData = lockInResponse.data as {
-          schoolName: string;
-          students: Array<{
-            studentName: string;
-            lockinScore: number;
-            lockedInInterpretation: string;
-            lockedInColor: string;
-          }>;
-        };
+        const data = lockInResponse.data as Record<string, unknown>;
 
-        const student = lockInData.students?.find(
-          (s) => s.studentName === resultData.patientName,
-        );
-
-        if (student) {
-          lockInAssessment = {
-            fullName: resultData.patientName,
-            age: resultData.patientAge,
-            sex: resultData.patientSex,
-            school: resultData.schoolName,
-            lockedInScore: student.lockinScore.toFixed(2),
-            lockedInScoreDescription: student.lockedInInterpretation,
-            lockedInColor: student.lockedInColor,
-            generalMentalHealth: "N/A",
-            generalMentalHealthScore: "N/A",
-            generalMentalHealthColor: "gray",
-            possibleDepressionScore: "N/A",
-            possibleDepressionDescription: "N/A",
-            possibleDepressionColor: "gray",
-            lonelinessScore: "N/A",
-            lonelinessScoreDescription: "N/A",
-            lonelinessColor: "gray",
-            suicidalRiskScore: "N/A",
-            suicidalRiskScoreDescription: "N/A",
-            suicidalRiskColor: "gray",
-            examAnxiety: "N/A",
-            examAnxietyScore: "N/A",
-            examAnxietyColor: "gray",
-            coreAnxietyScore: "N/A",
-            coreAnxietyScoreDescription: "N/A",
-            coreAnxietyColor: "gray",
-            physicalDistressScore: "N/A",
-            physicalDistressScoreDescription: "N/A",
-            physicalDistressColor: "gray",
-            examPrep: "N/A",
-            examPrepScore: "N/A",
-            examPrepColor: "gray",
-            motivationScore: "N/A",
-            motivationScoreDescription: "N/A",
-            motivationColor: "gray",
-            studySkillsScore: "N/A",
-            studySkillsScoreDescription: "N/A",
-            studySkillsColor: "gray",
-            procrastinationScore: "N/A",
-            procrastinationScoreDescription: "N/A",
-            procrastinationColor: "gray",
-          };
+        // Extract colors from assessmentItems array
+        const items =
+          (data.assessmentItems as Array<{
+            itemName: string;
+            color: string;
+          }>) ?? [];
+        const colorMap: Record<string, string> = {};
+        for (const item of items) {
+          colorMap[item.itemName] = item.color;
         }
+
+        lockInAssessment = {
+          fullName: patientResult.patientName,
+          age: patientResult.patientAge,
+          sex: patientResult.patientSex,
+          school: patientResult.schoolName,
+          lockedInScore:
+            typeof data.lockedInScore === "number"
+              ? data.lockedInScore.toFixed(2)
+              : String(data.lockedInScore ?? "N/A"),
+          lockedInScoreDescription: String(
+            data.lockedInScoreDescription ?? "N/A",
+          ),
+          lockedInColor: String(data.lockedInColor ?? "gray"),
+          generalMentalHealth: String(
+            data.generalMentalHealthDescription ?? "N/A",
+          ),
+          generalMentalHealthScore: String(
+            data.generalMentalHealthScore ?? "N/A",
+          ),
+          generalMentalHealthColor: colorMap["Overall Mental Health"] ?? "gray",
+          possibleDepressionScore: String(data.depressionScore ?? "N/A"),
+          possibleDepressionDescription: String(
+            data.depressionDescription ?? "N/A",
+          ),
+          possibleDepressionColor: colorMap["Possible Depression"] ?? "gray",
+          lonelinessScore: String(data.lonelinessScore ?? "N/A"),
+          lonelinessScoreDescription: String(
+            data.lonelinessDescription ?? "N/A",
+          ),
+          lonelinessColor: colorMap["Loneliness"] ?? "gray",
+          suicidalRiskScore: String(data.suicidalityScore ?? "N/A"),
+          suicidalRiskScoreDescription: String(
+            data.suicidalityDescription ?? "N/A",
+          ),
+          suicidalRiskColor: colorMap["Suicidal Risk"] ?? "gray",
+          examAnxiety: String(data.examAnxietyDescription ?? "N/A"),
+          examAnxietyScore: String(data.examAnxietyScore ?? "N/A"),
+          examAnxietyColor: colorMap["Overall Exam Anxiety"] ?? "gray",
+          coreAnxietyScore: String(data.coreAnxietyScore ?? "N/A"),
+          coreAnxietyScoreDescription: String(
+            data.coreAnxietyDescription ?? "N/A",
+          ),
+          coreAnxietyColor: colorMap["Core Anxiety"] ?? "gray",
+          physicalDistressScore: String(data.physicalDistressScore ?? "N/A"),
+          physicalDistressScoreDescription: String(
+            data.physicalDistressDescription ?? "N/A",
+          ),
+          physicalDistressColor: colorMap["Physical Distress"] ?? "gray",
+          examPrep: String(data.examPreparationDescription ?? "N/A"),
+          examPrepScore: String(data.examPreparationScore ?? "N/A"),
+          examPrepColor: colorMap["Overall Exam Preparation"] ?? "gray",
+          motivationScore: String(data.motivationScore ?? "N/A"),
+          motivationScoreDescription: String(
+            data.motivationDescription ?? "N/A",
+          ),
+          motivationColor: colorMap["Motivation"] ?? "gray",
+          studySkillsScore: String(data.studySkillsScore ?? "N/A"),
+          studySkillsScoreDescription: String(
+            data.studySkillsDescription ?? "N/A",
+          ),
+          studySkillsColor: colorMap["Study Skills"] ?? "gray",
+          procrastinationScore: String(data.procrastinationScore ?? "N/A"),
+          procrastinationScoreDescription: String(
+            data.procrastinationDescription ?? "N/A",
+          ),
+          procrastinationColor: colorMap["Procrastination"] ?? "gray",
+        };
       }
     } catch (error) {
-      console.error("Error fetching lock-in data:", error);
+      console.error("Error fetching lock-in update data:", error);
     }
   }
 

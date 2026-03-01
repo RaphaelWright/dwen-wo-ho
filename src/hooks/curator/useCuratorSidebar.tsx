@@ -9,12 +9,7 @@ import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { useNotification } from "@/hooks/useNotification";
 import { NavItem, SidebarProps } from "@/lib/types/components/curator/sidebar";
 
-export const useCuratorSidebar = ({
-  schoolCount,
-  providerCount,
-  partnerCount,
-  onCreateClick,
-}: SidebarProps) => {
+export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -60,19 +55,16 @@ export const useCuratorSidebar = ({
       href: ROUTES.curator.schools,
       label: "Schools",
       icon: <MdSchool className="text-lg shrink-0" />,
-      count: schoolCount,
     },
     {
       href: ROUTES.curator.providers,
       label: "Providers",
       icon: <MdHealthAndSafety className="text-lg shrink-0" />,
-      count: providerCount,
     },
     {
       href: ROUTES.curator.partners,
       label: "Partners",
       icon: <MdHandshake className="text-lg shrink-0" />,
-      count: partnerCount,
     },
     {
       href: ROUTES.curator.pages,

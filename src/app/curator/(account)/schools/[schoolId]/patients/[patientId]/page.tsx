@@ -175,7 +175,7 @@ export default function PatientDetailsPage() {
                           {item.name}
                         </span>
                         <span
-                          className="text-xs font-medium px-2 py-0.5 rounded"
+                          className="text-xs font-medium px-2 py-0.5 rounded text-background"
                           style={{ backgroundColor: item.color }}
                         >
                           {item.value}

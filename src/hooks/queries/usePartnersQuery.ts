@@ -92,12 +92,13 @@ export const useCreatePartner = () => {
   });
 };
 
-export const usePartnersList = () => {
+export const usePartnersList = (options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: [PARTNERS_QUERY_KEY],
     queryFn: fetchPartners,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+    enabled: options?.enabled ?? true,
   });
 };
 

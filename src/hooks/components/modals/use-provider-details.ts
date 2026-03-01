@@ -36,11 +36,18 @@ export const useProviderDetails = ({
   onShowRejectModal?: (email: string) => void;
 }) => {
   const pathname = usePathname();
-  const { useProvider, approveProvider, rejectProvider } = useProvidersQuery();
+  // Only fetch the providers list query when the modal is open — the full list
+  // is not needed, only the single-provider query + mutations.
+  // TODO: Backend should provide a single endpoint that returns provider details
+  // with associated schools and partners, eliminating the need for separate calls.
+  const { useProvider, approveProvider, rejectProvider } = useProvidersQuery({
+    enabled: false, // Don't fetch the full providers list — not needed here
+  });
   const { data: providerData, isLoading: isQueryLoading } =
     useProvider(providerEmail);
-  const { data: allSchools = [] } = useSchools();
-  const { data: allPartnersData = [] } = usePartnersList();
+  // Only fetch schools/partners lists when the modal is open
+  const { data: allSchools = [] } = useSchools({ enabled: isOpen });
+  const { data: allPartnersData = [] } = usePartnersList({ enabled: isOpen });
   const queryClient = useQueryClient();
 
   const allPartners: AssociatedPartner[] = useMemo(
@@ -204,26 +211,21 @@ export const useProviderDetails = ({
     }
   };
 
-  useEffect(() => {
-    if (isOpen && providerEmail) {
-      loadProviderSchools();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, providerEmail]);
-
+  // Single effect to load provider schools + partners when modal opens
+  // (previously had two duplicate effects that both called loadProviderSchools)
   useEffect(() => {
     if (isOpen && providerEmail && allSchools.length > 0) {
       loadProviderSchools();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allSchools.length, isOpen, providerEmail]);
+  }, [isOpen, providerEmail, allSchools.length]);
 
   useEffect(() => {
     if (isOpen && providerEmail && allPartners.length > 0) {
       loadProviderPartners(allPartners);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allPartners.length, isOpen, providerEmail]);
+  }, [isOpen, providerEmail, allPartners.length]);
 
   useEffect(() => {
     if (isOpen) {

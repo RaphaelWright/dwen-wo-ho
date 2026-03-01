@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { ThemeProvider } from "./theme-provider";
 import TanstackQueryProvider from "./tanstack-query-provider";
+import JotaiProvider from "./jotai-provider";
 
 export default function Providers({
   children,
@@ -16,7 +17,9 @@ export default function Providers({
       enableSystem
       disableTransitionOnChange
     >
-      <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      <JotaiProvider>
+        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      </JotaiProvider>
     </ThemeProvider>
   );
 }

@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  experimental: {
+    optimizePackageImports: ["jotai"],
+  },
+  transpilePackages: ["jotai"],
   images: {
     qualities: [75, 100],
     remotePatterns: [

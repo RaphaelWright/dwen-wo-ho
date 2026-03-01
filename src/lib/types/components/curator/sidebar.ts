@@ -11,9 +11,6 @@ export interface NavItem {
 }
 
 export interface SidebarProps {
-  schoolCount: number;
-  providerCount: number;
-  partnerCount: number;
   onCreateClick: () => void;
   onLogout: () => void;
 }

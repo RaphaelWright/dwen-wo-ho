@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { PatientResultItem, UrgentCarePatient } from "@/lib/types/patient";
-import { LockInStudent } from "@/lib/types/lockin";
 import { SchoolProvider } from "@/lib/types/provider";
 
 // ─── Query Keys ──────────────────────────────────────────────────────────────
@@ -23,18 +22,17 @@ export const schoolDetailKeys = {
 
 interface PatientsData {
   patients: PatientResultItem[];
-  lockinStudents: LockInStudent[];
   patientComments: Record<number, string | null>;
 }
 
 async function fetchSchoolPatients(schoolId: string): Promise<PatientsData> {
-  const [resResults, resLockIn] = await Promise.all([
-    api(ENDPOINTS.getSchoolPatientResults(schoolId)),
-    api(ENDPOINTS.getSchoolLockIn(schoolId)).catch(() => null),
-  ]);
+  // TODO: Backend should include lockinScore in the GET /api/v1/patient-results/school/{schoolId}
+  // response so we don't need a separate GET /api/v1/lockin/{schoolId} call.
+  // Previously we fetched lockin data here and matched scores by student name,
+  // which was fragile and added an extra API call.
+  const resResults = await api(ENDPOINTS.getSchoolPatientResults(schoolId));
 
   let patients: PatientResultItem[] = [];
-  let lockinStudents: LockInStudent[] = [];
   const patientComments: Record<number, string | null> = {};
 
   if (resResults?.success && resResults.data) {
@@ -64,36 +62,12 @@ async function fetchSchoolPatients(schoolId: string): Promise<PatientsData> {
     );
   }
 
-  if (
-    resLockIn?.success &&
-    (resLockIn.data as { students?: LockInStudent[] })?.students
-  ) {
-    lockinStudents = (resLockIn.data as { students: LockInStudent[] }).students;
-  }
+  // TODO: Backend should provide patient comments as part of the
+  // GET /api/v1/patient-results/school/{schoolId} response instead of
+  // requiring individual GET /api/v1/lockin-update/{lockinId} calls per patient.
+  // Previously this did N+1 calls (up to 15 patients × 1 call each).
 
-  // Fetch comments for first 15 patients
-  if (patients.length > 0) {
-    const first = patients.slice(0, 15);
-    await Promise.all(
-      first.map(async (p) => {
-        try {
-          const update = await api(ENDPOINTS.getLockInUpdate(p.lockinId));
-          if (
-            update?.success &&
-            (update.data as { comment?: string | null })?.comment != null
-          ) {
-            patientComments[p.lockinId] = (
-              update.data as { comment: string }
-            ).comment;
-          }
-        } catch {
-          // ignore
-        }
-      }),
-    );
-  }
-
-  return { patients, lockinStudents, patientComments };
+  return { patients, patientComments };
 }
 
 async function fetchSchoolProviders(

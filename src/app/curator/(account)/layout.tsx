@@ -16,9 +16,6 @@ export default function DashboardLayout({
   const {
     mounted,
     isAuthenticated,
-    schoolCount,
-    providerCount,
-    partnerCount,
     handleLogout,
     showCreateModal,
     setShowCreateModal,
@@ -34,7 +31,6 @@ export default function DashboardLayout({
     closeMemberModal,
     closePartnerModal,
     closeReachModal,
-    handlePartnerCreated,
   } = useCuratorLayout();
 
   // Show loading state only after mount to prevent hydration mismatch
@@ -56,9 +52,6 @@ export default function DashboardLayout({
   return (
     <div className="h-screen bg-background flex">
       <CuratorSidebar
-        schoolCount={schoolCount}
-        providerCount={providerCount}
-        partnerCount={partnerCount}
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
@@ -91,7 +84,7 @@ export default function DashboardLayout({
       <PartnerCreationModal
         isOpen={showPartnerModal}
         onClose={closePartnerModal}
-        onPartnerCreated={handlePartnerCreated}
+        onPartnerCreated={closePartnerModal}
       />
 
       <ReachModal isOpen={showReachModal} onClose={closeReachModal} />

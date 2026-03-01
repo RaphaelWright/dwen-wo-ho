@@ -56,18 +56,13 @@ export const ENDPOINTS = {
   updateSchool: (id: string | number) => `/api/v1/schools/${id}?schoolId=${id}`,
   schoolPartners: (id: string | number) => `/api/v1/schools/${id}/partners`,
   schoolProviders: (id: string | number) => `/api/v1/schools/${id}/providers`,
-  schoolReach: (id: string | number) => `/api/v1/schools/${id}/reach`,
   getSchoolLockIn: (id: string | number) => `/api/v1/lockin/${id}`,
   getLockInUpdate: (lockinId: string | number) =>
     `/api/v1/lockin/updates/${lockinId}`,
   updateLockInComment: (lockinId: string | number) =>
     `/api/v1/lockin/updates/${lockinId}/comment`,
-  getLockInBenchmarks: (schoolType: string) =>
-    `/api/v1/lockin/benchmarks/${schoolType}`,
   getUrgentCare: (schoolId: string | number) =>
     `/api/v1/lockin/urgent-care/${schoolId}`,
-  getUrgentCareTreating: (schoolId: string | number) =>
-    `/api/v1/lockin/urgent-care/${schoolId}/treating`,
   submitLockIn: "/api/v1/lockin",
   disableSchool: (id: string | number) => `/api/v1/schools/${id}/disable`,
   // Patient Results endpoints
@@ -84,12 +79,8 @@ export const ENDPOINTS = {
     `/api/v1/patient-results/school/${schoolId}`,
   getNewSchoolPatientResults: (schoolId: string | number) =>
     `/api/v1/patient-results/school/${schoolId}/new`,
-  getNewSchoolProviders: (schoolId: string | number) =>
-    `/api/v1/schools/${schoolId}/providers/new`,
   getProviderTreatingResults: (providerId: string | number) =>
     `/api/v1/patient-results/provider/${providerId}/treating`,
-  incrementSchoolVisit: (schoolId: string | number) =>
-    `/api/v1/patient-results/school/${schoolId}/visit`,
 
   // Partners endpoints
   partners: "/api/v1/partners",
