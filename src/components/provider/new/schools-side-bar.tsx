@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { School } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NEW_PROVIDER_SCHOOLS } from "@/data/mock-provider-data";
 import useNewProvider from "@/hooks/provider/use-new-provider";
@@ -18,7 +19,7 @@ import { cn } from "@/lib/utils";
 export default function SchoolsSidebar() {
   const { activeSchool, handleSelectSchool } = useNewProvider();
   return (
-    <aside className="w-full shrink-0 flex flex-col overflow-y-auto no-scrollbar border-r h-full">
+    <aside className="w-full shrink-0 flex flex-col overflow-y-auto no-scrollbar border-r h-full pb-40 md:pb-10">
       {/* Header label */}
       <div className="px-4 pt-5 pb-3 shrink-0">
         <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
@@ -48,31 +49,26 @@ export default function SchoolsSidebar() {
                 )}
               >
                 {/* Logo square */}
-                <div
+                <Avatar
                   className={cn(
                     "size-8 rounded-lg flex items-center justify-center shrink-0 border text-[12px] font-black",
+                    !isAll ? "bg-primary/20 border-primary/30" : "bg-white",
                   )}
-                  style={
-                    !isAll
-                      ? {
-                          backgroundColor: school.colors?.bg,
-                          borderColor: school.colors?.border,
-                        }
-                      : { background: "white" }
-                  }
                 >
-                  {isAll ? (
-                    <School className="size-4 text-primary" />
-                  ) : (
-                    <span
-                      style={{
-                        color: school.colors?.text,
-                      }}
-                    >
-                      {school.letter}
-                    </span>
-                  )}
-                </div>
+                  <AvatarImage src={school.avatarUrl} />
+                  <AvatarFallback
+                    className={cn(
+                      "bg-transparent",
+                      !isAll ? "text-primary" : "",
+                    )}
+                  >
+                    {isAll ? (
+                      <School className="size-4 text-primary" />
+                    ) : (
+                      school.label.slice(0, 2).toUpperCase()
+                    )}
+                  </AvatarFallback>
+                </Avatar>
 
                 {/* Name + count */}
                 <div className="flex-1 min-w-0">

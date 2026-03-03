@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { LogoProps } from "@/lib/types/shared-ui";
+import { ROUTES } from "@/lib/constants/routes";
+import { Route } from "next";
 
 export const Logo = ({
   variant = "purple",
   className,
   withLink = true,
-  href = "/",
+  href = ROUTES.public.landing as Route,
 }: LogoProps) => {
   let content;
 
@@ -19,7 +21,7 @@ export const Logo = ({
           src="/logos/logo-black.png"
           alt="JustGo Health"
           className={cn(
-            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out dark:hidden",
+            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out dark:hidden -ml-0.5",
             className,
           )}
           width={180}
@@ -30,7 +32,7 @@ export const Logo = ({
           src="/logos/logo-white.png"
           alt="JustGo Health"
           className={cn(
-            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out hidden dark:block",
+            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out hidden dark:block -ml-0.5",
             className,
           )}
           width={180}
@@ -52,7 +54,7 @@ export const Logo = ({
         src={src}
         alt="JustGo Health"
         className={cn(
-          "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out",
+          "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out -ml-0.5",
           className,
         )}
         width={180}

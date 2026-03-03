@@ -18,7 +18,7 @@ export default function UrgentPanel() {
   );
 
   return (
-    <aside className="w-full shrink-0 flex flex-col overflow-y-auto no-scrollbar h-full border-l">
+    <aside className="w-full shrink-0 flex flex-col overflow-y-auto no-scrollbar h-full border-l pb-40 md:pb-10">
       {/* Header */}
       <div className="px-4 pt-5 pb-4 border-b shrink-0 border-muted">
         <div className="flex items-center justify-between">

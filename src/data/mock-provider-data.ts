@@ -1,4 +1,5 @@
 import { AssociatedSchool, AssociatedPartner } from "@/lib/types/provider";
+import { NotificationItem } from "@/lib/types/provider/new-provider";
 import { LogOut, WifiOff } from "lucide-react";
 
 export const mockSchools: AssociatedSchool[] = [
@@ -49,6 +50,8 @@ export const DEFAULT_PROVIDER_PROFILE = {
   specialty: "Clinical Psychologist",
   status: "Let's talk mental health",
   phone: "+1 617 555 0123",
+  avatar:
+    "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=200&h=200&q=80",
 };
 
 export const NEW_PROVIDER_PATIENTS = [
@@ -170,8 +173,8 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     schoolLabel: "UCC · Crisis Alert",
     time: "18 min ago",
     score: 9.7,
-    color: "red",
     emoji: "👨🏽‍🎓",
+    avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
   },
   {
     id: 1,
@@ -180,8 +183,8 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     schoolLabel: "UG · Severe Anxiety",
     time: "2 min ago",
     score: 9.2,
-    color: "red",
     emoji: "👨🏽‍🎓",
+    avatarUrl: "https://randomuser.me/api/portraits/women/65.jpg",
   },
   {
     id: 2,
@@ -190,8 +193,8 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     schoolLabel: "KNUST · New Intake",
     time: "14 min ago",
     score: 7.4,
-    color: "amber",
     emoji: "👨🏽‍🎓",
+    avatarUrl: "https://randomuser.me/api/portraits/men/29.jpg",
   },
   {
     id: 5,
@@ -200,59 +203,82 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     schoolLabel: "UPSA · Intake",
     time: "5 hr ago",
     score: 8.2,
-    color: "amber",
     emoji: "👨🏽‍🎓",
+    avatarUrl: "https://randomuser.me/api/portraits/women/12.jpg",
   },
 ];
 
-export const NEW_PROVIDER_NOTIFICATIONS = [
+export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   {
     id: 1,
     unread: true,
-    emoji: "👨🏽‍🎓",
-    patient: "Akosua Yeboah · UCC",
+    avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
+    targetName: "Akosua Yeboah",
+    targetSchoolId: "ucc",
+    targetSchoolName: "UCC",
     text: "Crisis alert flagged — expressed thoughts of self-harm. Immediate review required.",
     meta: "18 min ago · Urgent",
+    targetId: "7",
+    targetType: "patient",
   },
   {
     id: 2,
     unread: true,
-    emoji: "👨🏽‍🎓",
-    patient: "Amara Osei-Mensah · UG",
+    avatarUrl: "https://randomuser.me/api/portraits/women/65.jpg",
+    targetName: "Amara Osei-Mensah",
+    targetSchoolId: "ug",
+    targetSchoolName: "UG",
     text: "New urgent case submitted. Severe anxiety affecting daily functioning.",
     meta: "2 min ago · New Case",
+    targetId: "1",
+    targetType: "patient",
   },
   {
     id: 3,
     unread: true,
-    emoji: "👨🏽‍🎓",
-    patient: "Selina Boateng · UCC",
+    avatarUrl: "https://randomuser.me/api/portraits/women/12.jpg",
+    targetName: "Selina Boateng",
+    targetSchoolId: "ucc",
+    targetSchoolName: "UCC",
     text: "Treatment milestone reached. Week 4 CBT session completed successfully.",
     meta: "1 hr ago · Milestone",
+    targetId: "3",
+    targetType: "patient",
   },
   {
     id: 4,
     unread: true,
-    emoji: "👨🏽‍🎓",
-    patient: "University of Ghana",
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/e/e9/University_of_Ghana_logo.png",
+    targetName: "University of Ghana",
     text: "You have been added to UG as a care provider. 9 patients are now visible.",
     meta: "Yesterday · School Update",
+    targetId: "ug",
+    targetType: "school",
   },
   {
     id: 5,
     unread: true,
-    emoji: "👨🏽‍🎓",
-    patient: "Fatima Abubakar · UPSA",
+    avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg",
+    targetName: "Fatima Abubakar",
+    targetSchoolId: "upsa",
+    targetSchoolName: "UPSA",
     text: "New referral from campus counselor. High risk score — early assessment recommended.",
     meta: "5 hr ago · Referral",
+    targetId: "5",
+    targetType: "patient",
   },
   {
     id: 6,
     unread: false,
-    emoji: "👨🏽‍🎓",
-    patient: "Nana Adjei · UG",
+    avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg",
+    targetName: "Nana Adjei",
+    targetSchoolId: "ug",
+    targetSchoolName: "UG",
     text: "Follow-up check-in completed. Patient reports improved mood and sleep quality.",
     meta: "3 days ago · Follow-up",
+    targetId: "4",
+    targetType: "patient",
   },
 ];
 
@@ -262,61 +288,41 @@ export const NEW_PROVIDER_SCHOOLS = [
     id: "knust",
     label: "KNUST",
     count: 8,
-    letter: "KN",
-    colors: {
-      bg: "hsl(348 83% 47% / 0.15)", // Crimson Red
-      border: "hsl(348 83% 47% / 0.3)",
-      text: "hsl(348 83% 47%)",
-    },
     hasNotif: true,
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/5/52/Kwame_Nkrumah_University_of_Science_and_Technology_logo.png",
   },
   {
     id: "ucc",
     label: "UCC",
     count: 7,
-    letter: "UC",
-    colors: {
-      bg: "hsl(210 100% 50% / 0.15)", // Blue
-      border: "hsl(210 100% 50% / 0.3)",
-      text: "hsl(210 100% 50%)",
-    },
     hasNotif: false,
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/e/e5/University_of_Cape_Coast_logo.png",
   },
   {
     id: "ug",
     label: "UG",
     count: 9,
-    letter: "UG",
-    colors: {
-      bg: "hsl(200 100% 45% / 0.15)", // Light Blue
-      border: "hsl(200 100% 45% / 0.3)",
-      text: "hsl(200 100% 45%)",
-    },
     hasNotif: true,
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/e/e9/University_of_Ghana_logo.png",
   },
   {
     id: "upsa",
     label: "UPSA",
     count: 4,
-    letter: "UP",
-    colors: {
-      bg: "hsl(220 80% 40% / 0.15)", // Darker Blue
-      border: "hsl(220 80% 40% / 0.3)",
-      text: "hsl(220 80% 40%)",
-    },
     hasNotif: false,
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/6/6f/University_of_Professional_Studies%2C_Accra_logo.png",
   },
   {
     id: "uds",
     label: "UDS",
     count: 4,
-    letter: "UD",
-    colors: {
-      bg: "hsl(0 80% 40% / 0.15)", // Crimson
-      border: "hsl(0 80% 40% / 0.3)",
-      text: "hsl(0 80% 40%)",
-    },
     hasNotif: false,
+    avatarUrl:
+      "https://upload.wikimedia.org/wikipedia/en/3/36/University_for_Development_Studies_logo.png",
   },
 ];
 
@@ -357,22 +363,22 @@ export const NEW_PROVIDER_EDITABLE_FIELDS = [
 /** Schools shown in the Profile → Schools tab */
 export const NEW_PROVIDER_ASSIGNED_SCHOOLS = [
   {
-    letter: "KN",
     name: "KNUST School of Medicine",
-    color: "hsl(348 83% 47%)",
+    primaryColor: "hsl(348 83% 47%)",
   },
   {
-    letter: "UC",
     name: "UCC School of Medical Sciences",
-    color: "hsl(210 100% 50%)",
+    primaryColor: "hsl(210 100% 50%)",
   },
   {
-    letter: "UG",
     name: "University of Ghana Medical School",
-    color: "hsl(200 100% 45%)",
+    primaryColor: "hsl(200 100% 45%)",
   },
-  { letter: "UP", name: "UPSA Clinic", color: "hsl(220 80% 40%)" },
-  { letter: "UD", name: "UDS School of Medicine", color: "hsl(0 80% 40%)" },
+  { name: "UPSA Clinic", primaryColor: "hsl(220 80% 40%)" },
+  {
+    name: "UDS School of Medicine",
+    primaryColor: "hsl(0 80% 40%)",
+  },
 ];
 
 /** Logout menu items */
@@ -383,22 +389,6 @@ export const NEW_PROVIDER_LOGOUT_OPTIONS = [
   { icon: "WifiOff", label: "Go offline", danger: false },
   { icon: "Trash2", label: "Delete account", danger: true },
 ];
-
-export const NEW_PROVIDER_COLORS = {
-  red: {
-    dot: "hsl(var(--destructive))",
-    score: "hsl(var(--destructive))",
-    scoreBg: "hsl(var(--destructive) / 0.13)",
-    border: "hsl(var(--destructive) / 0.3)",
-  },
-  amber: {
-    dot: "hsl(38 92% 50%)",
-    score: "hsl(38 92% 50%)",
-    scoreBg: "hsl(38 92% 50% / 0.13)",
-    border: "hsl(38 92% 50% / 0.3)",
-  },
-};
-
 export const NEW_PROVIDER_LOGOUT_ITEMS = [
   { icon: LogOut, label: "Log out of account", danger: false },
   { icon: WifiOff, label: "Go offline", danger: false },

@@ -20,7 +20,7 @@ export function ProfileTabs({
       defaultValue="overview"
       className="flex flex-col flex-1 overflow-hidden mt-5"
     >
-      <TabsList className="gap-0 rounded-none h-auto border-b w-full bg-transparent block space-x-2 px-6">
+      <TabsList className="flex w-full gap-0 rounded-none h-auto border-b bg-transparent px-2 md:px-6 md:space-x-2 overflow-x-visible">
         {[
           { value: "overview", label: "Overview" },
           { value: "schools", label: "Schools", badge: "5" },
@@ -29,7 +29,7 @@ export function ProfileTabs({
           <TabsTrigger
             key={tab.value}
             value={tab.value}
-            className="rounded-2xl pb-2.5 pt-2.5 px-4 text-[13px] font-semibold hover:bg-primary/5
+            className="flex-1 md:flex-none rounded-2xl pb-2.5 pt-2.5 px-2 md:px-4 text-[12px] md:text-[13px] font-semibold hover:bg-primary/5
                        data-[state=active]:text-primary
                        data-[state=active]:border-b-2
                        data-[state=active]:border-primary
@@ -38,14 +38,16 @@ export function ProfileTabs({
           >
             {tab.label}
             {tab.badge && (
-              <span className="ml-1.5 text-[11px]">({tab.badge})</span>
+              <span className="ml-1 md:ml-1.5 text-[10px] md:text-[11px]">
+                ({tab.badge})
+              </span>
             )}
           </TabsTrigger>
         ))}
       </TabsList>
 
       {/* ── Body split: fields col + tab content ── */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 flex-1 overflow-hidden">
         <ProfileFieldsColumn profileData={profileData} onEdit={onEdit} />
 
         <div className="flex-1 overflow-hidden overflow-y-auto no-scrollbar">
@@ -56,7 +58,7 @@ export function ProfileTabs({
             </InfoCard>
 
             <SectionLabel className="mt-5">Contact</SectionLabel>
-            <div className="grid grid-cols-2 gap-2.5 mb-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-5">
               <InfoCard label="Email">james@justgohealth.com</InfoCard>
               <InfoCard label="Phone">{profileData.phone}</InfoCard>
             </div>
@@ -77,7 +79,7 @@ export function ProfileTabs({
             </motion.button>
 
             <SectionLabel>Activity</SectionLabel>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               <InfoCard label="Member Since">Feb 7, 2026</InfoCard>
               <InfoCard label="Last Active">2 weeks ago</InfoCard>
             </div>

@@ -30,7 +30,7 @@ export default function MainContent() {
   } = useNewProvider();
 
   return (
-    <main className="h-full overflow-y-auto no-scrollbar px-2 py-6">
+    <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10">
       {/* ── Active-school filter bar ── */}
       <AnimatePresence>
         {activeSchool !== "all" && (

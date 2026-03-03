@@ -49,6 +49,7 @@ export interface AssociatedSchool {
   joinedDate?: string;
   isAssociated: boolean;
   logo?: string;
+  primaryColor?: string;
 }
 
 export interface AssociatedPartner {
@@ -64,5 +65,3 @@ export interface IProviderResponse {
   data: Provider[];
   message: string;
 }
-
-

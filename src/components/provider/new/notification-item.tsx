@@ -2,6 +2,7 @@
 
 import { NotificationItem } from "@/lib/types/provider/new-provider";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
@@ -31,9 +32,16 @@ export default function NotifItem({
       )}
     >
       {/* Avatar */}
-      <div className="size-9 rounded-full flex items-center justify-center text-[18px] shrink-0 border bg-primary/20 border-border">
-        {notif.emoji}
-      </div>
+      <Avatar className="size-9 shrink-0 border border-border">
+        <AvatarImage src={notif.avatarUrl} />
+        {notif.targetName ? (
+          <AvatarFallback className="text-foreground">
+            {notif.targetName.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        ) : (
+          <AvatarFallback className="text-foreground">N</AvatarFallback>
+        )}
+      </Avatar>
 
       {/* Body */}
       <div className="flex-1 min-w-0">
@@ -43,7 +51,7 @@ export default function NotifItem({
             notif.unread ? "text-foreground" : "text-muted-foreground",
           )}
         >
-          {notif.patient}
+          {notif.targetName}
         </p>
         <p className="text-[12.5px] leading-snug text-muted-foreground">
           {notif.text}

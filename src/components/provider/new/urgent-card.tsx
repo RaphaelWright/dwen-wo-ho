@@ -1,7 +1,7 @@
 "use client";
 
-import { NEW_PROVIDER_COLORS } from "@/data/mock-provider-data";
 import { Patient } from "@/lib/types/provider/new-provider";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 
 /**
@@ -15,10 +15,6 @@ export default function UrgentCard({
   patient: Patient;
   index: number;
 }) {
-  const c =
-    NEW_PROVIDER_COLORS[patient.color as keyof typeof NEW_PROVIDER_COLORS] ??
-    NEW_PROVIDER_COLORS.red;
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -32,9 +28,12 @@ export default function UrgentCard({
       className="flex items-start gap-3 p-3 rounded-xl border cursor-pointer bg-destructive dark:bg-destructive/80"
     >
       {/* Avatar */}
-      <div className="size-8.5 rounded-full flex items-center justify-center text-base shrink-0 border bg-muted">
-        {patient.emoji}
-      </div>
+      <Avatar className="size-8.5 shrink-0 border border-border">
+        <AvatarImage src={patient.avatarUrl} />
+        <AvatarFallback className="text-foreground">
+          {patient.name ? patient.name.charAt(0).toUpperCase() : "P"}
+        </AvatarFallback>
+      </Avatar>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
