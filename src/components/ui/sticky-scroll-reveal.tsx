@@ -116,7 +116,7 @@ export const StickyScroll = ({
         backgroundColor: colors[activeCard % colors.length],
       }}
       transition={{ duration: 0.5 }}
-      className="relative flex h-150 justify-center overflow-y-auto rounded-xs p-6 md:px-10 md:py-14 scrollbar-hide"
+      className="relative flex h-[60vh] md:h-150 justify-center overflow-y-auto rounded-xs p-6 md:px-10 md:py-14 scrollbar-hide"
       ref={containerRef}
     >
       <div className="relative flex w-full max-w-4xl items-start pt-10">
@@ -202,12 +202,23 @@ export const StickyScroll = ({
                 }}
                 transition={{ duration: 0.3, delay: 0.05 }}
                 className={cn(
-                  "text-sm md:text-base mt-4 max-w-sm",
+                  "text-sm md:text-base mt-4 max-w-sm bg",
                   descriptionClassName,
                 )}
               >
                 {item.description}
               </motion.p>
+              {/* Display visual content inline on mobile */}
+              <motion.div
+                animate={{
+                  opacity: activeCard === index ? 1 : 0.3,
+                  x: activeCard === index ? 0 : -10,
+                }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="mt-6 block lg:hidden w-full overflow-hidden rounded-xl aspect-video md:aspect-square"
+              >
+                {item.content ?? null}
+              </motion.div>
             </div>
           ))}
         </div>
@@ -219,7 +230,7 @@ export const StickyScroll = ({
         }}
         transition={{ duration: 0.5 }}
         className={cn(
-          "sticky top-5 hidden lg:block overflow-hidden rounded-xl shadow-2xl",
+          "sticky top-5 hidden lg:block overflow-hidden border rounded-2xl border-transparent shadow-2xl",
           contentClassName,
         )}
       >

@@ -32,20 +32,12 @@ export const FloatingDock = ({
   itemClassName?: string;
 }) => {
   return (
-    <>
-      <FloatingDockDesktop
-        items={items}
-        className={desktopClassName}
-        tooltipClassName={tooltipClassName}
-        itemClassName={itemClassName}
-      />
-      <FloatingDockMobile
-        items={items}
-        className={mobileClassName}
-        tooltipClassName={tooltipClassName}
-        itemClassName={itemClassName}
-      />
-    </>
+    <FloatingDockDesktop
+      items={items}
+      className={desktopClassName}
+      tooltipClassName={tooltipClassName}
+      itemClassName={itemClassName}
+    />
   );
 };
 
@@ -141,7 +133,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto hidden h-16 items-center gap-4 rounded-2xl bg-transparent px-4 pb-3 md:flex w-full",
+        "mx-auto flex h-16 items-center gap-4 rounded-2xl bg-transparent px-4 pb-3 w-full",
         className,
       )}
     >

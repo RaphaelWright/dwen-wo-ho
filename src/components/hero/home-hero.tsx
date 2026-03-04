@@ -104,8 +104,8 @@ export default function HomePageHero() {
   };
 
   return (
-    <section className="relative flex items-center overflow-hidden">
-      <WidthConstraint className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-24 lg:mt-0">
+    <section className="relative w-full flex items-center justify-center overflow-hidden pt-6 pb-6">
+      <WidthConstraint className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         {/* Left Content */}
         <motion.div
           variants={containerVariants}
@@ -125,7 +125,7 @@ export default function HomePageHero() {
 
           {/* Heading */}
           <motion.div variants={itemVariants}>
-            <h1 className="text-6xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1]">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1]">
               {HOME.TITLE}
             </h1>
           </motion.div>
@@ -141,12 +141,12 @@ export default function HomePageHero() {
           {/* Buttons */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap items-center gap-4"
+            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
             <Button
               onClick={() => router.push(ROUTES.patient.checkEmail)}
               size="lg"
-              className="rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1"
+              className="w-full sm:w-auto rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1"
             >
               {HOME.BUTTONS.GET_STARTED}
             </Button>
@@ -155,8 +155,8 @@ export default function HomePageHero() {
               variant="outline"
               size="lg"
               borderClassName="h-2 w-18 bg-primary/90"
-              containerClassName="h-13"
-              className="rounded-lg border-border text-primary bg-background hover:scale-95 px-8 h-12 text-base font-bold transition-all ease-in-out duration-300"
+              containerClassName="h-13 w-full sm:w-auto"
+              className="w-full sm:w-auto rounded-lg border-border text-primary bg-background hover:scale-95 px-8 h-12 text-base font-bold transition-all ease-in-out duration-300"
             >
               {HOME.BUTTONS.LOCK_IN}
             </MovingButton>

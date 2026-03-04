@@ -245,14 +245,26 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 2.5s ease-in-out infinite;
 }
-::-webkit-scrollbar {
-  @apply bg-background w-1 h-1;
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    @apply bg-background w-1 h-1;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/60 rounded-4xl border-0;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent cursor-grab;
+  }
 }
-::-webkit-scrollbar-thumb {
-  @apply bg-primary/60 rounded-4xl border-0;
-}
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-accent cursor-grab;
+
+@media (max-width: 1023px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
 /* New Modern Animations */

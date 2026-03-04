@@ -18,7 +18,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-footer-bg text-footer-foreground py-10">
+    <footer className="bg-footer-bg text-footer-foreground py-10 ">
       <WidthConstraint>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
           {/* About Us Section with Social Icons */}
@@ -33,7 +33,7 @@ export default function Footer() {
               resources. Prioritize yourself today.
             </p>
 
-            {/* Social Media Icons Group (Replaced Phone/Email) */}
+            {/* Social Media Icons Group */}
             <div>
               <FloatingDock
                 items={FOOTER_DOCK_ITEMS.map((item) => {
@@ -54,14 +54,15 @@ export default function Footer() {
                 e.preventDefault();
                 console.log("submitted");
               }}
-              className="bg-muted/10 border-none text-white rounded-full h-13.75 pl-4 pr-1"
+              className="bg-muted/10 border-none text-white rounded-full h-13.75 pl-4 pr-1 w-full max-w-full overflow-hidden"
               submitButton={({ value }) => (
                 <Button
                   type="submit"
-                  className="absolute top-1 right-1 h-11.75 px-8 rounded-full bg-primary hover:bg-primary/80 text-white font-semibold transition-colors gap-2 z-50"
+                  className="absolute top-1 right-1 w-10 lg:w-auto h-10 lg:h-11.75 mr-2 mt-0.5 lg:mt-0 lg:mr-0 px-4 sm:px-8 rounded-full bg-primary hover:bg-primary/80 text-white font-semibold transition-colors gap-2 z-50 text-sm sm:text-base"
                 >
-                  <span>Subscribe</span>
-                  {value && <ArrowRight />}
+                  <span className="hidden sm:inline">Subscribe</span>
+                  {value && <ArrowRight className="size-4" />}
+                  {!value && <ArrowRight className="size-4 sm:hidden" />}
                 </Button>
               )}
             />
@@ -118,23 +119,23 @@ export default function Footer() {
         </div>
 
         {/* Bottom Menu & Logo (Remains the same) */}
-        <div className="mt-28 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center">
-          <ul className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mb-4 md:mb-0 mr-auto text-white">
+        <div className="mt-28 pt-8 border-t border-white/10 flex flex-col items-center text-center space-y-4 md:space-y-0 md:flex-row md:text-left">
+          <ul className="flex flex-wrap justify-center gap-4 md:gap-6 md:mr-auto text-white">
             {FOOTER_BOTTOM_LINKS.map((link) => (
               <li key={link.label}>
                 <Link
                   href={link.href as any}
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary transition-colors text-sm sm:text-base"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="ml-auto flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mt-4 md:mt-0 md:ml-auto">
             <a
               href="#"
-              className="text-white font-medium hover:text-primary transition-colors"
+              className="text-white font-medium hover:text-primary transition-colors text-sm sm:text-base"
             >
               Just Go Health
             </a>

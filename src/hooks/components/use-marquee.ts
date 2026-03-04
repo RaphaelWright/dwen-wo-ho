@@ -18,22 +18,24 @@ export const useMarquee = ({
     if (isPaused) {
       controls.stop();
     } else {
+      // Small delay on resume helps prevent jarring jumps
       controls.start({
-        x: direction === "left" ? "-50%" : "0%",
+        x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
         transition: {
           repeat: Infinity,
           repeatType: "loop",
           duration: speed,
           ease: "linear",
+          // The key fix: ensure it doesn't try to tween from a dead stop slowly
         },
       });
     }
   }, [isPaused, controls, direction, speed]);
 
-  // Initial animation start
+  // Initial animation start - only run once on mount
   useEffect(() => {
     controls.start({
-      x: direction === "left" ? "-50%" : "0%",
+      x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
       transition: {
         repeat: Infinity,
         repeatType: "loop",
@@ -41,7 +43,8 @@ export const useMarquee = ({
         ease: "linear",
       },
     });
-  }, [controls, direction, speed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleMouseEnter = () => setIsPaused(true);
 

@@ -31,7 +31,7 @@ const Header = ({ className }: { className?: string }) => {
             "pointer-events-auto relative z-50 overflow-hidden",
             "bg-background/90 backdrop-blur-md border border-border dark:border-border/30",
             isFloating
-              ? "mt-2 sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
+              ? "mt-2 w-[95%] sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
               : "mt-0 w-full max-w-full rounded-none shadow-sm",
             className,
           )}
