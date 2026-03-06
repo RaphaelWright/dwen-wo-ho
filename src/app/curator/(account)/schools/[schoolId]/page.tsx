@@ -122,7 +122,7 @@ export default function SchoolDetailsPage() {
             onDisableClick={handleDisableSchool}
             searchComponent={
               <div className="flex items-center gap-3 w-full max-w-md md:w-110">
-                <div className="flex-1">
+                <div className="hidden 2xl:block flex-1">
                   <SearchDropdown
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
@@ -139,32 +139,49 @@ export default function SchoolDetailsPage() {
                 <NotificationBell
                   unreadCount={unreadCount}
                   onOpenNotifs={() => setNotifOpen(true)}
+                  className="hidden 2xl:flex"
                 />
               </div>
             }
           />
 
-          <FilterTabBar<SchoolTab>
-            tabs={tabs}
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            renderActions={(tab) =>
-              tab === "icons" ? (
-                <Button
-                  onClick={() => {
-                    setEditingIcon(null);
-                    setShowAddIconModal(true);
-                  }}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
-                >
-                  <Users className="w-4 h-4 mr-2" />
-                  Add Icon
-                </Button>
-              ) : null
-            }
-            className="mb-8"
-            activeTabLayoutId="school-details-filter"
-          />
+          <div className="grid 2xl:grid-cols-2 gap-4 mb-4 2xl:mb-0">
+            <FilterTabBar<SchoolTab>
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              renderActions={(tab) =>
+                tab === "icons" ? (
+                  <Button
+                    onClick={() => {
+                      setEditingIcon(null);
+                      setShowAddIconModal(true);
+                    }}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
+                  >
+                    <Users className="w-4 h-4 mr-2" />
+                    Add Icon
+                  </Button>
+                ) : null
+              }
+              className="2xl:mb-8"
+              activeTabLayoutId="school-details-filter"
+            />
+            <div className="2xl:hidden max-w-md">
+              <SearchDropdown
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
+                suggestions={suggestions}
+                quickFilters={quickFilters}
+                onSelectOption={(val) => {
+                  setSearchQuery(val);
+                }}
+                getSuggestionValue={(s) => s.name}
+                renderSuggestion={SchoolSearchSuggestionCard}
+              />
+            </div>
+          </div>
 
           {/* Content Area */}
           <div className="overflow-hidden">

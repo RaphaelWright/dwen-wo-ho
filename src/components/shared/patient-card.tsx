@@ -90,7 +90,7 @@ export default function PatientCard({
           }}
           whileHover={{
             scale: 1.03,
-            backgroundColor: "#8B5CF6",
+            backgroundColor: "var(--primary)",
             color: "#ffff",
           }}
           whileTap={{ scale: 0.97 }}

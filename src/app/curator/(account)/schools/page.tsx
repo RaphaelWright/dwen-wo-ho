@@ -67,7 +67,7 @@ export default function SchoolsPage() {
   return (
     <WidthConstraint>
       <div className="p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
           {/* Header */}
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
@@ -79,9 +79,9 @@ export default function SchoolsPage() {
           </div>
 
           {/* Header Actions */}
-          <div className="flex items-center gap-4">
+          <div className="hidden 2xl:flex items-center gap-4">
             {/* Test Notification Buttons */}
-            <div className=" hidden md:flex gap-2">
+            <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -153,7 +153,7 @@ export default function SchoolsPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2">
+        <div className="grid 2xl:grid-cols-2 gap-4">
           {/* Search & Filters */}
           <FilterTabBar<FilterType>
             tabs={FILTER_OPTIONS.map((opt) => ({
@@ -168,7 +168,7 @@ export default function SchoolsPage() {
             className="hidden lg:flex"
           />
 
-          <div className="w-full max-w-xl">
+          <div className="w-full max-w-md 2xl:max-w-xl">
             <SearchDropdown
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -218,7 +218,7 @@ export default function SchoolsPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 pb-20">
             {schoolsList.map((school, i) => (
               <div
                 key={school.id}
