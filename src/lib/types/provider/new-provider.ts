@@ -5,27 +5,20 @@ export type Patient = {
   schoolLabel: string;
   time: string;
   score: number;
-  emoji: string;
   avatarUrl?: string;
 };
 
-export type NotificationItem = {
-  id: number;
-  unread: boolean;
-  targetName: string;
-  targetSchoolId?: string | number;
-  targetSchoolName?: string;
-  text: string;
-  meta: string;
-  avatarUrl?: string;
-  targetId?: string;
-  targetType?: "patient" | "school" | "system";
-};
+import { Notification } from "@/lib/types/notification";
+
+// Alias for backward compatibility; NotificationItem now mirrors the unified Notification interface.
+export type NotificationItem = Notification & { id: number };
 
 export type ProfileData = {
   title: string;
   name: string;
   specialty: string;
+  avatar: string;
+  ranking: string;
   status: string;
   phone: string;
 };

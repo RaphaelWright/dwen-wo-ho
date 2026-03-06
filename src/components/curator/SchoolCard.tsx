@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { School, Loader2, MapPin } from "lucide-react";
@@ -5,11 +6,10 @@ import { ROUTES } from "@/lib/constants/routes";
 import { SchoolWithExtras } from "@/atoms/curator-schools";
 import { getFirstCampus } from "@/hooks/curator/useCuratorSchools";
 import { Badge } from "../ui/badge";
-import { cn } from "@/lib/utils";
 
 export function SchoolCard({ school }: { school: SchoolWithExtras }) {
   const firstCampus = getFirstCampus(school.campuses);
-  const displayNickname = school.nickname || school.name;
+  const displayNickname = school.name || school.nickname;
 
   // Format student count for display (e.g., 1.2k)
   const formatCount = (count: number) => {
@@ -18,99 +18,116 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
   };
 
   return (
-    <div className="w-full max-w-sm group/card mx-auto">
+    <motion.div
+      initial="initial"
+      whileHover="hover"
+      className="w-full max-w-sm mx-auto bg-card dark:bg-muted/80 rounded-xl"
+    >
       <Link
         href={`${ROUTES.curator.schools}/${school.id}`}
-        className={cn(
-          "cursor-pointer overflow-hidden relative card h-88 rounded-xl shadow-xl max-w-sm mx-auto flex flex-col justify-between p-4 transition-all duration-300 hover:shadow-2xl",
-          "bg-cover bg-center bg-no-repeat",
-        )}
+        className="block group overflow-hidden relative rounded-xl shadow-md transition-all duration-300  border border-border/50"
       >
-        {/* Background Image Layer */}
-        <div className="absolute inset-0 z-0">
-          {school.logo ? (
-            <Image
-              src={school.logo}
-              alt={school.name}
-              fill
-              className="object-cover transition-transform duration-700 group-hover/card:scale-110"
-            />
-          ) : (
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <School className="w-20 h-20 text-muted-foreground/30" />
-            </div>
-          )}
-        </div>
-
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/40 group-hover/card:bg-black/60 transition-colors duration-300 z-10" />
-
-        {/* Top Content */}
-        <div className="flex flex-row items-center space-x-4 z-20">
-          <div className="h-10 w-10 rounded-full border-2 border-white/20 bg-background/10 backdrop-blur-md overflow-hidden relative flex items-center justify-center">
+        {/* Header Section (Image Background) */}
+        <div className="relative h-74 w-full overflow-hidden">
+          {/* Background Image Layer */}
+          <motion.div
+            variants={{
+              initial: { scale: 1 },
+              hover: { scale: 0.9 },
+            }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute inset-0 z-0"
+          >
             {school.logo ? (
               <Image
                 src={school.logo}
-                alt="Logo"
+                alt={school.name}
                 fill
                 className="object-cover"
               />
             ) : (
-              <School className="w-5 h-5 text-white/80" />
+              <div className="w-full h-full bg-muted flex items-center justify-center">
+                <School className="w-20 h-20 text-muted-foreground/30" />
+              </div>
+            )}
+          </motion.div>
+
+          {/* Dark Overlay */}
+          <motion.div
+            variants={{
+              initial: { backgroundColor: "rgba(0, 0, 0, 0.2)" },
+              hover: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+            }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 z-10"
+          />
+
+          {/* Top Right Badge */}
+          <div className="absolute top-3 right-3 z-20">
+            {school.newPatientName && !school.isLoading && (
+              <Badge
+                variant="secondary"
+                className="bg-white hover:bg-white text-black shadow-sm font-semibold text-xs py-0.5 px-2.5 rounded-full"
+              >
+                New Patient
+              </Badge>
             )}
           </div>
 
-          <div className="flex flex-col">
-            <p className="font-semibold text-base text-gray-50 drop-shadow-sm">
-              {displayNickname}
-            </p>
-            <p className="text-xs text-gray-300 flex items-center gap-1">
-              <MapPin className="w-3 h-3" />
-              {firstCampus || "Main Campus"}
-            </p>
+          {/* Centered Circular Logo */}
+          <div className="absolute inset-0 z-20 flex items-center justify-center">
+            <motion.div
+              variants={{
+                initial: { scale: 1, y: 0 },
+                hover: { scale: 1.05, y: -5 },
+              }}
+              className="h-24 w-24 rounded-full border-4 border-yellow-500 bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-2xl"
+            >
+              {school.logo ? (
+                <Image
+                  src={school.logo}
+                  alt="Logo"
+                  fill
+                  className="object-center"
+                />
+              ) : (
+                <School className="w-10 h-10 text-white/80" />
+              )}
+            </motion.div>
           </div>
         </div>
 
-        {/* Badges / Status */}
-        <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
-          {school.newPatientName && !school.isLoading && (
-            <Badge
-              variant="secondary"
-              className="bg-white/90 text-black backdrop-blur-md shadow-sm text-xs py-0.5 px-2"
-            >
-              New Patient
-            </Badge>
-          )}
-        </div>
+        {/* Footer Section (White Background) */}
+        <div className="p-4 flex flex-col gap-3">
+          {/* School Name */}
+          <h1 className="font-bold text-lg md:text-xl text-foreground leading-tight line-clamp-1">
+            {displayNickname}
+          </h1>
 
-        {/* Bottom Content */}
-        <div className="z-20 space-y-3">
-          {/* Student Count / Loading */}
-          <div className="flex items-center gap-2">
+          {/* Bottom Row: Location & Count */}
+          <div className="flex items-center justify-between">
+            {/* Location */}
+            <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
+              <MapPin className="size-4 text-destructive" />
+              <span className="line-clamp-1">
+                {firstCampus || "Main Campus"}
+              </span>
+            </p>
+
+            {/* Student Count */}
             {school.isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-white/70" />
+              <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
             ) : (
               <Badge
-                variant="outline"
-                className="text-white border-white/30 bg-black/20 backdrop-blur-sm"
+                variant="secondary"
+                className="bg-primary/10 text-primary border-none font-semibold rounded-full px-3 py-0.5"
               >
                 {formatCount(school.studentCount ?? 0)} Students
               </Badge>
             )}
           </div>
-
-          <div>
-            <h1 className="font-bold text-xl md:text-2xl text-gray-50 leading-tight drop-shadow-md line-clamp-2">
-              {school.name}
-            </h1>
-            {school.motto && (
-              <p className="font-medium text-xs text-gray-300 mt-2 line-clamp-1 italic">
-                "{school.motto}"
-              </p>
-            )}
-          </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 }

@@ -14,6 +14,7 @@ export interface ProviderDetails {
   applicationDate?: string;
   bio?: string | null;
   providerName?: string; // Sometimes used instead of fullName in API responses
+  ranking?: string;
 }
 
 export interface Provider {
@@ -29,6 +30,7 @@ export interface Provider {
   status?: string | null;
   bio?: string | null;
   lastActive?: string;
+  ranking?: string;
 }
 
 export interface SchoolProvider {

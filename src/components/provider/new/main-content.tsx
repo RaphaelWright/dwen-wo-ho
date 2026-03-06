@@ -1,11 +1,17 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Filter } from "lucide-react";
+import { Filter, LayoutGrid, Search, Sparkles, X, Zap } from "lucide-react";
 import { NEW_PROVIDER_STATUS_CHIPS } from "@/data/mock-provider-data";
-import PatientCard from "./patient-card";
+import PatientCard from "@/components/shared/patient-card";
 import useNewProvider from "@/hooks/provider/use-new-provider";
-import { cn } from "@/lib/utils";
+import { FilterTabBar } from "@/components/shared/filter-tab-bar";
+
+const STATUS_TAB_ICONS: Record<string, typeof LayoutGrid> = {
+  all: LayoutGrid,
+  new: Sparkles,
+  action: Zap,
+};
 
 /**
  * Center scroll area — filter bar, status chips, and the patient card list.
@@ -30,7 +36,7 @@ export default function MainContent() {
   } = useNewProvider();
 
   return (
-    <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10">
+    <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10 lg:ml-4">
       {/* ── Active-school filter bar ── */}
       <AnimatePresence>
         {activeSchool !== "all" && (
@@ -45,67 +51,28 @@ export default function MainContent() {
             Showing patients from <strong>{schoolLabel}</strong>
             <button
               onClick={handleClearSchool}
-              className="ml-auto text-[11.5px] font-semibold cursor-pointer transition-colors text-muted-foreground hover:text-destructive"
+              className="ml-auto flex gap-1 text-[11.5px] font-semibold cursor-pointer transition-colors text-muted-foreground hover:text-destructive"
             >
-              ✕ Clear filter
+              <X /> Clear filter
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Status chips ── */}
-      <div className="flex gap-3 mb-6  overflow-x-auto overflow-y-hidden no-scrollbar">
-        {NEW_PROVIDER_STATUS_CHIPS.map((chip, i) => {
-          const isActive = activeStatus === chip.id;
-          const count = countForChip(chip.id);
-
-          return (
-            <motion.button
-              key={chip.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: i * 0.03 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setActiveStatus(chip.id)}
-              className={cn(
-                "flex items-center gap-3 px-4 py-2 rounded-full border cursor-pointer shrink-0",
-                isActive ? "bg-primary/10" : "bg-card",
-              )}
-            >
-              <div
-                className="size-2 rounded-full shrink-0 bg-destructive"
-                style={{ background: chip.color }}
-              />
-              <span
-                className="font-bold leading-none"
-                style={{
-                  color: isActive ? chip.color : "#f0f2f7",
-                }}
-              >
-                {count}
-              </span>
-              <span
-                className="text-[12.5px] font-medium"
-                style={{ color: isActive ? chip.color : "#8a93a8" }}
-              >
-                {chip.label}
-              </span>
-            </motion.button>
-          );
-        })}
-      </div>
-
-      {/* ── Section header ── */}
-      <div className="flex items-center justify-between mb-3.5">
-        <p className="text-[11.5px] font-bold tracking-[.08em] uppercase text-muted-foreground">
-          Patient Cases
-        </p>
-        <p className="text-[11.5px] text-muted-foreground">
-          Showing {filteredPatients.length} case
-          {filteredPatients.length !== 1 ? "s" : ""}
-        </p>
-      </div>
+      {/* ── Status filter tabs ── */}
+      <FilterTabBar
+        tabs={NEW_PROVIDER_STATUS_CHIPS.map((chip) => ({
+          key: chip.id,
+          label: chip.label,
+          icon: STATUS_TAB_ICONS[chip.id] ?? LayoutGrid,
+          count: countForChip(chip.id),
+        }))}
+        activeTab={activeStatus}
+        onTabChange={setActiveStatus}
+        showCount={true}
+        className="mb-6"
+        activeTabLayoutId="provider-main-status-filter"
+      />
 
       {/* ── Patient cards ── */}
       <div className="flex flex-col gap-2">
@@ -122,11 +89,11 @@ export default function MainContent() {
             animate={{ opacity: 1 }}
             className="text-center py-16"
           >
-            <p className="text-4xl mb-3">🔍</p>
-            <p className="font-semibold" style={{ color: "#8a93a8" }}>
-              No patients found
+            <p className="text-4xl mb-3">
+              <Search />
             </p>
-            <p className="text-[12.5px] mt-1" style={{ color: "#555e72" }}>
+            <p className="font-semibold">No patients found</p>
+            <p className="text-[12.5px] mt-1">
               Try adjusting your filters or search query
             </p>
           </motion.div>

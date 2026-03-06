@@ -1,0 +1,52 @@
+import {
+  Plus,
+  Send,
+  Archive,
+  BookMarked,
+  GraduationCap,
+  Building2,
+  TableProperties,
+} from "lucide-react";
+import type { FilterType } from "@/hooks/curator/useCuratorSchools";
+
+export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
+  id: FilterType;
+  label: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    id: "all",
+    label: "All Schools",
+    icon: (
+      <TableProperties className="size-4 text-slate-500/80 group-hover:text-slate-500" />
+    ),
+  },
+  {
+    id: "JHS",
+    label: "JHS Only",
+    icon: (
+      <BookMarked className="size-4 text-rose-500/80 group-hover:text-rose-500" />
+    ),
+  },
+  {
+    id: "SHS",
+    label: "SHS Only",
+    icon: (
+      <GraduationCap className="size-4 text-amber-500/80 group-hover:text-amber-500" />
+    ),
+  },
+  {
+    id: "COLLEGE",
+    label: "College Only",
+    icon: (
+      <Building2 className="size-4 text-sky-500/80 group-hover:text-sky-500" />
+    ),
+  },
+];
+
+export const SCHOOLS_LIST_SEARCH_PLACEHOLDERS = [
+  "Search schools by name, nickname, or campus...",
+  "Type 'SHS' to see senior high schools...",
+  "Looking for a specific campus location?",
+  "Find schools by their registration name...",
+];

@@ -7,10 +7,10 @@ export function SchoolHeaderCard({
   school,
   campusLabel,
   onEditClick,
+  searchComponent,
 }: SchoolHeaderCardProps) {
- 
   return (
-    <div className="bg-card rounded-3xl shadow-sm border border-border p-6 sm:p-8 mb-8 relative overflow-hidden group">
+    <div className="bg-card rounded-3xl shadow-sm border border-border p-6 sm:p-8 mb-8 relative group">
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
         {/* Logo */}
         <div onClick={onEditClick} className="cursor-pointer relative">
@@ -67,6 +67,13 @@ export function SchoolHeaderCard({
             )}
           </div>
         </div>
+
+        {/* Search Component injection point */}
+        {searchComponent && (
+          <div className="w-full md:w-auto md:ml-auto shrink-0 mt-4 md:mt-0 flex self-end md:self-center pb-2">
+            {searchComponent}
+          </div>
+        )}
       </div>
     </div>
   );

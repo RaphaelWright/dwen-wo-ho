@@ -15,6 +15,7 @@ export const FILTER_OPTIONS: { label: string; value: FilterType }[] = [
 ];
 
 import { parseCampuses } from "@/lib/utils/parseCampuses";
+import { useCuratorSchoolsSearch } from "./useCuratorSchoolsSearch";
 
 export function getFirstCampus(campuses: any): string {
   const parsed = parseCampuses(campuses);
@@ -27,11 +28,37 @@ export function useCuratorSchools() {
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
+
   const {
     data: allSchools = [],
     isLoading: schoolsLoading,
     isError,
   } = useSchoolsWithRefetch();
+
+  // Use cached schools when available
+  const mergedSchools = useMemo(() => {
+    if (allSchools.length === 0) return [];
+    if (cachedSchools.length > 0) {
+      return cachedSchools;
+    }
+    return allSchools as SchoolWithExtras[];
+  }, [allSchools, cachedSchools]);
+
+  const filterCounts = useMemo(
+    () => ({
+      all: mergedSchools.length,
+      JHS: mergedSchools.filter((s) => s.type === "JHS").length,
+      SHS: mergedSchools.filter((s) => s.type === "SHS").length,
+      COLLEGE: mergedSchools.filter((s) => s.type === "COLLEGE").length,
+    }),
+    [mergedSchools],
+  );
+
+  const { suggestions, quickFilters } = useCuratorSchoolsSearch({
+    searchQuery,
+    schools: allSchools as SchoolWithExtras[],
+    filterCounts,
+  });
 
   // Sync schools from React Query into the Jotai atom
   useEffect(() => {
@@ -43,15 +70,6 @@ export function useCuratorSchools() {
       schools: allSchools.map((s) => ({ ...s }) as SchoolWithExtras),
     }));
   }, [allSchools, setSchoolsState]);
-
-  // Use cached schools when available
-  const mergedSchools = useMemo(() => {
-    if (allSchools.length === 0) return [];
-    if (cachedSchools.length > 0) {
-      return cachedSchools;
-    }
-    return allSchools as SchoolWithExtras[];
-  }, [allSchools, cachedSchools]);
 
   const schoolsList = useMemo(() => {
     let filtered =
@@ -81,8 +99,11 @@ export function useCuratorSchools() {
     setActiveFilter,
     searchQuery,
     setSearchQuery,
+    filterCounts,
     isLoading: schoolsLoading || atomLoading,
     hasCachedData: cachedSchools.length > 0,
     isError,
+    suggestions,
+    quickFilters,
   };
 }

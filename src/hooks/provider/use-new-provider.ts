@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { useTheme } from "next-themes";
 import { useAtom } from "jotai";
 import {
   activeSchoolAtom,
@@ -19,6 +20,7 @@ import {
   NEW_PROVIDER_PATIENTS,
   NEW_PROVIDER_SCHOOLS,
 } from "@/data/mock-provider-data";
+import { PROVIDER_SEARCH_QUICK_FILTERS } from "@/lib/constants/provider-search";
 
 export default function useNewProvider() {
   /* ── Filter state ─────────────────────────────────── */
@@ -36,22 +38,24 @@ export default function useNewProvider() {
 
   /* ── Notifications ────────────────────────────────── */
   const [notifications, setNotifications] = useAtom(notificationsAtom);
-  const unreadCount = notifications.filter((n: any) => n.unread).length;
+  const unreadCount = notifications.filter((n: any) => !n.read).length;
 
   const markAllRead = useCallback(() => {
-    setNotifications((prev: any[]) =>
-      prev.map((n) => ({ ...n, unread: false })),
-    );
+    setNotifications((prev: any[]) => prev.map((n) => ({ ...n, read: true })));
   }, [setNotifications]);
 
   const markOneRead = useCallback(
-    (id: number) => {
+    (id: string | number) => {
       setNotifications((prev: any[]) =>
-        prev.map((n) => (n.id === id ? { ...n, unread: false } : n)),
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
       );
     },
     [setNotifications],
   );
+
+  const clearAllNotifications = useCallback(() => {
+    setNotifications([]);
+  }, [setNotifications]);
 
   /* ── Edit-field dialog state ──────────────────────── */
   const [editFieldKey, setEditFieldKey] = useAtom(editFieldKeyAtom);
@@ -107,6 +111,12 @@ export default function useNewProvider() {
   const schoolLabel =
     NEW_PROVIDER_SCHOOLS.find((s) => s.id === activeSchool)?.label ?? "";
 
+  const topSuggestions = searchQuery
+    ? filteredPatients.slice(0, 5)
+    : filteredPatients.slice(0, 4);
+
+  const { theme } = useTheme();
+
   /* Count per status chip after school + search filter (ignoring status) */
   const countForChip = (chipId: string) =>
     NEW_PROVIDER_PATIENTS.filter((p) => {
@@ -119,6 +129,8 @@ export default function useNewProvider() {
       const statusMatch = chipId === "all" || p.status === chipId;
       return schoolMatch && searchMatch && statusMatch;
     }).length;
+
+  const quickFilters = PROVIDER_SEARCH_QUICK_FILTERS;
 
   return {
     activeSchool,
@@ -140,6 +152,7 @@ export default function useNewProvider() {
     unreadCount,
     markAllRead,
     markOneRead,
+    clearAllNotifications,
     editFieldKey,
     setEditFieldKey,
     editFieldLabel,
@@ -151,7 +164,10 @@ export default function useNewProvider() {
     handleSelectSchool,
     handleClearSchool,
     filteredPatients,
+    topSuggestions,
+    theme,
     countForChip,
     schoolLabel,
+    quickFilters,
   };
 }

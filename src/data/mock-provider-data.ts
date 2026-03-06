@@ -48,17 +48,18 @@ export const DEFAULT_PROVIDER_PROFILE = {
   title: "Dr.",
   name: "James Okonkwo",
   specialty: "Clinical Psychologist",
-  status: "Let's talk mental health",
-  phone: "+1 617 555 0123",
   avatar:
     "https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=200&h=200&q=80",
+  ranking: "3",
+  status: "Available for sessions",
+  phone: "+233 54 123 4567",
 };
 
 export const NEW_PROVIDER_PATIENTS = [
   {
     id: 1,
     name: "Amara Osei-Mensah",
-    score: 9.2,
+    score: 1.8,
     status: "urgent",
     school: "ug",
     schoolLabel: "UG",
@@ -70,7 +71,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 2,
     name: "Kwame Asante",
-    score: 7.4,
+    score: 3.2,
     status: "new",
     school: "knust",
     schoolLabel: "KNUST",
@@ -82,7 +83,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 3,
     name: "Selina Boateng",
-    score: 6.0,
+    score: 7.8,
     status: "action",
     school: "ucc",
     schoolLabel: "UCC",
@@ -94,7 +95,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 4,
     name: "Nana Adjei",
-    score: 4.9,
+    score: 8.5,
     status: "follow-up",
     school: "ug",
     schoolLabel: "UG",
@@ -106,7 +107,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 5,
     name: "Fatima Abubakar",
-    score: 8.2,
+    score: 2.9,
     status: "new",
     school: "upsa",
     schoolLabel: "UPSA",
@@ -118,7 +119,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 6,
     name: "Emmanuel Darko",
-    score: 6.6,
+    score: 6.8,
     status: "referred",
     school: "knust",
     schoolLabel: "KNUST",
@@ -130,7 +131,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 7,
     name: "Akosua Yeboah",
-    score: 9.7,
+    score: 0.5,
     status: "urgent",
     school: "ucc",
     schoolLabel: "UCC",
@@ -142,7 +143,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 8,
     name: "Daniel Mensah-Bonsu",
-    score: 5.7,
+    score: 7.1,
     status: "action",
     school: "uds",
     schoolLabel: "UDS",
@@ -154,7 +155,7 @@ export const NEW_PROVIDER_PATIENTS = [
   {
     id: 9,
     name: "Aisha Mohammed",
-    score: 4.1,
+    score: 5.2,
     status: "ignored",
     school: "knust",
     schoolLabel: "KNUST",
@@ -171,8 +172,8 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     name: "Akosua Yeboah",
     school: "ucc",
     schoolLabel: "UCC · Crisis Alert",
-    time: "18 min ago",
-    score: 9.7,
+    time: "1 min ago",
+    score: 0.5,
     emoji: "👨🏽‍🎓",
     avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
   },
@@ -182,7 +183,7 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     school: "ug",
     schoolLabel: "UG · Severe Anxiety",
     time: "2 min ago",
-    score: 9.2,
+    score: 1.8,
     emoji: "👨🏽‍🎓",
     avatarUrl: "https://randomuser.me/api/portraits/women/65.jpg",
   },
@@ -192,7 +193,7 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     school: "knust",
     schoolLabel: "KNUST · New Intake",
     time: "14 min ago",
-    score: 7.4,
+    score: 3.2,
     emoji: "👨🏽‍🎓",
     avatarUrl: "https://randomuser.me/api/portraits/men/29.jpg",
   },
@@ -202,7 +203,7 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
     school: "upsa",
     schoolLabel: "UPSA · Intake",
     time: "5 hr ago",
-    score: 8.2,
+    score: 2.9,
     emoji: "👨🏽‍🎓",
     avatarUrl: "https://randomuser.me/api/portraits/women/12.jpg",
   },
@@ -211,6 +212,11 @@ export const NEW_PROVIDER_URGENT_PATIENTS = [
 export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   {
     id: 1,
+    type: "info",
+    message:
+      "Crisis alert flagged — expressed thoughts of self-harm. Immediate review required.",
+    timestamp: new Date(),
+    read: false,
     unread: true,
     avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
     targetName: "Akosua Yeboah",
@@ -223,6 +229,11 @@ export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   },
   {
     id: 2,
+    type: "info",
+    message:
+      "New urgent case submitted. Severe anxiety affecting daily functioning.",
+    timestamp: new Date(),
+    read: false,
     unread: true,
     avatarUrl: "https://randomuser.me/api/portraits/women/65.jpg",
     targetName: "Amara Osei-Mensah",
@@ -235,6 +246,11 @@ export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   },
   {
     id: 3,
+    type: "info",
+    message:
+      "Treatment milestone reached. Week 4 CBT session completed successfully.",
+    timestamp: new Date(),
+    read: false,
     unread: true,
     avatarUrl: "https://randomuser.me/api/portraits/women/12.jpg",
     targetName: "Selina Boateng",
@@ -247,6 +263,11 @@ export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   },
   {
     id: 4,
+    type: "info",
+    message:
+      "You have been added to UG as a care provider. 9 patients are now visible.",
+    timestamp: new Date(),
+    read: false,
     unread: true,
     avatarUrl:
       "https://upload.wikimedia.org/wikipedia/en/e/e9/University_of_Ghana_logo.png",
@@ -258,6 +279,11 @@ export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   },
   {
     id: 5,
+    type: "info",
+    message:
+      "New referral from campus counselor. High risk score — early assessment recommended.",
+    timestamp: new Date(),
+    read: false,
     unread: true,
     avatarUrl: "https://randomuser.me/api/portraits/women/44.jpg",
     targetName: "Fatima Abubakar",
@@ -270,6 +296,10 @@ export const NEW_PROVIDER_NOTIFICATIONS: NotificationItem[] = [
   },
   {
     id: 6,
+    type: "info",
+    message: "Clinical review meeting scheduled for next Tuesday at 2 PM.",
+    timestamp: new Date(),
+    read: true,
     unread: false,
     avatarUrl: "https://randomuser.me/api/portraits/men/32.jpg",
     targetName: "Nana Adjei",
@@ -329,11 +359,7 @@ export const NEW_PROVIDER_SCHOOLS = [
 export const NEW_PROVIDER_STATUS_CHIPS = [
   { id: "all", label: "All Patients", color: "#6366f1" }, // Indigo 500
   { id: "new", label: "New", color: "#10b981" }, // Emerald 500
-  { id: "action", label: "In Treatment", color: "#8B5CF6" }, // Violet 500
-  { id: "follow-up", label: "Follow-up", color: "#f59e0b" }, // Amber 500
-  { id: "referred", label: "Referred", color: "#38bdf8" }, // Sky 400
-  { id: "urgent", label: "Urgent", color: "#ef4444" }, // Red 500
-  { id: "ignored", label: "Ignored", color: "#555e72" }, // Slate 500
+  { id: "action", label: "Action", color: "#8B5CF6" }, // Violet 500
 ];
 
 export const NEW_PROVIDER_EDITABLE_FIELDS = [

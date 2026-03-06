@@ -12,21 +12,18 @@ import {
   useSchoolUrgentCare,
   useInvalidateSchoolProviders,
 } from "@/hooks/queries/useSchoolDetailsQuery";
+import { SCHOOL_TABS_CONFIG } from "@/lib/constants/components/curator/school-details";
+import {
+  formatProviderName,
+  getProviderTitle,
+} from "@/lib/utils/formatProviderName";
+import { ProviderDetails } from "@/lib/types/provider";
 
 export type CuratorSchoolTabType = "patients" | "icons" | "providers";
 
 import { parseCampuses } from "@/lib/utils/parseCampuses";
-
-function compactTimeAgo(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (seconds < 3600) return `${Math.max(1, Math.floor(seconds / 60))}h`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
-  return `${Math.floor(seconds / 86400)}d`;
-}
-
-export { compactTimeAgo, parseCampuses };
+import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
+import { useCuratorSchoolSearch } from "./useCuratorSchoolSearch";
 
 export function useCuratorSchoolDetails() {
   const params = useParams();
@@ -195,6 +192,61 @@ export function useCuratorSchoolDetails() {
     ? icons.filter((i) => i.schoolId === Number(school.id))
     : [];
 
+  const tabs = useMemo(
+    () =>
+      SCHOOL_TABS_CONFIG.map((tab) => ({
+        ...tab,
+        count:
+          tab.key === "patients"
+            ? patients.length
+            : tab.key === "icons"
+              ? schoolIcons.length
+              : providers.length,
+      })),
+    [patients.length, schoolIcons.length, providers.length],
+  );
+
+  const handleTabChange = useCallback(
+    (tab: CuratorSchoolTabType) => {
+      setActiveTab(tab);
+      setSearchQuery("");
+    },
+    [setSearchQuery],
+  );
+
+  const { suggestions, quickFilters } = useCuratorSchoolSearch({
+    searchQuery,
+    activeTab,
+    patients: filteredPatients,
+    schoolIcons,
+    providers,
+  });
+
+  const selectedProvider = useMemo(() => {
+    if (!selectedProviderEmail) return undefined;
+    const p = providers.find((p) => p.email === selectedProviderEmail);
+    if (!p) return undefined;
+
+    return {
+      id: p.id,
+      email: p.email,
+      fullName: formatProviderName(p.providerName, p.providerTitle),
+      providerTitle:
+        getProviderTitle(p.providerName, p.providerTitle) || undefined,
+      professionalTitle: p.specialty || undefined,
+      profileImage: p.profilePhotoURL || undefined,
+      createdAt: "",
+      updatedAt: "",
+      applicationStatus: p.applicationStatus as
+        | "PENDING"
+        | "APPROVED"
+        | "REJECTED",
+      applicationDate: "",
+      bio: undefined,
+      officePhoneNumber: p.officePhoneNumber || undefined,
+    } as ProviderDetails;
+  }, [selectedProviderEmail, providers]);
+
   return {
     // Route
     router,
@@ -207,6 +259,7 @@ export function useCuratorSchoolDetails() {
     icons: schoolIcons,
     urgentCare,
     campusLabel,
+    tabs,
 
     // Loading states
     isLoading,
@@ -219,6 +272,7 @@ export function useCuratorSchoolDetails() {
     // Tab
     activeTab,
     setActiveTab,
+    handleTabChange,
 
     // Search
     searchQuery,
@@ -235,6 +289,7 @@ export function useCuratorSchoolDetails() {
     showProviderModal,
     setShowProviderModal,
     selectedProviderEmail,
+    selectedProvider,
     showAddIconModal,
     setShowAddIconModal,
     editingIcon,
@@ -249,6 +304,10 @@ export function useCuratorSchoolDetails() {
 
     // Utilities
     compactTimeAgo,
+
+    // Search Logic
+    suggestions,
+    quickFilters,
 
     // Reloaders (for modal callbacks)
     loadProviders,

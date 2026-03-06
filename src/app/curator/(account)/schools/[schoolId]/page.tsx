@@ -4,22 +4,26 @@ import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
 import AddIconModal from "@/components/modals/add-icon";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import {
-  formatProviderName,
-  getProviderTitle,
-} from "@/lib/utils/formatProviderName";
 import { ROUTES } from "@/lib/constants/routes";
-import { ProviderDetails } from "@/lib/types/provider";
 import { useCuratorSchoolDetails } from "@/hooks/curator/useCuratorSchoolDetails";
 import {
   SchoolHeaderCard,
-  SchoolTabNavigation,
   PatientsTab,
   IconsTab,
-  UrgentCareSidebar,
+  UrgentPanel,
   ProvidersTab,
 } from "@/components/curator/school-details";
 import { Button } from "@/components/ui/button";
+import { FilterTabBar } from "@/components/shared/filter-tab-bar";
+import { SearchDropdown } from "@/components/shared/search-dropdown";
+import { SCHOOL_DETAILS_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/school-details";
+import type { SchoolTab } from "@/lib/types/components/curator/school-details";
+import { Users, ChevronLeft } from "lucide-react";
+import { formatUrgentCarePatients } from "@/lib/utils/formatUrgentCarePatients";
+import { motion } from "framer-motion";
+import { SchoolSearchSuggestionCard } from "@/components/curator/school-details/SchoolSearchSuggestionCard";
+import { NotificationBell } from "@/components/shared/notification-bell";
+import { useNotification } from "@/hooks/useNotification";
 
 export default function SchoolDetailsPage() {
   const {
@@ -34,11 +38,9 @@ export default function SchoolDetailsPage() {
     isLoading,
     patientsLoading,
     providersLoading,
-    urgentLoading,
     isActionLoading,
     error,
     activeTab,
-    setActiveTab,
     searchQuery,
     setSearchQuery,
     showEditModal,
@@ -59,7 +61,14 @@ export default function SchoolDetailsPage() {
     handleIconComplete,
     compactTimeAgo,
     loadProviders,
+    suggestions,
+    quickFilters,
+    tabs,
+    handleTabChange,
+    selectedProvider,
   } = useCuratorSchoolDetails();
+
+  const { unreadCount, setIsOpen: setNotifOpen } = useNotification();
 
   if (isLoading) {
     return (
@@ -90,53 +99,89 @@ export default function SchoolDetailsPage() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen flex flex-col bg-muted/5 animate-in fade-in duration-500">
-      <div className="flex-1 flex flex-col lg:flex-row items-start relative">
+      <div className="flex-1 flex flex-col lg:flex-row items-start relative w-full">
         {/* Main content */}
-        <div className="flex-1 min-w-0 flex flex-col px-4 py-6 sm:px-6 lg:px-8 xl:px-10 relative z-10 max-w-7xl mx-auto w-full">
+        <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 lg:px-8 xl:px-10 relative z-10">
+          <motion.button
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            whileHover={{ x: -4 }}
+            onClick={() => router.push(ROUTES.curator.schools)}
+            className="group mb-6 flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground w-fit"
+          >
+            <ChevronLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
+            Back to Schools
+          </motion.button>
+
           <SchoolHeaderCard
             school={school}
             campusLabel={campusLabel}
             onEditClick={() => setShowEditModal(true)}
             onDisableClick={handleDisableSchool}
+            searchComponent={
+              <div className="flex items-center gap-3 w-full max-w-md md:w-110">
+                <div className="flex-1">
+                  <SearchDropdown
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
+                    suggestions={suggestions}
+                    quickFilters={quickFilters}
+                    onSelectOption={(val) => {
+                      setSearchQuery(val);
+                    }}
+                    getSuggestionValue={(s) => s.name}
+                    renderSuggestion={SchoolSearchSuggestionCard}
+                  />
+                </div>
+                <NotificationBell
+                  unreadCount={unreadCount}
+                  onOpenNotifs={() => setNotifOpen(true)}
+                />
+              </div>
+            }
           />
 
-          <SchoolTabNavigation
+          <FilterTabBar<SchoolTab>
+            tabs={tabs}
             activeTab={activeTab}
-            onTabChange={(tab) => {
-              setActiveTab(tab);
-              setSearchQuery("");
-            }}
-            patientsCount={patients.length}
-            iconsCount={schoolIcons.length}
-            providersCount={providers.length}
-            onAddIconClick={() => {
-              setEditingIcon(null);
-              setShowAddIconModal(true);
-            }}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
+            onTabChange={handleTabChange}
+            renderActions={(tab) =>
+              tab === "icons" ? (
+                <Button
+                  onClick={() => {
+                    setEditingIcon(null);
+                    setShowAddIconModal(true);
+                  }}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Add Icon
+                </Button>
+              ) : null
+            }
+            className="mb-8"
+            activeTabLayoutId="school-details-filter"
           />
 
           {/* Content Area */}
-          <div className="bg-card rounded-3xl shadow-sm border border-border min-h-125 p-1 overflow-hidden">
+          <div className="overflow-hidden">
             {activeTab === "patients" && (
-              <div className="p-4 sm:p-6">
-                <PatientsTab
-                  patients={patients}
-                  isLoading={patientsLoading}
-                  schoolId={schoolId}
-                  compactTimeAgo={compactTimeAgo}
-                  searchQuery={searchQuery}
-                  onViewPatient={(patientId) =>
-                    router.push(
-                      `/curator/schools/${schoolId}/patients/${patientId}`,
-                    )
-                  }
-                />
-              </div>
+              <PatientsTab
+                patients={patients}
+                isLoading={patientsLoading}
+                schoolId={schoolId}
+                schoolName={school?.name}
+                compactTimeAgo={compactTimeAgo}
+                searchQuery={searchQuery}
+                onViewPatient={(patientId) =>
+                  router.push(
+                    `/curator/schools/${schoolId}/patients/${patientId}`,
+                  )
+                }
+              />
             )}
 
             {activeTab === "icons" && (
@@ -170,11 +215,18 @@ export default function SchoolDetailsPage() {
         </div>
 
         {/* Urgent Care Sidebar */}
-        <UrgentCareSidebar
-          urgentCare={urgentCare}
-          isLoading={urgentLoading}
-          compactTimeAgo={compactTimeAgo}
-          onLogoClick={() => router.push(ROUTES.curator.schools)}
+        <UrgentPanel
+          className="w-full lg:w-95 h-dvh lg:h-screen lg:sticky lg:top-0 border-l border-border/50 bg-destructive/5 shrink-0"
+          patients={formatUrgentCarePatients(
+            urgentCare.patients.filter(
+              (p) => p.lockedInScore && p.lockedInScore <= 4,
+            ),
+            school?.name,
+            compactTimeAgo,
+          )}
+          title="Urgent Care"
+          subtitle={`Across ${school.name ?? "this school"} · Latest first`}
+          emptyStateText="No urgent care patients"
         />
       </div>
 
@@ -208,34 +260,7 @@ export default function SchoolDetailsPage() {
           loadProviders();
         }}
         providerEmail={selectedProviderEmail}
-        provider={
-          providers.find((p) => p.email === selectedProviderEmail)
-            ? (() => {
-                const p = providers.find(
-                  (p) => p.email === selectedProviderEmail,
-                )!;
-                return {
-                  id: p.id,
-                  email: p.email,
-                  fullName: formatProviderName(p.providerName, p.providerTitle),
-                  providerTitle:
-                    getProviderTitle(p.providerName, p.providerTitle) ||
-                    undefined,
-                  professionalTitle: p.specialty || undefined,
-                  profileImage: p.profilePhotoURL || undefined,
-                  createdAt: "",
-                  updatedAt: "",
-                  applicationStatus: p.applicationStatus as
-                    | "PENDING"
-                    | "APPROVED"
-                    | "REJECTED",
-                  applicationDate: "",
-                  bio: undefined,
-                  officePhoneNumber: p.officePhoneNumber || undefined,
-                } as ProviderDetails;
-              })()
-            : undefined
-        }
+        provider={selectedProvider}
       />
 
       <AddIconModal

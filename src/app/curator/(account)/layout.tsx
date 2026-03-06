@@ -7,6 +7,8 @@ import PartnerCreationModal from "@/components/modals/partner-creation";
 import ReachModal from "@/components/modals/reach";
 import SchoolCreationModal from "@/components/modals/school-creation";
 import { useCuratorLayout } from "@/hooks/curator/useCuratorLayout";
+import { useNotification } from "@/hooks/useNotification";
+import NotificationsSheet from "@/components/shared/notification-sheet";
 
 export default function DashboardLayout({
   children,
@@ -32,6 +34,15 @@ export default function DashboardLayout({
     closePartnerModal,
     closeReachModal,
   } = useCuratorLayout();
+
+  const {
+    notifications,
+    isOpen: notifOpen,
+    setIsOpen: setNotifOpen,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications,
+  } = useNotification();
 
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
@@ -88,6 +99,14 @@ export default function DashboardLayout({
       />
 
       <ReachModal isOpen={showReachModal} onClose={closeReachModal} />
+      <NotificationsSheet
+        notifications={notifications}
+        isOpen={notifOpen}
+        onOpenChange={setNotifOpen}
+        markAllRead={markAllAsRead}
+        markOneRead={markAsRead}
+        clearAllNotifications={clearNotifications}
+      />
     </div>
   );
 }

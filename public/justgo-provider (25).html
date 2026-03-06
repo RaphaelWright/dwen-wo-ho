@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JustGo Health | Provider</title>
+<!-- Tab favicon: JustGo purple + -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23955aa4'/><text x='16' y='22' text-anchor='middle' font-size='20' font-weight='900' fill='white' font-family='Arial'>+</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue:#955aa4;
+  --blue-light:#FAF5F9;
+  --red:#ed1c24;
+  --red-light:#FCF1E9;
+  --purple:#955aa4;
+  --purple-light:#FAF5F9;
+  --green:#2bb673;
+  --green-light:#F6F9E6;
+  --bg:#ffffff;
+  --white:#fff;
+  --text:#111827;
+  --muted:#6B7280;
+  --border:#E5E7EB;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#ffffff;color:var(--text);display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── TOP BAR ── */
+.topbar {
+  background:#edfbf3;
+  border-bottom:1px solid #c8ecd8;
+  padding:0 32px;
+  height:80px;
+  display:flex;
+  align-items:center;
+  gap:24px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 1px 8px rgba(43,57,144,.06);
+}
+
+/* Logo */
+.logo {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-shrink:0;
+}
+.logo-ring {
+  width:34px;height:34px;
+  border:2.5px solid #955aa4;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-plus{font-size:1.1rem;font-weight:700;color:#955aa4;line-height:1;}
+.logo-text{font-weight:700;font-size:.95rem;color:var(--text);}
+
+
+
+/* Provider identity - center */
+.provider-identity {
+  display:flex;
+  align-items:center;
+  gap:20px;
+  flex:1;
+  justify-content:center;
+}
+.provider-photo {
+  width:58px;height:58px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-light),#c0d0f0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  flex-shrink:0;
+  box-shadow:0 3px 12px rgba(43,57,144,.18);
+  border:2.5px solid #dcc8e8;
+}
+.provider-info {}
+.provider-top-row{display:flex;align-items:center;gap:12px;}
+.provider-left{display:flex;flex-direction:column;}
+/* ── DR NAME: 5 purple options — uncomment one ── */
+/* A: deep purple */ /* .provider-name{font-size:1.35rem;font-weight:800;color:#6b21a8;line-height:1.1;display:flex;align-items:center;gap:6px;} .provider-dr{color:#6b21a8;font-weight:800;font-size:1.35rem;} */
+/* B: brand purple ✅ */
+.provider-name{font-size:1.35rem;font-weight:800;color:#955aa4;line-height:1.1;display:flex;align-items:center;gap:6px;}
+.provider-dr{color:#955aa4;font-weight:800;font-size:1.35rem;}
+/* C: vivid violet */ /* .provider-name{font-size:1.35rem;font-weight:800;color:#7c3aed;...} */
+/* D: warm plum    */ /* .provider-name{font-size:1.35rem;font-weight:800;color:#7e3f8f;...} */
+/* E: soft lavender*/ /* .provider-name{font-size:1.35rem;font-weight:800;color:#a855f7;...} */
+.provider-title{font-size:.82rem;color:#955aa4;font-weight:600;margin-top:5px;background:#fff;border:1.5px solid #dcc8e8;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;}
+.verified-check{width:24px;height:24px;flex-shrink:0;margin-left:7px;vertical-align:middle;display:inline-block;filter:drop-shadow(0 1px 3px rgba(43,57,144,.3));}
+
+
+
+
+.provider-specialty {
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--blue-light);
+  color:#955aa4;
+  font-size:.72rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  margin-top:5px;
+  letter-spacing:.03em;
+}
+
+/* Search */
+.topbar-search {
+  display:flex;align-items:center;gap:8px;
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:8px 14px;
+  background:#fff;
+  font-size:.82rem;
+  color:var(--muted);
+  min-width:220px;
+  cursor:text;
+  transition:border-color .2s;
+  flex-shrink:0;
+}
+.topbar-search:focus-within{border-color:#955aa4;}
+.topbar-search input{border:none;outline:none;font-family:inherit;font-size:.82rem;color:var(--text);background:transparent;width:100%;}
+.topbar-search input::placeholder{color:var(--muted);}
+
+.topbar-bell {
+  width:36px;height:36px;
+  border:1.5px solid var(--border);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.9rem;
+  position:relative;flex-shrink:0;
+}
+.bell-count{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--red);border-radius:50%;border:2px solid #edfbf3;font-size:.6rem;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;}
+
+/* ── MAIN LAYOUT ── */
+.layout {
+  display:flex;
+  flex:1;
+  min-height:0;
+}
+
+
+
+/* ── MAIN CONTENT ── */
+.main {
+  flex:1;
+  padding:28px 32px;
+  overflow-y:auto;
+}
+
+/* Stats row */
+.stats-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:28px;
+}
+.stat-card {
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  animation:fadeUp .4s ease both;
+  cursor:pointer;
+  transition:box-shadow .2s,border-color .2s;
+}
+.stat-card:hover{box-shadow:0 4px 16px rgba(149,90,164,.12);border-color:#dcc8e8;}
+.stat-card.active{border-color:#955aa4;box-shadow:0 4px 20px rgba(149,90,164,.12);background:#fff;}
+.stat-card:nth-child(1){animation-delay:.05s}
+.stat-card:nth-child(2){animation-delay:.10s}
+.stat-card:nth-child(3){animation-delay:.15s}
+.stat-card:nth-child(4){animation-delay:.20s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.stat-icon {
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.stat-icon.blue{background:#fff;border:1.5px solid var(--border);}
+.stat-icon.red{background:#fff;border:1.5px solid var(--border);}
+.stat-icon.green{background:#fff;border:1.5px solid var(--border);}
+.stat-icon.purple{background:#fff;border:1.5px solid var(--border);}
+.stat-num{font-size:1.6rem;font-weight:800;color:var(--text);line-height:1;}
+.stat-label{font-size:.75rem;color:var(--muted);margin-top:2px;}
+
+/* Section header */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.section-title{font-size:1rem;font-weight:700;color:var(--text);}
+.section-link{font-size:.8rem;font-weight:600;color:#955aa4;cursor:pointer;}
+
+/* Patient list */
+.patient-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.patient-row{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  transition:box-shadow .15s,transform .15s;
+  cursor:pointer;
+  animation:fadeUp .4s ease both;
+}
+.patient-row:hover{box-shadow:0 4px 16px rgba(43,57,144,.08);transform:translateX(2px);}
+.patient-row:nth-child(1){animation-delay:.1s}
+.patient-row:nth-child(2){animation-delay:.15s}
+.patient-row:nth-child(3){animation-delay:.2s}
+.patient-row:nth-child(4){animation-delay:.25s}
+.patient-row:nth-child(5){animation-delay:.3s}
+
+.score-badge{
+  width:54px;height:54px;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.score-badge svg { width:54px;height:54px; }
+.patient-info{flex:1;}
+.patient-name{font-weight:700;font-size:.93rem;color:var(--text);display:flex;align-items:center;gap:8px;}
+.patient-time{font-size:.73rem;color:var(--muted);font-weight:400;}
+.patient-comment{font-size:.78rem;color:var(--muted);margin-top:2px;}
+.patient-new{font-size:.68rem;font-weight:700;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:6px;margin-top:4px;display:inline-block;}
+.btn-open-case{background:#111;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;}
+.btn-open-case:hover{background:#333;}
+
+/* School tags on patients */
+.patient-school{font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:6px;margin-left:4px;border:1.5px solid;}
+.school-harvard{color:#A51C30;background:#fdf0f1;border-color:#e8a0a8;}
+.school-yale{color:#00356B;background:#eef3fb;border-color:#a0b8d8;}
+.school-columbia{color:#1D4F91;background:#eef3fb;border-color:#90a8d0;}
+.school-penn{color:#011F5B;background:#eef0f8;border-color:#9098c0;}
+.school-cornell{color:#B31B1B;background:#fdf0f0;border-color:#e0a0a0;}
+.school-dartmouth{color:#00693E;background:#eef8f2;border-color:#90c8a8;}
+.school-brown{color:#4E3629;background:#f5f0ec;border-color:#b8a898;}
+
+/* ── URGENT CARE PANEL ── */
+.urgent-panel {
+  width:290px;
+  flex-shrink:0;
+  background:#fff5f5;
+  border-left:1px solid #f5ddd8;
+  padding:24px 16px;
+  overflow-y:auto;
+  position:sticky;
+  top:80px;
+  height:calc(100vh - 80px);
+}
+.urgent-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.urgent-title{font-size:1.05rem;font-weight:800;color:var(--red);letter-spacing:-.01em;}
+.urgent-badge{background:var(--red);color:#fff;font-size:.68rem;font-weight:700;border-radius:20px;padding:4px 12px;}
+.urgent-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;
+  border-radius:12px;
+  cursor:pointer;
+  transition:box-shadow .15s;
+  border:1px solid rgba(255,255,255,.9);
+  margin-bottom:10px;
+  background:#fff;
+  box-shadow:0 1px 6px rgba(180,0,0,.07);
+}
+.urgent-item:hover{box-shadow:0 4px 14px rgba(180,0,0,.12);}
+.urgent-score{
+  width:42px;height:42px;border-radius:50%;
+  background:#fff;
+  border:1.5px solid #dcc8e8;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:800;color:#955aa4;flex-shrink:0;
+}
+.urgent-info{flex:1;}
+.urgent-name{font-size:.85rem;font-weight:700;color:var(--text);}
+.urgent-sub{font-size:.7rem;color:var(--muted);margin-top:2px;}
+.urgent-time{display:flex;align-items:center;gap:5px;margin-top:2px;}
+.urgent-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
+.urgent-time-text{font-size:.7rem;color:var(--muted);}
+
+/* Compare label */
+.compare-label{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+
+/* Rounded rectangle tabs with circle icons */
+.tab-row{display:flex;gap:12px;margin-bottom:28px;}
+.round-tab{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 28px 14px 14px;
+  border-radius:60px;
+  flex:1;
+  border:1.5px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.round-tab:hover{border-color:#955aa4;box-shadow:0 4px 14px rgba(149,90,164,.12);}
+.round-tab.active{background:linear-gradient(135deg,#f8f3fc,#efe6f7);border-color:#c4a0d8;box-shadow:0 4px 18px rgba(149,90,164,.15);}
+.round-tab.active .round-tab-num{color:#955aa4;font-size:1.3rem;}
+.round-tab.active .round-tab-label{color:#7a4a8a;font-weight:600;}
+.round-tab.active .tab-icon-circle{background:#fff;}
+
+.tab-icon-circle{
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.15rem;flex-shrink:0;
+}
+.purple-circle{background:#fff;border:1.5px solid #dcc8e8;}
+.green-circle{background:#fff;border:1.5px solid #c8ebd8;}
+.red-circle{background:#fff;border:1.5px solid #f5c0b0;}
+
+.tab-text{display:flex;flex-direction:row;align-items:center;gap:8px;}
+.round-tab-num{font-size:1.1rem;font-weight:800;color:#955aa4;line-height:1;}
+.round-tab-label{font-size:.85rem;font-weight:500;color:var(--muted);white-space:nowrap;}
+
+
+/* Topbar mini cards - same style as patient rows */
+.topbar-mini-card {
+  display:flex;align-items:center;gap:10px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:8px 14px 8px 8px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.mini-card-badge {
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.mini-card-info {}
+.mini-card-title {font-size:.82rem;font-weight:700;color:var(--text);line-height:1.2;}
+.mini-card-sub {font-size:.68rem;color:var(--muted);margin-top:2px;font-weight:500;}
+
+
+
+
+
+
+/* Two column layout */
+.content-row {
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+}
+
+/* Schools card - individual pill cards */
+.schools-card {
+  width:180px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  position:sticky;
+  top:100px;
+}
+.school-pill {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.school-pill:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateX(2px);}
+.school-pill.active{border-color:#955aa4;background:#faf5ff;box-shadow:0 4px 12px rgba(149,90,164,.12);}
+.sidebar-school-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0;}
+.school-pill-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.school-pill-name{font-size:.88rem;font-weight:600;color:var(--text);}
+.school-pill.active .school-pill-name{color:#955aa4;}
+
+/* Patients card */
+.patients-card {
+  flex:1;
+  min-width:0;
+}
+
+
+/* Plain specialty text */
+.provider-plain-title{font-size:.82rem;color:var(--muted);margin-top:4px;font-weight:500;}
+
+/* Rank circle */
+.provider-rank-circle{
+  width:44px;height:44px;border-radius:50%;
+  background:#111;border:2.5px solid #fff;
+  box-shadow:0 0 0 2px #111;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;flex-shrink:0;
+}
+.rank-circle-text{font-size:.7rem;font-weight:900;color:#955aa4;font-family:Georgia;line-height:1;}
+.rank-tooltip{
+  display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);
+  background:#111;color:#fff;font-size:.72rem;font-weight:600;
+  padding:6px 12px;border-radius:8px;white-space:nowrap;z-index:200;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+.rank-tooltip::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top:none;border-bottom-color:#111;}
+.provider-rank-circle:hover .rank-tooltip{display:block;}
+
+/* Stat tabs - segmented rectangular button */
+.tab-row{
+  display:inline-flex;
+  background:#f0e8f4;
+  border-radius:12px;
+  padding:4px;
+  gap:0;
+  margin-bottom:28px;
+  border:1px solid #dcc8e8;
+}
+.round-tab{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 20px;
+  border-radius:9px;
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+  white-space:nowrap;
+}
+.round-tab:hover{background:rgba(255,255,255,.6);}
+.round-tab.active{background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.12);}
+.round-tab.active .round-tab-num{color:#955aa4;}
+.round-tab.active .round-tab-label{color:#955aa4;}
+.round-tab.active .tab-icon-circle{background:#f0e8f4;}
+.tab-icon-circle{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;background:transparent;}
+.tab-text{display:flex;flex-direction:row;align-items:center;gap:6px;}
+.round-tab-num{font-size:1rem;font-weight:800;color:var(--muted);line-height:1;}
+.round-tab-label{font-size:.85rem;font-weight:500;color:var(--muted);white-space:nowrap;}
+
+/* School pill count badge */
+.school-pill-count{
+  margin-left:auto;
+  font-size:.7rem;font-weight:700;
+  color:var(--muted);
+  background:var(--border);
+  border-radius:20px;padding:1px 7px;
+}
+.school-pill.active .school-pill-count{background:#dcc8e8;color:#955aa4;}
+
+
+/* Apple-style separated pill buttons */
+.stat-pill-row {
+  display:flex;
+  justify-content:flex-start;
+  gap:10px;
+  margin-bottom:20px;
+}
+.stat-pill {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 28px;
+  border-radius:50px;
+  background:#f0f0f0;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .2s;
+}
+.stat-pill:hover{background:#e0e0e0;}
+/* ── STAT PILL ACTIVE: flat solid purple, white text ── */
+.stat-pill.active{background:#955aa4;border:none;box-shadow:0 4px 16px rgba(149,90,164,.3);}
+.stat-pill.active .stat-pill-num{color:#fff;}
+.stat-pill.active .stat-pill-label{color:rgba(255,255,255,.85);}
+.stat-pill.active .stat-pill-emoji{filter:brightness(10);}
+.stat-pill-emoji{font-size:.9rem;}
+.stat-pill-num{font-size:1rem;font-weight:800;color:#111;line-height:1;}
+.stat-pill-label{font-size:.85rem;font-weight:500;color:var(--muted);}
+
+/* ── SCHOOLS CARD BACKGROUND: 4 brand-color options ──
+   Uncomment ONE block to activate it
+   A: purple-light #FAF5F9  B: blue #2b3990 deep  C: red-tint #FCF1E9  D: green-tint #F6F9E6 */
+
+/* OPTION A — soft purple wash (current brand) */
+/* .schools-card-wrap{background:#FAF5F9;border-radius:16px;padding:14px 10px;border:1px solid #ede0f5;} */
+
+/* OPTION B — deep brand blue */
+/* .schools-card-wrap{background:#2b3990;border-radius:16px;padding:14px 10px;}
+.schools-header{color:#fff !important;}
+.school-pill{background:rgba(255,255,255,.15) !important;border-color:rgba(255,255,255,.2) !important;}
+.school-pill-name{color:#fff !important;}
+.school-pill-count{background:rgba(255,255,255,.2) !important;color:#fff !important;}
+.school-pill.active{background:rgba(255,255,255,.95) !important;border-color:#fff !important;}
+.school-pill.active .school-pill-name{color:#2b3990 !important;}
+.school-pill.active .school-pill-count{background:#2b3990 !important;color:#fff !important;} */
+
+/* OPTION C — warm red tint */
+.schools-card-wrap{background:#FCF1E9;border-radius:16px;padding:14px 10px;border:1px solid #f5d8c0;}
+.school-pill.active{background:#fff5f0 !important;border-color:#ed1c24 !important;}
+.school-pill.active .school-pill-name{color:#ed1c24 !important;}
+.school-pill.active .school-pill-count{background:#fde8e8 !important;color:#ed1c24 !important;}
+
+/* OPTION D — green tint */
+/* .schools-card-wrap{background:#F6F9E6;border-radius:16px;padding:14px 10px;border:1px solid #c8dfa0;}
+.school-pill.active{background:#edfbf3 !important;border-color:#2bb673 !important;}
+.school-pill.active .school-pill-name{color:#2bb673 !important;}
+.school-pill.active .school-pill-count{background:#c8ebd8 !important;color:#1a7a50 !important;} */
+
+/* Schools card inside wrap — remove its own bg */
+.schools-card{background:transparent !important;border:none !important;box-shadow:none !important;}
+
+/* ── STAT PILL EMOJI FIX: emoji always visible regardless of active state ── */
+.stat-pill.active .stat-pill-emoji{filter:none !important;}
+
+/* ── STAT PILL OPTION STYLES ──
+   3 options for Total Patients + New pill appearance
+   OPTION A (current): solid purple active, grey inactive
+   OPTION B: outlined style - purple border+text active, grey inactive
+   OPTION C: pill with colored left accent */
+
+/* Active pill base (shared) */
+.stat-pill.active{background:#955aa4;border:none;box-shadow:0 4px 16px rgba(149,90,164,.3);}
+.stat-pill.active .stat-pill-num{color:#fff;}
+.stat-pill.active .stat-pill-label{color:rgba(255,255,255,.85);}
+
+/* ── LOGOUT BUTTON: 6 design options ──
+   Switch class on .prov-logout between lo-A through lo-F */
+.lo-A{background:#fff;border:1.5px solid #e5e7eb;color:#374151;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-A:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626;}
+
+.lo-B{background:#111;border:none;color:#fff;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-B:hover{background:#333;}
+
+.lo-C{background:transparent;border:2px solid #955aa4;color:#955aa4;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-C:hover{background:#fef2f2;border-color:#dc2626;color:#dc2626;}
+
+.lo-D{background:linear-gradient(135deg,#ed1c24,#c0392b);border:none;color:#fff;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(237,28,36,.3);transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-D:hover{opacity:.88;}
+
+.lo-E{background:#fef2f2;border:1.5px solid #fca5a5;color:#dc2626;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:50px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-E:hover{background:#dc2626;color:#fff;border-color:#dc2626;}
+
+.lo-F{background:#fff;border:none;color:#6b7280;font-size:.88rem;font-weight:600;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.lo-F:hover{color:#dc2626;}
+
+/* specialty tag — fit content width */
+.specialty-A{font-size:.78rem;font-weight:700;margin-top:5px;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;background:#fde8e8;color:#c0392b;border:1.5px solid #f5b8b8;width:fit-content;white-space:nowrap;}
+
+/* ── PROVIDER MODAL ── */
+.prov-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:1000;align-items:center;justify-content:center;}
+.prov-overlay.open{display:flex;}
+.prov-modal{background:#fff;border-radius:20px;width:min(780px,95vw);max-height:90vh;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.22);animation:modalIn .22s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+.prov-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid #e5e7eb;background:#fff;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;transition:all .15s;z-index:10;}
+.prov-close:hover{background:#f5f5f5;color:#111;}
+
+/* Modal header */
+.prov-header{padding:28px 28px 0;display:flex;align-items:flex-start;gap:20px;}
+.prov-avatar{width:80px;height:80px;border-radius:50%;background:#f0e8f4;border:3px solid #fff;box-shadow:0 0 0 3px #955aa4;display:flex;align-items:center;justify-content:center;font-size:2.4rem;flex-shrink:0;}
+.prov-hinfo{}
+.prov-hname{font-size:1.35rem;font-weight:800;color:#111;margin-bottom:3px;}
+.prov-hspecialty{font-size:.88rem;color:#6b7280;margin-bottom:10px;}
+.prov-happroved{display:inline-flex;align-items:center;gap:6px;background:#edfbf3;border:1.5px solid #2bb673;color:#2bb673;font-size:.75rem;font-weight:800;padding:5px 14px;border-radius:20px;letter-spacing:.06em;}
+
+/* Tabs */
+.prov-tabs{display:flex;border-bottom:1px solid #e5e7eb;padding:0 28px;margin-top:20px;}
+.prov-tab{padding:12px 20px;font-size:.88rem;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.prov-tab:hover{color:#111;}
+.prov-tab.active{color:#955aa4;border-bottom-color:#955aa4;}
+.prov-tab-count{background:#f0e8f4;color:#955aa4;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:20px;}
+
+/* Body — two columns */
+.prov-body{display:flex;flex:1;overflow:hidden;}
+
+/* LEFT: editable info */
+.prov-left{width:260px;flex-shrink:0;border-right:1px solid #e5e7eb;overflow-y:auto;padding:20px;}
+.prov-left-title{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:12px;}
+.edit-field{padding:10px 12px;border-radius:10px;border:1.5px solid #e5e7eb;margin-bottom:8px;cursor:pointer;transition:all .15s;background:#fff;}
+.edit-field:hover{border-color:#955aa4;background:#faf7ff;}
+.edit-field-label{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:3px;}
+.edit-field-val{font-size:.85rem;font-weight:600;color:#111;}
+.edit-field-val input{border:none;outline:none;font-family:inherit;font-size:.85rem;font-weight:600;color:#111;width:100%;background:transparent;}
+.edit-hint{font-size:.6rem;color:#bbb;margin-top:10px;text-align:center;}
+
+/* RIGHT: main tab content */
+.prov-right{flex:1;overflow-y:auto;padding:24px 28px;}
+
+.prov-section{margin-bottom:24px;}
+.prov-section-title{font-size:.95rem;font-weight:700;color:#111;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+
+.prov-status-msg{background:#f6fdf9;border:1px solid #c8ebd8;border-radius:12px;padding:16px 20px;font-style:italic;color:#6b7280;font-size:.9rem;}
+
+.prov-contact-row{display:flex;gap:12px;}
+.prov-contact-card{flex:1;display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;}
+.prov-contact-icon{font-size:1.2rem;}
+.prov-contact-label{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:2px;}
+.prov-contact-val{font-size:.85rem;font-weight:600;color:#111;}
+
+.prov-dates-row{display:flex;gap:12px;margin-top:16px;}
+.prov-date-card{flex:1;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;}
+.prov-date-label{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:6px;}
+.prov-date-val{font-size:1rem;font-weight:700;color:#111;}
+
+.prov-specialty-tag{display:inline-flex;padding:6px 16px;border:1px solid #e5e7eb;border-radius:8px;font-size:.88rem;font-weight:600;color:#111;margin-top:6px;}
+
+/* School list */
+.prov-school-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;}
+.prov-school-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.prov-school-name{font-size:.9rem;font-weight:600;color:#111;}
+
+/* ── PROVIDER MODAL ── */
+.prov-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;}
+.prov-overlay.open{display:flex;}
+.prov-modal{background:#fff;border-radius:20px;width:min(800px,95vw);max-height:90vh;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.22);animation:modalIn .22s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.prov-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:1px solid #e5e7eb;background:#fff;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;z-index:10;transition:all .15s;}
+.prov-close:hover{background:#f5f5f5;color:#111;}
+.prov-header{padding:28px 28px 0;display:flex;align-items:flex-start;gap:20px;}
+.prov-avatar{width:80px;height:80px;border-radius:50%;background:#f0e8f4;border:3px solid #fff;box-shadow:0 0 0 3px #955aa4;display:flex;align-items:center;justify-content:center;font-size:2.4rem;flex-shrink:0;}
+.prov-hname{font-size:1.35rem;font-weight:800;color:#111;margin-bottom:3px;}
+.prov-hspecialty{font-size:.88rem;color:#6b7280;margin-bottom:10px;}
+.prov-happroved{display:inline-flex;align-items:center;gap:6px;background:#edfbf3;border:1.5px solid #2bb673;color:#2bb673;font-size:.75rem;font-weight:800;padding:5px 14px;border-radius:20px;letter-spacing:.06em;}
+.prov-tabs{display:flex;border-bottom:1px solid #e5e7eb;padding:0 28px;margin-top:20px;}
+.prov-tab{padding:12px 20px;font-size:.88rem;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.prov-tab:hover{color:#111;}
+.prov-tab.active{color:#955aa4;border-bottom-color:#955aa4;}
+.prov-tab-count{background:#f0e8f4;color:#955aa4;font-size:.68rem;font-weight:700;padding:1px 7px;border-radius:20px;}
+.prov-body{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* LEFT panel */
+.prov-left{width:240px;flex-shrink:0;border-right:1px solid #e5e7eb;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:4px;}
+.prov-left-title{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:10px;padding:0 4px;}
+
+/* Editable field */
+.edit-field{padding:12px 14px;border-radius:12px;border:1.5px solid #f0f0f0;cursor:pointer;transition:all .18s;background:#fafafa;position:relative;}
+.edit-field:hover{border-color:#955aa4;background:#faf5ff;box-shadow:0 2px 10px rgba(149,90,164,.1);}
+.edit-field:hover::after{content:'✏️';position:absolute;top:10px;right:10px;font-size:.75rem;}
+.edit-field-label{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:4px;}
+.edit-field-val{font-size:.92rem;font-weight:600;color:#111;line-height:1.3;}
+
+/* Read-only field */
+.readonly-field{padding:12px 14px;border-radius:12px;border:1.5px solid #f0f0f0;background:#f8f8f8;cursor:not-allowed;position:relative;}
+.readonly-field::after{content:'🔒';position:absolute;top:10px;right:10px;font-size:.7rem;opacity:.4;}
+.readonly-field .edit-field-label{color:#ccc;}
+.readonly-field .edit-field-val{color:#999;}
+
+/* RIGHT panel */
+.prov-right{flex:1;overflow-y:auto;padding:24px 28px;}
+.prov-section{margin-bottom:24px;}
+.prov-section-title{font-size:.95rem;font-weight:700;color:#111;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.prov-status-msg{background:#f6fdf9;border:1px solid #c8ebd8;border-radius:12px;padding:16px 20px;font-style:italic;color:#374151;font-size:.9rem;line-height:1.6;}
+.prov-contact-row{display:flex;gap:12px;}
+.prov-contact-card{flex:1;display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;}
+.prov-contact-icon{font-size:1.2rem;}
+.prov-contact-label{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:3px;}
+.prov-contact-val{font-size:.85rem;font-weight:600;color:#111;}
+.prov-dates-row{display:flex;gap:12px;margin-top:16px;}
+.prov-date-card{flex:1;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;}
+.prov-date-label{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:6px;}
+.prov-date-val{font-size:1rem;font-weight:700;color:#111;}
+.prov-specialty-tag{display:inline-flex;padding:6px 16px;border:1px solid #e5e7eb;border-radius:8px;font-size:.88rem;font-weight:600;color:#111;margin-top:6px;}
+
+/* Schools */
+.prov-school-item{display:flex;align-items:center;gap:14px;padding:13px 16px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;}
+.school-logo{width:34px;height:34px;object-fit:contain;flex-shrink:0;border-radius:4px;}
+.school-color-dot{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff;letter-spacing:.02em;}
+.prov-school-name{font-size:.9rem;font-weight:600;color:#111;}
+
+/* School display toggle */
+.school-display-toggle{display:flex;gap:8px;margin-bottom:14px;}
+.school-toggle-btn{padding:5px 14px;border-radius:20px;border:1.5px solid #e5e7eb;background:#fff;font-size:.75rem;font-weight:700;cursor:pointer;color:#6b7280;transition:all .15s;font-family:inherit;}
+.school-toggle-btn.active{background:#955aa4;border-color:#955aa4;color:#fff;}
+
+/* Footer */
+.prov-footer{padding:14px 28px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.prov-left-hint{font-size:.78rem;color:#bbb;font-style:italic;}
+
+/* ── LOGOUT OPTIONS ── */
+.logout-btn-wrap{position:relative;}
+.prov-logout{background:#fff;border:1.5px solid #e5e7eb;color:#374151;font-size:.88rem;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.prov-logout:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626;}
+.logout-options{display:none;position:absolute;bottom:calc(100% + 8px);right:0;background:#fff;border:1.5px solid #e5e7eb;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.15);overflow:hidden;min-width:200px;z-index:100;}
+.logout-options.open{display:block;}
+.logout-opt{padding:13px 18px;font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;color:#374151;transition:background .12s;border-bottom:1px solid #f5f5f5;}
+.logout-opt:last-child{border-bottom:none;}
+.logout-opt:hover{background:#fef2f2;color:#dc2626;}
+
+/* ── EDIT POPUP ── */
+.edit-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;align-items:center;justify-content:center;}
+.edit-overlay.open{display:flex;}
+.edit-popup{background:#fff;border-radius:20px;padding:32px;width:min(460px,92vw);box-shadow:0 20px 50px rgba(0,0,0,.25);animation:modalIn .18s ease;}
+.edit-popup-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.edit-popup-icon{width:44px;height:44px;border-radius:12px;background:#f3eeff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.edit-popup-title{font-size:1.15rem;font-weight:800;color:#111;}
+.edit-popup-subtitle{font-size:.8rem;color:#9ca3af;margin-top:2px;}
+
+/* field types inside popup */
+.popup-field-wrap{margin-bottom:20px;}
+.popup-field-label{font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;}
+.edit-popup-input{width:100%;border:1.5px solid #e5e7eb;border-radius:12px;padding:14px 16px;font-size:1rem;font-family:inherit;color:#111;outline:none;transition:border-color .15s;resize:none;}
+.edit-popup-input:focus{border-color:#955aa4;box-shadow:0 0 0 3px rgba(149,90,164,.1);}
+.char-count{font-size:.72rem;color:#9ca3af;text-align:right;margin-top:5px;}
+.char-count.over{color:#ef4444;}
+
+/* title selector */
+.title-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.title-opt{padding:10px 6px;border-radius:10px;border:1.5px solid #e5e7eb;background:#fff;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;color:#374151;transition:all .15s;font-family:inherit;}
+.title-opt:hover{border-color:#955aa4;color:#955aa4;}
+.title-opt.active{background:#955aa4;border-color:#955aa4;color:#fff;}
+
+/* specialty selector pills */
+.spec-opt{padding:7px 14px;border-radius:20px;border:1.5px solid #e5e7eb;background:#fff;font-size:.8rem;font-weight:600;cursor:pointer;color:#374151;transition:all .15s;font-family:inherit;white-space:nowrap;}
+.spec-opt:hover{border-color:#955aa4;color:#955aa4;}
+.spec-opt.active{background:#955aa4;border-color:#955aa4;color:#fff;}
+
+/* phone field */
+.phone-wrap{display:flex;gap:0;border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;transition:border-color .15s;}
+.phone-wrap:focus-within{border-color:#955aa4;box-shadow:0 0 0 3px rgba(149,90,164,.1);}
+.country-select{border:none;outline:none;padding:14px 10px;font-size:.95rem;font-family:inherit;background:#f8f8f8;cursor:pointer;border-right:1.5px solid #e5e7eb;min-width:90px;color:#111;}
+.phone-number-input{border:none;outline:none;padding:14px 14px;font-size:1rem;font-family:inherit;color:#111;flex:1;background:#fff;}
+
+/* photo upload area */
+.photo-upload-area{border:2px dashed #e5e7eb;border-radius:14px;padding:28px;text-align:center;cursor:pointer;transition:all .18s;background:#fafafa;}
+.photo-upload-area:hover{border-color:#955aa4;background:#faf5ff;}
+.photo-upload-area .upload-icon{font-size:2rem;margin-bottom:8px;}
+.photo-upload-area .upload-text{font-size:.88rem;font-weight:600;color:#374151;}
+.photo-upload-area .upload-sub{font-size:.75rem;color:#9ca3af;margin-top:4px;}
+
+.edit-popup-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
+.edit-popup-cancel{background:#fff;border:1.5px solid #e5e7eb;color:#6b7280;font-size:.88rem;font-weight:700;padding:11px 22px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.edit-popup-cancel:hover{background:#f5f5f5;color:#111;}
+.edit-popup-save{background:#955aa4;border:none;color:#fff;font-size:.88rem;font-weight:700;padding:11px 26px;border-radius:12px;cursor:pointer;font-family:inherit;transition:background .15s;}
+.edit-popup-save:hover{background:#7a4a8a;}
+
+/* sidebar logos */
+.sidebar-school-logo{width:22px;height:22px;object-fit:contain;flex-shrink:0;border-radius:3px;}
+.sidebar-color-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;}
+
+.schools-header{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:12px;padding:0 2px;letter-spacing:.01em;}
+.schools-count{color:var(--muted);font-weight:500;}
+
+.verified-circle{
+  width:22px;height:22px;border-radius:50%;
+  background:#1da1f2;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-left:6px;
+  box-shadow:0 1px 4px rgba(29,161,242,.35);
+  flex-shrink:0;
+}
+
+
+
+
+
+/* ── OPTIONS LAYOUT ── */
+.options-row{display:flex;gap:14px;align-items:center;}
+.photo-wrap,.rank-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.opt-tag{font-size:.58rem;font-weight:800;color:var(--muted);letter-spacing:.05em;text-align:center;}
+.opt-tag-inline{font-size:.5rem;font-weight:800;color:inherit;margin-left:2px;vertical-align:super;}
+
+/* Photo options */
+.photo-opt{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.photo-opt-a{border-radius:50%;border:3px solid #bbb;background:#f2f2f2;}
+.photo-opt-b{border-radius:50%;background:#fff;box-shadow:0 0 0 3px #fff,0 0 0 5.5px #955aa4;}
+.photo-opt-c{border-radius:14px;background:#f2f2f2;border:2px solid #ddd;box-shadow:0 3px 12px rgba(0,0,0,.12);}
+
+/* Verification options */
+.ver-opt{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:5px;flex-shrink:0;cursor:default;}
+.ver-opt-a{background:#1da1f2;box-shadow:0 1px 4px rgba(29,161,242,.35);}
+.ver-opt-b{background:#fff;border:2px solid #955aa4;}
+.ver-opt-c{background:#2bb673;box-shadow:0 1px 4px rgba(43,182,115,.35);}
+
+/* Ranking options */
+.rank-opt{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0;}
+.rank-opt-text{font-size:.7rem;font-weight:900;font-family:Georgia;line-height:1;}
+/* A: black fill, white ring, purple text */
+.rank-opt-a{background:#111;box-shadow:0 0 0 2.5px #fff,0 0 0 5px #111;}
+.rank-opt-a .rank-opt-text{color:#955aa4;}
+/* B: white fill, purple border, purple text */
+.rank-opt-b{background:#fff;border:2.5px solid #955aa4;}
+.rank-opt-b .rank-opt-text{color:#955aa4;}
+/* C: double ring - thin black outer, white gap, black fill, purple text */
+.rank-opt-c{background:#111;box-shadow:0 0 0 2.5px #fff, 0 0 0 5px #111;border:none;}
+.rank-opt-c .rank-opt-text{color:#955aa4;font-size:.72rem;}
+
+.rank-tooltip{display:none;position:absolute;top:50px;left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:.68rem;font-weight:600;padding:5px 10px;border-radius:8px;white-space:nowrap;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.rank-opt:hover .rank-tooltip{display:block;}
+
+
+/* 6 ranking options */
+/* 1: black fill, white gap ring, black outer ring — purple text */
+.rk-1{background:#111;box-shadow:0 0 0 2.5px #fff,0 0 0 5px #111;}
+.rk-1 .rank-opt-text{color:#955aa4;}
+
+/* 2: white fill, thick purple border — purple text */
+.rk-2{background:#fff;border:3px solid #955aa4;}
+.rk-2 .rank-opt-text{color:#955aa4;}
+
+/* 3: purple fill, white text */
+.rk-3{background:#955aa4;box-shadow:0 0 0 2.5px #fff,0 0 0 5px #955aa4;}
+.rk-3 .rank-opt-text{color:#fff;}
+
+/* 4: white fill, double ring — black outer, purple inner border, purple text */
+.rk-4{background:#fff;border:2px solid #955aa4;box-shadow:0 0 0 4px #111;}
+.rk-4 .rank-opt-text{color:#955aa4;}
+
+/* 5: dark gradient fill, gold text — premium feel */
+.rk-5{background:linear-gradient(135deg,#1a1a2e,#2d2d2d);border:2px solid #FFD700;}
+.rk-5 .rank-opt-text{color:#FFD700;}
+
+/* 6: green fill, white ring, white text */
+.rk-6{background:#2bb673;box-shadow:0 0 0 2.5px #fff,0 0 0 5px #2bb673;}
+.rk-6 .rank-opt-text{color:#fff;}
+
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+
+  /* Topbar */
+  .topbar {
+    padding: 0 16px;
+    height: auto;
+    min-height: 64px;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .logo-text { display: none; }
+
+  .provider-identity {
+    flex: none;
+    width: 100%;
+    order: 2;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .photo-opt-b {
+    width: 46px;
+    height: 46px;
+  }
+
+  .provider-name {
+    font-size: 1.05rem;
+  }
+
+  .provider-dr { font-size: 1.05rem; }
+
+  .options-row { gap: 10px; }
+
+  .rank-opt { width: 36px; height: 36px; }
+  .rank-opt-text { font-size: .62rem; }
+
+  .ver-opt { width: 18px; height: 18px; }
+
+  .topbar-search {
+    order: 3;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .topbar-bell { order: 1; margin-left: auto; }
+
+  /* Layout */
+  .layout { flex-direction: column; }
+
+  /* Main */
+  .main { padding: 16px; }
+
+  /* Stat pills */
+  .stat-pill-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    gap: 8px;
+    scrollbar-width: none;
+  }
+  .stat-pill-row::-webkit-scrollbar { display: none; }
+  .stat-pill { padding: 9px 16px; flex-shrink: 0; }
+  .stat-pill-num { font-size: .9rem; }
+  .stat-pill-label { font-size: .78rem; }
+
+  /* Content row — stack vertically on mobile */
+  .content-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Schools card — horizontal scroll on mobile */
+  .schools-card {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    position: static;
+  }
+  .schools-card::-webkit-scrollbar { display: none; }
+  .schools-header { display: none; }
+
+  .school-pill {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-radius: 50px;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .school-pill-count {
+    font-size: .65rem;
+    padding: 1px 5px;
+  }
+
+  /* Patient rows */
+  .patient-row {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .score-badge { width: 44px; height: 44px; }
+
+  .btn-open-case {
+    padding: 8px 14px;
+    font-size: .75rem;
+  }
+
+  .patient-school { display: none; }
+
+  /* Urgent panel — below main on mobile */
+  .urgent-panel {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-left: none;
+    border-top: 1px solid #f0d8d0;
+    padding: 16px;
+  }
+
+  /* Urgent items horizontal scroll */
+  #urgentList {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #urgentList::-webkit-scrollbar { display: none; }
+
+  .urgent-item {
+    flex-shrink: 0;
+    width: 180px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .provider-name { font-size: .95rem; }
+  .stat-pill { padding: 8px 12px; }
+  .stat-pill-label { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<header class="topbar">
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-ring"><span class="logo-plus">+</span></div>
+    <span class="logo-text">JustGo Health</span>
+  </div>
+
+
+  <!-- Provider Identity (center) — everything clickable opens provider modal -->
+  <div class="provider-identity" style="cursor:pointer;" onclick="openProvModal()">
+
+    <!-- Photo: Option B - circle with purple ring -->
+    <div class="photo-opt photo-opt-b"><span style="font-size:1.9rem">👨🏽‍⚕️</span></div>
+
+    <div class="provider-info">
+      <div class="provider-top-row">
+        <div class="provider-left">
+          <div class="provider-name">
+            <span class="provider-dr">Dr.</span> James Okonkwo
+            <span class="ver-opt ver-opt-c"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <div class="provider-specialty-plain" style="display:none"></div>
+          <span class="specialty-A">🧠 Clinical Psychologist</span>
+        </div>
+        <!-- Ranking: option 3 only -->
+        <div class="options-row" style="margin-top:6px;gap:16px;">
+          <div class="rank-wrap">
+            <div class="rank-opt rk-3"><span class="rank-opt-text">#3</span></div>
+            <span class="opt-tag">3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="topbar-search">
+    🔍 <input type="text" placeholder="Search patients..."/>
+  </div>
+
+  <!-- Bell -->
+  <div class="topbar-bell">
+    🔔
+    <span class="bell-count">5</span>
+  </div>
+</header>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="layout">
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- Two column: schools card + patients card -->
+    <div class="content-row">
+
+      <!-- Schools container -->
+      <div class="schools-card-wrap">
+      <div class="schools-card">
+        <div class="schools-header">Schools <span class="schools-count">(7)</span></div>
+        <div class="school-pill active" onclick="filterSchool(this,'all')">
+          <span class="school-pill-dot" style="background:#111;font-size:.7rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;">All</span>
+          <span class="school-pill-name">All Schools</span>
+          <span class="school-pill-count">57</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Harvard')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Harvard_University_logo.svg" class="sidebar-school-logo" alt="Harvard"/>
+          <span class="school-pill-name">Harvard</span>
+          <span class="school-pill-count">12</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Yale')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Yale_University_logo.svg" class="sidebar-school-logo" alt="Yale"/>
+          <span class="school-pill-name">Yale</span>
+          <span class="school-pill-count">8</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Columbia')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Columbia_University_shield.svg" class="sidebar-school-logo" alt="Columbia"/>
+          <span class="school-pill-name">Columbia</span>
+          <span class="school-pill-count">10</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Penn')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/UPenn_shield_with_banner.svg" class="sidebar-school-logo" alt="Penn"/>
+          <span class="school-pill-name">Penn</span>
+          <span class="school-pill-count">6</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Cornell')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Cornell_University_seal.svg" class="sidebar-school-logo" alt="Cornell"/>
+          <span class="school-pill-name">Cornell</span>
+          <span class="school-pill-count">9</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Dartmouth')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Dartmouth_College_wordmark.svg" class="sidebar-school-logo" alt="Dartmouth"/>
+          <span class="school-pill-name">Dartmouth</span>
+          <span class="school-pill-count">5</span>
+        </div>
+        <div class="school-pill" onclick="filterSchool(this,'Brown')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Brown_University_Logo.svg" class="sidebar-school-logo" alt="Brown"/>
+          <span class="school-pill-name">Brown</span>
+          <span class="school-pill-count">7</span>
+        </div>
+      </div>
+      </div><!-- end schools-card-wrap -->
+
+      <!-- Patients container -->
+      <div class="patients-card">
+        <div class="stat-pill-row">
+          <div class="stat-pill active" data-filter="all">
+            <span class="stat-pill-emoji">👥</span>
+            <span class="stat-pill-num">78</span>
+            <span class="stat-pill-label">Total Patients</span>
+          </div>
+          <div class="stat-pill" data-filter="new">
+            <span class="stat-pill-emoji">🆕</span>
+            <span class="stat-pill-num">14</span>
+            <span class="stat-pill-label">New</span>
+          </div>
+          <div class="stat-pill" data-filter="action">
+            <span class="stat-pill-emoji">⚡</span>
+            <span class="stat-pill-num">34</span>
+            <span class="stat-pill-label">Action</span>
+          </div>
+        </div>
+        <div class="patient-list" id="patientList"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Urgent Care Panel -->
+  <aside class="urgent-panel">
+    <div class="urgent-header">
+      <div class="urgent-title">🚨 Urgent Care</div>
+      <div class="urgent-badge">34 Active</div>
+    </div>
+    <div id="urgentList"></div>
+  </aside>
+
+</div>
+
+<script>
+const allPatients = [
+  {score:5.4,name:'James Smith',time:'3d ago',comment:'High priority',school:'Harvard',isNew:false},
+  {score:4.3,name:'William Johnson',time:'1d ago',comment:'Mild fever reported',school:'Yale',isNew:true},
+  {score:6.4,name:'Robert Williams',time:'1d ago',comment:'High priority',school:'Columbia',isNew:false},
+  {score:5.6,name:'Michael Brown',time:'3d ago',comment:'Mild fever reported',school:'Penn',isNew:true},
+  {score:8.8,name:'David Jones',time:'3d ago',comment:'Follow-up required',school:'Cornell',isNew:false},
+  {score:3.8,name:'Richard Garcia',time:'5d ago',comment:'No comments',school:'Dartmouth',isNew:true},
+  {score:6.4,name:'Joseph Miller',time:'1d ago',comment:'Under observation',school:'Brown',isNew:false},
+  {score:2.8,name:'Thomas Davis',time:'12h ago',comment:'Under observation',school:'Harvard',isNew:false},
+  {score:9.7,name:'Charles Wilson',time:'1d ago',comment:'Under observation',school:'Yale',isNew:true},
+  {score:3.9,name:'Daniel Anderson',time:'8d ago',comment:'No comments',school:'Columbia',isNew:false},
+  {score:4.1,name:'Matthew Taylor',time:'2d ago',comment:'Awaiting results',school:'Penn',isNew:true},
+  {score:6.8,name:'Anthony Thomas',time:'2d ago',comment:'High priority',school:'Cornell',isNew:true},
+  {score:2.8,name:'Mark Moore',time:'12h ago',comment:'Follow-up required',school:'Dartmouth',isNew:false},
+  {score:8.5,name:'Donald Jackson',time:'1d ago',comment:'Under observation',school:'Brown',isNew:true},
+  {score:3.5,name:'Steven Martin',time:'12h ago',comment:'Under observation',school:'Harvard',isNew:false},
+  {score:6.3,name:'Paul Lee',time:'3d ago',comment:'No comments',school:'Yale',isNew:true},
+  {score:5.7,name:'Andrew Perez',time:'6d ago',comment:'Follow-up required',school:'Columbia',isNew:false},
+  {score:7.6,name:'Kenneth Thompson',time:'12h ago',comment:'Follow-up required',school:'Penn',isNew:true},
+  {score:7.7,name:'Joshua White',time:'2d ago',comment:'High priority',school:'Cornell',isNew:true},
+  {score:3.4,name:'Kevin Harris',time:'1d ago',comment:'Follow-up required',school:'Dartmouth',isNew:false},
+  {score:9.7,name:'Brian Sanchez',time:'6d ago',comment:'Follow-up required',school:'Brown',isNew:true},
+  {score:8.9,name:'George Clark',time:'5d ago',comment:'Under observation',school:'Harvard',isNew:true},
+  {score:8.7,name:'Edward Ramirez',time:'1d ago',comment:'Mild fever reported',school:'Yale',isNew:false},
+  {score:3.0,name:'Ronald Lewis',time:'4d ago',comment:'No comments',school:'Columbia',isNew:true},
+  {score:2.8,name:'Timothy Robinson',time:'3d ago',comment:'Under observation',school:'Penn',isNew:false},
+  {score:8.5,name:'Jason Walker',time:'6d ago',comment:'Under observation',school:'Cornell',isNew:false},
+  {score:5.2,name:'Jeffrey Young',time:'1d ago',comment:'Follow-up required',school:'Dartmouth',isNew:true},
+  {score:9.2,name:'Ryan Allen',time:'6d ago',comment:'Under observation',school:'Brown',isNew:false},
+  {score:8.7,name:'Jacob King',time:'3d ago',comment:'Awaiting results',school:'Harvard',isNew:true},
+  {score:3.3,name:'Gary Wright',time:'5d ago',comment:'Follow-up required',school:'Yale',isNew:true},
+  {score:7.7,name:'Nicholas Scott',time:'3d ago',comment:'Under observation',school:'Columbia',isNew:false},
+  {score:8.0,name:'Eric Torres',time:'1d ago',comment:'Under observation',school:'Penn',isNew:false},
+  {score:9.1,name:'Jonathan Nguyen',time:'1d ago',comment:'High priority',school:'Cornell',isNew:false},
+  {score:7.5,name:'Stephen Hill',time:'5d ago',comment:'Under observation',school:'Dartmouth',isNew:true},
+  {score:9.3,name:'Larry Flores',time:'4d ago',comment:'Under observation',school:'Brown',isNew:true},
+  {score:5.5,name:'Justin Green',time:'2d ago',comment:'Mild fever reported',school:'Harvard',isNew:false},
+  {score:7.5,name:'Scott Adams',time:'8d ago',comment:'Follow-up required',school:'Yale',isNew:false},
+  {score:9.0,name:'Brandon Nelson',time:'5d ago',comment:'No comments',school:'Columbia',isNew:true},
+  {score:7.6,name:'Benjamin Baker',time:'3d ago',comment:'Awaiting results',school:'Penn',isNew:true},
+  {score:8.3,name:'Samuel Hall',time:'4d ago',comment:'Awaiting results',school:'Cornell',isNew:false},
+  {score:8.0,name:'Frank Rivera',time:'3d ago',comment:'Under observation',school:'Dartmouth',isNew:true},
+  {score:5.0,name:'Gregory Campbell',time:'6d ago',comment:'No comments',school:'Brown',isNew:false},
+  {score:6.4,name:'Raymond Mitchell',time:'12h ago',comment:'High priority',school:'Harvard',isNew:false},
+  {score:7.4,name:'Patrick Carter',time:'2d ago',comment:'High priority',school:'Yale',isNew:true},
+  {score:5.7,name:'Alexander Roberts',time:'3d ago',comment:'Mild fever reported',school:'Columbia',isNew:true},
+  {score:7.9,name:'Jack Gomez',time:'8d ago',comment:'High priority',school:'Penn',isNew:true},
+  {score:7.0,name:'Dennis Phillips',time:'4d ago',comment:'Follow-up required',school:'Cornell',isNew:true},
+  {score:9.8,name:'Jerry Evans',time:'4d ago',comment:'No comments',school:'Dartmouth',isNew:true},
+  {score:9.5,name:'Tyler Turner',time:'6d ago',comment:'Mild fever reported',school:'Brown',isNew:false},
+  {score:6.6,name:'Aaron Diaz',time:'4d ago',comment:'Follow-up required',school:'Harvard',isNew:true},
+  {score:9.7,name:'Henry Parker',time:'6d ago',comment:'Under observation',school:'Yale',isNew:true},
+  {score:4.4,name:'Douglas Cruz',time:'5d ago',comment:'Follow-up required',school:'Columbia',isNew:true},
+  {score:9.1,name:'Peter Edwards',time:'6d ago',comment:'Under observation',school:'Penn',isNew:true},
+  {score:7.7,name:'Adam Collins',time:'5d ago',comment:'Mild fever reported',school:'Cornell',isNew:false},
+  {score:5.9,name:'Nathan Reyes',time:'6d ago',comment:'Follow-up required',school:'Dartmouth',isNew:true},
+  {score:9.3,name:'Zachary Stewart',time:'8d ago',comment:'High priority',school:'Brown',isNew:true},
+  {score:9.0,name:'Walter Morris',time:'8d ago',comment:'Awaiting results',school:'Harvard',isNew:false},
+  {score:3.0,name:'Kyle Morales',time:'3d ago',comment:'Under observation',school:'Yale',isNew:true},
+  {score:3.3,name:'Harold Murphy',time:'8d ago',comment:'No comments',school:'Columbia',isNew:false},
+  {score:7.9,name:'Carl Cook',time:'4d ago',comment:'Awaiting results',school:'Penn',isNew:false},
+  {score:4.8,name:'Arthur Rogers',time:'4d ago',comment:'Follow-up required',school:'Cornell',isNew:false},
+  {score:9.2,name:'Gerald Gutierrez',time:'6d ago',comment:'No comments',school:'Dartmouth',isNew:false},
+  {score:6.2,name:'Roger Ortiz',time:'4d ago',comment:'Follow-up required',school:'Brown',isNew:true},
+  {score:2.9,name:'Keith Morgan',time:'6d ago',comment:'Follow-up required',school:'Harvard',isNew:true},
+  {score:3.4,name:'Jeremy Cooper',time:'2d ago',comment:'Mild fever reported',school:'Yale',isNew:false},
+  {score:5.2,name:'Lawrence Peterson',time:'3d ago',comment:'High priority',school:'Columbia',isNew:false},
+  {score:5.1,name:'Terry Bailey',time:'1d ago',comment:'Awaiting results',school:'Penn',isNew:true},
+  {score:7.8,name:'Sean Reed',time:'2d ago',comment:'Follow-up required',school:'Cornell',isNew:true},
+  {score:2.7,name:'Christian Kelly',time:'6d ago',comment:'Follow-up required',school:'Dartmouth',isNew:false},
+  {score:8.2,name:'Albert Howard',time:'3d ago',comment:'High priority',school:'Brown',isNew:true},
+  {score:9.6,name:'Joe Ramos',time:'2d ago',comment:'Mild fever reported',school:'Harvard',isNew:true},
+  {score:9.0,name:'Ethan Kim',time:'6d ago',comment:'Follow-up required',school:'Yale',isNew:false},
+  {score:7.9,name:'Austin Cox',time:'2d ago',comment:'Under observation',school:'Columbia',isNew:true},
+  {score:6.3,name:'Jesse Ward',time:'12h ago',comment:'Follow-up required',school:'Penn',isNew:false},
+  {score:7.5,name:'Bruce Richardson',time:'1d ago',comment:'Follow-up required',school:'Cornell',isNew:true},
+  {score:7.9,name:'Jordan Watson',time:'1d ago',comment:'Follow-up required',school:'Dartmouth',isNew:true},
+  {score:8.6,name:'Dylan Brooks',time:'8d ago',comment:'Mild fever reported',school:'Brown',isNew:false},
+  {score:6.8,name:'Alan Chavez',time:'6d ago',comment:'No comments',school:'Harvard',isNew:false}
+];
+
+const urgentPatients = [
+  {score:9.2,name:'William Johnson',school:'Harvard',time:'12h ago'},
+  {score:8.7,name:'Michael Brown',school:'Yale',time:'1d ago'},
+  {score:8.1,name:'Charles Wilson',school:'Columbia',time:'2d ago'},
+  {score:7.9,name:'Daniel Anderson',school:'Penn',time:'2d ago'},
+  {score:7.6,name:'Robert Williams',school:'Columbia',time:'2d ago'},
+  {score:7.4,name:'Matthew Taylor',school:'Harvard',time:'3d ago'},
+  {score:7.1,name:'James Smith',school:'Harvard',time:'2d ago'},
+  {score:6.8,name:'David Jones',school:'Penn',time:'3d ago'},
+  {score:6.5,name:'Anthony Thomas',school:'Yale',time:'4d ago'},
+  {score:6.3,name:'Richard Garcia',school:'Cornell',time:'3d ago'},
+];
+
+function renderPatients(list) {
+  document.getElementById('patientList').innerHTML = list.map((p,i) => `
+    <div class="patient-row" style="animation-delay:${.05+i*.03}s">
+      <div class="score-badge">
+      <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="scoreBg${i}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f8f3fc"/>
+            <stop offset="100%" style="stop-color:#efe6f7"/>
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="50" height="50" rx="13" fill="url(#scoreBg${i})" stroke="#c4a0d8" stroke-width="1.5"/>
+        <text x="27" y="34" text-anchor="middle" font-size="15" font-weight="900" fill="#955aa4" font-family="Georgia">${p.score}</text>
+      </svg>
+    </div>
+      <div class="patient-info">
+        <div class="patient-name">
+          ${p.name}
+          <span class="patient-time">${p.time}</span>
+          <span class="patient-school school-${p.school.toLowerCase()}">${p.school}</span>
+        </div>
+        <div class="patient-comment">${p.comment}</div>
+        ${p.isNew ? '<span class="patient-new">NEW</span>' : ''}
+      </div>
+      <button class="btn-open-case">Open Case</button>
+    </div>
+  `).join('');
+}
+
+// Default: show all sorted by score
+renderPatients([...allPatients].sort((a,b)=>b.score-a.score));
+
+function filterByType(type) {
+  currentFilter = type;
+  applyFilters();
+}
+
+// Stat tabs
+document.querySelectorAll('.stat-pill').forEach(tab => {
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.stat-pill').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    filterByType(this.dataset.filter);
+  });
+});
+
+// Render urgent
+document.getElementById('urgentList').innerHTML = urgentPatients.map(p => `
+  <div class="urgent-item">
+    <div class="urgent-score">${p.score}</div>
+    <div class="urgent-info">
+      <div class="urgent-name">${p.name}</div>
+      <div class="urgent-sub">${p.school}</div>
+      <div class="urgent-time">
+        <span class="urgent-dot"></span>
+        <span class="urgent-time-text">${p.time}</span>
+      </div>
+    </div>
+  </div>
+`).join('');
+
+// School filter
+let currentSchool = 'all';
+let currentFilter = 'all';
+
+function filterSchool(el, school) {
+  document.querySelectorAll('.school-pill').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  currentSchool = school;
+  applyFilters();
+}
+
+function applyFilters() {
+  let list = [...allPatients].sort((a,b) => b.score - a.score);
+  if(currentFilter === 'new') list = list.filter(p => p.isNew).slice(0,14);
+  if(currentFilter === 'action') list = list.slice(0,34);
+  if(currentSchool !== 'all') list = list.filter(p => p.school === currentSchool);
+  renderPatients(list);
+}
+
+// Search
+document.querySelector('.topbar-search input').addEventListener('input', function(){
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.patient-row').forEach(r => {
+    r.style.display = r.querySelector('.patient-name').textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// ── PROVIDER MODAL ──
+function openProvModal() { document.getElementById('provOverlay').classList.add('open'); }
+function closeProvModal(e) {
+  if(!e || e.target===document.getElementById('provOverlay')) {
+    document.getElementById('provOverlay').classList.remove('open');
+  }
+}
+function switchProvTab(el,tab) {
+  document.querySelectorAll('.prov-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.prov-tab-content').forEach(c=>c.style.display='none');
+  el.classList.add('active');
+  document.getElementById('ptab-'+tab).style.display='block';
+}
+
+// ── SCHOOL DISPLAY TOGGLE ──
+let schoolDisplayMode = 'logo';
+function toggleSchoolDisplay(mode) {
+  schoolDisplayMode = mode;
+  document.querySelectorAll('.school-toggle-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  document.querySelectorAll('.school-logo').forEach(img=>img.style.display = mode==='logo' ? 'block' : 'none');
+  document.querySelectorAll('.school-color-dot').forEach(dot=>dot.style.display = mode==='color' ? 'flex' : 'none');
+  document.querySelectorAll('.sidebar-school-logo').forEach(img=>img.style.display = mode==='logo' ? 'block' : 'none');
+  document.querySelectorAll('.sidebar-color-dot').forEach(dot=>dot.style.display = mode==='color' ? 'flex' : 'none');
+}
+
+// ── LOGOUT DROPDOWN ──
+function toggleLogout(e) {
+  e.stopPropagation();
+  document.getElementById('logoutOptions').classList.toggle('open');
+}
+document.addEventListener('click', ()=>document.getElementById('logoutOptions')?.classList.remove('open'));
+
+// ── EDIT POPUP ──
+let _activeField = null;
+const EDIT_TYPES = { photo:true, name:true, title:true, status:true, phone:true };
+
+const SPECIALTIES = [
+  // Mental Health
+  'Clinical Psychologist','Counseling Psychologist','Psychiatrist','Licensed Therapist (LCSW)',
+  'Licensed Mental Health Counselor','Marriage & Family Therapist','Substance Use Counselor',
+  'Trauma Specialist','Grief Counselor','Crisis Intervention Specialist',
+  // Medical
+  'General Practitioner','Student Health Physician','Sports Medicine Doctor',
+  'Internal Medicine Physician','Urgent Care Physician','Nurse Practitioner','Physician Assistant',
+  'Registered Nurse','Licensed Practical Nurse','Health Educator',
+  // Specialized
+  'Nutritionist / Dietitian','Physical Therapist','Occupational Therapist',
+  'Speech Language Pathologist','Audiologist','Optometrist','Dermatologist',
+  'Gynecologist / OB-GYN','Neurologist','Gastroenterologist',
+  // Wellness & Prevention
+  'Wellness Coach','Sexual Health Counselor','Sleep Medicine Specialist',
+  'Allergy & Immunology Specialist','Pain Management Specialist',
+  'Disability Services Coordinator','Peer Support Specialist',
+  // Dental & Vision
+  'Dentist','Orthodontist','Dental Hygienist','Optician',
+];
+
+const COUNTRIES = [
+  {flag:'🇺🇸',code:'+1',name:'US'},{flag:'🇬🇧',code:'+44',name:'UK'},{flag:'🇬🇭',code:'+233',name:'GH'},
+  {flag:'🇳🇬',code:'+234',name:'NG'},{flag:'🇿🇦',code:'+27',name:'ZA'},{flag:'🇰🇪',code:'+254',name:'KE'},
+  {flag:'🇨🇦',code:'+1',name:'CA'},{flag:'🇦🇺',code:'+61',name:'AU'},{flag:'🇩🇪',code:'+49',name:'DE'},
+  {flag:'🇫🇷',code:'+33',name:'FR'},{flag:'🇮🇳',code:'+91',name:'IN'},{flag:'🇧🇷',code:'+55',name:'BR'},
+  {flag:'🇨🇳',code:'+86',name:'CN'},{flag:'🇯🇵',code:'+81',name:'JP'},{flag:'🇸🇦',code:'+966',name:'SA'},
+  {flag:'🇪🇸',code:'+34',name:'ES'},{flag:'🇮🇹',code:'+39',name:'IT'},{flag:'🇵🇹',code:'+351',name:'PT'},
+  {flag:'🇲🇽',code:'+52',name:'MX'},{flag:'🇦🇪',code:'+971',name:'AE'},
+];
+
+const TITLES = ['Dr.','Prof.','Mr.','Mrs.','Ms.','Miss','Mx.','Sir','Rev.','Eng.','PhD','MD','RN','PA'];
+
+function openEditPopup(type, label, currentVal) {
+  _activeField = {type, label};
+  const popup = document.getElementById('editOverlay');
+  const icon = {photo:'📷',name:'✏️',title:'🎓',status:'💬',phone:'📱'}[type]||'✏️';
+  document.getElementById('editPopupIcon').textContent = icon;
+  document.getElementById('editPopupTitle').textContent = 'Edit ' + label;
+  document.getElementById('editPopupSubtitle').textContent = {
+    photo:'Upload a new profile photo',
+    name:'Your display name (first & last)',
+    title:'Select your professional title',
+    status:'A short message visible to your patients (max 144 chars)',
+    phone:'Your contact number with country code'
+  }[type]||'';
+
+  // Build body
+  const body = document.getElementById('editPopupBody');
+  body.innerHTML = '';
+
+  if(type==='photo') {
+    body.innerHTML = `
+      <div class="popup-field-wrap">
+        <div class="photo-upload-area" onclick="document.getElementById('photoFileInput').click()">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">Click to upload photo</div>
+          <div class="upload-sub">JPG, PNG or GIF · Max 5MB</div>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)"/>
+      </div>`;
+  } else if(type==='title') {
+    const grid = TITLES.map(t=>`<button class="title-opt${currentVal===t?' active':''}" onclick="selectTitle(this,'${t}')">${t}</button>`).join('');
+    body.innerHTML = `<div class="popup-field-wrap"><div class="popup-field-label">Select Title</div><div class="title-grid">${grid}</div></div>`;
+  } else if(type==='specialty') {
+    const cats = [
+      {label:'🧠 Mental Health', items: SPECIALTIES.slice(0,10)},
+      {label:'🏥 Medical', items: SPECIALTIES.slice(10,20)},
+      {label:'⚕️ Specialized', items: SPECIALTIES.slice(20,30)},
+      {label:'🌿 Wellness', items: SPECIALTIES.slice(30,37)},
+      {label:'🦷 Dental & Vision', items: SPECIALTIES.slice(37)},
+    ];
+    const searchId = 'specSearch';
+    const allBtns = SPECIALTIES.map(s=>`<button class="spec-opt${currentVal===s?' active':''}" onclick="selectSpecialty(this,'${s.replace(/'/g,"\\'")}')">${s}</button>`).join('');
+    body.innerHTML = `
+      <div class="popup-field-wrap">
+        <input class="edit-popup-input" id="${searchId}" type="text" placeholder="🔍 Search specialties..." oninput="filterSpecialties(this.value)" style="margin-bottom:10px"/>
+        <div id="specList" style="display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow-y:auto;padding:4px 0;">${allBtns}</div>
+      </div>`;
+  } else if(type==='status') {
+    body.innerHTML = `
+      <div class="popup-field-wrap">
+        <div class="popup-field-label">Status Message</div>
+        <textarea class="edit-popup-input" id="statusInput" rows="4" maxlength="144" oninput="updateCharCount(this)">${currentVal||''}</textarea>
+        <div class="char-count" id="charCount">${(currentVal||'').length}/144</div>
+      </div>`;
+  } else if(type==='phone') {
+    const opts = COUNTRIES.map(c=>`<option value="${c.code}">${c.flag} ${c.name} ${c.code}</option>`).join('');
+    body.innerHTML = `
+      <div class="popup-field-wrap">
+        <div class="popup-field-label">Phone Number</div>
+        <div class="phone-wrap">
+          <select class="country-select" id="countrySelect">${opts}</select>
+          <input class="phone-number-input" id="phoneNumInput" type="tel" placeholder="555 000 0000" value="${(currentVal||'').replace(/^\+\d+\s/,'')}"/>
+        </div>
+      </div>`;
+  } else {
+    body.innerHTML = `
+      <div class="popup-field-wrap">
+        <div class="popup-field-label">${label}</div>
+        <input class="edit-popup-input" id="genericInput" type="text" value="${currentVal||''}"/>
+      </div>`;
+  }
+  popup.classList.add('open');
+  event.stopPropagation();
+}
+
+function selectTitle(btn, title) {
+  document.querySelectorAll('.title-opt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectSpecialty(btn, spec) {
+  document.querySelectorAll('.spec-opt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function filterSpecialties(q) {
+  document.querySelectorAll('.spec-opt').forEach(b=>{
+    b.style.display = b.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function updateCharCount(el) {
+  const cc = document.getElementById('charCount');
+  cc.textContent = el.value.length+'/144';
+  cc.classList.toggle('over', el.value.length>144);
+}
+function handlePhotoUpload(input) {
+  if(input.files && input.files[0]) {
+    const area = input.closest('.photo-upload-area');
+    area.querySelector('.upload-text').textContent = '✅ '+input.files[0].name;
+  }
+}
+function closeEditPopup(e) {
+  if(!e || e.target===document.getElementById('editOverlay')) {
+    document.getElementById('editOverlay').classList.remove('open');
+    _activeField = null;
+  }
+}
+function saveEdit() {
+  const type = _activeField?.type;
+  let newVal = '';
+  if(type==='title') {
+    const active = document.querySelector('.title-opt.active');
+    newVal = active ? active.textContent : '';
+  } else if(type==='specialty') {
+    const active = document.querySelector('.spec-opt.active');
+    newVal = active ? active.textContent : '';
+  } else if(type==='status') {
+    newVal = document.getElementById('statusInput')?.value || '';
+  } else if(type==='phone') {
+    const cc = document.getElementById('countrySelect')?.value||'';
+    const num = document.getElementById('phoneNumInput')?.value||'';
+    newVal = cc + ' ' + num;
+  } else if(type==='photo') {
+    newVal = null; // handled separately
+  } else {
+    newVal = document.getElementById('genericInput')?.value||'';
+  }
+  if(newVal && _activeField) {
+    // Update relevant display fields
+    if(type==='name') { document.querySelectorAll('.prov-hname,.edit-field[data-type="name"] .edit-field-val').forEach(el=>el.textContent=newVal); }
+    if(type==='title') { document.querySelectorAll('.edit-field[data-type="title"] .edit-field-val').forEach(el=>el.textContent=newVal); }
+    if(type==='specialty') {
+      document.getElementById('specialtyDisplayLeft').textContent = newVal;
+      document.getElementById('specialtyDisplayRight').textContent = newVal + ' ✏️';
+      document.querySelector('.prov-hspecialty').textContent = newVal;
+    }
+    if(type==='status') { document.querySelectorAll('.prov-status-msg,.edit-field[data-type="status"] .edit-field-val').forEach(el=>el.textContent='"'+newVal+'"'); }
+    if(type==='phone') { document.querySelectorAll('.prov-contact-val.phone,.edit-field[data-type="phone"] .edit-field-val').forEach(el=>el.textContent=newVal); }
+  }
+  document.getElementById('editOverlay').classList.remove('open');
+  _activeField = null;
+}
+</script>
+
+<!-- ── PROVIDER MODAL ── -->
+<div class="prov-overlay" id="provOverlay" onclick="closeProvModal(event)">
+  <div class="prov-modal">
+    <button class="prov-close" onclick="closeProvModal()">✕</button>
+
+    <div class="prov-header">
+      <div class="prov-avatar">👨🏽‍⚕️</div>
+      <div class="prov-hinfo">
+        <div class="prov-hname">Dr. James Okonkwo</div>
+        <div class="prov-hspecialty">Clinical Psychologist</div>
+        <div class="prov-happroved">✓ APPROVED</div>
+      </div>
+    </div>
+
+    <div class="prov-tabs">
+      <div class="prov-tab active" onclick="switchProvTab(this,'overview')">📋 Overview</div>
+      <div class="prov-tab" onclick="switchProvTab(this,'schools')">🏫 Schools <span class="prov-tab-count">5</span></div>
+      <div class="prov-tab" onclick="switchProvTab(this,'partners')">🤝 Partners <span class="prov-tab-count">0</span></div>
+    </div>
+
+    <div class="prov-body">
+
+      <!-- LEFT: editable + read-only fields -->
+      <div class="prov-left">
+        <div class="prov-left-title">Profile Info</div>
+
+        <!-- EDITABLE -->
+        <div class="edit-field" data-type="photo" onclick="openEditPopup('photo','Profile Photo','')">
+          <div class="edit-field-label">Profile Photo</div>
+          <div class="edit-field-val">👨🏽‍⚕️ Current photo</div>
+        </div>
+        <div class="edit-field" data-type="title" onclick="openEditPopup('title','Title','Dr.')">
+          <div class="edit-field-label">Title</div>
+          <div class="edit-field-val">Dr.</div>
+        </div>
+        <div class="edit-field" data-type="name" onclick="openEditPopup('name','Full Name','James Okonkwo')">
+          <div class="edit-field-label">Full Name</div>
+          <div class="edit-field-val">James Okonkwo</div>
+        </div>
+        <div class="edit-field" data-type="specialty" onclick="openEditPopup('specialty','Specialty','Clinical Psychologist')">
+          <div class="edit-field-label">Specialty</div>
+          <div class="edit-field-val" id="specialtyDisplayLeft">Clinical Psychologist</div>
+        </div>
+        <div class="edit-field" data-type="status" onclick="openEditPopup('status','Status Message','Let\'s talk mental health ❤️')">
+          <div class="edit-field-label">Status Message</div>
+          <div class="edit-field-val">"Let's talk mental health ❤️"</div>
+        </div>
+        <div class="edit-field" data-type="phone" onclick="openEditPopup('phone','Phone Number','+1 617 555 0123')">
+          <div class="edit-field-label">Phone Number</div>
+          <div class="edit-field-val">+1 617 555 0123</div>
+        </div>
+
+        <!-- READ-ONLY -->
+        <div style="font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ddd;margin:12px 4px 8px;">Read Only</div>
+        <div class="readonly-field">
+          <div class="edit-field-label">Email Address</div>
+          <div class="edit-field-val">james.okonkwo@justgo.health</div>
+        </div>
+        <div class="readonly-field">
+          <div class="edit-field-label">Member Since</div>
+          <div class="edit-field-val">February 7, 2026</div>
+        </div>
+        <div class="readonly-field">
+          <div class="edit-field-label">Last Updated</div>
+          <div class="edit-field-val">2w ago</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: tab content -->
+      <div class="prov-right">
+
+        <!-- Overview -->
+        <div class="prov-tab-content" id="ptab-overview">
+          <div class="prov-section">
+            <div class="prov-section-title">💬 Status Message</div>
+            <div class="prov-status-msg">"Let's talk mental health ❤️"</div>
+          </div>
+          <div class="prov-section">
+            <div class="prov-section-title">👤 Contact Information</div>
+            <div class="prov-contact-row">
+              <div class="prov-contact-card">
+                <span class="prov-contact-icon">✉️</span>
+                <div>
+                  <div class="prov-contact-label">Email Address</div>
+                  <div class="prov-contact-val">james.okonkwo@justgo.health</div>
+                </div>
+              </div>
+              <div class="prov-contact-card">
+                <span class="prov-contact-icon">📱</span>
+                <div>
+                  <div class="prov-contact-label">Phone Number</div>
+                  <div class="prov-contact-val phone">+1 617 555 0123</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="prov-section">
+            <div class="prov-section-title">🎖️ Specialties</div>
+            <span class="prov-specialty-tag" id="specialtyDisplayRight" onclick="openEditPopup('specialty','Specialty','Clinical Psychologist')" style="cursor:pointer;" title="Click to edit">Clinical Psychologist ✏️</span>
+          </div>
+          <div class="prov-dates-row">
+            <div class="prov-date-card">
+              <div class="prov-date-label">Member Since</div>
+              <div class="prov-date-val">February 7, 2026</div>
+            </div>
+            <div class="prov-date-card">
+              <div class="prov-date-label">Last Updated</div>
+              <div class="prov-date-val">2w ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schools -->
+        <div class="prov-tab-content" id="ptab-schools" style="display:none">
+          <div class="school-display-toggle">
+            <button class="school-toggle-btn active" data-mode="logo" onclick="toggleSchoolDisplay('logo')">🖼 Logos</button>
+            <button class="school-toggle-btn" data-mode="color" onclick="toggleSchoolDisplay('color')">🔵 Colors</button>
+          </div>
+          <div class="prov-school-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Harvard_University_logo.svg" class="school-logo" alt="Harvard" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="school-color-dot" style="display:none;background:#A51C30;">H</div>
+            <span class="prov-school-name">Harvard Medical School</span>
+          </div>
+          <div class="prov-school-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Yale_University_logo.svg" class="school-logo" alt="Yale" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="school-color-dot" style="display:none;background:#00356B;">Y</div>
+            <span class="prov-school-name">Yale School of Medicine</span>
+          </div>
+          <div class="prov-school-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Columbia_University_shield.svg" class="school-logo" alt="Columbia" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="school-color-dot" style="display:none;background:#1D4F91;">C</div>
+            <span class="prov-school-name">Columbia Medical School</span>
+          </div>
+          <div class="prov-school-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/UPenn_shield_with_banner.svg" class="school-logo" alt="Penn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="school-color-dot" style="display:none;background:#011F5B;">P</div>
+            <span class="prov-school-name">Penn Medicine</span>
+          </div>
+          <div class="prov-school-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Cornell_University_seal.svg" class="school-logo" alt="Cornell" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="school-color-dot" style="display:none;background:#B31B1B;">Co</div>
+            <span class="prov-school-name">Cornell Medical College</span>
+          </div>
+        </div>
+
+        <!-- Partners -->
+        <div class="prov-tab-content" id="ptab-partners" style="display:none">
+          <div style="text-align:center;padding:48px 0;color:#9ca3af;font-size:.9rem;">No partners yet.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="prov-footer">
+      <span class="prov-left-hint">✏️ Click any purple field to edit</span>
+      <div class="logout-btn-wrap">
+        <button class="prov-logout lo-E" onclick="toggleLogout(event)">🚪 Log Out ▾</button>
+        <div class="logout-options" id="logoutOptions">
+          <div class="logout-opt" onclick="closeProvModal()">🚪 Log out of account</div>
+          <div class="logout-opt" onclick="closeProvModal()">🔄 Switch account</div>
+          <div class="logout-opt" onclick="closeProvModal()">🔒 Lock screen</div>
+          <div class="logout-opt" onclick="closeProvModal()">📵 Go offline</div>
+          <div class="logout-opt" onclick="closeProvModal()">🗑️ Deactivate account</div>
+          <div class="logout-opt" style="color:#dc2626;" onclick="closeProvModal()">⛔ Delete account</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── EDIT POPUP ── -->
+<div class="edit-overlay" id="editOverlay" onclick="closeEditPopup(event)">
+  <div class="edit-popup">
+    <div class="edit-popup-header">
+      <div class="edit-popup-icon" id="editPopupIcon">✏️</div>
+      <div>
+        <div class="edit-popup-title" id="editPopupTitle">Edit Field</div>
+        <div class="edit-popup-subtitle" id="editPopupSubtitle"></div>
+      </div>
+    </div>
+    <div id="editPopupBody"></div>
+    <div class="edit-popup-btns">
+      <button class="edit-popup-cancel" onclick="closeEditPopup()">← Go Back</button>
+      <button class="edit-popup-save" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

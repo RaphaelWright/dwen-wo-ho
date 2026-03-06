@@ -101,14 +101,14 @@ export const useNotification = () => {
   }, [setNotifications]);
 
   const dismissNotification = useCallback(
-    (id: string) => {
+    (id: string | number) => {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     },
     [setNotifications],
   );
 
   const markAsRead = useCallback(
-    (id: string) => {
+    (id: string | number) => {
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
       );

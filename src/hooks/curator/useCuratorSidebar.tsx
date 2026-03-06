@@ -17,12 +17,7 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  const {
-    notifications,
-    clearNotifications,
-    dismissNotification,
-    unreadCount,
-  } = useNotification();
+  const { notifications, unreadCount, setIsOpen } = useNotification();
 
   useEffect(() => {
     setMounted(true);
@@ -92,10 +87,9 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
     theme,
     mounted,
     notifications,
-    clearNotifications,
-    dismissNotification,
     unreadCount,
     navItems,
     handleLogoutClick,
+    setIsOpen: setIsOpen,
   };
 };

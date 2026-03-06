@@ -26,17 +26,17 @@ export default function NotifItem({
       transition={{ duration: 0.5, delay: index * 0.06 }}
       className={cn(
         "relative flex items-start gap-3 p-4 rounded-xl border border-border cursor-pointer transition-all duration-300 ease-in-out",
-        notif.unread
-          ? "hover:translate-x-1 hover:border-success bg-card border-l-success border-l-2 shadow-sm"
-          : "bg-card/50 border-muted-foreground/40 border-l-muted-foreground border-l-2",
+        !notif.read
+          ? "hover:translate-x-1 hover:border-success bg-success/10 shadow-sm"
+          : "bg-muted border-muted",
       )}
     >
       {/* Avatar */}
       <Avatar className="size-9 shrink-0 border border-border">
         <AvatarImage src={notif.avatarUrl} />
-        {notif.targetName ? (
+        {notif.targetName || notif.title ? (
           <AvatarFallback className="text-foreground">
-            {notif.targetName.charAt(0).toUpperCase()}
+            {(notif.targetName || notif.title || "N").charAt(0).toUpperCase()}
           </AvatarFallback>
         ) : (
           <AvatarFallback className="text-foreground">N</AvatarFallback>
@@ -48,19 +48,19 @@ export default function NotifItem({
         <p
           className={cn(
             "text-[11.5px] font-bold mb-1",
-            notif.unread ? "text-foreground" : "text-muted-foreground",
+            !notif.read ? "text-foreground" : "text-muted-foreground",
           )}
         >
-          {notif.targetName}
+          {notif.targetName || notif.title}
         </p>
         <p className="text-[12.5px] leading-snug text-muted-foreground">
-          {notif.text}
+          {notif.text || notif.message}
         </p>
         <p className="text-[10.5px] mt-1 text-muted-foreground">{notif.meta}</p>
       </div>
 
       {/* Mark as read / read indicator */}
-      {notif.unread ? (
+      {!notif.read ? (
         <button
           onClick={(e) => {
             e.stopPropagation();

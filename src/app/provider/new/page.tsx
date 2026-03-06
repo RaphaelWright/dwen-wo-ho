@@ -3,22 +3,35 @@
 import { motion, AnimatePresence } from "motion/react";
 import Navbar from "@/components/provider/new/nav-bar";
 import MainContent from "@/components/provider/new/main-content";
-import UrgentPanel from "@/components/provider/new/urgent-panel";
-import NotificationsSheet from "@/components/provider/new/notification-sheet";
+import UrgentPanel from "@/components/shared/urgent-panel";
+import NotificationsSheet from "@/components/shared/notification-sheet";
 import ProfileModal from "@/components/modals/new-provider/new-provider-modal";
 import EditFieldDialog from "@/components/provider/new/edit-field-dialog";
 import SchoolsSidebar from "@/components/provider/new/schools-side-bar";
 import LiquidGlassNavbar from "@/components/ui/liquid-glass-navbar";
 import LiquidGlass from "@/components/ui/liquid-glass";
 import useNewProvider from "@/hooks/provider/use-new-provider";
+import { SearchDropdown } from "@/components/shared/search-dropdown";
+import { ProviderSearchSuggestionCard } from "@/components/provider/new/provider-search-suggestion-card";
 import {
   useNewProviderMobile,
   type MobilePanel,
 } from "@/hooks/provider/use-new-provider-mobile";
-import { SearchBar } from "@/components/provider/new/nav-bar";
+import { NEW_PROVIDER_URGENT_PATIENTS } from "@/data/mock-provider-data";
 
 export default function ProviderDashboardPage() {
-  const { searchQuery, setSearchQuery } = useNewProvider();
+  const {
+    searchQuery,
+    setSearchQuery,
+    topSuggestions,
+    quickFilters,
+    notifications,
+    notifOpen,
+    setNotifOpen,
+    markAllRead,
+    markOneRead,
+    clearAllNotifications,
+  } = useNewProvider();
   const {
     activePanel,
     setActivePanel,
@@ -34,10 +47,10 @@ export default function ProviderDashboardPage() {
       <Navbar searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
 
       {/* ── Desktop: 3-column grid ── */}
-      <div className="hidden md:grid grid-cols-[20%_60%_20%] flex-1 overflow-hidden w-full">
+      <div className="hidden md:grid grid-cols-[15%_60%_25%] flex-1 overflow-hidden w-full">
         <SchoolsSidebar />
         <MainContent />
-        <UrgentPanel />
+        <UrgentPanel patients={NEW_PROVIDER_URGENT_PATIENTS} />
       </div>
 
       {/* ── Mobile: single panel ── */}
@@ -64,9 +77,18 @@ export default function ProviderDashboardPage() {
                 className="absolute top-0 left-0 right-0 z-40 p-3"
               >
                 <LiquidGlass cornerRadius={20} blur={16} padding="0px 0px">
-                  <SearchBar
+                  <SearchDropdown
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
+                    placeholders={["Search patients...", "Search schools…"]}
+                    suggestions={topSuggestions}
+                    quickFilters={quickFilters}
+                    onSelectOption={(val) => {
+                      setSearchQuery(val);
+                      setSearchOpen(false);
+                    }}
+                    getSuggestionValue={(p) => p.name}
+                    renderSuggestion={ProviderSearchSuggestionCard}
                   />
                 </LiquidGlass>
               </motion.div>
@@ -112,7 +134,7 @@ export default function ProviderDashboardPage() {
               transition={panelTransition}
               className="absolute inset-0 h-screen overflow-y-auto"
             >
-              <UrgentPanel />
+              <UrgentPanel patients={NEW_PROVIDER_URGENT_PATIENTS} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -125,7 +147,14 @@ export default function ProviderDashboardPage() {
           className="absolute!"
         />
       </div>
-      <NotificationsSheet />
+      <NotificationsSheet
+        notifications={notifications}
+        isOpen={notifOpen}
+        onOpenChange={setNotifOpen}
+        markAllRead={markAllRead}
+        markOneRead={markOneRead}
+        clearAllNotifications={clearAllNotifications}
+      />
       <ProfileModal />
       <EditFieldDialog />
     </div>

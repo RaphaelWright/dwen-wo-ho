@@ -45,14 +45,19 @@ export function getStatusConfig(status: string) {
 }
 
 /** Score-ring colour per status */
-export function getScoreColor(status: string) {
-  const colors: Record<string, string> = {
-    urgent: "#ef4444",
-    new: "#10b981",
-    action: "#8B5CF6",
-    followUp: "#f59e0b",
-    referred: "#38bdf8",
-    ignored: "#555e72",
-  };
-  return colors[status] ?? "#555e72";
+/** * Locked-In Color Coding based on 0-10 score
+ * 0.0 - 2.0: Black (Critical)
+ * 2.1 - 4.0: Red (High Concern)
+ * 4.1 - 6.0: Light Green (Mild Concern)
+ * 6.1 - 8.0: Green (Healthy/Stable)
+ * 8.1 - 10.0: Purple (Neutral/No Concern)
+ */
+export function getScoreColor(score: number | null) {
+  if (score === null) return "#555e72"; // Default/Ignored
+
+  if (score <= 2.0) return "#000000"; // Black: Critical
+  if (score <= 4.0) return "#ef4444"; // Red: High Concern
+  if (score <= 6.0) return "#90EE90"; // Light Green: Mild Concern
+  if (score <= 8.0) return "#10b981"; // Green: Healthy
+  return "#8B5CF6"; // Purple: Neutral
 }

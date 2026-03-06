@@ -21,13 +21,11 @@ export const CuratorSidebar = (props: SidebarProps) => {
     setShowLogoutModal,
     theme,
     mounted,
-    notifications,
-    clearNotifications,
-    dismissNotification,
     unreadCount,
     navItems,
     handleLogoutClick,
     pathname,
+    setIsOpen,
   } = useCuratorSidebar(props);
 
   const { onLogout } = props;
@@ -35,12 +33,9 @@ export const CuratorSidebar = (props: SidebarProps) => {
   const sidebarContentProps = {
     navItems,
     pathname,
-    theme,
     mounted,
-    notifications,
     unreadCount,
-    onClearNotifications: clearNotifications,
-    onDismissNotification: dismissNotification,
+    setIsOpen: setIsOpen,
     onToggleCollapse: () => setIsCollapsed(!isCollapsed),
     onLogoutClick: handleLogoutClick,
     onMobileClose: () => setIsMobileSidebarOpen(false),
@@ -54,9 +49,8 @@ export const CuratorSidebar = (props: SidebarProps) => {
         onToggle={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         theme={theme}
         mounted={mounted}
-        notifications={notifications}
-        onClearNotifications={clearNotifications}
-        onDismissNotification={dismissNotification}
+        unreadCount={unreadCount}
+        setIsOpen={setIsOpen}
       />
 
       {/* Mobile Overlay */}

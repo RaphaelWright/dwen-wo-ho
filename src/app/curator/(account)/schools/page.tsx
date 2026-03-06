@@ -1,17 +1,33 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Loader2, School, Search } from "lucide-react";
+import {
+  Loader2,
+  School,
+  BookMarked,
+  GraduationCap,
+  Building2,
+} from "lucide-react";
 import WidthConstraint from "@/components/ui/width-constraint";
 import {
   useCuratorSchools,
   FILTER_OPTIONS,
+  type FilterType,
 } from "@/hooks/curator/useCuratorSchools";
 import { SchoolCard } from "@/components/curator/SchoolCard";
-import { NotificationSheet } from "@/components/ui/notification-sheet";
+import { NotificationBell } from "@/components/shared/notification-bell";
 import { useNotification } from "@/hooks/useNotification";
-import { FiBell } from "react-icons/fi";
+import { FilterTabBar } from "@/components/shared/filter-tab-bar";
+import { SearchDropdown } from "@/components/shared/search-dropdown";
+import { SchoolSearchSuggestionCard } from "@/components/curator/school-details/SchoolSearchSuggestionCard";
+import { SCHOOLS_LIST_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/schools-list-search";
+
+const SCHOOL_FILTER_ICONS: Record<FilterType, typeof School> = {
+  all: School,
+  JHS: BookMarked,
+  SHS: GraduationCap,
+  COLLEGE: Building2,
+};
 
 export default function SchoolsPage() {
   const {
@@ -20,16 +36,16 @@ export default function SchoolsPage() {
     setActiveFilter,
     searchQuery,
     setSearchQuery,
+    filterCounts,
     isLoading,
     hasCachedData,
     isError,
+    suggestions,
+    quickFilters,
   } = useCuratorSchools();
-
   const {
-    notifications,
-    clearNotifications,
-    dismissNotification,
     unreadCount,
+    setIsOpen,
     addNotification, // Added for verification
   } = useNotification();
 
@@ -65,7 +81,7 @@ export default function SchoolsPage() {
           {/* Header Actions */}
           <div className="flex items-center gap-4">
             {/* Test Notification Buttons */}
-            <div className="flex gap-2">
+            <div className=" hidden md:flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -129,54 +145,51 @@ export default function SchoolsPage() {
                 Test: Error (No Link)
               </Button>
             </div>
-            <NotificationSheet
-              notifications={notifications}
-              onClear={clearNotifications}
-              onDismiss={dismissNotification}
-              trigger={
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="relative h-10 w-10 rounded-full border-border"
-                >
-                  <FiBell className="h-5 w-5 text-muted-foreground" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-0 right-0 h-3 w-3 rounded-full bg-destructive border-2 border-white transform translate-x-1/4 -translate-y-1/4" />
-                  )}
-                </Button>
-              }
+
+            <NotificationBell
+              unreadCount={unreadCount}
+              onOpenNotifs={() => setIsOpen(true)}
             />
           </div>
         </div>
 
-        {/* Search & Filters */}
-        <div className="space-y-6">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search schools by name, nickname, type, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 text-lg bg-background border-input focus-visible:ring-primary rounded-xl shadow-sm transition-all duration-300"
-            />
-          </div>
+        <div className="grid lg:grid-cols-2">
+          {/* Search & Filters */}
+          <FilterTabBar<FilterType>
+            tabs={FILTER_OPTIONS.map((opt) => ({
+              key: opt.value,
+              label: opt.label,
+              icon: SCHOOL_FILTER_ICONS[opt.value],
+              count: filterCounts[opt.value],
+            }))}
+            activeTab={activeFilter}
+            onTabChange={setActiveFilter}
+            activeTabLayoutId="curator-schools-filter"
+            className="hidden lg:flex"
+          />
 
-          <div className="flex flex-wrap gap-2">
-            {FILTER_OPTIONS.map((filter) => (
-              <Button
-                key={filter.value}
-                variant={activeFilter === filter.value ? "default" : "outline"}
-                onClick={() => setActiveFilter(filter.value)}
-                className={`rounded-full transition-all duration-300 ${
-                  activeFilter === filter.value
-                    ? "shadow-md scale-105"
-                    : "hover:bg-muted"
-                }`}
-              >
-                {filter.label}
-              </Button>
-            ))}
+          <div className="w-full max-w-xl">
+            <SearchDropdown
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              placeholders={SCHOOLS_LIST_SEARCH_PLACEHOLDERS}
+              suggestions={suggestions}
+              quickFilters={quickFilters}
+              onSelectOption={(val) => {
+                const filter = quickFilters.find(
+                  (f) => f.label === val || f.id === val,
+                );
+                if (filter) {
+                  setActiveFilter(filter.id as FilterType);
+                  setSearchQuery("");
+                } else {
+                  setSearchQuery(val);
+                }
+              }}
+              getSuggestionValue={(s) => s.name}
+              renderSuggestion={SchoolSearchSuggestionCard}
+              className="w-full"
+            />
           </div>
         </div>
 

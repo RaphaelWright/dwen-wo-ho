@@ -33,7 +33,7 @@ const SchoolEditModal = ({
   });
 
   return (
-    <AnimatePresence>
+    <AnimatePresence >
       {isOpen && (
         <>
           <motion.div
@@ -54,7 +54,7 @@ const SchoolEditModal = ({
             <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[90vh] border border-border">
               <SchoolEditHeader onClose={onClose} />
 
-              <div className="flex-1 overflow-y-auto p-8">
+              <div className="flex-1 overflow-y-auto p-8 no-scrollbar">
                 <SchoolEditForm
                   formData={formData}
                   handleInputChange={handleInputChange}

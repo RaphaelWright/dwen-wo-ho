@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { getStatusConfig } from "@/lib/utils/new-provider";
+import { getScoreColor, getStatusConfig } from "@/lib/utils/new-provider";
 import ScoreRing from "./score-ring";
 
 /**
@@ -10,26 +10,27 @@ import ScoreRing from "./score-ring";
  *
  */
 
-interface Patient {
-  id: number;
+export interface PatientCardProps {
+  id: string | number;
   name: string;
-  score: number;
+  score: number | null;
   status: string;
-  school: string;
-  schoolLabel: string;
   time: string;
-  preview: string;
-  emoji: string;
+  preview: string | React.ReactNode;
+  schoolLabel?: string;
 }
 
 export default function PatientCard({
   patient,
-  index,
+  index = 0,
+  onActionClick,
 }: {
-  patient: Patient;
-  index: number;
+  patient: PatientCardProps;
+  index?: number;
+  onActionClick?: (id: string | number) => void;
 }) {
   const cfg = getStatusConfig(patient.status);
+  const scoreColor = getScoreColor(patient.score);
 
   return (
     <motion.div
@@ -41,18 +42,16 @@ export default function PatientCard({
         delay: Math.min(index * 0.03, 0.15),
         ease: "easeOut",
       }}
-      whileHover={{ x: 3, transition: { duration: 0.15 } }}
-      className="relative flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer overflow-hidden bg-card group"
+      whileHover={{
+        x: 3,
+        boxShadow: `-2px 0 0 0 ${scoreColor}`,
+        transition: { duration: 0.15 },
+      }}
+      className="relative flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer overflow-hidden bg-card z-1"
     >
-      {/* Left accent bar — visible on hover */}
-      <motion.div
-        className="absolute left-0 top-0 bottom-0 w-0.75 rounded-l-[3px] opacity-0 group-hover:opacity-100 transition-all  ease-in-out"
-        style={{ background: cfg.bar }}
-      />
-
       {/* Content */}
       <div className="relative z-10 flex items-center gap-4 w-full">
-        <ScoreRing score={patient.score} status={patient.status} />
+        <ScoreRing score={patient.score} />
 
         <div className="flex-1 min-w-0">
           {/* Name + time */}
@@ -75,21 +74,27 @@ export default function PatientCard({
             >
               {cfg.label}
             </span>
-            <span className="text-[10.5px] font-bold tracking-wide px-2 py-0.75 rounded border text-muted-foreground/70">
-              {patient.schoolLabel}
-            </span>
+            {patient.schoolLabel && (
+              <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border text-muted-foreground/70 max-w-30 truncate">
+                {patient.schoolLabel}
+              </span>
+            )}
           </div>
         </div>
 
         {/* Action button */}
         <motion.button
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onActionClick) onActionClick(patient.id);
+          }}
           whileHover={{
             scale: 1.03,
             backgroundColor: "#8B5CF6",
             color: "#ffff",
           }}
           whileTap={{ scale: 0.97 }}
-          className="shrink-0 px-4 py-1.5 rounded-xl border text-[12px] font-semibold cursor-pointer bg-card transition-all duration-300 ease-in-out "
+          className="shrink-0 px-4 py-1.5 rounded-xl border text-[12px] font-semibold cursor-pointer bg-card transition-all duration-300 ease-in-out"
         >
           {cfg.actionLabel}
         </motion.button>

@@ -21,6 +21,7 @@ export interface PatientsTabProps {
   patients: Patient[];
   isLoading: boolean;
   schoolId: string;
+  schoolName?: string;
   compactTimeAgo: (date: string) => string;
   onViewPatient: (patientId: number | string) => void;
 }
@@ -35,6 +36,7 @@ export interface SchoolHeaderCardProps {
   campusLabel: string | null;
   onEditClick: () => void;
   onDisableClick: () => void;
+  searchComponent?: React.ReactNode;
 }
 
 export type SchoolTab = "patients" | "icons" | "providers";
@@ -46,8 +48,6 @@ export interface SchoolTabNavigationProps {
   iconsCount: number;
   providersCount: number;
   onAddIconClick: () => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
 }
 
 export interface UrgentCarePatient {
