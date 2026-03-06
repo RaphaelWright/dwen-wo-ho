@@ -122,7 +122,7 @@ export default function SchoolDetailsPage() {
             onDisableClick={handleDisableSchool}
             searchComponent={
               <div className="flex items-center gap-3 w-full max-w-md md:w-110">
-                <div className="hidden 2xl:block flex-1">
+                <div className="hidden min-[1229px]:block lg:max-w-xs 2xl:max-w-md ml-auto flex-1">
                   <SearchDropdown
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
@@ -145,7 +145,7 @@ export default function SchoolDetailsPage() {
             }
           />
 
-          <div className="grid 2xl:grid-cols-2 gap-4 mb-4 2xl:mb-0">
+          <div className="grid gap-4 mb-4">
             <FilterTabBar<SchoolTab>
               tabs={tabs}
               activeTab={activeTab}
@@ -164,10 +164,10 @@ export default function SchoolDetailsPage() {
                   </Button>
                 ) : null
               }
-              className="2xl:mb-8"
+              className="2xl:mb-8 z-0"
               activeTabLayoutId="school-details-filter"
             />
-            <div className="2xl:hidden max-w-md">
+            <div className="min-[1229px]:hidden max-w-md">
               <SearchDropdown
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}

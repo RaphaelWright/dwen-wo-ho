@@ -153,7 +153,7 @@ export default function SchoolsPage() {
           </div>
         </div>
 
-        <div className="grid 2xl:grid-cols-2 gap-4">
+        <div className="flex flex-col min-[1229px]:flex-row gap-4 justify-between object-center">
           {/* Search & Filters */}
           <FilterTabBar<FilterType>
             tabs={FILTER_OPTIONS.map((opt) => ({
@@ -165,10 +165,10 @@ export default function SchoolsPage() {
             activeTab={activeFilter}
             onTabChange={setActiveFilter}
             activeTabLayoutId="curator-schools-filter"
-            className="hidden lg:flex"
+            className="hidden min-[1229px]:flex"
           />
 
-          <div className="w-full max-w-md 2xl:max-w-xl">
+          <div className="w-full max-w-sm 2xl:max-w-xl">
             <SearchDropdown
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
