@@ -242,7 +242,6 @@ export default function SchoolDetailsPage() {
             compactTimeAgo,
           )}
           title="Urgent Care"
-          subtitle={`Across ${school.name ?? "this school"} · Latest first`}
           emptyStateText="No urgent care patients"
         />
       </div>
