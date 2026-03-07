@@ -2,6 +2,7 @@
 
 import { Clock } from "lucide-react";
 import ScoreRing from "@/components/shared/score-ring";
+import { getStatusConfig } from "@/lib/utils/new-provider";
 
 export interface ProviderSearchSuggestionCardProps {
   name: string;
@@ -19,6 +20,7 @@ export function ProviderSearchSuggestionCard({
   time,
   preview,
 }: ProviderSearchSuggestionCardProps) {
+  const cfg = getStatusConfig(status);
   return (
     <div className="flex items-center gap-4">
       <div className="shrink-0">
@@ -34,8 +36,10 @@ export function ProviderSearchSuggestionCard({
             {time}
           </span>
           <span className="shrink-0 opacity-40">•</span>
-          <span className="truncate text-[10px] font-bold uppercase tracking-wider text-foreground/80">
-            {preview}
+          <span
+            className={`inline-flex items-center gap-1 text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border ${cfg.cls}`}
+          >
+            {status}
           </span>
         </div>
       </div>

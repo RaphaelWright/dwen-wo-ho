@@ -60,6 +60,11 @@ export default function PatientCard({
             <span className="text-xs text-muted-foreground">
               {patient.time}
             </span>
+            {patient.schoolLabel && (
+              <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info bg-info/10 max-w-30 truncate">
+                {patient.schoolLabel}
+              </span>
+            )}
           </div>
 
           {/* Preview */}
@@ -74,11 +79,6 @@ export default function PatientCard({
             >
               {cfg.label}
             </span>
-            {patient.schoolLabel && (
-              <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border text-muted-foreground/70 max-w-30 truncate">
-                {patient.schoolLabel}
-              </span>
-            )}
           </div>
         </div>
 

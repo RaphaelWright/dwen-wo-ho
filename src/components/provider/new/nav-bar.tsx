@@ -31,11 +31,11 @@ const ProviderIdentity = ({
   return (
     <motion.button
       onClick={onOpenProfile}
-      whileHover={{ 
+      whileHover={{
         paddingLeft: "24px",
         paddingRight: "28px",
         scale: 0.95,
-        transition: { duration: 0.4, ease: "easeInOut" }
+        transition: { duration: 0.4, ease: "easeInOut" },
       }}
       className="flex flex-row items-center justify-between min-w-70 cursor-pointer py-2 pl-2.5 pr-3.5 rounded-full shrink-0 text-left bg-card/60 hover:bg-card border border-border/50 hover:shadow-md hover:border-primary/30"
     >
@@ -96,17 +96,20 @@ export default function Navbar({
   } = useNewProvider();
 
   return (
-    <header className="flex md:grid md:grid-cols-3 items-center justify-between md:justify-stretch pl-1 pr-2 md:px-2 h-18 border-b">
+    <header className="flex min-[1065px]:grid min-[1065px]:grid-cols-3 items-center justify-between min-[1065px]:justify-stretch pl-1 pr-2 min-[1065px]:px-2 h-18 border-b">
       <div className="flex gap-2 items-center">
         <ClientOnly fallback={<Logo variant="white" />}>
-          <Logo variant={theme === "light" ? "black" : "white"} />
+          <Logo
+            variant={theme === "light" ? "black" : "white"}
+            className="ml-1 min-[1065px]:ml-0"
+          />
         </ClientOnly>
         {/* Divider — desktop only */}
-        <div className="hidden md:block w-0.5 h-6 mx-5 shrink-0 bg-foreground/20" />
+        <div className="hidden min-[1065px]:block w-0.5 h-6 mx-5 shrink-0 bg-foreground/20" />
       </div>
 
       {/* Search — desktop only */}
-      <div className="hidden md:flex justify-center">
+      <div className="hidden min-[1065px]:flex -ml-10 xl:ml-[1vw] ">
         <ProviderIdentity
           providerTitle={title}
           providerName={name}
@@ -120,7 +123,7 @@ export default function Navbar({
       {/* Right actions */}
       <div className="flex items-center gap-4 ml-auto">
         {/* Mobile search toggle */}
-        <div className="md:hidden">
+        <div className="min-[1065px]:hidden">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setSearchOpen?.(!searchOpen)}
@@ -132,7 +135,7 @@ export default function Navbar({
 
         {/* Provider identity — desktop only */}
         <ThemeToggle />
-        <div className="hidden md:block">
+        <div className="hidden min-[1065px]:block">
           <SearchDropdown
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}

@@ -6,37 +6,37 @@ export function getStatusConfig(status: string) {
   const map: Record<string, any> = {
     urgent: {
       label: "Urgent",
-      cls: "bg-red-dim text-[#ef4444] border-[rgba(239,68,68,.25)]",
+      cls: "bg-destructive/10 text-[#ef4444] border-[rgba(239,68,68,.25)]",
       bar: "#ef4444",
       actionLabel: "View Case",
     },
     new: {
       label: "New",
-      cls: "bg-emerald-dim text-[#10b981] border-[rgba(16,185,129,.25)]",
+      cls: "bg-success/10 text-[#10b981] border-[rgba(16,185,129,.25)]",
       bar: "#10b981",
       actionLabel: "Open Case",
     },
     action: {
       label: "In Treatment",
-      cls: "bg-violet-dim text-[#8B5CF6] border-[rgba(139,92,246,.25)]",
+      cls: "bg-primary/10 text-primary border-[rgba(139,92,246,.25)]",
       bar: "#8B5CF6",
       actionLabel: "Resume",
     },
     "follow-up": {
       label: "Follow-up",
-      cls: "bg-amber-dim text-[#f59e0b] border-[rgba(245,158,11,.25)]",
+      cls: "bg-amber-50 text-[#f59e0b] border-[rgba(245,158,11,.25)]",
       bar: "#f59e0b",
       actionLabel: "Review",
     },
     referred: {
       label: "Referred Out",
-      cls: "bg-sky-dim text-[#38bdf8] border-[rgba(56,189,248,.25)]",
+      cls: "bg-info/10 text-info border-[rgba(56,189,248,.25)]",
       bar: "#38bdf8",
       actionLabel: "View",
     },
     ignored: {
       label: "Ignored",
-      cls: "bg-[rgba(255,255,255,.05)] text-[#555e72] border-[rgba(255,255,255,.07)]",
+      cls: "bg-muted-foreground/10 text-muted-foreground border-muted-foreground/25",
       bar: "#555e72",
       actionLabel: "Action",
     },
@@ -59,5 +59,5 @@ export function getScoreColor(score: number | null) {
   if (score <= 4.0) return "#ef4444"; // Red: High Concern
   if (score <= 6.0) return "#90EE90"; // Light Green: Mild Concern
   if (score <= 8.0) return "#10b981"; // Green: Healthy
-  return "#8B5CF6"; // Purple: Neutral
+  return "var(--primary)"; // Purple: Neutral
 }

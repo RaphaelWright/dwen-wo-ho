@@ -25,40 +25,11 @@ const STATUS_TAB_ICONS: Record<string, typeof LayoutGrid> = {
  * }} props
  */
 export default function MainContent() {
-  const {
-    activeSchool,
-    activeStatus,
-    handleClearSchool,
-    setActiveStatus,
-    schoolLabel,
-    countForChip,
-    filteredPatients,
-  } = useNewProvider();
+  const { activeStatus, setActiveStatus, countForChip, filteredPatients } =
+    useNewProvider();
 
   return (
     <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10 lg:ml-4">
-      {/* ── Active-school filter bar ── */}
-      <AnimatePresence>
-        {activeSchool !== "all" && (
-          <motion.div
-            key="filter-bar"
-            initial={{ opacity: 0, y: -8, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
-            exit={{ opacity: 0, y: -8, height: 0 }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border mb-4 text-[12.5px] bg-primary/10 text-primary"
-          >
-            <Filter size={13} />
-            Showing patients from <strong>{schoolLabel}</strong>
-            <button
-              onClick={handleClearSchool}
-              className="ml-auto flex gap-1 text-[11.5px] font-semibold cursor-pointer transition-colors text-muted-foreground hover:text-destructive"
-            >
-              <X /> Clear filter
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ── Status filter tabs ── */}
       <FilterTabBar
         tabs={NEW_PROVIDER_STATUS_CHIPS.map((chip) => ({
@@ -70,7 +41,7 @@ export default function MainContent() {
         activeTab={activeStatus}
         onTabChange={setActiveStatus}
         showCount={true}
-        className="mb-6"
+        className="mb-6 mx-auto min-[640px]:w-fit"
         activeTabLayoutId="provider-main-status-filter"
       />
 

@@ -18,6 +18,7 @@ import {
   type MobilePanel,
 } from "@/hooks/provider/use-new-provider-mobile";
 import { NEW_PROVIDER_URGENT_PATIENTS } from "@/data/mock-provider-data";
+import { cn } from "@/lib/utils";
 
 export default function ProviderDashboardPage() {
   const {
@@ -43,18 +44,23 @@ export default function ProviderDashboardPage() {
   } = useNewProviderMobile();
 
   return (
-    <div className="overflow-x-hidden h-dvh md:h-screen md:overflow-hidden flex flex-col w-full px-0.5 md:px-0">
+    <div className="overflow-x-hidden h-dvh min-[1065px]:h-screen min-[1065px]:overflow-hidden flex flex-col w-full px-0.5 min-[1065px]:px-0">
       <Navbar searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
 
       {/* ── Desktop: 3-column grid ── */}
-      <div className="hidden md:grid grid-cols-[15%_60%_25%] flex-1 overflow-hidden w-full">
+      <div className="hidden min-[1065px]:grid grid-cols-[15%_60%_25%] flex-1 overflow-hidden w-full">
         <SchoolsSidebar />
         <MainContent />
         <UrgentPanel patients={NEW_PROVIDER_URGENT_PATIENTS} />
       </div>
 
       {/* ── Mobile: single panel ── */}
-      <div className="md:hidden flex-1 overflow-hidden relative">
+      <div
+        className={cn(
+          "min-[1065px]:hidden flex-1 relative",
+          searchOpen ? "overflow-visible" : "overflow-hidden",
+        )}
+      >
         {/* Search overlay & backdrop */}
         <AnimatePresence>
           {searchOpen && (
@@ -64,33 +70,46 @@ export default function ProviderDashboardPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 z-30 bg-background/20 backdrop-blur-sm"
+                className="absolute inset-0 z-60 bg-background/20"
                 onClick={() => setSearchOpen(false)}
               />
 
-              {/* Search bar */}
+              {/* Search bar container - clicking empty space here closes search */}
               <motion.div
                 initial={{ y: -60, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -60, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute top-0 left-0 right-0 z-40 p-3"
+                className="absolute top-0 left-0 right-0 z-70 p-3 h-full"
+                onClick={() => setSearchOpen(false)}
               >
-                <LiquidGlass cornerRadius={20} blur={16} padding="0px 0px">
-                  <SearchDropdown
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    placeholders={["Search patients...", "Search schools…"]}
-                    suggestions={topSuggestions}
-                    quickFilters={quickFilters}
-                    onSelectOption={(val) => {
-                      setSearchQuery(val);
-                      setSearchOpen(false);
-                    }}
-                    getSuggestionValue={(p) => p.name}
-                    renderSuggestion={ProviderSearchSuggestionCard}
-                  />
-                </LiquidGlass>
+                <div
+                  className="max-w-sm mx-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <LiquidGlass
+                    cornerRadius={20}
+                    blur={16}
+                    padding="0px 0px"
+                    style={{ overflow: "visible" }}
+                  >
+                    <SearchDropdown
+                      searchQuery={searchQuery}
+                      onSearchChange={setSearchQuery}
+                      placeholders={["Search patients...", "Search schools…"]}
+                      suggestions={topSuggestions}
+                      quickFilters={quickFilters}
+                      autoFocus={true}
+                      fullMobileHeight={true}
+                      onSelectOption={(val) => {
+                        setSearchQuery(val);
+                        setSearchOpen(false);
+                      }}
+                      getSuggestionValue={(p) => p.name}
+                      renderSuggestion={ProviderSearchSuggestionCard}
+                    />
+                  </LiquidGlass>
+                </div>
               </motion.div>
             </>
           )}

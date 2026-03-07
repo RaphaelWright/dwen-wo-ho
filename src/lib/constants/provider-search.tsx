@@ -1,6 +1,13 @@
-import { Clock, Send, Archive } from "lucide-react";
+import { Clock, Send, Archive, Siren } from "lucide-react";
 
 export const PROVIDER_SEARCH_QUICK_FILTERS = [
+  {
+    id: "urgent",
+    label: "Urgent",
+    icon: (
+      <Siren className="size-4 text-destructive group-hover:text-destructive/50" />
+    ),
+  },
   {
     id: "follow-up",
     label: "Follow-up",

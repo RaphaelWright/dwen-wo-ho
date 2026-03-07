@@ -11,12 +11,14 @@ export function PlaceholdersAndVanishInput({
   className,
   submitButton,
   value,
+  autoFocus,
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string; // Allow custom classes for the container
   value?: string; // Add support for controlled external value
+  autoFocus?: boolean;
   submitButton?:
     | React.ReactNode
     | ((props: { value: string }) => React.ReactNode); // Allow replacing the default button with access to value
@@ -65,6 +67,12 @@ export function PlaceholdersAndVanishInput({
       setInternalValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   const draw = useCallback(() => {
     if (!inputRef.current) return;

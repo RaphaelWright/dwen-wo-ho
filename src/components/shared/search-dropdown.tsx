@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
+import { cn } from "@/lib/utils";
 
 export interface FilterOption {
   id: string;
@@ -25,6 +26,8 @@ export interface SearchDropdownProps<T extends object> {
   emptySuggestionsMessage?: string;
   className?: string;
   inputClassName?: string;
+  autoFocus?: boolean;
+  fullMobileHeight?: boolean;
 }
 
 export function SearchDropdown<T extends Record<string, any>>({
@@ -38,6 +41,8 @@ export function SearchDropdown<T extends Record<string, any>>({
   renderSuggestion: RenderSuggestion,
   emptySuggestionsMessage = "No matching results found.",
   className = "",
+  autoFocus = false,
+  fullMobileHeight = false,
 }: SearchDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,11 +72,12 @@ export function SearchDropdown<T extends Record<string, any>>({
         onFocus={() => setIsOpen(true)}
         onClick={() => setIsOpen(true)}
       >
-        <InputGroup className="w-full relative z-20 rounded-2xl">
+        <InputGroup className="w-full relative z-20 rounded-2xl focus-within:ring-1 focus-within:ring-primary!">
           <PlaceholdersAndVanishInput
             onChange={(e) => onSearchChange(e.target.value)}
             value={searchQuery}
             placeholders={placeholders}
+            autoFocus={autoFocus}
             onSubmit={(e) => {
               e.preventDefault();
               onSearchChange("");
@@ -92,7 +98,11 @@ export function SearchDropdown<T extends Record<string, any>>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute left-0 top-[calc(100%+8px)] z-30 w-full origin-top overflow-hidden rounded-3xl border border-border/60 bg-card/95 p-5 shadow-[0_16px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-border/30 backdrop-blur-xl"
+            className={cn(
+              "absolute left-0 top-[calc(100%+8px)] z-30 w-full origin-top overflow-hidden rounded-3xl border border-border/60 bg-card/80 p-5 shadow-[0_16px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-border/30 backdrop-blur-2xl",
+              fullMobileHeight &&
+                "max-[1065px]:h-[60dvh] max-[1065px]:overflow-y-auto scrollbar-hide",
+            )}
           >
             {/* Suggestions */}
             <div className={quickFilters.length > 0 ? "mb-5" : ""}>
@@ -147,14 +157,14 @@ export function SearchDropdown<T extends Record<string, any>>({
                         onClick={() =>
                           handleFilterClick(filter.label || filter.id)
                         }
-                        className="group flex items-center gap-1.5 rounded-full border border-border/40 bg-muted/20 px-3 py-1.5 text-muted-foreground transition-colors hover:bg-primary/10 hover:border-primary/20 hover:text-primary"
+                        className="group flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-primary transition-colors hover:bg-primary/10 hover:border-primary/20 hover:text-primary"
                       >
                         {filter.icon && (
                           <div className="opacity-80 group-hover:opacity-100 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
                             {filter.icon}
                           </div>
                         )}
-                        <span className="text-[12px] font-medium text-foreground">
+                        <span className="text-[12px] font-medium text-primary">
                           {filter.label}
                         </span>
                       </motion.button>

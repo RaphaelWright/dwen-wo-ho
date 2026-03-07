@@ -52,10 +52,10 @@ export default function UrgentCard({
             {/* Info */}
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold truncate transition-colors">
-                {patient.name}
-              </p>
-              <p className="text-xs mt-0.5 text-muted-foreground">
-                {patient.schoolLabel}
+                {patient.name}{" "}
+                <span className="text-xs mt-0.5 text-muted-foreground ml-1">
+                  {patient.schoolLabel}
+                </span>
               </p>
               <div className="flex items-center gap-1.5 mt-1">
                 <motion.div

@@ -29,7 +29,6 @@ export default function UrgentPanel({
   patients,
   activeSchool = "all",
   title = "Urgent Care",
-  subtitle = "Across all schools · Latest first",
   emptyStateText = "No urgent cases for this school",
   className,
 }: {
@@ -44,7 +43,6 @@ export default function UrgentPanel({
   }>;
   activeSchool?: string;
   title?: string;
-  subtitle?: string;
   emptyStateText?: string;
   className?: string;
 }) {
@@ -84,8 +82,6 @@ export default function UrgentPanel({
             {filtered.length}
           </motion.span>
         </div>
-
-        <p className="text-[11px] mt-1 text-white/80">{subtitle}</p>
       </div>
 
       {/* Card list */}
