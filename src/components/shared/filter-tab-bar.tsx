@@ -123,7 +123,7 @@ export function FilterTabBar<T extends string = string>({
                     className={cn(
                       "px-2 py-0.5 rounded-full text-[10px] font-bold min-w-5 text-center",
                       isActive
-                        ? "bg-primary/10 text-primary"
+                        ? "bg-white/20 text-white"
                         : "bg-muted-foreground/10 text-muted-foreground",
                     )}
                   >

@@ -181,7 +181,7 @@ export default function SchoolDetailsPage() {
                 patients={patients}
                 isLoading={patientsLoading}
                 schoolId={schoolId}
-                schoolName={school?.name}
+                schoolName={school?.nickname}
                 compactTimeAgo={compactTimeAgo}
                 searchQuery={searchQuery}
                 onViewPatient={(patientId) =>
