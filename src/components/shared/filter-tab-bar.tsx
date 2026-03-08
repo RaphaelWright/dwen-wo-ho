@@ -71,7 +71,7 @@ export function FilterTabBar<T extends string = string>({
   const placeholders =
     typeof searchPlaceholders === "function"
       ? searchPlaceholders(activeTab)
-      : searchPlaceholders ?? [];
+      : (searchPlaceholders ?? []);
 
   const hasSearch = placeholders.length > 0 && onSearchChange !== undefined;
 
@@ -100,7 +100,7 @@ export function FilterTabBar<T extends string = string>({
               className={cn(
                 "relative flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-transparent",
                 isActive
-                  ? "text-primary hover:text-primary"
+                  ? "bg-primary text-white hover:bg-primary/5"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -156,9 +156,7 @@ export function FilterTabBar<T extends string = string>({
             searchClassName,
           )}
         >
-          <div
-            className={cn("relative", searchWidthClasses[searchWidth])}
-          >
+          <div className={cn("relative", searchWidthClasses[searchWidth])}>
             <PlaceholdersAndVanishInput
               placeholders={placeholders}
               value={searchQuery}
