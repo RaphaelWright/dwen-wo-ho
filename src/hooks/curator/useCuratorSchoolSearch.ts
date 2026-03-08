@@ -31,9 +31,8 @@ export function useCuratorSchoolSearch({
         return patients
           .filter((p) => !query || p.patientName?.toLowerCase().includes(query))
           .map((p) => ({
-            type: "patient" as const,
             name: p.patientName,
-            score: p.lockinScore ?? null,
+            score: p.lockinScore ?? 0,
             status:
               (p.treatingProviders?.length ?? 0) > 0
                 ? "action"
@@ -41,19 +40,18 @@ export function useCuratorSchoolSearch({
                   ? "follow-up"
                   : "new",
             time: compactTimeAgo(p.createdAt || ""),
-            metadata: p.comment || "No comments",
+            preview: p.comment || "",
           }))
           .slice(0, query ? 5 : 4);
       case "icons":
         return schoolIcons
           .filter((i) => !query || i.name.toLowerCase().includes(query))
           .map((i) => ({
-            type: "icon" as const,
             name: i.name,
-            subtitle: i.slogan,
-            image:
-              typeof i.photoPreview === "string" ? i.photoPreview : undefined,
-            metadata: `Rank #${i.rank}`,
+            score: 0, // Icons don't have scores, using 0 as placeholder
+            status: "ignored", // Using "ignored" status for neutral styling
+            time: i.slogan || "",
+            preview: `Rank #${i.rank}`,
           }))
           .slice(0, query ? 5 : 4);
       case "providers":
@@ -66,11 +64,11 @@ export function useCuratorSchoolSearch({
                 .includes(query),
           )
           .map((p) => ({
-            type: "provider" as const,
             name: formatProviderName(p.providerName, p.providerTitle),
-            subtitle: p.specialty ?? undefined,
-            image: p.profilePhotoURL ?? undefined,
-            metadata: p.applicationStatus ?? undefined,
+            score: 0,
+            status: p.applicationStatus === "APPROVED" ? "new" : "ignored",
+            time: p.specialty || "",
+            preview: p.applicationStatus || "",
           }))
           .slice(0, query ? 5 : 4);
       default:

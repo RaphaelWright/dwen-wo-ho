@@ -4,22 +4,20 @@ import { Clock } from "lucide-react";
 import ScoreRing from "@/components/shared/score-ring";
 import { getStatusConfig } from "@/lib/utils/new-provider";
 
-export interface ProviderSearchSuggestionCardProps {
+export interface PatientSuggestionCardProps {
   name: string;
   score: number;
   status: string;
   time: string;
-  preview: string;
   [key: string]: any; // Allows passing the rest of the patient object safely
 }
 
-export function ProviderSearchSuggestionCard({
+export function PatientSuggestionCard({
   name,
   score,
   status,
   time,
-  preview,
-}: ProviderSearchSuggestionCardProps) {
+}: PatientSuggestionCardProps) {
   const cfg = getStatusConfig(status);
   return (
     <div className="flex items-center gap-4">
@@ -27,7 +25,7 @@ export function ProviderSearchSuggestionCard({
         <ScoreRing score={score} />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="truncate text-[15px] font-bold text-foreground">
+        <div className="truncate text-[15px] font-bold text-foreground transition-colors group-hover:text-primary">
           {name}
         </div>
         <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">

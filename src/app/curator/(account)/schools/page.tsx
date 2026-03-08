@@ -19,7 +19,7 @@ import { NotificationBell } from "@/components/shared/notification-bell";
 import { useNotification } from "@/hooks/useNotification";
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
-import { SchoolSearchSuggestionCard } from "@/components/curator/school-details/SchoolSearchSuggestionCard";
+import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { SCHOOLS_LIST_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/schools-list-search";
 
 const SCHOOL_FILTER_ICONS: Record<FilterType, typeof School> = {
@@ -187,7 +187,7 @@ export default function SchoolsPage() {
                 }
               }}
               getSuggestionValue={(s) => s.name}
-              renderSuggestion={SchoolSearchSuggestionCard}
+              renderSuggestion={PatientSuggestionCard}
               className="w-full"
             />
           </div>

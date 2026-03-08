@@ -30,11 +30,11 @@ export function useCuratorSchoolsSearch({
 
     return baseList
       .map((school) => ({
-        type: "school" as const,
         name: school.name,
-        subtitle: school.type,
-        metadata: getFirstCampus(school.campuses),
-        image: null,
+        score: 0,
+        status: "ignored",
+        time: school.type || "",
+        preview: getFirstCampus(school.campuses),
       }))
       .slice(0, 5);
   }, [searchQuery, schools]);

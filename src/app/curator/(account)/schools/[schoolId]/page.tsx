@@ -21,9 +21,7 @@ import type { SchoolTab } from "@/lib/types/components/curator/school-details";
 import { Users, ChevronLeft } from "lucide-react";
 import { formatUrgentCarePatients } from "@/lib/utils/formatUrgentCarePatients";
 import { motion } from "framer-motion";
-import { SchoolSearchSuggestionCard } from "@/components/curator/school-details/SchoolSearchSuggestionCard";
-import { NotificationBell } from "@/components/shared/notification-bell";
-import { useNotification } from "@/hooks/useNotification";
+import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 
 export default function SchoolDetailsPage() {
   const {
@@ -68,8 +66,6 @@ export default function SchoolDetailsPage() {
     selectedProvider,
   } = useCuratorSchoolDetails();
 
-  const { unreadCount, setIsOpen: setNotifOpen } = useNotification();
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-muted/5">
@@ -100,10 +96,10 @@ export default function SchoolDetailsPage() {
     );
   }
   return (
-    <div className="min-h-screen flex flex-col bg-muted/5 animate-in fade-in duration-500">
+    <div className="min-h-screen flex flex-col bg-primary/10 animate-in fade-in duration-500">
       <div className="flex-1 flex flex-col lg:flex-row items-start relative w-full">
         {/* Main content */}
-        <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 lg:px-8 xl:px-10 relative z-10">
+        <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 relative z-10">
           <motion.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -121,8 +117,8 @@ export default function SchoolDetailsPage() {
             onEditClick={() => setShowEditModal(true)}
             onDisableClick={handleDisableSchool}
             searchComponent={
-              <div className="flex items-center gap-3 w-full max-w-md md:w-110">
-                <div className="hidden min-[1229px]:block lg:max-w-xs 2xl:max-w-md ml-auto flex-1">
+              <div className="flex items-center gap-3 w-full md:max-w-110">
+                <div className="hidden md:block lg:max-w-xs 2xl:max-w-md ml-auto flex-1">
                   <SearchDropdown
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
@@ -133,14 +129,9 @@ export default function SchoolDetailsPage() {
                       setSearchQuery(val);
                     }}
                     getSuggestionValue={(s) => s.name}
-                    renderSuggestion={SchoolSearchSuggestionCard}
+                    renderSuggestion={PatientSuggestionCard}
                   />
                 </div>
-                <NotificationBell
-                  unreadCount={unreadCount}
-                  onOpenNotifs={() => setNotifOpen(true)}
-                  className="hidden 2xl:flex"
-                />
               </div>
             }
           />
@@ -167,7 +158,7 @@ export default function SchoolDetailsPage() {
               className="2xl:mb-8 z-0"
               activeTabLayoutId="school-details-filter"
             />
-            <div className="min-[1229px]:hidden max-w-md">
+            <div className="md:hidden max-w-md">
               <SearchDropdown
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -178,7 +169,7 @@ export default function SchoolDetailsPage() {
                   setSearchQuery(val);
                 }}
                 getSuggestionValue={(s) => s.name}
-                renderSuggestion={SchoolSearchSuggestionCard}
+                renderSuggestion={PatientSuggestionCard}
               />
             </div>
           </div>

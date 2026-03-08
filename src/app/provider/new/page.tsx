@@ -12,7 +12,7 @@ import LiquidGlassNavbar from "@/components/ui/liquid-glass-navbar";
 import LiquidGlass from "@/components/ui/liquid-glass";
 import useNewProvider from "@/hooks/provider/use-new-provider";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
-import { ProviderSearchSuggestionCard } from "@/components/provider/new/provider-search-suggestion-card";
+import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import {
   useNewProviderMobile,
   type MobilePanel,
@@ -106,7 +106,7 @@ export default function ProviderDashboardPage() {
                         setSearchOpen(false);
                       }}
                       getSuggestionValue={(p) => p.name}
-                      renderSuggestion={ProviderSearchSuggestionCard}
+                      renderSuggestion={PatientSuggestionCard}
                     />
                   </LiquidGlass>
                 </div>

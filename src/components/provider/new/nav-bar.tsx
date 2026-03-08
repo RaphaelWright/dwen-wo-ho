@@ -7,7 +7,7 @@ import { motion, useAnimation } from "framer-motion";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
-import { ProviderSearchSuggestionCard } from "@/components/provider/new/provider-search-suggestion-card";
+import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { ClientOnly } from "@/components/ui/client-only";
 import { NotificationBell } from "@/components/shared/notification-bell";
 
@@ -144,7 +144,7 @@ export default function Navbar({
             quickFilters={quickFilters}
             onSelectOption={(val) => setSearchQuery(val)}
             getSuggestionValue={(p) => p.name}
-            renderSuggestion={ProviderSearchSuggestionCard}
+            renderSuggestion={PatientSuggestionCard}
           />
         </div>
         <NotificationBell
