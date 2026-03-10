@@ -10,7 +10,7 @@ import {
   ProviderPasswordFormData,
 } from "@/lib/schemas/provider.auth.schema";
 import { ROUTES } from "@/lib/constants/routes";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 
 export function useProviderPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);

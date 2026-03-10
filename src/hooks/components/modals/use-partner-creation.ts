@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import {
   useCreatePartner,
   ICreatePartner,
-} from "@/hooks/queries/usePartnersQuery";
+} from "@/hooks/queries/usePartners";
 
 
 export const usePartnerCreation = ({

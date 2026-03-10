@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import useNewProvider from "./use-new-provider";
+import useProviderDashboard from "./useProviderDashboard";
 import { GlassNavTab } from "@/components/ui/liquid-glass-navbar";
 import { School, Users, AlertTriangle, User } from "lucide-react";
 
 export type MobilePanel = "schools" | "patients" | "urgent";
 
-export function useNewProviderMobile() {
-  const { setProfileOpen } = useNewProvider();
+export function useProviderDashboardMobile() {
+  const { setProfileOpen } = useProviderDashboard();
 
   const [activePanel, setActivePanel] = useState<MobilePanel>("patients");
   const [searchOpen, setSearchOpen] = useState(false);

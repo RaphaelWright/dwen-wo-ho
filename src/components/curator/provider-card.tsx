@@ -29,7 +29,7 @@ const ProviderCard = (props: ProviderCardProps) => {
         <Image
           src={provider.profilePhotoURL || DEFAULT_PROVIDER_IMAGE}
           alt={formatProviderName(
-            provider.providerName,
+            provider.providerName || "",
             provider.providerTitle,
           )}
           width={64}
@@ -41,7 +41,7 @@ const ProviderCard = (props: ProviderCardProps) => {
       {/* Provider Info - Centered */}
       <div className="text-center w-full">
         <h3 className="font-bold group-hover:text-primary transition-colors text-lg mb-2 truncate px-1">
-          {formatProviderName(provider.providerName, provider.providerTitle)}
+          {formatProviderName(provider.providerName || "", provider.providerTitle)}
         </h3>
         <p className="text-muted-foreground text-sm mb-3 truncate px-1">
           {provider.specialty || "General Practice"}
@@ -49,8 +49,9 @@ const ProviderCard = (props: ProviderCardProps) => {
 
         {/* Time Added */}
         <p className="text-orange-500 text-xs font-medium mb-4">
-          Added {timeAgo(provider.applicationDate)}
+          Added {timeAgo(provider.applicationDate || "")}
         </p>
+
 
         {/* Status Badge or Action Buttons */}
         <div className="flex gap-2 justify-center w-full px-1">

@@ -1,113 +1,125 @@
-export const PUBLIC_ENDPOINTS = [
-  "/api/v1/auth/check-email",
-  "/api/v1/auth/sign-in",
-  "/api/v1/auth/create-account",
-  "/api/v1/auth/submit-signup-code",
-  "/api/v1/email/send-verification",
-  "/api/v1/auth/recover-account",
-  "/api/v1/auth/submit-account-recovery-code",
-  "/api/v1/auth/reset-password",
-  "/api/v1/auth/refresh-token",
-];
+const API_V1 = "/api/v1";
 
-export const ENDPOINTS = {
-  // Auth endpoints
-  login: "/api/v1/auth/sign-in",
-  signup: "/api/v1/auth/create-account",
-  checkEmail: "/api/v1/auth/check-email",
-  sendVerificationEmail: "/api/v1/email/send-verification",
-  verifyEmail: "/api/v1/auth/submit-signup-code",
-  addPhoto: "/api/v1/auth/add-photo",
-  updateProfile: "/api/v1/auth/update-profile",
-  addSpecialty: "/api/v1/auth/add-speciality",
-  profile: "/api/v1/auth/profile",
-  recoverAccount: "/api/v1/auth/recover-account",
-  submitAccountRecoveryCode: "/api/v1/auth/submit-account-recovery-code",
-  resetPassword: "/api/v1/auth/reset-password",
-  refreshToken: "/api/v1/auth/refresh-token",
-
-  // Specialties endpoints
-  specialties: "/api/v1/specialties",
-
-  // Providers endpoints
-  providers: "/api/v1/providers",
-  provider: (email: string) => `/api/v1/providers/${email}`,
-  approveProvider: (email: string) => `/api/v1/providers/${email}/approve`,
-  rejectProvider: (email: string) => `/api/v1/providers/${email}/reject`,
-  updateProviderActivity: "/api/v1/providers/activity",
-  addSchoolToProvider: (providerId: string | number) =>
-    `/api/v1/curator/providers/${providerId}/schools`,
-  removeSchoolFromProvider: (
-    providerId: string | number,
-    schoolId: string | number,
-  ) => `/api/v1/curator/providers/${providerId}/schools/${schoolId}`,
-  addPartnerToProvider: (
-    partnerId: string | number,
-    providerId: string | number,
-  ) => `/api/v1/partners/${partnerId}/add-provider?providerId=${providerId}`,
-  removePartnerFromProvider: (
-    partnerId: string | number,
-    providerId: string | number,
-  ) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
-
-  // Schools endpoints
-  schools: "/api/v1/schools",
-  school: (id: string | number) => `/api/v1/schools/${id}`,
-  updateSchool: (id: string | number) => `/api/v1/schools/${id}?schoolId=${id}`,
-  schoolPartners: (id: string | number) => `/api/v1/schools/${id}/partners`,
-  schoolProviders: (id: string | number) => `/api/v1/schools/${id}/providers`,
-  getSchoolLockIn: (id: string | number) => `/api/v1/lockin/${id}`,
-  getLockInUpdate: (lockinId: string | number) =>
-    `/api/v1/lockin/updates/${lockinId}`,
-  updateLockInComment: (lockinId: string | number) =>
-    `/api/v1/lockin/updates/${lockinId}/comment`,
-  getUrgentCare: (schoolId: string | number) =>
-    `/api/v1/lockin/urgent-care/${schoolId}`,
-  submitLockIn: "/api/v1/lockin",
-  disableSchool: (id: string | number) => `/api/v1/schools/${id}/disable`,
-  // Patient Results endpoints
-  createPatientResult: "/api/v1/patient-results",
-  openPatientResult: (resultId: string | number) =>
-    `/api/v1/patient-results/${resultId}/open`,
-  updateActionStatus: (resultId: string | number) =>
-    `/api/v1/patient-results/${resultId}/action-status`,
-  setReferredProvider: (resultId: string | number) =>
-    `/api/v1/patient-results/${resultId}/referred-provider`,
-  getPatientResult: (resultId: string | number) =>
-    `/api/v1/patient-results/${resultId}`,
-  getSchoolPatientResults: (schoolId: string | number) =>
-    `/api/v1/patient-results/school/${schoolId}`,
-  getNewSchoolPatientResults: (schoolId: string | number) =>
-    `/api/v1/patient-results/school/${schoolId}/new`,
-  getProviderTreatingResults: (providerId: string | number) =>
-    `/api/v1/patient-results/provider/${providerId}/treating`,
-
-  // Partners endpoints
-  partners: "/api/v1/partners",
-  partner: (id: string | number) => `/api/v1/partners/${id}`,
-  disablePartner: (id: string | number) => `/api/v1/partners/${id}/disable`,
-  addPartnerToSchool: (schoolId: string | number, partnerId: string | number) =>
-    `/api/v1/schools/${schoolId}/add-partner?partnerId=${partnerId}`,
-  removePartnerFromSchool: (
-    schoolId: string | number,
-    partnerId: string | number,
-  ) => `/api/v1/schools/${schoolId}/remove-partner?partnerId=${partnerId}`,
-  partnerSchools: (partnerId: string | number) =>
-    `/api/v1/partners/${partnerId}/schools`,
-  partnerProviders: (partnerId: string | number) =>
-    `/api/v1/partners/${partnerId}/providers`,
-  addSchoolToPartner: (partnerId: string | number, schoolId: string | number) =>
-    `/api/v1/partners/${partnerId}/add-school?schoolId=${schoolId}`,
-  removeSchoolFromPartner: (
-    partnerId: string | number,
-    schoolId: string | number,
-  ) => `/api/v1/partners/${partnerId}/remove-school?schoolId=${schoolId}`,
-  addProviderToPartner: (
-    partnerId: string | number,
-    providerId: string | number,
-  ) => `/api/v1/partners/${partnerId}/add-provider?providerId=${providerId}`,
-  removeProviderFromPartner: (
-    partnerId: string | number,
-    providerId: string | number,
-  ) => `/api/v1/partners/${partnerId}/remove-provider?providerId=${providerId}`,
+const BASE_URLS = {
+  AUTH: `${API_V1}/auth`,
+  EMAIL: `${API_V1}/email`,
+  SPECIALTIES: `${API_V1}/specialties`,
+  PROVIDERS: `${API_V1}/providers`,
+  CURATOR_PROVIDERS: `${API_V1}/curator/providers`,
+  SCHOOLS: `${API_V1}/schools`,
+  PARTNERS: `${API_V1}/partners`,
+  LOCKIN: `${API_V1}/lockin`,
+  PATIENT_RESULTS: `${API_V1}/patient-results`,
 };
+
+export const STATIC_ENDPOINTS = {
+  AUTH: {
+    LOGIN: `${BASE_URLS.AUTH}/sign-in`,
+    SIGNUP: `${BASE_URLS.AUTH}/create-account`,
+    CHECK_EMAIL: `${BASE_URLS.AUTH}/check-email`,
+    VERIFY_EMAIL: `${BASE_URLS.AUTH}/submit-signup-code`,
+    ADD_PHOTO: `${BASE_URLS.AUTH}/add-photo`,
+    UPDATE_PROFILE: `${BASE_URLS.AUTH}/update-profile`,
+    ADD_SPECIALTY: `${BASE_URLS.AUTH}/add-speciality`,
+    PROFILE: `${BASE_URLS.AUTH}/profile`,
+    RECOVER_ACCOUNT: `${BASE_URLS.AUTH}/recover-account`,
+    SUBMIT_ACCOUNT_RECOVERY_CODE: `${BASE_URLS.AUTH}/submit-account-recovery-code`,
+    RESET_PASSWORD: `${BASE_URLS.AUTH}/reset-password`,
+    REFRESH_TOKEN: `${BASE_URLS.AUTH}/refresh-token`,
+  },
+  EMAIL: {
+    SEND_VERIFICATION: `${BASE_URLS.EMAIL}/send-verification`,
+  },
+  SPECIALTIES: `${BASE_URLS.SPECIALTIES}`,
+  PROVIDERS: {
+    BASE: `${BASE_URLS.PROVIDERS}`,
+    ACTIVITY: `${BASE_URLS.PROVIDERS}/activity`,
+  },
+  SCHOOLS: `${BASE_URLS.SCHOOLS}`,
+  LOCKIN: {
+    SUBMIT: `${BASE_URLS.LOCKIN}`,
+  },
+  PATIENT_RESULTS: {
+    CREATE: `${BASE_URLS.PATIENT_RESULTS}`,
+  },
+  PARTNERS: `${BASE_URLS.PARTNERS}`,
+};
+
+export const DYNAMIC_ENDPOINTS = {
+  PROVIDERS: {
+    GET: (email: string) => `${BASE_URLS.PROVIDERS}/${email}`,
+    APPROVE: (email: string) => `${BASE_URLS.PROVIDERS}/${email}/approve`,
+    REJECT: (email: string) => `${BASE_URLS.PROVIDERS}/${email}/reject`,
+    ADD_SCHOOL: (providerId: string | number) =>
+      `${BASE_URLS.CURATOR_PROVIDERS}/${providerId}/schools`,
+    REMOVE_SCHOOL: (providerId: string | number, schoolId: string | number) =>
+      `${BASE_URLS.CURATOR_PROVIDERS}/${providerId}/schools/${schoolId}`,
+  },
+  SCHOOLS: {
+    GET: (id: string | number) => `${BASE_URLS.SCHOOLS}/${id}`,
+    UPDATE: (id: string | number) => `${BASE_URLS.SCHOOLS}/${id}?schoolId=${id}`,
+    PARTNERS: (id: string | number) => `${BASE_URLS.SCHOOLS}/${id}/partners`,
+    PROVIDERS: (id: string | number) => `${BASE_URLS.SCHOOLS}/${id}/providers`,
+    GET_LOCKIN: (id: string | number) => `${BASE_URLS.LOCKIN}/${id}`,
+    ADD_PARTNER: (schoolId: string | number, partnerId: string | number) =>
+      `${BASE_URLS.SCHOOLS}/${schoolId}/add-partner?partnerId=${partnerId}`,
+    REMOVE_PARTNER: (schoolId: string | number, partnerId: string | number) =>
+      `${BASE_URLS.SCHOOLS}/${schoolId}/remove-partner?partnerId=${partnerId}`,
+    DISABLE: (id: string | number) => `${BASE_URLS.SCHOOLS}/${id}/disable`,
+  },
+  LOCKIN: {
+    GET_UPDATE: (lockinId: string | number) =>
+      `${BASE_URLS.LOCKIN}/updates/${lockinId}`,
+    UPDATE_COMMENT: (lockinId: string | number) =>
+      `${BASE_URLS.LOCKIN}/updates/${lockinId}/comment`,
+    GET_URGENT_CARE: (schoolId: string | number) =>
+      `${BASE_URLS.LOCKIN}/urgent-care/${schoolId}`,
+  },
+  PATIENT_RESULTS: {
+    OPEN: (resultId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/${resultId}/open`,
+    UPDATE_ACTION_STATUS: (resultId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/${resultId}/action-status`,
+    SET_REFERRED_PROVIDER: (resultId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/${resultId}/referred-provider`,
+    GET: (resultId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/${resultId}`,
+    GET_SCHOOL_RESULTS: (schoolId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/school/${schoolId}`,
+    GET_NEW_SCHOOL_RESULTS: (schoolId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/school/${schoolId}/new`,
+    GET_PROVIDER_TREATING: (providerId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/provider/${providerId}/treating`,
+  },
+  PARTNERS: {
+    GET: (id: string | number) => `${BASE_URLS.PARTNERS}/${id}`,
+    DISABLE: (id: string | number) => `${BASE_URLS.PARTNERS}/${id}/disable`,
+    SCHOOLS: (partnerId: string | number) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/schools`,
+    PROVIDERS: (partnerId: string | number) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/providers`,
+    ADD_SCHOOL: (partnerId: string | number, schoolId: string | number) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/add-school?schoolId=${schoolId}`,
+    REMOVE_SCHOOL: (partnerId: string | number, schoolId: string | number) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/remove-school?schoolId=${schoolId}`,
+    ADD_PROVIDER: (partnerId: string | number, providerId: string | number) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/add-provider?providerId=${providerId}`,
+    REMOVE_PROVIDER: (
+      partnerId: string | number,
+      providerId: string | number,
+    ) =>
+      `${BASE_URLS.PARTNERS}/${partnerId}/remove-provider?providerId=${providerId}`,
+  },
+};
+
+export const PUBLIC_ENDPOINTS = [
+  STATIC_ENDPOINTS.AUTH.CHECK_EMAIL,
+  STATIC_ENDPOINTS.AUTH.LOGIN,
+  STATIC_ENDPOINTS.AUTH.SIGNUP,
+  STATIC_ENDPOINTS.AUTH.VERIFY_EMAIL,
+  STATIC_ENDPOINTS.EMAIL.SEND_VERIFICATION,
+  STATIC_ENDPOINTS.AUTH.RECOVER_ACCOUNT,
+  STATIC_ENDPOINTS.AUTH.SUBMIT_ACCOUNT_RECOVERY_CODE,
+  STATIC_ENDPOINTS.AUTH.RESET_PASSWORD,
+  STATIC_ENDPOINTS.AUTH.REFRESH_TOKEN,
+];

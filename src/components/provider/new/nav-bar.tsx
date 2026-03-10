@@ -2,7 +2,7 @@
 
 import { Logo } from "@/components/shared/Logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import useNewProvider from "@/hooks/provider/use-new-provider";
+import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
 import { motion, useAnimation } from "framer-motion";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -93,7 +93,7 @@ export default function Navbar({
     theme,
     topSuggestions,
     quickFilters,
-  } = useNewProvider();
+  } = useProviderDashboard();
 
   return (
     <header className="flex min-[1065px]:grid min-[1065px]:grid-cols-3 items-center justify-between min-[1065px]:justify-stretch pl-1 pr-2 min-[1065px]:px-2 h-18 border-b">

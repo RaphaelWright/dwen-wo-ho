@@ -7,9 +7,7 @@ import { PatientsTabProps } from "@/lib/types/components/curator/school-details"
 export function PatientsTab({
   patients,
   isLoading,
-  compactTimeAgo,
   onViewPatient,
-  schoolName = "Unknown",
   searchQuery = "",
 }: PatientsTabProps & { searchQuery?: string }) {
   if (isLoading) {
@@ -47,23 +45,11 @@ export function PatientsTab({
   return (
     <div className="flex flex-col gap-3">
       {filteredPatients.map((patient, index) => {
-        const isTreating = (patient.treatingProviders?.length ?? 0) > 0;
-        const isSeen = patient.visibilityStatus === "SEEN";
-        const status = isTreating ? "action" : isSeen ? "follow-up" : "new";
-
         return (
           <PatientCard
             key={patient.id}
             index={index}
-            patient={{
-              id: patient.id as string | number,
-              name: patient.patientName,
-              score: patient.lockinScore ?? null,
-              status,
-              schoolLabel: schoolName,
-              time: `${compactTimeAgo(patient.createdAt || "")} ago`,
-              preview: patient.comment ? `"${patient.comment}"` : "No comments",
-            }}
+            patient={patient}
             onActionClick={onViewPatient}
           />
         );

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { usePartnersList, Partner } from "@/hooks/queries/usePartnersQuery";
+import { usePartnersList, Partner } from "@/hooks/queries/usePartners";
 
-export type { Partner } from "@/hooks/queries/usePartnersQuery";
+export type { Partner } from "@/hooks/queries/usePartners";
 
 export function useCuratorPartners() {
   const { data: cachedPartners = [], isLoading: atomLoading } =

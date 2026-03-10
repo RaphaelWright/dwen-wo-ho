@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "@/components/ui/sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSchools } from "@/hooks/queries/useSchoolsQuery";
-import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
+import { useSchools } from "@/hooks/queries/useSchools";
+import { useProvidersQuery } from "@/hooks/queries/useProviders";
 import { School } from "@/lib/types/school";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { useRouter } from "next/navigation";
@@ -31,7 +31,7 @@ async function fetchPartnerDetails(
   allSchools: School[],
   providersList: any[],
 ): Promise<PartnerDetailsData> {
-  const response = await api(ENDPOINTS.partner(partnerId));
+  const response = await api(DYNAMIC_ENDPOINTS.PARTNERS.GET(partnerId));
   if (!response?.success || !response.data) {
     throw new Error("Failed to load partner details");
   }
@@ -170,7 +170,7 @@ export const usePartnerDetails = ({
     setIsAddingSchool(true);
     try {
       const response = await api(
-        ENDPOINTS.addSchoolToPartner(partnerId, school.id),
+        DYNAMIC_ENDPOINTS.PARTNERS.ADD_SCHOOL(partnerId, school.id),
         {
           method: "POST",
         },
@@ -196,7 +196,7 @@ export const usePartnerDetails = ({
     setIsRemovingSchool(true);
     try {
       const response = await api(
-        ENDPOINTS.removeSchoolFromPartner(partnerId, school.id),
+        DYNAMIC_ENDPOINTS.PARTNERS.REMOVE_SCHOOL(partnerId, school.id),
         {
           method: "POST",
         },
@@ -222,7 +222,7 @@ export const usePartnerDetails = ({
     setIsAddingProvider(true);
     try {
       const response = await api(
-        ENDPOINTS.addProviderToPartner(partnerId, provider.id),
+        DYNAMIC_ENDPOINTS.PARTNERS.ADD_PROVIDER(partnerId, provider.id),
         {
           method: "POST",
         },
@@ -250,7 +250,7 @@ export const usePartnerDetails = ({
     setIsRemovingProvider(true);
     try {
       const response = await api(
-        ENDPOINTS.removeProviderFromPartner(partnerId, provider.id),
+        DYNAMIC_ENDPOINTS.PARTNERS.REMOVE_PROVIDER(partnerId, provider.id),
         {
           method: "POST",
         },
@@ -297,7 +297,7 @@ export const usePartnerDetails = ({
 
   const handleSchoolClick = async (school: AssociatedSchool) => {
     try {
-      const response = await api(ENDPOINTS.school(String(school.id)));
+      const response = await api(DYNAMIC_ENDPOINTS.SCHOOLS.GET(String(school.id)));
       if (response?.success && response.data) {
         setSelectedSchool(response.data);
         setShowSchoolModal(true);

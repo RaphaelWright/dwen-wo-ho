@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { School } from "@/lib/types/school";
 import { FilterType } from "@/lib/types/modals";
 
@@ -26,7 +26,7 @@ export const useSchoolSelection = (
   const loadSchools = async () => {
     setIsLoading(true);
     try {
-      const response = await api(ENDPOINTS.schools);
+      const response = await api(STATIC_ENDPOINTS.SCHOOLS);
       if (response?.success && response.data) {
         const schoolsList = Array.isArray(response.data) ? response.data : [];
         setSchools(schoolsList);

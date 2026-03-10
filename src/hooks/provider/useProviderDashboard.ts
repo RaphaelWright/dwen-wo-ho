@@ -22,7 +22,7 @@ import {
 } from "@/data/mock-provider-data";
 import { PROVIDER_SEARCH_QUICK_FILTERS } from "@/lib/constants/provider-search";
 
-export default function useNewProvider() {
+export default function useProviderDashboard() {
   /* ── Filter state ─────────────────────────────────── */
   const [activeSchool, setActiveSchool] = useAtom(activeSchoolAtom);
   const [activeStatus, setActiveStatus] = useAtom(activeStatusAtom);

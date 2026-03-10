@@ -6,19 +6,20 @@ export interface IconsTabProps {
   onAddFirstIcon: () => void;
 }
 
-export interface Patient {
+export interface SchoolPatientRecord {
   id: number | string;
   lockinId: number;
   patientName: string;
-  lockinScore?: number;
+  lockinScore: number;
   comment: string | null;
-  createdAt?: string;
-  visibilityStatus?: string;
-  treatingProviders?: Array<{ id: string; fullName: string }>;
+  createdAt: string;
+  visibilityStatus: string;
+  schoolNickname: string;
+  schoolId: number;
 }
 
 export interface PatientsTabProps {
-  patients: Patient[];
+  patients: SchoolPatientRecord[];
   isLoading: boolean;
   schoolId: string;
   schoolName?: string;

@@ -3,19 +3,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
 import { ROUTES } from "@/lib/constants/routes";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { providersService } from "@/services/providers";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { ProviderDetails } from "@/lib/types/provider";
 
 // ─── Fetcher ─────────────────────────────────────────────────────────────────
 
 async function fetchProviderDetails(email: string): Promise<ProviderDetails> {
-  const response = await api(ENDPOINTS.provider(email));
-  if (response.success) {
-    return response.data;
-  }
+  const provider = await providersService.getProvider(email);
+  if (provider) return provider;
   throw new Error("Failed to load provider details");
 }
 
@@ -122,13 +119,9 @@ export function useCuratorProviderDetails() {
     setSuccessMessage("");
 
     try {
-      const refreshToken = localStorage.getItem("refreshToken") || "";
-      const response = await api(ENDPOINTS.approveProvider(email), {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      });
+      const response = await providersService.approveProvider(email);
 
-      if (response.success) {
+      if (response?.success) {
         setSuccessMessage("Provider approved successfully!");
         // Refresh the page after 2 seconds
         setTimeout(() => {
@@ -152,13 +145,9 @@ export function useCuratorProviderDetails() {
     setSuccessMessage("");
 
     try {
-      const refreshToken = localStorage.getItem("refreshToken") || "";
-      const response = await api(ENDPOINTS.rejectProvider(email), {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      });
+      const response = await providersService.rejectProvider(email);
 
-      if (response.success) {
+      if (response?.success) {
         setSuccessMessage("Provider rejected successfully!");
         // Refresh the page after 2 seconds
         setTimeout(() => {

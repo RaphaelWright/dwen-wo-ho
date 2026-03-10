@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 
 export function useProviderVerifyPasswordReset() {
   const [isRunning, setIsRunning] = useState(true);

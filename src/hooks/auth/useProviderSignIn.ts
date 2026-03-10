@@ -6,7 +6,7 @@ import {
   ProviderLoginSchema,
   ProviderLoginFormData,
 } from "@/lib/schemas/provider.auth.schema";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 import { setUserType } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
 import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";

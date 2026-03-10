@@ -5,31 +5,29 @@ import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { ROUTES } from "@/lib/constants/routes";
 import { School, SchoolIcon } from "@/lib/types/school";
-import { useDisableSchool, useSchool } from "@/hooks/queries/useSchoolsQuery";
+import { ProviderDetails } from "@/lib/types/provider";
+import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
+import { SCHOOL_TABS_CONFIG } from "@/lib/constants/components/curator/school-details";
+import { useDisableSchool, useSchool } from "@/hooks/queries/useSchools";
 import {
   useSchoolPatients,
   useSchoolProviders,
   useSchoolUrgentCare,
   useInvalidateSchoolProviders,
-} from "@/hooks/queries/useSchoolDetailsQuery";
-import { SCHOOL_TABS_CONFIG } from "@/lib/constants/components/curator/school-details";
-import {
-  formatProviderName,
-  getProviderTitle,
-} from "@/lib/utils/formatProviderName";
-import { ProviderDetails } from "@/lib/types/provider";
-
-export type CuratorSchoolTabType = "patients" | "icons" | "providers";
-
+} from "@/hooks/queries/useSchoolDetails";
 import { parseCampuses } from "@/lib/utils/parseCampuses";
 import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
+import { formatProviderName, getProviderTitle } from "@/lib/utils/formatProviderName";
 import { useCuratorSchoolSearch } from "./useCuratorSchoolSearch";
+
+export type CuratorSchoolTabType = "patients" | "icons" | "providers";
 
 export function useCuratorSchoolDetails() {
   const params = useParams();
   const router = useRouter();
   const schoolId = params.schoolId as string;
 
+  // ─── UI state ────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState<CuratorSchoolTabType>("patients");
   const [icons, setIcons] = useState<SchoolIcon[]>([]);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -43,20 +41,20 @@ export function useCuratorSchoolDetails() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // ─── Mutations ───────────────────────────────────────────────────────────
   const disableSchoolMutation = useDisableSchool();
   const queryClient = useQueryClient();
 
-  // ─── React Query hooks (all fire in parallel) ─────────────────────────
+  // ─── Queries (all fire in parallel) ─────────────────────────────────────
   const schoolQuery = useSchool(schoolId);
   const patientsQuery = useSchoolPatients(schoolId);
   const providersQuery = useSchoolProviders(schoolId);
   const urgentCareQuery = useSchoolUrgentCare(schoolId);
   const invalidateProviders = useInvalidateSchoolProviders();
 
-  // ─── Derived data ─────────────────────────────────────────────────────
-  const rawSchool = schoolQuery.data as
-    | (School & { campuses?: unknown })
-    | undefined;
+  // ─── Derived data ─────────────────────────────────────────────────────────
+  const rawSchool = schoolQuery.data as (School & { campuses?: unknown }) | undefined;
+
   const school = useMemo(() => {
     if (!rawSchool) return null;
     const s = { ...rawSchool } as School;
@@ -66,42 +64,83 @@ export function useCuratorSchoolDetails() {
     return s;
   }, [rawSchool]);
 
-  const patients = patientsQuery.data?.patients ?? [];
-  const patientComments = patientsQuery.data?.patientComments ?? {};
+  const patients = (patientsQuery.data as SchoolPatientRecord[]) ?? [];
   const providers = providersQuery.data ?? [];
   const urgentCare = urgentCareQuery.data ?? {
     totalUrgentCarePatients: 0,
     patients: [],
   };
+
   const isLoading = schoolQuery.isLoading;
-  const error = schoolQuery.error ? "Failed to load school details" : null;
+  // Preserve the actual error message rather than discarding it
+  const error = schoolQuery.error
+    ? (schoolQuery.error as Error).message ?? "Failed to load school details"
+    : null;
 
-  // ─── Computed data ───────────────────────────────────────────────────────
-  // TODO: Backend should include lockinScore in patient-results response.
-  // Until then, patient cards will show "–" for the lock-in score.
-  // Previously we fetched GET /api/v1/lockin/{schoolId} and matched scores
-  // by student name (fragile). That call has been removed.
-  const patientsWithScore = useMemo(
-    () =>
-      patients.map((p) => ({
-        ...p,
-        lockinScore: undefined, // Will be populated when backend includes it in patient-results
-        comment: patientComments[p.lockinId] ?? null,
-      })),
-    [patients, patientComments],
-  );
-
+  // ─── Filtered patients ────────────────────────────────────────────────────
+  // No intermediate clone — filter directly from the query data
   const filteredPatients = useMemo(
     () =>
       searchQuery.trim()
-        ? patientsWithScore.filter((p) =>
+        ? patients.filter((p) =>
             p.patientName.toLowerCase().includes(searchQuery.toLowerCase()),
           )
-        : patientsWithScore,
-    [patientsWithScore, searchQuery],
+        : patients,
+    [patients, searchQuery],
   );
 
+  // ─── Derived UI data ─────────────────────────────────────────────────────
+  const campusLabel = school ? parseCampuses(school.campuses)[0] : null;
+  const schoolIcons = school
+    ? icons.filter((i) => i.schoolId === Number(school.id))
+    : [];
+
+  const tabs = useMemo(
+    () =>
+      SCHOOL_TABS_CONFIG.map((tab) => ({
+        ...tab,
+        count:
+          tab.key === "patients"
+            ? patients.length
+            : tab.key === "icons"
+              ? schoolIcons.length
+              : providers.length,
+      })),
+    [patients.length, schoolIcons.length, providers.length],
+  );
+
+  const selectedProvider = useMemo(() => {
+    if (!selectedProviderEmail) return undefined;
+    const p = providers.find((p) => p.email === selectedProviderEmail);
+    if (!p) return undefined;
+
+    return {
+      id: p.id,
+      email: p.email,
+      fullName: formatProviderName(p.providerName, p.providerTitle),
+      providerTitle: getProviderTitle(p.providerName, p.providerTitle) || undefined,
+      professionalTitle: p.specialty || undefined,
+      profileImage: p.profilePhotoURL || undefined,
+      createdAt: "",
+      updatedAt: "",
+      applicationStatus: p.applicationStatus as "PENDING" | "APPROVED" | "REJECTED",
+      applicationDate: "",
+      bio: undefined,
+      officePhoneNumber: p.officePhoneNumber || undefined,
+    } as ProviderDetails;
+  }, [selectedProviderEmail, providers]);
+
   // ─── Handlers ────────────────────────────────────────────────────────────
+
+  /** Switch tab and reset search so stale query doesn't linger */
+  const handleTabChange = useCallback(
+    (tab: CuratorSchoolTabType) => {
+      setActiveTab(tab);
+      setSearchQuery("");
+    },
+    [],
+  );
+
   const handleProviderClick = useCallback((provider: { email: string }) => {
     setSelectedProviderEmail(provider.email);
     setShowProviderModal(true);
@@ -127,6 +166,12 @@ export function useCuratorSchoolDetails() {
     }
   }, [school, disableSchoolMutation, router]);
 
+  /**
+   * Icon add/edit complete handler.
+   * NOTE: FileReader (photo processing) intentionally runs here so the component
+   * stays presentation-only. The icon data is stored locally until a persist API
+   * is wired up.
+   */
   const handleIconComplete = useCallback(
     (data: {
       photo: File | null;
@@ -187,66 +232,7 @@ export function useCuratorSchoolDetails() {
     invalidateProviders(schoolId);
   }, [invalidateProviders, schoolId]);
 
-  const campusLabel = school ? parseCampuses(school.campuses)[0] : null;
-  const schoolIcons = school
-    ? icons.filter((i) => i.schoolId === Number(school.id))
-    : [];
-
-  const tabs = useMemo(
-    () =>
-      SCHOOL_TABS_CONFIG.map((tab) => ({
-        ...tab,
-        count:
-          tab.key === "patients"
-            ? patients.length
-            : tab.key === "icons"
-              ? schoolIcons.length
-              : providers.length,
-      })),
-    [patients.length, schoolIcons.length, providers.length],
-  );
-
-  const handleTabChange = useCallback(
-    (tab: CuratorSchoolTabType) => {
-      setActiveTab(tab);
-      setSearchQuery("");
-    },
-    [setSearchQuery],
-  );
-
-  const { suggestions, quickFilters } = useCuratorSchoolSearch({
-    searchQuery,
-    activeTab,
-    patients: filteredPatients,
-    schoolIcons,
-    providers,
-  });
-
-  const selectedProvider = useMemo(() => {
-    if (!selectedProviderEmail) return undefined;
-    const p = providers.find((p) => p.email === selectedProviderEmail);
-    if (!p) return undefined;
-
-    return {
-      id: p.id,
-      email: p.email,
-      fullName: formatProviderName(p.providerName, p.providerTitle),
-      providerTitle:
-        getProviderTitle(p.providerName, p.providerTitle) || undefined,
-      professionalTitle: p.specialty || undefined,
-      profileImage: p.profilePhotoURL || undefined,
-      createdAt: "",
-      updatedAt: "",
-      applicationStatus: p.applicationStatus as
-        | "PENDING"
-        | "APPROVED"
-        | "REJECTED",
-      applicationDate: "",
-      bio: undefined,
-      officePhoneNumber: p.officePhoneNumber || undefined,
-    } as ProviderDetails;
-  }, [selectedProviderEmail, providers]);
-
+  // ─── Return ───────────────────────────────────────────────────────────────
   return {
     // Route
     router,
@@ -260,8 +246,9 @@ export function useCuratorSchoolDetails() {
     urgentCare,
     campusLabel,
     tabs,
+    selectedProvider,
 
-    // Loading states
+    // Loading / error states
     isLoading,
     patientsLoading: patientsQuery.isLoading,
     providersLoading: providersQuery.isLoading,
@@ -269,9 +256,9 @@ export function useCuratorSchoolDetails() {
     isActionLoading,
     error,
 
-    // Tab
+    // Tab — only expose handleTabChange, not raw setActiveTab,
+    // so callers always go through the search-reset logic
     activeTab,
-    setActiveTab,
     handleTabChange,
 
     // Search
@@ -280,6 +267,20 @@ export function useCuratorSchoolDetails() {
     isSearchOpen,
     setIsSearchOpen,
     searchInputRef,
+    suggestions: useCuratorSchoolSearch({
+      searchQuery,
+      activeTab,
+      patients: filteredPatients,
+      schoolIcons,
+      providers,
+    }).suggestions,
+    quickFilters: useCuratorSchoolSearch({
+      searchQuery,
+      activeTab,
+      patients: filteredPatients,
+      schoolIcons,
+      providers,
+    }).quickFilters,
 
     // Modal state
     showEditModal,
@@ -289,7 +290,6 @@ export function useCuratorSchoolDetails() {
     showProviderModal,
     setShowProviderModal,
     selectedProviderEmail,
-    selectedProvider,
     showAddIconModal,
     setShowAddIconModal,
     editingIcon,
@@ -301,15 +301,9 @@ export function useCuratorSchoolDetails() {
     handleDisableSchool,
     handleDisableConfirm,
     handleIconComplete,
+    loadProviders,
 
     // Utilities
     compactTimeAgo,
-
-    // Search Logic
-    suggestions,
-    quickFilters,
-
-    // Reloaders (for modal callbacks)
-    loadProviders,
   };
 }

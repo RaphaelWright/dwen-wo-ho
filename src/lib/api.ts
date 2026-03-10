@@ -1,19 +1,9 @@
 import { handleTokenExpiration, isAuthError } from "./auth-utils";
 import { toast } from "@/components/ui/sonner";
+import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://justgo.up.railway.app";
-
-const PUBLIC_ENDPOINTS = [
-  "/api/v1/auth/check-email",
-  "/api/v1/auth/sign-in",
-  "/api/v1/auth/create-account",
-  "/api/v1/auth/submit-signup-code",
-  "/api/v1/email/send-verification",
-  "/api/v1/auth/recover-account",
-  "/api/v1/auth/submit-account-recovery-code",
-  "/api/v1/auth/refresh-token",
-];
 
 const isPublicEndpoint = (endpoint: string): boolean => {
   return PUBLIC_ENDPOINTS.some((path) => endpoint.includes(path));

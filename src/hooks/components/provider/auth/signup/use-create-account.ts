@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 import {
   ProviderSignUpSchema,
   ProviderSignUpFormData,

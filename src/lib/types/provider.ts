@@ -1,37 +1,30 @@
-export interface ProviderDetails {
+export interface Provider {
   id: string;
   email: string;
-  fullName: string;
-  providerTitle?: string | null;
-  professionalTitle?: string | null;
-  status?: string;
-  officePhoneNumber?: string | null;
-  specialties?: string[];
-  profileImage?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  applicationStatus?: "PENDING" | "APPROVED" | "REJECTED";
-  applicationDate?: string;
-  bio?: string | null;
-  providerName?: string; // Sometimes used instead of fullName in API responses
-  ranking?: string;
-}
-
-export interface Provider {
-  id?: string;
-  email: string;
-  providerName: string;
+  providerName?: string;
   providerTitle?: string | null;
   specialty?: string | null;
   officePhoneNumber?: string | null;
-  applicationDate: string;
-  applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
+  applicationDate?: string;
+  applicationStatus?: "PENDING" | "APPROVED" | "REJECTED";
   profilePhotoURL?: string | null;
   status?: string | null;
   bio?: string | null;
   lastActive?: string;
   ranking?: string;
 }
+
+
+export interface ProviderDetails extends Provider {
+  fullName: string;
+  professionalTitle?: string | null;
+  profileImage?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  specialties?: string[];
+}
+
+
 
 export interface SchoolProvider {
   id: string;

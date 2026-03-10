@@ -22,7 +22,7 @@ export function getStatusConfig(status: string) {
       bar: "#8B5CF6",
       actionLabel: "Resume",
     },
-    "follow-up": {
+    followUp: {
       label: "Follow-up",
       cls: "bg-amber-50 text-[#f59e0b] border-[rgba(245,158,11,.25)]",
       bar: "#f59e0b",
@@ -41,7 +41,7 @@ export function getStatusConfig(status: string) {
       actionLabel: "Action",
     },
   };
-  return map[status] ?? map.ignored;
+  return map[status.toLowerCase()] ?? map.ignored;
 }
 
 /** Score-ring colour per status */

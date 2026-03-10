@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
+import { useProvidersQuery } from "@/hooks/queries/useProviders";
 import { Provider, Provider as ApiProvider } from "@/lib/types/provider";
 import {
   formatProviderName,
@@ -84,7 +84,7 @@ export function useCuratorProviders() {
     (email: string) => {
       const provider = providersList.find((p) => p.email === email);
       if (!provider) return "";
-      return formatProviderName(provider.providerName, provider.providerTitle);
+      return formatProviderName(provider.providerName || "", provider.providerTitle);
     },
     [providersList],
   );
@@ -150,12 +150,12 @@ export function useCuratorProviders() {
       id: foundProvider.email,
       email: foundProvider.email,
       fullName: formatProviderName(
-        foundProvider.providerName,
+        foundProvider.providerName || "",
         foundProvider.providerTitle,
       ),
       providerTitle:
         getProviderTitle(
-          foundProvider.providerName,
+          foundProvider.providerName || "",
           foundProvider.providerTitle,
         ) || undefined,
       professionalTitle: foundProvider.specialty || undefined,

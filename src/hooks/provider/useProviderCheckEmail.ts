@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
 import { ProviderEmailSchema } from "@/lib/schemas/provider.auth.schema";
 

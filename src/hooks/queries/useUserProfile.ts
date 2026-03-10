@@ -1,7 +1,5 @@
-"use client";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { useQuery } from "@tanstack/react-query";
+import { authService } from "@/services/auth";
 
 const useUserQuery = (options?: {
   refetchInterval?: number;
@@ -9,16 +7,11 @@ const useUserQuery = (options?: {
 }) => {
   const getProfileQuery = useQuery({
     queryKey: ["auth", "profile"],
-    queryFn: () => getProfile(),
+    queryFn: authService.getProfile,
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     ...options,
   });
-
-  async function getProfile() {
-    const response = await api(ENDPOINTS.profile, { method: "GET" });
-    return response.data;
-  }
 
   return {
     getProfileQuery,

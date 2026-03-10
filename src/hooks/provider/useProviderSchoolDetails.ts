@@ -3,9 +3,10 @@
 import { useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import { schoolsService } from "@/services/schools";
+import { lockinsService } from "@/services/lockins";
+import { patientsService } from "@/services/patients";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { toast } from "@/components/ui/sonner";
 
 import { LockInData, LockInStudent } from "@/lib/types/lockin";
@@ -15,30 +16,29 @@ import { School } from "@/lib/types/school";
 // ─── Fetchers ────────────────────────────────────────────────────────────────
 
 async function fetchSchoolDetail(schoolId: string): Promise<School | null> {
-  const response = await api(ENDPOINTS.school(schoolId));
-  if (response?.success && response.data) {
-    return response.data;
+  try {
+    return await schoolsService.getSchool(schoolId);
+  } catch {
+    return null;
   }
-  return null;
 }
 
 async function fetchStudents(schoolId: string): Promise<LockInStudent[]> {
-  const lockInResponse = await api(ENDPOINTS.getSchoolLockIn(schoolId));
-  if (!lockInResponse?.success || !lockInResponse.data) {
+  let lockInData;
+  try {
+    lockInData = await lockinsService.getSchoolLockIn(schoolId);
+  } catch {
     return [];
   }
 
-  const lockInData = lockInResponse.data as LockInData;
+  if (!lockInData) return [];
+
   let studentsList = lockInData.students || [];
 
   try {
-    const resultsResponse = await api(
-      ENDPOINTS.getSchoolPatientResults(schoolId),
-    );
-    if (resultsResponse?.success && resultsResponse.data) {
-      const results = Array.isArray(resultsResponse.data)
-        ? resultsResponse.data
-        : [];
+    const resultsResponse = await patientsService.getSchoolResults(schoolId);
+    if (resultsResponse && Array.isArray(resultsResponse)) {
+      const results = resultsResponse;
 
       const resultMap = new Map<string, PatientResult>();
       results.forEach((result: PatientResult) => {
@@ -150,13 +150,9 @@ export function useProviderSchoolDetails() {
       }
 
       try {
-        const resultsResponse = await api(
-          ENDPOINTS.getSchoolPatientResults(schoolId),
-        );
-        if (resultsResponse?.success && resultsResponse.data) {
-          const results = Array.isArray(resultsResponse.data)
-            ? resultsResponse.data
-            : [];
+        const resultsResponse = await patientsService.getSchoolResults(schoolId);
+        if (resultsResponse && Array.isArray(resultsResponse)) {
+          const results = resultsResponse;
           const existingResult = results.find(
             (r: PatientResult) => r.patientName === student.studentName,
           );
@@ -171,22 +167,15 @@ export function useProviderSchoolDetails() {
 
       if (student.lockinId) {
         try {
-          const response = await api(ENDPOINTS.createPatientResult, {
-            method: "POST",
-            body: JSON.stringify({
-              lockinId: student.lockinId,
-              schoolId: Number(schoolId),
-            }),
+          const response = await patientsService.createPatientResult({
+            lockinId: student.lockinId,
+            schoolId: Number(schoolId),
           });
 
           if (response?.success) {
-            const updatedResults = await api(
-              ENDPOINTS.getSchoolPatientResults(schoolId),
-            );
-            if (updatedResults?.success && updatedResults.data) {
-              const results = Array.isArray(updatedResults.data)
-                ? updatedResults.data
-                : [];
+            const updatedResults = await patientsService.getSchoolResults(schoolId);
+            if (updatedResults && Array.isArray(updatedResults)) {
+              const results = updatedResults;
               const result = results.find(
                 (r: PatientResult) => r.patientName === student.studentName,
               );

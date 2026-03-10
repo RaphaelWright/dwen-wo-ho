@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useProvidersQuery } from "@/hooks/queries/useProvidersQuery";
-import { useSchools } from "@/hooks/queries/useSchoolsQuery";
-import { usePartnersList } from "@/hooks/queries/usePartnersQuery";
+import { useProvidersQuery } from "@/hooks/queries/useProviders";
+import { useSchools } from "@/hooks/queries/useSchools";
+import { usePartnersList } from "@/hooks/queries/usePartners";
 import {
   AssociatedSchool,
   AssociatedPartner,
+  Provider,
   ProviderDetails,
 } from "@/lib/types/provider";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "@/components/ui/sonner";
 import { School } from "@/lib/types/school";
 import { useQueryClient } from "@tanstack/react-query";
@@ -100,26 +101,28 @@ export const useProviderDetails = ({
     ? {
         id: providerData.id || providerData.email,
         email: providerData.email,
-        fullName: formatProviderName(
-          providerData.providerName,
-          providerData.providerTitle,
-        ),
+        fullName:
+          (providerData as ProviderDetails).fullName ||
+          formatProviderName(
+            (providerData as Provider).providerName || providerData.email,
+            providerData.providerTitle,
+          ),
         providerTitle:
           getProviderTitle(
-            providerData.providerName,
+            (providerData as Provider).providerName || "",
             providerData.providerTitle,
           ) || undefined,
-        professionalTitle: providerData.specialty || "",
-        profileImage: providerData.profilePhotoURL || undefined,
+        professionalTitle: (providerData as Provider).specialty || "",
+        profileImage: (providerData as Provider).profilePhotoURL || undefined,
         status: providerData.status || providerData.bio || undefined,
         officePhoneNumber: providerData.officePhoneNumber || undefined,
-        specialties: providerData.specialty
-          ? [providerData.specialty]
+        specialties: (providerData as Provider).specialty
+          ? [(providerData as Provider).specialty as string]
           : undefined,
-        createdAt: providerData.applicationDate,
-        updatedAt: providerData.lastActive || providerData.applicationDate,
-        applicationStatus: providerData.applicationStatus,
-        applicationDate: providerData.applicationDate,
+        createdAt: (providerData as Provider).applicationDate,
+        updatedAt: (providerData as Provider).lastActive || (providerData as Provider).applicationDate,
+        applicationStatus: (providerData as Provider).applicationStatus,
+        applicationDate: (providerData as Provider).applicationDate,
       }
     : (providerProp ?? null);
 
@@ -134,7 +137,7 @@ export const useProviderDetails = ({
       });
 
       const response = await api(
-        `${ENDPOINTS.provider(providerEmail)}?_t=${Date.now()}`,
+        `${DYNAMIC_ENDPOINTS.PROVIDERS.GET(providerEmail)}?_t=${Date.now()}`,
       );
       if (response?.success && response.data) {
         const providerSchools = response.data.schools || [];
@@ -180,7 +183,7 @@ export const useProviderDetails = ({
   ) => {
     setIsLoadingPartners(true);
     try {
-      const response = await api(ENDPOINTS.provider(providerEmail));
+      const response = await api(DYNAMIC_ENDPOINTS.PROVIDERS.GET(providerEmail));
       if (response?.success && response.data) {
         const providerPartners = response.data.partners || [];
         const associatedIds = new Set(
@@ -263,7 +266,7 @@ export const useProviderDetails = ({
     const providerId = provider?.id || providerEmail;
     setIsAddingSchool(true);
     try {
-      const response = await api(ENDPOINTS.addSchoolToProvider(providerId), {
+      const response = await api(DYNAMIC_ENDPOINTS.PROVIDERS.ADD_SCHOOL(providerId), {
         method: "POST",
         body: JSON.stringify({ schoolId: school.id }),
       });
@@ -297,7 +300,7 @@ export const useProviderDetails = ({
     setIsRemovingSchool(true);
     try {
       const response = await api(
-        ENDPOINTS.removeSchoolFromProvider(providerId, school.id),
+        DYNAMIC_ENDPOINTS.PROVIDERS.REMOVE_SCHOOL(providerId, school.id),
         {
           method: "DELETE",
         },
@@ -323,7 +326,7 @@ export const useProviderDetails = ({
     try {
       const providerId = provider?.id || providerEmail;
       const response = await api(
-        ENDPOINTS.addPartnerToProvider(partner.id, providerId),
+        DYNAMIC_ENDPOINTS.PARTNERS.ADD_PROVIDER(partner.id, providerId),
         {
           method: "POST",
         },
@@ -344,7 +347,7 @@ export const useProviderDetails = ({
     try {
       const providerId = provider?.id || providerEmail;
       const response = await api(
-        ENDPOINTS.removePartnerFromProvider(partner.id, providerId),
+        DYNAMIC_ENDPOINTS.PARTNERS.REMOVE_PROVIDER(partner.id, providerId),
         {
           method: "POST",
         },

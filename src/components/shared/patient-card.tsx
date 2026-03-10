@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { getScoreColor, getStatusConfig } from "@/lib/utils/new-provider";
 import ScoreRing from "./score-ring";
+import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
+import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
 
 /**
  * A single row in the patient list.
@@ -10,27 +12,17 @@ import ScoreRing from "./score-ring";
  *
  */
 
-export interface PatientCardProps {
-  id: string | number;
-  name: string;
-  score: number | null;
-  status: string;
-  time: string;
-  preview: string | React.ReactNode;
-  schoolLabel?: string;
-}
-
 export default function PatientCard({
   patient,
   index = 0,
   onActionClick,
 }: {
-  patient: PatientCardProps;
+  patient: SchoolPatientRecord;
   index?: number;
   onActionClick?: (id: string | number) => void;
 }) {
-  const cfg = getStatusConfig(patient.status);
-  const scoreColor = getScoreColor(patient.score);
+  const cfg = getStatusConfig(patient.visibilityStatus);
+  const scoreColor = getScoreColor(patient.lockinScore);
 
   return (
     <motion.div
@@ -51,25 +43,23 @@ export default function PatientCard({
     >
       {/* Content */}
       <div className="relative z-10 flex items-center gap-4 w-full">
-        <ScoreRing score={patient.score} />
+        <ScoreRing score={patient.lockinScore} />
 
         <div className="flex-1 min-w-0">
           {/* Name + time */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[15px] font-bold">{patient.name}</span>
+            <span className="text-[15px] font-bold">{patient.patientName}</span>
             <span className="text-xs text-muted-foreground">
-              {patient.time}
+              {compactTimeAgo(patient.createdAt || "")} ago
             </span>
-            {patient.schoolLabel && (
-              <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info bg-info/10 max-w-30 truncate">
-                {patient.schoolLabel}
-              </span>
-            )}
+            <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info bg-info/10 max-w-30 truncate">
+              {patient.schoolNickname ?? "Unknown"}
+            </span>
           </div>
 
           {/* Preview */}
           <p className="text-[12.5px] mt-0.5 leading-snug line-clamp-1 text-muted-foreground/80">
-            {patient.preview}
+            {patient.comment}
           </p>
 
           {/* Tags */}

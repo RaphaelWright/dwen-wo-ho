@@ -5,8 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod/v4";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { lockinsService } from "@/services/lockins";
 
 export type LockInFormData = z.infer<typeof lockInSchema>;
 
@@ -162,10 +161,7 @@ export function useLockInForm() {
     async (data: LockInFormData) => {
       setIsSubmitting(true);
       try {
-        const response = await api(ENDPOINTS.submitLockIn, {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
+        const response = await lockinsService.submitLockInForm(data);
 
         if (response?.success) {
           clearCachedData();

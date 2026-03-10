@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { NEW_PROVIDER_EDITABLE_FIELDS } from "@/data/mock-provider-data";
-import useNewProvider from "@/hooks/provider/use-new-provider";
+import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
 import { Input } from "@/components/ui/input";
 
 /**
@@ -34,7 +34,7 @@ export default function EditFieldDialog() {
     editValue,
     setEditValue,
     saveEdit,
-  } = useNewProvider();
+  } = useProviderDashboard();
   const hint =
     NEW_PROVIDER_EDITABLE_FIELDS.find((f) => f.key === editFieldKey)?.hint ??
     "";

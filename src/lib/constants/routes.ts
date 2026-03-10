@@ -38,3 +38,12 @@ export const ROUTES = {
     pages: "/curator/pages",
   },
 } as const;
+
+export const DYNAMIC_ROUTES = {
+  curator: {
+    schoolDetails: (schoolId: string | number) => `/curator/schools/${schoolId}`,
+    patientDetails: (schoolId: string | number, patientId: string | number) =>
+      `/curator/schools/${schoolId}/patients/${patientId}`,
+  },
+};
+

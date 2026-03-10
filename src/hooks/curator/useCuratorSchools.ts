@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSchoolsWithRefetch } from "@/hooks/queries/useSchoolsQuery";
+import { useSchoolsWithRefetch } from "@/hooks/queries/useSchools";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
 

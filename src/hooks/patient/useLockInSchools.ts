@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useSchools } from "@/hooks/queries/useSchoolsQuery";
+import { useSchools } from "@/hooks/queries/useSchools";
 import { School } from "@/lib/types/school";
 
 export function useLockInSchools() {

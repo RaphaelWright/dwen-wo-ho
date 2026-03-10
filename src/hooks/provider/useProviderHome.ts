@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
 import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { calculateTimeAgo } from "@/lib/utils";
 
 export function useProviderHome() {

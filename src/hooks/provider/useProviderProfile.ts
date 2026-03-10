@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { ProviderProfile, ProviderStats } from "@/lib/types/provider/profile";
 
 export function useProviderProfile() {

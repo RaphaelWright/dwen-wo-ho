@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { useAtom } from "jotai";
 import {
   providerSchoolsAtom,

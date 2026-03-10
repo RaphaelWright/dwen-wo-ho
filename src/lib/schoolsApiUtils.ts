@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 
 // Simple in-memory cache with TTL
 class RequestCache {
@@ -83,7 +83,7 @@ export async function getSchoolLockInCount(
   }
 
   try {
-    const response = await api(ENDPOINTS.getSchoolLockIn(schoolId));
+    const response = await api(DYNAMIC_ENDPOINTS.SCHOOLS.GET_LOCKIN(schoolId));
 
     if (response?.success && response.data) {
       const count = response.data.students?.length || 0;
@@ -116,7 +116,7 @@ export async function getLatestPatientResult(
   }
 
   try {
-    const response = await api(ENDPOINTS.getSchoolPatientResults(schoolId));
+    const response = await api(DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_SCHOOL_RESULTS(schoolId));
 
     if (response?.success && response.data && response.data.length > 0) {
       // Sort and get the latest
@@ -149,7 +149,7 @@ export async function checkForNewPatients(
   latestPatient?: { patientName: string; createdAt: string };
 } | null> {
   try {
-    const response = await api(ENDPOINTS.getNewSchoolPatientResults(schoolId));
+    const response = await api(DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_NEW_SCHOOL_RESULTS(schoolId));
 
     if (response?.success && response.data && response.data.length > 0) {
       const sorted = response.data.sort(

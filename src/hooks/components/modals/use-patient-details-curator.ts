@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { PatientResult, LockInAssessment } from "@/lib/types/modals";
 
 // ─── Fetcher ─────────────────────────────────────────────────────────────────
@@ -19,14 +19,14 @@ async function fetchPatientDetails(
   let patientResult: PatientResult | null = null;
   let lockInAssessment: LockInAssessment | null = null;
 
-  const resultResponse = await api(ENDPOINTS.getPatientResult(patientId));
+  const resultResponse = await api(DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET(patientId));
   if (resultResponse?.success && resultResponse.data) {
     const resultData = resultResponse.data as PatientResult;
     patientResult = resultData;
 
     try {
       const lockInResponse = await api(
-        ENDPOINTS.getSchoolLockIn(resultData.schoolId),
+        DYNAMIC_ENDPOINTS.SCHOOLS.GET_LOCKIN(resultData.schoolId),
       );
       if (lockInResponse?.success && lockInResponse.data) {
         const lockInData = lockInResponse.data as {

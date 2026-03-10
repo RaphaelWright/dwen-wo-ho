@@ -9,8 +9,7 @@ import {
 } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
 import { refreshToken } from "@/lib/auth-utils";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { authService } from "@/services/auth";
 
 export type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
 
@@ -61,11 +60,9 @@ export function useProviderAuth() {
 
       const verifyProfileAndRedirect = async () => {
         try {
-          const profileResponse = await api(ENDPOINTS.profile, {
-            method: "GET",
-          });
+          const profileData = await authService.getProfile();
 
-          if (profileResponse?.success && profileResponse.data) {
+          if (profileData) {
             const userType = getUserType();
 
             if (userType === "curator" && !hasRedirectedRef.current) {

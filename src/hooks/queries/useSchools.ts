@@ -1,94 +1,97 @@
 "use client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
 import { toast } from "@/components/ui/sonner";
-import { School } from "@/lib/types/school";
+import { schoolsService } from "@/services/schools";
+import { lockinsService } from "@/services/lockins";
 
 const SCHOOLS_QUERY_KEY = "schools";
-
-const getSchools = async (): Promise<School[]> => {
-  const result = await api("/api/v1/schools");
-
-  if (result?.success && Array.isArray(result.data)) {
-    return result.data;
-  }
-
-  if (Array.isArray(result)) {
-    return result;
-  }
-
-  return [];
-};
-
-const getSchool = async (schoolId: string): Promise<School> => {
-  const result = await api(`/api/v1/schools/${schoolId}`);
-
-  if (result?.success && result.data) {
-    return result.data;
-  }
-
-  throw new Error("Failed to fetch school");
-};
-
-const disableSchool = async (schoolId: string): Promise<School> => {
-  const result = await api(`/api/v1/schools/${schoolId}/disable`, {
-    method: "PUT",
-  });
-
-  if (result?.success && result.data) {
-    return result.data;
-  }
-
-  throw new Error("Failed to disable school");
-};
+const SCHOOLS_LOCKIN_QUERY_KEY = "schools_lockin";
 
 export const useSchools = (options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient();
-
-  const schoolsQuery = useQuery({
+  return useQuery({
     queryKey: [SCHOOLS_QUERY_KEY],
-    queryFn: getSchools,
+    queryFn: () => schoolsService.getSchools(),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: options?.enabled ?? true,
   });
+};
 
-  // Get single school
-  const useSchool = (schoolId: string) =>
-    useQuery({
-      queryKey: [SCHOOLS_QUERY_KEY, schoolId],
-      queryFn: () => getSchool(schoolId),
-      enabled: !!schoolId,
-    });
+export const useSchoolsWithRefetch = (options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: [SCHOOLS_QUERY_KEY],
+    queryFn: () => schoolsService.getSchools(),
+    staleTime: 0,
+    gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
+  });
+};
 
-  // Disable school mutation
-  const disableSchoolMutation = useMutation({
-    mutationFn: disableSchool,
+export const useSchool = (schoolId: string) => {
+  return useQuery({
+    queryKey: [SCHOOLS_QUERY_KEY, schoolId],
+    queryFn: () => schoolsService.getSchool(schoolId),
+    enabled: !!schoolId,
+  });
+};
+
+export const useSchoolLockin = (schoolId: string) => {
+  return useQuery({
+    queryKey: [SCHOOLS_LOCKIN_QUERY_KEY, schoolId],
+    queryFn: () => lockinsService.getSchoolLockIn(schoolId),
+    enabled: !!schoolId,
+    staleTime: 3 * 60 * 1000, // 3 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+export const useCreateSchool = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: schoolsService.createSchool,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [SCHOOLS_QUERY_KEY] });
+      toast.success("School created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to create school");
+    },
+  });
+};
+
+export const useDisableSchool = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: schoolsService.disableSchool,
     onSuccess: (data, schoolId) => {
-      // Invalidate schools queries to trigger refetch
       queryClient.invalidateQueries({ queryKey: [SCHOOLS_QUERY_KEY] });
       queryClient.invalidateQueries({
-        queryKey: [SCHOOLS_QUERY_KEY, schoolId],
+        queryKey: [SCHOOLS_QUERY_KEY, String(schoolId)],
       });
-
       toast.success("School disabled successfully");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to disable school");
     },
   });
+};
 
-  // Return all queries and mutations
-  return {
-    // Queries
-    schools: schoolsQuery.data,
-    isLoading: schoolsQuery.isLoading,
-    isError: schoolsQuery.isError,
-    error: schoolsQuery.error,
-    // Single school query helper
-    useSchool,
-    // Mutations
-    disableSchool: disableSchoolMutation.mutate,
-    isDisabling: disableSchoolMutation.isPending,
-  };
+export const useUpdateSchool = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: schoolsService.updateSchool,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: [SCHOOLS_QUERY_KEY] });
+      queryClient.invalidateQueries({
+        queryKey: [SCHOOLS_QUERY_KEY, String(variables.id)],
+      });
+      toast.success("School updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update school");
+    },
+  });
 };

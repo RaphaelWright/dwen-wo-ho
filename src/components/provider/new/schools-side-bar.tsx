@@ -5,7 +5,7 @@ import { School } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NEW_PROVIDER_SCHOOLS } from "@/data/mock-provider-data";
-import useNewProvider from "@/hooks/provider/use-new-provider";
+import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
  * }} props
  */
 export default function SchoolsSidebar() {
-  const { activeSchool, handleSelectSchool } = useNewProvider();
+  const { activeSchool, handleSelectSchool } = useProviderDashboard();
   return (
     <aside className="w-full shrink-0 flex flex-col overflow-y-auto no-scrollbar border-r h-full pb-40 md:pb-10 lg:border-0 lg:bg-[#fcf1e9] lg:dark:bg-muted lg:h-fit lg:rounded-2xl lg:mt-6 lg:ml-2 lg:pb-2">
       {/* Header label */}

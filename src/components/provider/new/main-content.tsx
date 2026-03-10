@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Filter, LayoutGrid, Search, Sparkles, X, Zap } from "lucide-react";
 import { NEW_PROVIDER_STATUS_CHIPS } from "@/data/mock-provider-data";
 import PatientCard from "@/components/shared/patient-card";
-import useNewProvider from "@/hooks/provider/use-new-provider";
+import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
 
 const STATUS_TAB_ICONS: Record<string, typeof LayoutGrid> = {
@@ -26,7 +26,7 @@ const STATUS_TAB_ICONS: Record<string, typeof LayoutGrid> = {
  */
 export default function MainContent() {
   const { activeStatus, setActiveStatus, countForChip, filteredPatients } =
-    useNewProvider();
+    useProviderDashboard();
 
   return (
     <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10 lg:ml-4">
@@ -48,7 +48,8 @@ export default function MainContent() {
       {/* ── Patient cards ── */}
       <div className="flex flex-col gap-2">
         <AnimatePresence>
-          {filteredPatients.map((patient, i) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {(filteredPatients as any[]).map((patient, i) => (
             <PatientCard key={patient.id} patient={patient} index={i} />
           ))}
         </AnimatePresence>

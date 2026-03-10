@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useCreateSchool } from "@/hooks/queries/useSchoolsQuery";
+import { useCreateSchool } from "@/hooks/queries/useSchools";
 import { ICreateSchool } from "@/lib/types/school";
 
 export interface SchoolFormData {

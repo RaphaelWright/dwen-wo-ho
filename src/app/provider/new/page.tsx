@@ -10,13 +10,13 @@ import EditFieldDialog from "@/components/provider/new/edit-field-dialog";
 import SchoolsSidebar from "@/components/provider/new/schools-side-bar";
 import LiquidGlassNavbar from "@/components/ui/liquid-glass-navbar";
 import LiquidGlass from "@/components/ui/liquid-glass";
-import useNewProvider from "@/hooks/provider/use-new-provider";
+import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import {
-  useNewProviderMobile,
+  useProviderDashboardMobile,
   type MobilePanel,
-} from "@/hooks/provider/use-new-provider-mobile";
+} from "@/hooks/provider/useProviderDashboardMobile";
 import { NEW_PROVIDER_URGENT_PATIENTS } from "@/data/mock-provider-data";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ export default function ProviderDashboardPage() {
     markAllRead,
     markOneRead,
     clearAllNotifications,
-  } = useNewProvider();
+  } = useProviderDashboard();
   const {
     activePanel,
     setActivePanel,
@@ -41,7 +41,7 @@ export default function ProviderDashboardPage() {
     mobileTabs,
     panelVariants,
     panelTransition,
-  } = useNewProviderMobile();
+  } = useProviderDashboardMobile();
 
   return (
     <div className="overflow-x-hidden h-dvh min-[1065px]:h-screen min-[1065px]:overflow-hidden flex flex-col w-full px-0.5 min-[1065px]:px-0">

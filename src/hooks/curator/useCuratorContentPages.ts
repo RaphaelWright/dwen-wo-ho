@@ -6,7 +6,7 @@ import { CoverPage } from "@/lib/types/curator";
 
 export type CuratorPagesTabType = "cover-page" | "icons" | "lock-ins";
 
-export function useCuratorPages() {
+export function useCuratorContentPages() {
   const [activeTab, setActiveTab] = useState<CuratorPagesTabType>("cover-page");
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [showSchoolModal, setShowSchoolModal] = useState(false);

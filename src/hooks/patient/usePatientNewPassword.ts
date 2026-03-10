@@ -7,7 +7,7 @@ import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 import { SignUpSchema } from "@/lib/schemas/patient.auth";
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>;

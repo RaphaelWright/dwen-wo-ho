@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { performLogout } from "@/lib/auth-utils";
 import { hasValidToken } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";

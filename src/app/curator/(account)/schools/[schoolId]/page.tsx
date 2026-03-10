@@ -1,10 +1,11 @@
 "use client";
+import type { Route } from "next";
 
 import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
 import AddIconModal from "@/components/modals/add-icon";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
 import { useCuratorSchoolDetails } from "@/hooks/curator/useCuratorSchoolDetails";
 import {
   SchoolHeaderCard,
@@ -185,9 +186,7 @@ export default function SchoolDetailsPage() {
                 compactTimeAgo={compactTimeAgo}
                 searchQuery={searchQuery}
                 onViewPatient={(patientId) =>
-                  router.push(
-                    `/curator/schools/${schoolId}/patients/${patientId}`,
-                  )
+                  router.push(DYNAMIC_ROUTES.curator.patientDetails(schoolId, patientId) as Route)
                 }
               />
             )}

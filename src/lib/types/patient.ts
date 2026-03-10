@@ -31,17 +31,6 @@ export interface PatientResult {
   lockinScore?: number;
 }
 
-export interface PatientResultItem {
-  id: number;
-  lockinId: number;
-  patientName: string;
-  createdAt: string;
-  visibilityStatus: string;
-  treatingProviders: Array<{ id: string; fullName: string }>;
-  lockinScore?: number;
-  comment?: string | null;
-}
-
 export interface UrgentCarePatient {
   id?: number;
   lockinId?: number;

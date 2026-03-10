@@ -3,8 +3,8 @@
 import { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { patientsService } from "@/services/patients";
+import { lockinsService } from "@/services/lockins";
 import { CuratorPatientResult } from "@/lib/types/curator";
 import { LockInAssessment } from "@/lib/types/lockin";
 
@@ -31,21 +31,17 @@ async function fetchPatientDetails(
   let patientResult: CuratorPatientResult | null = null;
   let lockInAssessment: LockInAssessment | null = null;
 
-  const resultResponse = await api(
-    ENDPOINTS.getPatientResult(Number(patientId)),
-  );
+  const fetchedResult = await patientsService.getPatientResult(patientId);
 
-  if (resultResponse?.success && resultResponse.data) {
-    patientResult = resultResponse.data as CuratorPatientResult;
+  if (fetchedResult) {
+    patientResult = fetchedResult as CuratorPatientResult;
 
     // Fetch per-patient lock-in assessment data using the lockinId
     try {
-      const lockInResponse = await api(
-        ENDPOINTS.getLockInUpdate(patientResult.lockinId),
-      );
+      const lockInUpdateData = await lockinsService.getLockInUpdate(patientResult.lockinId);
 
-      if (lockInResponse?.success && lockInResponse.data) {
-        const data = lockInResponse.data as Record<string, unknown>;
+      if (lockInUpdateData) {
+        const data = lockInUpdateData as Record<string, unknown>;
 
         // Extract colors from assessmentItems array
         const items =

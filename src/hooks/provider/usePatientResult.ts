@@ -3,9 +3,9 @@
 import { useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
-import useUserQuery from "@/hooks/queries/useUserQuery";
+import { patientsService } from "@/services/patients";
+import { lockinsService } from "@/services/lockins";
+import useUserQuery from "@/hooks/queries/useUserProfile";
 import { toast } from "@/components/ui/sonner";
 
 import { PatientResult } from "@/lib/types/patient";
@@ -27,19 +27,17 @@ async function fetchPatientResult(
   let patientResult: PatientResult | null = null;
   let lockInAssessment: LockInAssessment | null = null;
 
-  // Try to open the result first (marks as seen)
-  const openResponse = await api(ENDPOINTS.openPatientResult(resultId), {
-    method: "POST",
-  });
-
   let resultData: PatientResult | null = null;
 
-  if (openResponse?.success && openResponse.data) {
-    resultData = openResponse.data as PatientResult;
-  } else {
-    const resultResponse = await api(ENDPOINTS.getPatientResult(resultId));
-    if (resultResponse?.success && resultResponse.data) {
-      resultData = resultResponse.data as PatientResult;
+  try {
+    const openedResult = await patientsService.openPatientResult(resultId);
+    if (openedResult) {
+      resultData = openedResult;
+    }
+  } catch {
+    const fetchedResult = await patientsService.getPatientResult(resultId);
+    if (fetchedResult) {
+      resultData = fetchedResult;
     }
   }
 
@@ -48,19 +46,8 @@ async function fetchPatientResult(
 
     if (resultData.schoolId) {
       try {
-        const lockInResponse = await api(
-          ENDPOINTS.getSchoolLockIn(resultData.schoolId),
-        );
-        if (lockInResponse?.success && lockInResponse.data) {
-          const lockInData = lockInResponse.data as {
-            schoolName: string;
-            students: Array<{
-              studentName: string;
-              lockinScore: number;
-              lockedInInterpretation: string;
-              lockedInColor: string;
-            }>;
-          };
+        const lockInData = await lockinsService.getSchoolLockIn(resultData.schoolId);
+        if (lockInData) {
           const student = lockInData.students?.find(
             (s) => s.studentName === resultData?.patientName,
           );
@@ -150,14 +137,10 @@ export function usePatientResult() {
 
       setIsUpdating(true);
       try {
-        const providerId =
-          getProfileQuery.data.id || getProfileQuery.data.email;
-        const response = await api(ENDPOINTS.updateActionStatus(resultId), {
-          method: "PUT",
-          body: JSON.stringify({
-            providerId,
-            actionStatus,
-          }),
+        const providerId = getProfileQuery.data.id || getProfileQuery.data.email;
+        const response = await patientsService.updateActionStatus(resultId, {
+          providerId,
+          actionStatus,
         });
 
         if (response?.success) {

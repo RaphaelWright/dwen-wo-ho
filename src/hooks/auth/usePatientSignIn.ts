@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import useAuthQuery from "@/hooks/queries/useAuth";
 import { ROUTES } from "@/lib/constants/routes";
 import { LoginSchema } from "@/lib/schemas/login.auth.schema";
 import { z } from "zod/v4";

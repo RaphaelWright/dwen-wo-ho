@@ -9,11 +9,8 @@ import {
   Building2,
 } from "lucide-react";
 import WidthConstraint from "@/components/ui/width-constraint";
-import {
-  useCuratorSchools,
-  FILTER_OPTIONS,
-  type FilterType,
-} from "@/hooks/curator/useCuratorSchools";
+import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { useCuratorSchools, FILTER_OPTIONS, type FilterType } from "@/hooks/curator/useCuratorSchools";
 import { SchoolCard } from "@/components/curator/SchoolCard";
 import { NotificationBell } from "@/components/shared/notification-bell";
 import { useNotification } from "@/hooks/useNotification";
@@ -92,7 +89,7 @@ export default function SchoolsPage() {
                     addNotification(
                       "success",
                       `New school added: ${sampleSchool.name}`,
-                      `/curator/schools/${sampleSchool.id}`,
+                      DYNAMIC_ROUTES.curator.schoolDetails(sampleSchool.id),
                     );
                   } else {
                     addNotification(
@@ -117,7 +114,7 @@ export default function SchoolsPage() {
                     addNotification(
                       "info",
                       `New patient: ${schoolWithPatient.newPatientName} at ${schoolWithPatient.name}`,
-                      `/curator/schools/${schoolWithPatient.id}/patients/${schoolWithPatient.newPatientId}`,
+                      DYNAMIC_ROUTES.curator.patientDetails(schoolWithPatient.id, schoolWithPatient.newPatientId || ""),
                     );
                   } else {
                     addNotification(

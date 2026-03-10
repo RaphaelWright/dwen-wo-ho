@@ -1,80 +1,7 @@
 "use client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "@/configs/axiosInstance";
-import { checkResponse } from "@/lib/api-utils";
-import { api } from "@/lib/api";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
 import { toast } from "@/components/ui/sonner";
-import { IProviderResponse, Provider } from "@/lib/types/provider";
-
-const getProviders = async (): Promise<IProviderResponse> => {
-  try {
-    const response = await axiosInstance.get(ENDPOINTS.providers);
-    const data = checkResponse(response, 200);
-
-    if (data && typeof data === "object" && "data" in data) {
-      return data as IProviderResponse;
-    }
-
-    if (Array.isArray(data)) {
-      return {
-        success: true,
-        data,
-        message: "",
-      };
-    }
-
-    return {
-      success: true,
-      data: [],
-      message: "",
-    };
-  } catch {
-    const result = await api(ENDPOINTS.providers);
-    if (result?.success) {
-      return {
-        success: true,
-        data: Array.isArray(result.data) ? result.data : [],
-        message: result.message ?? "",
-      };
-    }
-    return {
-      success: false,
-      data: [],
-      message: "Failed to fetch providers",
-    };
-  }
-};
-
-const getProvider = async (email: string): Promise<Provider> => {
-  const result = await api(ENDPOINTS.provider(email));
-
-  if (result?.success && result.data) {
-    return result.data;
-  }
-
-  throw new Error("Failed to fetch provider");
-};
-
-const approveProvider = async (email: string): Promise<Provider> => {
-  const result = await api(ENDPOINTS.approveProvider(email), { method: "PUT" });
-
-  if (result?.success && result.data) {
-    return result.data;
-  }
-
-  throw new Error("Failed to approve provider");
-};
-
-const rejectProvider = async (email: string): Promise<Provider> => {
-  const result = await api(ENDPOINTS.rejectProvider(email), { method: "PUT" });
-
-  if (result?.success && result.data) {
-    return result.data;
-  }
-
-  throw new Error("Failed to reject provider");
-};
+import { providersService } from "@/services/providers";
 
 const PROVIDERS_QUERY_KEY = "providers";
 
@@ -83,7 +10,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
 
   const providersQuery = useQuery({
     queryKey: [PROVIDERS_QUERY_KEY],
-    queryFn: getProviders,
+    queryFn: providersService.getProviders,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: options?.enabled ?? true,
@@ -93,7 +20,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   const useProvider = (email: string) =>
     useQuery({
       queryKey: [PROVIDERS_QUERY_KEY, email],
-      queryFn: () => getProvider(email),
+      queryFn: () => providersService.getProvider(email),
       enabled: !!email,
       staleTime: 3 * 60 * 1000, // 3 minutes
       gcTime: 10 * 60 * 1000, // 10 minutes
@@ -101,7 +28,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
 
   // Approve provider mutation
   const approveProviderMutation = useMutation({
-    mutationFn: approveProvider,
+    mutationFn: providersService.approveProvider,
     onSuccess: (data, email) => {
       // Invalidate providers queries to trigger refetch
       queryClient.invalidateQueries({ queryKey: [PROVIDERS_QUERY_KEY] });
@@ -118,7 +45,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
 
   // Reject provider mutation
   const rejectProviderMutation = useMutation({
-    mutationFn: rejectProvider,
+    mutationFn: providersService.rejectProvider,
     onSuccess: (data, email) => {
       // Invalidate providers queries to trigger refetch
       queryClient.invalidateQueries({ queryKey: [PROVIDERS_QUERY_KEY] });

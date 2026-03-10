@@ -9,7 +9,7 @@ import {
   ProviderLoginFormData,
 } from "@/lib/schemas/provider.auth.schema";
 import { ROUTES } from "@/lib/constants/routes";
-import { ENDPOINTS } from "@/lib/constants/endpoints";
+import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "@/lib/api";
 import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
@@ -76,7 +76,7 @@ export function useProviderSignIn() {
     setErrorMessage("");
 
     try {
-      const response = await api(ENDPOINTS.login, {
+      const response = await api(STATIC_ENDPOINTS.AUTH.LOGIN, {
         method: "POST",
         body: JSON.stringify(values),
       });
