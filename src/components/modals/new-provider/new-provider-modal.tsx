@@ -5,7 +5,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { ProfileHero } from "./profile-hero";
 import { ProfileTabs } from "./profile-tabs";
 import { ProfileFooter } from "./profile-footer";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 
 /**
  * Profile dialog with Overview / Schools / Partners tabs.

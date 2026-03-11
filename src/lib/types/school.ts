@@ -16,6 +16,15 @@ export interface School {
   newPatientName?: string;
 }
 
+export interface SchoolFormData {
+  name: string;
+  nickname: string;
+  motto: string;
+  campuses: string[];
+  type: string;
+  logo: File | undefined;
+}
+
 export interface ICreateSchool {
   name: string;
   nickname: string;

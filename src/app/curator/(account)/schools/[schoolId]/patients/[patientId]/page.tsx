@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   useCuratorPatientDetails,
-  generateColor,
-} from "@/hooks/curator/useCuratorPatientDetails";
+} from "@/hooks/curator/use-curator-patient-details";
+import { getColorHex } from "@/lib/utils/color-utils";
 import { MOCK_PATIENT_ACTIONS } from "@/lib/constants/mock-data";
 
 export default function PatientDetailsPage() {
@@ -127,7 +127,7 @@ export default function PatientDetailsPage() {
               <div
                 className="px-4 py-1.5 rounded-full text-xs font-bold text-white uppercase tracking-wide shadow-sm"
                 style={{
-                  backgroundColor: generateColor(
+                  backgroundColor: getColorHex(
                     lockInAssessment?.lockedInColor || "gray",
                   ),
                 }}

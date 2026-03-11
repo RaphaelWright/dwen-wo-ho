@@ -1,6 +1,5 @@
-import { ExamAnxietySectionProps } from "@/lib/types/components/patient/lock-in";
+import { ExamAnxietySectionProps, LockInFormData } from "@/lib/types/components/patient/lock-in";
 import { Label } from "@/components/ui/label";
-import { LockInFormData } from "@/hooks/patient/useLockInForm";
 import { LOCK_IN_TEXTS } from "@/lib/constants/components/patient/lock-in";
 
 export function ExamAnxietySection({

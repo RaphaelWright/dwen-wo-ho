@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { NEW_PROVIDER_EDITABLE_FIELDS } from "@/data/mock-provider-data";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 import { Input } from "@/components/ui/input";
 
 /**

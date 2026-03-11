@@ -1,7 +1,7 @@
 "use client";
 
 import { ProviderSidebar } from "@/components/ui/provider-sidebar";
-import { useProviderLayout } from "@/hooks/provider/useProviderLayout";
+import { useProviderLayout } from "@/hooks/provider/use-provider-layout";
 import { LoadingScreen } from "@/components/ui/loading-screen";
 import { ProviderLayoutProps } from "@/lib/types/provider/layout";
 

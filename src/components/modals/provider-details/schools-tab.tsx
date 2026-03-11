@@ -2,7 +2,7 @@ import { FiAward, FiMinus, FiSearch, FiPlus } from "react-icons/fi";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SchoolsTabProps } from "@/lib/types/components/modals/provider-details";
-import { AssociatedSchool } from "@/lib/types/provider";
+import { AssociatedSchool } from "@/lib/types/partners";
 import { Input } from "@/components/ui/input";
 
 export const SchoolsTab = ({

@@ -7,9 +7,9 @@ import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
-import useGetSearchParams from "@/hooks/useGetSearchParams";
-import useAuthQuery from "@/hooks/queries/useAuth";
-import { ProviderPasswordSchema } from "@/lib/schemas/provider.auth.schema";
+import useGetSearchParams from "@/hooks/use-get-search-params";
+import {useAuthQuery} from "@/hooks/queries/use-auth";
+import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/new-password";
 import { setUserType } from "@/lib/utils/getUserType";
 

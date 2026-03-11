@@ -5,7 +5,7 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { SidebarProps } from "@/lib/types/components/curator/sidebar";
 import { SidebarContent } from "./sidebar-content";
 import { MobileHeader } from "./mobile-header";
-import { useCuratorSidebar } from "@/hooks/curator/useCuratorSidebar";
+import { useCuratorSidebar } from "@/hooks/curator/use-curator-sidebar";
 import {
   SIDEBAR_EXPANDED_WIDTH,
   SIDEBAR_COLLAPSED_WIDTH,

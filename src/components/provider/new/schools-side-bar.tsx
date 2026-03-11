@@ -5,7 +5,7 @@ import { School } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NEW_PROVIDER_SCHOOLS } from "@/data/mock-provider-data";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 import { cn } from "@/lib/utils";
 
 /**

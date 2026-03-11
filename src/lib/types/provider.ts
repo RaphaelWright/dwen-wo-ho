@@ -1,3 +1,5 @@
+import { AssociatedSchool, AssociatedPartner } from "./partners";
+
 export interface Provider {
   id: string;
   email: string;
@@ -22,6 +24,8 @@ export interface ProviderDetails extends Provider {
   createdAt?: string;
   updatedAt?: string;
   specialties?: string[];
+  schools?: any[];
+  partners?: any[];
 }
 
 
@@ -38,25 +42,16 @@ export interface SchoolProvider {
   isAssociated: boolean;
 }
 
-export interface AssociatedSchool {
-  id: string;
-  name: string;
-  joinedDate?: string;
-  isAssociated: boolean;
-  logo?: string;
-  primaryColor?: string;
-}
 
-export interface AssociatedPartner {
-  id: string;
-  name: string;
-  joinedDate?: string;
-  isAssociated: boolean;
-  logo?: string;
-}
 
 export interface IProviderResponse {
   success: boolean;
   data: Provider[];
   message: string;
+}
+
+export interface ApiActionResponse {
+  success: boolean;
+  message?: string;
+  data?: Provider;
 }

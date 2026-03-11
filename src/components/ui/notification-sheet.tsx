@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/drawer";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { useNotification } from "@/hooks/useNotification";
+import { useNotification } from "@/hooks/use-notification";
 import { NotificationSheetProps } from "@/lib/types/notification";
 
 const NOTIFICATION_TYPE_CONFIG = {

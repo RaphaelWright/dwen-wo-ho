@@ -2,7 +2,7 @@ import Image from "next/image";
 import { FiUsers, FiSearch, FiMinus, FiPlus } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { ProvidersTabProps } from "@/lib/types/components/modals/partner-details";
-import { AssociatedProvider } from "@/lib/types/modals";
+import { AssociatedProvider } from "@/lib/types/partners";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { Input } from "@/components/ui/input";
 

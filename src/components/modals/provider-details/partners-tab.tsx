@@ -2,7 +2,7 @@ import { FiUsers, FiMinus, FiSearch, FiPlus } from "react-icons/fi";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PartnersTabProps } from "@/lib/types/components/modals/provider-details";
-import { AssociatedPartner } from "@/lib/types/provider";
+import { AssociatedPartner } from "@/lib/types/partners";
 import { Input } from "@/components/ui/input";
 
 export const PartnersTab = ({
@@ -31,7 +31,7 @@ export const PartnersTab = ({
           </div>
         ) : (
           <div className="space-y-3">
-            {associatedPartners.map((partner) => (
+            {associatedPartners.map((partner: AssociatedPartner) => (
               <div
                 key={partner.id}
                 className="flex items-center justify-between p-4 bg-card border border-border rounded-lg hover:border-teal-500/30 transition-colors"

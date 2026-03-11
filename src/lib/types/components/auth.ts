@@ -1,6 +1,8 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { Route } from "next";
 
+export type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
+
 export interface BaseSignInFormProps {
   role: "patient" | "provider";
   email: string;

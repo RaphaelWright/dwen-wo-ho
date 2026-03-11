@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import PendingVerificationModal from "@/components/modals/pending-verification";
 import LoadingOverlay from "@/components/ui/loading-overlay";
 import { BaseSignInForm } from "@/components/auth/BaseSignInForm";
-import { useProviderSignIn } from "@/hooks/auth/useProviderSignIn";
+import { useProviderSignIn } from "@/hooks/auth/use-provider-signin";
 import { ProviderSignInProps } from "@/lib/types/provider/auth";
 import { SIGN_IN_TEXTS } from "@/lib/constants/components/provider/auth/signin";
 

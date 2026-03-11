@@ -4,7 +4,7 @@ import Link from "next/link";
 import { School, Loader2, MapPin } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { SchoolWithExtras } from "@/atoms/curator-schools";
-import { getFirstCampus } from "@/hooks/curator/useCuratorSchools";
+import { getFirstCampus } from "@/hooks/curator/use-curator-schools";
 import { Badge } from "../ui/badge";
 
 export function SchoolCard({ school }: { school: SchoolWithExtras }) {

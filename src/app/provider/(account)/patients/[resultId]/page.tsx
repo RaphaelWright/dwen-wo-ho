@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { usePatientResult } from "@/hooks/provider/usePatientResult";
+import { usePatientResult } from "@/hooks/provider/use-patient-result";
 import {
   PatientResultHeader,
   PatientInfoCard,

@@ -7,7 +7,7 @@ import { formatTime, signUpSteps } from "@/lib/utils";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/miscellaneous/stepper";
-import { useProviderVerifyEmail } from "@/hooks/provider/useProviderVerifyEmail";
+import { useProviderVerifyEmail } from "@/hooks/provider/use-provider-verify-email";
 
 const Verify = () => {
   const {

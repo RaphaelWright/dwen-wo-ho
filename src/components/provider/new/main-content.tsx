@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Filter, LayoutGrid, Search, Sparkles, X, Zap } from "lucide-react";
 import { NEW_PROVIDER_STATUS_CHIPS } from "@/data/mock-provider-data";
 import PatientCard from "@/components/shared/patient-card";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
 
 const STATUS_TAB_ICONS: Record<string, typeof LayoutGrid> = {

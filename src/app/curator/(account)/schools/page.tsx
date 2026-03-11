@@ -9,22 +9,20 @@ import {
   Building2,
 } from "lucide-react";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
-import { useCuratorSchools, FILTER_OPTIONS, type FilterType } from "@/hooks/curator/useCuratorSchools";
+import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { useCuratorSchools } from "@/hooks/curator/use-curator-schools";
+import { type FilterType } from "@/lib/types/curator";
+import { FILTER_OPTIONS } from "@/lib/constants/components/curator/schools-list-search";
 import { SchoolCard } from "@/components/curator/SchoolCard";
 import { NotificationBell } from "@/components/shared/notification-bell";
-import { useNotification } from "@/hooks/useNotification";
+import { useNotification } from "@/hooks/use-notification";
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
-import { SCHOOLS_LIST_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/schools-list-search";
-
-const SCHOOL_FILTER_ICONS: Record<FilterType, typeof School> = {
-  all: School,
-  JHS: BookMarked,
-  SHS: GraduationCap,
-  COLLEGE: Building2,
-};
+import {
+  SCHOOLS_LIST_SEARCH_PLACEHOLDERS,
+  SCHOOL_FILTER_ICONS,
+} from "@/lib/constants/components/curator/schools-list-search";
 
 export default function SchoolsPage() {
   const {
@@ -114,7 +112,10 @@ export default function SchoolsPage() {
                     addNotification(
                       "info",
                       `New patient: ${schoolWithPatient.newPatientName} at ${schoolWithPatient.name}`,
-                      DYNAMIC_ROUTES.curator.patientDetails(schoolWithPatient.id, schoolWithPatient.newPatientId || ""),
+                      DYNAMIC_ROUTES.curator.patientDetails(
+                        schoolWithPatient.id,
+                        schoolWithPatient.newPatientId || "",
+                      ),
                     );
                   } else {
                     addNotification(

@@ -1,7 +1,7 @@
 "use client";
 
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useProviderProfile } from "@/hooks/provider/useProviderProfile";
+import { useProviderProfile } from "@/hooks/provider/use-provider-profile";
 import {
   ProviderProfileHeader,
   ProviderProfileCard,

@@ -5,7 +5,7 @@ import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { Logo } from "@/components/shared/Logo";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useLockInSchools } from "@/hooks/patient/useLockInSchools";
+import { useLockInSchools } from "@/hooks/patient/use-lock-in-schools";
 
 export default function LockInPage() {
   const {

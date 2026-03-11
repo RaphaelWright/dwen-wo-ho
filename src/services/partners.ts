@@ -2,22 +2,7 @@ import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { axiosFormData } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
-
-export interface ICreatePartner {
-  name: string;
-  nickname?: string;
-  slogan?: string;
-  logo?: File | null;
-}
-
-export interface Partner {
-  id: string | number;
-  name: string;
-  nickname?: string;
-  slogan?: string;
-  logo?: string;
-  [key: string]: unknown;
-}
+import { Partner, ICreatePartner, PartnerDetailsData, AssociatedSchool, AssociatedProvider } from "@/lib/types/partners";
 
 export const partnersService = {
   getPartners: async (): Promise<Partner[]> => {
@@ -45,5 +30,41 @@ export const partnersService = {
 
     const response = await axiosFormData.post(STATIC_ENDPOINTS.PARTNERS, formData);
     return checkResponse(response, 201);
+  },
+
+  getPartnerDetails: async (partnerId: string): Promise<PartnerDetailsData> => {
+    const response = await api(DYNAMIC_ENDPOINTS.PARTNERS.GET(partnerId));
+    if (!response?.success || !response.data) {
+      throw new Error("Failed to load partner details");
+    }
+
+    const partnerData = response.data;
+
+    const partnerSchools: AssociatedSchool[] =
+      partnerData.schools && Array.isArray(partnerData.schools)
+        ? partnerData.schools.map((s: any) => ({
+            id: s.id,
+            name: s.name,
+            logo: s.logo,
+          }))
+        : [];
+
+    const partnerProviders: AssociatedProvider[] =
+      partnerData.providers && Array.isArray(partnerData.providers)
+        ? partnerData.providers.map((p: any) => ({
+            id: p.id || p.email,
+            email: p.email,
+            providerName: p.providerName || p.fullName,
+            providerTitle: p.providerTitle || p.title,
+            specialty: p.specialty,
+            profilePhotoURL: p.profilePhotoURL || p.profileImage,
+          }))
+        : [];
+
+    return {
+      partner: partnerData,
+      associatedSchools: partnerSchools,
+      associatedProviders: partnerProviders,
+    };
   },
 };

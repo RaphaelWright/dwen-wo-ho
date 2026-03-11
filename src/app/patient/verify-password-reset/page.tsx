@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { usePatientVerifyPasswordReset } from "@/hooks/patient/usePatientVerifyPasswordReset";
+import { usePatientVerifyPasswordReset } from "@/hooks/patient/use-patient-verify-password-reset";
 import {
   VerifyPasswordResetHeader,
   VerifyPasswordResetOTPSection,

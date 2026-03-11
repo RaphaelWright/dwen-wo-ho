@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import { ProfessionalTitleModalProps } from "@/lib/types/modals";
-import { useProfessionalTitle } from "@/hooks/components/modals/use-professional-title";
 import { PROFESSIONAL_TITLES } from "@/lib/constants/components/modals/professional-title";
 
 const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
@@ -12,7 +11,10 @@ const ProfessionalTitleModal: React.FC<ProfessionalTitleModalProps> = ({
   onSelect,
   selectedTitle,
 }) => {
-  const { handleTitleSelect } = useProfessionalTitle({ onSelect, onClose });
+  const handleTitleSelect = (title: string) => {
+    onSelect(title);
+    onClose();
+  };
 
   return (
     <AnimatePresence>

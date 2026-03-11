@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { SchoolEditModalProps } from "@/lib/types/modals";
 import { useSchoolEdit } from "@/hooks/components/modals/use-school-edit";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useClickOutside } from "@/hooks/use-click-outside";
 import { SchoolEditHeader } from "./school-edit/header";
 import { SchoolEditForm } from "./school-edit/form";
 import { SchoolEditFooter } from "./school-edit/footer";

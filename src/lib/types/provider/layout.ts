@@ -2,6 +2,8 @@ export interface ProviderLayoutProps {
   children: React.ReactNode;
 }
 
+export type MobilePanel = "schools" | "patients" | "urgent";
+
 export interface UseProviderLayoutReturn {
   isAuthenticated: boolean | null;
   isLoading: boolean;

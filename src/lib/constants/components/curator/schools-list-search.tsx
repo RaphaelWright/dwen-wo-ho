@@ -1,13 +1,25 @@
 import {
-  Plus,
-  Send,
-  Archive,
   BookMarked,
   GraduationCap,
   Building2,
   TableProperties,
+  School,
 } from "lucide-react";
-import type { FilterType } from "@/hooks/curator/useCuratorSchools";
+import type { FilterType } from "@/lib/types/curator";
+
+export const FILTER_OPTIONS: { label: string; value: FilterType }[] = [
+  { label: "All", value: "all" },
+  { label: "JHS", value: "JHS" },
+  { label: "SHS", value: "SHS" },
+  { label: "COLLEGE", value: "COLLEGE" },
+];
+
+export const SCHOOL_FILTER_ICONS: Record<FilterType, typeof School> = {
+  all: School,
+  JHS: BookMarked,
+  SHS: GraduationCap,
+  COLLEGE: Building2,
+};
 
 export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
   id: FilterType;

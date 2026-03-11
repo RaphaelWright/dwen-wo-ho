@@ -8,7 +8,7 @@ import SpecialtyStep from "./steps/specialty-step";
 import { Loader2 } from "lucide-react";
 import { SignUpProfileProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { useSignUpProfile } from "@/hooks/components/provider/auth/signup/use-sign-up-profile";
+import { useSignUpProfile } from "@/hooks/components/provider/auth/signup/sign-up-profile";
 
 const SignUpProfile = (props: SignUpProfileProps) => {
   const {

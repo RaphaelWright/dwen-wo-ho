@@ -53,12 +53,6 @@ const prepareHeaders = (
 
 const extractErrorFromResponse = async (response: Response): Promise<Error> => {
   const responseText = await response.text();
-  const isExpectedFlow =
-    responseText.includes("ACCOUNT PENDING") ||
-    responseText.includes("User not found") ||
-    responseText.includes("Profile is not complete") ||
-    responseText.includes("Invalid or missing Authorization header");
-
   try {
     const errorData = JSON.parse(responseText);
     return new Error(JSON.stringify(errorData));

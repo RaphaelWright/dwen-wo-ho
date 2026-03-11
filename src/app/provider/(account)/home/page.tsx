@@ -1,7 +1,7 @@
 "use client";
 
 import PendingVerificationModal from "@/components/modals/pending-verification";
-import { useProviderHome } from "@/hooks/provider/useProviderHome";
+import { useProviderHome } from "@/hooks/provider/use-provider-home";
 import { ProviderHomeLoading } from "@/components/provider/home";
 
 const ProviderHomePage = () => {

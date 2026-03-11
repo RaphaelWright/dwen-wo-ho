@@ -1,5 +1,14 @@
 import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { LockInFormData } from "@/hooks/patient/useLockInForm";
+import * as z from "zod/v4";
+import { lockInSchema } from "@/lib/schemas/lockin-form-schema";
+
+export type LockInFormData = z.infer<typeof lockInSchema>;
+
+export interface CacheData {
+  data: Partial<LockInFormData>;
+  timestamp: number;
+  schoolId: string;
+}
 
 export interface LockInDetailsSectionProps {
   register: UseFormRegister<LockInFormData>;

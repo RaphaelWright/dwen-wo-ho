@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
-import useAuthQuery from "@/hooks/queries/useAuth";
+import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import {
   ProviderSignUpSchema,
   ProviderSignUpFormData,
-} from "@/lib/schemas/provider.auth.schema";
+} from "@/lib/schemas/provider-auth-schema";
 import { toast } from "@/components/ui/sonner";
 import { CreateAccountProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
@@ -31,7 +31,9 @@ export const useCreateAccount = ({
     watch,
     setValue,
     formState: { isValid },
-  } = useSelectedValuesFromReactHookForm(ProviderSignUpSchema, {
+  } = useSelectedValuesFromReactHookForm<ProviderSignUpFormData>(
+    ProviderSignUpSchema,
+    {
     mode: "onChange",
     defaultValues: {
       email: propEmail || "",

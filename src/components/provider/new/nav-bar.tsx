@@ -2,7 +2,7 @@
 
 import { Logo } from "@/components/shared/Logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 import { motion, useAnimation } from "framer-motion";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,7 +26,7 @@ const ProviderIdentity = ({
   ranking?: string;
   onOpenProfile: () => void;
 }) => {
-  const fallback = providerName ? providerName.charAt(0).toUpperCase() : "PR";
+  const fallback = providerName?.charAt(0).toUpperCase() || "PR";
 
   return (
     <motion.button

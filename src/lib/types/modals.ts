@@ -1,5 +1,5 @@
 import { Area } from "@/lib/utils/image-utils";
-import { School } from "./school";
+import { School, SchoolFormData } from "./school";
 import { ProviderDetails } from "./provider";
 import { PROVIDER_DETAILS_TAB_VALUES } from "../constants/components/modals/provider-details";
 
@@ -63,23 +63,6 @@ export interface PartnerDetailsModalProps {
     slogan?: string;
     logo?: string;
   };
-}
-
-export type PartnerDetailsTab = "overview" | "schools" | "providers";
-
-export interface AssociatedSchool {
-  id: string | number;
-  name: string;
-  logo?: string;
-}
-
-export interface AssociatedProvider {
-  id: string;
-  email: string;
-  providerName: string;
-  providerTitle?: string | null;
-  specialty?: string;
-  profilePhotoURL?: string;
 }
 
 export interface PatientDetailsModalProps {
@@ -207,15 +190,7 @@ export interface SchoolCreationModalProps {
   onSchoolCreated?: (school: any) => void;
 }
 
-export type SchoolFormData = {
-  name: string;
-  nickname: string;
-  type: string;
-  baseline: string;
-  motto: string;
-  campuses: string[];
-  logo: File | null;
-};
+
 
 export interface SchoolEditModalProps {
   isOpen: boolean;

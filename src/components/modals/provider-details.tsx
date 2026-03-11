@@ -4,7 +4,7 @@ import {
   ProviderDetailsModalProps,
   ProviderDetailsTab,
 } from "@/lib/types/modals";
-import { useProviderDetails } from "@/hooks/components/modals/use-provider-details";
+import { useProviderDetails } from "@/hooks/components/modals/provider-details";
 import { ProviderHeader } from "./provider-details/header";
 import { ProviderTabs } from "./provider-details/tabs";
 import { OverviewTab } from "./provider-details/overview-tab";

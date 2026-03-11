@@ -6,8 +6,8 @@ import MemberCreationModal from "@/components/modals/member-creation";
 import PartnerCreationModal from "@/components/modals/partner-creation";
 import ReachModal from "@/components/modals/reach";
 import SchoolCreationModal from "@/components/modals/school-creation";
-import { useCuratorLayout } from "@/hooks/curator/useCuratorLayout";
-import { useNotification } from "@/hooks/useNotification";
+import { useCuratorLayout } from "@/hooks/curator/use-curator-layout";
+import { useNotification } from "@/hooks/use-notification";
 import NotificationsSheet from "@/components/shared/notification-sheet";
 
 export default function DashboardLayout({

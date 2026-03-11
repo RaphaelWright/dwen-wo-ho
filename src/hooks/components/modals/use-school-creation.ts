@@ -1,17 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useCreateSchool } from "@/hooks/queries/useSchools";
-import { ICreateSchool } from "@/lib/types/school";
-
-export interface SchoolFormData {
-  name: string;
-  nickname: string;
-  motto: string;
-  campuses: string[];
-  type: string;
-  logo: File | undefined;
-}
+import useSchoolsQuery from "@/hooks/queries/use-schools";
+import { ICreateSchool, SchoolFormData } from "@/lib/types/school";
 
 export const useSchoolCreation = ({
   onClose,
@@ -32,7 +23,8 @@ export const useSchoolCreation = ({
     logo: undefined,
   });
 
-  const createSchoolMutation = useCreateSchool();
+  const { createSchool, isCreating } = useSchoolsQuery();
+  const createSchoolMutation = { mutate: createSchool, isPending: isCreating };
   const campusDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (field: string, value: string) => {

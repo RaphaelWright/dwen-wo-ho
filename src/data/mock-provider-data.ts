@@ -1,4 +1,4 @@
-import { AssociatedSchool, AssociatedPartner } from "@/lib/types/provider";
+import { AssociatedSchool, AssociatedPartner } from "@/lib/types/partners";
 import { NotificationItem } from "@/lib/types/provider/new-provider";
 import { LogOut, WifiOff } from "lucide-react";
 

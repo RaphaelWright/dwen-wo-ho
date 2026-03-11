@@ -10,13 +10,13 @@ import EditFieldDialog from "@/components/provider/new/edit-field-dialog";
 import SchoolsSidebar from "@/components/provider/new/schools-side-bar";
 import LiquidGlassNavbar from "@/components/ui/liquid-glass-navbar";
 import LiquidGlass from "@/components/ui/liquid-glass";
-import useProviderDashboard from "@/hooks/provider/useProviderDashboard";
+import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import {
   useProviderDashboardMobile,
   type MobilePanel,
-} from "@/hooks/provider/useProviderDashboardMobile";
+} from "@/hooks/provider/use-provider-dashboar-mobile";
 import { NEW_PROVIDER_URGENT_PATIENTS } from "@/data/mock-provider-data";
 import { cn } from "@/lib/utils";
 

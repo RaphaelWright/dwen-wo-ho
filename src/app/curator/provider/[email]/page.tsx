@@ -3,7 +3,7 @@
 import { ROUTES } from "@/lib/constants/routes";
 import { Button } from "@/components/ui/button";
 import LoadingOverlay from "@/components/ui/loading-overlay";
-import { useCuratorProviderDetails } from "@/hooks/curator/useCuratorProviderDetails";
+import { useCuratorProviderDetails } from "@/hooks/curator/use-curator-provider-details";
 import {
   ProviderDetailsHeader,
   ProviderProfileCard,

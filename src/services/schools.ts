@@ -4,6 +4,10 @@ import { axiosFormData, axiosInstance } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
 import { ICreateSchool, IUpdateSchool, School } from "@/lib/types/school";
 import { SchoolProvider } from "@/lib/types/provider";
+import { patientsService } from "./patients";
+import { lockinsService } from "./lockins";
+import { LockInStudent } from "@/lib/types/lockin";
+import { PatientResult } from "@/lib/types/patient";
 
 export const schoolsService = {
   getSchools: async (): Promise<School[]> => {
@@ -72,5 +76,57 @@ export const schoolsService = {
     const direct = response as { providers?: SchoolProvider[] };
     if (direct?.providers) return direct.providers;
     return [];
+  },
+
+  getSchoolStudents: async (schoolId: string): Promise<LockInStudent[]> => {
+    let lockInData;
+    try {
+      lockInData = await lockinsService.getSchoolLockIn(schoolId);
+    } catch {
+      return [];
+    }
+
+    if (!lockInData) return [];
+
+    let studentsList = lockInData.students || [];
+
+    try {
+      const resultsResponse = await patientsService.getSchoolResults(schoolId);
+      if (resultsResponse && Array.isArray(resultsResponse)) {
+        const results = resultsResponse;
+
+        const resultMap = new Map<string, PatientResult>();
+        results.forEach((result: PatientResult) => {
+          resultMap.set(result.patientName, result);
+        });
+
+        studentsList = studentsList.map((student) => {
+          const result = resultMap.get(student.studentName);
+          if (result) {
+            return {
+              ...student,
+              lockinId: result.lockinId,
+              createdAt: result.createdAt,
+              patientResultId: result.id,
+              visibilityStatus: result.visibilityStatus,
+            };
+          }
+          return student;
+        });
+      }
+    } catch {
+      // Silently handle errors when fetching patient results
+    }
+
+    studentsList.sort((a, b) => {
+      if (a.createdAt && b.createdAt) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      if (a.createdAt) return -1;
+      if (b.createdAt) return 1;
+      return a.studentName.localeCompare(b.studentName);
+    });
+
+    return studentsList;
   },
 };

@@ -1,5 +1,6 @@
 import { Partner, School, SchoolReach, SchoolIcon } from "./school";
 import { SchoolProvider } from "./provider";
+import { SchoolTab } from "@/lib/types/components/curator/school-details";
 
 export interface CoverPage {
   id: string;
@@ -58,3 +59,13 @@ export interface CuratorPatientResult {
     fullName: string;
   }>;
 }
+
+export interface UseCuratorSchoolSearchProps {
+  searchQuery: string;
+  activeTab: SchoolTab;
+  patients: any[];
+  schoolIcons: SchoolIcon[];
+  providers: SchoolProvider[];
+}
+
+export type FilterType = "all" | "JHS" | "SHS" | "COLLEGE";

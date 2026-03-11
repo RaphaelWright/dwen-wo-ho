@@ -5,7 +5,7 @@ import WidthConstraint from "@/components/ui/width-constraint";
 import ProviderDetailsModal from "@/components/modals/provider-details";
 import ProviderCard from "@/components/curator/provider-card";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { useCuratorProviders } from "@/hooks/curator/useCuratorProviders";
+import { useCuratorProviders } from "@/hooks/curator/use-curator-providers";
 
 export default function ProvidersPage() {
   const {

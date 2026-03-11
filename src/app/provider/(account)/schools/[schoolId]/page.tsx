@@ -4,7 +4,7 @@ import { ArrowLeft, Users } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useProviderSchoolDetails } from "@/hooks/provider/useProviderSchoolDetails";
+import { useProviderSchoolDetails } from "@/hooks/provider/use-provider-school-details";
 
 export default function ProviderSchoolDetailsPage() {
   const {

@@ -6,7 +6,7 @@ import ProviderDetailsModal from "@/components/modals/provider-details";
 import AddIconModal from "@/components/modals/add-icon";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
-import { useCuratorSchoolDetails } from "@/hooks/curator/useCuratorSchoolDetails";
+import { useCuratorSchoolDetails } from "@/hooks/curator/use-curator-school-details";
 import {
   SchoolHeaderCard,
   PatientsTab,

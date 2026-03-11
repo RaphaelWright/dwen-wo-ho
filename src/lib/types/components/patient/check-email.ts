@@ -3,7 +3,12 @@ import {
   UseFormHandleSubmit,
   FieldErrors,
 } from "react-hook-form";
-import { PatientCheckEmailFormData } from "@/hooks/patient/usePatientCheckEmail";
+import * as z from "zod/v4";
+import { PatientCheckEmailFormSchema } from "@/lib/schemas/patient-auth-schema";
+
+export type PatientCheckEmailFormData = z.infer<
+  typeof PatientCheckEmailFormSchema
+>;
 
 export interface CheckEmailFormProps {
   register: UseFormRegister<PatientCheckEmailFormData>;

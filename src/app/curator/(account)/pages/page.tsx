@@ -8,7 +8,7 @@ import AddCoverPageModal from "@/components/modals/add-cover-page";
 import AddIconModal from "@/components/modals/add-icon";
 import WidthConstraint from "@/components/ui/width-constraint";
 import { Lock } from "lucide-react";
-import { useCuratorContentPages } from "@/hooks/curator/useCuratorContentPages";
+import { useCuratorContentPages } from "@/hooks/curator/curator-content-pages";
 
 export default function CuratorPagesPage() {
   const {

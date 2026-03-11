@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { api } from "@/lib/api";
-import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { useState, useMemo } from "react";
+import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { School } from "@/lib/types/school";
 import { FilterType } from "@/lib/types/modals";
 
@@ -10,33 +9,10 @@ export const useSchoolSelection = (
   isOpen: boolean,
   onSelect: (school: School | null) => void,
 ) => {
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { useSchools } = useSchoolsQuery();
+  const { data: schools = [], isLoading } = useSchools({ enabled: isOpen });
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
-
-  useEffect(() => {
-    if (isOpen) {
-      loadSchools();
-    } else {
-      setSearchQuery("");
-    }
-  }, [isOpen]);
-
-  const loadSchools = async () => {
-    setIsLoading(true);
-    try {
-      const response = await api(STATIC_ENDPOINTS.SCHOOLS);
-      if (response?.success && response.data) {
-        const schoolsList = Array.isArray(response.data) ? response.data : [];
-        setSchools(schoolsList);
-      }
-    } catch (error) {
-      // Error loading schools
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const filteredSchools = useMemo(() => {
     let filtered =

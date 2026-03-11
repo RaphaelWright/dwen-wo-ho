@@ -1,5 +1,4 @@
-import { SchoolFormData } from "@/hooks/components/modals/use-school-edit";
-import { School } from "@/lib/types/school";
+import { SchoolFormData, School } from "@/lib/types/school";
 
 export interface SchoolEditFooterProps {
   handleDisable: () => void;

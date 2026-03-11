@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useAuthQuery from "@/hooks/queries/useAuth";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { toast } from "@/components/ui/sonner";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
