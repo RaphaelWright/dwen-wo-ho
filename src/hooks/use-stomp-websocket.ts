@@ -1,0 +1,108 @@
+"use client";
+
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useAtom } from "jotai";
+import { stompClient } from "@/services/websocket/stomp-client";
+import { subscriptionManager } from "@/services/websocket/subscription-manager";
+import {
+  ConnectionStatus,
+  NewNotificationEvent,
+  NewUrgentCaseEvent,
+  PatientStatusChangedEvent,
+  NewPatientResultEvent,
+} from "@/lib/types/websocket";
+import { connectionStatusAtom } from "@/atoms/websocket";
+import { getUserType, hasValidToken } from "@/lib/utils/getUserType";
+
+export function useStompWebSocket() {
+  const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
+  const [userType, setUserType] = useState<ReturnType<typeof getUserType>>(null);
+  const reconnectAttemptRef = useRef(0);
+
+  // Initialize connection
+  const connect = useCallback(() => {
+    const type = getUserType();
+    setUserType(type);
+
+    if (!type || !hasValidToken()) {
+      console.log("[useStompWebSocket] No valid user or token, skipping connection");
+      return;
+    }
+
+    const token = localStorage.getItem(
+      type === "curator" ? "token" : "token"
+    );
+
+    if (!token) {
+      console.warn("[useStompWebSocket] Token not found");
+      return;
+    }
+
+    stompClient.connect(token);
+  }, []);
+
+  // Disconnect
+  const disconnect = useCallback(() => {
+    stompClient.disconnect();
+    subscriptionManager.cleanup();
+  }, []);
+
+  // Subscribe to a topic
+  const subscribe = useCallback(<T,>(
+    topic: string,
+    handler: (payload: T) => void
+  ): (() => void) => {
+    const subscriptionId = stompClient.subscribe(topic, handler);
+
+    return () => {
+      stompClient.unsubscribe(subscriptionId);
+    };
+  }, []);
+
+  // Reconnect manually
+  const reconnect = useCallback(() => {
+    disconnect();
+    reconnectAttemptRef.current = 0;
+    setTimeout(connect, 500);
+  }, [connect, disconnect]);
+
+  // Setup status listener
+  useEffect(() => {
+    const unsubscribe = stompClient.onStatusChange((status) => {
+      setConnectionStatus(status);
+    });
+
+    return unsubscribe;
+  }, [setConnectionStatus]);
+
+  // Handle visibility change (pause/resume)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Optional: disconnect when tab hidden to save battery
+        // disconnect();
+      } else {
+        // Reconnect when tab becomes visible
+        if (connectionStatus === "DISCONNECTED" || connectionStatus === "ERROR") {
+          connect();
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [connect, connectionStatus]);
+
+  return {
+    connectionStatus,
+    userType,
+    connect,
+    disconnect,
+    subscribe,
+    reconnect,
+    isConnected: connectionStatus === "CONNECTED",
+    isConnecting: connectionStatus === "CONNECTING",
+  };
+}
