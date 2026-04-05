@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "pub-f9f7d99a5b7c4d858a673d96aea96e13.r2.dev",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "api.microlink.io",
       },
       {
@@ -29,7 +35,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://justgo.up.railway.app/api/:path*",
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || "https://justgo.up.railway.app"}/api/:path*`,
       },
     ];
   },
