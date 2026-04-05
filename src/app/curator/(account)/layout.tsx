@@ -1,58 +1,99 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { CuratorSidebar } from "@/components/ui/curator-sidebar";
+
 import CreateModal from "@/components/curator/create-modal";
+
 import MemberCreationModal from "@/components/modals/member-creation";
+
 import PartnerCreationModal from "@/components/modals/partner-creation";
+
 import ReachModal from "@/components/modals/reach";
+
 import SchoolCreationModal from "@/components/modals/school-creation";
+
 import { useCuratorLayout } from "@/hooks/curator/use-curator-layout";
+
+import { isCuratorNotificationSheetOpenAtom } from "@/atoms/notification";
 import { useNotification } from "@/hooks/use-notification";
 import NotificationsSheet from "@/components/shared/notification-sheet";
+
+function CuratorNotificationsSheet() {
+  const router = useRouter();
+  const {
+    notifications,
+    setIsOpen,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications,
+    deleteNotification,
+  } = useNotification();
+  return (
+    <NotificationsSheet
+      notifications={notifications}
+      openAtom={isCuratorNotificationSheetOpenAtom}
+      onOpenChange={setIsOpen}
+      markAllRead={markAllAsRead}
+      markOneRead={markAsRead}
+      deleteOne={deleteNotification}
+      clearAllNotifications={clearNotifications}
+      onNavigate={(link) => router.push(link as any)}
+      variant="curator"
+    />
+  );
+}
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const {
     mounted,
+
     isAuthenticated,
+
     handleLogout,
+
     showCreateModal,
+
     setShowCreateModal,
+
     showSchoolModal,
+
     showMemberModal,
+
     showPartnerModal,
+
     showReachModal,
+
     openSchoolModal,
+
     openMemberModal,
+
     openPartnerModal,
+
     openReachModal,
+
     closeSchoolModal,
+
     closeMemberModal,
+
     closePartnerModal,
+
     closeReachModal,
   } = useCuratorLayout();
 
-  const {
-    notifications,
-    isOpen: notifOpen,
-    setIsOpen: setNotifOpen,
-    markAsRead,
-    markAllAsRead,
-    clearNotifications,
-    deleteNotification,
-  } = useNotification();
-
   // Show loading state only after mount to prevent hydration mismatch
+
   if (!mounted || isAuthenticated === null) {
     return (
       <div className="h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
@@ -69,6 +110,7 @@ export default function DashboardLayout({
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
+
       <div className="flex-1 overflow-y-auto bg-muted/10 pt-14 md:pt-0">
         {children}
       </div>
@@ -102,16 +144,8 @@ export default function DashboardLayout({
       />
 
       <ReachModal isOpen={showReachModal} onClose={closeReachModal} />
-      <NotificationsSheet
-        notifications={notifications}
-        isOpen={notifOpen}
-        onOpenChange={setNotifOpen}
-        markAllRead={markAllAsRead}
-        markOneRead={markAsRead}
-        deleteOne={deleteNotification}
-        clearAllNotifications={clearNotifications}
-        onNavigate={(link) => router.push(link as any)}
-      />
+
+      <CuratorNotificationsSheet />
     </div>
   );
 }

@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SidebarContentProps } from "@/lib/types/components/curator/sidebar";
 import { SidebarNavItem } from "./sidebar-nav-item";
+import { Route } from "next";
 
 export const SidebarContent = ({
   collapsed,
@@ -48,7 +49,7 @@ export const SidebarContent = ({
           )}
         >
           {collapsed ? (
-            <Link href={ROUTES.curator.dashboard as any}>
+            <Link href={ROUTES.curator.dashboard as Route}>
               <Image
                 priority
                 src="/favicons/apple-touch-icon.png"

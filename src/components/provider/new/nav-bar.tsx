@@ -11,6 +11,7 @@ import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { ClientOnly } from "@/components/ui/client-only";
 import { NotificationBell } from "@/components/shared/notification-bell";
+import { ROUTES } from "@/lib/constants/routes";
 
 const ProviderIdentity = ({
   providerTitle,
@@ -113,6 +114,7 @@ export default function ProviderNavbar({
           <Logo
             variant={theme === "light" ? "black" : "white"}
             className="ml-1 min-[1065px]:ml-0"
+            href={ROUTES.provider.home}
           />
         </ClientOnly>
         {/* Divider — desktop only */}

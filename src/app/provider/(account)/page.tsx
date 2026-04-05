@@ -28,6 +28,39 @@ import ProviderActivityLog from "@/components/provider/provider-activity-log";
 import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
 import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
 import ProviderNavbar from "@/components/provider/new/nav-bar";
+import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
+
+function ProviderNotificationsSheet({
+  notifications,
+  setNotifOpen,
+  markAllRead,
+  markOneRead,
+  deleteNotification,
+  clearAllNotifications,
+  router,
+}: {
+  notifications: any[];
+  setNotifOpen: (open: boolean) => void;
+  markAllRead: () => void;
+  markOneRead: (id: string | number) => void;
+  deleteNotification: (id: string | number) => void;
+  clearAllNotifications: () => void;
+  router: ReturnType<typeof useRouter>;
+}) {
+  return (
+    <NotificationsSheet
+      notifications={notifications}
+      openAtom={isProviderNotificationSheetOpenAtom}
+      onOpenChange={setNotifOpen}
+      markAllRead={markAllRead}
+      markOneRead={markOneRead}
+      deleteOne={deleteNotification}
+      clearAllNotifications={clearAllNotifications}
+      onNavigate={(link) => router.push(link as any)}
+      variant="provider"
+    />
+  );
+}
 
 export default function ProviderHomePage() {
   const router = useRouter();
@@ -167,7 +200,6 @@ export default function ProviderHomePage() {
     topSuggestions,
     quickFilters,
     notifications,
-    notifOpen,
     setNotifOpen,
     markAllRead,
     markOneRead,
@@ -477,15 +509,14 @@ export default function ProviderHomePage() {
           className="absolute!"
         />
       </div>
-      <NotificationsSheet
+      <ProviderNotificationsSheet
         notifications={notifications}
-        isOpen={notifOpen}
-        onOpenChange={setNotifOpen}
+        setNotifOpen={setNotifOpen}
         markAllRead={markAllRead}
         markOneRead={markOneRead}
-        deleteOne={deleteNotification}
+        deleteNotification={deleteNotification}
         clearAllNotifications={clearAllNotifications}
-        onNavigate={(link) => router.push(link as any)}
+        router={router}
       />
       <ProfileModal
         profileOpen={profileOpen}

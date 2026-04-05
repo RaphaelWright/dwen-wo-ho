@@ -7,7 +7,13 @@ import { SchoolWithExtras } from "@/atoms/curator-schools";
 import { getFirstCampus } from "@/hooks/curator/use-curator-schools";
 import { Badge } from "../ui/badge";
 
-export function SchoolCard({ school }: { school: SchoolWithExtras }) {
+export function SchoolCard({
+  school,
+  priority = false,
+}: {
+  school: SchoolWithExtras;
+  priority?: boolean;
+}) {
   const firstCampus = getFirstCampus(school.campuses);
   const displayNickname = school.name || school.nickname;
 
@@ -43,8 +49,8 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
                 src={school.logo}
                 alt={school.name}
                 fill
+                priority={priority}
                 className="object-contain"
-                style={{ transform: "scale(0.75)" }}
               />
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -90,6 +96,7 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
                   alt="Logo"
                   width={28}
                   height={28}
+                  priority={priority}
                   className="object-contain"
                 />
               ) : (
@@ -124,7 +131,8 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
                 variant="secondary"
                 className="bg-primary/10 text-primary border-none font-semibold rounded-full px-2 py-0.5 text-xs"
               >
-                {formatCount(school.totalPatients ?? school.studentCount ?? 0)} Patients
+                {formatCount(school.totalPatients ?? school.studentCount ?? 0)}{" "}
+                Patients
               </Badge>
             )}
           </div>

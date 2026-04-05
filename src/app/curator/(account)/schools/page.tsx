@@ -193,7 +193,7 @@ export default function SchoolsPage() {
                 className="animate-in fade-in slide-in-from-bottom-8 fill-mode-backwards"
                 style={{ animationDelay: `${i * 50}ms` }}
               >
-                <SchoolCard school={school} />
+                <SchoolCard school={school} priority={i < 3} />
               </div>
             ))}
           </div>

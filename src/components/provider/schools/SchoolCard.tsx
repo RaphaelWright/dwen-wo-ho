@@ -31,8 +31,9 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
           <Image
             src={school.logo}
             alt={school.name}
-            fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
+            width={400}
+            height={400}
+            className="object-cover w-full h-full"
           />
         </div>
       ) : (

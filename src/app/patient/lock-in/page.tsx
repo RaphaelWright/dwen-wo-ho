@@ -79,8 +79,9 @@ export default function LockInPage() {
                         <Image
                           src={school.logo}
                           alt={school.name}
-                          fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-contain rounded-lg"
+                          width={64}
+                          height={64}
+                          className="object-contain rounded-lg w-full h-full"
                         />
                       </div>
                     ) : (
