@@ -33,7 +33,7 @@ export function usePatientSignIn({ email }: { email: string | null }) {
       loginMutation.mutate(values, {
         onSuccess: () => {
           // Redirection should likely be to patient home or dashboard
-          router.push(ROUTES.curator.schools); // This was previously "/signin", let's check ROUTES
+          router.push(ROUTES.patient.lockIn);
         },
         onError: (error: any) => {
           let message = "Sign in failed";

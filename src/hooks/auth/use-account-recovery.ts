@@ -14,15 +14,11 @@ export const useAccountRecovery = (email: string, onForgotPassword?: () => void)
   const handleRecoverAccount = async () => {
     setErrorMessage("");
     try {
-      const response = await recoverAccountMutation.mutateAsync({ email });
-      if (response.success) {
-        if (onForgotPassword) {
-          onForgotPassword();
-        } else {
-          router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
-        }
+      await recoverAccountMutation.mutateAsync({ email });
+      if (onForgotPassword) {
+        onForgotPassword();
       } else {
-        setErrorMessage(response.message || "Failed to send recovery email.");
+        router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
       }
     } catch (error: any) {
       setErrorMessage(getCleanErrorMessage(error));

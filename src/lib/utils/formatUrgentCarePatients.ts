@@ -1,10 +1,11 @@
 import { UrgentCarePatient } from "@/lib/types/components/curator/school-details";
+import type { UrgentPatient } from "@/components/shared/urgent-card";
 
 export function formatUrgentCarePatients(
   patients: UrgentCarePatient[] = [],
   schoolName: string = "Unknown",
   compactTimeAgo: (date: string) => string,
-) {
+): UrgentPatient[] {
   return [...patients]
     .sort((a, b) => {
       const dateA = new Date(
@@ -17,14 +18,15 @@ export function formatUrgentCarePatients(
     })
     .map((p) => ({
       id: p.id || p.lockinId || p.patientResultId || Math.random().toString(),
-      name: p.patientName || "Patient",
-      school: schoolName,
-      schoolLabel: schoolName,
+      patientResultId: p.patientResultId || p.id || "",
+      patientName: p.patientName || "Patient",
+      // schoolId is not available in UrgentCarePatient; curator panel filters by school context
+      schoolId: 0,
+      schoolName: schoolName,
       time: compactTimeAgo(
         p.urgentCareEnteredAt || p.lockinDate || p.createdAt || "",
       ),
-      score: p.lockedInScore || 0,
-      emoji: "👨🏽‍🎓",
+      lockinScore: p.lockedInScore ?? 0,
       avatarUrl: undefined,
     }));
 }

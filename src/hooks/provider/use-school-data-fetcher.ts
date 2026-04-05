@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { toast } from "@/components/ui/sonner";
 import {
   getSchoolLockInCount,
@@ -9,11 +9,26 @@ import {
 } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
 import { SchoolWithExtras } from "@/atoms/provider-schools";
+import { useProviderSchoolsSummary } from "@/hooks/queries/use-provider";
+import type { ProviderSchoolsSummaryItem } from "@/lib/types/api/providers";
 
 export function useSchoolDataFetcher(
-  updateSchoolInState: (id: number | string, data: Partial<SchoolWithExtras>) => void,
+  updateSchoolInState: (
+    id: number | string,
+    data: Partial<SchoolWithExtras>,
+  ) => void,
   previousSchoolsRef: React.MutableRefObject<Map<number, SchoolWithExtras>>,
 ) {
+  const { data: schoolsSummaryData } = useProviderSchoolsSummary();
+
+  const summaryMap = useMemo(() => {
+    const map = new Map<number, ProviderSchoolsSummaryItem>();
+    (schoolsSummaryData ?? []).forEach((item: ProviderSchoolsSummaryItem) =>
+      map.set(item.schoolId, item),
+    );
+    return map;
+  }, [schoolsSummaryData]);
+
   const fetchSchoolData = useCallback(
     async (
       school: School,
@@ -22,41 +37,40 @@ export function useSchoolDataFetcher(
       const schoolData: SchoolWithExtras = { ...school, isLoading: true };
 
       try {
-        // Check for new patients only during background updates
         let forceRefresh = false;
         if (isBackground) {
           const prevSchool = previousSchoolsRef.current.get(Number(school.id));
-
           if (prevSchool?.newPatientName) {
             const newPatientCheck = await checkForNewPatients(
               school.id,
               prevSchool.newPatientName,
             );
-
             if (newPatientCheck?.hasNew && newPatientCheck.latestPatient) {
               toast.success(
                 `New patient: ${newPatientCheck.latestPatient.patientName} at ${school.name}`,
               );
-              forceRefresh = true; // Force cache refresh to get updated counts
+              forceRefresh = true;
             }
           }
         }
 
-        // Parallel fetch of lock-in count and latest patient (skip cache if new patient detected)
-        const [studentCount, latestPatient] = await Promise.all([
-          forceRefresh
-            ? getSchoolLockInCount(school.id, true) // Force fresh data
-            : getSchoolLockInCount(school.id),
-          forceRefresh
-            ? getLatestPatientResult(school.id, true) // Force fresh data
-            : getLatestPatientResult(school.id),
-        ]);
-
-        schoolData.studentCount = studentCount;
-
-        if (latestPatient) {
-          schoolData.latestLockInDate = latestPatient.createdAt;
-          schoolData.newPatientName = latestPatient.patientName;
+        const summary = summaryMap.get(Number(school.id));
+        if (summary && !forceRefresh) {
+          schoolData.studentCount = summary.lockinCount ?? 0;
+          if (summary.latestPatientResultAt) {
+            schoolData.latestLockInDate = summary.latestPatientResultAt;
+          }
+        } else {
+          // Fallback: fetch individual APIs (no caching — React Query handles that)
+          const [studentCount, latestPatient] = await Promise.all([
+            getSchoolLockInCount(school.id),
+            getLatestPatientResult(school.id),
+          ]);
+          schoolData.studentCount = studentCount;
+          if (latestPatient) {
+            schoolData.latestLockInDate = latestPatient.createdAt;
+            schoolData.newPatientName = latestPatient.patientName;
+          }
         }
       } catch (error) {
         console.error(`Error fetching data for school ${school.id}:`, error);
@@ -65,7 +79,7 @@ export function useSchoolDataFetcher(
       schoolData.isLoading = false;
       return schoolData;
     },
-    [],
+    [summaryMap, previousSchoolsRef],
   );
 
   return { fetchSchoolData };

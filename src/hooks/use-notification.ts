@@ -5,15 +5,28 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/sonner";
 import {
-  notificationsAtom,
-  notificationSheetOpenAtom,
+  curatorNotificationListAtom,
+  isCuratorNotificationSheetOpenAtom,
 } from "@/atoms/notification";
 import { Notification } from "@/lib/types/notification";
+import {
+  useClearNotificationsMutation,
+  useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
+  useDeleteNotificationMutation,
+} from "@/hooks/queries/use-provider";
 
 export const useNotification = () => {
-  const [notifications, setNotifications] = useAtom(notificationsAtom);
-  const [isOpen, setIsOpen] = useAtom(notificationSheetOpenAtom);
+  const [notifications, setNotifications] = useAtom(
+    curatorNotificationListAtom,
+  );
+  const [isOpen, setIsOpen] = useAtom(isCuratorNotificationSheetOpenAtom);
   const router = useRouter();
+
+  const clearMutation = useClearNotificationsMutation();
+  const markReadMutation = useMarkNotificationReadMutation();
+  const markAllReadMutation = useMarkAllNotificationsReadMutation();
+  const deleteMutation = useDeleteNotificationMutation();
 
   const openSheet = useCallback(() => setIsOpen(true), [setIsOpen]);
   const closeSheet = useCallback(() => setIsOpen(false), [setIsOpen]);
@@ -98,7 +111,8 @@ export const useNotification = () => {
 
   const clearNotifications = useCallback(() => {
     setNotifications([]);
-  }, [setNotifications]);
+    clearMutation.mutate();
+  }, [setNotifications, clearMutation]);
 
   const dismissNotification = useCallback(
     (id: string | number) => {
@@ -112,13 +126,23 @@ export const useNotification = () => {
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
       );
+      if (typeof id === "string") markReadMutation.mutate(id);
     },
-    [setNotifications],
+    [setNotifications, markReadMutation],
   );
 
   const markAllAsRead = useCallback(() => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, [setNotifications]);
+    markAllReadMutation.mutate();
+  }, [setNotifications, markAllReadMutation]);
+
+  const deleteNotification = useCallback(
+    (id: string | number) => {
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+      deleteMutation.mutate(id);
+    },
+    [setNotifications, deleteMutation],
+  );
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -129,6 +153,7 @@ export const useNotification = () => {
     dismissNotification,
     markAsRead,
     markAllAsRead,
+    deleteNotification,
     unreadCount,
     isOpen,
     setIsOpen,

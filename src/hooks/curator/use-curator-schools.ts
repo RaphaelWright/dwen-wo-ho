@@ -1,12 +1,32 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
 import { FilterType } from "@/lib/types/curator";
 import { parseCampuses } from "@/lib/utils/parseCampuses";
-import { useCuratorSchoolSearch } from "./use-curator-school-search";
+import { SCHOOLS_LIST_SEARCH_QUICK_FILTERS } from "@/lib/constants/components/curator/schools-list-search";
+import type { FilterOption } from "@/components/shared/search-dropdown";
+
+function matchesFilter(item: any, filter: FilterOption): boolean {
+  if (!filter.filterKey || !filter.filterValue) return true;
+
+  const value = item[filter.filterKey];
+
+  if (value === undefined || value === null) return true;
+
+  const filterValue = filter.filterValue;
+
+  switch (filter.filterType) {
+    case "exact":
+      return String(value).toLowerCase() === String(filterValue).toLowerCase();
+    case "contains":
+      return String(value).toLowerCase().includes(filterValue.toLowerCase());
+    default:
+      return true;
+  }
+}
 
 export function getFirstCampus(campuses: any): string {
   const parsed = parseCampuses(campuses);
@@ -19,6 +39,28 @@ export function useCuratorSchools() {
 
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [appliedSearchQuery, setAppliedSearchQuery] = useState("");
+  const [localActiveFilters, setLocalActiveFilters] = useState<FilterOption[]>(
+    [],
+  );
+
+  const toggleFilter = useCallback((filter: FilterOption) => {
+    setLocalActiveFilters((prev) => {
+      const exists = prev.some((f) => f.id === filter.id);
+      if (exists) {
+        return prev.filter((f) => f.id !== filter.id);
+      }
+      return [...prev, filter];
+    });
+  }, []);
+
+  const clearFilters = useCallback(() => {
+    setLocalActiveFilters([]);
+  }, []);
+
+  const removeFilter = useCallback((filter: FilterOption) => {
+    setLocalActiveFilters((prev) => prev.filter((f) => f.id !== filter.id));
+  }, []);
 
   const { useSchoolsWithRefetch } = useSchoolsQuery();
   const {
@@ -46,16 +88,38 @@ export function useCuratorSchools() {
     [mergedSchools],
   );
 
-  const { suggestions, quickFilters } = useCuratorSchoolSearch({
-    searchQuery,
-    activeTab: "icons", // Default to icons/schools for this view
-    patients: [],
-    schoolIcons: allSchools.map((s) => ({
-      ...s,
-      slogan: (s as any).nickname || "",
-    })) as any,
-    providers: [],
-  });
+  // Compute suggestions with active filters applied
+  const suggestions = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+
+    // Helper to check if an item matches all active filters
+    const matchesAllFilters = (item: any) => {
+      return localActiveFilters.every((filter) => matchesFilter(item, filter));
+    };
+
+    let filtered = allSchools.filter((school) => matchesAllFilters(school));
+
+    if (query) {
+      filtered = filtered.filter((school) => {
+        const nameMatch = school.name?.toLowerCase().includes(query);
+        const nicknameMatch = (school as any).nickname
+          ?.toLowerCase()
+          .includes(query);
+        const typeMatch = school.type?.toLowerCase().includes(query);
+        return nameMatch || nicknameMatch || typeMatch;
+      });
+    }
+
+    return filtered
+      .map((school) => ({
+        id: school.id,
+        name: school.name,
+        avatarUrl: (school as any).logoUrl || (school as any).logo,
+        type: school.type,
+        slogan: (school as any).nickname || (school as any).motto || "",
+      }))
+      .slice(0, query ? 5 : 4);
+  }, [searchQuery, allSchools, localActiveFilters]);
 
   // Sync schools from React Query into the Jotai atom
   useEffect(() => {
@@ -74,8 +138,8 @@ export function useCuratorSchools() {
         ? mergedSchools
         : mergedSchools.filter((school) => school.type === activeFilter);
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
+    if (appliedSearchQuery.trim()) {
+      const query = appliedSearchQuery.toLowerCase().trim();
       filtered = filtered.filter((school) => {
         const nameMatch = school.name?.toLowerCase().includes(query);
         const nicknameMatch = school.nickname?.toLowerCase().includes(query);
@@ -88,7 +152,7 @@ export function useCuratorSchools() {
     }
 
     return filtered;
-  }, [mergedSchools, activeFilter, searchQuery]);
+  }, [mergedSchools, activeFilter, appliedSearchQuery]);
 
   return {
     schoolsList,
@@ -96,11 +160,17 @@ export function useCuratorSchools() {
     setActiveFilter,
     searchQuery,
     setSearchQuery,
+    appliedSearchQuery,
+    setAppliedSearchQuery,
     filterCounts,
     isLoading: schoolsLoading || atomLoading,
     hasCachedData: cachedSchools.length > 0,
     isError,
     suggestions,
-    quickFilters,
+    quickFilters: SCHOOLS_LIST_SEARCH_QUICK_FILTERS,
+    localActiveFilters,
+    toggleFilter,
+    removeFilter,
+    clearFilters,
   };
 }

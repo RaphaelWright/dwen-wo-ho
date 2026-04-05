@@ -16,7 +16,7 @@ export const ROUTES = {
     newPassword: "/provider/new-password",
     auth: "/provider/auth",
     profile: "/provider/profile",
-    home: "/provider/home",
+    home: "/provider",
     schools: "/provider/schools",
   },
   patient: {
@@ -41,9 +41,9 @@ export const ROUTES = {
 
 export const DYNAMIC_ROUTES = {
   curator: {
-    schoolDetails: (schoolId: string | number) => `/curator/schools/${schoolId}`,
+    schoolDetails: (schoolId: string | number) =>
+      `/curator/schools/${schoolId}`,
     patientDetails: (schoolId: string | number, patientId: string | number) =>
       `/curator/schools/${schoolId}/patients/${patientId}`,
   },
 };
-

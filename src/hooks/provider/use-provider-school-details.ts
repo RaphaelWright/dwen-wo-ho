@@ -71,7 +71,7 @@ export function useProviderSchoolDetails() {
             schoolId: Number(schoolId),
           });
 
-          if (response?.success) {
+          if (response) {
             // Patient results query will be invalidated by createPatientResult mutation success handler
             // We can refetch/wait for invalidation or just manually check again
             const updatedResults =

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import useUserQuery from "@/hooks/queries/use-user-profile";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
@@ -11,12 +11,22 @@ export function usePatientResult() {
   const router = useRouter();
   const resultId = params.resultId as string;
   const { getProfileQuery } = useUserQuery();
-  const { usePatientFullDetails, updateActionStatus, isUpdating } =
-    usePatientResultQuery();
+  const {
+    usePatientFullDetails,
+    updateActionStatus,
+    isUpdating,
+    openPatientResult,
+  } = usePatientResultQuery();
 
   const { data, isLoading } = usePatientFullDetails(resultId, {
     enabled: !!resultId && !!getProfileQuery.data,
   });
+
+  // T2-3: Mark result as SEEN on first visit (background, silent on error)
+  useEffect(() => {
+    if (resultId) openPatientResult(resultId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultId]);
 
   const patientResult = data?.patientResult ?? null;
   const lockInAssessment = data?.lockInAssessment ?? null;

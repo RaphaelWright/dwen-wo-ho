@@ -11,7 +11,7 @@ export function useApprovedProviderRedirect(
 ) {
   useEffect(() => {
     if (applicationStatus === "APPROVED" && !isLoading) {
-      router.replace(ROUTES.provider.schools);
+      router.replace(ROUTES.provider.home);
     }
   }, [applicationStatus, isLoading, router]);
 }

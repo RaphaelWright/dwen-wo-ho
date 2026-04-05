@@ -2,13 +2,16 @@
 
 import { useState, useRef, useCallback } from "react";
 import { SchoolIcon } from "@/lib/types/school";
+import type { FilterOption } from "@/components/shared/search-dropdown";
 
 export type CuratorSchoolTabType = "patients" | "icons" | "providers";
 
 export function useSchoolUI() {
   const [activeTab, setActiveTab] = useState<CuratorSchoolTabType>("patients");
   const [searchQuery, setSearchQuery] = useState("");
+  const [appliedSearchQuery, setAppliedSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<FilterOption | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Modals
@@ -22,6 +25,8 @@ export function useSchoolUI() {
   const handleTabChange = useCallback((tab: CuratorSchoolTabType) => {
     setActiveTab(tab);
     setSearchQuery("");
+    setAppliedSearchQuery("");
+    setActiveFilter(null);
   }, []);
 
   const handleProviderClick = useCallback((provider: { email: string }) => {
@@ -34,6 +39,8 @@ export function useSchoolUI() {
     handleTabChange,
     searchQuery,
     setSearchQuery,
+    appliedSearchQuery,
+    setAppliedSearchQuery,
     isSearchOpen,
     setIsSearchOpen,
     searchInputRef,
@@ -50,5 +57,7 @@ export function useSchoolUI() {
     editingIcon,
     setEditingIcon,
     handleProviderClick,
+    activeFilter,
+    setActiveFilter,
   };
 }

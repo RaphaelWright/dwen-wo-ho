@@ -10,9 +10,9 @@ export const QUERY_KEYS = {
   user: "user",
   profile: "profile",
   specialties: "specialties",
-  curator: {
-    partners: "curator-partners",
-    schools: "curator-schools",
-    providers: "curator-providers",
-  },
+  curator: "curator",
+  curatorSummary: "curator-summary",
+  curatorNotifications: "curator-notifications",
+  providerSchoolsSummary: "provider-schools-summary",
+  providerDashboard: "provider-dashboard",
 } as const;

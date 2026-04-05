@@ -18,6 +18,8 @@ export const schoolDetailKeys = {
     [...schoolDetailKeys.all, "providers", schoolId] as const,
   urgentCare: (schoolId: string) =>
     [...schoolDetailKeys.all, "urgent-care", schoolId] as const,
+  patientsOverview: (schoolId: string) =>
+    [...schoolDetailKeys.all, "patients-overview", schoolId] as const,
 };
 
 // ─── Fetch Functions ─────────────────────────────────────────────────────────
@@ -52,11 +54,11 @@ async function fetchSchoolUrgentCare(schoolId: string) {
 export default function useSchoolDetailsQuery(schoolId: string) {
   const queryClient = useQueryClient();
 
-  const patientsQuery = useQuery({
-    queryKey: schoolDetailKeys.patients(schoolId),
-    queryFn: () => fetchSchoolPatients(schoolId),
+  const patientsOverviewQuery = useQuery({
+    queryKey: schoolDetailKeys.patientsOverview(schoolId),
+    queryFn: () => schoolsService.getPatientsOverview(schoolId),
     enabled: !!schoolId,
-    staleTime: 3 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -65,14 +67,6 @@ export default function useSchoolDetailsQuery(schoolId: string) {
     queryFn: () => fetchSchoolProviders(schoolId),
     enabled: !!schoolId,
     staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
-
-  const urgentCareQuery = useQuery({
-    queryKey: schoolDetailKeys.urgentCare(schoolId),
-    queryFn: () => fetchSchoolUrgentCare(schoolId),
-    enabled: !!schoolId,
-    staleTime: 2 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
 
@@ -85,9 +79,8 @@ export default function useSchoolDetailsQuery(schoolId: string) {
   );
 
   return {
-    patientsQuery,
+    patientsOverviewQuery,
     providersQuery,
-    urgentCareQuery,
     invalidateSchoolProviders,
   };
 }

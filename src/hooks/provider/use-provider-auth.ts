@@ -31,14 +31,8 @@ export function useProviderAuth() {
     hasCheckedRef.current = true;
     isCheckingRef.current = true;
 
-    let isMounted = true;
-
     const checkAuthAndRedirect = async () => {
-      if (!isMounted || hasRedirectedRef.current) {
-        if (isMounted && !hasRedirectedRef.current) {
-          isCheckingRef.current = false;
-          setIsCheckingAuth(false);
-        }
+      if (hasRedirectedRef.current) {
         return;
       }
 
@@ -51,7 +45,7 @@ export function useProviderAuth() {
           localStorage.removeItem("pendingUser");
         }
         setUserType(null);
-        if (isMounted && !hasRedirectedRef.current) {
+        if (!hasRedirectedRef.current) {
           isCheckingRef.current = false;
           setIsCheckingAuth(false);
         }
@@ -94,7 +88,7 @@ export function useProviderAuth() {
 
       if (refreshTokenValue) {
         const refreshedToken = await refreshToken();
-        if (refreshedToken && isMounted && !hasRedirectedRef.current) {
+        if (refreshedToken && !hasRedirectedRef.current) {
           await verifyProfileAndRedirect();
           return;
         }
@@ -107,7 +101,7 @@ export function useProviderAuth() {
         return;
       }
 
-      if (isMounted && !hasRedirectedRef.current) {
+      if (!hasRedirectedRef.current) {
         isCheckingRef.current = false;
         setIsCheckingAuth(false);
       }
@@ -116,8 +110,8 @@ export function useProviderAuth() {
     checkAuthAndRedirect();
 
     return () => {
-      isMounted = false;
       isCheckingRef.current = false;
+      hasCheckedRef.current = false;
     };
   }, []);
 

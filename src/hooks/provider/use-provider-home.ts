@@ -43,7 +43,7 @@ export function useProviderHome() {
 
   // Handle approved provider redirection
   useApprovedProviderRedirect(
-    getProfileQuery.data?.applicationStatus,
+    getProfileQuery.data?.status, // Changed from applicationStatus
     getProfileQuery.isLoading,
     router,
   );
@@ -52,6 +52,6 @@ export function useProviderHome() {
     userInfo,
     showPendingModal,
     isLoading: getProfileQuery.isLoading,
-    isApproved: getProfileQuery.data?.applicationStatus === "APPROVED",
+    isApproved: getProfileQuery.data?.status === "APPROVED", // Changed from applicationStatus
   };
 }

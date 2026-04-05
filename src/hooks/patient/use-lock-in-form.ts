@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { toast } from "@/components/ui/sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { lockinsService } from "@/services/lockins";
@@ -74,14 +75,16 @@ export function useLockInForm() {
       try {
         const response = await lockinsService.submitLockInForm(data);
 
-        if (response?.success) {
+        if (response?.lockinId) {
           clearCachedData();
           router.push(ROUTES.patient.waitingRoom);
         } else {
-          console.error("Failed to submit lock-in:", response?.message);
+          console.error("Failed to submit lock-in: Missing lockinId");
+          toast.error("Submission failed. Please try again.");
         }
       } catch (error) {
         console.error("Error submitting lock-in:", error);
+        toast.error("Submission failed. Please try again.");
       } finally {
         setIsSubmitting(false);
       }

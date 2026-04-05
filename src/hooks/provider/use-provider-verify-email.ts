@@ -37,9 +37,9 @@ export function useProviderVerifyEmail() {
         email: decodeURIComponent(email as string),
       });
 
-      if (response.success) {
-        if (response.data?.token) {
-          localStorage.setItem("token", response.data.token);
+      if (response) {
+        if (response.token) {
+          localStorage.setItem("token", response.token);
         }
         // Redirect to profile setup (photo step)
         router.push(
@@ -47,8 +47,6 @@ export function useProviderVerifyEmail() {
             email as string,
           )}&step=photo`,
         );
-      } else {
-        setErrorMessage(response.message || "Verification failed");
       }
     } catch (error: any) {
       const errorMsg =

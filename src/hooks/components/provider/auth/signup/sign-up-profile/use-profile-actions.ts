@@ -52,23 +52,22 @@ export const useProfileActions = ({
     if (currentStep === 1) {
       setIsSubmitting(true);
       try {
-        const response = await updateProfileMutation.mutateAsync({
+        const data = await updateProfileMutation.mutateAsync({
           officePhoneNumber: profileData.phoneNumber,
           status: profileData.bio,
         });
 
-        if (response?.success && response?.data) {
-          const data = response.data;
+        if (data) {
           setUserInfo((prev: any) => ({
             ...prev,
-            name: `${(data as any).title ? `${(data as any).title} ` : ""}${
-              data.providerName || prev.name
+            name: `${data.title ? `${data.title} ` : ""}${
+              data.name || prev.name
             }`,
-            title: (data as any).professionalTitle || data.specialty || prev.title,
+            title: data.specialty || prev.title,
             specialty: data.specialty || prev.specialty,
-            profileImage: data.profilePhotoURL || prev.profileImage,
-            timeAgo: (data as any).applicationDate
-              ? calculateTimeAgo((data as any).applicationDate)
+            profileImage: data.avatarUrl || prev.profileImage,
+            timeAgo: data.memberSince
+              ? calculateTimeAgo(data.memberSince as string)
               : prev.timeAgo,
           }));
         }
@@ -99,8 +98,8 @@ export const useProfileActions = ({
               password,
             });
 
-            if (loginResponse.success) {
-              const { token, refreshToken: refreshTokenValue, userData } = loginResponse.data;
+            if (loginResponse) {
+              const { token, refreshToken: refreshTokenValue, userData } = loginResponse;
 
               if (refreshTokenValue) {
                 localStorage.setItem("refreshToken", refreshTokenValue);

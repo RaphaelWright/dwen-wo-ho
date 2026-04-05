@@ -58,12 +58,7 @@ export const useProviderSignIn = ({
         password: values.password,
       });
 
-      if (!response.success) {
-        setErrorMessage(getCleanErrorMessage(response.message || "Sign in failed"));
-        return;
-      }
-
-      const { token, userData, refreshToken: refreshTokenValue } = response.data || {};
+      const { token, userData, refreshToken: refreshTokenValue } = response || {};
 
       if (token) {
         localStorage.setItem("token", token);

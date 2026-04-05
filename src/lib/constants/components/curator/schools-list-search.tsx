@@ -25,6 +25,9 @@ export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
   id: FilterType;
   label: string;
   icon: React.ReactNode;
+  filterKey?: string;
+  filterValue?: string;
+  filterType?: "exact" | "contains" | "score" | "date";
 }[] = [
   {
     id: "all",
@@ -32,10 +35,14 @@ export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
     icon: (
       <TableProperties className="size-4 text-slate-500/80 group-hover:text-slate-500" />
     ),
+    // No filterKey/filterValue for "all" - it shows everything
   },
   {
     id: "JHS",
     label: "JHS Only",
+    filterKey: "type",
+    filterValue: "JHS",
+    filterType: "exact",
     icon: (
       <BookMarked className="size-4 text-rose-500/80 group-hover:text-rose-500" />
     ),
@@ -43,6 +50,9 @@ export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
   {
     id: "SHS",
     label: "SHS Only",
+    filterKey: "type",
+    filterValue: "SHS",
+    filterType: "exact",
     icon: (
       <GraduationCap className="size-4 text-amber-500/80 group-hover:text-amber-500" />
     ),
@@ -50,6 +60,9 @@ export const SCHOOLS_LIST_SEARCH_QUICK_FILTERS: {
   {
     id: "COLLEGE",
     label: "College Only",
+    filterKey: "type",
+    filterValue: "COLLEGE",
+    filterType: "exact",
     icon: (
       <Building2 className="size-4 text-sky-500/80 group-hover:text-sky-500" />
     ),

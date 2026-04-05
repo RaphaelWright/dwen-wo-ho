@@ -56,30 +56,19 @@ export const useCreateAccount = ({
     setErrorMessage("");
 
     try {
-      const response = await signupMutation.mutateAsync({
+      await signupMutation.mutateAsync({
         email: values.email,
         password: values.password,
         fullName: values.fullName,
         professionalTitle: values.title,
       });
 
-      if (response?.success || response) {
-        onNext({
-          email: values.email,
-          fullName: values.fullName,
-          title: values.title,
-          password: values.password,
-        });
-      } else {
-        const errorResponse = response as
-          | { message?: string }
-          | null
-          | undefined;
-        const errorMsg =
-          errorResponse?.message || SIGN_UP_TEXTS.errors.createFailed;
-        setErrorMessage(errorMsg);
-        toast.error(errorMsg);
-      }
+      onNext({
+        email: values.email,
+        fullName: values.fullName,
+        title: values.title,
+        password: values.password,
+      });
     } catch (error: any) {
       let errorMsg = SIGN_UP_TEXTS.errors.general;
 

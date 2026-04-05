@@ -55,17 +55,15 @@ export function useProviderPassword() {
         professionalTitle: signupData.professionalTitle,
       });
 
-      if (response.success) {
+      if (response) {
         localStorage.removeItem("signupData");
 
         // Store the token for future API calls
-        if (response.data?.token) {
-          localStorage.setItem("authToken", response.data.token);
+        if (response.token) {
+          localStorage.setItem("authToken", response.token);
         }
 
         router.push(`${ROUTES.provider.signUp}/${email}/profile` as Route);
-      } else {
-        setErrorMessage(response.message || "Account creation failed");
       }
     } catch (error: any) {
       const errorMsg =

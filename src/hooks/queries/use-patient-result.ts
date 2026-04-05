@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { patientsService } from "@/services/patients";
+import { lockinsService } from "@/services/lockins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 export default function usePatientResultQuery() {
@@ -52,11 +53,116 @@ export default function usePatientResultQuery() {
     },
   });
 
+  const openPatientResultMutation = useMutation({
+    mutationFn: (resultId: string | number) =>
+      patientsService.openPatientResult(resultId),
+    onSuccess: (_, resultId) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.patientResult, "full-details", String(resultId)],
+      });
+    },
+    onError: () => {
+      /* silent — opening is a background effect */
+    },
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: ({
+      lockinId,
+      comment,
+    }: {
+      lockinId: string | number;
+      comment: string;
+    }) => lockinsService.addComment(lockinId, comment),
+    onSuccess: (_, { lockinId }) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.patientResult],
+      });
+      toast.success("Comment saved");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to save comment");
+    },
+  });
+
+  const useAvailableProvidersForReferral = (
+    resultId: string | number,
+    options?: { enabled?: boolean },
+  ) =>
+    useQuery({
+      queryKey: [
+        QUERY_KEYS.patientResult,
+        "available-providers",
+        String(resultId),
+      ],
+      queryFn: () => patientsService.getAvailableProvidersForReferral(resultId),
+      enabled: (options?.enabled ?? false) && !!resultId,
+      staleTime: 2 * 60 * 1000,
+    });
+
+  const setReferredProviderMutation = useMutation({
+    mutationFn: ({
+      resultId,
+      providerId,
+    }: {
+      resultId: string | number;
+      providerId: string;
+    }) => patientsService.setReferredProvider(resultId, providerId),
+    onSuccess: (_, { resultId }) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.patientResult, "full-details", String(resultId)],
+      });
+      toast.success("Referral set successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to set referral");
+    },
+  });
+
+  const usePatientActions = (
+    resultId: string | number,
+    options?: { enabled?: boolean },
+  ) =>
+    useQuery({
+      queryKey: [QUERY_KEYS.patientResult, "actions", String(resultId)],
+      queryFn: () => patientsService.getPatientActions(resultId),
+      enabled: (options?.enabled ?? true) && !!resultId,
+      staleTime: 2 * 60 * 1000,
+    });
+
+  const addPatientActionMutation = useMutation({
+    mutationFn: ({
+      resultId,
+      data,
+    }: {
+      resultId: string | number;
+      data: { title: string; type: string; notes?: string };
+    }) => patientsService.addPatientAction(resultId, data),
+    onSuccess: (_, { resultId }) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.patientResult, "actions", String(resultId)],
+      });
+      toast.success("Action added");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to add action");
+    },
+  });
+
   return {
     usePatientFullDetails,
     createPatientResult: createPatientResultMutation.mutateAsync,
     isCreating: createPatientResultMutation.isPending,
     updateActionStatus: updateActionStatusMutation.mutateAsync,
     isUpdating: updateActionStatusMutation.isPending,
+    openPatientResult: openPatientResultMutation.mutate,
+    addComment: addCommentMutation.mutateAsync,
+    isAddingComment: addCommentMutation.isPending,
+    useAvailableProvidersForReferral,
+    setReferredProvider: setReferredProviderMutation.mutateAsync,
+    isSettingReferral: setReferredProviderMutation.isPending,
+    usePatientActions,
+    addPatientAction: addPatientActionMutation.mutateAsync,
+    isAddingAction: addPatientActionMutation.isPending,
   };
 }

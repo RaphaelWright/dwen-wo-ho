@@ -43,10 +43,9 @@ export function useProviderVerifyPasswordReset() {
         email: email,
       });
 
-      console.log("Submit Recovery Code Response:", response);
-      if (response.success && response.data?.token) {
-        console.log("Setting recoveryToken:", response.data.token);
-        localStorage.setItem("recoveryToken", response.data.token);
+      if (response && response.token) {
+        console.log("Setting recoveryToken:", response.token);
+        localStorage.setItem("recoveryToken", response.token);
         const savedToken = localStorage.getItem("recoveryToken");
         console.log("Verified saved recoveryToken:", savedToken);
 
@@ -55,7 +54,7 @@ export function useProviderVerifyPasswordReset() {
         toast.success("Code verified successfully");
         router.push(`${ROUTES.provider.newPassword}?email=${email}`);
       } else {
-        toast.error(response.message || "Invalid code");
+        toast.error("Invalid code or missing token");
       }
     } catch (error: any) {
       const errorMsg =

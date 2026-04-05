@@ -1,42 +1,46 @@
-import {
-  AlertCircle,
-  Clock,
-  Send,
-  Archive,
-  Lock,
-  Star,
-  CheckCircle,
-} from "lucide-react";
+import { Lock, Star, CheckCircle, User, Eye, Venus, Mars } from "lucide-react";
 import type { SchoolTab } from "@/lib/types/components/curator/school-details";
 
 export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, any[]> = {
   patients: [
     {
-      id: "urgent",
-      label: "Urgent",
+      id: "new",
+      label: "New",
+      filterKey: "visibilityStatus",
+      filterValue: "NEW",
+      filterType: "exact",
       icon: (
-        <AlertCircle className="size-4 text-rose-500/80 group-hover:text-rose-500" />
+        <User className="size-4 text-blue-500/80 group-hover:text-blue-500" />
       ),
     },
     {
-      id: "follow-up",
-      label: "Follow-up",
+      id: "seen",
+      label: "Seen",
+      filterKey: "visibilityStatus",
+      filterValue: "SEEN",
+      filterType: "exact",
       icon: (
-        <Clock className="size-4 text-amber-500/80 group-hover:text-amber-500" />
+        <Eye className="size-4 text-green-500/80 group-hover:text-green-500" />
       ),
     },
     {
-      id: "referred",
-      label: "Referred",
+      id: "male",
+      label: "Male",
+      filterKey: "patientSex",
+      filterValue: "Male",
+      filterType: "exact",
       icon: (
-        <Send className="size-4 text-sky-500/80 group-hover:text-sky-500" />
+        <Mars className="size-4 text-blue-500/80 group-hover:text-blue-500" />
       ),
     },
     {
-      id: "ignored",
-      label: "Ignored",
+      id: "female",
+      label: "Female",
+      filterKey: "patientSex",
+      filterValue: "Female",
+      filterType: "exact",
       icon: (
-        <Archive className="size-4 text-slate-500/80 group-hover:text-slate-500" />
+        <Venus className="size-4 text-pink-500/80 group-hover:text-pink-500" />
       ),
     },
   ],
@@ -44,6 +48,9 @@ export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, any[]> = {
     {
       id: "ready",
       label: "Locked In",
+      filterKey: "lockIns",
+      filterValue: "hasItems",
+      filterType: "contains",
       icon: (
         <Lock className="size-4 text-indigo-500/80 group-hover:text-indigo-500" />
       ),
@@ -51,6 +58,9 @@ export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, any[]> = {
     {
       id: "top",
       label: "Top Ranked",
+      filterKey: "rank",
+      filterValue: "top3",
+      filterType: "score",
       icon: (
         <Star className="size-4 text-amber-500/80 group-hover:text-amber-500" />
       ),
@@ -60,6 +70,9 @@ export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, any[]> = {
     {
       id: "approved",
       label: "Approved",
+      filterKey: "applicationStatus",
+      filterValue: "APPROVED",
+      filterType: "exact",
       icon: (
         <CheckCircle className="size-4 text-emerald-500/80 group-hover:text-emerald-500" />
       ),

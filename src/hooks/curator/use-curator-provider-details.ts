@@ -3,8 +3,8 @@
 import { useParams } from "next/navigation";
 import { getStatusColor } from "@/lib/utils/provider-utils";
 import { useCuratorAuth } from "@/hooks/curator/use-curator-auth";
-import { useProviderData } from "@/hooks/curator/use-provider-data";
-import { useProviderActions } from "@/hooks/curator/use-provider-actions";
+import { useCuratorProviderList } from "@/hooks/curator/use-curator-provider-list";
+import { useCuratorProviderApproval } from "@/hooks/curator/use-curator-provider-approval";
 
 export function useCuratorProviderDetails() {
   const params = useParams();
@@ -16,7 +16,7 @@ export function useCuratorProviderDetails() {
     provider,
     isLoading,
     errorMessage: dataError,
-  } = useProviderData(email, isAuthenticated);
+  } = useCuratorProviderList(email, isAuthenticated);
 
   const {
     isActionLoading,
@@ -24,7 +24,7 @@ export function useCuratorProviderDetails() {
     successMessage,
     handleApprove,
     handleReject,
-  } = useProviderActions(email);
+  } = useCuratorProviderApproval(email);
 
   // Combine errors or prioritize one
   const errorMessage = dataError || actionError;

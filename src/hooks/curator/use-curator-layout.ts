@@ -4,12 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { hasValidToken } from "@/lib/utils/getUserType";
+import { hasValidToken, getStoredUserType } from "@/lib/utils/getUserType";
+import { useCuratorSummary } from "@/hooks/queries/use-curator";
 
 export function useCuratorLayout() {
   const router = useRouter();
   const pathname = usePathname();
   const { logout } = useAuthQuery();
+
+  const { data: summary } = useCuratorSummary();
 
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -18,7 +21,7 @@ export function useCuratorLayout() {
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      if (!hasValidToken()) {
+      if (!hasValidToken() || getStoredUserType() !== "curator") {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;
@@ -85,6 +88,11 @@ export function useCuratorLayout() {
     // Auth
     mounted,
     isAuthenticated,
+
+    // Summary counts
+    schoolCount: summary?.schoolCount ?? 0,
+    providerCount: summary?.providerCount ?? 0,
+    partnerCount: summary?.partnerCount ?? 0,
 
     // Handlers
     handleLogout,

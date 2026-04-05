@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { patientsService } from "@/services/patients";
 import { getColorHex } from "@/lib/utils/color-utils";
+import usePatientResultQuery from "@/hooks/queries/use-patient-result";
 
 export function useCuratorPatientDetails() {
   const params = useParams();
@@ -25,6 +26,13 @@ export function useCuratorPatientDetails() {
 
   const patientResult = data?.patientResult ?? null;
   const lockInAssessment = data?.lockInAssessment ?? null;
+
+  const { usePatientActions, addPatientAction, isAddingAction } =
+    usePatientResultQuery();
+  const actionsQuery = usePatientActions(patientId, {
+    enabled: !!patientId && !!data,
+  });
+  const actions = actionsQuery.data ?? [];
 
   const metrics = useMemo(() => {
     if (!lockInAssessment) return [];
@@ -109,5 +117,9 @@ export function useCuratorPatientDetails() {
     activeTab,
     setActiveTab,
     metrics,
+    actions,
+    isActionsLoading: actionsQuery.isLoading,
+    addPatientAction,
+    isAddingAction,
   };
 }

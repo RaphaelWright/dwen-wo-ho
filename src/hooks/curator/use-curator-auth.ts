@@ -8,16 +8,18 @@ export function useCuratorAuth() {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(() => {
     if (typeof window !== "undefined") {
-      const refreshToken = localStorage.getItem("refreshToken");
-      return !!refreshToken;
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+      return !!token && userType === "curator";
     }
     return null;
   });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) {
+      const token = localStorage.getItem("token");
+      const userType = localStorage.getItem("userType");
+      if (!token || userType !== "curator") {
         router.replace(ROUTES.provider.auth);
         setIsAuthenticated(false);
         return;

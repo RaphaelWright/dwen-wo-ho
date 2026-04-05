@@ -2,15 +2,47 @@
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
-import { providersService } from "@/services/providers";
+import { curatorProvidersService } from "@/services/curator-providers";
+import { providerDashboardService } from "@/services/provider-dashboard";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import type { ProviderActivityParams } from "@/lib/types/api/providers";
+
+export const useProviderActivityQuery = (params?: ProviderActivityParams) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.providers, "activity", params],
+    queryFn: () => curatorProvidersService.getActivity(params),
+    staleTime: 60 * 1000,
+  });
+
+export const useProviderNotificationsQuery = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.providers, "notifications"],
+    queryFn: () => providerDashboardService.getNotifications(),
+    staleTime: 60 * 1000,
+  });
+
+// Re-export unified notification mutations (role-aware)
+export {
+  useClearNotificationsMutation,
+  useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
+  useDeleteNotificationMutation,
+} from "./use-notifications-mutations";
+
+export const useProviderSchoolsSummary = () =>
+  useQuery({
+    queryKey: [QUERY_KEYS.providerSchoolsSummary],
+    queryFn: curatorProvidersService.getSchoolsSummary,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
 
 export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   const queryClient = useQueryClient();
 
   const providersQuery = useQuery({
     queryKey: [QUERY_KEYS.providers],
-    queryFn: providersService.getProviders,
+    queryFn: curatorProvidersService.getProviders,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: options?.enabled ?? true,
@@ -20,7 +52,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   const useProvider = (email: string) =>
     useQuery({
       queryKey: [QUERY_KEYS.providers, email],
-      queryFn: () => providersService.getProvider(email),
+      queryFn: () => curatorProvidersService.getProvider(email),
       enabled: !!email,
       staleTime: 3 * 60 * 1000, // 3 minutes
       gcTime: 10 * 60 * 1000, // 10 minutes
@@ -28,7 +60,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
 
   // Approve provider mutation
   const approveProviderMutation = useMutation({
-    mutationFn: providersService.approveProvider,
+    mutationFn: curatorProvidersService.approveProvider,
     onSuccess: (data, email) => {
       // Invalidate providers queries to trigger refetch
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.providers] });
@@ -45,7 +77,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
 
   // Reject provider mutation
   const rejectProviderMutation = useMutation({
-    mutationFn: providersService.rejectProvider,
+    mutationFn: curatorProvidersService.rejectProvider,
     onSuccess: (data, email) => {
       // Invalidate providers queries to trigger refetch
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.providers] });
@@ -77,7 +109,7 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
     }: {
       providerId: string | number;
       schoolId: string | number;
-    }) => providersService.addSchoolToProvider(providerId, schoolId),
+    }) => curatorProvidersService.addSchoolToProvider(providerId, schoolId),
     onSuccess: (_, { providerId }) => {
       if (typeof providerId === "string") invalidateProvider(providerId);
       toast.success("School added to provider successfully");
@@ -93,7 +125,8 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
     }: {
       providerId: string | number;
       schoolId: string | number;
-    }) => providersService.removeSchoolFromProvider(providerId, schoolId),
+    }) =>
+      curatorProvidersService.removeSchoolFromProvider(providerId, schoolId),
     onSuccess: (_, { providerId }) => {
       if (typeof providerId === "string") invalidateProvider(providerId);
       toast.success("School removed from provider successfully");

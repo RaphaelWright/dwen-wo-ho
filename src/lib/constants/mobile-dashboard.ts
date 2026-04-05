@@ -16,6 +16,11 @@ export const MOBILE_TABS_CONFIG = [
     iconName: "AlertTriangle",
   },
   {
+    id: "activity",
+    label: "Activity",
+    iconName: "Activity",
+  },
+  {
     id: "profile",
     label: "Profile",
     iconName: "User",

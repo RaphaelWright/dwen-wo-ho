@@ -25,10 +25,8 @@ export function useProviderCheckEmail({
       setErrorMessage("");
       const response = await checkEmailMutation.mutateAsync({ email });
 
-      if (response.success) {
-        onEmailSubmit(email, response.data?.emailExists || false);
-      } else {
-        setErrorMessage(response.message || "Failed to verify email");
+      if (response) {
+        onEmailSubmit(email, response.emailExists || false);
       }
     } catch (error) {
       // Parse error message - it might be stringified JSON

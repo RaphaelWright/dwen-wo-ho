@@ -1,30 +1,29 @@
-import { Clock, Send, Archive, Siren } from "lucide-react";
+import { Zap, TrendingUp, Award } from "lucide-react";
+import type { FilterOption } from "@/components/shared/search-dropdown";
 
-export const PROVIDER_SEARCH_QUICK_FILTERS = [
+export const PROVIDER_SEARCH_QUICK_FILTERS: FilterOption[] = [
   {
-    id: "urgent",
-    label: "Urgent",
-    icon: (
-      <Siren className="size-4 text-destructive group-hover:text-destructive/50" />
-    ),
+    id: "status-new",
+    label: "New",
+    icon: <Zap className="w-3.5 h-3.5" />,
+    filterKey: "status",
+    filterValue: "new",
+    filterType: "exact",
   },
   {
-    id: "follow-up",
-    label: "Follow-up",
-    icon: (
-      <Clock className="size-4 text-amber-500/80 group-hover:text-amber-500" />
-    ),
+    id: "high-score",
+    label: "High Score",
+    icon: <TrendingUp className="w-3.5 h-3.5" />,
+    filterKey: "score",
+    filterValue: "high",
+    filterType: "score",
   },
   {
-    id: "referred",
-    label: "Referred",
-    icon: <Send className="size-4 text-sky-500/80 group-hover:text-sky-500" />,
-  },
-  {
-    id: "ignored",
-    label: "Ignored",
-    icon: (
-      <Archive className="size-4 text-slate-500/80 group-hover:text-slate-500" />
-    ),
+    id: "low-score",
+    label: "Low Score",
+    icon: <Award className="w-3.5 h-3.5" />,
+    filterKey: "score",
+    filterValue: "low",
+    filterType: "score",
   },
 ];
