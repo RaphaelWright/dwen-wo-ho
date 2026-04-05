@@ -4,7 +4,7 @@ import WidthConstraint from "@/components/ui/width-constraint";
 import { Building2, Search } from "lucide-react";
 import Image from "next/image";
 import PartnerDetailsModal from "@/components/modals/partner-details";
-import { useCuratorPartners } from "@/hooks/curator/useCuratorPartners";
+import { useCuratorPartners } from "@/hooks/curator/use-curator-partners";
 
 export default function PartnersPage() {
   const {
@@ -77,7 +77,7 @@ export default function PartnersPage() {
                       <Image
                         src={partner.logo}
                         alt={partner.name}
-                        fill
+                        fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-contain rounded-lg"
                       />
                     </div>

@@ -4,7 +4,7 @@ import { ArrowLeft, Users } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useProviderSchoolDetails } from "@/hooks/provider/useProviderSchoolDetails";
+import { useProviderSchoolDetails } from "@/hooks/provider/use-provider-school-details";
 
 export default function ProviderSchoolDetailsPage() {
   const {
@@ -113,7 +113,7 @@ export default function ProviderSchoolDetailsPage() {
                 <Image
                   src={school.logo}
                   alt={school.name}
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover"
                 />
               </div>

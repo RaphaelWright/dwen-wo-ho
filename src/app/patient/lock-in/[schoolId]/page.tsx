@@ -1,15 +1,15 @@
 "use client";
 
 import WidthConstraint from "@/components/ui/width-constraint";
+import { useLockInForm } from "@/hooks/patient/use-lock-in-form";
 import {
-  useLockInForm,
-  frequencyOptions,
-  yesNoOptions,
-  motivationOptions,
-  studyFrequencyOptions,
-  timeToExamOptions,
-  reasonOptions,
-} from "@/hooks/patient/useLockInForm";
+  LOCKIN_FREQUENCY_OPTIONS as frequencyOptions,
+  LOCKIN_YES_NO_OPTIONS as yesNoOptions,
+  LOCKIN_MOTIVATION_OPTIONS as motivationOptions,
+  LOCKIN_STUDY_FREQUENCY_OPTIONS as studyFrequencyOptions,
+  LOCKIN_TIME_TO_EXAM_OPTIONS as timeToExamOptions,
+  LOCKIN_REASON_OPTIONS as reasonOptions,
+} from "@/lib/constants/mock-data";
 import {
   LockInHeader,
   PersonalInfoSection,

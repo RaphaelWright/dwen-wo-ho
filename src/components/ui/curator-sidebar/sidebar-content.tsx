@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/Logo";
 import { ROUTES } from "@/lib/constants/routes";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { NotificationSheet } from "@/components/ui/notification-sheet";
 import {
   Tooltip,
   TooltipContent,
@@ -25,13 +24,11 @@ export const SidebarContent = ({
   pathname,
   theme,
   mounted,
-  notifications,
   unreadCount,
-  onClearNotifications,
-  onDismissNotification,
   onToggleCollapse,
   onLogoutClick,
   onMobileClose,
+  setIsOpen,
 }: SidebarContentProps) => {
   const isActive = (path: string) => pathname.startsWith(path);
 
@@ -102,56 +99,50 @@ export const SidebarContent = ({
       <div className="border-t border-border p-2 space-y-1">
         {/* Notification Menu Item */}
         <div className="pt-2 mt-2">
-          <NotificationSheet
-            notifications={notifications}
-            onClear={onClearNotifications}
-            onDismiss={onDismissNotification}
-            trigger={
-              <button
-                className={cn(
-                  "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
-                  collapsed
-                    ? "justify-center px-0 w-10 h-10 mx-auto text-muted-foreground hover:bg-muted"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
+          <button
+            onClick={() => setIsOpen(true)}
+            className={cn(
+              "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
+              collapsed
+                ? "justify-center px-0 w-10 h-10 mx-auto text-muted-foreground hover:bg-muted"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+            )}
+          >
+            <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+              <FiBell className="text-lg shrink-0" />
+            </span>
+
+            <AnimatePresence mode="wait">
+              {!collapsed && (
+                <motion.span
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="whitespace-nowrap overflow-hidden"
+                >
+                  Notifications
+                </motion.span>
+              )}
+            </AnimatePresence>
+
+            {/* Unread Badge */}
+            {!collapsed && unreadCount > 0 && (
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-destructive text-white px-1.5"
               >
-                <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                  <FiBell className="text-lg shrink-0" />
-                </span>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </motion.span>
+            )}
 
-                <AnimatePresence mode="wait">
-                  {!collapsed && (
-                    <motion.span
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="whitespace-nowrap overflow-hidden"
-                    >
-                      Notifications
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-
-                {/* Unread Badge */}
-                {!collapsed && unreadCount > 0 && (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-destructive text-white px-1.5"
-                  >
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </motion.span>
-                )}
-
-                {/* Collapsed Badge */}
-                {collapsed && unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-destructive border-2 border-white" />
-                )}
-              </button>
-            }
-          />
+            {/* Collapsed Badge */}
+            {collapsed && unreadCount > 0 && (
+              <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-destructive border-2 border-white" />
+            )}
+          </button>
         </div>
 
         {/* Collapse toggle — desktop only */}

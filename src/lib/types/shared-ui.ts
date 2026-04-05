@@ -1,10 +1,11 @@
 import { PARTNER_SCHOOLS } from "@/lib/constants/components/social-proof";
+import { Route } from "next";
 
 export interface LogoProps {
   variant?: "black" | "purple" | "white" | "auto";
   className?: string;
   withLink?: boolean;
-  href?: string;
+  href?: string | Route;
 }
 
 export interface FormInputProps extends React.ComponentProps<"input"> {

@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 // import { DevTool } from "@hookform/devtools"; // Commented out for production feel
-import { usePatientNewPassword } from "@/hooks/patient/usePatientNewPassword";
+import { usePatientNewPassword } from "@/hooks/patient/use-patient-new-password";
 import {
   NewPasswordHeader,
   NewPasswordForm,

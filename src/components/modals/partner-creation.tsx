@@ -136,7 +136,7 @@ const PartnerCreationModal = ({
                           <Image
                             src={logo}
                             alt="Logo preview"
-                            fill
+                            fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-contain"
                           />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">

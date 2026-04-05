@@ -1,3 +1,6 @@
+export const CACHE_KEY_PREFIX = "lockin_form_cache_";
+export const CACHE_DURATION = 5 * 60 * 1000;
+
 export const LOCK_IN_TEXTS = {
   header: {
     title: "Student Lock In Form",

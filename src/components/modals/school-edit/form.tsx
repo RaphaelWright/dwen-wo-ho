@@ -131,7 +131,7 @@ export const SchoolEditForm = ({
                 exit={{ opacity: 0, y: 10 }}
                 className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-20 overflow-hidden"
               >
-                <div className="max-h-48 overflow-y-auto p-2">
+                <div className="max-h-48 overflow-y-auto p-2 no-scrollbar">
                   {CAMPUS_OPTIONS.map((campus) => (
                     <Button
                       key={campus}

@@ -1,4 +1,4 @@
-import { SchoolFormData } from "@/hooks/components/modals/use-school-creation";
+import { SchoolFormData } from "@/lib/types/school";
 
 export interface SchoolHeaderProps {
   currentStep: number;

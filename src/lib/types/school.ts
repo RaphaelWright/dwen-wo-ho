@@ -5,8 +5,7 @@ export interface School {
   logo?: string;
   type?: string;
   motto?: string;
-  totalProviders?: number;
-  totalPartners?: number;
+  totalPatients?: number;
   campuses?: string[] | null;
   createdAt?: string;
   // Extras
@@ -14,6 +13,15 @@ export interface School {
   studentCount?: number;
   latestLockInDate?: string;
   newPatientName?: string;
+}
+
+export interface SchoolFormData {
+  name: string;
+  nickname: string;
+  motto: string;
+  campuses: string[];
+  type: string;
+  logo: File | undefined;
 }
 
 export interface ICreateSchool {
@@ -60,5 +68,3 @@ export interface SchoolReach {
   schoolName: string;
   reach: number;
 }
-
-

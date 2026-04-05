@@ -1,0 +1,229 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetClose,
+} from "@/components/ui/sheet";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Notification } from "@/lib/types/notification";
+import NotifItem from "./notification-item";
+import { CheckCircle, Trash2, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type FilterType = "all" | "unread" | "read";
+
+interface NotificationsSheetProps {
+  notifications: Notification[];
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  markAllRead: () => void;
+  markOneRead: (id: string | number) => void;
+  deleteOne?: (id: string | number) => void;
+  clearAllNotifications: () => void;
+  onNavigate?: (link: string) => void;
+}
+
+export default function NotificationsSheet({
+  notifications,
+  isOpen,
+  onOpenChange,
+  markAllRead,
+  markOneRead,
+  deleteOne,
+  clearAllNotifications,
+  onNavigate,
+}: NotificationsSheetProps) {
+  const [filter, setFilter] = useState<FilterType>("all");
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+  const readCount = notifications.filter((n) => n.read).length;
+
+  const filteredNotifications = useMemo(() => {
+    switch (filter) {
+      case "unread":
+        return notifications.filter((n) => !n.read);
+      case "read":
+        return notifications.filter((n) => n.read);
+      default:
+        return notifications;
+    }
+  }, [notifications, filter]);
+
+  return (
+    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="right"
+        className="w-100 p-0 border-l flex flex-col"
+        showCloseButton={false}
+      >
+        <SheetClose className="absolute right-2 top-2 size-7 rounded-full border bg-background flex items-center justify-center shadow-sm transition-all hover:scale-110 hover:bg-muted group z-50">
+          <X className="size-4 text-destructive" />
+          <span className="sr-only">Close</span>
+        </SheetClose>
+
+        {/* Header */}
+        <SheetHeader className="px-5 pt-5 pb-4 border-b shrink-0 mt-4">
+          <div className="flex items-center gap-3">
+            <SheetTitle className="text-[16px] font-bold flex-1">
+              Notifications
+            </SheetTitle>
+          </div>
+
+          <div className="flex justify-between items-center gap-2">
+            {/* Filter tabs */}
+            <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-lg w-fit">
+              <FilterTab
+                active={filter === "all"}
+                onClick={() => setFilter("all")}
+                count={notifications.length}
+                label="All"
+              />
+              <FilterTab
+                active={filter === "unread"}
+                onClick={() => setFilter("unread")}
+                count={unreadCount}
+                label="Unread"
+                showBadge={unreadCount > 0}
+              />
+              <FilterTab
+                active={filter === "read"}
+                onClick={() => setFilter("read")}
+                count={readCount}
+                label="Read"
+              />
+            </div>
+            <div className="flex justify-between items-center gap-2">
+              {unreadCount > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={markAllRead}
+                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-info/15 hover:text-info active:scale-95"
+                      >
+                        <CheckCircle className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" sideOffset={8}>
+                      <p className="text-[10px]"> Mark all read</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              {notifications.length > 0 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={clearAllNotifications}
+                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive active:scale-95"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" sideOffset={8}>
+                      <p className="text-[10px]">Clear all</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+          </div>
+        </SheetHeader>
+
+        {/* List */}
+        <div className="flex-1 min-h-0 px-4 overflow-y-auto no-scrollbar">
+          <div className="flex flex-col gap-2 py-4">
+            {filteredNotifications.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground text-sm">
+                {filter === "unread"
+                  ? "No unread notifications"
+                  : filter === "read"
+                    ? "No read notifications"
+                    : "No notifications"}
+              </div>
+            ) : (
+              filteredNotifications.map((n, i) => (
+                <NotifItem
+                  key={n.id ? `notif-${n.id}` : `notif-idx-${i}`}
+                  notif={n as any}
+                  index={i}
+                  onMarkRead={() => markOneRead(n.id)}
+                  onDelete={deleteOne ? () => deleteOne(n.id) : undefined}
+                  onClick={
+                    n.link
+                      ? () => {
+                          onNavigate?.(n.link!);
+                          markOneRead(n.id);
+                        }
+                      : undefined
+                  }
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+function FilterTab({
+  active,
+  onClick,
+  count,
+  label,
+  showBadge,
+}: {
+  active: boolean;
+  onClick: () => void;
+  count: number;
+  label: string;
+  showBadge?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "relative px-3 py-1.5 rounded-md text-[11px] font-semibold transition-all duration-200 ease-out",
+        active
+          ? "bg-background text-foreground shadow-sm ring-1 ring-border"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/80",
+      )}
+    >
+      <span className="flex items-center gap-1.5">
+        {label}
+        {showBadge ? (
+          <span
+            className={cn(
+              "text-[9px] px-1.5 py-0 rounded-full font-bold min-w-4 text-center",
+              active
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted-foreground/20 text-muted-foreground",
+            )}
+          >
+            {count}
+          </span>
+        ) : (
+          <span
+            className={cn(
+              "text-[10px] tabular-nums",
+              active ? "text-muted-foreground" : "text-muted-foreground/50",
+            )}
+          >
+            {count}
+          </span>
+        )}
+      </span>
+    </button>
+  );
+}

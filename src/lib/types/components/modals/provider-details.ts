@@ -1,8 +1,5 @@
-import {
-  AssociatedSchool,
-  AssociatedPartner,
-  ProviderDetails,
-} from "@/lib/types/provider";
+import { ProviderDetails } from "@/lib/types/provider";
+import { AssociatedSchool, AssociatedPartner } from "@/lib/types/partners";
 
 export interface ProviderHeaderProps {
   provider: ProviderDetails;

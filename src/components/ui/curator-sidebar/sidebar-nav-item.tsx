@@ -60,10 +60,10 @@ export const SidebarNavItem = ({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           className={cn(
-            "ml-auto text-xs font-semibold px-2 py-0.5 rounded-full min-w-6 text-center",
+            "ml-auto flex shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold",
             isActive
-              ? "bg-primary/20 text-primary"
-              : "bg-muted/80 text-muted-foreground",
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted-foreground/10 text-muted-foreground"
           )}
         >
           {item.count}
@@ -98,9 +98,6 @@ export const SidebarNavItem = ({
         </TooltipTrigger>
         <TooltipContent side="right" className="font-medium">
           <p>{item.label}</p>
-          {item.count !== undefined && (
-            <span className="text-xs opacity-70 ml-1">({item.count})</span>
-          )}
         </TooltipContent>
       </Tooltip>
     );

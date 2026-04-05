@@ -3,7 +3,7 @@
 import Layout from "@/app/provider/auth/layout";
 import ProviderSignUp from "@/components/provider/auth/sign-up";
 import { Suspense } from "react";
-import { useProviderSignup } from "@/hooks/provider/useProviderSignup";
+import { useProviderSignup } from "@/hooks/provider/use-provider-signup";
 
 const SignUpPageContent = () => {
   const {

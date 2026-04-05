@@ -18,8 +18,8 @@ const SocialProof = () => {
       </div>
 
       <div className="relative flex flex-col gap-8 overflow-hidden mask-gradient">
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-linear-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-linear-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-linear-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-linear-to-l from-background to-transparent z-10 pointer-events-none" />
 
         <MarqueeRow items={row1Items} direction="left" speed={40} />
         <MarqueeRow items={row2Items} direction="right" speed={45} />

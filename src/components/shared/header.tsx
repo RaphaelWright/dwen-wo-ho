@@ -7,9 +7,17 @@ import { DesktopNav } from "./header/desktop-nav";
 import { HeaderActions } from "./header/header-actions";
 import { MobileNav } from "./header/mobile-nav";
 import { useHeader } from "@/hooks/components/shared/use-header";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const Header = ({ className }: { className?: string }) => {
   const { isOpen, setIsOpen, navRef, isFloating } = useHeader();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
@@ -21,9 +29,9 @@ const Header = ({ className }: { className?: string }) => {
           }}
           className={cn(
             "pointer-events-auto relative z-50 overflow-hidden",
-            "bg-background/90 backdrop-blur-md border border-border",
+            "bg-background/90 backdrop-blur-md border border-border dark:border-border/30",
             isFloating
-              ? "mt-2 sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
+              ? "mt-2 w-[95%] sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
               : "mt-0 w-full max-w-full rounded-none shadow-sm",
             className,
           )}
@@ -37,7 +45,11 @@ const Header = ({ className }: { className?: string }) => {
             >
               {/* Logo */}
               <div className="shrink-0">
-                <Logo withLink className="w-36" variant="black" />
+                <Logo
+                  withLink
+                  className="w-36"
+                  variant={mounted && theme === "light" ? "black" : "white"}
+                />
               </div>
 
               {/* Desktop Nav */}

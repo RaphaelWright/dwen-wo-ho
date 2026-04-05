@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { toast } from "@/components/ui/sonner";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
@@ -39,13 +39,14 @@ export const useSignUpVerification = ({
         email: email.trim(),
       });
 
-      if (verifyResponse?.success) {
-        const token = verifyResponse.data?.token;
+      if (verifyResponse) {
+        const token = verifyResponse.token;
 
         if (token) {
           localStorage.setItem("token", token);
 
-          const refreshTokenValue = verifyResponse.data?.refreshToken;
+          // If refreshToken is present in TokenResponse or SignInResponse
+          const refreshTokenValue = (verifyResponse as any).refreshToken;
           if (refreshTokenValue) {
             localStorage.setItem("refreshToken", refreshTokenValue);
           }
@@ -56,11 +57,6 @@ export const useSignUpVerification = ({
           setErrorMessage(SIGN_UP_TEXTS.errors.verifySuccessLoginFailed);
           toast.error(SIGN_UP_TEXTS.errors.noToken);
         }
-      } else {
-        const msg =
-          verifyResponse?.message || SIGN_UP_TEXTS.errors.verifyFailed;
-        setErrorMessage(msg);
-        toast.error(msg);
       }
     } catch (error: any) {
       let errorMsg = SIGN_UP_TEXTS.errors.verifyFailed;

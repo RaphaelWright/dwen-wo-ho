@@ -12,19 +12,21 @@ import Footer from "@/components/shared/footer";
 
 export default function HomePage() {
   return (
-    <>
-      <JsonLd data={JSON_LD_HOME_PAGE} />
-      <Header />
-      <main className="space-y-20">
-        <BackgroundBeamsWithCollision className="min-h-screen">
-          <HomePageHero />
-        </BackgroundBeamsWithCollision>
-        <SocialProof />
-        <Services />
-        <StickyScrollSection />
-        <AnimatedTestimonials testimonials={testimonials} />
-        <Footer />
-      </main>
-    </>
+    <div className="relative overflow-x-hidden">
+      <div>
+        <JsonLd data={JSON_LD_HOME_PAGE} />
+        <Header />
+        <main className="space-y-20 pb-20">
+          <BackgroundBeamsWithCollision className="h-auto min-h-screen w-full items-start lg:items-center">
+            <HomePageHero />
+          </BackgroundBeamsWithCollision>
+          <SocialProof />
+          <Services />
+          <StickyScrollSection />
+          <AnimatedTestimonials testimonials={testimonials} />
+        </main>
+      </div>
+      <Footer />
+    </div>
   );
 }

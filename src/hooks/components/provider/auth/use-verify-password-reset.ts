@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
-import useGetSearchParams from "@/hooks/useGetSearchParams";
+import useGetSearchParams from "@/hooks/use-get-search-params";
 import { VerifyPasswordResetProps } from "@/lib/types/provider/auth";
 
 export const useVerifyPasswordReset = ({

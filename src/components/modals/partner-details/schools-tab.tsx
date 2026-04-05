@@ -3,7 +3,7 @@ import { MdSchool } from "react-icons/md";
 import { FiSearch, FiMinus, FiPlus } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { SchoolsTabProps } from "@/lib/types/components/modals/partner-details";
-import { AssociatedSchool } from "@/lib/types/modals";
+import { AssociatedSchool } from "@/lib/types/partners";
 import { Input } from "@/components/ui/input";
 
 export const SchoolsTab = ({

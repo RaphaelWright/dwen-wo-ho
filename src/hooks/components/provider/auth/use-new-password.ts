@@ -7,9 +7,9 @@ import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
-import useGetSearchParams from "@/hooks/useGetSearchParams";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
-import { ProviderPasswordSchema } from "@/lib/schemas/provider.auth.schema";
+import useGetSearchParams from "@/hooks/use-get-search-params";
+import {useAuthQuery} from "@/hooks/queries/use-auth";
+import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/new-password";
 import { setUserType } from "@/lib/utils/getUserType";
 
@@ -81,40 +81,33 @@ export const useNewPassword = () => {
         token: storedToken || undefined,
       });
 
-      if (response.success) {
-        localStorage.removeItem("recoveryToken");
+      localStorage.removeItem("recoveryToken");
 
-        const token = response.data?.token;
-        const userData = response.data?.userData || response.data;
+      // Attempt to access token and userData since resetPassword might return SignInResponse natively
+      const token = (response as any)?.token;
+      const userData = (response as any)?.userData || response;
 
-        if (token) {
-          localStorage.setItem("token", token);
-          if (userData?.userRole === "ROLE_CURATOR") {
-            localStorage.setItem("curatorToken", token);
-            setUserType("curator");
-          } else {
-            setUserType("provider");
-          }
-        }
-
-        const refreshTokenValue = response.data?.refreshToken;
-        if (refreshTokenValue) {
-          localStorage.setItem("refreshToken", refreshTokenValue);
-        }
-
-        toast.success(NEW_PASSWORD_TEXTS.toasts.success);
-
-        if (userData?.applicationStatus === "APPROVED") {
-          router.push(ROUTES.provider.profile);
+      if (token) {
+        localStorage.setItem("token", token);
+        if (userData?.userRole === "ROLE_CURATOR") {
+          localStorage.setItem("curatorToken", token);
+          setUserType("curator");
         } else {
-          router.push(ROUTES.provider.home);
+          setUserType("provider");
         }
+      }
+
+      const refreshTokenValue = (response as any)?.refreshToken;
+      if (refreshTokenValue) {
+        localStorage.setItem("refreshToken", refreshTokenValue);
+      }
+
+      toast.success(NEW_PASSWORD_TEXTS.toasts.success);
+
+      if (userData?.applicationStatus === "APPROVED") {
+        router.push(ROUTES.provider.profile);
       } else {
-        setErrorMessage(
-          getCleanErrorMessage(
-            response.message || NEW_PASSWORD_TEXTS.errors.passwordResetFailed,
-          ),
-        );
+        router.push(ROUTES.provider.home);
       }
     } catch (error) {
       setErrorMessage(getCleanErrorMessage(error));

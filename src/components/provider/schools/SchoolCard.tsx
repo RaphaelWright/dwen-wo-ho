@@ -31,7 +31,7 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
           <Image
             src={school.logo}
             alt={school.name}
-            fill
+            fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover"
           />
         </div>
@@ -65,7 +65,7 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
       {!school.isLoading && (
         <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-destructive backdrop-blur-sm flex items-center justify-center shadow-lg">
           <span className="text-destructive-foreground font-bold text-sm">
-            {school.studentCount ?? 0}
+            {school.totalPatients ?? school.studentCount ?? 0}
           </span>
         </div>
       )}

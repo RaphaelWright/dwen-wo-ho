@@ -62,7 +62,7 @@ const siteMetadata: Metadata = {
     description: DEFAULT_DESCRIPTION,
     images: [
       {
-        url: `${SITE_URL}/logos/logo-purple.png`,
+        url: `${SITE_URL}/og.png`,
         width: 1200,
         height: 630,
         alt: SITE_TITLE,
@@ -76,7 +76,7 @@ const siteMetadata: Metadata = {
       template: `%s | ${SITE_NAME}`,
     },
     description: DEFAULT_DESCRIPTION,
-    images: [`${SITE_URL}/logos/logo-purple.png`],
+    images: [`${SITE_URL}/og.png`],
     creator: "@justgohealth",
   },
   icons: {
@@ -105,7 +105,7 @@ export function getMetadata(
   const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_TITLE;
   const pageDescription = description || DEFAULT_DESCRIPTION;
   const pageUrl = path ? `${SITE_URL}${path}` : SITE_URL;
-  const pageImage = image || `${SITE_URL}/logos/logo-purple.png`;
+  const pageImage = image || `${SITE_URL}/og.png`;
 
   return {
     ...siteMetadata,

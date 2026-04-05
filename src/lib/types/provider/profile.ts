@@ -1,8 +1,8 @@
 import { Provider } from "@/lib/types/provider";
 
 export interface ProviderProfile extends Provider {
-  schools?: any[]; // TODO: Define School type if available
-  partners?: any[]; // TODO: Define Partner type if available
+  schools?: import("@/lib/types/api/providers").AssociatedSchool[];
+  partners?: import("@/lib/types/api/providers").AssociatedPartner[];
 }
 
 export interface ProviderStats {

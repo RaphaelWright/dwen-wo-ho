@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { SchoolCreationModalProps } from "@/lib/types/modals";
 import { useSchoolCreation } from "@/hooks/components/modals/use-school-creation";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useClickOutside } from "@/hooks/use-click-outside";
 import { SchoolHeader } from "./school-creation/header";
 import { StepIndicator } from "./school-creation/step-indicator";
 import { FormStep } from "./school-creation/form-step";

@@ -12,6 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           width={1080}
           height={1080}
           quality={100}
+          priority
           className="w-full h-full object-cover"
         />
       </section>

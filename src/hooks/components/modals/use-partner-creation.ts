@@ -1,10 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import {
-  useCreatePartner,
-  ICreatePartner,
-} from "@/hooks/queries/usePartnersQuery";
+import usePartnerQuery from "@/hooks/queries/use-partner";
+import { partnersService } from "@/services/partners";
+import type { ICreatePartner, Partner } from "@/lib/types/partners";
 
 
 export const usePartnerCreation = ({
@@ -25,7 +24,8 @@ export const usePartnerCreation = ({
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const createPartnerMutation = useCreatePartner();
+  const { createPartner, isCreating } = usePartnerQuery();
+  const createPartnerMutation = { mutate: createPartner, isPending: isCreating };
 
   const handlePickLogo = () => fileInputRef.current?.click();
 
@@ -50,7 +50,7 @@ export const usePartnerCreation = ({
     };
 
     createPartnerMutation.mutate(partnerData, {
-      onSuccess: (data) => {
+      onSuccess: (data: Partner) => {
         onPartnerCreated?.({
           name: data.name,
           nickname: data.nickname,

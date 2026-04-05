@@ -1,24 +1,25 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { CuratorSidebar } from "@/components/ui/curator-sidebar";
 import CreateModal from "@/components/curator/create-modal";
 import MemberCreationModal from "@/components/modals/member-creation";
 import PartnerCreationModal from "@/components/modals/partner-creation";
 import ReachModal from "@/components/modals/reach";
 import SchoolCreationModal from "@/components/modals/school-creation";
-import { useCuratorLayout } from "@/hooks/curator/useCuratorLayout";
+import { useCuratorLayout } from "@/hooks/curator/use-curator-layout";
+import { useNotification } from "@/hooks/use-notification";
+import NotificationsSheet from "@/components/shared/notification-sheet";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const {
     mounted,
     isAuthenticated,
-    schoolCount,
-    providerCount,
-    partnerCount,
     handleLogout,
     showCreateModal,
     setShowCreateModal,
@@ -34,8 +35,17 @@ export default function DashboardLayout({
     closeMemberModal,
     closePartnerModal,
     closeReachModal,
-    handlePartnerCreated,
   } = useCuratorLayout();
+
+  const {
+    notifications,
+    isOpen: notifOpen,
+    setIsOpen: setNotifOpen,
+    markAsRead,
+    markAllAsRead,
+    clearNotifications,
+    deleteNotification,
+  } = useNotification();
 
   // Show loading state only after mount to prevent hydration mismatch
   if (!mounted || isAuthenticated === null) {
@@ -56,9 +66,6 @@ export default function DashboardLayout({
   return (
     <div className="h-screen bg-background flex">
       <CuratorSidebar
-        schoolCount={schoolCount}
-        providerCount={providerCount}
-        partnerCount={partnerCount}
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
@@ -91,10 +98,20 @@ export default function DashboardLayout({
       <PartnerCreationModal
         isOpen={showPartnerModal}
         onClose={closePartnerModal}
-        onPartnerCreated={handlePartnerCreated}
+        onPartnerCreated={closePartnerModal}
       />
 
       <ReachModal isOpen={showReachModal} onClose={closeReachModal} />
+      <NotificationsSheet
+        notifications={notifications}
+        isOpen={notifOpen}
+        onOpenChange={setNotifOpen}
+        markAllRead={markAllAsRead}
+        markOneRead={markAsRead}
+        deleteOne={deleteNotification}
+        clearAllNotifications={clearNotifications}
+        onNavigate={(link) => router.push(link as any)}
+      />
     </div>
   );
 }

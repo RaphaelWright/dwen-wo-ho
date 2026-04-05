@@ -11,9 +11,6 @@ export interface NavItem {
 }
 
 export interface SidebarProps {
-  schoolCount: number;
-  providerCount: number;
-  partnerCount: number;
   onCreateClick: () => void;
   onLogout: () => void;
 }
@@ -23,9 +20,8 @@ export interface MobileHeaderProps {
   onToggle: () => void;
   theme?: string;
   mounted: boolean;
-  notifications: Notification[];
-  onClearNotifications: () => void;
-  onDismissNotification: (id: string) => void;
+  unreadCount: number;
+  setIsOpen: (open: boolean) => void;
 }
 
 export interface SidebarContentProps {
@@ -34,10 +30,8 @@ export interface SidebarContentProps {
   pathname: string;
   theme?: string;
   mounted: boolean;
-  notifications: Notification[];
   unreadCount: number;
-  onClearNotifications: () => void;
-  onDismissNotification: (id: string) => void;
+  setIsOpen: (open: boolean) => void;
   onToggleCollapse: () => void;
   onLogoutClick: () => void;
   onMobileClose: () => void;

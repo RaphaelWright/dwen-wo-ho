@@ -1,19 +1,7 @@
 import { handleTokenExpiration, isAuthError } from "./auth-utils";
 import { toast } from "@/components/ui/sonner";
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://justgo.up.railway.app";
-
-const PUBLIC_ENDPOINTS = [
-  "/api/v1/auth/check-email",
-  "/api/v1/auth/sign-in",
-  "/api/v1/auth/create-account",
-  "/api/v1/auth/submit-signup-code",
-  "/api/v1/email/send-verification",
-  "/api/v1/auth/recover-account",
-  "/api/v1/auth/submit-account-recovery-code",
-  "/api/v1/auth/refresh-token",
-];
+import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { API_BASE_URL } from "@/configs/config";
 
 const isPublicEndpoint = (endpoint: string): boolean => {
   return PUBLIC_ENDPOINTS.some((path) => endpoint.includes(path));
@@ -49,12 +37,10 @@ const prepareHeaders = (
   // Token is set after OTP verification and should be used for subsequent signup requests
   // After signin endpoint returns refreshToken, we switch to using refreshToken
   if (!headers.Authorization && !isPublicEndpoint(endpoint)) {
-    // If refreshToken exists, use it (means signup is complete and we've signed in)
-    // Otherwise, use token (during signup flow before signin)
-    if (refreshToken) {
-      headers.Authorization = `Bearer ${refreshToken}`;
-    } else if (token) {
+    if (token) {
       headers.Authorization = `Bearer ${token}`;
+    } else if (refreshToken) {
+      headers.Authorization = `Bearer ${refreshToken}`;
     }
   }
 
@@ -63,12 +49,6 @@ const prepareHeaders = (
 
 const extractErrorFromResponse = async (response: Response): Promise<Error> => {
   const responseText = await response.text();
-  const isExpectedFlow =
-    responseText.includes("ACCOUNT PENDING") ||
-    responseText.includes("User not found") ||
-    responseText.includes("Profile is not complete") ||
-    responseText.includes("Invalid or missing Authorization header");
-
   try {
     const errorData = JSON.parse(responseText);
     return new Error(JSON.stringify(errorData));
@@ -98,13 +78,21 @@ export async function api(endpoint: string, options: RequestInit = {}) {
   const headers = prepareHeaders(endpoint, { ...options, body });
 
   try {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       headers,
       body,
     });
 
     if (!response.ok) {
+      if (response.status === 403) {
+        // Only show permission toast for user-initiated actions (non-GET requests)
+        // Background fetches should fail silently
+        const method = (options.method || "GET").toUpperCase();
+        if (method !== "GET") {
+          toast.error("You don't have permission to perform this action.");
+        }
+      }
       if (isAuthError(response.status) && !isPublicEndpoint(endpoint)) {
         if (typeof window !== "undefined") {
           toast.error("Your session has expired. Please log in again.");

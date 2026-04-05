@@ -12,7 +12,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/miscellaneous/stepper";
 import { ArrowRightIcon } from "lucide-react";
 import LoadingOverlay from "@/components/ui/loading-overlay";
-import { useProviderVerifyPasswordReset } from "@/hooks/provider/useProviderVerifyPasswordReset";
+import { useProviderVerifyPasswordReset } from "@/hooks/provider/use-provider-verify-password-reset";
 
 const VerifyContent = () => {
   const {

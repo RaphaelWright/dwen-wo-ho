@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/useSelectedValuesFromReactHookForm";
-import useAuthQuery from "@/hooks/queries/useAuthQuery";
+import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import {
   ProviderSignUpSchema,
   ProviderSignUpFormData,
-} from "@/lib/schemas/provider.auth.schema";
+} from "@/lib/schemas/provider-auth-schema";
 import { toast } from "@/components/ui/sonner";
 import { CreateAccountProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
@@ -31,7 +31,9 @@ export const useCreateAccount = ({
     watch,
     setValue,
     formState: { isValid },
-  } = useSelectedValuesFromReactHookForm(ProviderSignUpSchema, {
+  } = useSelectedValuesFromReactHookForm<ProviderSignUpFormData>(
+    ProviderSignUpSchema,
+    {
     mode: "onChange",
     defaultValues: {
       email: propEmail || "",
@@ -54,30 +56,19 @@ export const useCreateAccount = ({
     setErrorMessage("");
 
     try {
-      const response = await signupMutation.mutateAsync({
+      await signupMutation.mutateAsync({
         email: values.email,
         password: values.password,
         fullName: values.fullName,
         professionalTitle: values.title,
       });
 
-      if (response?.success || response) {
-        onNext({
-          email: values.email,
-          fullName: values.fullName,
-          title: values.title,
-          password: values.password,
-        });
-      } else {
-        const errorResponse = response as
-          | { message?: string }
-          | null
-          | undefined;
-        const errorMsg =
-          errorResponse?.message || SIGN_UP_TEXTS.errors.createFailed;
-        setErrorMessage(errorMsg);
-        toast.error(errorMsg);
-      }
+      onNext({
+        email: values.email,
+        fullName: values.fullName,
+        title: values.title,
+        password: values.password,
+      });
     } catch (error: any) {
       let errorMsg = SIGN_UP_TEXTS.errors.general;
 

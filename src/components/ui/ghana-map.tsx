@@ -95,9 +95,8 @@ export default function GhanaMap({ className }: { className?: string }) {
             d={region.path}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{
-              opacity: 1,
+              opacity: hoveredRegion === region.id ? 0.9 : 0.8,
               scale: hoveredRegion === region.id ? 1.02 : 1,
-              fillOpacity: hoveredRegion === region.id ? 0.9 : 0.8,
             }}
             transition={{ duration: 0.3 }}
             className={cn(

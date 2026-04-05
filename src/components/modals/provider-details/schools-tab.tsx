@@ -2,7 +2,7 @@ import { FiAward, FiMinus, FiSearch, FiPlus } from "react-icons/fi";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SchoolsTabProps } from "@/lib/types/components/modals/provider-details";
-import { AssociatedSchool } from "@/lib/types/provider";
+import { AssociatedSchool } from "@/lib/types/partners";
 import { Input } from "@/components/ui/input";
 
 export const SchoolsTab = ({
@@ -106,9 +106,8 @@ export const SchoolsTab = ({
                     <div
                       key={school.id}
                       className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${
-                        isRejected
-                          ? "bg-card border-border opacity-60 cursor-not-allowed"
-                          : "bg-muted-foreground/50 border-border/50 hover:bg-muted-foreground/80"
+                        isRejected &&
+                        "bg-muted text-muted-foreground border-border opacity-60 cursor-not-allowed"
                       }`}
                     >
                       <div className="flex items-center gap-3">

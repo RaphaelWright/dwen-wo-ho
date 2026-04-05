@@ -11,12 +11,14 @@ export function PlaceholdersAndVanishInput({
   className,
   submitButton,
   value,
+  autoFocus,
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string; // Allow custom classes for the container
   value?: string; // Add support for controlled external value
+  autoFocus?: boolean;
   submitButton?:
     | React.ReactNode
     | ((props: { value: string }) => React.ReactNode); // Allow replacing the default button with access to value
@@ -25,9 +27,12 @@ export function PlaceholdersAndVanishInput({
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 4500);
+    }, 6000);
   };
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
@@ -62,6 +67,12 @@ export function PlaceholdersAndVanishInput({
       setInternalValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   const draw = useCallback(() => {
     if (!inputRef.current) return;
@@ -217,7 +228,7 @@ export function PlaceholdersAndVanishInput({
         value={internalValue}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base border-none h-full rounded-xl focus:outline-none focus:ring-0 pl-2 sm:pl-8 pr-20",
+          "w-full relative text-sm sm:text-base border-none h-full rounded-xl focus:outline-none focus:ring-0 pl-2 sm:pl-4 pr-20",
           animating && "text-transparent dark:text-transparent",
         )}
       />
@@ -232,7 +243,7 @@ export function PlaceholdersAndVanishInput({
         <button
           disabled={!internalValue}
           type="submit"
-          className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
+          className="absolute right-1 top-1/2  -translate-y-1/2 size-8  rounded-full bg-foreground disabled:bg-muted/80 text-background disabled:text-muted-foreground/50 transition duration-300 flex items-center justify-center"
         >
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +255,7 @@ export function PlaceholdersAndVanishInput({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-gray-300 h-4 w-4"
+            className="size-4"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <motion.path
@@ -285,10 +296,10 @@ export function PlaceholdersAndVanishInput({
                 opacity: 0,
               }}
               transition={{
-                duration: 0.3,
-                ease: "linear",
+                duration: 0.5,
+                ease: "easeInOut",
               }}
-              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate"
+              className="dark:text-zinc-500 text-sm font-normal text-neutral-500 pl-6 sm:pl-8 text-left w-[calc(100%-2rem)] truncate"
             >
               {placeholders[currentPlaceholder]}
             </motion.p>

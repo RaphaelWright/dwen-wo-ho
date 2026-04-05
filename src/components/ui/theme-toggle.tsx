@@ -53,9 +53,9 @@ export function ThemeToggle({ className }: { className?: string }) {
           variant="outline"
           size="icon"
           onClick={() => changeTheme("light")}
-          className={cn(className)}
+          className={cn("rounded-lg border-0", className)}
         >
-          <Moon className="size-5 transition-all" />
+          <Moon className="size-5 transition-all rotate-270" />
           <span className="sr-only">Toggle light theme</span>
         </Button>
       )}

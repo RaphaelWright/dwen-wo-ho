@@ -1,6 +1,9 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { PatientSignInFormData } from "@/hooks/patient/usePatientSignIn";
+import * as z from "zod/v4";
+import { LoginSchema } from "@/lib/schemas/patient-auth-schema";
 import type { Route } from "next";
+
+export type PatientSignInFormData = z.infer<typeof LoginSchema>;
 
 export interface SignInFormProps {
   email: string;

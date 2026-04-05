@@ -1,68 +1,83 @@
-export interface ProviderDetails {
+export interface Provider {
   id: string;
+
   email: string;
-  fullName: string;
+
+  fullName?: string;
+
+  providerName?: string;
+
+  professionalTitle?: string;
+
   providerTitle?: string | null;
-  professionalTitle?: string | null;
-  status?: string;
+
+  specialty?: string | null;
+
   officePhoneNumber?: string | null;
-  specialties?: string[];
-  profileImage?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  applicationStatus?: "PENDING" | "APPROVED" | "REJECTED";
+
   applicationDate?: string;
+
+  applicationStatus?: "PENDING" | "APPROVED" | "REJECTED";
+
+  profilePhotoURL?: string | null;
+
+  status?: string | null;
+
   bio?: string | null;
-  providerName?: string; // Sometimes used instead of fullName in API responses
+
+  lastActive?: string;
+
+  ranking?: string; // frontend-only computed field, not in API spec
 }
 
-export interface Provider {
-  id?: string;
-  email: string;
-  providerName: string;
-  providerTitle?: string | null;
-  specialty?: string | null;
-  officePhoneNumber?: string | null;
-  applicationDate: string;
-  applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
+export interface ProviderDetails extends Provider {
   profilePhotoURL?: string | null;
-  status?: string | null;
-  bio?: string | null;
-  lastActive?: string;
+
+  createdAt?: string;
+
+  updatedAt?: string;
+
+  specialty?: string;
+
+  specialties?: string[];
+
+  schools?: import("./api/providers").AssociatedSchool[];
+
+  partners?: import("./api/providers").AssociatedPartner[];
 }
 
 export interface SchoolProvider {
   id: string;
+
   email: string;
+
   providerName: string;
+
   providerTitle: string;
+
   specialty: string;
+
   officePhoneNumber: string;
+
   profilePhotoURL: string;
+
   applicationStatus: string;
-  isAssociated: boolean;
-}
 
-export interface AssociatedSchool {
-  id: string;
-  name: string;
-  joinedDate?: string;
   isAssociated: boolean;
-  logo?: string;
-}
-
-export interface AssociatedPartner {
-  id: string;
-  name: string;
-  joinedDate?: string;
-  isAssociated: boolean;
-  logo?: string;
 }
 
 export interface IProviderResponse {
   success: boolean;
+
   data: Provider[];
+
   message: string;
 }
 
+export interface ApiActionResponse {
+  success: boolean;
 
+  message?: string;
+
+  data?: Provider;
+}

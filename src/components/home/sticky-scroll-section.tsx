@@ -7,16 +7,14 @@ export function StickyScrollSection() {
     title: item.title,
     description: item.description,
     content: (
-      <div className="h-full w-full flex items-center justify-center text-white">
-        <Image
-          src={item.image}
-          width={1080}
-          height={800}
-          quality={100}
-          className="h-full w-full object-cover rounded-md"
-          alt={item.alt}
-        />
-      </div>
+      <Image
+        src={item.image}
+        width={1080}
+        height={800}
+        quality={100}
+        className="h-full w-full object-cover rounded-2xl"
+        alt={item.alt}
+      />
     ),
   }));
 

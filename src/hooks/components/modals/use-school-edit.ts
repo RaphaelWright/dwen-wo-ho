@@ -1,16 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useUpdateSchool } from "@/hooks/queries/useSchoolsQuery";
-import { School } from "@/lib/types/school";
-
-export interface SchoolFormData {
-  name: string;
-  nickname: string;
-  motto: string;
-  campuses: string[];
-  type: string;
-}
+import useSchoolsQuery from "@/hooks/queries/use-schools";
+import { School, SchoolFormData } from "@/lib/types/school";
 
 export const useSchoolEdit = ({
   school,
@@ -31,9 +23,11 @@ export const useSchoolEdit = ({
     motto: "",
     campuses: [],
     type: "",
+    logo: undefined,
   });
 
-  const updateSchoolMutation = useUpdateSchool();
+  const { updateSchool, isUpdating } = useSchoolsQuery();
+  const updateSchoolMutation = { mutate: updateSchool, isPending: isUpdating };
   const campusDropdownRef = useRef<HTMLDivElement>(null);
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -45,6 +39,7 @@ export const useSchoolEdit = ({
         motto: school.motto || "",
         campuses: school.campuses || [],
         type: school.type || "",
+        logo: undefined,
       });
       setSelectedCampuses(school.campuses || []);
       setHasChanges(false);

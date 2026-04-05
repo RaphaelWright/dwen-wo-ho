@@ -5,7 +5,7 @@ import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { Logo } from "@/components/shared/Logo";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useLockInSchools } from "@/hooks/patient/useLockInSchools";
+import { useLockInSchools } from "@/hooks/patient/use-lock-in-schools";
 
 export default function LockInPage() {
   const {
@@ -79,7 +79,7 @@ export default function LockInPage() {
                         <Image
                           src={school.logo}
                           alt={school.name}
-                          fill
+                          fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-contain rounded-lg"
                         />
                       </div>

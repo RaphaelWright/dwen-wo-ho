@@ -1,0 +1,18 @@
+export const QUERY_KEYS = {
+  partners: "partners",
+  schools: "schools",
+  providers: "providers",
+  lockins: "lockins",
+  schoolsLockin: "schools-lockin",
+  patientResults: "patientResults",
+  patientResult: "patient-result",
+  auth: "auth",
+  user: "user",
+  profile: "profile",
+  specialties: "specialties",
+  curator: "curator",
+  curatorSummary: "curator-summary",
+  curatorNotifications: "curator-notifications",
+  providerSchoolsSummary: "provider-schools-summary",
+  providerDashboard: "provider-dashboard",
+} as const;

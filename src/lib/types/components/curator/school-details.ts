@@ -6,21 +6,31 @@ export interface IconsTabProps {
   onAddFirstIcon: () => void;
 }
 
-export interface Patient {
+export interface SchoolPatientRecord {
   id: number | string;
   lockinId: number;
+  schoolId: number;
+  schoolName: string;
+  schoolNickname: string;
   patientName: string;
-  lockinScore?: number;
-  comment: string | null;
-  createdAt?: string;
-  visibilityStatus?: string;
-  treatingProviders?: Array<{ id: string; fullName: string }>;
+  patientAge?: number;
+  patientSex?: string;
+  visibilityStatus: string;
+  starProvider?: string | null;
+  referredProvider?: string | null;
+  createdAt: string;
+  firstOpenedAt?: string | null;
+  openedByCurrentUser?: boolean;
+  treatingProviders?: string[];
+  lockinScore: number;
+  comment?: string | null;
 }
 
 export interface PatientsTabProps {
-  patients: Patient[];
+  patients: SchoolPatientRecord[];
   isLoading: boolean;
   schoolId: string;
+  schoolName?: string;
   compactTimeAgo: (date: string) => string;
   onViewPatient: (patientId: number | string) => void;
 }
@@ -35,6 +45,7 @@ export interface SchoolHeaderCardProps {
   campusLabel: string | null;
   onEditClick: () => void;
   onDisableClick: () => void;
+  searchComponent?: React.ReactNode;
 }
 
 export type SchoolTab = "patients" | "icons" | "providers";
@@ -46,8 +57,6 @@ export interface SchoolTabNavigationProps {
   iconsCount: number;
   providersCount: number;
   onAddIconClick: () => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
 }
 
 export interface UrgentCarePatient {

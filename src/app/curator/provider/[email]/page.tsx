@@ -1,9 +1,13 @@
 "use client";
 
 import { ROUTES } from "@/lib/constants/routes";
+
 import { Button } from "@/components/ui/button";
+
 import LoadingOverlay from "@/components/ui/loading-overlay";
-import { useCuratorProviderDetails } from "@/hooks/curator/useCuratorProviderDetails";
+
+import { useCuratorProviderDetails } from "@/hooks/curator/use-curator-provider-details";
+
 import {
   ProviderDetailsHeader,
   ProviderProfileCard,
@@ -15,14 +19,23 @@ import {
 const ProviderDetailsPage = () => {
   const {
     provider,
+
     isLoading,
+
     isActionLoading,
+
     errorMessage,
+
     successMessage,
+
     isAuthenticated,
+
     handleApprove,
+
     handleReject,
+
     getStatusColor,
+
     router,
   } = useCuratorProviderDetails();
 
@@ -31,6 +44,7 @@ const ProviderDetailsPage = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+
           <p className="text-gray-500">Loading...</p>
         </div>
       </div>
@@ -54,6 +68,7 @@ const ProviderDetailsPage = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
             Provider Not Found
           </h1>
+
           <Button onClick={() => router.push(ROUTES.curator.providers)}>
             Back to Providers
           </Button>

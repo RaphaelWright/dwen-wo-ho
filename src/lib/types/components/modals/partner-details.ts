@@ -2,7 +2,7 @@ import {
   AssociatedSchool,
   AssociatedProvider,
   PartnerDetailsTab,
-} from "@/lib/types/modals";
+} from "@/lib/types/partners";
 
 export interface PartnerHeaderProps {
   partner: any;

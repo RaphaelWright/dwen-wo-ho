@@ -3,14 +3,15 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
-import { Home, ArrowLeft, Search, Heart } from "lucide-react";
+import { Home, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { ROUTES } from "@/lib/constants/routes";
 
 export default function NotFound() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center">
         {/* Logo */}
         <motion.div
@@ -24,12 +25,12 @@ export default function NotFound() {
 
         {/* Animated 404 */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-6"
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+          className="mb-8 relative"
         >
-          <h1 className="text-9xl md:text-[12rem] font-bold bg-linear-to-r from-[#955aa4] via-[#22c55e] to-[#955aa4] bg-clip-text text-transparent animate-pulse">
+          <h1 className="text-[10rem] md:text-[14rem] font-bold leading-none tracking-tighter text-destructive/80 drop-shadow-sm select-none">
             404
           </h1>
         </motion.div>
@@ -38,77 +39,45 @@ export default function NotFound() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mb-8"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-5 tracking-tight">
             Oops! Page Not Found
           </h2>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
             It looks like you've wandered off the path. The page you're looking
             for doesn't exist or has been moved.
           </p>
-        </motion.div>
-
-        {/* Animated Icons */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex justify-center gap-8 mb-12"
-        >
-          <motion.div
-            animate={{
-              y: [0, -10, 0],
-              rotate: [0, 5, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="w-16 h-16 bg-[#955aa4]/10 rounded-full flex items-center justify-center"
-          >
-            <Search className="w-8 h-8 text-[#955aa4]" />
-          </motion.div>
-          <motion.div
-            animate={{
-              y: [0, -10, 0],
-              rotate: [0, -5, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 0.3,
-            }}
-            className="w-16 h-16 bg-[#22c55e]/10 rounded-full flex items-center justify-center"
-          >
-            <Heart className="w-8 h-8 text-[#22c55e]" />
-          </motion.div>
         </motion.div>
 
         {/* Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex flex-col sm:flex-row gap-5 justify-center items-center"
         >
           <Button
             onClick={() => router.push("/")}
-            className="bg-[#955aa4] hover:bg-[#955aa4]/90 text-white px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            size="lg"
+            className="group relative overflow-hidden text-white px-8 h-14 rounded-full text-base font-semibold shadow-[0_8px_30px_rgb(149,90,164,0.3)] hover:shadow-[0_8px_40px_rgb(149,90,164,0.4)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto"
           >
-            <Home className="w-5 h-5 mr-2" />
-            Go Home
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <Home className=" text-white w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
+              Return Home
+            </span>
           </Button>
           <Button
             onClick={() => router.back()}
+            size="lg"
             variant="outline"
-            className="border-2 border-[#955aa4] text-[#955aa4] hover:bg-[#955aa4]/10 px-8 py-6 text-lg font-semibold transition-all duration-300"
+            className="group px-8 h-14 rounded-full text-base font-semibold border-2 border-border bg-background/50 shadow-xs hover:shadow-md transition-all duration-300 w-full sm:w-auto backdrop-blur-sm"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Go Back
+            <span className="flex items-center justify-center gap-2">
+              <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
+              Go Back
+            </span>
           </Button>
         </motion.div>
 
@@ -116,65 +85,38 @@ export default function NotFound() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="mt-12 pt-8 border-t border-gray-200"
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="mt-16 pt-8 border-t border-border"
         >
-          <p className="text-sm text-gray-500 mb-4">
-            You might be looking for:
+          <p className="text-sm font-medium text-muted-foreground mb-5 uppercase tracking-wider">
+            You might be looking for
           </p>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <button
-              onClick={() => router.push("/")}
-              className="text-[#955aa4] hover:text-[#955aa4]/80 hover:underline transition-colors"
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm font-medium">
+            <Button
+              variant={"link"}
+              onClick={() => router.push(ROUTES.public.landing)}
+              className="text-muted-foreground hover:text-destructive/50 hover:-translate-y-0.5 transition-all duration-300"
             >
               Home
-            </button>
-            <span className="text-gray-300">•</span>
-            <button
-              onClick={() => router.push("/patient/lock-in")}
-              className="text-[#955aa4] hover:text-[#955aa4]/80 hover:underline transition-colors"
+            </Button>
+            <span className="text-muted-foreground">•</span>
+            <Button
+              variant={"link"}
+              onClick={() => router.push(ROUTES.patient.lockIn)}
+              className="text-muted-foreground hover:text-destructive/50 hover:-translate-y-0.5 transition-all duration-300"
             >
               Patient Lock-In
-            </button>
-            <span className="text-gray-300">•</span>
-            <button
-              onClick={() => router.push("/provider/auth")}
-              className="text-[#955aa4] hover:text-[#955aa4]/80 hover:underline transition-colors"
+            </Button>
+            <span className="text-muted-foreground">•</span>
+            <Button
+              variant={"link"}
+              onClick={() => router.push(ROUTES.provider.auth)}
+              className="text-muted-foreground hover:text-destructive/50 hover:-translate-y-0.5 transition-all duration-300"
             >
               Provider Login
-            </button>
+            </Button>
           </div>
         </motion.div>
-
-        {/* Decorative Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-          <motion.div
-            animate={{
-              x: [0, 100, 0],
-              y: [0, 100, 0],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute top-20 left-20 w-72 h-72 bg-[#955aa4] rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{
-              x: [0, -100, 0],
-              y: [0, -100, 0],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute bottom-20 right-20 w-96 h-96 bg-[#22c55e] rounded-full blur-3xl"
-          />
-        </div>
       </div>
     </div>
   );

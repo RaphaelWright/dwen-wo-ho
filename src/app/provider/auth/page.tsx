@@ -5,7 +5,7 @@ import CheckEmail from "@/components/provider/auth/check-email";
 import SignIn from "@/components/provider/auth/signin";
 import SignUp from "@/components/provider/auth/sign-up";
 import VerifyPasswordReset from "@/components/provider/auth/verify-password-reset";
-import { useProviderAuth } from "@/hooks/provider/useProviderAuth";
+import { useProviderAuth } from "@/hooks/provider/use-provider-auth";
 
 const ProviderAuthPageContent = () => {
   const {
