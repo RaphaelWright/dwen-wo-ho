@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState, useEffect, KeyboardEvent, ChangeEvent } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
+
 import {
   Dialog,
   DialogContent,
@@ -20,6 +21,8 @@ import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashb
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Upload, Loader2, X, ChevronDown, Search, Smile } from "lucide-react";
+
+const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false });
 
 /**
  * Small edit popup for a single profile field.
