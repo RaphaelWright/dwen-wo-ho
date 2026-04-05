@@ -15,7 +15,6 @@ export function SchoolCard({
   priority?: boolean;
 }) {
   const firstCampus = getFirstCampus(school.campuses);
-  const displayNickname = school.name || school.nickname;
 
   // Format student count for display (e.g., 1.2k)
   const formatCount = (count: number) => {
@@ -50,7 +49,7 @@ export function SchoolCard({
                 alt={school.name}
                 fill
                 priority={priority}
-                className="object-contain"
+                className="object-cover aspect-square"
               />
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -107,11 +106,16 @@ export function SchoolCard({
         </div>
 
         {/* Footer Section (White Background) */}
-        <div className="p-3 flex flex-col gap-2">
+        <div className="p-3 flex flex-col gap-3">
           {/* School Name */}
-          <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
-            {displayNickname}
-          </h1>
+          <div className="flex justify-between items-center gap-2">
+            <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
+              {school.name}
+            </h1>
+            <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
+              {school.nickname}
+            </h1>
+          </div>
 
           {/* Bottom Row: Location & Count */}
           <div className="flex items-center justify-between">

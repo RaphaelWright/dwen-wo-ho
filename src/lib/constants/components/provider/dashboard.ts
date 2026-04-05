@@ -6,7 +6,11 @@ export const NEW_PROVIDER_STATUS_CHIPS = [
 ];
 
 export const NEW_PROVIDER_EDITABLE_FIELDS = [
-  { key: "title", label: "Title", hint: "e.g. Dr., Prof., Mr., Ms." },
+  {
+    key: "title",
+    label: "Title",
+    hint: "Select from Dr., Prof., Mr., Ms., etc.",
+  },
   {
     key: "name",
     label: "Full Name",
@@ -15,7 +19,7 @@ export const NEW_PROVIDER_EDITABLE_FIELDS = [
   {
     key: "specialty",
     label: "Specialty",
-    hint: "e.g. Clinical Psychologist, Psychiatrist",
+    hint: "Select your specialty from the list of options.",
   },
   {
     key: "status",

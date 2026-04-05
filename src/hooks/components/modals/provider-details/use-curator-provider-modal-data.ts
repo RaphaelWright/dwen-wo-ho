@@ -38,6 +38,7 @@ export const useCuratorProviderModalData = (
           data.providerTitle,
         ) || undefined,
       professionalTitle: (data as Provider).specialty || "",
+      profilePhotoURL: (data as Provider).profilePhotoURL || undefined,
       profileImage: (data as Provider).profilePhotoURL || undefined,
       status: data.status || data.bio || undefined,
       officePhoneNumber: data.officePhoneNumber || undefined,

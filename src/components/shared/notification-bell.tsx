@@ -44,21 +44,28 @@ export const NotificationBell = ({
       >
         <Icon size={iconSize} />
         {unreadCount > 0 && (
-          <motion.div
-            animate={{
-              boxShadow: [
-                `0 0 0 0 ${pulseColor}`,
-                `0 0 0 5px rgba(16,185,129,0)`,
-                `0 0 0 0 ${pulseColor}`,
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className={cn(
-              "absolute top-1.5 right-1.5 rounded-full border-2",
-              badgeSize,
-              badgeColor,
-            )}
-          />
+          <>
+            {/* Unread count badge - top left */}
+            <span className="absolute -top-2 -left-2 flex items-center justify-center size-5 text-[8.5px] font-bold text-white bg-success rounded-full">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+            {/* Green beacon pulse - top right */}
+            {/* <motion.div
+              animate={{
+                boxShadow: [
+                  `0 0 0 0 ${pulseColor}`,
+                  `0 0 0 5px rgba(16,185,129,0)`,
+                  `0 0 0 0 ${pulseColor}`,
+                ],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className={cn(
+                "absolute top-1.5 right-1.5 rounded-full border-2",
+                badgeSize,
+                badgeColor,
+              )}
+            /> */}
+          </>
         )}
       </motion.button>
     </div>
