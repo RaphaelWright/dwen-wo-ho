@@ -133,7 +133,7 @@ export const SidebarContent = ({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-destructive text-white px-1.5"
+                className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-success text-white px-1.5"
               >
                 {unreadCount > 99 ? "99+" : unreadCount}
               </motion.span>

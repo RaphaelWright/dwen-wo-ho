@@ -58,7 +58,7 @@ export default function ScoreRing({ score }: { score: number | null }) {
           fontWeight="800"
           fill={color}
         >
-          {score !== null ? score.toFixed(1) : "–"}
+          {score !== null ? score.toFixed(2) : "–"}
         </text>
       </svg>
     </ClientOnly>

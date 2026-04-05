@@ -50,7 +50,7 @@ export default function SchoolsSidebar({
   ];
 
   return (
-    <aside className="w-[96%] mx-auto shrink-0 flex flex-col overflow-y-auto no-scrollbar  h-fit pb-40 md:pb-10  lg:bg-[#fcf1e9] lg:dark:bg-muted lg:rounded-2xl lg:mt-6 lg:pb-2">
+    <aside className="w-[96%] mx-auto shrink-0 flex flex-col overflow-y-auto no-scrollbar  h-fit pb-40 md:pb-10  lg:bg-[#fcf1e9] lg:dark:bg-muted lg:rounded-2xl lg:mt-6">
       {/* Header label */}
       <div className="px-4 pt-5 pb-3 shrink-0">
         <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
@@ -60,7 +60,7 @@ export default function SchoolsSidebar({
 
       {/* School list */}
       <ScrollArea className="flex-1 px-2.5 pb-4">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 overflow-y-auto no-scrollbar max-h-[77vh]">
           {displaySchools.map((school) => {
             const isActive = activeSchool === school.id;
             const isAll = school.id === "all";

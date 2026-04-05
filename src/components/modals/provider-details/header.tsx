@@ -21,10 +21,11 @@ export const ProviderHeader = ({
 
       <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-card shadow-lg shrink-0 bg-muted">
         <Image
-          src={provider?.profilePhotoURL ?? "/auth/lawyer.jpg"}
-          alt={provider?.fullName ?? "Provider"}
+          src={provider.profilePhotoURL || "/auth/lawyer.jpg"}
+          alt={provider.fullName || "Provider"}
           width={96}
           height={96}
+          priority
           className="w-full h-full object-cover"
         />
       </div>
