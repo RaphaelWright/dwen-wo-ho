@@ -1,9 +1,10 @@
+import { AssessmentItem, SchoolTypeAverages } from "./api/lockin";
+
 export interface LockInStudent {
   studentName: string;
   lockinScore: number;
   lockedInInterpretation: string;
   lockedInColor: string;
-  // Additional fields found in usage
   lockinId?: number;
   createdAt?: string;
   patientResultId?: number;
@@ -16,10 +17,14 @@ export interface LockInData {
 }
 
 export interface LockInAssessment {
+  lockinId: number;
   fullName: string;
   age: number;
   sex: string;
   school: string;
+  schoolType: string;
+  comment?: string | null;
+  lockinDate: string;
   generalMentalHealth: string;
   generalMentalHealthScore: string;
   generalMentalHealthColor: string;
@@ -56,6 +61,9 @@ export interface LockInAssessment {
   lockedInScore: string;
   lockedInScoreDescription: string;
   lockedInColor: string;
+  inUrgentCare: boolean;
+  urgentCareEnteredAt?: string;
+  timeInUrgentCareMinutes?: number;
+  schoolTypeAverages?: SchoolTypeAverages;
+  assessmentItems?: AssessmentItem[];
 }
-
-

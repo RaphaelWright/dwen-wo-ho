@@ -9,16 +9,12 @@ export type Patient = {
 };
 
 import { Notification } from "@/lib/types/notification";
+import type { ProfileData as ApiProfileData } from "@/lib/types/api/provider-dashboard";
 
 // Alias for backward compatibility; NotificationItem now mirrors the unified Notification interface.
 export type NotificationItem = Notification & { id: number };
 
-export type ProfileData = {
-  title: string;
-  name: string;
-  specialty: string;
-  avatar: string;
-  ranking: string;
-  status: string;
-  phone: string;
+// Re-export API ProfileData and extend with frontend-only computed field
+export type ProfileData = ApiProfileData & {
+  ranking?: string; // frontend-only computed field, not in API spec
 };

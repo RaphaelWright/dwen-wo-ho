@@ -4,7 +4,7 @@ export interface Partner {
   nickname?: string;
   slogan?: string;
   logo?: string;
-  [key: string]: unknown;
+  createdAt?: string;
 }
 
 export interface ICreatePartner {
@@ -46,7 +46,11 @@ export interface PartnerDetailsData {
   associatedProviders: AssociatedProvider[];
 }
 
-export type PartnerDetailsTab = "overview" | "schools" | "providers" | "partners";
+export type PartnerDetailsTab =
+  | "overview"
+  | "schools"
+  | "providers"
+  | "partners";
 
 export interface UsePartnerSearchProps {
   availableSchools: AssociatedSchool[];

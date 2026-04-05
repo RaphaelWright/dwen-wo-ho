@@ -5,8 +5,7 @@ export interface School {
   logo?: string;
   type?: string;
   motto?: string;
-  totalProviders?: number;
-  totalPartners?: number;
+  totalPatients?: number;
   campuses?: string[] | null;
   createdAt?: string;
   // Extras
@@ -69,5 +68,3 @@ export interface SchoolReach {
   schoolName: string;
   reach: number;
 }
-
-

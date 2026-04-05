@@ -9,13 +9,21 @@ export interface IconsTabProps {
 export interface SchoolPatientRecord {
   id: number | string;
   lockinId: number;
-  patientName: string;
-  lockinScore: number;
-  comment: string | null;
-  createdAt: string;
-  visibilityStatus: string;
-  schoolNickname: string;
   schoolId: number;
+  schoolName: string;
+  schoolNickname: string;
+  patientName: string;
+  patientAge?: number;
+  patientSex?: string;
+  visibilityStatus: string;
+  starProvider?: string | null;
+  referredProvider?: string | null;
+  createdAt: string;
+  firstOpenedAt?: string | null;
+  openedByCurrentUser?: boolean;
+  treatingProviders?: string[];
+  lockinScore: number;
+  comment?: string | null;
 }
 
 export interface PatientsTabProps {

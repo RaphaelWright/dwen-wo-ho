@@ -1,3 +1,5 @@
+import type { TreatingProviderDTO } from "./api/shared";
+
 export interface PatientResult {
   id: number;
   lockinId: number;
@@ -18,6 +20,8 @@ export interface PatientResult {
     id: string;
     fullName: string;
     email: string;
+    professionalTitle: string;
+    specialty: string;
   } | null;
   createdAt: string;
   firstOpenedAt: string | null;
@@ -28,20 +32,21 @@ export interface PatientResult {
   }>;
   // Optional fields for list views
   comment?: string | null;
-  lockinScore?: number;
+  lockinScore: number;
 }
 
 export interface UrgentCarePatient {
-  id?: number;
+  id: number;
   lockinId?: number;
   schoolId?: number;
   patientResultId?: number;
-  patientName?: string;
+  patientName: string;
   patientAge?: number;
   patientSex?: string;
   lockedInScore?: number;
   lockinDate?: string;
   urgentCareEnteredAt?: string;
   createdAt?: string;
-  [key: string]: unknown;
+  isTreating?: boolean;
+  treatingProviders?: TreatingProviderDTO[];
 }

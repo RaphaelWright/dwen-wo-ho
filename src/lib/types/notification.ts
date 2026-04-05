@@ -1,3 +1,4 @@
+/** UI-only notification shape for Jotai state. For backend notification type see BackendNotification in api/shared.ts */
 export interface Notification {
   id: string | number;
   type: "success" | "error" | "info";
