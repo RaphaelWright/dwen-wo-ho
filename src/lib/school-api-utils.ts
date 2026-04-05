@@ -1,53 +1,6 @@
 import { api } from "@/lib/api";
 import { DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 
-// Simple in-memory cache with TTL
-class RequestCache {
-  private cache = new Map<string, { data: any; timestamp: number }>();
-  private ttl: number;
-
-  constructor(ttlMinutes: number = 5) {
-    this.ttl = ttlMinutes * 60 * 1000; // Convert to milliseconds
-  }
-
-  set(key: string, data: any) {
-    this.cache.set(key, {
-      data,
-      timestamp: Date.now(),
-    });
-  }
-
-  get(key: string): any | null {
-    const entry = this.cache.get(key);
-
-    if (!entry) return null;
-
-    // Check if cache entry has expired
-    if (Date.now() - entry.timestamp > this.ttl) {
-      this.cache.delete(key);
-      return null;
-    }
-
-    return entry.data;
-  }
-
-  clear() {
-    this.cache.clear();
-  }
-
-  clearKey(key: string) {
-    this.cache.delete(key);
-  }
-
-  has(key: string): boolean {
-    return this.cache.has(key);
-  }
-}
-
-// Create cache instances for different data types
-export const lockInCache = new RequestCache(5); // 5 minutes
-export const patientResultsCache = new RequestCache(2); // 2 minutes for more frequent updates
-
 // Batch processor with concurrency limit
 export async function processBatch<T, R>(
   items: T[],
@@ -67,28 +20,15 @@ export async function processBatch<T, R>(
   return results;
 }
 
-// Optimized API calls with caching
+// Optimized API calls (no longer cached — React Query handles caching)
 export async function getSchoolLockInCount(
   schoolId: string | number,
-  skipCache: boolean = false,
 ): Promise<number> {
-  const cacheKey = `lockin-${schoolId}`;
-
-  // Skip cache if requested (for real-time updates)
-  if (!skipCache) {
-    const cached = lockInCache.get(cacheKey);
-    if (cached !== null) {
-      return cached;
-    }
-  }
-
   try {
     const response = await api(DYNAMIC_ENDPOINTS.SCHOOLS.GET_LOCKIN(schoolId));
 
     if (response?.success && response.data) {
-      const count = response.data.students?.length || 0;
-      lockInCache.set(cacheKey, count);
-      return count;
+      return response.data.students?.length || 0;
     }
 
     return 0;
@@ -99,40 +39,28 @@ export async function getSchoolLockInCount(
 
 export async function getLatestPatientResult(
   schoolId: string | number,
-  skipCache: boolean = false,
 ): Promise<{
   id: number;
   patientName: string;
   createdAt: string;
 } | null> {
-  const cacheKey = `latest-patient-${schoolId}`;
-
-  // Skip cache if requested (for real-time updates)
-  if (!skipCache) {
-    const cached = patientResultsCache.get(cacheKey);
-    if (cached !== null) {
-      return cached;
-    }
-  }
-
   try {
-    const response = await api(DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_SCHOOL_RESULTS(schoolId));
+    const response = await api(
+      DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_SCHOOL_RESULTS(schoolId),
+    );
 
     if (response?.success && response.data && response.data.length > 0) {
       // Sort and get the latest
       const sorted = response.data.sort(
-        (a: any, b: any) =>
+        (a: { createdAt: string }, b: { createdAt: string }) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
 
-      const latest = {
+      return {
         id: sorted[0].id,
         patientName: sorted[0].patientName,
         createdAt: sorted[0].createdAt,
       };
-
-      patientResultsCache.set(cacheKey, latest);
-      return latest;
     }
 
     return null;
@@ -149,7 +77,9 @@ export async function checkForNewPatients(
   latestPatient?: { patientName: string; createdAt: string };
 } | null> {
   try {
-    const response = await api(DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_NEW_SCHOOL_RESULTS(schoolId));
+    const response = await api(
+      DYNAMIC_ENDPOINTS.PATIENT_RESULTS.GET_NEW_SCHOOL_RESULTS(schoolId),
+    );
 
     if (response?.success && response.data && response.data.length > 0) {
       const sorted = response.data.sort(
@@ -212,9 +142,7 @@ export async function deduplicatedRequest<T>(
   return promise;
 }
 
-// Clear all caches
+// Clear all pending requests
 export function clearAllCaches() {
-  lockInCache.clear();
-  patientResultsCache.clear();
   pendingRequests.clear();
 }

@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { axiosFormData, axiosInstance } from "@/configs/axiosInstance";
+import { axiosFormData } from "@/configs/axiosInstance";
 import { checkResponse } from "@/lib/api-utils";
 import { ICreateSchool, IUpdateSchool, School } from "@/lib/types/school";
 import { SchoolProvider } from "@/lib/types/provider";
@@ -47,7 +47,10 @@ export const schoolsService = {
       formData.append("logo", data.logo);
     }
 
-    const response = await axiosFormData.post(STATIC_ENDPOINTS.SCHOOLS, formData);
+    const response = await axiosFormData.post(
+      STATIC_ENDPOINTS.SCHOOLS,
+      formData,
+    );
     return checkResponse(response, 201);
   },
 
@@ -60,11 +63,12 @@ export const schoolsService = {
     if (data.motto !== undefined) body.motto = data.motto;
     if (data.campuses !== undefined) body.campuses = data.campuses;
 
-    const response = await axiosInstance.put(
-      DYNAMIC_ENDPOINTS.SCHOOLS.UPDATE(data.id),
-      body,
-    );
-    return checkResponse(response, 200);
+    const result = await api(DYNAMIC_ENDPOINTS.SCHOOLS.UPDATE(data.id), {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+    if (!result?.success) throw new Error("Failed to update school");
+    return result.data as School;
   },
 
   getSchoolProviders: async (schoolId: string): Promise<SchoolProvider[]> => {
@@ -76,6 +80,22 @@ export const schoolsService = {
     const direct = response as { providers?: SchoolProvider[] };
     if (direct?.providers) return direct.providers;
     return [];
+  },
+
+  getPatientsOverview: async (schoolId: string | number) => {
+    const response = await api(
+      DYNAMIC_ENDPOINTS.SCHOOLS.PATIENTS_OVERVIEW(schoolId),
+    );
+    if (response?.success && response.data) {
+      return response.data as {
+        patients: unknown[];
+        urgentCare: { totalUrgentCarePatients: number; patients: unknown[] };
+      };
+    }
+    return {
+      patients: [],
+      urgentCare: { totalUrgentCarePatients: 0, patients: [] },
+    };
   },
 
   getSchoolStudents: async (schoolId: string): Promise<LockInStudent[]> => {
@@ -120,7 +140,9 @@ export const schoolsService = {
 
     studentsList.sort((a, b) => {
       if (a.createdAt && b.createdAt) {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       }
       if (a.createdAt) return -1;
       if (b.createdAt) return 1;
@@ -128,5 +150,51 @@ export const schoolsService = {
     });
 
     return studentsList;
+  },
+
+  batchCreateSchools: async (schools: ICreateSchool[]): Promise<School[]> => {
+    const result = await api(STATIC_ENDPOINTS.SCHOOLS_BATCH, {
+      method: "POST",
+      body: JSON.stringify({ data: schools }),
+    });
+    if (result?.success && Array.isArray(result.data)) return result.data;
+    if (Array.isArray(result)) return result;
+    throw new Error("Failed to batch create schools");
+  },
+
+  addProviderToSchool: async (
+    schoolId: string | number,
+    providerEmail: string,
+  ): Promise<void> => {
+    const result = await api(
+      DYNAMIC_ENDPOINTS.SCHOOLS.ADD_PROVIDER(schoolId, providerEmail),
+      {
+        method: "POST",
+      },
+    );
+    if (!result?.success) throw new Error("Failed to add provider to school");
+  },
+
+  removeProviderFromSchool: async (
+    schoolId: string | number,
+    providerEmail: string,
+  ): Promise<void> => {
+    const result = await api(
+      DYNAMIC_ENDPOINTS.SCHOOLS.REMOVE_PROVIDER(schoolId, providerEmail),
+      {
+        method: "POST",
+      },
+    );
+    if (!result?.success)
+      throw new Error("Failed to remove provider from school");
+  },
+
+  getSchoolReach: async (
+    schoolId: string | number,
+  ): Promise<{ schoolName: string; reach: number }> => {
+    const result = await api(`${STATIC_ENDPOINTS.SCHOOLS}/${schoolId}/reach`);
+    if (result?.success && result.data)
+      return result.data as { schoolName: string; reach: number };
+    return { schoolName: "", reach: 0 };
   },
 };

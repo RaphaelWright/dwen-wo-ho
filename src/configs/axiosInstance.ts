@@ -49,11 +49,10 @@ const attachAuthToken = (config: InternalAxiosRequestConfig) => {
   const refreshToken =
     typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null;
 
-  // Prioritize refreshToken if available (signed in), else token (signup flow)
-  if (refreshToken) {
-    config.headers.Authorization = `Bearer ${refreshToken}`;
-  } else if (token) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  } else if (refreshToken) {
+    config.headers.Authorization = `Bearer ${refreshToken}`;
   }
 
   return config;
