@@ -66,17 +66,40 @@ export function useNotificationWebSocket() {
   // Seed notifications from HTTP on initial load
   useEffect(() => {
     if (initialNotifications?.notifications && !initialLoadComplete) {
-      const mapped = initialNotifications.notifications.map(
-        (n: BackendNotification) => ({
-          id: n.notificationId,
-          type: mapNotificationType(n.category),
-          message: n.text,
-          title: n.targetName,
-          link: `/provider/patients/${n.targetId}`,
-          timestamp: new Date(n.timestamp),
-          read: !n.unread,
-        }),
-      );
+      // Map based on user type since curator and provider have different formats
+      const mapped = initialNotifications.notifications.map((n: any) => {
+        if (userType === "curator") {
+          // Curator API format: id, type, title, message, actionUrl, createdAt, read
+          return {
+            id: n.id,
+            type: mapNotificationType(n.type),
+            message: n.message,
+            title: n.title,
+            link: n.actionUrl,
+            timestamp: new Date(n.createdAt),
+            read: n.read,
+            // Additional fields for UI
+            targetName: n.title,
+            text: n.message,
+            meta: formatTimestamp(n.createdAt),
+          };
+        } else {
+          // Provider API format (BackendNotification): notificationId, category, text, targetName, timestamp, unread
+          return {
+            id: n.notificationId,
+            type: mapNotificationType(n.category),
+            message: n.text,
+            title: n.targetName,
+            link: `/provider/patients/${n.targetId}`,
+            timestamp: new Date(n.timestamp),
+            read: !n.unread,
+            // Additional fields for UI
+            targetName: n.targetName,
+            text: n.text,
+            meta: formatTimestamp(n.timestamp),
+          };
+        }
+      });
       setNotifications(mapped);
       setUnreadCount(initialNotifications.unreadCount);
       setInitialLoadComplete(true);
@@ -86,6 +109,7 @@ export function useNotificationWebSocket() {
     setNotifications,
     setUnreadCount,
     initialLoadComplete,
+    userType,
   ]);
 
   const handleNotification = useCallback(
@@ -197,4 +221,21 @@ function mapNotificationType(type: string): "success" | "error" | "info" {
     default:
       return "info";
   }
+}
+
+// Format timestamp to relative time string
+function formatTimestamp(timestamp: string): string {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSecs < 60) return "just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString();
 }

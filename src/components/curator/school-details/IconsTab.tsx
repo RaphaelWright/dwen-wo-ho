@@ -55,9 +55,10 @@ export function IconsTab({
               {icon.photoPreview ? (
                 <Image
                   src={icon.photoPreview}
-                  alt={icon.name}
-                  fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  alt="Cover preview"
+                  width={400}
+                  height={300}
+                  className="object-cover w-full h-full"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground/30">

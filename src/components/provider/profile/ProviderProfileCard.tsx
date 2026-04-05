@@ -15,8 +15,9 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
                 provider.providerName || "",
                 provider.providerTitle,
               )}
-              fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
+              width={96}
+              height={96}
+              className="object-cover w-full h-full"
             />
           </div>
         ) : (
@@ -26,7 +27,10 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
         )}
         <div className="flex-1">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {formatProviderName(provider.providerName || "", provider.providerTitle)}
+            {formatProviderName(
+              provider.providerName || "",
+              provider.providerTitle,
+            )}
           </h2>
 
           {provider.specialty && (

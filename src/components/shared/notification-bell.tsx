@@ -36,7 +36,7 @@ export const NotificationBell = ({
         whileTap={{ scale: 0.95 }}
         onClick={onOpenNotifs}
         className={cn(
-          "relative size-9 flex items-center justify-center rounded-lg border cursor-pointer bg-card/90 hover:bg-muted/80 transition-colors",
+          "relative size-9 flex items-center justify-center rounded-lg border bg-card/90 hover:bg-muted/80 transition-colors",
           className,
         )}
         aria-label="Open notifications"

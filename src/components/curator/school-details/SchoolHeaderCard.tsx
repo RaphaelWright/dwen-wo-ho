@@ -23,10 +23,10 @@ export function SchoolHeaderCard({
                 <Image
                   src={school.logo}
                   alt={school.name}
-                  fill
+                  width={80}
+                  height={80}
                   priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover rounded-2xl"
+                  className="object-cover rounded-2xl w-full h-full"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground/50">

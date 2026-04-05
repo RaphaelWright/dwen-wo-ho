@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "next-themes";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import {
@@ -103,9 +103,7 @@ export default function useProviderDashboard() {
   }, []);
 
   /* ── Modal / sheet open state ─────────────────────── */
-  const [notifOpen, setNotifOpen] = useAtom(
-    isProviderNotificationSheetOpenAtom,
-  );
+  const setNotifOpen = useSetAtom(isProviderNotificationSheetOpenAtom);
   const [profileOpen, setProfileOpen] = useAtom(profileOpenAtom);
   const [editOpen, setEditOpen] = useAtom(editOpenAtom);
 
@@ -340,7 +338,6 @@ export default function useProviderDashboard() {
     setSearchQuery,
     appliedSearchQuery,
     setAppliedSearchQuery,
-    notifOpen,
     setNotifOpen,
     profileOpen,
     setProfileOpen,

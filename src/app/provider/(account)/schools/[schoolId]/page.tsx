@@ -113,8 +113,9 @@ export default function ProviderSchoolDetailsPage() {
                 <Image
                   src={school.logo}
                   alt={school.name}
-                  fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover"
+                  width={128}
+                  height={128}
+                  className="object-cover w-full h-full"
                 />
               </div>
             ) : (
