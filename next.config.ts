@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["jotai"],
   },
-  transpilePackages: ["jotai", "@emoji-mart/react", "@emoji-mart/data"],
+  transpilePackages: ["jotai"],
   images: {
     qualities: [75, 100],
     remotePatterns: [

@@ -3,14 +3,12 @@
 import { useRef, useState, useEffect, KeyboardEvent, ChangeEvent } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import data from "@emoji-mart/data";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { NEW_PROVIDER_EDITABLE_FIELDS } from "@/lib/constants/components/provider/dashboard";
 import {
@@ -20,9 +18,9 @@ import {
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, Loader2, X, ChevronDown, Search, Smile } from "lucide-react";
+import { Upload, Loader2, ChevronDown, Search, Smile } from "lucide-react";
 
-const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false });
+const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
 /**
  * Small edit popup for a single profile field.
@@ -296,15 +294,13 @@ export default function EditFieldDialog({
                   transition={{ duration: 0.15 }}
                   className="absolute z-50 right-0 mt-2"
                 >
-                  <Picker
-                    data={data}
-                    onEmojiSelect={(emoji: any) => {
-                      setEditValue((prev) => prev + emoji.native);
+                  <EmojiPicker
+                    onEmojiClick={(emojiData) => {
+                      setEditValue((prev) => prev + emojiData.emoji);
                     }}
-                    skinTonePosition="search"
-                    previewPosition="none"
-                    theme="light"
                     height={350}
+                    skinTonesDisabled
+                    previewConfig={{ showPreview: false }}
                   />
                 </motion.div>
               )}
