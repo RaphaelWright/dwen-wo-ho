@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { CuratorSidebar } from "@/components/ui/curator-sidebar";
 import CreateModal from "@/components/curator/create-modal";
 import MemberCreationModal from "@/components/modals/member-creation";
@@ -15,6 +16,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const {
     mounted,
     isAuthenticated,
@@ -42,6 +44,7 @@ export default function DashboardLayout({
     markAsRead,
     markAllAsRead,
     clearNotifications,
+    deleteNotification,
   } = useNotification();
 
   // Show loading state only after mount to prevent hydration mismatch
@@ -105,7 +108,9 @@ export default function DashboardLayout({
         onOpenChange={setNotifOpen}
         markAllRead={markAllAsRead}
         markOneRead={markAsRead}
+        deleteOne={deleteNotification}
         clearAllNotifications={clearNotifications}
+        onNavigate={(link) => router.push(link as any)}
       />
     </div>
   );

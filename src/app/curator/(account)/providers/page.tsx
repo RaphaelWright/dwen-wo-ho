@@ -82,17 +82,8 @@ export default function ProvidersPage() {
                 </p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-card/50 rounded-lg border border-border">
-              <span className="text-muted-foreground text-sm font-medium">
-                Total:
-              </span>
-              <span className="text-primary text-lg font-bold">
-                {providersList.length}
-              </span>
-            </div>
           </div>
 
-          {/* Filter Tabs */}
           <div className="flex items-center gap-2 flex-wrap">
             {filterOptions.map((option) => (
               <button
@@ -119,7 +110,6 @@ export default function ProvidersPage() {
           </div>
         </div>
 
-        {/* Providers Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {filteredProviders.length === 0 ? (
             <div className="col-span-full text-center py-12">

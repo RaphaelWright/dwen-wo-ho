@@ -141,7 +141,7 @@ export default function CuratorPagesPage() {
                           <Image
                             src={page.photoPreview}
                             alt="Cover page"
-                            fill
+                            fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                           />
                         )}
@@ -197,7 +197,7 @@ export default function CuratorPagesPage() {
                           <Image
                             src={icon.photoPreview}
                             alt={icon.name}
-                            fill
+                            fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                           />
                           {/* Rank Badge */}

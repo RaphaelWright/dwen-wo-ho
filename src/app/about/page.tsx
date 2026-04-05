@@ -32,7 +32,7 @@ export default function AboutPage() {
             <Image
               src="https://images.unsplash.com/photo-1544367563-12123d8965cd?w=800&auto=format&fit=crop&q=60"
               alt="Wellness and Community"
-              fill
+              fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover"
             />
           </div>

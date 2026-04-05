@@ -1,6 +1,7 @@
 "use client";
-import type { Route } from "next";
 
+import type { Route } from "next";
+import type { UrgentPatient } from "@/components/shared/urgent-card";
 import SchoolEditModal from "@/components/modals/school-edit";
 import ProviderDetailsModal from "@/components/modals/provider-details";
 import AddIconModal from "@/components/modals/add-icon";
@@ -23,6 +24,7 @@ import { Users, ChevronLeft } from "lucide-react";
 import { formatUrgentCarePatients } from "@/lib/utils/formatUrgentCarePatients";
 import { motion } from "framer-motion";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
+import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
 
 export default function SchoolDetailsPage() {
   const {
@@ -42,6 +44,9 @@ export default function SchoolDetailsPage() {
     activeTab,
     searchQuery,
     setSearchQuery,
+    appliedSearchQuery,
+    setAppliedSearchQuery,
+    isSearchOpen,
     showEditModal,
     setShowEditModal,
     showDisableModal,
@@ -65,6 +70,10 @@ export default function SchoolDetailsPage() {
     tabs,
     handleTabChange,
     selectedProvider,
+    localActiveFilters,
+    toggleFilter,
+    removeFilter,
+    clearFilters,
   } = useCuratorSchoolDetails();
 
   if (isLoading) {
@@ -72,6 +81,7 @@ export default function SchoolDetailsPage() {
       <div className="flex items-center justify-center min-h-screen bg-muted/5">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3" />
+
           <p className="text-muted-foreground text-sm">
             Loading school details...
           </p>
@@ -90,16 +100,19 @@ export default function SchoolDetailsPage() {
         >
           ← Back to Schools
         </Button>
+
         <p className="text-destructive text-sm">
           {error || "School not found"}
         </p>
       </div>
     );
   }
+
   return (
     <div className="min-h-screen flex flex-col bg-primary/10 animate-in fade-in duration-500">
       <div className="flex-1 flex flex-col lg:flex-row items-start relative w-full">
         {/* Main content */}
+
         <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 relative z-10">
           <motion.button
             initial={{ opacity: 0, x: -10 }}
@@ -126,11 +139,48 @@ export default function SchoolDetailsPage() {
                     placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
                     suggestions={suggestions}
                     quickFilters={quickFilters}
+                    activeFilters={localActiveFilters}
                     onSelectOption={(val) => {
                       setSearchQuery(val);
                     }}
+                    onFilterChange={(filter) => {
+                      if (filter.filterKey) {
+                        toggleFilter(filter);
+                      }
+                    }}
+                    onRemoveFilter={removeFilter}
                     getSuggestionValue={(s) => s.name}
-                    renderSuggestion={PatientSuggestionCard}
+                    renderSuggestion={(props: any) =>
+                      activeTab === "icons" ? (
+                        <SchoolSuggestionCard {...props} />
+                      ) : (
+                        <PatientSuggestionCard {...props} />
+                      )
+                    }
+                    onSubmitSearch={(query) => setAppliedSearchQuery(query)}
+                    onSuggestionAction={(suggestion) => {
+                      if (activeTab === "patients" && suggestion.id) {
+                        router.push(
+                          DYNAMIC_ROUTES.curator.patientDetails(
+                            schoolId,
+                            suggestion.id,
+                          ) as Route,
+                        );
+                      } else if (
+                        activeTab === "providers" &&
+                        suggestion.email
+                      ) {
+                        handleProviderClick(suggestion);
+                      } else if (activeTab === "icons") {
+                        setEditingIcon(suggestion);
+                        setShowAddIconModal(true);
+                      }
+                    }}
+                    onResetSearch={() => {
+                      setSearchQuery("");
+                      setAppliedSearchQuery("");
+                      clearFilters();
+                    }}
                   />
                 </div>
               </div>
@@ -147,6 +197,7 @@ export default function SchoolDetailsPage() {
                   <Button
                     onClick={() => {
                       setEditingIcon(null);
+
                       setShowAddIconModal(true);
                     }}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
@@ -159,6 +210,7 @@ export default function SchoolDetailsPage() {
               className="2xl:mb-8 z-0"
               activeTabLayoutId="school-details-filter"
             />
+
             <div className="md:hidden max-w-md">
               <SearchDropdown
                 searchQuery={searchQuery}
@@ -166,16 +218,51 @@ export default function SchoolDetailsPage() {
                 placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
                 suggestions={suggestions}
                 quickFilters={quickFilters}
+                activeFilters={localActiveFilters}
                 onSelectOption={(val) => {
                   setSearchQuery(val);
                 }}
+                onFilterChange={(filter) => {
+                  if (filter.filterKey) {
+                    toggleFilter(filter);
+                  }
+                }}
+                onRemoveFilter={removeFilter}
                 getSuggestionValue={(s) => s.name}
-                renderSuggestion={PatientSuggestionCard}
+                renderSuggestion={(props: any) =>
+                  activeTab === "icons" ? (
+                    <SchoolSuggestionCard {...props} />
+                  ) : (
+                    <PatientSuggestionCard {...props} />
+                  )
+                }
+                onSubmitSearch={(query) => setAppliedSearchQuery(query)}
+                onSuggestionAction={(suggestion) => {
+                  if (activeTab === "patients" && suggestion.id) {
+                    router.push(
+                      DYNAMIC_ROUTES.curator.patientDetails(
+                        schoolId,
+                        suggestion.id,
+                      ) as Route,
+                    );
+                  } else if (activeTab === "providers" && suggestion.email) {
+                    handleProviderClick(suggestion);
+                  } else if (activeTab === "icons") {
+                    setEditingIcon(suggestion);
+                    setShowAddIconModal(true);
+                  }
+                }}
+                onResetSearch={() => {
+                  setSearchQuery("");
+                  setAppliedSearchQuery("");
+                  clearFilters();
+                }}
               />
             </div>
           </div>
 
           {/* Content Area */}
+
           <div className="overflow-hidden">
             {activeTab === "patients" && (
               <PatientsTab
@@ -184,9 +271,14 @@ export default function SchoolDetailsPage() {
                 schoolId={schoolId}
                 schoolName={school?.nickname}
                 compactTimeAgo={compactTimeAgo}
-                searchQuery={searchQuery}
+                searchQuery={appliedSearchQuery}
                 onViewPatient={(patientId) =>
-                  router.push(DYNAMIC_ROUTES.curator.patientDetails(schoolId, patientId) as Route)
+                  router.push(
+                    DYNAMIC_ROUTES.curator.patientDetails(
+                      schoolId,
+                      patientId,
+                    ) as Route,
+                  )
                 }
               />
             )}
@@ -195,7 +287,7 @@ export default function SchoolDetailsPage() {
               <div className="p-4 sm:p-6">
                 <IconsTab
                   icons={schoolIcons}
-                  searchQuery={searchQuery}
+                  searchQuery={appliedSearchQuery}
                   onIconClick={(icon) => {
                     setEditingIcon(icon);
                     setShowAddIconModal(true);
@@ -213,7 +305,7 @@ export default function SchoolDetailsPage() {
                 <ProvidersTab
                   providers={providers}
                   isLoading={providersLoading}
-                  searchQuery={searchQuery}
+                  searchQuery={appliedSearchQuery}
                   onProviderClick={handleProviderClick}
                 />
               </div>
@@ -222,21 +314,29 @@ export default function SchoolDetailsPage() {
         </div>
 
         {/* Urgent Care Sidebar */}
+
         <UrgentPanel
           className="w-full lg:w-95 h-dvh lg:h-screen lg:sticky lg:top-0 border-l border-border/50 bg-destructive/5 shrink-0"
           patients={formatUrgentCarePatients(
-            urgentCare.patients.filter(
-              (p) => p.lockedInScore && p.lockedInScore <= 4,
-            ),
+            urgentCare.patients as any[],
             school?.name,
             compactTimeAgo,
           )}
           title="Urgent Care"
           emptyStateText="No urgent care patients"
+          onPatientClick={(patient: UrgentPatient) =>
+            router.push(
+              DYNAMIC_ROUTES.curator.patientDetails(
+                schoolId,
+                patient.patientResultId,
+              ) as Route,
+            )
+          }
         />
       </div>
 
       {/* Modals */}
+
       {school && (
         <>
           <SchoolEditModal
@@ -246,6 +346,7 @@ export default function SchoolDetailsPage() {
             onSchoolUpdated={handleSchoolUpdated}
             onDisableSchool={handleDisableSchool}
           />
+
           <ConfirmationModal
             isOpen={showDisableModal}
             onClose={() => setShowDisableModal(false)}

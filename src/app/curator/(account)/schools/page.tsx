@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import type { Route } from "next";
+import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
 import { Button } from "@/components/ui/button";
+
 import {
   Loader2,
   School,
@@ -8,17 +12,27 @@ import {
   GraduationCap,
   Building2,
 } from "lucide-react";
+
 import WidthConstraint from "@/components/ui/width-constraint";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+
 import { useCuratorSchools } from "@/hooks/curator/use-curator-schools";
+
 import { type FilterType } from "@/lib/types/curator";
+
 import { FILTER_OPTIONS } from "@/lib/constants/components/curator/schools-list-search";
+
 import { SchoolCard } from "@/components/curator/SchoolCard";
+
 import { NotificationBell } from "@/components/shared/notification-bell";
+
 import { useNotification } from "@/hooks/use-notification";
+
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
+
 import { SearchDropdown } from "@/components/shared/search-dropdown";
-import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
+
+import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
+
 import {
   SCHOOLS_LIST_SEARCH_PLACEHOLDERS,
   SCHOOL_FILTER_ICONS,
@@ -31,18 +45,21 @@ export default function SchoolsPage() {
     setActiveFilter,
     searchQuery,
     setSearchQuery,
+    setAppliedSearchQuery,
     filterCounts,
     isLoading,
     hasCachedData,
     isError,
     suggestions,
     quickFilters,
+    localActiveFilters,
+    toggleFilter,
+    removeFilter,
+    clearFilters,
   } = useCuratorSchools();
-  const {
-    unreadCount,
-    setIsOpen,
-    addNotification, // Added for verification
-  } = useNotification();
+
+  const router = useRouter();
+  const { unreadCount, setIsOpen } = useNotification();
 
   if (isError) {
     return (
@@ -51,6 +68,7 @@ export default function SchoolsPage() {
           <div className="text-center text-destructive font-medium">
             Failed to load schools
           </div>
+
           <Button variant="outline" onClick={() => window.location.reload()}>
             Retry
           </Button>
@@ -68,6 +86,7 @@ export default function SchoolsPage() {
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
               Schools
             </h1>
+
             <p className="text-muted-foreground text-lg">
               Manage and view all registered educational institutions
             </p>
@@ -75,75 +94,6 @@ export default function SchoolsPage() {
 
           {/* Header Actions */}
           <div className="hidden 2xl:flex items-center gap-4">
-            {/* Test Notification Buttons */}
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
-                onClick={() => {
-                  if (schoolsList.length > 0) {
-                    const sampleSchool = schoolsList[0];
-                    addNotification(
-                      "success",
-                      `New school added: ${sampleSchool.name}`,
-                      DYNAMIC_ROUTES.curator.schoolDetails(sampleSchool.id),
-                    );
-                  } else {
-                    addNotification(
-                      "success",
-                      "New school added: Achimota School",
-                      "/curator/schools/4",
-                    );
-                  }
-                }}
-              >
-                Test: School (Link)
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
-                onClick={() => {
-                  const schoolWithPatient = schoolsList.find(
-                    (s) => s.newPatientId,
-                  );
-                  if (schoolWithPatient) {
-                    addNotification(
-                      "info",
-                      `New patient: ${schoolWithPatient.newPatientName} at ${schoolWithPatient.name}`,
-                      DYNAMIC_ROUTES.curator.patientDetails(
-                        schoolWithPatient.id,
-                        schoolWithPatient.newPatientId || "",
-                      ),
-                    );
-                  } else {
-                    addNotification(
-                      "info",
-                      "New patient: Maame Abena Pokuaa at Achimota School",
-                      "/curator/schools/4/patients/122",
-                    );
-                  }
-                }}
-              >
-                Test: Patient (Link)
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
-                onClick={() =>
-                  addNotification(
-                    "error",
-                    "School removed: Mfantsipim School is no longer available",
-                    // No link for errors usually
-                  )
-                }
-              >
-                Test: Error (No Link)
-              </Button>
-            </div>
-
             <NotificationBell
               unreadCount={unreadCount}
               onOpenNotifs={() => setIsOpen(true)}
@@ -173,19 +123,36 @@ export default function SchoolsPage() {
               placeholders={SCHOOLS_LIST_SEARCH_PLACEHOLDERS}
               suggestions={suggestions}
               quickFilters={quickFilters}
+              activeFilters={localActiveFilters}
               onSelectOption={(val) => {
-                const filter = quickFilters.find(
-                  (f) => f.label === val || f.id === val,
-                );
-                if (filter) {
-                  setActiveFilter(filter.id as FilterType);
-                  setSearchQuery("");
-                } else {
-                  setSearchQuery(val);
+                setSearchQuery(val);
+              }}
+              onFilterChange={(filter) => {
+                if (filter.filterKey) {
+                  toggleFilter(filter);
                 }
               }}
+              onRemoveFilter={removeFilter}
               getSuggestionValue={(s) => s.name}
-              renderSuggestion={PatientSuggestionCard}
+              renderSuggestion={SchoolSuggestionCard}
+              onSubmitSearch={(query) => {
+                setAppliedSearchQuery(query);
+              }}
+              onSuggestionAction={(suggestion) => {
+                if (suggestion && suggestion.id) {
+                  router.push(
+                    DYNAMIC_ROUTES.curator.schoolDetails(
+                      suggestion.id,
+                    ) as Route,
+                  );
+                }
+              }}
+              onResetSearch={() => {
+                setSearchQuery("");
+                setAppliedSearchQuery("");
+                setActiveFilter("all");
+                clearFilters();
+              }}
               className="w-full"
             />
           </div>
@@ -195,6 +162,7 @@ export default function SchoolsPage() {
         {isLoading && !hasCachedData ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
+
             <p className="text-muted-foreground font-medium">
               Loading schools...
             </p>
@@ -204,10 +172,12 @@ export default function SchoolsPage() {
             <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
               <School className="w-10 h-10 text-muted-foreground" />
             </div>
+
             <div className="space-y-2">
               <h3 className="text-xl font-semibold text-foreground">
                 No schools found
               </h3>
+
               <p className="text-muted-foreground max-w-sm mx-auto">
                 {activeFilter === "all"
                   ? "There are no schools registered yet."
