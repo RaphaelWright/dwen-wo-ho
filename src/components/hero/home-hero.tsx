@@ -70,6 +70,7 @@ export function HomePageHeroDraggableCards() {
             alt={item.alt}
             width={500}
             height={500}
+            priority
             className="pointer-events-none w-full h-full object-cover rounded-lg"
           />
         </DraggableCardBody>

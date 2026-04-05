@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, RotateCcw, X } from "lucide-react";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,9 @@ export interface FilterOption {
   label: string;
   subLabel?: string;
   icon?: React.ReactNode;
+  filterKey?: string;
+  filterValue?: string;
+  filterType?: "exact" | "contains" | "score" | "date";
 }
 
 export interface SearchDropdownProps<T extends object> {
@@ -20,9 +23,15 @@ export interface SearchDropdownProps<T extends object> {
   placeholders?: string[];
   suggestions: T[];
   quickFilters?: FilterOption[];
+  activeFilters?: FilterOption[];
   onSelectOption: (option: string) => void;
+  onFilterChange?: (filter: FilterOption) => void;
+  onRemoveFilter?: (filter: FilterOption) => void;
   getSuggestionValue?: (item: T) => string;
   renderSuggestion: React.ComponentType<T>;
+  onSubmitSearch?: (query: string) => void;
+  onSuggestionAction?: (item: T) => void;
+  onResetSearch?: () => void;
   emptySuggestionsMessage?: string;
   className?: string;
   inputClassName?: string;
@@ -36,9 +45,15 @@ export function SearchDropdown<T extends Record<string, any>>({
   placeholders = ["Search..."],
   suggestions,
   quickFilters = [],
+  activeFilters = [],
   onSelectOption,
+  onFilterChange,
+  onRemoveFilter,
   getSuggestionValue,
   renderSuggestion: RenderSuggestion,
+  onSubmitSearch,
+  onSuggestionAction,
+  onResetSearch,
   emptySuggestionsMessage = "No matching results found.",
   className = "",
   autoFocus = false,
@@ -61,7 +76,10 @@ export function SearchDropdown<T extends Record<string, any>>({
   }, []);
 
   const handleFilterClick = (filter: string) => {
-    onSelectOption(filter);
+    // If not decoupled, fallback to onSelectOption
+    if (onSelectOption) {
+      onSelectOption(filter);
+    }
     setIsOpen(false);
   };
 
@@ -80,7 +98,9 @@ export function SearchDropdown<T extends Record<string, any>>({
             autoFocus={autoFocus}
             onSubmit={(e) => {
               e.preventDefault();
-              onSearchChange("");
+              if (onSubmitSearch) {
+                onSubmitSearch(searchQuery);
+              }
               setIsOpen(false);
             }}
             className="h-11/12 border-0 bg-transparent! shadow-none focus:outline-none"
@@ -104,6 +124,47 @@ export function SearchDropdown<T extends Record<string, any>>({
                 "max-[1065px]:h-[60dvh] max-[1065px]:overflow-y-auto scrollbar-hide",
             )}
           >
+            {/* Active Filters Chips */}
+            {activeFilters.length > 0 && (
+              <div className="mb-4">
+                <div className="mb-2 flex items-center justify-between px-1">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                    Active Filters
+                  </h4>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {activeFilters.map((filter) => (
+                    <motion.div
+                      key={filter.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="group flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/15 px-3 py-1.5 text-primary"
+                    >
+                      {filter.icon && (
+                        <div className="opacity-90 flex items-center justify-center">
+                          {filter.icon}
+                        </div>
+                      )}
+                      <span className="text-[12px] font-medium text-primary">
+                        {filter.label}
+                      </span>
+                      {onRemoveFilter && (
+                        <button
+                          type="button"
+                          onClick={() => onRemoveFilter(filter)}
+                          className="ml-1 flex items-center justify-center rounded-full p-0.5 hover:bg-primary/20 transition-colors"
+                        >
+                          <X className="size-3 text-primary" />
+                        </button>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="my-4 h-px w-full bg-border/50" />
+              </div>
+            )}
+
             {/* Suggestions */}
             <div className={quickFilters.length > 0 ? "mb-5" : ""}>
               <h4 className="mb-3 px-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
@@ -117,7 +178,10 @@ export function SearchDropdown<T extends Record<string, any>>({
                       whileHover={{ x: 5 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
-                        if (getSuggestionValue) {
+                        if (onSuggestionAction) {
+                          onSuggestionAction(item);
+                          setIsOpen(false);
+                        } else if (getSuggestionValue) {
                           handleFilterClick(getSuggestionValue(item));
                         }
                       }}
@@ -146,17 +210,33 @@ export function SearchDropdown<T extends Record<string, any>>({
                     <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
                       Quick Filters
                     </h4>
+                    {onResetSearch && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSearchChange("");
+                          onResetSearch();
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center gap-1 text-[10px] font-bold uppercase text-destructive/80 hover:text-destructive transition-colors"
+                      >
+                        <RotateCcw className="size-3" />
+                        Reset Filter
+                      </button>
+                    )}
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 justify-between">
                     {quickFilters.map((filter) => (
                       <motion.button
                         key={filter.id}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ duration: 0.15, ease: "easeOut" }}
-                        onClick={() =>
-                          handleFilterClick(filter.label || filter.id)
-                        }
+                        onClick={() => {
+                          if (onFilterChange) {
+                            onFilterChange(filter);
+                          }
+                        }}
                         className="group flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-primary transition-colors hover:bg-primary/10 hover:border-primary/20 hover:text-primary"
                       >
                         {filter.icon && (

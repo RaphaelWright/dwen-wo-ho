@@ -106,9 +106,8 @@ export const SchoolsTab = ({
                     <div
                       key={school.id}
                       className={`flex items-center justify-between p-4 border rounded-lg transition-colors ${
-                        isRejected
-                          ? "bg-card border-border opacity-60 cursor-not-allowed"
-                          : "bg-muted-foreground/50 border-border/50 hover:bg-muted-foreground/80"
+                        isRejected &&
+                        "bg-muted text-muted-foreground border-border opacity-60 cursor-not-allowed"
                       }`}
                     >
                       <div className="flex items-center gap-3">

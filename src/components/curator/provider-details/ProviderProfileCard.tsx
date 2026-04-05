@@ -9,9 +9,9 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
         <div className="flex items-start space-x-6">
           {/* Profile Image */}
           <div className="shrink-0">
-            {provider.profileImage ? (
+            {provider.profilePhotoURL ? (
               <Image
-                src={provider.profileImage}
+                src={provider.profilePhotoURL}
                 alt="Profile"
                 width={120}
                 height={120}

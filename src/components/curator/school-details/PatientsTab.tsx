@@ -3,6 +3,7 @@
 import { Users } from "lucide-react";
 import PatientCard from "@/components/shared/patient-card";
 import { PatientsTabProps } from "@/lib/types/components/curator/school-details";
+import type { PatientCase } from "@/lib/types/api/patient-results";
 
 export function PatientsTab({
   patients,
@@ -45,11 +46,26 @@ export function PatientsTab({
   return (
     <div className="flex flex-col gap-3">
       {filteredPatients.map((patient, index) => {
+        // Map SchoolPatientRecord to PatientCase API type
+        const patientCase: PatientCase = {
+          patientId:
+            typeof patient.id === "string"
+              ? parseInt(patient.id) || 0
+              : patient.id,
+          patientName: patient.patientName,
+          schoolId: patient.schoolId,
+          schoolName: patient.schoolName,
+          status: patient.visibilityStatus,
+          score: patient.lockinScore,
+          time: patient.createdAt,
+          preview: "",
+          avatarUrl: null,
+        };
         return (
           <PatientCard
             key={patient.id}
             index={index}
-            patient={patient}
+            patient={patientCase}
             onActionClick={onViewPatient}
           />
         );

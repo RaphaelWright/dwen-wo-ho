@@ -18,12 +18,14 @@ export function SchoolHeaderCard({
             onClick={onEditClick}
             className="cursor-pointer relative shrink-0"
           >
-            <div className="size-20 sm:size-25 rounded-2xl overflow-hidden border-4 border-card shadow-lg bg-muted group-hover:shadow-xl transition-all duration-300">
+            <div className="relative size-20 sm:size-25 rounded-2xl overflow-hidden border-4 border-card shadow-lg bg-muted group-hover:shadow-xl transition-all duration-300">
               {school.logo ? (
                 <Image
                   src={school.logo}
                   alt={school.name}
                   fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover rounded-2xl"
                 />
               ) : (

@@ -20,7 +20,7 @@ export function ResponsiveDialog({
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:min-w-max">{children}</DialogContent>
+        <DialogContent aria-describedby={undefined} className="sm:min-w-max">{children}</DialogContent>
       </Dialog>
     );
   }

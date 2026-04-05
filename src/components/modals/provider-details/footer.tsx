@@ -23,7 +23,7 @@ export const ProviderFooter = ({
             <Button
               onClick={handleApproveClick}
               disabled={isTargetingThisProvider}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed h-auto"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 text-success border hover:bg-muted rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed h-auto"
             >
               {currentAction === "approving" && isTargetingThisProvider ? (
                 <>
@@ -108,13 +108,13 @@ export const ProviderFooter = ({
             </div>
           </div>
         )}
-        <Button
+        {/* <Button
           onClick={onClose}
           variant="outline"
           className="px-6 py-2.5 bg-muted/80 rounded-lg font-semibold hover:bg-muted/50 transition-colors h-auto"
         >
           Close
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

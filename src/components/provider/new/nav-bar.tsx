@@ -2,7 +2,8 @@
 
 import { Logo } from "@/components/shared/Logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import useProviderDashboard from "@/hooks/provider/use-provider-dashboard";
+import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
+import type { useProviderSearchConfig } from "@/hooks/provider/use-provider-search-config";
 import { motion, useAnimation } from "framer-motion";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -32,9 +33,9 @@ const ProviderIdentity = ({
     <motion.button
       onClick={onOpenProfile}
       whileHover={{
-        paddingLeft: "24px",
-        paddingRight: "28px",
-        scale: 0.95,
+        paddingLeft: "10px",
+        paddingRight: "15px",
+        scale: 0.99,
         transition: { duration: 0.4, ease: "easeInOut" },
       }}
       className="flex flex-row items-center justify-between min-w-70 cursor-pointer py-2 pl-2.5 pr-3.5 rounded-full shrink-0 text-left bg-card/60 hover:bg-card border border-border/50 hover:shadow-md hover:border-primary/30"
@@ -76,24 +77,34 @@ const ProviderIdentity = ({
   );
 };
 
-export default function Navbar({
+export default function ProviderNavbar({
   searchOpen,
   setSearchOpen,
+  profileData,
+  unreadCount,
+  setProfileOpen,
+  setNotifOpen,
+  theme,
+  searchConfig,
+  quickFilters,
 }: {
   searchOpen?: boolean;
   setSearchOpen?: (open: boolean) => void;
-} = {}) {
+  profileData: ProviderDashboardState["profileData"];
+  unreadCount: ProviderDashboardState["unreadCount"];
+  setProfileOpen: ProviderDashboardState["setProfileOpen"];
+  setNotifOpen: ProviderDashboardState["setNotifOpen"];
+  theme: ProviderDashboardState["theme"];
+  searchConfig: ReturnType<typeof useProviderSearchConfig>;
+  quickFilters: ProviderDashboardState["quickFilters"];
+}) {
   const {
-    profileData: { name, specialty, title, avatar, ranking },
-    searchQuery,
-    unreadCount,
-    setSearchQuery,
-    setProfileOpen,
-    setNotifOpen,
-    theme,
-    topSuggestions,
-    quickFilters,
-  } = useProviderDashboard();
+    name = "",
+    specialty = "",
+    title = "",
+    avatarUrl = "",
+    ranking,
+  } = profileData ?? {};
 
   return (
     <header className="flex min-[1065px]:grid min-[1065px]:grid-cols-3 items-center justify-between min-[1065px]:justify-stretch pl-1 pr-2 min-[1065px]:px-2 h-18 border-b">
@@ -114,7 +125,7 @@ export default function Navbar({
           providerTitle={title}
           providerName={name}
           specialty={specialty}
-          avatarUrl={avatar}
+          avatarUrl={avatarUrl}
           ranking={ranking}
           onOpenProfile={() => setProfileOpen(true)}
         />
@@ -137,14 +148,28 @@ export default function Navbar({
         <ThemeToggle />
         <div className="hidden min-[1065px]:block">
           <SearchDropdown
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            searchQuery={searchConfig.searchQuery}
+            onSearchChange={searchConfig.setSearchQuery}
             placeholders={["Search patients...", "Search schools…"]}
-            suggestions={topSuggestions}
+            suggestions={searchConfig.topSuggestions}
             quickFilters={quickFilters}
-            onSelectOption={(val) => setSearchQuery(val)}
-            getSuggestionValue={(p) => p.name}
-            renderSuggestion={PatientSuggestionCard}
+            activeFilters={searchConfig.localActiveFilters}
+            onSelectOption={(val) => searchConfig.setSearchQuery(val)}
+            onFilterChange={searchConfig.onFilterChange}
+            onRemoveFilter={searchConfig.removeFilter}
+            getSuggestionValue={searchConfig.getSuggestionValue}
+            renderSuggestion={(p: any) => (
+              <PatientSuggestionCard
+                name={p.patientName}
+                score={p.lockinScore}
+                status={p.status}
+                school={p.schoolName}
+                {...p}
+              />
+            )}
+            onSubmitSearch={searchConfig.onSubmitSearch}
+            onSuggestionAction={searchConfig.onSuggestionAction}
+            onResetSearch={searchConfig.onResetSearch}
           />
         </div>
         <NotificationBell

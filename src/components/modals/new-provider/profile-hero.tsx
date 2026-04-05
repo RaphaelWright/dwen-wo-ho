@@ -27,7 +27,7 @@ export function ProfileHero({
           onClick={() => onEdit("photo", "Profile Photo", "")}
         >
           <Avatar className="w-full h-full">
-            <AvatarImage src={profileData.avatar} />
+            <AvatarImage src={profileData.avatarUrl} />
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
           <div className="absolute bottom-0 right-0 size-5 md:size-6.5 rounded-full z-10 flex items-center justify-center border-2 bg-primary">

@@ -3,29 +3,55 @@
 import {
   NEW_PROVIDER_EDITABLE_FIELDS,
   NEW_PROVIDER_FIELD_HOVER,
-  NEW_PROVIDER_READ_ONLY_FIELDS,
-} from "@/data/mock-provider-data";
+} from "@/lib/constants/components/provider/dashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { Pencil } from "lucide-react";
 import { ReactNode } from "react";
+import type { ProfileData } from "@/lib/types/provider/new-provider";
 
-/**
- * Left column of the profile modal — editable + read-only field rows.
- *
- * @param {{
- *   profileData: Record<string, string>,
- *   onEdit:      (key: string, label: string, current: string) => void,
- * }} props
- */
+function formatDate(dateString: string): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatRelativeTime(dateString: string | null): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+}
 
 export default function ProfileFieldsColumn({
   profileData,
   onEdit,
 }: {
-  profileData: any;
+  profileData: Partial<ProfileData>;
   onEdit: (key: string, label: string, current: string) => void;
 }) {
+  // Dynamic read-only fields from API data
+  const readOnlyFields = [
+    { label: "Email", value: profileData.email || "N/A" },
+    { label: "Member Since", value: formatDate(profileData.memberSince || "") },
+    {
+      label: "Last Updated",
+      value: formatRelativeTime(profileData.lastUpdated || null),
+    },
+  ];
+
   return (
     <div className="w-full p-6 border-b md:border-b-0 md:border-r flex flex-col gap-1.5 overflow-hidden overflow-y-auto no-scrollbar shrink-0 max-h-[40vh] md:max-h-none">
       {/* ── Editable ── */}
@@ -37,7 +63,7 @@ export default function ProfileFieldsColumn({
         value={
           <div className="flex items-center gap-2">
             <Avatar className="size-5 shrink-0">
-              <AvatarImage src={profileData.avatar} />
+              <AvatarImage src={profileData.avatarUrl} />
               <AvatarFallback>
                 {profileData.name
                   ? profileData.name.charAt(0).toUpperCase()
@@ -55,15 +81,21 @@ export default function ProfileFieldsColumn({
         <FieldRow
           key={f.key}
           label={f.label}
-          value={profileData[f.key] ?? ""}
-          onEdit={() => onEdit(f.key, f.label, profileData[f.key] ?? "")}
+          value={(profileData as Record<string, string>)[f.key] ?? ""}
+          onEdit={() =>
+            onEdit(
+              f.key,
+              f.label,
+              (profileData as Record<string, string>)[f.key] ?? "",
+            )
+          }
         />
       ))}
 
       {/* ── Read-only ── */}
       <SectionLabel className="mt-4">Read Only</SectionLabel>
 
-      {NEW_PROVIDER_READ_ONLY_FIELDS.map((f) => (
+      {readOnlyFields.map((f) => (
         <div key={f.label} className="flex items-center gap-3 px-3 py-2">
           <span className="text-[11.5px] w-22.5 shrink-0">{f.label}</span>
           <span className="text-[13px]">{f.value}</span>

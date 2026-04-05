@@ -89,7 +89,7 @@ export const PartnersTab = ({
                 placeholder="Search partners..."
                 value={partnerSearchQuery}
                 onChange={(e) => setPartnerSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-input border border-input transition-all placeholder-muted-foreground"
+                className="w-full pl-10 pr-4 py-2 bg-transparent border border-input transition-all placeholder-muted-foreground"
               />
             </div>
 

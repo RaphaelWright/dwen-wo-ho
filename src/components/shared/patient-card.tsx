@@ -1,28 +1,43 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { getScoreColor, getStatusConfig } from "@/lib/utils/new-provider";
 import ScoreRing from "./score-ring";
-import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
+import type { PatientCase } from "@/lib/types/api/patient-results";
 import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
 
 /**
  * A single row in the patient list.
- * @param {{ patient: import("@/lib/data").Patient, index: number }} props
- *
+ * Uses PatientCase from API directly - no type transformation needed.
  */
 
 export default function PatientCard({
   patient,
   index = 0,
   onActionClick,
+  detailRoute,
 }: {
-  patient: SchoolPatientRecord;
+  patient: PatientCase;
   index?: number;
   onActionClick?: (id: string | number) => void;
+  detailRoute?: (patientId: string | number) => string;
 }) {
-  const cfg = getStatusConfig(patient?.visibilityStatus || "new");
-  const scoreColor = getScoreColor(patient?.lockinScore || 0);
+  const router = useRouter();
+  // Map API 'status' to UI 'visibilityStatus' for getStatusConfig compatibility
+  const cfg = getStatusConfig(patient?.status || "new");
+  const scoreColor = getScoreColor(patient?.score || 0);
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onActionClick) {
+      onActionClick(patient.patientId);
+    } else if (detailRoute) {
+      router.push(
+        detailRoute(patient.patientId) as Parameters<typeof router.push>[0],
+      );
+    }
+  };
 
   return (
     <motion.div
@@ -43,23 +58,25 @@ export default function PatientCard({
     >
       {/* Content */}
       <div className="relative z-10 flex items-center gap-4 w-full">
-        <ScoreRing score={patient?.lockinScore || 0} />
+        <ScoreRing score={patient?.score || 0} />
 
         <div className="flex-1 min-w-0">
           {/* Name + time */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[15px] font-bold">{patient?.patientName || "Unknown"}</span>
+            <span className="text-[15px] font-bold">
+              {patient?.patientName || "Unknown"}
+            </span>
             <span className="text-xs text-muted-foreground">
-              {compactTimeAgo(patient?.createdAt || "")} ago
+              {compactTimeAgo(patient?.time || "")} ago
             </span>
             <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info bg-info/10 max-w-30 truncate">
-              {patient?.schoolNickname || "Unknown"}
+              {patient?.schoolName || "Unknown"}
             </span>
           </div>
 
-          {/* Preview */}
+          {/* Preview - PatientCase doesn't have comment field */}
           <p className="text-[12.5px] mt-0.5 leading-snug line-clamp-1 text-muted-foreground/80">
-            {patient?.comment || ""}
+            {/* Comment not available in PatientCase API type */}
           </p>
 
           {/* Tags */}
@@ -74,10 +91,7 @@ export default function PatientCard({
 
         {/* Action button */}
         <motion.button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onActionClick) onActionClick(patient.id);
-          }}
+          onClick={handleActionClick}
           whileHover={{
             scale: 1.03,
             backgroundColor: "var(--primary)",

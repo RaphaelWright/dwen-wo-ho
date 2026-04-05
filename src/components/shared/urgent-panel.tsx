@@ -1,29 +1,15 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import UrgentCard from "./urgent-card";
+import UrgentCard, { type UrgentPatient } from "./urgent-card";
 import { cn } from "@/lib/utils";
+import { UrgentPanelSkeleton } from "./urgent-panel-skeleton";
 
 /**
  * Right-side Urgent Care panel.
  *
- * @param {{
- *   patients: Array<{
- *     id: string | number;
- *     name: string;
- *     school: string;
- *     schoolLabel: string;
- *     time: string;
- *     score: number;
- *     emoji: string;
- *     avatarUrl?: string;
- *   }>;
- *   activeSchool?: string;
- *   title?: string;
- *   subtitle?: string;
- *   emptyStateText?: string;
- *   className?: string;
- * }} props
+ * Accepts patients whose shape matches the PatientCase API DTO,
+ * normalised to UrgentPatient.
  */
 export default function UrgentPanel({
   patients,
@@ -31,24 +17,25 @@ export default function UrgentPanel({
   title = "Urgent Care",
   emptyStateText = "No urgent cases for this school",
   className,
+  onPatientClick,
+  isLoading,
 }: {
-  patients: Array<{
-    id: string | number;
-    name: string;
-    school: string;
-    schoolLabel: string;
-    time: string;
-    score: number;
-    avatarUrl?: string;
-  }>;
-  activeSchool?: string;
+  patients: UrgentPatient[];
+  activeSchool?: string | number;
   title?: string;
   emptyStateText?: string;
   className?: string;
+  onPatientClick?: (patient: UrgentPatient) => void;
+  isLoading?: boolean;
 }) {
-  const filtered = patients.filter(
-    (p) => activeSchool === "all" || p.school === activeSchool,
-  );
+  if (isLoading) {
+    return <UrgentPanelSkeleton />;
+  }
+
+  const filtered =
+    activeSchool === "all"
+      ? patients
+      : patients.filter((p) => p.schoolId === Number(activeSchool));
 
   return (
     <aside
@@ -89,7 +76,16 @@ export default function UrgentPanel({
         <div className="flex flex-col gap-2">
           <AnimatePresence>
             {filtered.map((p, i) => (
-              <UrgentCard key={p.id} patient={p} index={i} />
+              <UrgentCard
+                key={
+                  p.id != null && p.id !== 0
+                    ? `urgent-${p.id}`
+                    : `urgent-idx-${i}`
+                }
+                patient={p}
+                index={i}
+                onClick={onPatientClick}
+              />
             ))}
           </AnimatePresence>
 

@@ -54,6 +54,22 @@ export const SidebarNavItem = ({
         )}
       </AnimatePresence>
 
+      {!collapsed && item.count !== undefined && (
+        <motion.span
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className={cn(
+            "ml-auto flex shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold",
+            isActive
+              ? "bg-primary text-primary-foreground"
+              : "bg-muted-foreground/10 text-muted-foreground"
+          )}
+        >
+          {item.count}
+        </motion.span>
+      )}
+
       {/* Active indicator bar */}
       {isActive && (
         <motion.div

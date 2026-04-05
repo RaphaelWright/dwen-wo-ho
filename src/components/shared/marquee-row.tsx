@@ -34,7 +34,7 @@ export const MarqueeRow = ({
           <div
             key={`${direction}-${idx}`}
             className={cn(
-              "cursor-pointer shrink-0 transition-all duration-300 ease-out",
+              "cursor-pointer shrink-0 transition-all duration-300 ease-out relative w-13.75 h-13.75",
               hoveredIndex !== null &&
                 hoveredIndex !== idx &&
                 "blur-md scale-90 opacity-20",
@@ -46,10 +46,10 @@ export const MarqueeRow = ({
             <Image
               src={uni.logo}
               alt={uni.name}
-              width={55}
-              height={55}
+              fill
               quality={100}
               className="object-contain"
+              sizes="55px"
             />
           </div>
         ))}

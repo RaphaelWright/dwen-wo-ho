@@ -13,15 +13,15 @@ export const ProviderHeader = ({
       <Button
         onClick={onClose}
         variant="ghost"
-        className="absolute top-4 right-4 w-10 h-10 bg-muted/80 hover:bg-muted/50 backdrop-blur-sm text-muted-foreground hover:text-foreground rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-90 p-0 border border-border/50"
+        className="absolute top-4 right-4 w-10 h-10 bg-muted/80 hover:bg-destructive/5 backdrop-blur-sm text-muted-foreground hover:text-foreground rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-90 p-0 border border-border/50"
         aria-label="Close modal"
       >
-        <FiX className="w-5 h-5" />
+        <FiX className="w-5 h-5 text-destructive" />
       </Button>
 
       <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-card shadow-lg shrink-0 bg-muted">
         <Image
-          src={provider?.profileImage ?? "/auth/lawyer.jpg"}
+          src={provider?.profilePhotoURL ?? "/auth/lawyer.jpg"}
           alt={provider?.fullName ?? "Provider"}
           width={96}
           height={96}

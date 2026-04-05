@@ -3,16 +3,44 @@
 import { motion } from "framer-motion";
 import { BrainCircuit, Pencil } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SectionLabel, InfoCard } from "./profile-helpers";
-import { NEW_PROVIDER_ASSIGNED_SCHOOLS } from "@/data/mock-provider-data";
+import type { AssociatedSchool } from "@/lib/types/api/providers";
 import ProfileFieldsColumn from "./profile-fields-column";
 import { ProfileData } from "@/lib/types/provider/new-provider";
 
+function formatDate(dateString: string): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatRelativeTime(dateString: string | null): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+}
+
 export function ProfileTabs({
   profileData,
+  schools,
   onEdit,
 }: {
-  profileData: ProfileData;
+  profileData: Partial<ProfileData>;
+  schools: AssociatedSchool[];
   onEdit: (key: string, label: string, current: string) => void;
 }) {
   return (
@@ -23,7 +51,7 @@ export function ProfileTabs({
       <TabsList className="flex w-full gap-0 rounded-none h-auto border-b bg-transparent px-2 md:px-6 md:space-x-2 overflow-x-visible">
         {[
           { value: "overview", label: "Overview" },
-          { value: "schools", label: "Schools", badge: "5" },
+          { value: "schools", label: "Schools", badge: String(schools.length) },
           { value: "partners", label: "Partners", badge: "0" },
         ].map((tab) => (
           <TabsTrigger
@@ -59,7 +87,7 @@ export function ProfileTabs({
 
             <SectionLabel className="mt-5">Contact</SectionLabel>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-5">
-              <InfoCard label="Email">james@justgohealth.com</InfoCard>
+              <InfoCard label="Email">{profileData.email || "N/A"}</InfoCard>
               <InfoCard label="Phone">{profileData.phone}</InfoCard>
             </div>
 
@@ -67,7 +95,7 @@ export function ProfileTabs({
             <motion.button
               whileHover={{ backgroundColor: "rgba(139,92,246,.25)" }}
               onClick={() =>
-                onEdit("specialty", "Specialty", profileData.specialty)
+                onEdit("specialty", "Specialty", profileData.specialty ?? "")
               }
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-5 cursor-pointer text-primary"
             >
@@ -80,8 +108,12 @@ export function ProfileTabs({
 
             <SectionLabel>Activity</SectionLabel>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              <InfoCard label="Member Since">Feb 7, 2026</InfoCard>
-              <InfoCard label="Last Active">2 weeks ago</InfoCard>
+              <InfoCard label="Member Since">
+                {formatDate(profileData.memberSince || "")}
+              </InfoCard>
+              <InfoCard label="Last Active">
+                {formatRelativeTime(profileData.lastUpdated || null)}
+              </InfoCard>
             </div>
           </TabsContent>
 
@@ -89,22 +121,35 @@ export function ProfileTabs({
           <TabsContent value="schools" className="p-6 mt-0">
             <SectionLabel>Assigned Schools</SectionLabel>
             <div className="flex flex-col gap-2">
-              {NEW_PROVIDER_ASSIGNED_SCHOOLS.map((s: any) => (
-                <div
-                  key={s.name}
-                  className="flex items-center gap-3 p-2.5 rounded-xl border bg-card"
-                >
+              {schools.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No schools assigned
+                </p>
+              ) : (
+                schools.map((s) => (
                   <div
-                    className="w-7 h-7 rounded-[6px] border flex items-center justify-center text-[11px] font-black shrink-0"
-                    style={{
-                      color: s.color,
-                    }}
+                    key={s.schoolId}
+                    className="flex items-center gap-3 p-2.5 rounded-xl border bg-card"
                   >
-                    {s.letter}
+                    <Avatar className="w-7 h-7 rounded-[6px] border shrink-0 bg-white">
+                      <AvatarImage
+                        src={s.avatarUrl || undefined}
+                        alt={s.schoolName}
+                        className="object-cover"
+                      />
+                      <AvatarFallback
+                        className="text-[11px] font-black bg-white"
+                        style={{ color: s.primaryColor || "#6366f1" }}
+                      >
+                        {s.schoolName?.charAt(0)?.toUpperCase() || "S"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-[13px] font-semibold">
+                      {s.schoolName}
+                    </span>
                   </div>
-                  <span className="text-[13px] font-semibold">{s.name}</span>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </TabsContent>
 

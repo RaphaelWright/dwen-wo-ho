@@ -21,14 +21,14 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
     <motion.div
       initial="initial"
       whileHover="hover"
-      className="w-full max-w-sm mx-auto bg-card dark:bg-muted/80 rounded-xl"
+      className="w-full max-w-xs mx-auto bg-card dark:bg-muted/80 rounded-lg"
     >
       <Link
         href={`${ROUTES.curator.schools}/${school.id}`}
-        className="block group overflow-hidden relative rounded-xl shadow-md transition-all duration-300  border border-border/50"
+        className="block group overflow-hidden relative rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-border/30"
       >
         {/* Header Section (Image Background) */}
-        <div className="relative h-74 w-full overflow-hidden">
+        <div className="relative h-48 w-full overflow-hidden">
           {/* Background Image Layer */}
           <motion.div
             variants={{
@@ -43,11 +43,12 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
                 src={school.logo}
                 alt={school.name}
                 fill
-                className="object-cover"
+                className="object-contain"
+                style={{ transform: "scale(0.75)" }}
               />
             ) : (
               <div className="w-full h-full bg-muted flex items-center justify-center">
-                <School className="w-20 h-20 text-muted-foreground/30" />
+                <School className="w-6 h-6 text-muted-foreground/30" />
               </div>
             )}
           </motion.div>
@@ -79,36 +80,37 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
             <motion.div
               variants={{
                 initial: { scale: 1, y: 0 },
-                hover: { scale: 1.05, y: -5 },
+                hover: { scale: 1.1, y: -3 },
               }}
-              className="h-24 w-24 rounded-full border-4 border-yellow-500 bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-2xl"
+              className="h-16 w-16 rounded-full border-4 border-yellow-500 bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-xl"
             >
               {school.logo ? (
                 <Image
                   src={school.logo}
                   alt="Logo"
-                  fill
-                  className="object-center"
+                  width={28}
+                  height={28}
+                  className="object-contain"
                 />
               ) : (
-                <School className="w-10 h-10 text-white/80" />
+                <School className="w-4 h-4 text-white/80" />
               )}
             </motion.div>
           </div>
         </div>
 
         {/* Footer Section (White Background) */}
-        <div className="p-4 flex flex-col gap-3">
+        <div className="p-3 flex flex-col gap-2">
           {/* School Name */}
-          <h1 className="font-bold text-lg md:text-xl text-foreground leading-tight line-clamp-1">
+          <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
             {displayNickname}
           </h1>
 
           {/* Bottom Row: Location & Count */}
           <div className="flex items-center justify-between">
             {/* Location */}
-            <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
-              <MapPin className="size-4 text-destructive" />
+            <p className="text-sm text-muted-foreground flex items-center gap-1 font-medium">
+              <MapPin className="size-3.5 text-destructive" />
               <span className="line-clamp-1">
                 {firstCampus || "Main Campus"}
               </span>
@@ -116,13 +118,13 @@ export function SchoolCard({ school }: { school: SchoolWithExtras }) {
 
             {/* Student Count */}
             {school.isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+              <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
             ) : (
               <Badge
                 variant="secondary"
-                className="bg-primary/10 text-primary border-none font-semibold rounded-full px-3 py-0.5"
+                className="bg-primary/10 text-primary border-none font-semibold rounded-full px-2 py-0.5 text-xs"
               >
-                {formatCount(school.studentCount ?? 0)} Students
+                {formatCount(school.totalPatients ?? school.studentCount ?? 0)} Patients
               </Badge>
             )}
           </div>

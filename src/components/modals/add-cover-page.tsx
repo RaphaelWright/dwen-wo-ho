@@ -167,7 +167,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       <Image
                         src={photoPreview}
                         alt="Cover preview"
-                        fill
+                        fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
                       />
                     </div>
@@ -313,7 +313,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       <Image
                         src={photoPreview}
                         alt="Cover preview"
-                        fill
+                        fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
                       />
                     </div>
