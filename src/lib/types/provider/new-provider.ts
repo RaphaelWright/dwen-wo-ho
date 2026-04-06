@@ -12,7 +12,7 @@ import { Notification } from "@/lib/types/notification";
 import type { ProfileData as ApiProfileData } from "@/lib/types/api/provider-dashboard";
 
 // Alias for backward compatibility; NotificationItem now mirrors the unified Notification interface.
-export type NotificationItem = Notification & { id: number };
+export type NotificationItem = Notification & { id: string | number };
 
 // Re-export API ProfileData and extend with frontend-only computed field
 export type ProfileData = ApiProfileData & {

@@ -53,7 +53,7 @@ export default function ProfileFieldsColumn({
   ];
 
   return (
-    <div className="w-full p-6 border-b md:border-b-0 md:border-r flex flex-col gap-1.5 overflow-hidden overflow-y-auto no-scrollbar shrink-0 max-h-[40vh] md:max-h-none">
+    <div className="w-full p-6 border-b md:border-b-0 md:border-r flex flex-col gap-1.5 overflow-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent shrink-0 max-h-[40vh] md:max-h-none">
       {/* ── Editable ── */}
       <SectionLabel>Editable</SectionLabel>
 

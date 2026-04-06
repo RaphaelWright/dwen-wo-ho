@@ -78,7 +78,7 @@ export function ProfileTabs({
       <div className="grid grid-cols-1 md:grid-cols-2 flex-1 overflow-hidden">
         <ProfileFieldsColumn profileData={profileData} onEdit={onEdit} />
 
-        <div className="flex-1 overflow-hidden overflow-y-auto no-scrollbar">
+        <div className="flex-1 overflow-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
           {/* Overview */}
           <TabsContent value="overview" className="p-6 mt-0">
             <InfoCard label="Current Status Message">
