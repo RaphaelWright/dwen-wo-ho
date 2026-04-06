@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef, ComponentType } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 import { useStore } from "jotai";
 import type { Atom } from "jotai";
@@ -20,21 +20,9 @@ import { cn } from "@/lib/utils";
 
 import { NotificationSkeleton } from "./notification-skeleton";
 
-import {
-  CuratorNotificationItem,
-  CuratorNotificationItemProps,
-} from "./curator-notification-item";
-
-import {
-  ProviderNotificationItem,
-  ProviderNotificationItemProps,
-} from "./provider-notification-item";
+import NotifItem from "./notification-item";
 
 type FilterType = "all" | "unread" | "read";
-
-type NotificationItemComponent = ComponentType<
-  CuratorNotificationItemProps | ProviderNotificationItemProps
->;
 
 interface NotificationsSheetProps {
   notifications: Notification[];
@@ -119,8 +107,7 @@ export default function NotificationsSheet({
 
   // Select the appropriate notification item component based on variant
 
-  const NotificationItem =
-    variant === "curator" ? CuratorNotificationItem : ProviderNotificationItem;
+  const NotificationItem = NotifItem;
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 

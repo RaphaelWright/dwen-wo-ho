@@ -18,6 +18,7 @@ import {
   useProviderDashboardMobile,
   type MobilePanel,
 } from "@/hooks/provider/use-provider-dashboard-mobile";
+import { PendingApprovalModal } from "@/components/provider/pending-approval-modal";
 import { useProviderUrgentPatients } from "@/hooks/queries/use-provider-dashboard";
 import useUserQuery from "@/hooks/queries/use-user-profile";
 import { useProviderSearchConfig } from "@/hooks/provider/use-provider-search-config";
@@ -29,6 +30,7 @@ import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
 import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
 import ProviderNavbar from "@/components/provider/new/nav-bar";
 import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
+import { ROUTES } from "@/lib/constants/routes";
 
 function ProviderNotificationsSheet({
   notifications,
@@ -257,7 +259,6 @@ export default function ProviderHomePage() {
     panelTransition,
   } = useProviderDashboardMobile(setProfileOpen);
 
-  // Live urgent patients from API
   const { data: urgentData } = useProviderUrgentPatients();
   const urgentPatients: UrgentPatient[] = (urgentData?.patients ?? []).map(
     (p) => ({
@@ -274,20 +275,22 @@ export default function ProviderHomePage() {
 
   // ── Early returns (AFTER all hooks are called) ──
   if (!isApproved && !isLoading) {
+    const handleLogout = () => {
+      localStorage.removeItem("token");
+      router.push(ROUTES.provider.auth);
+    };
+
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-        <p className="text-muted-foreground mb-6 text-center max-w-md">
-          Your provider account is pending approval. Please wait for an
-          administrator to verify your credentials.
-        </p>
-        <button
-          onClick={() => router.push("/")}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
-        >
-          Return Home
-        </button>
-      </div>
+      <PendingApprovalModal
+        userInfo={{
+          name: userInfo.name,
+          title: userInfo.title,
+          specialty: userInfo.specialty,
+          profileImage: userInfo.profileImage,
+          timeAgo: "Just now",
+        }}
+        onLogout={handleLogout}
+      />
     );
   }
 

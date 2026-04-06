@@ -1,0 +1,253 @@
+"use client";
+
+import { useState, useMemo, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/components/ui/sonner";
+import useUserQuery from "@/hooks/queries/use-user-profile";
+import usePatientResultQuery from "@/hooks/queries/use-patient-result";
+import { patientsService } from "@/services/patients";
+import { getColorHex } from "@/lib/utils/color-utils";
+import { PatientActionResponseDTO } from "@/lib/types/api/patient-results";
+
+export type ActionTab = "pending" | "history";
+
+export interface MetricItem {
+  name: string;
+  description: string;
+  value: string;
+  color: string;
+}
+
+export interface MetricCategory {
+  name: string;
+  description: string;
+  score: string;
+  items: MetricItem[];
+}
+
+export function useProviderPatientDetails() {
+  const params = useParams();
+  const router = useRouter();
+  const resultId = params.resultId as string;
+  const queryClient = useQueryClient();
+
+  const { getProfileQuery } = useUserQuery();
+  const providerId = getProfileQuery.data?.id || getProfileQuery.data?.email;
+
+  const [activeTab, setActiveTab] = useState<ActionTab>("pending");
+  const [isAddActionOpen, setIsAddActionOpen] = useState(false);
+
+  // Fetch full patient details
+  const { data: patientData, isLoading: isPatientLoading } = useQuery({
+    queryKey: ["provider-patient-details", resultId],
+    queryFn: () => patientsService.getFullPatientDetails(resultId),
+    enabled: !!resultId && !!getProfileQuery.data,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+  const patientResult = patientData?.patientResult ?? null;
+  const lockInAssessment = patientData?.lockInAssessment ?? null;
+
+  // Fetch actions
+  const { data: allActions = [], isLoading: isActionsLoading } = useQuery({
+    queryKey: ["provider-patient-actions", resultId],
+    queryFn: () => patientsService.getPatientActions(resultId),
+    enabled: !!resultId && !!patientData,
+    staleTime: 2 * 60 * 1000,
+  });
+
+  // Filter actions for provider's own actions only
+  const actions = useMemo(() => {
+    if (!providerId) return [];
+    return allActions.filter(
+      (action: PatientActionResponseDTO) =>
+        (action as any).providerId === providerId ||
+        (action as any).createdBy === providerId,
+    );
+  }, [allActions, providerId]);
+
+  // For now, all actions are shown as pending (type doesn't have status field)
+  const pendingActions = actions;
+  const historyActions: PatientActionResponseDTO[] = [];
+
+  // Add action mutation
+  const addActionMutation = useMutation({
+    mutationFn: (data: { title: string; type: string; notes?: string }) =>
+      patientsService.addPatientAction(resultId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["provider-patient-actions", resultId],
+      });
+      toast.success("Action added successfully");
+      setIsAddActionOpen(false);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to add action");
+    },
+  });
+
+  // Compute metrics categories (same as curator)
+  const metrics = useMemo<MetricCategory[]>(() => {
+    if (!lockInAssessment) return [];
+    return [
+      {
+        name: "General Mental Health",
+        description: lockInAssessment.generalMentalHealth,
+        score: lockInAssessment.generalMentalHealthScore,
+        items: [
+          {
+            name: "Depression",
+            description: lockInAssessment.possibleDepressionDescription,
+            value: lockInAssessment.possibleDepressionScore,
+            color: getColorHex(lockInAssessment.possibleDepressionColor),
+          },
+          {
+            name: "Loneliness",
+            description: lockInAssessment.lonelinessScoreDescription,
+            value: lockInAssessment.lonelinessScore,
+            color: getColorHex(lockInAssessment.lonelinessColor),
+          },
+          {
+            name: "Suicidal Risk",
+            description: lockInAssessment.suicidalRiskScoreDescription,
+            value: lockInAssessment.suicidalRiskScore,
+            color: getColorHex(lockInAssessment.suicidalRiskColor),
+          },
+        ],
+      },
+      {
+        name: "Exam Anxiety",
+        description: lockInAssessment.examAnxiety,
+        score: lockInAssessment.examAnxietyScore,
+        items: [
+          {
+            name: "Physical Distress",
+            description: lockInAssessment.physicalDistressScoreDescription,
+            value: lockInAssessment.physicalDistressScore,
+            color: getColorHex(lockInAssessment.physicalDistressColor),
+          },
+          {
+            name: "Core Anxiety",
+            description: lockInAssessment.coreAnxietyScoreDescription,
+            value: lockInAssessment.coreAnxietyScore,
+            color: getColorHex(lockInAssessment.coreAnxietyColor),
+          },
+        ],
+      },
+      {
+        name: "Exam Prep",
+        description: lockInAssessment.examPrep,
+        score: lockInAssessment.examPrepScore,
+        items: [
+          {
+            name: "Motivation",
+            description: lockInAssessment.motivationScoreDescription,
+            value: lockInAssessment.motivationScore,
+            color: getColorHex(lockInAssessment.motivationColor),
+          },
+          {
+            name: "Procrastination",
+            description: lockInAssessment.procrastinationScoreDescription,
+            value: lockInAssessment.procrastinationScore,
+            color: getColorHex(lockInAssessment.procrastinationColor),
+          },
+          {
+            name: "Study Skills",
+            description: lockInAssessment.studySkillsScoreDescription,
+            value: lockInAssessment.studySkillsScore,
+            color: getColorHex(lockInAssessment.studySkillsColor),
+          },
+        ],
+      },
+    ];
+  }, [lockInAssessment]);
+
+  // Check if provider is treating this patient
+  const isTreating = useMemo(() => {
+    if (!patientResult || !providerId) return false;
+    return patientResult.treatingProviders.some(
+      (p: { id: string | number }) =>
+        String(p.id) === String(providerId) || p.id === providerId,
+    );
+  }, [patientResult, providerId]);
+
+  // Check if another provider is already treating (exclusive mode)
+  const isAnotherProviderTreating = useMemo(() => {
+    if (!patientResult || !providerId) return false;
+    return patientResult.treatingProviders.some(
+      (p: { id: string | number }) =>
+        String(p.id) !== String(providerId) && p.id !== providerId,
+    );
+  }, [patientResult, providerId]);
+
+  // Get the treating provider name (if another is treating)
+  const treatingProviderName = useMemo(() => {
+    if (!patientResult || !providerId) return null;
+    const otherProvider = patientResult.treatingProviders.find(
+      (p: { id: string | number; fullName?: string }) =>
+        String(p.id) !== String(providerId) && p.id !== providerId,
+    );
+    return otherProvider?.fullName || null;
+  }, [patientResult, providerId]);
+
+  // Treatment status mutation
+  const { usePatientFullDetails, updateActionStatus, isUpdating } =
+    usePatientResultQuery();
+
+  const handleUpdateActionStatus = useCallback(
+    async (actionStatus: "TREATING" | "NOT_TREATING") => {
+      if (!patientResult || !providerId) return;
+      await updateActionStatus({
+        resultId,
+        data: { providerId, actionStatus },
+      });
+    },
+    [patientResult, providerId, resultId, updateActionStatus],
+  );
+
+  // Refresh data helper
+  const refreshData = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["provider-patient-details", resultId],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["provider-patient-actions", resultId],
+    });
+  }, [queryClient, resultId]);
+
+  return {
+    // Navigation
+    router,
+    resultId,
+
+    // Patient data
+    patientResult,
+    lockInAssessment,
+    isLoading: isPatientLoading,
+    refreshData,
+
+    // Metrics
+    metrics,
+
+    // Actions
+    activeTab,
+    setActiveTab,
+    pendingActions,
+    historyActions,
+    isActionsLoading,
+    addPatientAction: addActionMutation.mutateAsync,
+    isAddingAction: addActionMutation.isPending,
+    isAddActionOpen,
+    setIsAddActionOpen,
+
+    // Treatment status
+    isTreating,
+    isAnotherProviderTreating,
+    treatingProviderName,
+    handleUpdateActionStatus,
+    isUpdating,
+    providerId,
+  };
+}
