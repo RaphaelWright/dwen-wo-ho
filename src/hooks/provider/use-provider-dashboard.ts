@@ -364,6 +364,7 @@ export default function useProviderDashboard() {
     handleClearSchool,
     schools: apiSchools,
     filteredPatients,
+    totalPatientCount: apiPatients.length,
     topSuggestions,
     theme,
     countForChip,

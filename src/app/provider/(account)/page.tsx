@@ -216,6 +216,7 @@ export default function ProviderHomePage() {
     handleSelectSchool,
     schools,
     filteredPatients,
+    totalPatientCount,
     activeStatus,
     countForChip,
     profileOpen,
@@ -335,7 +336,7 @@ export default function ProviderHomePage() {
             activeSchool={activeSchool}
             handleSelectSchool={handleSelectSchool}
             schools={schools}
-            filteredPatients={filteredPatients}
+            totalPatientCount={totalPatientCount}
             isLoading={isInitLoading}
           />
         </div>
@@ -449,7 +450,7 @@ export default function ProviderHomePage() {
                 activeSchool={activeSchool}
                 handleSelectSchool={handleSelectSchool}
                 schools={schools}
-                filteredPatients={filteredPatients}
+                totalPatientCount={totalPatientCount}
                 isLoading={isInitLoading}
               />
             </motion.div>

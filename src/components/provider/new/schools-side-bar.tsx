@@ -16,13 +16,13 @@ export default function SchoolsSidebar({
   activeSchool,
   handleSelectSchool,
   schools,
-  filteredPatients,
+  totalPatientCount,
   isLoading,
 }: {
   activeSchool: ProviderDashboardState["activeSchool"];
   handleSelectSchool: ProviderDashboardState["handleSelectSchool"];
   schools: ProviderDashboardState["schools"];
-  filteredPatients: ProviderDashboardState["filteredPatients"];
+  totalPatientCount: ProviderDashboardState["totalPatientCount"];
   isLoading?: boolean;
 }) {
   if (isLoading) {
@@ -31,15 +31,17 @@ export default function SchoolsSidebar({
 
   // Build display list: "All Schools" entry + live schools from API
   // Filter out schools with missing/invalid ids to avoid duplicate React keys
+  // Sort by patient count descending (highest first)
   const displaySchools = [
     {
       id: "all",
       name: "All Schools",
       avatarUrl: undefined,
-      count: filteredPatients.length,
+      count: totalPatientCount,
     },
     ...schools
       .filter((s) => s.schoolId != null && String(s.schoolId) !== "")
+      .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
       .map((s) => ({
         id: String(s.schoolId),
         name: s.schoolName ?? "Unknown School",
