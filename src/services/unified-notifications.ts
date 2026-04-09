@@ -1,5 +1,4 @@
 import { curatorService } from "./curator";
-import { curatorProvidersService } from "@/services/curator-providers";
 import { providerDashboardService } from "./provider-dashboard";
 import { getUserType } from "@/lib/utils/getUserType";
 import type { SendNotificationRequest } from "@/lib/types/api/curator";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { toast } from "@/components/ui/sonner";
 import { useRouter } from "next/navigation";
@@ -12,12 +12,22 @@ import {
 } from "@/atoms/notification";
 import { unreadCountAtom } from "@/atoms/websocket";
 import { NewNotificationEvent } from "@/lib/types/websocket";
-import { BackendNotification } from "@/lib/types/api/shared";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import { providerDashboardService } from "@/services/provider-dashboard";
 import { curatorService } from "@/services/curator";
 import { getUserType } from "@/lib/utils/getUserType";
+import {
+  CuratorNotification,
+  CuratorNotificationListResponse,
+  ProviderNotification,
+  ProviderNotificationListResponse,
+} from "@/lib/types/notification";
+import {
+  getCuratorNotificationRoute,
+  getProviderNotificationRoute,
+} from "@/lib/config/notification-routing";
+import { Route } from "next";
 
 export function useNotificationWebSocket() {
   const userType = getUserType();
@@ -29,106 +39,101 @@ export function useNotificationWebSocket() {
   const [providerNotifications, setProviderNotifications] = useAtom(
     providerNotificationListAtom,
   );
-  const [, setCuratorSheetOpen] = useAtom(isCuratorNotificationSheetOpenAtom);
-  const [, setProviderSheetOpen] = useAtom(isProviderNotificationSheetOpenAtom);
+  const [curatorSheetOpen, setCuratorSheetOpen] = useAtom(
+    isCuratorNotificationSheetOpenAtom,
+  );
+  const [providerSheetOpen, setProviderSheetOpen] = useAtom(
+    isProviderNotificationSheetOpenAtom,
+  );
 
   // Select the appropriate atoms based on role
   const notifications =
     userType === "curator" ? curatorNotifications : providerNotifications;
-  const setNotifications =
-    userType === "curator" ? setCuratorNotifications : setProviderNotifications;
   const setSheetOpen =
     userType === "curator" ? setCuratorSheetOpen : setProviderSheetOpen;
   const [unreadCount, setUnreadCount] = useAtom(unreadCountAtom);
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // Determine correct service and query key based on role (already have userType above)
-  const queryKey =
-    userType === "curator"
-      ? [QUERY_KEYS.curator, "notifications"]
-      : [QUERY_KEYS.providers, "notifications"];
-
-  const queryFn =
-    userType === "curator"
-      ? curatorService.getNotifications
-      : () => providerDashboardService.getNotifications();
-
-  // Initial load of notification history via HTTP (role-aware)
-  const { data: initialNotifications } = useQuery({
-    queryKey,
-    queryFn,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    enabled: !!userType,
+  // Separate queries for each role to maintain type safety
+  const curatorQuery = useQuery<CuratorNotificationListResponse, Error>({
+    queryKey: [QUERY_KEYS.curator, "notifications"],
+    queryFn: () => curatorService.getNotifications(),
+    staleTime: 5 * 60 * 1000,
+    enabled: userType === "curator",
   });
 
-  // Seed notifications from HTTP on initial load
+  const providerQuery = useQuery<ProviderNotificationListResponse, Error>({
+    queryKey: [QUERY_KEYS.providers, "notifications"],
+    queryFn: () => providerDashboardService.getNotifications(),
+    staleTime: 5 * 60 * 1000,
+    enabled: userType === "provider",
+  });
+
+  const initialNotifications =
+    userType === "curator"
+      ? curatorQuery.data?.data?.items
+      : providerQuery.data?.items;
+
+  // Seed notifications from HTTP on initial load and when data changes
   useEffect(() => {
-    if (initialNotifications?.notifications && !initialLoadComplete) {
-      // Map based on user type since curator and provider have different formats
-      const mapped = initialNotifications.notifications.map((n: any) => {
-        if (userType === "curator") {
-          // Curator API format: id, type, title, message, actionUrl, createdAt, read
-          return {
-            id: n.id,
-            type: mapNotificationType(n.type),
-            message: n.message,
-            title: n.title,
-            link: n.actionUrl,
-            timestamp: new Date(n.createdAt),
-            read: n.read,
-            // Additional fields for UI
-            targetName: n.title,
-            text: n.message,
-            meta: formatTimestamp(n.createdAt),
-          };
-        } else {
-          // Provider API format (BackendNotification): notificationId, category, text, targetName, timestamp, unread
-          return {
-            id: n.notificationId,
-            type: mapNotificationType(n.category),
-            message: n.text,
-            title: n.targetName,
-            link: `/provider/patients/${n.targetId}`,
-            timestamp: new Date(n.timestamp),
-            read: !n.unread,
-            // Additional fields for UI
-            targetName: n.targetName,
-            text: n.text,
-            meta: formatTimestamp(n.timestamp),
-          };
-        }
-      });
-      setNotifications(mapped);
-      setUnreadCount(initialNotifications.unreadCount);
-      setInitialLoadComplete(true);
+    if (!initialNotifications) return;
+
+    // Map based on user type since curator and provider have different formats
+    if (userType === "curator") {
+      setCuratorNotifications(initialNotifications as CuratorNotification[]);
+      setUnreadCount(curatorQuery.data?.data?.unreadCount || 0);
+    } else {
+      setProviderNotifications(initialNotifications as ProviderNotification[]);
+      setUnreadCount(providerQuery.data?.unreadCount || 0);
     }
   }, [
     initialNotifications,
-    setNotifications,
+    setCuratorNotifications,
+    setProviderNotifications,
     setUnreadCount,
-    initialLoadComplete,
     userType,
+    curatorQuery.data?.data?.unreadCount,
+    providerQuery.data?.unreadCount,
   ]);
 
   const handleNotification = useCallback(
-    (event: CustomEvent<NewNotificationEvent>) => {
-      const { notification, unreadCount: newUnreadCount } = event.detail;
+    (event: unknown) => {
+      if (typeof event !== "object" || event === null) return;
 
-      // Map backend notification to frontend format
+      const eventObj =
+        userType === "curator"
+          ? (event as CustomEvent<NewNotificationEvent<CuratorNotification>>)
+          : (event as CustomEvent<NewNotificationEvent<ProviderNotification>>);
+
+      if (!eventObj.detail?.notification) return;
+
+      const { notification, unreadCount: newUnreadCount } = eventObj.detail;
+
+      // Generate route based on action field
+      const link =
+        userType === "curator"
+          ? getCuratorNotificationRoute(notification as CuratorNotification)
+          : getProviderNotificationRoute(notification as ProviderNotification);
+
       const newNotif = {
-        id: notification.notificationId,
-        type: mapNotificationType(notification.category),
-        message: notification.text,
-        title: notification.targetName,
-        link: `/provider/patients/${notification.targetId}`,
-        timestamp: new Date(notification.timestamp),
-        read: !notification.unread,
+        ...notification,
+        link: link,
       };
 
       // Add to atom (prepend for newest first)
-      setNotifications((prev) => [newNotif, ...prev]);
+      // Using unknown cast since newNotif has a UI-specific format different from API types
+      if (userType === "curator") {
+        setCuratorNotifications((prev) => [
+          newNotif as CuratorNotification,
+          ...prev,
+        ]);
+      } else {
+        setProviderNotifications((prev) => [
+          newNotif as ProviderNotification,
+          ...prev,
+        ]);
+      }
       setUnreadCount(newUnreadCount);
 
       // Invalidate TanStack Query cache
@@ -136,23 +141,36 @@ export function useNotificationWebSocket() {
         queryKey: [QUERY_KEYS.providers, "notifications"],
       });
 
-      // Show toast
-      const toastFn =
-        newNotif.type === "success"
-          ? toast.success
-          : newNotif.type === "error"
-            ? toast.error
-            : toast.info;
+      // Show toast - handle different notification shapes
+      let toastTitle: string;
+      let toastDescription: string;
+      let toastType: "success" | "error" | "info";
 
-      toastFn(notification.targetName, {
-        description: notification.text,
-        action: `/provider/patients/${notification.targetId}`
+      if (userType === "curator") {
+        const curatorNotif = notification as CuratorNotification;
+        toastTitle = curatorNotif.title;
+        toastDescription = curatorNotif.message;
+        toastType = curatorNotif.type === "CRITICAL_ALERT" ? "error" : "info";
+      } else {
+        const providerNotif = notification as ProviderNotification;
+        toastTitle = providerNotif.targetName;
+        toastDescription = providerNotif.text;
+        toastType =
+          providerNotif.category !== "STAR_PROVIDER_ASSIGNED" &&
+          providerNotif.category !== "NEW_PATIENT_ADDED"
+            ? "error"
+            : "info";
+      }
+
+      const toastFn = toastType === "error" ? toast.error : toast.info;
+
+      toastFn(toastTitle, {
+        description: toastDescription,
+        action: link
           ? {
               label: "View",
               onClick: () => {
-                router.push(
-                  `/provider/patients/${notification.targetId}` as `/provider/patients/${string}`,
-                );
+                if (link) router.push(link as Route);
               },
             }
           : undefined,
@@ -162,7 +180,8 @@ export function useNotificationWebSocket() {
       setTimeout(() => setSheetOpen(true), 500);
     },
     [
-      setNotifications,
+      setCuratorNotifications,
+      setProviderNotifications,
       setUnreadCount,
       setSheetOpen,
       router,
@@ -206,36 +225,4 @@ export function useNotificationWebSocket() {
     unreadCount,
     userType,
   };
-}
-
-// Map backend notification type to frontend notification type
-function mapNotificationType(type: string): "success" | "error" | "info" {
-  switch (type) {
-    case "PATIENT_REFERRED":
-    case "STAR_PROVIDER_ASSIGNED":
-    case "PATIENT_LOCK_IN":
-      return "success";
-    case "CRITICAL_ALERT":
-      return "error";
-    case "PROVIDER_APPLICATION_UPDATE":
-    default:
-      return "info";
-  }
-}
-
-// Format timestamp to relative time string
-function formatTimestamp(timestamp: string): string {
-  const date = new Date(timestamp);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-  const diffMins = Math.floor(diffSecs / 60);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffSecs < 60) return "just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString();
 }

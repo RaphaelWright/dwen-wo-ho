@@ -1,22 +1,31 @@
+import type { ComponentType } from "react";
 import {
   AssociatedSchool,
   AssociatedProvider,
   PartnerDetailsTab,
+  Partner,
 } from "@/lib/types/partners";
 
 export interface PartnerHeaderProps {
-  partner: any;
+  partner: Partner | null;
   onClose: () => void;
 }
 
+export interface PartnerTab {
+  id: PartnerDetailsTab;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  count?: number;
+}
+
 export interface PartnerTabsProps {
-  tabs: any[];
+  tabs: PartnerTab[];
   activeTab: PartnerDetailsTab;
   setActiveTab: (tabId: PartnerDetailsTab) => void;
 }
 
 export interface OverviewTabProps {
-  partner: any;
+  partner: Partner | null;
 }
 
 export interface SchoolsTabProps {

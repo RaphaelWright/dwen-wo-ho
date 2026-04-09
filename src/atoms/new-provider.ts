@@ -1,5 +1,5 @@
+import { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
 import { atom } from "jotai";
-import type { ProfileData } from "@/lib/types/provider/new-provider";
 
 export const activeSchoolAtom = atom("all");
 export const activeStatusAtom = atom("all");
@@ -12,7 +12,7 @@ export const profileOpenAtom = atom(false);
 export const editOpenAtom = atom(false);
 
 // Initialised empty – real data loaded from API via useProviderDashboard
-export const profileDataAtom = atom<Partial<ProfileData>>({});
+export const profileDataAtom = atom<Partial<ProviderProfileData>>({});
 
 /** @deprecated Use notificationListAtom from @/atoms/notification instead */
 export const notificationsAtom = atom<any[]>([]);

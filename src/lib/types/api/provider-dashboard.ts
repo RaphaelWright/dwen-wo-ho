@@ -1,8 +1,8 @@
-import type { BackendNotification } from "./shared";
-import type { AssociatedSchool } from "./providers";
-import type { PatientCase, PatientListResponse } from "./patient-results";
+import { ProviderNotification } from "../notification";
+import type { PatientCase } from "./patient-results";
+import type { ProviderAssociatedSchool } from "./providers";
 
-export interface ProfileData {
+export interface ProviderProfileData {
   title: string;
   name: string;
   specialty: string;
@@ -12,26 +12,25 @@ export interface ProfileData {
   email: string;
   memberSince: string;
   lastUpdated: string | null;
+  ranking?: string; // frontend-only computed field
 }
 
-export interface NotificationsData {
-  items: BackendNotification[];
-  unreadCount: number;
-}
-
-export interface DashboardInitResponse {
-  profile: ProfileData;
-  schools: AssociatedSchool[];
+export interface ProviderDashboardInitResponse {
+  profile: ProviderProfileData;
+  schools: ProviderAssociatedSchool[];
   patients: PatientCase[];
-  notifications: NotificationsData;
+  notifications: {
+    items: ProviderNotification[];
+    unreadCount: number;
+  };
 }
 
-export interface UpdateProfileRequest {
+export interface ProviderUpdateProfileRequest {
   fieldKey: "title" | "name" | "specialty" | "status" | "phone";
   value: string;
 }
 
-export interface UpdatePatientStatusRequest {
+export interface ProviderUpdatePatientStatusRequest {
   status: string;
 }
 
@@ -42,6 +41,3 @@ export interface ProviderPatientsParams {
   page?: number;
   limit?: number;
 }
-
-// Re-export for convenience
-export type { PatientCase, PatientListResponse };

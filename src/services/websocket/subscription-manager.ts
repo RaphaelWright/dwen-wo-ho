@@ -1,12 +1,10 @@
 import { stompClient } from "./stomp-client";
 import {
-  ROLE_BASED_TOPICS,
-  ActiveSubscription,
   NewNotificationEvent,
-  UnreadCountChangedEvent,
   NewUrgentCaseEvent,
   PatientStatusChangedEvent,
   NewPatientResultEvent,
+  ActiveSubscription,
 } from "@/lib/types/websocket";
 import { getUserType } from "@/lib/utils/getUserType";
 
@@ -22,9 +20,6 @@ class SubscriptionManager {
     this.userType = getUserType();
 
     if (!this.userType) {
-      console.log(
-        "[SubscriptionManager] No user type found, skipping subscriptions",
-      );
       return;
     }
 
@@ -32,8 +27,6 @@ class SubscriptionManager {
     if (this.userType === "provider" && !this.providerId) {
       this.providerId = this.extractProviderId();
     }
-
-    console.log(`[SubscriptionManager] Initializing for ${this.userType}`);
 
     // Subscribe to common topic (all roles)
     this.subscribeToTopic(
@@ -75,7 +68,6 @@ class SubscriptionManager {
       // Provider ID will be set later via setProviderId() after profile loads.
       // Don't warn repeatedly - this is expected during initial page load.
       if (!this.hasWarnedMissingId) {
-        console.log("[SubscriptionManager] Provider ID not yet available, provider-specific subscriptions will be set up after profile loads");
         this.hasWarnedMissingId = true;
       }
       return;
@@ -155,10 +147,6 @@ class SubscriptionManager {
       topic,
       unsubscribe: () => stompClient.unsubscribe(subId),
     });
-
-    console.log(
-      `[SubscriptionManager] Subscribed: ${topic} (${subscriptionId})`,
-    );
   }
 
   private unsubscribe(subscriptionId: string): void {
@@ -166,14 +154,13 @@ class SubscriptionManager {
     if (subscription) {
       subscription.unsubscribe();
       this.activeSubscriptions.delete(subscriptionId);
-      console.log(`[SubscriptionManager] Unsubscribed: ${subscriptionId}`);
     }
   }
 
   private handleMessage(topic: string, payload: unknown): void {
     // Dispatch to appropriate handler based on topic pattern
     if (topic === "/user/queue/notifications") {
-      this.handlePersonalNotification(payload as NewNotificationEvent);
+      this.handlePersonalNotification(payload as NewNotificationEvent<unknown>);
     } else if (topic.includes("/urgent")) {
       this.handleUrgentCase(payload as NewUrgentCaseEvent);
     } else if (topic.includes("/patients") && !topic.includes("/urgent")) {
@@ -183,7 +170,9 @@ class SubscriptionManager {
     }
   }
 
-  private handlePersonalNotification(payload: NewNotificationEvent): void {
+  private handlePersonalNotification(
+    payload: NewNotificationEvent<unknown>,
+  ): void {
     // This will be handled by the notification hook/atom
     // Event is dispatched to window for loose coupling
     window.dispatchEvent(
@@ -247,7 +236,6 @@ class SubscriptionManager {
     this.activeSubscriptions.forEach((sub) => sub.unsubscribe());
     this.activeSubscriptions.clear();
     this.schoolIds = [];
-    console.log("[SubscriptionManager] Cleaned up all subscriptions");
   }
 
   // Get active subscription count (for debugging)

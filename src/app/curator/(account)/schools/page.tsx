@@ -25,7 +25,7 @@ import { SchoolCard } from "@/components/curator/SchoolCard";
 
 import { NotificationBell } from "@/components/shared/notification-bell";
 
-import { useNotification } from "@/hooks/use-notification";
+import { useCuratorNotification } from "@/hooks/use-curator-notification";
 
 import { FilterTabBar } from "@/components/shared/filter-tab-bar";
 
@@ -59,7 +59,7 @@ export default function SchoolsPage() {
   } = useCuratorSchools();
 
   const router = useRouter();
-  const { unreadCount, setIsOpen } = useNotification();
+  const { unreadCount, setIsOpen } = useCuratorNotification();
 
   if (isError) {
     return (

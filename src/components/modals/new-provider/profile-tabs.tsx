@@ -5,9 +5,9 @@ import { BrainCircuit, Pencil } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SectionLabel, InfoCard } from "./profile-helpers";
-import type { AssociatedSchool } from "@/lib/types/api/providers";
+import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
 import ProfileFieldsColumn from "./profile-fields-column";
-import { ProfileData } from "@/lib/types/provider/new-provider";
+import type { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
 
 function formatDate(dateString: string): string {
   if (!dateString) return "N/A";
@@ -39,8 +39,8 @@ export function ProfileTabs({
   schools,
   onEdit,
 }: {
-  profileData: Partial<ProfileData>;
-  schools: AssociatedSchool[];
+  profileData: Partial<ProviderProfileData>;
+  schools: ProviderAssociatedSchool[];
   onEdit: (key: string, label: string, current: string) => void;
 }) {
   return (

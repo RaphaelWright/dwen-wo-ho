@@ -1,3 +1,4 @@
+import { UrgentPatient } from "@/components/shared/urgent-card";
 import type {
   ProviderSummaryDTO,
   TreatingProviderDTO,
@@ -58,6 +59,7 @@ export interface PatientListResponse {
   totalCount: number;
   totalPages: number;
 }
+export type UrgentPatientListResponse = UrgentPatient[];
 
 export interface PatientCase {
   patientId: number;
@@ -69,6 +71,7 @@ export interface PatientCase {
   time: string;
   preview: string;
   avatarUrl: string | null;
+  schoolNickname: string;
 }
 
 export interface VisitIncrementResponse {

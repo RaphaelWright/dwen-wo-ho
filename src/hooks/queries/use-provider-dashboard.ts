@@ -5,8 +5,8 @@ import { toast } from "@/components/ui/sonner";
 import { providerDashboardService } from "@/services/provider-dashboard";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import type {
-  UpdateProfileRequest,
-  UpdatePatientStatusRequest,
+  ProviderUpdateProfileRequest,
+  ProviderUpdatePatientStatusRequest,
   ProviderPatientsParams,
 } from "@/lib/types/api/provider-dashboard";
 
@@ -51,7 +51,7 @@ export const useProviderNotifications = (page?: number) =>
 export const useUpdateProfileMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: UpdateProfileRequest) =>
+    mutationFn: (payload: ProviderUpdateProfileRequest) =>
       providerDashboardService.updateProfile(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PD, "profile"] });
@@ -87,7 +87,7 @@ export const useUpdatePatientStatusMutation = () => {
       payload,
     }: {
       patientId: string | number;
-      payload: UpdatePatientStatusRequest;
+      payload: ProviderUpdatePatientStatusRequest;
     }) => providerDashboardService.updatePatientStatus(patientId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PD, "patients"] });
@@ -95,6 +95,28 @@ export const useUpdatePatientStatusMutation = () => {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update patient status");
+    },
+  });
+};
+
+export const useUpdatePhoneNumberMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: {
+      officePhoneNumber: string;
+      currentStatus: string;
+    }) =>
+      providerDashboardService.updatePhoneNumber({
+        officePhoneNumber: payload.officePhoneNumber,
+        status: payload.currentStatus,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PD, "profile"] });
+      queryClient.invalidateQueries({ queryKey: [PD, "init"] });
+      toast.success("Phone number updated");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update phone number");
     },
   });
 };

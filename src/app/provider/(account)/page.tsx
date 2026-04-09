@@ -31,6 +31,8 @@ import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
 import ProviderNavbar from "@/components/provider/new/nav-bar";
 import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
 import { ROUTES } from "@/lib/constants/routes";
+import { getProviderNotificationRoute } from "@/lib/config/notification-routing";
+import { ProviderNotification } from "@/lib/types/notification";
 
 function ProviderNotificationsSheet({
   notifications,
@@ -40,17 +42,35 @@ function ProviderNotificationsSheet({
   deleteNotification,
   clearAllNotifications,
   router,
+  isMarkingRead,
+  isDeleting,
+  getNotificationId,
+  isNotificationUnread,
+  getAvatarUrl,
+  getEmoji,
+  getTitle,
+  getText,
+  getTimestamp,
 }: {
-  notifications: any[];
+  notifications: ProviderNotification[];
   setNotifOpen: (open: boolean) => void;
   markAllRead: () => void;
   markOneRead: (id: string | number) => void;
   deleteNotification: (id: string | number) => void;
   clearAllNotifications: () => void;
   router: ReturnType<typeof useRouter>;
+  isMarkingRead: boolean;
+  isDeleting: boolean;
+  getNotificationId: (n: ProviderNotification) => string;
+  isNotificationUnread: (n: ProviderNotification) => boolean;
+  getAvatarUrl: (n: ProviderNotification) => string | null | undefined;
+  getEmoji: (n: ProviderNotification) => string | undefined;
+  getTitle: (n: ProviderNotification) => string | undefined;
+  getText: (n: ProviderNotification) => string | undefined;
+  getTimestamp: (n: ProviderNotification) => string | undefined;
 }) {
   return (
-    <NotificationsSheet
+    <NotificationsSheet<ProviderNotification>
       notifications={notifications}
       openAtom={isProviderNotificationSheetOpenAtom}
       onOpenChange={setNotifOpen}
@@ -59,7 +79,16 @@ function ProviderNotificationsSheet({
       deleteOne={deleteNotification}
       clearAllNotifications={clearAllNotifications}
       onNavigate={(link) => router.push(link as any)}
-      variant="provider"
+      getNotificationActionUrl={(n) => getProviderNotificationRoute(n) ?? "#"}
+      isMarkingRead={isMarkingRead}
+      isDeleting={isDeleting}
+      getNotificationId={getNotificationId}
+      isNotificationUnread={isNotificationUnread}
+      getAvatarUrl={getAvatarUrl}
+      getEmoji={getEmoji}
+      getTitle={getTitle}
+      getText={getText}
+      getTimestamp={getTimestamp}
     />
   );
 }
@@ -207,6 +236,8 @@ export default function ProviderHomePage() {
     markOneRead,
     clearAllNotifications,
     deleteNotification,
+    isMarkingRead,
+    isDeleting,
     localActiveFilters,
     toggleFilter,
     removeFilter,
@@ -261,18 +292,6 @@ export default function ProviderHomePage() {
   } = useProviderDashboardMobile(setProfileOpen);
 
   const { data: urgentData } = useProviderUrgentPatients();
-  const urgentPatients: UrgentPatient[] = (urgentData?.patients ?? []).map(
-    (p) => ({
-      id: p.patientId,
-      patientResultId: String(p.patientId),
-      patientName: p.patientName,
-      schoolId: p.schoolId,
-      schoolName: p.schoolName,
-      time: p.time ? new Date(p.time).toLocaleDateString() : "Recently",
-      lockinScore: p.score ?? 0,
-      avatarUrl: p.avatarUrl as string | undefined,
-    }),
-  );
 
   // ── Early returns (AFTER all hooks are called) ──
   if (!isApproved && !isLoading) {
@@ -350,7 +369,14 @@ export default function ProviderHomePage() {
           />
         </div>
         <div className="h-full overflow-hidden">
-          <UrgentPanel patients={urgentPatients} />
+          <UrgentPanel
+            patients={urgentData}
+            onPatientClick={(patient) => {
+              router.push(
+                `${ROUTES.provider.patients}/${patient.patientResultId}`,
+              );
+            }}
+          />
         </div>
       </div>
 
@@ -484,10 +510,7 @@ export default function ProviderHomePage() {
               transition={panelTransition}
               className="absolute inset-0 h-screen overflow-y-auto"
             >
-              <UrgentPanel
-                patients={urgentPatients}
-                isLoading={isInitLoading}
-              />
+              <UrgentPanel patients={urgentData} isLoading={isInitLoading} />
             </motion.div>
           )}
           {activePanel === "activity" && (
@@ -521,6 +544,15 @@ export default function ProviderHomePage() {
         deleteNotification={deleteNotification}
         clearAllNotifications={clearAllNotifications}
         router={router}
+        isMarkingRead={isMarkingRead}
+        isDeleting={isDeleting}
+        getNotificationId={(n) => n.notificationId}
+        isNotificationUnread={(n) => n.unread}
+        getAvatarUrl={(n) => n.avatarUrl}
+        getEmoji={(n) => n.emoji}
+        getTitle={(n) => n.targetName}
+        getText={(n) => n.text}
+        getTimestamp={(n) => n.timestamp}
       />
       <ProfileModal
         profileOpen={profileOpen}

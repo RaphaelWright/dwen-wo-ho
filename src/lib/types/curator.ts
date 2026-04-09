@@ -1,6 +1,9 @@
 import { Partner, School, SchoolReach, SchoolIcon } from "./school";
 import { SchoolProvider } from "./provider";
-import { SchoolTab } from "@/lib/types/components/curator/school-details";
+import {
+  SchoolTab,
+  SchoolPatientRecord,
+} from "@/lib/types/components/curator/school-details";
 
 export interface CoverPage {
   id: string;
@@ -36,7 +39,7 @@ export type { PatientResultResponse as CuratorPatientResult } from "./api/patien
 export interface UseCuratorSchoolSearchProps {
   searchQuery: string;
   activeTab: SchoolTab;
-  patients: any[];
+  patients: SchoolPatientRecord[];
   schoolIcons: SchoolIcon[];
   providers: SchoolProvider[];
 }

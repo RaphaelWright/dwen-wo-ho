@@ -1,6 +1,5 @@
 import { Route } from "next";
 import { ReactNode } from "react";
-import { Notification } from "@/lib/types/notification";
 
 export interface NavItem {
   href?: Route;

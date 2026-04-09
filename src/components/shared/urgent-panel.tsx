@@ -20,7 +20,7 @@ export default function UrgentPanel({
   onPatientClick,
   isLoading,
 }: {
-  patients: UrgentPatient[];
+  patients: UrgentPatient[] | undefined;
   activeSchool?: string | number;
   title?: string;
   emptyStateText?: string;
@@ -34,8 +34,8 @@ export default function UrgentPanel({
 
   const filtered =
     activeSchool === "all"
-      ? patients
-      : patients.filter((p) => p.schoolId === Number(activeSchool));
+      ? (patients ?? [])
+      : (patients?.filter((p) => p.schoolId === Number(activeSchool)) ?? []);
 
   return (
     <aside

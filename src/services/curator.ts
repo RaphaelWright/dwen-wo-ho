@@ -6,6 +6,7 @@ import type {
   MarkNotificationsReadRequest,
 } from "@/lib/types/api/curator";
 import type { ProviderDetailResponse } from "@/lib/types/api/providers";
+import { CuratorNotificationListResponse } from "@/lib/types/notification";
 
 export const curatorService = {
   // T3-1: Summary counts
@@ -30,14 +31,23 @@ export const curatorService = {
   // T3-3: Curator notifications
   getNotifications: async () => {
     const result = await api(STATIC_ENDPOINTS.CURATOR.NOTIFICATIONS);
-    if (result?.success && result.data) return result.data;
-    return { notifications: [], unreadCount: 0, totalCount: 0 };
+    if (result?.success && result.data)
+      return result as CuratorNotificationListResponse;
+    return {
+      success: true,
+      message: "",
+      data: { items: [], unreadCount: 0 },
+    };
   },
 
   getUnreadNotifications: async () => {
     const result = await api(STATIC_ENDPOINTS.CURATOR.NOTIFICATIONS_UNREAD);
     if (result?.success && result.data) return result.data;
-    return { notifications: [], unreadCount: 0 };
+    return {
+      success: true,
+      message: "",
+      data: { notifications: [], unreadCount: 0 },
+    };
   },
 
   sendNotification: async (data: SendNotificationRequest): Promise<void> => {

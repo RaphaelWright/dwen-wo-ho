@@ -65,7 +65,6 @@ export function ProfileFooter() {
             className="flex items-center gap-2 text-[12.5px] cursor-pointer text-destructive"
             onClick={() => {
               // TODO: Implement delete account
-              console.log("Delete account clicked");
             }}
           >
             <Trash2 className="text-destructive" size={13} /> Delete account

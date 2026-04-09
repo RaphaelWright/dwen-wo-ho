@@ -12,7 +12,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { Notification } from "@/lib/types/notification";
+import type {
+  CuratorNotification,
+  NotificationItem,
+  ProviderNotification,
+} from "@/lib/types/notification";
 
 import { CheckCircle, Trash2, X } from "lucide-react";
 
@@ -24,50 +28,58 @@ import NotifItem from "./notification-item";
 
 type FilterType = "all" | "unread" | "read";
 
-interface NotificationsSheetProps {
-  notifications: Notification[];
+type Variant = "curator" | "provider";
 
+interface NotificationsSheetProps<N> {
+  notifications: N[];
+  getNotificationActionUrl: (n: N) => string;
   openAtom: Atom<boolean>;
-
   onOpenChange: (open: boolean) => void;
-
   markAllRead: () => void;
-
   markOneRead: (id: string | number) => void;
-
   deleteOne?: (id: string | number) => void;
-
   clearAllNotifications: () => void;
-
   onNavigate?: (link: string) => void;
-
   isLoading?: boolean;
-
-  variant?: "curator" | "provider";
+  isMarkingRead?: boolean;
+  isDeleting?: boolean;
+  // Type-specific helpers
+  getNotificationId: (n: N) => string | number | undefined;
+  isNotificationUnread: (n: N) => boolean;
+  getAvatarUrl: (n: N) => string | null | undefined;
+  getEmoji: (n: N) => string | undefined;
+  getTitle: (n: N) => string | undefined;
+  getText: (n: N) => string | undefined;
+  getTimestamp: (n: N) => string | undefined;
 }
 
-export default function NotificationsSheet({
+export default function NotificationsSheet<N>({
   notifications,
-
   openAtom,
-
   onOpenChange,
-
   markAllRead,
-
   markOneRead,
-
   deleteOne,
-
   clearAllNotifications,
-
   onNavigate,
-
   isLoading = false,
-
-  variant = "provider",
-}: NotificationsSheetProps) {
+  getNotificationActionUrl,
+  isMarkingRead: globalMarkingRead = false,
+  isDeleting: globalDeleting = false,
+  getNotificationId,
+  isNotificationUnread,
+  getAvatarUrl,
+  getEmoji,
+  getTitle,
+  getText,
+  getTimestamp,
+}: NotificationsSheetProps<N>) {
   const [filter, setFilter] = useState<FilterType>("all");
+  // Track per-notification loading states
+  const [markingReadId, setMarkingReadId] = useState<string | number | null>(
+    null,
+  );
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const store = useStore();
@@ -109,22 +121,24 @@ export default function NotificationsSheet({
 
   const NotificationItem = NotifItem;
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) =>
+    isNotificationUnread(n),
+  ).length;
 
-  const readCount = notifications.filter((n) => n.read).length;
+  const readCount = notifications.filter(
+    (n) => !isNotificationUnread(n),
+  ).length;
 
   const filteredNotifications = useMemo(() => {
     switch (filter) {
       case "unread":
-        return notifications.filter((n) => !n.read);
-
+        return notifications.filter((n) => isNotificationUnread(n));
       case "read":
-        return notifications.filter((n) => n.read);
-
+        return notifications.filter((n) => !isNotificationUnread(n));
       default:
         return notifications;
     }
-  }, [notifications, filter]);
+  }, [notifications, filter, isNotificationUnread]);
 
   return (
     <>
@@ -244,24 +258,64 @@ export default function NotificationsSheet({
                     : "No notifications"}
               </div>
             ) : (
-              filteredNotifications.map((n, i) => (
-                <NotificationItem
-                  key={n.id ? `notif-${n.id}` : `notif-idx-${i}`}
-                  notif={n}
-                  index={i}
-                  onMarkRead={() => markOneRead(n.id)}
-                  onDelete={deleteOne ? () => deleteOne(n.id) : undefined}
-                  onClick={
-                    n.link
-                      ? () => {
-                          onNavigate?.(n.link!);
-
-                          markOneRead(n.id);
-                        }
-                      : undefined
-                  }
-                />
-              ))
+              filteredNotifications.map((n, i) => {
+                const notifId = getNotificationId(n);
+                // Per-item loading state (only the clicked item shows spinner)
+                const itemIsMarkingRead = markingReadId === notifId;
+                const itemIsDeleting = deletingId === notifId;
+                return (
+                  <NotificationItem
+                    key={notifId ? `notif-${notifId}` : `notif-idx-${i}`}
+                    notif={n}
+                    isUnread={isNotificationUnread(n)}
+                    onMarkRead={() => {
+                      if (notifId) {
+                        setMarkingReadId(notifId);
+                        markOneRead(notifId);
+                        // Clear after a reasonable timeout as fallback
+                        setTimeout(
+                          () =>
+                            setMarkingReadId((id) =>
+                              id === notifId ? null : id,
+                            ),
+                          3000,
+                        );
+                      }
+                    }}
+                    onDelete={
+                      deleteOne && notifId
+                        ? () => {
+                            setDeletingId(notifId);
+                            deleteOne(notifId!);
+                            // Clear after a reasonable timeout as fallback
+                            setTimeout(
+                              () =>
+                                setDeletingId((id) =>
+                                  id === notifId ? null : id,
+                                ),
+                              3000,
+                            );
+                          }
+                        : undefined
+                    }
+                    onClick={() => {
+                      onNavigate?.(getNotificationActionUrl(n));
+                      notifId && markOneRead(notifId);
+                    }}
+                    isMarkingRead={itemIsMarkingRead}
+                    isDeleting={itemIsDeleting}
+                    getAvatarUrl={
+                      getAvatarUrl as (n: unknown) => string | null | undefined
+                    }
+                    getEmoji={getEmoji as (n: unknown) => string | undefined}
+                    getTitle={getTitle as (n: unknown) => string | undefined}
+                    getText={getText as (n: unknown) => string | undefined}
+                    getTimestamp={
+                      getTimestamp as (n: unknown) => string | undefined
+                    }
+                  />
+                );
+              })
             )}
           </div>
         </div>

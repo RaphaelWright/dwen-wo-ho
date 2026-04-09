@@ -41,9 +41,9 @@ export interface ProviderDetails extends Provider {
 
   specialties?: string[];
 
-  schools?: import("./api/providers").AssociatedSchool[];
+  schools?: import("./api/providers").ProviderAssociatedSchool[];
 
-  partners?: import("./api/providers").AssociatedPartner[];
+  partners?: import("./api/providers").ProviderAssociatedPartner[];
 }
 
 export interface SchoolProvider {

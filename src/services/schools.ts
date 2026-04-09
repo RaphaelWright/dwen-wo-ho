@@ -8,6 +8,7 @@ import { patientsService } from "./patients";
 import { lockinsService } from "./lockins";
 import { LockInStudent } from "@/lib/types/lockin";
 import { PatientResult } from "@/lib/types/patient";
+import { UrgentPatient } from "@/components/shared/urgent-card";
 
 export const schoolsService = {
   getSchools: async (): Promise<School[]> => {
@@ -89,7 +90,10 @@ export const schoolsService = {
     if (response?.success && response.data) {
       return response.data as {
         patients: unknown[];
-        urgentCare: { totalUrgentCarePatients: number; patients: unknown[] };
+        urgentCare: {
+          totalUrgentCarePatients: number;
+          patients: UrgentPatient[];
+        };
       };
     }
     return {

@@ -26,6 +26,7 @@ import {
   useProviderDashboardInit,
   useUpdateProfileMutation,
   useUploadAvatarMutation,
+  useUpdatePhoneNumberMutation,
 } from "@/hooks/queries/use-provider-dashboard";
 import {
   useMarkNotificationReadMutation,
@@ -34,7 +35,7 @@ import {
   useClearNotificationsMutation,
 } from "@/hooks/queries/use-notifications-mutations";
 import type { PatientCase } from "@/lib/types/api/patient-results";
-import type { AssociatedSchool } from "@/lib/types/api/providers";
+import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
 import type { FilterOption } from "@/components/shared/search-dropdown";
 
 function matchesFilter(item: any, filter: FilterOption): boolean {
@@ -69,9 +70,10 @@ export default function useProviderDashboard() {
   // Note: useProviderNotifications removed - WebSocket now handles real-time notifications
   const updateProfileMutation = useUpdateProfileMutation();
   const uploadAvatarMutation = useUploadAvatarMutation();
+  const updatePhoneNumberMutation = useUpdatePhoneNumberMutation();
 
   const apiPatients: PatientCase[] = dashboardInit?.patients ?? [];
-  const apiSchools: AssociatedSchool[] = dashboardInit?.schools ?? [];
+  const apiSchools: ProviderAssociatedSchool[] = dashboardInit?.schools ?? [];
 
   /* ── Filter state ─────────────────────────────────── */
   const [activeSchool, setActiveSchool] = useAtom(activeSchoolAtom);
@@ -131,7 +133,7 @@ export default function useProviderDashboard() {
   const deleteMutation = useDeleteNotificationMutation();
   const clearMutation = useClearNotificationsMutation();
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   const markAllRead = useCallback(async () => {
     // Optimistic update
@@ -146,9 +148,13 @@ export default function useProviderDashboard() {
 
   const markOneRead = useCallback(
     async (id: string | number) => {
-      // Optimistic update
+      // Optimistic update - handle both 'id' (curator) and 'notificationId' (provider) fields
       setNotifications((prev: any[]) =>
-        prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+        prev.map((n) =>
+          n.id === id || n.notificationId === id
+            ? { ...n, read: true, unread: false }
+            : n,
+        ),
       );
       // Persist to backend if it's a string ID
       if (typeof id === "string") {
@@ -172,12 +178,17 @@ export default function useProviderDashboard() {
 
   const deleteNotification = useCallback(
     async (id: string | number) => {
-      // Optimistic update
-      setNotifications((prev: any[]) => prev.filter((n) => n.id !== id));
+      // Optimistic update - handle both 'id' (curator) and 'notificationId' (provider) fields
+      setNotifications((prev: any[]) =>
+        prev.filter((n) => n.id !== id && n.notificationId !== id),
+      );
       // Persist to backend
       await deleteMutation.mutateAsync(id);
-      // Invalidate cache
-      queryClient.invalidateQueries({
+      // Invalidate cache and refetch immediately
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.providers, "notifications"],
+      });
+      await queryClient.refetchQueries({
         queryKey: [QUERY_KEYS.providers, "notifications"],
       });
     },
@@ -208,19 +219,21 @@ export default function useProviderDashboard() {
       return;
     }
     if (editFieldKey && editValue.trim()) {
-      const allowedKeys = [
-        "title",
-        "name",
-        "specialty",
-        "status",
-        "phone",
-      ] as const;
-      type AllowedKey = (typeof allowedKeys)[number];
-      if (allowedKeys.includes(editFieldKey as AllowedKey)) {
-        await updateProfileMutation.mutateAsync({
-          fieldKey: editFieldKey as AllowedKey,
-          value: editValue.trim(),
+      // Phone number uses separate mutation
+      if (editFieldKey === "phone") {
+        await updatePhoneNumberMutation.mutateAsync({
+          officePhoneNumber: editValue.trim(),
+          currentStatus: profileData?.status ?? "",
         });
+      } else {
+        const allowedKeys = ["title", "name", "specialty", "status"] as const;
+        type AllowedKey = (typeof allowedKeys)[number];
+        if (allowedKeys.includes(editFieldKey as AllowedKey)) {
+          await updateProfileMutation.mutateAsync({
+            fieldKey: editFieldKey as AllowedKey,
+            value: editValue.trim(),
+          });
+        }
       }
       setProfileData((prev) => ({
         ...prev,
@@ -232,6 +245,8 @@ export default function useProviderDashboard() {
     editFieldKey,
     editValue,
     updateProfileMutation,
+    updatePhoneNumberMutation,
+    profileData?.status,
     setProfileData,
     setEditOpen,
   ]);
@@ -327,8 +342,6 @@ export default function useProviderDashboard() {
       return schoolMatch && searchMatch && statusMatch;
     }).length;
 
-  const quickFilters = PROVIDER_SEARCH_QUICK_FILTERS;
-
   return {
     activeSchool,
     setActiveSchool,
@@ -352,6 +365,10 @@ export default function useProviderDashboard() {
     markOneRead,
     clearAllNotifications,
     deleteNotification,
+    isMarkingRead: markReadMutation.isPending,
+    isMarkingAllRead: markAllReadMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    isClearing: clearMutation.isPending,
     editFieldKey,
     setEditFieldKey,
     editFieldLabel,
@@ -376,6 +393,8 @@ export default function useProviderDashboard() {
     isSaving: updateProfileMutation.isPending,
     isUploadingAvatar: uploadAvatarMutation.isPending,
     uploadAvatar: uploadAvatarMutation.mutateAsync,
+    isUpdatingPhoneNumber: updatePhoneNumberMutation.isPending,
+    updatePhoneNumber: updatePhoneNumberMutation.mutateAsync,
     localActiveFilters,
     toggleFilter,
     removeFilter,

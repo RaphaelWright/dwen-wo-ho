@@ -41,7 +41,7 @@ export interface AssociatedPartner {
 }
 
 export interface PartnerDetailsData {
-  partner: any;
+  partner: unknown;
   associatedSchools: AssociatedSchool[];
   associatedProviders: AssociatedProvider[];
 }

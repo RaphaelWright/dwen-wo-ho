@@ -25,7 +25,6 @@ export function StompProvider({ children }: StompProviderProps) {
     const userType = getUserType();
 
     if (userType && hasValidToken()) {
-      console.log("[StompProvider] Connecting for user type:", userType);
       connect();
     }
 
@@ -37,7 +36,6 @@ export function StompProvider({ children }: StompProviderProps) {
   // Initialize subscriptions when connected
   useEffect(() => {
     if (connectionStatus === "CONNECTED") {
-      console.log("[StompProvider] Initializing subscriptions");
       // Pass provider ID if available from profile
       const providerId = localStorage.getItem("providerId");
       if (providerId) {
@@ -55,7 +53,6 @@ export function StompProvider({ children }: StompProviderProps) {
         const userType = getUserType();
 
         if (!userType || !hasValidToken()) {
-          console.log("[StompProvider] Token/user changed, disconnecting");
           disconnect();
         } else {
           // Reconnect with new credentials

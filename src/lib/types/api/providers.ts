@@ -1,5 +1,3 @@
-import type { BackendNotification, NotificationListResponse } from "./shared";
-
 export interface ProviderResponse {
   id: string;
   email: string;
@@ -18,7 +16,7 @@ export interface ProviderResponse {
   applicationDate?: string;
 }
 
-export interface AssociatedSchool {
+export interface ProviderAssociatedSchool {
   schoolId: number;
   schoolName: string;
   count: number;
@@ -27,7 +25,7 @@ export interface AssociatedSchool {
   primaryColor: string | null;
 }
 
-export interface AssociatedPartner {
+export interface ProviderAssociatedPartner {
   id: string;
   name: string;
   logo?: string;
@@ -37,14 +35,14 @@ export interface AssociatedPartner {
 
 export interface ProviderDetailResponse {
   provider: ProviderResponse;
-  associatedSchools: AssociatedSchool[];
-  availableSchools: AssociatedSchool[];
-  associatedPartners: AssociatedPartner[];
+  associatedSchools: ProviderAssociatedSchool[];
+  availableSchools: ProviderAssociatedSchool[];
+  associatedPartners: ProviderAssociatedPartner[];
 }
 
 export interface ProviderPartnersResponse {
   providerId: string;
-  partners: AssociatedPartner[];
+  partners: ProviderAssociatedPartner[];
 }
 
 export interface ProviderSchoolsSummaryItem {
@@ -83,12 +81,4 @@ export interface ProviderActivityListResponse {
   page: number;
   limit: number;
   totalPages: number;
-}
-
-// Re-export for convenience
-export type { BackendNotification, NotificationListResponse };
-
-export interface ProviderNotificationsData {
-  items: BackendNotification[];
-  unreadCount: number;
 }

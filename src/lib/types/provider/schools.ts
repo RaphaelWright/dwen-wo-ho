@@ -1,3 +1,5 @@
+import { School } from "@/lib/types/school";
+
 export type FilterType = "all" | "JHS" | "SHS" | "COLLEGE";
 
 export interface ProviderSchoolsHeaderProps {
@@ -13,12 +15,12 @@ export interface ProviderSchoolsFilterProps {
 }
 
 export interface SchoolCardProps {
-  school: any; // Will refine with SchoolWithExtras type
+  school: School;
   onClick: (id: string | number) => void;
 }
 
 export interface ProviderSchoolsListProps {
-  schools: any[]; // Will refine with SchoolWithExtras type
+  schools: School[];
   isLoading: boolean;
   activeFilter: FilterType;
   onSchoolClick: (id: string | number) => void;

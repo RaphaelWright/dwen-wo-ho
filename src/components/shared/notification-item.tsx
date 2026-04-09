@@ -1,7 +1,7 @@
 "use client";
 
-import { NotificationItem } from "@/lib/types/provider/new-provider";
 import { cn } from "@/lib/utils";
+import { timeAgo } from "@/lib/utils/timeAgo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
@@ -9,31 +9,55 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Check, Trash2 } from "lucide-react";
+import { Check, Trash2, Loader2 } from "lucide-react";
 
 /**
  * A single notification row in the notifications sheet with redesigned card layout.
  */
-export default function NotifItem({
+export default function NotifItem<N>({
   notif,
-  index,
+  isUnread,
   onMarkRead,
   onDelete,
   onClick,
+  isMarkingRead = false,
+  isDeleting = false,
+  getAvatarUrl,
+  getEmoji,
+  getTitle,
+  getText,
+  getTimestamp,
 }: {
-  notif: NotificationItem;
-  index: number;
+  notif: N;
+  isUnread: boolean;
   onMarkRead: () => void;
   onDelete?: () => void;
   onClick?: () => void;
+  isMarkingRead?: boolean;
+  isDeleting?: boolean;
+  getAvatarUrl: (n: unknown) => string | null | undefined;
+  getEmoji: (n: unknown) => string | undefined;
+  getTitle: (n: unknown) => string | undefined;
+  getText: (n: unknown) => string | undefined;
+  getTimestamp: (n: unknown) => string | undefined;
 }) {
+  const avatarUrl = getAvatarUrl(notif);
+  const emoji = getEmoji(notif);
+  const title = getTitle(notif);
+  const text = getText(notif);
+  const timestamp = getTimestamp(notif);
+  const relativeTime = timeAgo(timestamp);
+
   return (
     <TooltipProvider delayDuration={200}>
       <div
-        onClick={onClick}
+        onClick={() => {
+          if (isUnread) onMarkRead();
+          onClick?.();
+        }}
         className={cn(
           "relative flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all duration-300 ease-in-out",
-          !notif.read
+          isUnread
             ? "bg-success/15 border-success/20 border-l-3 border-l-success/50 shadow-sm"
             : "bg-muted border-muted",
         )}
@@ -42,13 +66,13 @@ export default function NotifItem({
         <Avatar
           className={cn(
             "size-10 shrink-0 border border-success/20 rounded-md",
-            notif.read && "border-muted-foreground/10",
+            !isUnread && "border-muted-foreground/10",
           )}
         >
-          <AvatarImage src={notif.avatarUrl} className="rounded-none" />
-          {notif.targetName || notif.title ? (
+          <AvatarImage src={avatarUrl ?? undefined} className="rounded-none" />
+          {title || emoji ? (
             <AvatarFallback className="bg-muted text-sm rounded-none">
-              {(notif.targetName || notif.title || "N").charAt(0).toUpperCase()}
+              {emoji ? emoji : (title || "N").charAt(0).toUpperCase()}
             </AvatarFallback>
           ) : (
             <AvatarFallback className="bg-muted text-sm rounded-none">
@@ -64,12 +88,12 @@ export default function NotifItem({
             <span
               className={cn(
                 "px-2.5 py-0.5 rounded-sm text-xs font-semibold",
-                !notif.read
+                isUnread
                   ? "bg-success text-white"
                   : "bg-muted-foreground/10 text-muted-foreground font-normal",
               )}
             >
-              {notif.targetName || notif.title || "Notification"}
+              {title || "Notification"}
             </span>
           </div>
 
@@ -77,24 +101,24 @@ export default function NotifItem({
           <p
             className={cn(
               "text-sm  mb-0.5",
-              notif.read && "font-normal text-muted-foreground",
+              !isUnread && "font-normal text-muted-foreground",
             )}
           >
-            {notif.text || notif.message}
+            {text}
           </p>
 
           {/* Meta with dot separator */}
-          <p className="text-xs text-muted-foreground">{notif.meta}</p>
+          <p className="text-xs text-muted-foreground">{relativeTime}</p>
         </div>
 
         {/* Right side: Green dot for unread + Actions */}
         <div className="flex flex-col items-center gap-2 shrink-0">
           {/* Unread indicator dot */}
-          {!notif.read && <span className="w-2 h-2 rounded-full bg-success" />}
+          {isUnread && <span className="w-2 h-2 rounded-full bg-success" />}
 
           {/* Actions */}
-          <div className={cn("flex flex-col gap-1 mt-1", notif.read && "mt-5")}>
-            {!notif.read ? (
+          <div className={cn("flex flex-col gap-1 mt-1", !isUnread && "mt-5")}>
+            {isUnread ? (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
@@ -102,9 +126,14 @@ export default function NotifItem({
                       e.stopPropagation();
                       onMarkRead();
                     }}
-                    className="flex items-center justify-center w-7 h-7 rounded-md text-success-/60 hover:bg-white/70 cursor-pointer transition-colors"
+                    disabled={isMarkingRead}
+                    className="flex items-center justify-center w-7 h-7 rounded-md text-success hover:bg-white/70 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Check size={16} />
+                    {isMarkingRead ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Check size={16} />
+                    )}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="left">
@@ -128,9 +157,14 @@ export default function NotifItem({
                       e.stopPropagation();
                       onDelete();
                     }}
-                    className="flex items-center justify-center w-7 h-7 rounded-md text-destructive hover:bg-destructive/10 cursor-pointer transition-colors"
+                    disabled={isDeleting}
+                    className="flex items-center justify-center w-7 h-7 rounded-md text-destructive hover:bg-destructive/10 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Trash2 size={16} />
+                    {isDeleting ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="left">

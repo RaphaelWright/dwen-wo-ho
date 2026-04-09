@@ -11,7 +11,7 @@ import { ProfileHero } from "./profile-hero";
 import { ProfileTabs } from "./profile-tabs";
 import { ProfileFooter } from "./profile-footer";
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
-import type { AssociatedSchool } from "@/lib/types/api/providers";
+import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
 import { X } from "lucide-react";
 
 /**
@@ -22,7 +22,7 @@ import { X } from "lucide-react";
  *   onOpenChange: (v: boolean) => void,
  *   profileData:  Record<string, string>,
  *   onEdit:       (key: string, label: string, current: string) => void,
- *   schools:      AssociatedSchool[]
+ *   schools:      ProviderAssociatedSchool[]
  * }} props
  */
 export default function ProfileModal({
@@ -36,7 +36,7 @@ export default function ProfileModal({
   setProfileOpen: ProviderDashboardState["setProfileOpen"];
   profileData: ProviderDashboardState["profileData"];
   openEdit: ProviderDashboardState["openEdit"];
-  schools: AssociatedSchool[];
+  schools: ProviderAssociatedSchool[];
 }) {
   return (
     <Dialog open={profileOpen} onOpenChange={setProfileOpen} modal>

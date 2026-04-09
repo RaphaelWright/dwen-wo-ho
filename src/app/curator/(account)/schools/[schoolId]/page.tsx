@@ -21,7 +21,6 @@ import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { SCHOOL_DETAILS_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/school-details";
 import type { SchoolTab } from "@/lib/types/components/curator/school-details";
 import { Users, ChevronLeft } from "lucide-react";
-import { formatUrgentCarePatients } from "@/lib/utils/formatUrgentCarePatients";
 import { motion } from "framer-motion";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
@@ -317,11 +316,7 @@ export default function SchoolDetailsPage() {
 
         <UrgentPanel
           className="w-full lg:w-95 h-dvh lg:h-screen lg:sticky lg:top-0 border-l border-border/50 bg-destructive/5 shrink-0"
-          patients={formatUrgentCarePatients(
-            urgentCare.patients as any[],
-            school?.name,
-            compactTimeAgo,
-          )}
+          patients={urgentCare.patients}
           title="Urgent Care"
           emptyStateText="No urgent care patients"
           onPatientClick={(patient: UrgentPatient) =>

@@ -13,16 +13,16 @@ import {
   isCuratorNotificationSheetOpenAtom,
 } from "@/atoms/notification";
 
-import { Notification } from "@/lib/types/notification";
+import { CuratorNotification } from "@/lib/types/notification";
 
 import {
   useClearNotificationsMutation,
   useMarkNotificationReadMutation,
   useMarkAllNotificationsReadMutation,
   useDeleteNotificationMutation,
-} from "@/hooks/queries/use-provider";
+} from "@/hooks/queries/use-notifications-mutations";
 
-export const useNotification = () => {
+export const useCuratorNotification = () => {
   const [notifications, setNotifications] = useAtom(
     curatorNotificationListAtom,
   );
@@ -50,21 +50,30 @@ export const useNotification = () => {
   );
 
   const addNotification = useCallback(
-    (type: Notification["type"], message: string, link?: string) => {
+    (type: "success" | "error" | "info", message: string, link?: string) => {
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
-      const newNotification = {
+      // Map toast types to CuratorNotification structure
+      const notificationTypeMap: Record<string, string> = {
+        success: "ADMIN_ACTION_REQUIRED",
+        error: "CRITICAL_ALERT",
+        info: "PROVIDER_REGISTRATION",
+      };
+
+      const newNotification: CuratorNotification = {
         id,
-
-        type,
-
+        type: notificationTypeMap[type] as CuratorNotification["type"],
+        title: type.charAt(0).toUpperCase() + type.slice(1),
         message,
-
-        link,
-
-        timestamp: new Date(),
-
+        createdAt: new Date().toISOString(),
+        relatedEntityId: id,
+        relatedEntityType: "notification",
+        action: "",
+        notification: message,
+        emoji: type === "success" ? "✅" : type === "error" ? "⚠️" : "ℹ️",
+        schoolId: 0,
         read: false,
+        link: link as CuratorNotification["link"],
       };
 
       setNotifications((prev) => [newNotification, ...prev]);
@@ -75,7 +84,7 @@ export const useNotification = () => {
         setIsOpen(true);
       }, 500);
 
-      newNotification.type === "success"
+      type === "success"
         ? toast.success(message, {
             action: {
               label: "Open",
@@ -95,7 +104,7 @@ export const useNotification = () => {
               },
             },
           })
-        : newNotification.type === "error"
+        : type === "error"
           ? toast.error(message, {
               action: {
                 label: "Open",
@@ -207,5 +216,11 @@ export const useNotification = () => {
     closeSheet,
 
     toggleSheet,
+
+    // Loading states for UI feedback
+    isMarkingRead: markReadMutation.isPending,
+    isMarkingAllRead: markAllReadMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    isClearing: clearMutation.isPending,
   };
 };
