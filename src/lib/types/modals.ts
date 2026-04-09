@@ -1,5 +1,5 @@
 import { Area } from "@/lib/utils/image-utils";
-import { School, SchoolFormData } from "./school";
+import { School } from "./school";
 import { ProviderDetails } from "./provider";
 import { PROVIDER_DETAILS_TAB_VALUES } from "../constants/components/modals/provider-details";
 import type { PatientResult } from "@/lib/types/patient";
@@ -41,7 +41,7 @@ export interface LineupModalProps {
 export interface MemberCreationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onMemberCreated?: (member: any) => void;
+  onMemberCreated?: (member: unknown) => void;
 }
 
 export interface PartnerCreationModalProps {

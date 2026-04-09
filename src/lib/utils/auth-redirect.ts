@@ -1,5 +1,24 @@
 import { ROUTES } from "@/lib/constants/routes";
-import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
+import type { SignInResponse } from "@/lib/types/api/auth";
+
+interface ProviderUserData {
+  applicationStatus?: string;
+  status?: string;
+  userRole?: string;
+  profileURL?: string;
+  officePhoneNumber?: string;
+  specialty?: string;
+  title?: string;
+  providerName?: string;
+  professionalTitle?: string;
+  profilePhotoURL?: string;
+  applicationTimestamp?: string | number | Date;
+  createdAt?: string | number | Date;
+  created_at?: string | number | Date;
+  joinedAt?: string | number | Date;
+}
+
+type LoginResponse = SignInResponse | { message?: string };
 
 export interface RedirectInfo {
   path: string;
@@ -16,11 +35,15 @@ export interface RedirectInfo {
 /**
  * Determines the redirect path and user info based on the provider's application status and profile completeness.
  */
-export function getProviderRedirectInfo(userData: any, loginResponse?: any): RedirectInfo {
+export function getProviderRedirectInfo(
+  userData: ProviderUserData,
+  loginResponse?: LoginResponse,
+): RedirectInfo {
   const isPending =
     userData.applicationStatus === "PENDING" ||
     userData.status === "PENDING" ||
-    loginResponse?.message === "ACCOUNT PENDING";
+    ("message" in (loginResponse ?? {}) &&
+      (loginResponse as { message?: string }).message === "ACCOUNT PENDING");
 
   if (isPending) {
     let timeAgo = "Recently";
@@ -54,9 +77,11 @@ export function getProviderRedirectInfo(userData: any, loginResponse?: any): Red
       isPending: true,
       userInfo: {
         name: `${userData.title ? `${userData.title} ` : ""}${userData.providerName || "Provider"}`,
-        title: userData.professionalTitle || userData.specialty || "Health Provider",
+        title:
+          userData.professionalTitle || userData.specialty || "Health Provider",
         timeAgo,
-        profileImage: userData.profilePhotoURL || userData.profileURL || undefined,
+        profileImage:
+          userData.profilePhotoURL || userData.profileURL || undefined,
       },
     };
   }
@@ -72,7 +97,7 @@ export function getProviderRedirectInfo(userData: any, loginResponse?: any): Red
     if (!userData.officePhoneNumber) {
       return { path: "/provider/signup", step: "bio", isPending: false };
     }
-    if (!userData.specialty || !userData.specialty.trim()) {
+    if (!userData.specialty?.trim()) {
       return { path: "/provider/signup", step: "specialty", isPending: false };
     }
 
@@ -95,7 +120,7 @@ export function getProviderRedirectInfo(userData: any, loginResponse?: any): Red
   if (!userData.officePhoneNumber) {
     return { path: "/provider/signup", step: "bio", isPending: false };
   }
-  if (!userData.specialty || !userData.specialty.trim()) {
+  if (!userData.specialty?.trim()) {
     return { path: "/provider/signup", step: "specialty", isPending: false };
   }
 

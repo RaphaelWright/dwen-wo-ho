@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
+import { timeAgo } from "@/lib/utils/timeAgo";
 import ScoreRing from "@/components/shared/score-ring";
 
 export interface UrgentPatient {
@@ -16,10 +17,12 @@ export interface UrgentPatient {
   patientName: string;
   schoolId: number;
   schoolName: string;
-  /** Pre-formatted time string, e.g. "2 min ago" */
+  schoolNickname: string;
   time: string;
-  lockinScore: number;
+  lockedInScore: string;
+  score: string;
   avatarUrl?: string;
+  urgentCareEnteredAt?: string;
 }
 
 /**
@@ -69,7 +72,7 @@ export default function UrgentCard({
               <p className="text-sm font-bold truncate transition-colors">
                 {patient.patientName}{" "}
                 <span className="text-xs mt-0.5 text-muted-foreground ml-1">
-                  {patient.schoolName}
+                  {patient.schoolNickname || patient.schoolName}
                 </span>
               </p>
               <div className="flex items-center gap-1.5 mt-1">
@@ -79,13 +82,13 @@ export default function UrgentCard({
                   className="size-1.5 rounded-full shrink-0 bg-destructive"
                 />
                 <span className="text-[10.5px] text-muted-foreground">
-                  {patient.time}
+                  {timeAgo(patient.urgentCareEnteredAt || patient.time)}
                 </span>
               </div>
             </div>
 
             <div className="self-center">
-              <ScoreRing score={patient.lockinScore} />
+              <ScoreRing score={patient.score || patient.lockedInScore} />
             </div>
           </motion.div>
         </TooltipTrigger>

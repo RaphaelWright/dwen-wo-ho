@@ -24,6 +24,7 @@ export interface SchoolPatientRecord {
   treatingProviders?: string[];
   lockinScore: number;
   comment?: string | null;
+  patientLevel: string;
 }
 
 export interface PatientsTabProps {

@@ -3,7 +3,10 @@
  * @param {"urgent"|"new"|"action"|"follow-up"|"referred"|"ignored"} status
  */
 export function getStatusConfig(status: string) {
-  const map: Record<string, any> = {
+  const map: Record<
+    string,
+    { label: string; cls: string; bar: string; actionLabel: string }
+  > = {
     urgent: {
       label: "Urgent",
       cls: "bg-destructive/10 text-[#ef4444] border-[rgba(239,68,68,.25)]",

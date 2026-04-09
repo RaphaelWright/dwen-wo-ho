@@ -1,11 +1,6 @@
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {
-  ConnectionStatus,
-  StompConnectionConfig,
-  WebSocketEventPayload,
-  ActiveSubscription,
-} from "@/lib/types/websocket";
+import { ConnectionStatus } from "@/lib/types/websocket";
 import { API_BASE_URL } from "@/configs/config";
 
 class StompWebSocketClient {

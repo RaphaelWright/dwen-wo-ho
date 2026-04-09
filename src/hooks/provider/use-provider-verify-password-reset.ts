@@ -44,11 +44,7 @@ export function useProviderVerifyPasswordReset() {
       });
 
       if (response && response.token) {
-        console.log("Setting recoveryToken:", response.token);
         localStorage.setItem("recoveryToken", response.token);
-        const savedToken = localStorage.getItem("recoveryToken");
-        console.log("Verified saved recoveryToken:", savedToken);
-
         localStorage.removeItem("refreshToken");
 
         toast.success("Code verified successfully");

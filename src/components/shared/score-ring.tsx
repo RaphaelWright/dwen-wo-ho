@@ -3,14 +3,15 @@ import { getScoreColor } from "@/lib/utils/new-provider";
 import { useTheme } from "next-themes";
 import { ClientOnly } from "../ui/client-only";
 
-export default function ScoreRing({ score }: { score: number | null }) {
-  const color = getScoreColor(score);
+export default function ScoreRing({ score }: { score: number | string }) {
+  let cleanedScore = typeof score === "string" ? parseInt(score) : score;
+  const color = getScoreColor(cleanedScore);
   const radius = 18;
   const circumference = 2 * Math.PI * radius;
 
   // Logic to prevent "blank" look:
   // If score is 0, we show 2% of the ring as a "sliver"
-  const visualScore = score === 0 ? 0.2 : (score ?? 0);
+  const visualScore = cleanedScore === 0 ? 0.2 : (cleanedScore ?? 0);
   const dash = (visualScore / 10) * circumference;
   const { theme } = useTheme();
   return (
@@ -58,7 +59,7 @@ export default function ScoreRing({ score }: { score: number | null }) {
           fontWeight="800"
           fill={color}
         >
-          {score !== null ? score.toFixed(2) : "–"}
+          {cleanedScore != null ? cleanedScore.toFixed(2) : "–"}
         </text>
       </svg>
     </ClientOnly>

@@ -1,6 +1,5 @@
 import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { checkResponse } from "@/lib/api-utils";
 import {
   IProviderResponse,
   Provider,

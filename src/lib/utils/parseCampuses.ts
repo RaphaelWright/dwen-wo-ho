@@ -1,4 +1,4 @@
-export const parseCampuses = (campuses: any): string[] => {
+export const parseCampuses = (campuses: unknown): string[] => {
   if (!campuses) return [];
 
   if (typeof campuses === "string") {

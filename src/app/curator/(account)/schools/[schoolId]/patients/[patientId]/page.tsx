@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { useCuratorPatientDetails } from "@/hooks/curator/use-curator-patient-details";
 
 import { getColorHex } from "@/lib/utils/color-utils";
+import { IconProgress } from "@tabler/icons-react";
 
 export default function PatientDetailsPage() {
   const {
@@ -144,6 +145,12 @@ export default function PatientDetailsPage() {
                     </span>
                   </div>
                 )}
+                <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
+                  <IconProgress className="w-4 h-4 text-teal-600" />
+                  <span className="font-medium">
+                    Year: {patientResult?.patientLevel}
+                  </span>
+                </div>
               </div>
             </div>
 

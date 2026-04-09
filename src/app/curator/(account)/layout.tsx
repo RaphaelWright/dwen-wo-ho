@@ -17,8 +17,10 @@ import SchoolCreationModal from "@/components/modals/school-creation";
 import { useCuratorLayout } from "@/hooks/curator/use-curator-layout";
 
 import { isCuratorNotificationSheetOpenAtom } from "@/atoms/notification";
-import { useNotification } from "@/hooks/use-notification";
+import { useCuratorNotification } from "@/hooks/use-curator-notification";
 import NotificationsSheet from "@/components/shared/notification-sheet";
+import { getCuratorNotificationRoute } from "@/lib/config/notification-routing";
+import type { CuratorNotification } from "@/lib/types/notification";
 
 function CuratorNotificationsSheet() {
   const router = useRouter();
@@ -29,9 +31,11 @@ function CuratorNotificationsSheet() {
     markAllAsRead,
     clearNotifications,
     deleteNotification,
-  } = useNotification();
+    isMarkingRead,
+    isDeleting,
+  } = useCuratorNotification();
   return (
-    <NotificationsSheet
+    <NotificationsSheet<CuratorNotification>
       notifications={notifications}
       openAtom={isCuratorNotificationSheetOpenAtom}
       onOpenChange={setIsOpen}
@@ -39,8 +43,17 @@ function CuratorNotificationsSheet() {
       markOneRead={markAsRead}
       deleteOne={deleteNotification}
       clearAllNotifications={clearNotifications}
+      isMarkingRead={isMarkingRead}
+      isDeleting={isDeleting}
       onNavigate={(link) => router.push(link as any)}
-      variant="curator"
+      getNotificationActionUrl={(n) => getCuratorNotificationRoute(n) ?? "#"}
+      getNotificationId={(n) => n.id}
+      isNotificationUnread={(n) => !n.read}
+      getAvatarUrl={() => undefined}
+      getEmoji={(n) => n.emoji}
+      getTitle={(n) => n.title}
+      getText={(n) => n.message}
+      getTimestamp={(n) => n.createdAt}
     />
   );
 }

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { Pencil } from "lucide-react";
 import { ReactNode } from "react";
-import type { ProfileData } from "@/lib/types/provider/new-provider";
+import type { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
 
 function formatDate(dateString: string): string {
   if (!dateString) return "N/A";
@@ -39,7 +39,7 @@ export default function ProfileFieldsColumn({
   profileData,
   onEdit,
 }: {
-  profileData: Partial<ProfileData>;
+  profileData: Partial<ProviderProfileData>;
   onEdit: (key: string, label: string, current: string) => void;
 }) {
   // Dynamic read-only fields from API data

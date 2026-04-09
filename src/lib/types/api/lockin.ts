@@ -50,7 +50,7 @@ export interface ScoreAverageDTO {
   sampleSize: number;
 }
 
-export interface SchoolTypeAverages extends ScoreAverageDTO {}
+export type SchoolTypeAverages = ScoreAverageDTO;
 
 export interface LockinUpdateResponse {
   lockinId: number;

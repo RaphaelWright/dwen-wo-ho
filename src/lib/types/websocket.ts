@@ -1,5 +1,3 @@
-import { BackendNotification, NotificationType } from "./api/shared";
-
 export type ConnectionStatus =
   | "CONNECTING"
   | "CONNECTED"
@@ -21,13 +19,13 @@ export interface ConnectedEvent {
   role: "ROLE_PROVIDER" | "ROLE_CURATOR" | "ROLE_ADMIN";
 }
 
-export interface NewNotificationEvent {
+export interface NewNotificationEvent<T> {
   event: "NEW_NOTIFICATION";
   timestamp: string;
   recipientId: string;
   recipientRole: string;
   unreadCount: number;
-  notification: BackendNotification;
+  notification: T;
 }
 
 export interface UnreadCountChangedEvent {
@@ -38,9 +36,9 @@ export interface UnreadCountChangedEvent {
   unreadCount: number;
 }
 
-export type WebSocketEventPayload =
+export type WebSocketEventPayload<T> =
   | ConnectedEvent
-  | NewNotificationEvent
+  | NewNotificationEvent<T>
   | UnreadCountChangedEvent;
 
 // STOMP topic destinations
@@ -79,7 +77,7 @@ export const ROLE_BASED_TOPICS: Record<
 };
 
 // Notification types by role (for frontend filtering if needed)
-export const CURATOR_NOTIFICATION_TYPES: NotificationType[] = [
+export const CURATOR_NOTIFICATION_TYPES = [
   "PROVIDER_REGISTRATION",
   "PROVIDER_APPLICATION_UPDATE",
   "SCHOOL_REGISTRATION",
@@ -88,7 +86,7 @@ export const CURATOR_NOTIFICATION_TYPES: NotificationType[] = [
   "ADMIN_ACTION_REQUIRED",
 ];
 
-export const PROVIDER_NOTIFICATION_TYPES: NotificationType[] = [
+export const PROVIDER_NOTIFICATION_TYPES = [
   "PATIENT_LOCK_IN",
   "OPEN_PATIENTS_AVAILABLE",
   "PATIENT_REFERRED",

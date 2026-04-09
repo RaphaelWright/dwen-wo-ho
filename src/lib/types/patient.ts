@@ -8,6 +8,7 @@ export interface PatientResult {
   patientName: string;
   patientAge: number;
   patientSex: string;
+  patientLevel: string;
   visibilityStatus: "NEW" | "SEEN";
   starProvider: {
     id: string;

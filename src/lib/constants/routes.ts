@@ -18,6 +18,7 @@ export const ROUTES = {
     profile: "/provider/profile",
     home: "/provider",
     schools: "/provider/schools",
+    patients: "/provider/patients",
   },
   patient: {
     singIn: "/patient/signin",
@@ -46,4 +47,10 @@ export const DYNAMIC_ROUTES = {
     patientDetails: (schoolId: string | number, patientId: string | number) =>
       `/curator/schools/${schoolId}/patients/${patientId}`,
   },
-};
+  provider: {
+    schoolDetails: (schoolId: string | number) =>
+      `/provider/schools/${schoolId}`,
+    patientDetails: (patientId: string | number) =>
+      `/provider/patients/${patientId}`,
+  },
+} as const;

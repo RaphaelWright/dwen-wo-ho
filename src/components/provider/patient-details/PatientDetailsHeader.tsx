@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PatientResult } from "@/lib/types/patient";
 import { LockInAssessment } from "@/lib/types/lockin";
 import { getColorHex } from "@/lib/utils/color-utils";
+import { IconProgress } from "@tabler/icons-react";
 
 interface PatientDetailsHeaderProps {
   patientResult: PatientResult;
@@ -95,6 +96,13 @@ export function PatientDetailsHeader({
                 </span>
               </div>
             )}
+
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
+              <IconProgress className="w-4 h-4 text-teal-600" />
+              <span className="font-medium">
+                Year: {patientResult?.patientLevel}
+              </span>
+            </div>
           </div>
         </div>
 

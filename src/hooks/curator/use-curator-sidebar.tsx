@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { FiFileText, FiPlus } from "react-icons/fi";
 import { ROUTES } from "@/lib/constants/routes";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
-import { useNotification } from "@/hooks/use-notification";
+import { useCuratorNotification } from "@/hooks/use-curator-notification";
 import { NavItem, SidebarProps } from "@/lib/types/components/curator/sidebar";
 import { useCuratorSummary } from "@/hooks/queries/use-curator";
 
@@ -18,7 +18,7 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  const { notifications, unreadCount, setIsOpen } = useNotification();
+  const { notifications, unreadCount, setIsOpen } = useCuratorNotification();
   const { data: summary } = useCuratorSummary();
 
   useEffect(() => {

@@ -49,10 +49,9 @@ export default function Footer() {
             {/* shadcn Subscribe Form */}
             <PlaceholdersAndVanishInput
               placeholders={NEWSLETTER_PLACEHOLDERS}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => {}}
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log("submitted");
               }}
               className="bg-muted/10 border-none text-white rounded-full h-13.75 pl-4 pr-1 w-full max-w-full overflow-hidden"
               submitButton={({ value }) => (

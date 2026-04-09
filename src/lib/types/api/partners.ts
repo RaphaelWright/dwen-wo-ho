@@ -9,12 +9,12 @@ export interface PartnerResponse {
 
 export interface PartnerSchoolsResponse {
   partnerId: string;
-  schools: import("./providers").AssociatedSchool[];
+  schools: import("./providers").ProviderAssociatedSchool[];
 }
 
 export interface PartnerProvidersResponse {
   partnerId: string;
-  providers: import("./providers").AssociatedPartner[];
+  providers: import("./providers").ProviderAssociatedPartner[];
 }
 
 export interface CreatePartnerRequest {
