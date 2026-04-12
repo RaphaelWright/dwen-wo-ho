@@ -355,7 +355,7 @@ export default function ProviderHomePage() {
         </div>
         <div className="h-full overflow-hidden">
           <UrgentPanel
-            patients={urgentData}
+            patients={urgentData?.urgentPatients}
             activeSchool={activeSchool}
             onPatientClick={(patient) => {
               router.push(
@@ -497,7 +497,7 @@ export default function ProviderHomePage() {
               className="absolute inset-0 h-screen overflow-y-auto"
             >
               <UrgentPanel
-                patients={urgentData}
+                patients={urgentData?.urgentPatients}
                 activeSchool={activeSchool}
                 isLoading={isInitLoading}
               />
