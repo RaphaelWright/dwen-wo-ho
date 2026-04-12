@@ -59,7 +59,10 @@ export interface PatientListResponse {
   totalCount: number;
   totalPages: number;
 }
-export type UrgentPatientListResponse = UrgentPatient[];
+export interface UrgentPatientListResponse {
+  urgentPatients: UrgentPatient[];
+  urgentPatientsCount: number;
+}
 
 export interface PatientCase {
   patientId: number;
