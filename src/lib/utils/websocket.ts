@@ -4,6 +4,10 @@ import { API_BASE_URL } from "@/configs/config";
  * Build WebSocket URL with authentication token
  * @param token JWT access token
  * @returns SockJS WebSocket URL
+ *
+ * NOTE: Backend guide shows 'accessToken' as the localStorage key,
+ * but this codebase consistently uses 'token'. The backend accepts
+ * the token via ?token= query parameter regardless of storage key name.
  */
 export function buildWebSocketUrl(token: string): string {
   const baseUrl = API_BASE_URL.replace(/^https:/, "http:");

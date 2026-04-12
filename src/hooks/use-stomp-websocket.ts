@@ -22,7 +22,7 @@ export function useStompWebSocket() {
       return;
     }
 
-    const token = localStorage.getItem(type === "curator" ? "token" : "token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
       return;
@@ -64,6 +64,17 @@ export function useStompWebSocket() {
 
     return unsubscribe;
   }, [setConnectionStatus]);
+
+  // Setup reconnect listener to re-fetch state
+  useEffect(() => {
+    const unsubscribe = stompClient.onReconnect(() => {
+      console.log("[WebSocket] Reconnected - re-fetching critical state");
+      // Dispatch event for hooks to re-fetch data
+      window.dispatchEvent(new CustomEvent("ws:reconnect"));
+    });
+
+    return unsubscribe;
+  }, []);
 
   // Handle visibility change (pause/resume)
   useEffect(() => {

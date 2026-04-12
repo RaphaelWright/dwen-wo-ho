@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Clock, LogOut, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "../shared/Logo";
-import { useTheme } from "next-themes";
 
 interface PendingApprovalModalProps {
   userInfo: {
@@ -23,7 +22,6 @@ export function PendingApprovalModal({
   userInfo,
   onLogout,
 }: PendingApprovalModalProps) {
-  const { theme } = useTheme();
   return (
     <div className="min-h-screen bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 fixed inset-0 z-50">
       <motion.div
@@ -38,11 +36,7 @@ export function PendingApprovalModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/50">
           <div className="flex items-center gap-2">
-            <Logo
-              withLink={false}
-              variant={theme === "dark" ? "white" : "black"}
-              className="w-30"
-            />
+            <Logo withLink={false} variant="auto" className="w-30" />
           </div>
           <span className="text-sm text-muted-foreground">Approval Status</span>
         </div>

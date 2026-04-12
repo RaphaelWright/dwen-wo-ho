@@ -103,7 +103,7 @@ export default function DashboardLayout({
 
   if (!mounted || isAuthenticated === null) {
     return (
-      <div className="h-screen bg-background flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
 
@@ -118,15 +118,13 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="h-screen bg-background flex">
+    <div className="h-screen flex">
       <CuratorSidebar
         onCreateClick={() => setShowCreateModal(true)}
         onLogout={handleLogout}
       />
 
-      <div className="flex-1 overflow-y-auto bg-muted/10 pt-14 md:pt-0">
-        {children}
-      </div>
+      <div className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</div>
 
       {showCreateModal && (
         <CreateModal
