@@ -29,8 +29,13 @@ import {
 } from "@/lib/config/notification-routing";
 import { Route } from "next";
 
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+
 export function useNotificationWebSocket() {
-  const userType = getUserType();
+  const pathname = usePathname();
+  // Using useMemo with pathname forces userType to re-evaluate on navigation (e.g. after login)
+  const userType = useMemo(() => getUserType(), [pathname]);
 
   // Use role-specific atoms
   const [curatorNotifications, setCuratorNotifications] = useAtom(
@@ -136,10 +141,16 @@ export function useNotificationWebSocket() {
       }
       setUnreadCount(newUnreadCount);
 
-      // Invalidate TanStack Query cache
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.providers, "notifications"],
-      });
+      // Invalidate TanStack Query cache for the correct role
+      if (userType === "curator") {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.curator, "notifications"],
+        });
+      } else {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.providers, "notifications"],
+        });
+      }
 
       // Show toast - handle different notification shapes
       let toastTitle: string;
@@ -197,6 +208,18 @@ export function useNotificationWebSocket() {
     [setUnreadCount],
   );
 
+  const handleReconnect = useCallback(() => {
+    console.log(
+      "[NotificationWebSocket] Reconnect detected - re-fetching notifications",
+    );
+    // Re-fetch notifications from REST API
+    if (userType === "curator") {
+      curatorQuery.refetch();
+    } else if (userType === "provider") {
+      providerQuery.refetch();
+    }
+  }, [userType, curatorQuery, providerQuery]);
+
   useEffect(() => {
     // Listen for WebSocket events
     window.addEventListener(
@@ -207,6 +230,7 @@ export function useNotificationWebSocket() {
       "ws:unread-count",
       handleUnreadCountChange as EventListener,
     );
+    window.addEventListener("ws:reconnect", handleReconnect as EventListener);
 
     return () => {
       window.removeEventListener(
@@ -217,8 +241,12 @@ export function useNotificationWebSocket() {
         "ws:unread-count",
         handleUnreadCountChange as EventListener,
       );
+      window.removeEventListener(
+        "ws:reconnect",
+        handleReconnect as EventListener,
+      );
     };
-  }, [handleNotification, handleUnreadCountChange]);
+  }, [handleNotification, handleUnreadCountChange, handleReconnect]);
 
   return {
     notifications,

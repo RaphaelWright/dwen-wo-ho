@@ -71,11 +71,11 @@ export default function NotifItem<N>({
         >
           <AvatarImage src={avatarUrl ?? undefined} className="rounded-none" />
           {title || emoji ? (
-            <AvatarFallback className="bg-muted text-sm rounded-none">
+            <AvatarFallback className="bg-muted dark:bg-muted-foreground/30 dark:text-foreground text-sm rounded-none">
               {emoji ? emoji : (title || "N").charAt(0).toUpperCase()}
             </AvatarFallback>
           ) : (
-            <AvatarFallback className="bg-muted text-sm rounded-none">
+            <AvatarFallback className="bg-muted dark:bg-muted-foreground/30 dark:text-foreground text-sm rounded-none">
               N
             </AvatarFallback>
           )}

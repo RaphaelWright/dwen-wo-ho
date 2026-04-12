@@ -28,22 +28,40 @@ export function usePatientStatusWebSocket() {
         duration: 5000,
       });
     },
-    [queryClient]
+    [queryClient],
   );
+
+  const handleReconnect = useCallback(() => {
+    console.log(
+      "[PatientStatusWebSocket] Reconnect detected - re-fetching patient data",
+    );
+    // Invalidate patient queries to refresh data
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.providerDashboard, "patients"],
+    });
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.providerDashboard, "patients", "urgent"],
+    });
+  }, [queryClient]);
 
   useEffect(() => {
     window.addEventListener(
       "ws:patient-status",
-      handlePatientStatusChange as EventListener
+      handlePatientStatusChange as EventListener,
     );
+    window.addEventListener("ws:reconnect", handleReconnect as EventListener);
 
     return () => {
       window.removeEventListener(
         "ws:patient-status",
-        handlePatientStatusChange as EventListener
+        handlePatientStatusChange as EventListener,
+      );
+      window.removeEventListener(
+        "ws:reconnect",
+        handleReconnect as EventListener,
       );
     };
-  }, [handlePatientStatusChange]);
+  }, [handlePatientStatusChange, handleReconnect]);
 
   return {
     // This hook primarily handles side effects (cache invalidation)

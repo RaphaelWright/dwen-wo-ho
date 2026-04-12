@@ -14,6 +14,8 @@ class StompWebSocketClient {
 
   private readonly reconnectDelays = [1000, 2000, 4000, 8000, 16000, 30000];
   private statusChangeCallbacks: ((status: ConnectionStatus) => void)[] = [];
+  private lastMessageTimestamp: number = 0;
+  private reconnectCallbacks: (() => void)[] = [];
 
   // Get singleton instance
   private static instance: StompWebSocketClient;
@@ -201,6 +203,29 @@ class StompWebSocketClient {
     this.messageHandlers.clear();
 
     console.log(`[STOMP] Resubscribed to ${this.subscriptions.size} topics`);
+
+    // Notify reconnection listeners to re-fetch state
+    this.reconnectCallbacks.forEach((cb) => cb());
+  }
+
+  // Track when last message was received
+  updateLastMessageTimestamp(): void {
+    this.lastMessageTimestamp = Date.now();
+  }
+
+  // Get last message timestamp (for detecting stale connection)
+  getLastMessageTimestamp(): number {
+    return this.lastMessageTimestamp;
+  }
+
+  // Register callback to run on successful reconnect
+  onReconnect(callback: () => void): () => void {
+    this.reconnectCallbacks.push(callback);
+    return () => {
+      this.reconnectCallbacks = this.reconnectCallbacks.filter(
+        (cb) => cb !== callback,
+      );
+    };
   }
 
   // Send message (if needed in future)

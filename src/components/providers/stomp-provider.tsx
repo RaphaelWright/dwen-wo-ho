@@ -5,8 +5,11 @@ import { useStompWebSocket } from "@/hooks/use-stomp-websocket";
 import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
 import { useUrgentCasesWebSocket } from "@/hooks/use-urgent-cases-websocket";
 import { usePatientStatusWebSocket } from "@/hooks/use-patient-status-websocket";
+import { usePatientResultWebSocket } from "@/hooks/use-patient-result-websocket";
 import { subscriptionManager } from "@/services/websocket/subscription-manager";
 import { getUserType, hasValidToken } from "@/lib/utils/getUserType";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 interface StompProviderProps {
   children: ReactNode;
@@ -14,24 +17,28 @@ interface StompProviderProps {
 
 export function StompProvider({ children }: StompProviderProps) {
   const { connect, disconnect, connectionStatus } = useStompWebSocket();
+  const [isAuth, setIsAuth] = useState(false);
+  const pathname = usePathname();
 
   // Initialize WebSocket hooks (they listen for events)
   useNotificationWebSocket();
   useUrgentCasesWebSocket();
   usePatientStatusWebSocket();
+  usePatientResultWebSocket();
 
-  // Connect when authenticated
+  // Connect when authenticated, and re-evaluate on navigation
   useEffect(() => {
     const userType = getUserType();
+    const valid = !!(userType && hasValidToken());
 
-    if (userType && hasValidToken()) {
+    if (valid && !isAuth) {
+      setIsAuth(true);
       connect();
-    }
-
-    return () => {
+    } else if (!valid && isAuth) {
+      setIsAuth(false);
       disconnect();
-    };
-  }, [connect, disconnect]);
+    }
+  }, [connect, disconnect, pathname, isAuth]);
 
   // Initialize subscriptions when connected
   useEffect(() => {

@@ -131,6 +131,29 @@ export interface NewPatientResultEvent {
   createdAt: string;
 }
 
+// Provider notification topic payload (/topic/provider/{id}/notifications)
+// Has different structure than personal queue
+export interface ProviderTopicNotificationEvent {
+  type: "NEW_NOTIFICATION" | "UNREAD_COUNT_CHANGED";
+  notification?: {
+    notificationId: string;
+    targetId: number;
+    targetType: string;
+    unread: boolean;
+    targetName: string;
+    targetSchoolId: number;
+    targetSchoolName: string | null;
+    text: string;
+    category: string;
+    action: string | null;
+    notification: string | null;
+    emoji: string | null;
+    timestamp: string;
+    avatarUrl: string | null;
+  };
+  unreadCount: number;
+}
+
 // Union of all topic-specific events
 export type TopicEventPayload =
   | NewUrgentCaseEvent

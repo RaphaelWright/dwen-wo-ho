@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 import type { PatientCase } from "@/lib/types/api/patient-results";
 import ProviderActivityLog from "@/components/provider/provider-activity-log";
 import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
-import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
+
 import ProviderNavbar from "@/components/provider/new/nav-bar";
 import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
 import { ROUTES } from "@/lib/constants/routes";
@@ -95,9 +95,6 @@ function ProviderNotificationsSheet({
 
 export default function ProviderHomePage() {
   const router = useRouter();
-
-  // Initialize WebSocket for real-time notifications
-  useNotificationWebSocket();
 
   // Prevent hydration mismatch - only render after mount
   const [mounted, setMounted] = useState(false);
@@ -322,18 +319,6 @@ export default function ProviderHomePage() {
     );
   }
 
-  // Prevent hydration mismatch - show loading until mounted
-  if (!mounted) {
-    return (
-      <div className="h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="overflow-x-hidden h-dvh min-[1065px]:h-screen min-[1065px]:overflow-hidden flex flex-col w-full px-0.5 min-[1065px]:px-0">
       <ProviderNavbar
@@ -371,6 +356,7 @@ export default function ProviderHomePage() {
         <div className="h-full overflow-hidden">
           <UrgentPanel
             patients={urgentData}
+            activeSchool={activeSchool}
             onPatientClick={(patient) => {
               router.push(
                 `${ROUTES.provider.patients}/${patient.patientResultId}`,
@@ -510,7 +496,11 @@ export default function ProviderHomePage() {
               transition={panelTransition}
               className="absolute inset-0 h-screen overflow-y-auto"
             >
-              <UrgentPanel patients={urgentData} isLoading={isInitLoading} />
+              <UrgentPanel
+                patients={urgentData}
+                activeSchool={activeSchool}
+                isLoading={isInitLoading}
+              />
             </motion.div>
           )}
           {activePanel === "activity" && (

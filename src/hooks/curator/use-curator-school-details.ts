@@ -14,6 +14,7 @@ import { useSchoolData } from "./school/use-school-data";
 import { useSchoolUI, CuratorSchoolTabType } from "./school/use-school-ui";
 import { useSchoolActions } from "./school/use-school-actions";
 import { useSchoolIcons } from "./school/use-school-icons";
+import { useSchoolSubscription } from "@/hooks/use-school-subscription";
 import type { FilterOption } from "@/components/shared/search-dropdown";
 
 function matchesFilter(patient: any, filter: FilterOption): boolean {
@@ -54,6 +55,9 @@ export function useCuratorSchoolDetails() {
   const params = useParams();
   const router = useRouter();
   const schoolId = params.schoolId as string;
+
+  // Subscribe to school-specific WebSocket topics for real-time updates
+  useSchoolSubscription(schoolId);
 
   // ─── Sub-Hooks ───────────────────────────────────────────────────────────
   const schoolUI = useSchoolUI();

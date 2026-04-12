@@ -69,8 +69,10 @@ export default function UrgentCard({
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold truncate transition-colors">
+              <p className="text-sm font-bold truncate transition-colors text-foreground">
                 {patient.patientName}{" "}
+              </p>
+              <p className="text-sm font-bold truncate transition-colors">
                 <span className="text-xs mt-0.5 text-muted-foreground ml-1">
                   {patient.schoolNickname || patient.schoolName}
                 </span>

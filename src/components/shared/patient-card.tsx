@@ -216,7 +216,7 @@ export default function PatientCard<
             <span className="text-xs text-muted-foreground">
               {compactTimeAgo(time || "")} ago
             </span>
-            <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info bg-info/10 max-w-30 truncate">
+            <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info dark:text-blue-300 bg-info/10 max-w-30 truncate">
               {schoolNickname || schoolName}
             </span>
           </div>

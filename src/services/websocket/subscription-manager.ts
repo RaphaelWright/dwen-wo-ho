@@ -5,8 +5,10 @@ import {
   PatientStatusChangedEvent,
   NewPatientResultEvent,
   ActiveSubscription,
+  ProviderTopicNotificationEvent,
 } from "@/lib/types/websocket";
 import { getUserType } from "@/lib/utils/getUserType";
+import { ProviderNotification } from "@/lib/types/notification";
 
 class SubscriptionManager {
   private activeSubscriptions: Map<string, ActiveSubscription> = new Map();
@@ -161,6 +163,14 @@ class SubscriptionManager {
     // Dispatch to appropriate handler based on topic pattern
     if (topic === "/user/queue/notifications") {
       this.handlePersonalNotification(payload as NewNotificationEvent<unknown>);
+    } else if (
+      topic.includes("/topic/provider/") &&
+      topic.includes("/notifications")
+    ) {
+      // Provider notification topic has different payload structure
+      this.handleProviderTopicNotification(
+        payload as ProviderTopicNotificationEvent,
+      );
     } else if (topic.includes("/urgent")) {
       this.handleUrgentCase(payload as NewUrgentCaseEvent);
     } else if (topic.includes("/patients") && !topic.includes("/urgent")) {
@@ -178,6 +188,58 @@ class SubscriptionManager {
     window.dispatchEvent(
       new CustomEvent("ws:notification", { detail: payload }),
     );
+  }
+
+  private handleProviderTopicNotification(
+    payload: ProviderTopicNotificationEvent,
+  ): void {
+    // Handle UNREAD_COUNT_CHANGED type
+    if (payload.type === "UNREAD_COUNT_CHANGED") {
+      window.dispatchEvent(
+        new CustomEvent("ws:unread-count", {
+          detail: { unreadCount: payload.unreadCount },
+        }),
+      );
+      return;
+    }
+
+    // Handle NEW_NOTIFICATION type - transform to match expected format
+    if (payload.type === "NEW_NOTIFICATION" && payload.notification) {
+      // Transform provider topic notification to match ProviderNotification shape
+      const notification: ProviderNotification = {
+        notificationId: payload.notification.notificationId,
+        targetId: payload.notification.targetId,
+        targetType: payload.notification.targetType,
+        unread: payload.notification.unread,
+        targetName: payload.notification.targetName,
+        targetSchoolId: payload.notification.targetSchoolId,
+        targetSchoolName: payload.notification.targetSchoolName,
+        text: payload.notification.text,
+        category: payload.notification
+          .category as ProviderNotification["category"],
+        action:
+          (payload.notification.action as ProviderNotification["action"]) ||
+          "VIEW",
+        notification: payload.notification.notification || "",
+        emoji: payload.notification.emoji || "",
+        timestamp: payload.notification.timestamp,
+        avatarUrl: payload.notification.avatarUrl,
+      };
+
+      // Dispatch in format expected by useNotificationWebSocket
+      window.dispatchEvent(
+        new CustomEvent("ws:notification", {
+          detail: {
+            event: "NEW_NOTIFICATION",
+            timestamp: payload.notification.timestamp,
+            recipientId: "", // Not provided in topic payload
+            recipientRole: "ROLE_PROVIDER",
+            unreadCount: payload.unreadCount,
+            notification,
+          },
+        }),
+      );
+    }
   }
 
   private handleUrgentCase(payload: NewUrgentCaseEvent): void {
