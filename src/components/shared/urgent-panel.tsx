@@ -37,6 +37,13 @@ export default function UrgentPanel({
       ? (patients ?? [])
       : (patients?.filter((p) => p.schoolId === Number(activeSchool)) ?? []);
 
+  // Sort by newest first (descending) - prioritize urgentCareEnteredAt, fallback to time
+  const sorted = [...filtered].sort((a, b) => {
+    const dateA = new Date(a.urgentCareEnteredAt || a.time);
+    const dateB = new Date(b.urgentCareEnteredAt || b.time);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
     <aside
       className={cn(
@@ -66,7 +73,7 @@ export default function UrgentPanel({
             transition={{ duration: 2, repeat: Infinity }}
             className="text-sm flex items-center justify-center font-bold text-destructive size-6 rounded-full bg-white"
           >
-            {filtered.length}
+            {sorted.length}
           </motion.span>
         </div>
       </div>
@@ -75,7 +82,7 @@ export default function UrgentPanel({
       <div className="flex-1 p-3 overflow-y-auto no-scrollbar min-h-0 flex flex-col pb-20">
         <div className="flex flex-col gap-2">
           <AnimatePresence>
-            {filtered.map((p, i) => (
+            {sorted.map((p, i) => (
               <UrgentCard
                 key={
                   p.id != null && p.id !== 0
@@ -89,7 +96,7 @@ export default function UrgentPanel({
             ))}
           </AnimatePresence>
 
-          {filtered.length === 0 && (
+          {sorted.length === 0 && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
