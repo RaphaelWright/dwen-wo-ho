@@ -15,4 +15,9 @@ export const QUERY_KEYS = {
   curatorNotifications: "curator-notifications",
   providerSchoolsSummary: "provider-schools-summary",
   providerDashboard: "provider-dashboard",
+  providerPatientDetails: "provider-patient-details",
+  providerPatientActions: "provider-patient-actions",
+  curatorProviderDetails: "curator-provider-details",
+  curatorPatientModal: "curator-patient-modal",
+  curatorPatientDetails: "curator-patient-details",
 } as const;

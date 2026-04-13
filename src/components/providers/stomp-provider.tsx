@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useRef, ReactNode } from "react";
+import { useEffect, useRef, ReactNode } from "react";
 import { useStompWebSocket } from "@/hooks/use-stomp-websocket";
 import { useNotificationWebSocket } from "@/hooks/use-notification-websocket";
 import { useUrgentCasesWebSocket } from "@/hooks/use-urgent-cases-websocket";
@@ -11,11 +11,7 @@ import { getUserType, hasValidToken } from "@/lib/utils/getUserType";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-interface StompProviderProps {
-  children: ReactNode;
-}
-
-export function StompProvider({ children }: StompProviderProps) {
+export function StompProvider({ children }: { children: ReactNode }) {
   const { connect, disconnect, connectionStatus } = useStompWebSocket();
   const [isAuth, setIsAuth] = useState(false);
   const pathname = usePathname();

@@ -9,6 +9,7 @@ import usePatientResultQuery from "@/hooks/queries/use-patient-result";
 import { patientsService } from "@/services/patients";
 import { getColorHex } from "@/lib/utils/color-utils";
 import { PatientActionResponseDTO } from "@/lib/types/api/patient-results";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 export type ActionTab = "pending" | "history";
 
@@ -40,7 +41,7 @@ export function useProviderPatientDetails() {
 
   // Fetch full patient details
   const { data: patientData, isLoading: isPatientLoading } = useQuery({
-    queryKey: ["provider-patient-details", resultId],
+    queryKey: [QUERY_KEYS.providerPatientDetails, resultId],
     queryFn: () => patientsService.getFullPatientDetails(resultId),
     enabled: !!resultId && !!getProfileQuery.data,
     staleTime: 3 * 60 * 1000,
@@ -52,7 +53,7 @@ export function useProviderPatientDetails() {
 
   // Fetch actions
   const { data: allActions = [], isLoading: isActionsLoading } = useQuery({
-    queryKey: ["provider-patient-actions", resultId],
+    queryKey: [QUERY_KEYS.providerPatientActions, resultId],
     queryFn: () => patientsService.getPatientActions(resultId),
     enabled: !!resultId && !!patientData,
     staleTime: 2 * 60 * 1000,
@@ -78,7 +79,7 @@ export function useProviderPatientDetails() {
       patientsService.addPatientAction(resultId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["provider-patient-actions", resultId],
+        queryKey: [QUERY_KEYS.providerPatientActions, resultId],
       });
       toast.success("Action added successfully");
       setIsAddActionOpen(false);
@@ -210,10 +211,10 @@ export function useProviderPatientDetails() {
   // Refresh data helper
   const refreshData = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["provider-patient-details", resultId],
+      queryKey: [QUERY_KEYS.providerPatientDetails, resultId],
     });
     queryClient.invalidateQueries({
-      queryKey: ["provider-patient-actions", resultId],
+      queryKey: [QUERY_KEYS.providerPatientActions, resultId],
     });
   }, [queryClient, resultId]);
 

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { patientsService } from "@/services/patients";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 export const usePatientDetailsCurator = ({
   isOpen,
@@ -12,7 +13,7 @@ export const usePatientDetailsCurator = ({
   patientId: string;
 }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["curator-patient-modal", patientId],
+    queryKey: [QUERY_KEYS.curatorPatientModal, patientId],
     queryFn: () => patientsService.getFullPatientDetails(patientId),
     enabled: isOpen && !!patientId,
     staleTime: 3 * 60 * 1000, // 3 minutes

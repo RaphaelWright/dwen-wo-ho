@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { curatorProvidersService } from "@/services/curator-providers";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { ProviderDetails } from "@/lib/types/provider";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 async function fetchProviderDetails(email: string): Promise<ProviderDetails> {
   const result = await curatorProvidersService.getProvider(email);
@@ -61,7 +62,7 @@ export function useCuratorProviderList(
     isLoading,
     error: queryError,
   } = useQuery({
-    queryKey: ["curator-provider-details", email],
+    queryKey: [QUERY_KEYS.curatorProviderDetails, email],
     queryFn: () => fetchProviderDetails(email),
     enabled: isAuthenticated === true && !!email,
     staleTime: 3 * 60 * 1000, // 3 minutes
