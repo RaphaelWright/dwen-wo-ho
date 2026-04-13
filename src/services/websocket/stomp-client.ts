@@ -158,8 +158,13 @@ class StompWebSocketClient {
     const subscription = this.client.subscribe(
       topic,
       (message: IMessage) => {
+        console.log(
+          `[STOMP] 📥 Raw message received on ${topic}:`,
+          message.body,
+        );
         try {
           const payload = JSON.parse(message.body);
+          console.log(`[STOMP] ✅ Parsed payload from ${topic}:`, payload);
           handler(payload as T);
         } catch (error) {
           console.error(`[STOMP] Error parsing message from ${topic}:`, error);
@@ -187,6 +192,9 @@ class StompWebSocketClient {
     topic: string,
     handler: (payload: unknown) => void,
   ): void {
+    console.log(
+      `[STOMP] Adding pending handler for ${topic} (not connected yet)`,
+    );
     if (!this.messageHandlers.has(topic)) {
       this.messageHandlers.set(topic, []);
     }
@@ -194,8 +202,14 @@ class StompWebSocketClient {
   }
 
   private resubscribeAll(): void {
+    console.log(
+      `[STOMP] Resubscribing all... Pending handlers: ${this.messageHandlers.size} topics`,
+    );
     // Resubscribe to all pending handlers
     this.messageHandlers.forEach((handlers, topic) => {
+      console.log(
+        `[STOMP] Resubscribing ${handlers.length} handlers for ${topic}`,
+      );
       handlers.forEach((handler) => {
         this.subscribe(topic, handler);
       });

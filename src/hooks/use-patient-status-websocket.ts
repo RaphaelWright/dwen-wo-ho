@@ -11,6 +11,10 @@ export function usePatientStatusWebSocket() {
 
   const handlePatientStatusChange = useCallback(
     (event: CustomEvent<PatientStatusChangedEvent>) => {
+      console.log(
+        `[PatientStatusWebSocket] 📥 Received ws:patient-status`,
+        event.detail,
+      );
       const { patient } = event.detail;
 
       // Invalidate patient queries to refresh data

@@ -104,6 +104,7 @@ export function useNotificationWebSocket() {
 
   const handleNotification = useCallback(
     (event: unknown) => {
+      console.log(`[NotificationWebSocket] 📥 Received ws:notification`, event);
       if (typeof event !== "object" || event === null) return;
 
       const eventObj =
@@ -164,11 +165,14 @@ export function useNotificationWebSocket() {
         toastType = curatorNotif.type === "CRITICAL_ALERT" ? "error" : "info";
       } else {
         const providerNotif = notification as ProviderNotification;
-        toastTitle = providerNotif.targetName;
-        toastDescription = providerNotif.text;
+        // Use the transformed notification fields directly
+        toastTitle = providerNotif.targetName || "Notification";
+        toastDescription = providerNotif.text || "";
+        const notifType = providerNotif.category || "";
+
         toastType =
-          providerNotif.category !== "STAR_PROVIDER_ASSIGNED" &&
-          providerNotif.category !== "NEW_PATIENT_ADDED"
+          notifType !== "STAR_PROVIDER_ASSIGNED" &&
+          notifType !== "NEW_PATIENT_ADDED"
             ? "error"
             : "info";
       }
@@ -177,6 +181,7 @@ export function useNotificationWebSocket() {
 
       toastFn(toastTitle, {
         description: toastDescription,
+        duration: 10000, // 10 seconds
         action: link
           ? {
               label: "View",

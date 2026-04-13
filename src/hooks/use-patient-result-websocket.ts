@@ -17,6 +17,10 @@ export function usePatientResultWebSocket() {
 
   const handlePatientResult = useCallback(
     (event: CustomEvent<NewPatientResultEvent>) => {
+      console.log(
+        `[PatientResultWebSocket] 📥 Received ws:patient-result`,
+        event.detail,
+      );
       const { patientName, schoolId } = event.detail;
 
       // Invalidate school-specific patient overview query

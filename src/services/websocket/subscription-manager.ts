@@ -20,14 +20,23 @@ class SubscriptionManager {
   // Initialize subscriptions based on user role
   initialize(): void {
     this.userType = getUserType();
+    console.log(
+      `[SubscriptionManager] Initializing for userType: ${this.userType}`,
+    );
 
     if (!this.userType) {
+      console.warn(
+        `[SubscriptionManager] No userType found, skipping initialization`,
+      );
       return;
     }
 
     // Try to extract provider ID if not already set
     if (this.userType === "provider" && !this.providerId) {
       this.providerId = this.extractProviderId();
+      console.log(
+        `[SubscriptionManager] Extracted providerId: ${this.providerId}`,
+      );
     }
 
     // Subscribe to common topic (all roles)
@@ -38,10 +47,15 @@ class SubscriptionManager {
 
     // Subscribe to role-specific topics
     if (this.userType === "curator") {
+      console.log(`[SubscriptionManager] Initializing curator subscriptions`);
       this.initializeCuratorSubscriptions();
     } else if (this.userType === "provider") {
+      console.log(`[SubscriptionManager] Initializing provider subscriptions`);
       this.initializeProviderSubscriptions();
     }
+    console.log(
+      `[SubscriptionManager] Total active subscriptions: ${this.activeSubscriptions.size}`,
+    );
   }
 
   private initializeCuratorSubscriptions(): void {
@@ -61,9 +75,16 @@ class SubscriptionManager {
   }
 
   private initializeProviderSubscriptions(): void {
+    console.log(
+      `[SubscriptionManager] initializeProviderSubscriptions called, providerId: ${this.providerId}`,
+    );
+
     if (!this.providerId) {
       // Try to get provider ID from localStorage or API
       this.providerId = this.extractProviderId();
+      console.log(
+        `[SubscriptionManager] Extracted providerId: ${this.providerId}`,
+      );
     }
 
     if (!this.providerId) {
@@ -71,9 +92,16 @@ class SubscriptionManager {
       // Don't warn repeatedly - this is expected during initial page load.
       if (!this.hasWarnedMissingId) {
         this.hasWarnedMissingId = true;
+        console.warn(
+          `[SubscriptionManager] No providerId available, skipping provider subscriptions`,
+        );
       }
       return;
     }
+
+    console.log(
+      `[SubscriptionManager] Setting up provider subscriptions for ${this.providerId}`,
+    );
 
     // Provider-specific notification events
     this.subscribeToTopic(
@@ -100,6 +128,10 @@ class SubscriptionManager {
         `school-${schoolId}-urgent`,
       );
     });
+
+    console.log(
+      `[SubscriptionManager] Provider subscriptions complete. Active: ${this.activeSubscriptions.size}`,
+    );
   }
 
   // Add school-specific subscription dynamically
@@ -137,9 +169,15 @@ class SubscriptionManager {
 
   private subscribeToTopic(topic: string, subscriptionId: string): void {
     if (this.activeSubscriptions.has(subscriptionId)) {
+      console.log(
+        `[SubscriptionManager] Already subscribed to ${topic} (${subscriptionId})`,
+      );
       return; // Already subscribed
     }
 
+    console.log(
+      `[SubscriptionManager] Subscribing to ${topic} (${subscriptionId})`,
+    );
     const subId = stompClient.subscribe(topic, (payload: unknown) => {
       this.handleMessage(topic, payload);
     });
@@ -149,6 +187,9 @@ class SubscriptionManager {
       topic,
       unsubscribe: () => stompClient.unsubscribe(subId),
     });
+    console.log(
+      `[SubscriptionManager] ✓ Subscribed to ${topic} with subId: ${subId}`,
+    );
   }
 
   private unsubscribe(subscriptionId: string): void {
@@ -160,29 +201,46 @@ class SubscriptionManager {
   }
 
   private handleMessage(topic: string, payload: unknown): void {
+    console.log(
+      `[SubscriptionManager] 📨 Handling message for topic: ${topic}`,
+      payload,
+    );
     // Dispatch to appropriate handler based on topic pattern
     if (topic === "/user/queue/notifications") {
+      console.log(`[SubscriptionManager] → Routing to personal notifications`);
       this.handlePersonalNotification(payload as NewNotificationEvent<unknown>);
     } else if (
       topic.includes("/topic/provider/") &&
       topic.includes("/notifications")
     ) {
+      console.log(
+        `[SubscriptionManager] → Routing to provider topic notifications`,
+      );
       // Provider notification topic has different payload structure
       this.handleProviderTopicNotification(
         payload as ProviderTopicNotificationEvent,
       );
     } else if (topic.includes("/urgent")) {
+      console.log(`[SubscriptionManager] → Routing to urgent cases`);
       this.handleUrgentCase(payload as NewUrgentCaseEvent);
     } else if (topic.includes("/patients") && !topic.includes("/urgent")) {
+      console.log(`[SubscriptionManager] → Routing to patient status`);
       this.handlePatientStatusChange(payload as PatientStatusChangedEvent);
     } else if (topic.includes("patient-results")) {
+      console.log(`[SubscriptionManager] → Routing to patient results`);
       this.handlePatientResult(payload as NewPatientResultEvent);
+    } else {
+      console.warn(`[SubscriptionManager] ⚠️ Unhandled topic: ${topic}`);
     }
   }
 
   private handlePersonalNotification(
     payload: NewNotificationEvent<unknown>,
   ): void {
+    console.log(
+      `[SubscriptionManager] 🔔 Dispatching ws:notification`,
+      payload,
+    );
     // This will be handled by the notification hook/atom
     // Event is dispatched to window for loose coupling
     window.dispatchEvent(
@@ -190,40 +248,50 @@ class SubscriptionManager {
     );
   }
 
-  private handleProviderTopicNotification(
-    payload: ProviderTopicNotificationEvent,
-  ): void {
+  private handleProviderTopicNotification(payload: unknown): void {
+    console.log(
+      `[SubscriptionManager] 🔔 Dispatching provider notification`,
+      payload,
+    );
+
+    // Cast to any to access raw fields without TypeScript interface constraints
+    const rawPayload = payload as Record<string, unknown>;
+
     // Handle UNREAD_COUNT_CHANGED type
-    if (payload.type === "UNREAD_COUNT_CHANGED") {
+    if (rawPayload.type === "UNREAD_COUNT_CHANGED") {
       window.dispatchEvent(
         new CustomEvent("ws:unread-count", {
-          detail: { unreadCount: payload.unreadCount },
+          detail: { unreadCount: rawPayload.unreadCount as number },
         }),
       );
       return;
     }
 
     // Handle NEW_NOTIFICATION type - transform to match expected format
-    if (payload.type === "NEW_NOTIFICATION" && payload.notification) {
+    const notificationObj = rawPayload.notification as
+      | Record<string, unknown>
+      | undefined;
+    if (rawPayload.type === "NEW_NOTIFICATION" && notificationObj) {
       // Transform provider topic notification to match ProviderNotification shape
+      // Using actual field names from WebSocket payload
       const notification: ProviderNotification = {
-        notificationId: payload.notification.notificationId,
-        targetId: payload.notification.targetId,
-        targetType: payload.notification.targetType,
-        unread: payload.notification.unread,
-        targetName: payload.notification.targetName,
-        targetSchoolId: payload.notification.targetSchoolId,
-        targetSchoolName: payload.notification.targetSchoolName,
-        text: payload.notification.text,
-        category: payload.notification
-          .category as ProviderNotification["category"],
+        notificationId: (notificationObj.id as string) || "",
+        targetId:
+          parseInt((notificationObj.relatedEntityId as string) || "0", 10) || 0,
+        targetType: (notificationObj.relatedEntityType as string) || "",
+        unread: !(notificationObj.read as boolean),
+        targetName: (notificationObj.title as string) || "",
+        targetSchoolId: (notificationObj.schoolId as number) || 0,
+        targetSchoolName: (notificationObj.schoolName as string | null) || null,
+        text: (notificationObj.message as string) || "",
+        category:
+          notificationObj.type as string as ProviderNotification["category"],
         action:
-          (payload.notification.action as ProviderNotification["action"]) ||
-          "VIEW",
-        notification: payload.notification.notification || "",
-        emoji: payload.notification.emoji || "",
-        timestamp: payload.notification.timestamp,
-        avatarUrl: payload.notification.avatarUrl,
+          (notificationObj.action as ProviderNotification["action"]) || "VIEW",
+        notification: (notificationObj.notification as string) || "",
+        emoji: (notificationObj.emoji as string) || "",
+        timestamp: notificationObj.createdAt as string,
+        avatarUrl: (notificationObj.avatarUrl as string | null) || null,
       };
 
       // Dispatch in format expected by useNotificationWebSocket
@@ -231,10 +299,10 @@ class SubscriptionManager {
         new CustomEvent("ws:notification", {
           detail: {
             event: "NEW_NOTIFICATION",
-            timestamp: payload.notification.timestamp,
+            timestamp: notificationObj.createdAt as string,
             recipientId: "", // Not provided in topic payload
             recipientRole: "ROLE_PROVIDER",
-            unreadCount: payload.unreadCount,
+            unreadCount: rawPayload.unreadCount as number,
             notification,
           },
         }),
@@ -243,18 +311,27 @@ class SubscriptionManager {
   }
 
   private handleUrgentCase(payload: NewUrgentCaseEvent): void {
+    console.log(`[SubscriptionManager] 🚨 Dispatching ws:urgent-case`, payload);
     window.dispatchEvent(
       new CustomEvent("ws:urgent-case", { detail: payload }),
     );
   }
 
   private handlePatientStatusChange(payload: PatientStatusChangedEvent): void {
+    console.log(
+      `[SubscriptionManager] 🏥 Dispatching ws:patient-status`,
+      payload,
+    );
     window.dispatchEvent(
       new CustomEvent("ws:patient-status", { detail: payload }),
     );
   }
 
   private handlePatientResult(payload: NewPatientResultEvent): void {
+    console.log(
+      `[SubscriptionManager] 📋 Dispatching ws:patient-result`,
+      payload,
+    );
     window.dispatchEvent(
       new CustomEvent("ws:patient-result", { detail: payload }),
     );
@@ -283,21 +360,63 @@ class SubscriptionManager {
 
   // Set provider ID (call this after login or when ID is known)
   setProviderId(id: string): void {
+    console.log(
+      `[SubscriptionManager] setProviderId called: ${id}, current userType: ${this.userType}`,
+    );
     this.providerId = id;
     localStorage.setItem("providerId", id);
 
     // Re-initialize if already connected
     if (this.userType === "provider") {
+      console.log(
+        `[SubscriptionManager] Re-initializing provider subscriptions`,
+      );
       this.cleanup();
       this.initializeProviderSubscriptions();
+    } else {
+      console.log(
+        `[SubscriptionManager] Not a provider userType, skipping subscription init`,
+      );
     }
   }
 
   // Cleanup all subscriptions
   cleanup(): void {
+    console.log(
+      `[SubscriptionManager] Cleaning up ${this.activeSubscriptions.size} subscriptions`,
+    );
     this.activeSubscriptions.forEach((sub) => sub.unsubscribe());
     this.activeSubscriptions.clear();
     this.schoolIds = [];
+  }
+
+  // Re-subscribe to all topics after reconnect
+  resubscribeAll(): void {
+    console.log(
+      `[SubscriptionManager] Resubscribing all ${this.activeSubscriptions.size} topics after reconnect`,
+    );
+
+    // Get all current topics before clearing
+    const topicsToResubscribe: Array<{
+      topic: string;
+      subscriptionId: string;
+    }> = [];
+    this.activeSubscriptions.forEach((sub, id) => {
+      topicsToResubscribe.push({ topic: sub.topic, subscriptionId: id });
+    });
+
+    // Clear current subscriptions (they're invalid after disconnect)
+    this.activeSubscriptions.clear();
+
+    // Re-subscribe to each topic
+    topicsToResubscribe.forEach(({ topic, subscriptionId }) => {
+      console.log(`[SubscriptionManager] Re-subscribing to ${topic}`);
+      this.subscribeToTopic(topic, subscriptionId);
+    });
+
+    console.log(
+      `[SubscriptionManager] Resubscribed to ${this.activeSubscriptions.size} topics`,
+    );
   }
 
   // Get active subscription count (for debugging)

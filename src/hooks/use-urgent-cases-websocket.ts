@@ -52,6 +52,10 @@ export function useUrgentCasesWebSocket() {
 
   const handleUrgentCase = useCallback(
     (event: CustomEvent<NewUrgentCaseEvent>) => {
+      console.log(
+        `[UrgentCasesWebSocket] 📥 Received ws:urgent-case`,
+        event.detail,
+      );
       const { patient } = event.detail;
 
       // Add to urgent cases atom (for potential future direct use)
