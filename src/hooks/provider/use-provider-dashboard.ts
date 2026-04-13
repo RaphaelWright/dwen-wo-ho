@@ -27,6 +27,7 @@ import {
   useUpdateProfileMutation,
   useUploadAvatarMutation,
   useUpdatePhoneNumberMutation,
+  useProviderUrgentPatients,
 } from "@/hooks/queries/use-provider-dashboard";
 import {
   useMarkNotificationReadMutation,
@@ -37,6 +38,8 @@ import {
 import type { PatientCase } from "@/lib/types/api/patient-results";
 import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
 import type { FilterOption } from "@/components/shared/search-dropdown";
+import { useProviderSearchConfig } from "./use-provider-search-config";
+import { useProviderDashboardMobile } from "./use-provider-dashboard-mobile";
 
 function matchesFilter(item: any, filter: FilterOption): boolean {
   if (!filter.filterKey || !filter.filterValue) return true;
@@ -342,6 +345,30 @@ export default function useProviderDashboard() {
       return schoolMatch && searchMatch && statusMatch;
     }).length;
 
+  // Centralized search config
+  const searchConfig = useProviderSearchConfig({
+    searchQuery,
+    setSearchQuery,
+    appliedSearchQuery: "",
+    setAppliedSearchQuery,
+    localActiveFilters,
+    toggleFilter,
+    removeFilter,
+    clearFilters,
+    filteredPatients,
+  });
+
+  const {
+    activePanel,
+    setActivePanel,
+    searchOpen,
+    setSearchOpen,
+    mobileTabs,
+    panelVariants,
+    panelTransition,
+  } = useProviderDashboardMobile(setProfileOpen);
+
+  const { data: urgentData } = useProviderUrgentPatients();
   return {
     activeSchool,
     setActiveSchool,
@@ -399,5 +426,14 @@ export default function useProviderDashboard() {
     toggleFilter,
     removeFilter,
     clearFilters,
+    searchConfig,
+    activePanel,
+    setActivePanel,
+    searchOpen,
+    setSearchOpen,
+    mobileTabs,
+    panelVariants,
+    panelTransition,
+    urgentData,
   };
 }
