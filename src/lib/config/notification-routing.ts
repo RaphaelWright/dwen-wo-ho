@@ -8,6 +8,7 @@ import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/routes";
 import {
   CuratorNotification,
   ProviderNotification,
+  ProviderNotificationAction,
 } from "@/lib/types/notification";
 
 export const providerNotificationRouteConfig = {
@@ -27,13 +28,34 @@ export const providerNotificationRouteConfig = {
 export function getProviderNotificationRoute(
   notification: ProviderNotification,
 ) {
-  const { action } = notification;
-  if (!action || !VALID_PROVIDER_NOTIFICATION_ACTIONS.includes(action))
+  let computedAction = notification.action as string;
+
+  const validActions = VALID_PROVIDER_NOTIFICATION_ACTIONS as string[];
+
+  // Compute action based on the notification data if the backend action is not a valid enum
+  if (!computedAction || !validActions.includes(computedAction)) {
+    if (
+      notification.category === "NEW_PATIENT_ADDED" ||
+      notification.category === "STAR_PROVIDER_ASSIGNED" ||
+      notification.targetType === "PATIENT_RESULT" ||
+      notification.targetType === "PATIENT"
+    ) {
+      computedAction = PROVIDER_NOTIFICATION_ACTIONS.OPEN_PATIENT;
+    } else if (notification.targetType === "URGENT_CARE") {
+      computedAction = PROVIDER_NOTIFICATION_ACTIONS.OPEN_URGENT_CARE;
+    } else if (notification.targetType === "SCHOOL") {
+      computedAction = PROVIDER_NOTIFICATION_ACTIONS.OPEN_PROVIDER_SCHOOL;
+    }
+  }
+
+  if (!computedAction || !validActions.includes(computedAction))
     return null;
 
-  const generator = providerNotificationRouteConfig[action];
+  const validActionKey = computedAction as keyof typeof providerNotificationRouteConfig;
+  const generator = providerNotificationRouteConfig[validActionKey];
   return generator(
-    notification.action === PROVIDER_NOTIFICATION_ACTIONS.OPEN_PROVIDER_SCHOOL
+    computedAction === PROVIDER_NOTIFICATION_ACTIONS.OPEN_PROVIDER_SCHOOL ||
+      computedAction === PROVIDER_NOTIFICATION_ACTIONS.OPEN_SCHOOL_PATIENTS
       ? notification.targetSchoolId
       : notification.targetId,
   );
@@ -52,17 +74,49 @@ export const curatorNotificationRouteConfig = {
 };
 
 export function getCuratorNotificationRoute(notification: CuratorNotification) {
-  const { action, relatedEntityId, schoolId } = notification;
+  let computedAction = notification.action as string;
   const validActions = VALID_CURATOR_NOTIFICATION_ACTIONS as string[];
-  if (!action || !validActions.includes(action)) return null;
 
-  const validAction = action as keyof typeof curatorNotificationRouteConfig;
-  const generator = curatorNotificationRouteConfig[validAction];
-  if (action === CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT) {
-    return generator(schoolId, relatedEntityId);
+  // Compute action based on the notification data if the backend action is not a valid enum
+  if (!computedAction || !validActions.includes(computedAction)) {
+    const type = notification.type;
+    const targetType = notification.relatedEntityType;
+    
+    if (
+      type === "NEW_PATIENT_ADDED" || 
+      type === "PATIENT_LOCK_IN" || 
+      type === "PATIENT_REFERRED" || 
+      targetType === "PATIENT_RESULT" || 
+      targetType === "PATIENT"
+    ) {
+      computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT;
+    } else if (
+      type === "PROVIDER_REGISTRATION" || 
+      type === "PROVIDER_APPLICATION_UPDATE" || 
+      type === "PROVIDER_SCHOOL_CHANGE" || 
+      targetType === "PROVIDER" ||
+      targetType === "USER"
+    ) {
+      computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_PROVIDER;
+    } else if (
+      type === "SCHOOL_REGISTRATION" || 
+      type === "OPEN_PATIENTS_AVAILABLE" || 
+      type === "CRITICAL_ALERT" || 
+      targetType === "SCHOOL"
+    ) {
+      computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_SCHOOL;
+    }
   }
-  if (action === CURATOR_NOTIFICATION_ACTIONS.OPEN_PARTNER) {
+
+  if (!computedAction || !validActions.includes(computedAction)) return null;
+
+  const validAction = computedAction as keyof typeof curatorNotificationRouteConfig;
+  const generator = curatorNotificationRouteConfig[validAction];
+  if (computedAction === CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT) {
+    return generator(notification.schoolId, notification.relatedEntityId);
+  }
+  if (computedAction === CURATOR_NOTIFICATION_ACTIONS.OPEN_PARTNER) {
     return (generator as () => string)();
   }
-  return (generator as (id: string | number) => string)(relatedEntityId);
+  return (generator as (id: string | number) => string)(notification.relatedEntityId);
 }

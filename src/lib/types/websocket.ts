@@ -136,20 +136,20 @@ export interface NewPatientResultEvent {
 export interface ProviderTopicNotificationEvent {
   type: "NEW_NOTIFICATION" | "UNREAD_COUNT_CHANGED";
   notification?: {
-    notificationId: string;
-    targetId: number;
-    targetType: string;
-    unread: boolean;
-    targetName: string;
-    targetSchoolId: number;
-    targetSchoolName: string | null;
-    text: string;
-    category: string;
-    action: string | null;
-    notification: string | null;
-    emoji: string | null;
-    timestamp: string;
-    avatarUrl: string | null;
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    relatedEntityId: string;
+    relatedEntityType: string;
+    schoolId: number;
+    schoolName?: string | null;
+    read: boolean;
+    createdAt: string;
+    action?: string | null;
+    notification?: string | null;
+    emoji?: string | null;
+    avatarUrl?: string | null;
   };
   unreadCount: number;
 }
