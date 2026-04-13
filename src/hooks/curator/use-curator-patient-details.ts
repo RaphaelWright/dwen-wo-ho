@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { patientsService } from "@/services/patients";
 import { getColorHex } from "@/lib/utils/color-utils";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 export function useCuratorPatientDetails() {
   const params = useParams();
@@ -17,7 +18,7 @@ export function useCuratorPatientDetails() {
   );
 
   const { data, isLoading } = useQuery({
-    queryKey: ["curator-patient-details", patientId],
+    queryKey: [QUERY_KEYS.curatorPatientDetails, patientId],
     queryFn: () => patientsService.getFullPatientDetails(patientId),
     enabled: !!patientId,
     staleTime: 3 * 60 * 1000, // 3 minutes

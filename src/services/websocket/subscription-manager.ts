@@ -9,6 +9,7 @@ import {
 } from "@/lib/types/websocket";
 import { getUserType } from "@/lib/utils/getUserType";
 import { ProviderNotification } from "@/lib/types/notification";
+import { refetchAllActiveQueries } from "@/lib/query-client-store";
 
 class SubscriptionManager {
   private activeSubscriptions: Map<string, ActiveSubscription> = new Map();
@@ -232,6 +233,11 @@ class SubscriptionManager {
     } else {
       console.warn(`[SubscriptionManager] ⚠️ Unhandled topic: ${topic}`);
     }
+
+    // Trigger immediate refetch of all active React Query observers.
+    // This runs synchronously in the WebSocket message handler — no React
+    // lifecycle, no event listener timing issues.
+    refetchAllActiveQueries();
   }
 
   private handlePersonalNotification(

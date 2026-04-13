@@ -181,7 +181,7 @@ export function useNotificationWebSocket() {
 
       toastFn(toastTitle, {
         description: toastDescription,
-        duration: 10000, // 10 seconds
+        duration: 5000, // 5 seconds
         action: link
           ? {
               label: "View",
@@ -191,6 +191,14 @@ export function useNotificationWebSocket() {
             }
           : undefined,
       });
+
+      // Immediately refetch ALL active queries so dashboard, patient list,
+      // schools sidebar and urgent panel all update in real-time.
+      // refetchQueries({ type: "active" }) bypasses staleTime entirely.
+      console.log(
+        "[NotificationWebSocket] Triggering global refetch after notification...",
+      );
+      queryClient.refetchQueries({ type: "active" });
 
       // Open notification sheet briefly
       setTimeout(() => setSheetOpen(true), 500);
