@@ -71,9 +71,9 @@ export default function UrgentPanel({
               ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="text-sm flex items-center justify-center font-bold text-destructive size-6 rounded-full bg-white"
+            className="text-xs p-2 flex items-center justify-center font-bold text-destructive size-7 rounded-full bg-white"
           >
-            {sorted.length}
+            {sorted.length > 99 ? "99+" : sorted.length}
           </motion.span>
         </div>
       </div>

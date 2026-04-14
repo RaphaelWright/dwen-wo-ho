@@ -7,6 +7,7 @@ import ScoreRing from "./score-ring";
 import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
 import type { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
 import type { PatientCase } from "@/lib/types/api/patient-results";
+import { Checkbox } from "../ui/checkbox";
 
 /**
  * A single row in the patient list.
@@ -49,6 +50,9 @@ export interface PatientCardProps<T> {
   getSchoolNickname?: (patient: T) => string | undefined;
   /** Extract the school name from the patient object */
   getSchoolName?: (patient: T) => string;
+  selectedPatients?: Set<string | number>;
+  handleSelectPatient?: (id: string | number, checked: boolean) => void;
+  showCheckbox: boolean;
 }
 
 // Default accessors for SchoolPatientRecord
@@ -90,6 +94,9 @@ export default function PatientCard<
   getPatientName,
   getSchoolNickname,
   getSchoolName,
+  handleSelectPatient,
+  selectedPatients,
+  showCheckbox = false,
 }: PatientCardProps<T>) {
   const router = useRouter();
 
@@ -249,6 +256,17 @@ export default function PatientCard<
         >
           {cfg.actionLabel}
         </motion.button>
+        {showCheckbox && (
+          <Checkbox
+            id={`patient-${id}-checkbox`}
+            name={`patient-${id}-checkbox`}
+            checked={selectedPatients?.has(id)}
+            onCheckedChange={(checked) =>
+              handleSelectPatient?.(id, checked === true)
+            }
+            className="bg-background border-primary"
+          />
+        )}
       </div>
     </motion.div>
   );

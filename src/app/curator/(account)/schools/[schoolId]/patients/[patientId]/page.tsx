@@ -16,6 +16,7 @@ import {
   Stethoscope,
   TrendingUp,
   Users,
+  Trash2,
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -25,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 import { useCuratorPatientDetails } from "@/hooks/curator/use-curator-patient-details";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 
 import { getColorHex } from "@/lib/utils/color-utils";
 import { IconProgress } from "@tabler/icons-react";
@@ -48,6 +50,14 @@ export default function PatientDetailsPage() {
     actions,
 
     isActionsLoading,
+
+    showDeleteModal,
+
+    setShowDeleteModal,
+
+    singleDeletePending,
+
+    handleDeleteConfirm,
   } = useCuratorPatientDetails();
 
   if (isLoading) {
@@ -87,19 +97,30 @@ export default function PatientDetailsPage() {
         {/* Header Card */}
 
         <div className="bg-card rounded-3xl shadow-sm border border-border p-6 md:p-8 mb-8 relative overflow-hidden">
-          <Button
-            onClick={() => router.back()}
-            variant="ghost"
-            className="rounded-full mb-6 transition-colors gap-2 pl-0 hover:bg-transparent text-muted-foreground hover:text-foreground"
-          >
-            <ChevronLeft className="size-5" /> Back to List
-          </Button>
+          <div className="flex items-center justify-between mb-6">
+            <Button
+              onClick={() => router.back()}
+              variant="ghost"
+              className="rounded-full transition-colors gap-2 pl-0 hover:bg-transparent text-muted-foreground hover:text-foreground"
+            >
+              <ChevronLeft className="size-5" /> Back to List
+            </Button>
+          </div>
 
           <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
             {/* Avatar / Initials */}
 
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-teal-500/10 rounded-3xl flex items-center justify-center text-teal-600 shadow-inner shrink-0 ring-1 ring-teal-500/20">
-              <User className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
+            <div className="space-y-2 flex flex-col items-center justify-center">
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-teal-500/10 rounded-3xl flex items-center justify-center text-teal-600 shadow-inner shrink-0 ring-1 ring-teal-500/20">
+                <User className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
+              </div>
+              <Button
+                variant="destructive"
+                onClick={() => setShowDeleteModal(true)}
+                className="gap-2 rounded-md w-full"
+              >
+                <Trash2 className="size-4" /> Delete
+              </Button>
             </div>
 
             {/* Patient Info */}
@@ -703,6 +724,17 @@ export default function PatientDetailsPage() {
           </div>
         </div>
       </main>
+
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Patient Record"
+        message="This will permanently delete this patient record. This action cannot be undone."
+        confirmText="Delete"
+        variant="danger"
+        isLoading={singleDeletePending}
+      />
     </div>
   );
 }

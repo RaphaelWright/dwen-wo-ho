@@ -70,6 +70,7 @@ export const STATIC_ENDPOINTS = {
   },
   PATIENT_RESULTS: {
     CREATE: `${BASE_URLS.PATIENT_RESULTS}`,
+    BULK_DELETE_PATIENT_RECORDS: `${BASE_URLS.PATIENT_RESULTS}/bulk`,
   },
   PARTNERS: `${BASE_URLS.PARTNERS}`,
 };
@@ -158,6 +159,8 @@ export const DYNAMIC_ENDPOINTS = {
       `${BASE_URLS.PATIENT_RESULTS}/${resultId}/available-providers-for-referral`,
     ACTIONS: (resultId: string | number) =>
       `${BASE_URLS.PATIENT_RESULTS}/${resultId}/actions`,
+    DELETE_SINGLE_PATIENT_RECORD: (resultId: string | number) =>
+      `${BASE_URLS.PATIENT_RESULTS}/${resultId}`,
   },
   PARTNERS: {
     GET: (id: string | number) => `${BASE_URLS.PARTNERS}/${id}`,

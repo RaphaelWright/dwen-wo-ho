@@ -349,4 +349,25 @@ export const patientsService = {
       },
     );
   },
+
+  deleteSinglePatientRecord: async (
+    resultId: string | number,
+  ): Promise<void> => {
+    await api(
+      `${DYNAMIC_ENDPOINTS.PATIENT_RESULTS.DELETE_SINGLE_PATIENT_RECORD(resultId)}`,
+      {
+        method: "DELETE",
+      },
+    );
+  },
+
+  deleteAllPatientRecords: async (patientIds: number[]): Promise<void> => {
+    await api(
+      `${STATIC_ENDPOINTS.PATIENT_RESULTS.BULK_DELETE_PATIENT_RECORDS}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({ resultIds: patientIds }),
+      },
+    );
+  },
 };

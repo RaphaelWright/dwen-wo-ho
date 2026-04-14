@@ -4,7 +4,6 @@ import { useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { NewPatientResultEvent } from "@/lib/types/websocket";
-import { schoolDetailKeys } from "@/hooks/queries/use-school-details";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 /**
@@ -25,12 +24,12 @@ export function usePatientResultWebSocket() {
 
       // Invalidate school-specific patient overview query
       queryClient.invalidateQueries({
-        queryKey: schoolDetailKeys.patientsOverview(String(schoolId)),
+        queryKey: QUERY_KEYS.schoolPatientsOverview(String(schoolId)),
       });
 
       // Invalidate all school detail queries (covers urgent care too)
       queryClient.invalidateQueries({
-        queryKey: schoolDetailKeys.all,
+        queryKey: [QUERY_KEYS.schoolDetail],
       });
 
       // Invalidate curator-level queries
@@ -53,7 +52,7 @@ export function usePatientResultWebSocket() {
     );
     // Invalidate all school detail queries to catch missed results
     queryClient.invalidateQueries({
-      queryKey: schoolDetailKeys.all,
+      queryKey: [QUERY_KEYS.schoolDetail],
     });
   }, [queryClient]);
 
