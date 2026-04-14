@@ -81,6 +81,7 @@ export default function MainContent({
               patient={patient}
               index={i}
               detailRoute={(id) => `/provider/patients/${id}`}
+              showCheckbox={false}
             />
           ))}
         </AnimatePresence>

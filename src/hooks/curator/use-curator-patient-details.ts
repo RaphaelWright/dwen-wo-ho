@@ -7,15 +7,21 @@ import { patientsService } from "@/services/patients";
 import { getColorHex } from "@/lib/utils/color-utils";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { useDeleteSinglePatientRecord } from "@/hooks/curator/use-curator-delete-patient-records";
 
 export function useCuratorPatientDetails() {
   const params = useParams();
   const router = useRouter();
   const patientId = params.patientId as string;
+  const schoolId = params.schoolId as string;
 
   const [activeTab, setActiveTab] = useState<"assessment" | "history">(
     "assessment",
   );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const { deleteSinglePatient, singleDeletePending } =
+    useDeleteSinglePatientRecord(schoolId);
 
   const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEYS.curatorPatientDetails, patientId],
@@ -110,6 +116,15 @@ export function useCuratorPatientDetails() {
     ];
   }, [lockInAssessment]);
 
+  const handleDeleteConfirm = () => {
+    deleteSinglePatient(patientId, {
+      onSuccess: () => {
+        setShowDeleteModal(false);
+        router.back();
+      },
+    });
+  };
+
   return {
     router,
     patientResult,
@@ -122,5 +137,9 @@ export function useCuratorPatientDetails() {
     isActionsLoading: actionsQuery.isLoading,
     addPatientAction,
     isAddingAction,
+    showDeleteModal,
+    setShowDeleteModal,
+    singleDeletePending,
+    handleDeleteConfirm,
   };
 }

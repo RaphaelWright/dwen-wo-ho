@@ -20,4 +20,13 @@ export const QUERY_KEYS = {
   curatorProviderDetails: "curator-provider-details",
   curatorPatientModal: "curator-patient-modal",
   curatorPatientDetails: "curator-patient-details",
+  schoolDetail: "school-detail",
+  schoolPatients: (schoolId: string) =>
+    [QUERY_KEYS.schoolDetail, "patients", schoolId] as const,
+  schoolProviders: (schoolId: string) =>
+    [QUERY_KEYS.schoolDetail, "providers", schoolId] as const,
+  schoolUrgentCare: (schoolId: string) =>
+    [QUERY_KEYS.schoolDetail, "urgent-care", schoolId] as const,
+  schoolPatientsOverview: (schoolId: string) =>
+    [QUERY_KEYS.schoolDetail, "patients-overview", schoolId] as const,
 } as const;

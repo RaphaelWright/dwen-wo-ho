@@ -7,22 +7,7 @@ import { lockinsService } from "@/services/lockins";
 import { patientsService } from "@/services/patients";
 import { SchoolProvider } from "@/lib/types/provider";
 import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
-
-// ─── Query Keys ──────────────────────────────────────────────────────────────
-
-export const schoolDetailKeys = {
-  all: ["school-detail"] as const,
-  patients: (schoolId: string) =>
-    [...schoolDetailKeys.all, "patients", schoolId] as const,
-  providers: (schoolId: string) =>
-    [...schoolDetailKeys.all, "providers", schoolId] as const,
-  urgentCare: (schoolId: string) =>
-    [...schoolDetailKeys.all, "urgent-care", schoolId] as const,
-  patientsOverview: (schoolId: string) =>
-    [...schoolDetailKeys.all, "patients-overview", schoolId] as const,
-};
-
-// ─── Fetch Functions ─────────────────────────────────────────────────────────
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 async function fetchSchoolPatients(
   schoolId: string,
@@ -50,12 +35,11 @@ async function fetchSchoolUrgentCare(schoolId: string) {
   return lockinsService.getSchoolUrgentCare(schoolId);
 }
 
-// ─── Query Hook ──────────────────────────────────────────────────────────────
 export default function useSchoolDetailsQuery(schoolId: string) {
   const queryClient = useQueryClient();
 
   const patientsOverviewQuery = useQuery({
-    queryKey: schoolDetailKeys.patientsOverview(schoolId),
+    queryKey: QUERY_KEYS.schoolPatientsOverview(schoolId),
     queryFn: () => schoolsService.getPatientsOverview(schoolId),
     enabled: !!schoolId,
     staleTime: 2 * 60 * 1000,
@@ -63,7 +47,7 @@ export default function useSchoolDetailsQuery(schoolId: string) {
   });
 
   const providersQuery = useQuery({
-    queryKey: schoolDetailKeys.providers(schoolId),
+    queryKey: QUERY_KEYS.schoolProviders(schoolId),
     queryFn: () => fetchSchoolProviders(schoolId),
     enabled: !!schoolId,
     staleTime: 5 * 60 * 1000,
@@ -73,7 +57,7 @@ export default function useSchoolDetailsQuery(schoolId: string) {
   const invalidateSchoolProviders = useCallback(
     () =>
       queryClient.invalidateQueries({
-        queryKey: schoolDetailKeys.providers(schoolId),
+        queryKey: QUERY_KEYS.schoolProviders(schoolId),
       }),
     [queryClient, schoolId],
   );

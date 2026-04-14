@@ -7,7 +7,6 @@ import { toast } from "@/components/ui/sonner";
 import { urgentCasesAtom } from "@/atoms/websocket";
 import { NewUrgentCaseEvent } from "@/lib/types/websocket";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
-import { schoolDetailKeys } from "@/hooks/queries/use-school-details";
 
 // Urgent alert audio — short beep using Web Audio API
 function playUrgentAlertSound() {
@@ -79,7 +78,7 @@ export function useUrgentCasesWebSocket() {
 
       // Invalidate REST queries so UrgentPanel refreshes (Curator school detail)
       queryClient.invalidateQueries({
-        queryKey: schoolDetailKeys.all,
+        queryKey: [QUERY_KEYS.schoolDetail],
       });
 
       // Play urgent alert sound
@@ -111,7 +110,7 @@ export function useUrgentCasesWebSocket() {
     });
     // Re-fetch urgent care data (Curator)
     queryClient.invalidateQueries({
-      queryKey: schoolDetailKeys.all,
+      queryKey: [QUERY_KEYS.schoolDetail],
     });
   }, [queryClient]);
 
