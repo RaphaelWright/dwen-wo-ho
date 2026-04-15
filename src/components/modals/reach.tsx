@@ -21,7 +21,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 backdrop-blur-sm bg-background/80 z-50"
+            className="fixed inset-0 backdrop-blur-3xl bg-background/80 z-50"
             onClick={onClose}
           />
           <motion.div

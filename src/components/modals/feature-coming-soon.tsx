@@ -16,7 +16,7 @@ const FeatureComingSoonModal = ({
     FEATURE_COMING_SOON_CONTENT;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-60 p-4">
+    <div className="fixed inset-0 backdrop-blur-3xl bg-background/80 flex items-center justify-center z-60 p-4">
       <div
         className="relative bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col items-center text-center p-8 border border-border"
         onClick={(e) => e.stopPropagation()}
