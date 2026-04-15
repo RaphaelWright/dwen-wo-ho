@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
 import ProviderDetailsModal from "@/components/modals/provider-details";
@@ -8,6 +10,8 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { useCuratorProviders } from "@/hooks/curator/use-curator-providers";
 
 export default function ProvidersPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const {
     isLoading,
     isError,
@@ -35,6 +39,23 @@ export default function ProvidersPage() {
     handleRejectConfirm,
     getProviderName,
   } = useCuratorProviders();
+
+  // Auto-open provider modal from notification query param
+  useEffect(() => {
+    const providerModalEmail = searchParams.get("providerModal");
+    if (providerModalEmail && !isLoading && providersList.length > 0) {
+      // Check if provider exists in list before opening
+      const providerExists = providersList.some(
+        (p) => p.email === providerModalEmail,
+      );
+      if (providerExists) {
+        handleProviderSelect(providerModalEmail);
+        // Clean up URL by removing query param
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      }
+    }
+  }, [searchParams, isLoading, providersList, handleProviderSelect]);
 
   if (isLoading) {
     return (

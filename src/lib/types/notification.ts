@@ -60,6 +60,7 @@ export interface CuratorNotification {
   emoji: string;
   schoolId: number;
   read: boolean;
+  targetEmail?: string;
   link?: Route;
 }
 

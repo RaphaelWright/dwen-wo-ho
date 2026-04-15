@@ -48,10 +48,10 @@ export function getProviderNotificationRoute(
     }
   }
 
-  if (!computedAction || !validActions.includes(computedAction))
-    return null;
+  if (!computedAction || !validActions.includes(computedAction)) return null;
 
-  const validActionKey = computedAction as keyof typeof providerNotificationRouteConfig;
+  const validActionKey =
+    computedAction as keyof typeof providerNotificationRouteConfig;
   const generator = providerNotificationRouteConfig[validActionKey];
   return generator(
     computedAction === PROVIDER_NOTIFICATION_ACTIONS.OPEN_PROVIDER_SCHOOL ||
@@ -65,7 +65,7 @@ export const curatorNotificationRouteConfig = {
   [CURATOR_NOTIFICATION_ACTIONS.OPEN_SCHOOL]: (id: string | number) =>
     DYNAMIC_ROUTES.curator.schoolDetails(id),
   [CURATOR_NOTIFICATION_ACTIONS.OPEN_PROVIDER]: (id: string | number) =>
-    `${ROUTES.curator.providerDetails}/${id}`,
+    `${ROUTES.curator.providers}?providerModal=${id}`,
   [CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT]: (
     schoolId: string | number,
     patientId: string | number,
@@ -81,27 +81,27 @@ export function getCuratorNotificationRoute(notification: CuratorNotification) {
   if (!computedAction || !validActions.includes(computedAction)) {
     const type = notification.type;
     const targetType = notification.relatedEntityType;
-    
+
     if (
-      type === "NEW_PATIENT_ADDED" || 
-      type === "PATIENT_LOCK_IN" || 
-      type === "PATIENT_REFERRED" || 
-      targetType === "PATIENT_RESULT" || 
+      type === "NEW_PATIENT_ADDED" ||
+      type === "PATIENT_LOCK_IN" ||
+      type === "PATIENT_REFERRED" ||
+      targetType === "PATIENT_RESULT" ||
       targetType === "PATIENT"
     ) {
       computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT;
     } else if (
-      type === "PROVIDER_REGISTRATION" || 
-      type === "PROVIDER_APPLICATION_UPDATE" || 
-      type === "PROVIDER_SCHOOL_CHANGE" || 
+      type === "PROVIDER_REGISTRATION" ||
+      type === "PROVIDER_APPLICATION_UPDATE" ||
+      type === "PROVIDER_SCHOOL_CHANGE" ||
       targetType === "PROVIDER" ||
       targetType === "USER"
     ) {
       computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_PROVIDER;
     } else if (
-      type === "SCHOOL_REGISTRATION" || 
-      type === "OPEN_PATIENTS_AVAILABLE" || 
-      type === "CRITICAL_ALERT" || 
+      type === "SCHOOL_REGISTRATION" ||
+      type === "OPEN_PATIENTS_AVAILABLE" ||
+      type === "CRITICAL_ALERT" ||
       targetType === "SCHOOL"
     ) {
       computedAction = CURATOR_NOTIFICATION_ACTIONS.OPEN_SCHOOL;
@@ -110,7 +110,8 @@ export function getCuratorNotificationRoute(notification: CuratorNotification) {
 
   if (!computedAction || !validActions.includes(computedAction)) return null;
 
-  const validAction = computedAction as keyof typeof curatorNotificationRouteConfig;
+  const validAction =
+    computedAction as keyof typeof curatorNotificationRouteConfig;
   const generator = curatorNotificationRouteConfig[validAction];
   if (computedAction === CURATOR_NOTIFICATION_ACTIONS.OPEN_PATIENT) {
     return generator(notification.schoolId, notification.relatedEntityId);
@@ -118,5 +119,10 @@ export function getCuratorNotificationRoute(notification: CuratorNotification) {
   if (computedAction === CURATOR_NOTIFICATION_ACTIONS.OPEN_PARTNER) {
     return (generator as () => string)();
   }
-  return (generator as (id: string | number) => string)(notification.relatedEntityId);
+  // For provider notifications, use targetEmail if available, otherwise fall back to relatedEntityId
+  const providerIdentifier =
+    computedAction === CURATOR_NOTIFICATION_ACTIONS.OPEN_PROVIDER
+      ? notification.targetEmail || notification.relatedEntityId
+      : notification.relatedEntityId;
+  return (generator as (id: string | number) => string)(providerIdentifier);
 }
