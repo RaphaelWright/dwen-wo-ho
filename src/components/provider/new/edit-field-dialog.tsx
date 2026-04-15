@@ -232,8 +232,8 @@ export default function EditFieldDialog({
                     </div>
                   </div>
 
-                  {/* Items list - scrollable with hidden scrollbar */}
-                  <div className="max-h-52 overflow-y-auto scrollbar-hide">
+                  {/* Items list - scrollable with native scrollbar */}
+                  <div className="max-h-52 overflow-y-auto">
                     {filteredItems.length > 0 ? (
                       filteredItems.map((item) => (
                         <button
