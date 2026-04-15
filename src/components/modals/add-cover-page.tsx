@@ -52,7 +52,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
   if (!props.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-3xl">
       <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-border">

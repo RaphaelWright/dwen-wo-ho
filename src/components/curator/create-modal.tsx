@@ -27,7 +27,7 @@ const CreateModal = ({
   return (
     <>
       <div
-        className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 backdrop-blur-3xl bg-background/80 flex items-center justify-center z-50 p-4"
         onClick={() => setShowCreateModal(false)}
       >
         <div
