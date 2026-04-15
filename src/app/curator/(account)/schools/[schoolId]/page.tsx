@@ -129,64 +129,64 @@ export default function SchoolDetailsPage() {
             campusLabel={campusLabel}
             onEditClick={() => setShowEditModal(true)}
             onDisableClick={handleDisableSchool}
-            searchComponent={
-              <div className="flex items-center gap-3 w-full md:max-w-110">
-                <div className="hidden md:block lg:max-w-xs 2xl:max-w-md ml-auto flex-1">
-                  <SearchDropdown
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
-                    suggestions={suggestions}
-                    quickFilters={quickFilters}
-                    activeFilters={localActiveFilters}
-                    onSelectOption={(val) => {
-                      setSearchQuery(val);
-                    }}
-                    onFilterChange={(filter) => {
-                      if (filter.filterKey) {
-                        toggleFilter(filter);
-                      }
-                    }}
-                    onRemoveFilter={removeFilter}
-                    getSuggestionValue={(s) => s.name}
-                    renderSuggestion={(props: any) =>
-                      activeTab === "icons" ? (
-                        <SchoolSuggestionCard {...props} />
-                      ) : (
-                        <PatientSuggestionCard {...props} />
-                      )
-                    }
-                    onSubmitSearch={(query) => setAppliedSearchQuery(query)}
-                    onSuggestionAction={(suggestion) => {
-                      if (activeTab === "patients" && suggestion.id) {
-                        router.push(
-                          DYNAMIC_ROUTES.curator.patientDetails(
-                            schoolId,
-                            suggestion.id,
-                          ) as Route,
-                        );
-                      } else if (
-                        activeTab === "providers" &&
-                        suggestion.email
-                      ) {
-                        handleProviderClick(suggestion);
-                      } else if (activeTab === "icons") {
-                        setEditingIcon(suggestion);
-                        setShowAddIconModal(true);
-                      }
-                    }}
-                    onResetSearch={() => {
-                      setSearchQuery("");
-                      setAppliedSearchQuery("");
-                      clearFilters();
-                    }}
-                  />
-                </div>
-              </div>
-            }
+            // searchComponent={
+            //   <div className="flex items-center gap-3 w-full md:max-w-110">
+            //     <div className="hidden md:block lg:max-w-xs 2xl:max-w-md ml-auto flex-1">
+            //       <SearchDropdown
+            //         searchQuery={searchQuery}
+            //         onSearchChange={setSearchQuery}
+            //         placeholders={SCHOOL_DETAILS_SEARCH_PLACEHOLDERS[activeTab]}
+            //         suggestions={suggestions}
+            //         quickFilters={quickFilters}
+            //         activeFilters={localActiveFilters}
+            //         onSelectOption={(val) => {
+            //           setSearchQuery(val);
+            //         }}
+            //         onFilterChange={(filter) => {
+            //           if (filter.filterKey) {
+            //             toggleFilter(filter);
+            //           }
+            //         }}
+            //         onRemoveFilter={removeFilter}
+            //         getSuggestionValue={(s) => s.name}
+            //         renderSuggestion={(props: any) =>
+            //           activeTab === "icons" ? (
+            //             <SchoolSuggestionCard {...props} />
+            //           ) : (
+            //             <PatientSuggestionCard {...props} />
+            //           )
+            //         }
+            //         onSubmitSearch={(query) => setAppliedSearchQuery(query)}
+            //         onSuggestionAction={(suggestion) => {
+            //           if (activeTab === "patients" && suggestion.id) {
+            //             router.push(
+            //               DYNAMIC_ROUTES.curator.patientDetails(
+            //                 schoolId,
+            //                 suggestion.id,
+            //               ) as Route,
+            //             );
+            //           } else if (
+            //             activeTab === "providers" &&
+            //             suggestion.email
+            //           ) {
+            //             handleProviderClick(suggestion);
+            //           } else if (activeTab === "icons") {
+            //             setEditingIcon(suggestion);
+            //             setShowAddIconModal(true);
+            //           }
+            //         }}
+            //         onResetSearch={() => {
+            //           setSearchQuery("");
+            //           setAppliedSearchQuery("");
+            //           clearFilters();
+            //         }}
+            //       />
+            //     </div>
+            //   </div>
+            // }
           />
 
-          <div className="grid gap-4 mb-4">
+          <div className="grid md:grid-cols-2 gap-4">
             <FilterTabBar<SchoolTab>
               tabs={tabs}
               activeTab={activeTab}
@@ -210,7 +210,7 @@ export default function SchoolDetailsPage() {
               activeTabLayoutId="school-details-filter"
             />
 
-            <div className="md:hidden max-w-md">
+            <div className="max-w-full">
               <SearchDropdown
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}

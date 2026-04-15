@@ -1,4 +1,4 @@
-import { FiX, FiClock } from "react-icons/fi";
+import { X, Clock } from "lucide-react";
 
 import { FeatureComingSoonModalProps } from "@/lib/types/modals";
 
@@ -16,34 +16,36 @@ const FeatureComingSoonModal = ({
     FEATURE_COMING_SOON_CONTENT;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-60 p-4">
+    <div className="fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-60 p-4">
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col items-center text-center p-8"
+        className="relative bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col items-center text-center p-8 border border-border"
         onClick={(e) => e.stopPropagation()}
       >
         <Button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-full flex items-center justify-center transition-all duration-200"
+          variant="outline"
+          size="icon"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full"
           aria-label="Close modal"
         >
-          <FiX className="w-4 h-4" />
+          <X className="w-4 h-4" />
         </Button>
 
-        <div className="w-20 h-20 bg-[#955aa4]/10 rounded-full flex items-center justify-center mb-6">
-          <FiClock className="w-10 h-10 text-[#955aa4]" />
+        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+          <Clock className="w-10 h-10 text-primary" />
         </div>
 
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">{TITLE}</h3>
+        <h3 className="text-2xl font-bold text-foreground mb-2">{TITLE}</h3>
 
-        <p className="text-gray-600 mb-6">
+        <p className="text-muted-foreground mb-6">
           {DESCRIPTION_PREFIX}{" "}
-          <span className="font-semibold text-[#955aa4]">{featureName}</span>{" "}
+          <span className="font-semibold text-primary">{featureName}</span>{" "}
           {DESCRIPTION_SUFFIX}
         </p>
 
         <Button
           onClick={onClose}
-          className="px-6 py-2.5 bg-[#955aa4] text-white font-semibold rounded-lg hover:bg-[#8a4d99] transition-colors shadow-lg shadow-[#955aa4]/20"
+          className="px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
         >
           {BUTTON_TEXT}
         </Button>

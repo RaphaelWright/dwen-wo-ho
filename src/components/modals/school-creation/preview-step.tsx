@@ -8,10 +8,10 @@ export const PreviewStep = ({
 }: PreviewStepProps) => {
   return (
     <div className="space-y-6">
-      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+      <div className="bg-muted rounded-xl p-6 space-y-4">
         <div className="flex items-start gap-4">
           {formData.logo ? (
-            <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-gray-200">
+            <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-border">
               <Image
                 src={URL.createObjectURL(formData.logo)}
                 alt="School logo"
@@ -21,45 +21,45 @@ export const PreviewStep = ({
               />
             </div>
           ) : (
-            <div className="w-20 h-20 rounded-xl bg-gray-200 flex items-center justify-center shrink-0">
-              <span className="text-gray-400 text-2xl font-bold">
+            <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center shrink-0">
+              <span className="text-muted-foreground text-2xl font-bold">
                 {formData.name.charAt(0).toUpperCase()}
               </span>
             </div>
           )}
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">
+            <h3 className="text-2xl font-bold text-foreground mb-1">
               {formData.name}
             </h3>
             {formData.nickname && (
-              <p className="text-lg text-gray-600 font-medium">
+              <p className="text-lg text-muted-foreground font-medium">
                 &quot;{formData.nickname}&quot;
               </p>
             )}
             {formData.motto && (
-              <p className="text-sm text-gray-500 italic mt-1">
+              <p className="text-sm text-muted-foreground italic mt-1">
                 &quot;{formData.motto}&quot;
               </p>
             )}
-            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700">
+            <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-bold bg-secondary-accent/10 text-secondary-accent">
               {formData.type}
             </span>
           </div>
         </div>
 
         {selectedCampuses.length > 0 && (
-          <div className="pt-4 border-t border-gray-200">
+          <div className="pt-4 border-t border-border">
             <div className="flex items-start gap-2">
-              <MapPin className="w-5 h-5 text-teal-600 mt-0.5 shrink-0" />
+              <MapPin className="w-5 h-5 text-secondary-accent mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">
+                <p className="text-sm font-semibold text-foreground mb-2">
                   Campuses:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedCampuses.map((campus) => (
                     <span
                       key={campus}
-                      className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
+                      className="px-3 py-1 bg-card border border-border rounded-lg text-sm text-foreground"
                     >
                       {campus}
                     </span>

@@ -73,7 +73,7 @@ export function SchoolCard({
             {school.newPatientName && !school.isLoading && (
               <Badge
                 variant="secondary"
-                className="bg-white hover:bg-white text-black shadow-sm font-semibold text-xs py-0.5 px-2.5 rounded-full"
+                className="bg-background hover:bg-background text-foreground shadow-sm font-semibold text-xs py-0.5 px-2.5 rounded-full"
               >
                 New Patient
               </Badge>
@@ -87,7 +87,7 @@ export function SchoolCard({
                 initial: { scale: 1, y: 0 },
                 hover: { scale: 1.1, y: -3 },
               }}
-              className="h-16 w-16 rounded-full border-4 border-yellow-500 bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-xl"
+              className="h-16 w-16 rounded-full border-4 border-warning bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-xl"
             >
               {school.logo ? (
                 <Image
@@ -99,7 +99,7 @@ export function SchoolCard({
                   className="object-contain"
                 />
               ) : (
-                <School className="w-4 h-4 text-white/80" />
+                <School className="w-4 h-4 text-background/80" />
               )}
             </motion.div>
           </div>

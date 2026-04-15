@@ -12,11 +12,13 @@ export const ReachTab = ({ reach, isLoading }: ReachTabProps) => (
   >
     {reach && (
       <div className="max-w-md mx-auto">
-        <div className="bg-linear-to-br from-[#955aa4] to-[#7a4a88] rounded-2xl p-8 text-center text-white">
+        <div className="bg-linear-to-br from-primary to-primary/80 rounded-2xl p-8 text-center text-primary-foreground">
           <TrendingUp className="w-16 h-16 mx-auto mb-4" />
           <h3 className="text-2xl font-bold mb-2">Reach</h3>
           <p className="text-5xl font-extrabold mb-2">{reach.reach}</p>
-          <p className="text-white/80">Total reach for {reach.schoolName}</p>
+          <p className="text-primary-foreground/80">
+            Total reach for {reach.schoolName}
+          </p>
         </div>
       </div>
     )}
