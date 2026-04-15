@@ -8,6 +8,7 @@ import {
   RotateCcw,
   RotateCw,
   Maximize2,
+  ArrowBigLeftIcon,
 } from "lucide-react";
 import { AddCoverPageModalProps } from "@/lib/types/modals";
 import {
@@ -51,30 +52,24 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
   if (!props.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border-2 border-[#955aa4]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-sm">
+      <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-border">
           <button
             onClick={handleBack}
-            className="w-10 h-10 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+            className="w-10 h-10 bg-muted rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
           >
-            <Image
-              src="/arrow-diagonal-white.svg"
-              alt="Back"
-              width={20}
-              height={20}
-              className="rotate-180"
-            />
+            <ArrowBigLeftIcon className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold text-gray-900">{headerTitle}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{headerTitle}</h2>
           <button
             onClick={headerAction.onClick}
             disabled={headerAction.disabled}
             className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
               headerAction.disabled
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
             }`}
           >
             {headerAction.label}
@@ -87,12 +82,12 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
             <div className="space-y-6">
               <div className="flex items-end gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-semibold text-gray-900 mb-3">
+                  <label className="block text-sm font-semibold text-foreground mb-3">
                     Photo
                   </label>
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors text-base"
+                    className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors text-base"
                   >
                     + Photo
                   </button>
@@ -105,12 +100,12 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                   />
                 </div>
                 <div className="relative flex-1" ref={colorDropdownRef}>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3">
+                  <label className="block text-sm font-semibold text-foreground mb-3">
                     Colors
                   </label>
                   <button
                     onClick={() => setShowColorDropdown(!showColorDropdown)}
-                    className="w-full px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors flex items-center justify-between text-base"
+                    className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-between text-base"
                   >
                     <span>
                       {selectedColor
@@ -125,23 +120,23 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                     />
                   </button>
                   {showColorDropdown && (
-                    <div className="absolute z-10 mt-2 w-full bg-white border-2 border-gray-200 rounded-xl shadow-2xl overflow-hidden">
+                    <div className="absolute z-10 mt-2 w-full bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
                       <div className="p-4 space-y-2 max-h-64 overflow-y-auto">
                         {COVER_PAGE_COLORS.map((color) => (
                           <button
                             key={color.hex}
                             onClick={() => handleColorSelect(color)}
-                            className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left"
+                            className="w-full flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg transition-colors text-left"
                           >
                             <div
-                              className="w-12 h-12 rounded-lg border-2 border-gray-200 shrink-0"
+                              className="w-12 h-12 rounded-lg border-2 border-border shrink-0"
                               style={{ backgroundColor: `#${color.hex}` }}
                             />
                             <div>
-                              <p className="font-semibold text-gray-900">
+                              <p className="font-semibold text-foreground">
                                 {color.name}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-muted-foreground">
                                 #{color.hex}
                               </p>
                             </div>
@@ -152,14 +147,14 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                   )}
                 </div>
               </div>
-              <div className="border-b border-gray-200" />
+              <div className="border-b border-border" />
               <div>
                 <div
-                  className="w-full h-64 rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
+                  className="w-full h-64 rounded-xl border-2 border-border overflow-hidden flex items-center justify-center"
                   style={{
                     backgroundColor: selectedColor
                       ? `#${selectedColor}`
-                      : "#f9fafb",
+                      : "var(--muted)",
                   }}
                 >
                   {photoPreview ? (
@@ -173,7 +168,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       />
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center">
+                    <p className="text-muted-foreground text-center">
                       Add photo to get started
                     </p>
                   )}
@@ -184,14 +179,14 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
 
           {step === "edit-image" && photoPreview && (
             <div className="space-y-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Zoom, rotate, or drag the image to set the focus. The rectangle
                 is what will show on the cover.
               </p>
               {/* Frame: fixed aspect, overflow hidden */}
               <div
                 ref={editorContainerRef}
-                className="relative w-full rounded-xl border-2 border-gray-300 overflow-hidden bg-gray-100 select-none"
+                className="relative w-full rounded-xl border-2 border-border overflow-hidden bg-muted select-none"
                 style={{
                   aspectRatio: COVER_PAGE_CONSTANTS.EDIT_FRAME_ASPECT,
                   maxHeight: 360,
@@ -237,10 +232,10 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       ),
                     )
                   }
-                  className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+                  className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
                   title="Zoom out"
                 >
-                  <ZoomOut className="w-5 h-5 text-gray-700" />
+                  <ZoomOut className="w-5 h-5 text-foreground" />
                 </button>
                 <button
                   type="button"
@@ -252,34 +247,34 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       ),
                     )
                   }
-                  className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+                  className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
                   title="Zoom in"
                 >
-                  <ZoomIn className="w-5 h-5 text-gray-700" />
+                  <ZoomIn className="w-5 h-5 text-foreground" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setRotation((r) => (r - 90) % 360)}
-                  className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+                  className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
                   title="Rotate left"
                 >
-                  <RotateCcw className="w-5 h-5 text-gray-700" />
+                  <RotateCcw className="w-5 h-5 text-foreground" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setRotation((r) => (r + 90) % 360)}
-                  className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100"
+                  className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
                   title="Rotate right"
                 >
-                  <RotateCw className="w-5 h-5 text-gray-700" />
+                  <RotateCw className="w-5 h-5 text-foreground" />
                 </button>
                 <button
                   type="button"
                   onClick={setFitToFrame}
-                  className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 flex items-center gap-1"
+                  className="p-2 rounded-lg border border-border hover:bg-muted flex items-center gap-1 transition-colors"
                   title="Fit to frame"
                 >
-                  <Maximize2 className="w-5 h-5 text-gray-700" />
+                  <Maximize2 className="w-5 h-5 text-foreground" />
                   <span className="text-sm font-medium">Fit</span>
                 </button>
               </div>
@@ -289,7 +284,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
           {step === "slogan" && (
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-3">
+                <label className="block text-sm font-semibold text-foreground mb-3">
                   Slogan
                 </label>
                 <input
@@ -297,16 +292,16 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                   value={slogan}
                   onChange={(e) => setSlogan(e.target.value)}
                   placeholder="Enter slogan..."
-                  className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#955aa4]/20 focus:border-[#955aa4] transition-all text-gray-900 placeholder-gray-400"
+                  className="w-full px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
                 />
               </div>
               <div>
                 <div
-                  className="w-full h-75 rounded-xl border-2 border-gray-200 overflow-hidden flex items-center justify-center"
+                  className="w-full h-75 rounded-xl border-2 border-border overflow-hidden flex items-center justify-center"
                   style={{
                     backgroundColor: selectedColor
                       ? `#${selectedColor}`
-                      : "#f9fafb",
+                      : "var(--muted)",
                   }}
                 >
                   {photoPreview ? (
@@ -320,7 +315,7 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
                       />
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-center">
+                    <p className="text-muted-foreground text-center">
                       Preview will appear here
                     </p>
                   )}

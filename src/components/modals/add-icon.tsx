@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { AddIconModalProps } from "@/lib/types/modals";
-import { Lock, X } from "lucide-react";
+import { ArrowBigLeftIcon, Lock, X } from "lucide-react";
 import { useIconForm } from "@/hooks/components/modals/use-icon-form";
 import { Button } from "../ui/button";
 
@@ -38,21 +38,15 @@ export default function AddIconModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-sm">
       <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-5xl max-h-[85vh] overflow-hidden flex flex-col border border-border">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border bg-muted/20">
+        <div className="flex items-center justify-between p-6 border-b border-border">
           <Button
             onClick={onClose}
-            className="w-10 h-10 bg-muted-foreground/20 rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
+            className="w-10 h-10 bg-muted rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
           >
-            <Image
-              src="/arrow-diagonal-white.svg"
-              alt="Back"
-              width={20}
-              height={20}
-              className="rotate-180 invert dark:invert-0"
-            />
+           <ArrowBigLeftIcon/>
           </Button>
           <h2 className="text-2xl font-bold text-foreground">{headerTitle}</h2>
           <div className="w-10" /> {/* Spacer for centering */}
@@ -68,7 +62,7 @@ export default function AddIconModal({
                   <>
                     <Button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute inset-0 z-0 p-0 h-full w-full bg-transparent hover:bg-black/10 transition-colors"
+                      className="absolute inset-0 z-0 p-0 h-full w-full bg-transparent hover:bg-foreground/10 transition-colors"
                     >
                       <Image
                         src={photoPreview}
@@ -86,12 +80,12 @@ export default function AddIconModal({
                     </div>
                     {/* Name Overlay */}
                     {name && (
-                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/80 to-transparent z-10">
-                        <p className="text-white text-3xl font-bold drop-shadow-md">
+                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-foreground/80 to-transparent z-10">
+                        <p className="text-background text-3xl font-bold drop-shadow-md">
                           {name}
                         </p>
                         {slogan && (
-                          <p className="text-white/90 text-lg mt-1 drop-shadow-sm">
+                          <p className="text-background/90 text-lg mt-1 drop-shadow-sm">
                             {slogan}
                           </p>
                         )}
@@ -167,7 +161,7 @@ export default function AddIconModal({
               {/* Lock-ins Section */}
               <div className="p-4 bg-muted/10 rounded-xl border border-border">
                 <h3 className="font-bold text-foreground mb-3 flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-orange-500" />
+                  <Lock className="w-4 h-4 text-warning" />
                   Lock-ins ({lockIns.length})
                 </h3>
                 {lockIns.length > 0 && (

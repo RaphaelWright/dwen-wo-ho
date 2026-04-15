@@ -12,14 +12,14 @@ export const SchoolFooter = ({
   isPending,
 }: SchoolFooterProps) => {
   return (
-    <div className="px-8 py-6 border-t border-gray-100 bg-gray-50/50 flex justify-between gap-3">
+    <div className="px-8 py-6 border-t border-border bg-muted/30 flex justify-between gap-3">
       {currentStep === 1 ? (
         <>
           <Button
             type="button"
             onClick={handleClose}
             variant="ghost"
-            className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            className="px-6"
           >
             Cancel
           </Button>
@@ -38,7 +38,7 @@ export const SchoolFooter = ({
             type="button"
             onClick={handleBack}
             variant="ghost"
-            className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-2"
+            className="px-6 flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Edit
@@ -48,7 +48,7 @@ export const SchoolFooter = ({
               type="button"
               onClick={handleClose}
               variant="ghost"
-              className="px-6 font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className="px-6"
             >
               Cancel
             </Button>

@@ -8,14 +8,16 @@ export function ProviderActionButtons({
   isLoading,
 }: ProviderActionButtonsProps) {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="bg-card shadow-lg rounded-lg overflow-hidden border border-border">
       <div className="px-6 py-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Review Actions</h2>
+        <h2 className="text-xl font-bold text-foreground mb-4">
+          Review Actions
+        </h2>
         <div className="flex space-x-4">
           <Button
             onClick={onApprove}
             disabled={isLoading}
-            className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3"
+            className="flex items-center space-x-2 bg-success hover:bg-success/90 text-primary-foreground px-6 py-3"
           >
             <CheckCircle className="w-5 h-5" />
             <span>Approve Provider</span>

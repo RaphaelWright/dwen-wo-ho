@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 
 export const StepIndicator = ({ currentStep }: StepIndicatorProps) => {
   return (
-    <div className="px-8 py-4 border-b border-gray-100 bg-white">
+    <div className="px-8 py-4 border-b border-border bg-card">
       <div className="flex items-center gap-2">
         <div
           className={`flex items-center gap-2 ${
@@ -21,7 +21,7 @@ export const StepIndicator = ({ currentStep }: StepIndicatorProps) => {
           </div>
           <span className="text-sm font-medium">Form</span>
         </div>
-        <div className="flex-1 h-0.5 bg-gray-200">
+        <div className="flex-1 h-0.5 bg-muted">
           <div
             className={`h-full transition-all duration-300 ${
               currentStep >= 2 ? "bg-primary" : "bg-muted"

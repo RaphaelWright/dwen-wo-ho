@@ -32,7 +32,7 @@ export function IconsTab({
         </p>
         <Button
           onClick={onAddFirstIcon}
-          className="bg-black text-white hover:bg-gray-800 rounded-lg px-6"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6"
         >
           + Add First Icon
         </Button>
@@ -70,8 +70,8 @@ export function IconsTab({
               </div>
 
               {/* Hover Edit Overlay */}
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <Pencil className="text-white w-6 h-6" />
+              <div className="absolute inset-0 bg-foreground/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <Pencil className="text-background w-6 h-6" />
               </div>
             </div>
 

@@ -29,8 +29,8 @@ export const FormStep = ({
       {/* Name & Nickname */}
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-gray-700">
-            School Name <span className="text-red-500">*</span>
+          <label className="text-sm font-semibold text-foreground">
+            School Name <span className="text-destructive">*</span>
           </label>
           <Input
             type="text"
@@ -41,7 +41,7 @@ export const FormStep = ({
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-gray-700">
+          <label className="text-sm font-semibold text-foreground">
             Nickname (Optional)
           </label>
           <Input
@@ -56,8 +56,8 @@ export const FormStep = ({
 
       {/* Motto */}
       <div className="space-y-2">
-        <Label className="text-sm font-semibold text-gray-700">
-          Motto <span className="text-red-500">*</span>
+        <Label className="text-sm font-semibold text-foreground">
+          Motto <span className="text-destructive">*</span>
         </Label>
         <Textarea
           value={formData.motto}
@@ -70,8 +70,8 @@ export const FormStep = ({
 
       {/* Type */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-gray-700">
-          Type <span className="text-red-500">*</span>
+        <Label className="text-sm font-semibold text-foreground">
+          Type <span className="text-destructive">*</span>
         </Label>
         <div className="flex gap-4">
           {SCHOOL_TYPES.map((type) => (
@@ -94,11 +94,11 @@ export const FormStep = ({
       {/* Campuses */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-semibold text-gray-700">
+          <Label className="text-sm font-semibold text-foreground">
             Campuses
           </Label>
           {selectedCampuses.length > 0 && (
-            <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-secondary-accent bg-secondary-accent/10 px-2 py-1 rounded-full">
               {selectedCampuses.length} selected
             </span>
           )}
@@ -107,15 +107,15 @@ export const FormStep = ({
           <Button
             type="button"
             onClick={() => setShowCampusDropdown(!showCampusDropdown)}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
+            className="w-full px-4 py-3 bg-muted border border-border rounded-xl text-left flex items-center justify-between hover:bg-muted/80 transition-colors"
           >
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4" />
               <span
                 className={
                   selectedCampuses.length > 0
-                    ? "text-gray-900"
-                    : "text-gray-500"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
                 }
               >
                 {selectedCampuses.length > 0
@@ -124,7 +124,7 @@ export const FormStep = ({
               </span>
             </div>
             <ChevronDown
-              className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+              className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
                 showCampusDropdown ? "rotate-180" : ""
               }`}
             />
@@ -136,7 +136,7 @@ export const FormStep = ({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-xl z-20 overflow-hidden"
+                className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-20 overflow-hidden"
               >
                 <div className="max-h-48 overflow-y-auto p-2">
                   {CAMPUS_OPTIONS.map((campus) => (
@@ -146,8 +146,8 @@ export const FormStep = ({
                       onClick={() => handleCampusToggle(campus)}
                       className={`bg-transparent shadow-none border-0 w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
                         selectedCampuses.includes(campus)
-                          ? "bg-gray-100 text-gray-900 font-medium"
-                          : "hover:bg-gray-50 text-gray-700"
+                          ? "bg-muted text-foreground font-medium"
+                          : "hover:bg-muted/50 text-muted-foreground"
                       }`}
                     >
                       <span>{campus}</span>
@@ -162,7 +162,7 @@ export const FormStep = ({
 
       {/* Logo */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-gray-700">
+        <Label className="text-sm font-semibold text-foreground">
           School Logo
         </Label>
         <div className="flex items-center gap-6">
@@ -194,7 +194,7 @@ export const FormStep = ({
                   <Button
                     type="button"
                     onClick={handleRemoveLogo}
-                    className="bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition-colors"
+                    className="bg-foreground/60 hover:bg-foreground/80 text-background rounded-full p-1 transition-colors"
                     title="Remove logo"
                   >
                     <X size={12} />
@@ -215,12 +215,12 @@ export const FormStep = ({
                   className="w-full h-32 bg-muted border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/80 hover:border-primary/30 transition-all group"
                 >
                   <div className="w-10 h-10 bg-background rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Upload className="w-5 h-5 text-teal-600" />
+                    <Upload className="w-5 h-5 text-secondary-accent" />
                   </div>
                   <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
                     Click to upload logo
                   </span>
-                  <span className="text-xs text-gray-400 mt-1">
+                  <span className="text-xs text-muted-foreground mt-1">
                     PNG, JPG up to 5MB
                   </span>
                 </Label>

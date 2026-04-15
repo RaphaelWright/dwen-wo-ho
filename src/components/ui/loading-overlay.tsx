@@ -15,14 +15,14 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 bg-background/50 backdrop-blur-sm"
     >
       {/* Loading bar at bottom */}
       <motion.div
         initial={{ y: "100%" }}
         animate={{ y: "10%" }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="absolute bottom-14 left-1/2 transform -translate-x-1/2 w-2/5 bg-white rounded-lg shadow-2xl"
+        className="absolute bottom-14 left-1/2 transform -translate-x-1/2 w-2/5 bg-card rounded-lg shadow-2xl"
       >
         <div className="p-8 flex flex-col items-center justify-center space-y-6">
           {/* Throbber spinner - 3 concentric circles */}
@@ -64,7 +64,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg font-medium text-gray-700 text-center"
+            className="text-lg font-medium text-muted-foreground text-center"
           >
             {text}
           </motion.p>

@@ -119,7 +119,7 @@ export function SearchDropdown<T extends Record<string, any>>({
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={cn(
-              "absolute left-0 top-[calc(100%+8px)] z-30 w-full origin-top overflow-hidden rounded-3xl border border-border/60 bg-card/80 p-5 shadow-[0_16px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-border/30 backdrop-blur-2xl",
+              "absolute left-0 top-[calc(100%+8px)] z-30 w-full origin-top overflow-hidden rounded-3xl border border-border/60 bg-card/50 dark:bg-background/70 p-5 shadow-[0_16px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-border/30 backdrop-blur-[500px]",
               fullMobileHeight &&
                 "max-[1065px]:h-[60dvh] max-[1065px]:overflow-y-auto scrollbar-hide",
             )}
@@ -128,7 +128,7 @@ export function SearchDropdown<T extends Record<string, any>>({
             {activeFilters.length > 0 && (
               <div className="mb-4">
                 <div className="mb-2 flex items-center justify-between px-1">
-                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-foreground/70">
                     Active Filters
                   </h4>
                 </div>
@@ -139,7 +139,7 @@ export function SearchDropdown<T extends Record<string, any>>({
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      className="group flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/15 px-3 py-1.5 text-primary"
+                      className="group flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/15 dark:bg-card backdrop-blur-3xl px-3 py-1.5 text-primary"
                     >
                       {filter.icon && (
                         <div className="opacity-90 flex items-center justify-center">
@@ -218,7 +218,7 @@ export function SearchDropdown<T extends Record<string, any>>({
                           onResetSearch();
                           setIsOpen(false);
                         }}
-                        className="flex items-center gap-1 text-[10px] font-bold uppercase text-destructive/80 hover:text-destructive transition-colors"
+                        className="flex items-center gap-1 text-[10px] font-bold uppercase text-destructive hover:text-destructive/80 transition-colors"
                       >
                         <RotateCcw className="size-3" />
                         Reset Filter
