@@ -65,6 +65,15 @@ export interface SignUpProfileProps {
   password?: string;
 }
 
+export interface ProviderProfileData {
+  photo: string | null;
+  phoneNumber: string;
+  bio: string;
+  specialty: string;
+}
+
+export type ProviderProfileStep = 0 | 1 | 2;
+
 export interface SpecialtyStepProps {
   specialty: string;
   onChange: (field: "specialty", value: string) => void;

@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Upload, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { PartnerCreationModalProps } from "@/lib/types/modals";
 import { usePartnerCreation } from "@/hooks/components/modals/use-partner-creation";
 
@@ -173,21 +174,16 @@ const PartnerCreationModal = ({
                 >
                   Cancel
                 </Button>
-                <Button
+                <LoadingButton
                   type="submit"
                   form="partner-form"
-                  disabled={!name.trim() || createPartnerMutation.isPending}
+                  loading={createPartnerMutation.isPending}
+                  loadingText="Creating..."
+                  disabled={!name.trim()}
                   className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:shadow-none"
                 >
-                  {createPartnerMutation.isPending ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                      Creating...
-                    </div>
-                  ) : (
-                    "Create Partner"
-                  )}
-                </Button>
+                  Create Partner
+                </LoadingButton>
               </div>
             </div>
           </motion.div>

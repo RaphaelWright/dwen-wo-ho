@@ -61,6 +61,8 @@ const ProviderDetailsModal = ({
     partnerToRemove,
     isAddingSchool,
     isRemovingSchool,
+    isAddingPartner,
+    isRemovingPartner,
     applicationStatusConfig,
   } = useProviderDetails({
     isOpen,
@@ -171,6 +173,8 @@ const ProviderDetailsModal = ({
         partnerToRemove={partnerToRemove}
         setPartnerToRemove={setPartnerToRemove}
         handleRemovePartner={handleRemovePartner}
+        isAddingPartner={isAddingPartner}
+        isRemovingPartner={isRemovingPartner}
         providerName={provider?.fullName}
         showApproveModal={showApproveModal}
         setShowApproveModal={setShowApproveModal}

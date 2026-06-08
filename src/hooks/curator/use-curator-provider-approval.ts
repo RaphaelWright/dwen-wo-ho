@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { curatorProvidersService } from "@/services/curator-providers";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export function useCuratorProviderApproval(email: string) {
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -25,10 +26,10 @@ export function useCuratorProviderApproval(email: string) {
       } else {
         setErrorMessage(response.message || "Failed to approve provider");
       }
-    } catch (error: any) {
-      const errorMsg =
-        error?.message || "Failed to approve provider. Please try again.";
-      setErrorMessage(errorMsg);
+    } catch (error: unknown) {
+      setErrorMessage(
+        getCleanErrorMessage(error) || "Failed to approve provider. Please try again.",
+      );
     } finally {
       setIsActionLoading(false);
     }
@@ -51,10 +52,10 @@ export function useCuratorProviderApproval(email: string) {
       } else {
         setErrorMessage(response.message || "Failed to reject provider");
       }
-    } catch (error: any) {
-      const errorMsg =
-        error?.message || "Failed to reject provider. Please try again.";
-      setErrorMessage(errorMsg);
+    } catch (error: unknown) {
+      setErrorMessage(
+        getCleanErrorMessage(error) || "Failed to reject provider. Please try again.",
+      );
     } finally {
       setIsActionLoading(false);
     }

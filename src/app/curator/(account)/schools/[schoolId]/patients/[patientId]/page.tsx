@@ -15,7 +15,6 @@ import {
   FileText,
   Stethoscope,
   TrendingUp,
-  Users,
   Trash2,
 } from "lucide-react";
 

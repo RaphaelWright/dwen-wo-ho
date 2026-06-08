@@ -7,6 +7,7 @@ import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { LoginSchema } from "@/lib/schemas/login-auth-schema";
 import { z } from "zod/v4";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export const usePatientSignIn = ({ email }: { email: string | null }) => {
   const router = useRouter();
@@ -31,8 +32,8 @@ export const usePatientSignIn = ({ email }: { email: string | null }) => {
       onSuccess: () => {
         router.push(ROUTES.patient.waitingRoom);
       },
-      onError: (error: any) => {
-        setErrorMessage(error?.message || "Sign in failed");
+      onError: (error: unknown) => {
+        setErrorMessage(getCleanErrorMessage(error) || "Sign in failed");
       },
     });
   };

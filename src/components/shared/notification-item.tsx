@@ -9,7 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Check, Trash2, Loader2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 /**
  * A single notification row in the notifications sheet with redesigned card layout.
@@ -130,7 +131,7 @@ export default function NotifItem<N>({
                     className="flex items-center justify-center w-7 h-7 rounded-md text-success hover:bg-white/70 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isMarkingRead ? (
-                      <Loader2 size={14} className="animate-spin" />
+                      <Spinner className="size-3.5" />
                     ) : (
                       <Check size={16} />
                     )}
@@ -161,7 +162,7 @@ export default function NotifItem<N>({
                     className="flex items-center justify-center w-7 h-7 rounded-md text-destructive hover:bg-destructive/10 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isDeleting ? (
-                      <Loader2 size={14} className="animate-spin" />
+                      <Spinner className="size-3.5" />
                     ) : (
                       <Trash2 size={16} />
                     )}

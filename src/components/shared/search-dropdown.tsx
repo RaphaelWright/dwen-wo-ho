@@ -39,7 +39,7 @@ export interface SearchDropdownProps<T extends object> {
   fullMobileHeight?: boolean;
 }
 
-export function SearchDropdown<T extends Record<string, any>>({
+export function SearchDropdown<T extends object>({
   searchQuery,
   onSearchChange,
   placeholders = ["Search..."],

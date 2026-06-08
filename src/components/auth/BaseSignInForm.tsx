@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "../ui/label";
 import { BaseSignInFormProps } from "@/lib/types/components/auth";
@@ -113,36 +113,40 @@ export const BaseSignInForm = ({
         )}
 
         <div className="pt-2">
-          <Button
+          <LoadingButton
             form="login-form"
             type="submit"
-            disabled={isLoading || Object.keys(errors).length > 0}
+            loading={isLoading}
+            loadingText="Signing In..."
+            disabled={Object.keys(errors).length > 0}
             className="w-full h-12 text-lg font-bold rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
-            {isLoading && <Loader2 className="w-5 h-5 mr-2 animate-spin" />}
-            {isLoading ? "Signing In..." : "Sign In"}
-          </Button>
+            Sign In
+          </LoadingButton>
         </div>
 
         <div className="text-center pt-4">
-          <Button
-            type="button"
-            variant="link"
-            onClick={role === "patient" ? undefined : onRecoverAccount}
-            disabled={isRecovering}
-            className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto font-normal"
-            asChild={role === "patient" && !!forgotPasswordHref}
-          >
-            {role === "patient" && forgotPasswordHref ? (
+          {role === "patient" && forgotPasswordHref ? (
+            <Button
+              type="button"
+              variant="link"
+              className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto font-normal"
+              asChild
+            >
               <Link href={forgotPasswordHref}>Forgot your password?</Link>
-            ) : (
-              <span>
-                {isRecovering
-                  ? "Sending recovery email..."
-                  : "Forgot your password?"}
-              </span>
-            )}
-          </Button>
+            </Button>
+          ) : (
+            <LoadingButton
+              type="button"
+              variant="link"
+              onClick={onRecoverAccount}
+              loading={isRecovering}
+              loadingText="Sending recovery email..."
+              className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto font-normal"
+            >
+              Forgot your password?
+            </LoadingButton>
+          )}
         </div>
       </form>
 

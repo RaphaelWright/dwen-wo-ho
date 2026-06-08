@@ -1,6 +1,7 @@
 "use client";
 
-import { SignUpProfileProps } from "@/lib/types/provider/auth";
+import { SignUpProfileProps, ProviderProfileStep } from "@/lib/types/provider/auth";
+import { isProviderProfileStepValid } from "@/lib/utils/provider-profile-validation";
 import { useProfileData } from "./use-profile-data";
 import { useProfileSteps } from "./use-profile-steps";
 import { useProfileStatus } from "./use-profile-status";
@@ -40,6 +41,11 @@ export const useSignUpProfile = ({
     setUserInfo,
   });
 
+  const isCurrentStepValid = isProviderProfileStepValid(
+    currentStep as ProviderProfileStep,
+    profileData,
+  );
+
   return {
     currentStep,
     setCurrentStep,
@@ -52,5 +58,6 @@ export const useSignUpProfile = ({
     handleChange,
     handleBack,
     handleNext,
+    isCurrentStepValid,
   };
 };

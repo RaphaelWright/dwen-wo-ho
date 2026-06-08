@@ -17,21 +17,36 @@ export const SIGN_UP_TEXTS = {
     emailPlaceholder: "Enter your email address",
     professionalTitle: "Professional Title",
     professionalTitlePlaceholder: "Professional Title",
-    fullNamePlaceholder: "Full Name",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Enter your full name",
     passwordPlaceholder: "Password (6 or more characters)",
+    passwordStrength: {
+      label: "Password Strength",
+      weak: "Weak",
+      moderate: "Moderate",
+      strong: "Strong",
+      veryStrong: "Very Strong",
+      requirements: {
+        length: "At least 6 characters",
+        lowercase: "One lowercase letter",
+        uppercase: "One uppercase letter",
+        number: "One number",
+        special: "One special character (@$!%*?&)",
+      },
+    },
     youAre: "You are",
     show: "Show",
     hide: "Hide",
     agreeTo: "Agree to",
     terms: "Terms & Conditions",
-    verificationText: "Sending verification code...",
+    verificationText: "Sending verification code",
   },
   verification: {
     title: "Enter Verification Code",
     subtitle: "A 6-digit verification code was just sent to",
-    verifying: "Verifying your code...",
-    creating: "Creating your account...",
-    sending: "Sending...",
+    verifying: "Verifying your code",
+    creating: "Creating your account",
+    sending: "Sending",
     resend: "Resend code",
   },
   profile: {
@@ -41,7 +56,7 @@ export const SIGN_UP_TEXTS = {
       specialty: "3. Specialty",
     },
     submit: "Submit",
-    submitting: "Submitting...",
+    submitting: "Submitting",
   },
   photoStep: {
     addPhoto: "Add Photo",
@@ -53,7 +68,7 @@ export const SIGN_UP_TEXTS = {
     editPhoto: "Edit Photo",
     editPhotoDescription:
       "You can scale, rotate, or drag your image to your desired position. When you are done, click submit.",
-    uploading: "Uploading...",
+    uploading: "Uploading",
     add: "Add",
     cancel: "Cancel",
     failedProcess: "Failed to process image",
@@ -61,11 +76,16 @@ export const SIGN_UP_TEXTS = {
     successUpload: "Photo uploaded successfully!",
   },
   bioStep: {
-    officePhonePlaceholder: "Office Phone Number",
+    officePhoneLabel: "Phone Number",
+    officePhonePlaceholder:
+      "Enter your 10 digits phone number",
+    countryCode: "+233",
+    ghanaFlagSrc: "/ghana-flag.png",
     privateInfo:
       "This is private and will not be shared with anyone outside JustGo Health.",
-    status: "Status",
-    bioPlaceholder: "",
+    status: "My Slogan",
+    bioPlaceholder:
+      "One thing I want my patients to know (min. 10 characters)",
     bioDescription: "Introduce yourself to the world of mental health.",
   },
   specialtyStep: {
@@ -93,7 +113,7 @@ export const SIGN_UP_TEXTS = {
   toasts: {
     verified: "Account verified successfully",
   },
-  loading: "Loading...",
+  loading: "Loading",
 };
 
 export const PROVIDER_SPECIALTIES = [
@@ -118,3 +138,7 @@ export const PROFESSIONAL_TITLES = [
   "Miss",
   "Rev. (Reverend)",
 ];
+
+export const TITLE_SELECT_OPEN_DELAY_MS = 1000;
+
+export const OTP_INPUT_FOCUS_DELAY_MS = 700;

@@ -12,6 +12,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "@/lib/api";
 import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import useGetSearchParams from "@/hooks/use-get-search-params";
 
 export function useProviderSignIn() {
@@ -22,7 +23,7 @@ export function useProviderSignIn() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPendingModal, setShowPendingModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo] = useState({
     ...DEFAULT_PENDING_USER_INFO,
   });
 
@@ -47,28 +48,6 @@ export function useProviderSignIn() {
       router.push(ROUTES.provider.checkEmail);
     }
   }, [searchEmail, router]);
-
-  const getCleanErrorMessage = (error: any): string => {
-    let message = "An unexpected error occurred.";
-
-    if (typeof error === "string") {
-      message = error;
-    } else if (error?.response?.data?.message) {
-      message = error.response.data.message;
-    } else if (error?.message) {
-      message = error.message;
-    }
-
-    if (typeof message === "string" && message.trim().startsWith("{")) {
-      try {
-        const parsed = JSON.parse(message);
-        if (parsed.message) return parsed.message;
-        if (parsed.error) return parsed.error;
-      } catch {}
-    }
-
-    return message;
-  };
 
   const onSubmit = async (values: ProviderLoginFormData) => {
     setIsLoading(true);
@@ -111,7 +90,7 @@ export function useProviderSignIn() {
           getCleanErrorMessage(response?.message ?? "Sign in failed"),
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = getCleanErrorMessage(error);
 
       // Check if error is about incomplete profile

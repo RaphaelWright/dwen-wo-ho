@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import {
   Tooltip,
@@ -88,9 +89,11 @@ export default function PatientResultPage() {
         {/* Action Buttons & Treatment Status */}
         <div className="mb-6 flex items-center gap-3">
           {!isTreating ? (
-            <Button
+            <LoadingButton
               onClick={() => handleUpdateActionStatus("TREATING")}
-              disabled={isUpdating || isAnotherProviderTreating}
+              loading={isUpdating}
+              loadingText="Updating..."
+              disabled={isAnotherProviderTreating}
               className="bg-teal-600 hover:bg-teal-700 px-6 py-2.5 disabled:opacity-50"
               title={
                 isAnotherProviderTreating
@@ -98,17 +101,18 @@ export default function PatientResultPage() {
                   : ""
               }
             >
-              {isUpdating ? "Updating..." : "Start Treating"}
-            </Button>
+              Start Treating
+            </LoadingButton>
           ) : (
-            <Button
+            <LoadingButton
               onClick={() => setShowStopConfirm(true)}
-              disabled={isUpdating}
+              loading={isUpdating}
+              loadingText="Updating..."
               variant="outline"
               className="px-6 py-2.5 border-red-300 hover:bg-red-50 hover:text-red-700"
             >
-              {isUpdating ? "Updating..." : "Stop Treating"}
-            </Button>
+              Stop Treating
+            </LoadingButton>
           )}
 
           {/* Minimal Treatment Status Badge */}

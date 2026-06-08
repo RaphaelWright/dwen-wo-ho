@@ -1,4 +1,4 @@
-const JsonLd = ({ data }: { data: Record<string, any> }) => {
+const JsonLd = ({ data }: { data: Record<string, unknown> }) => {
   return (
     <script
       type="application/ld+json"

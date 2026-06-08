@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import usePartnerQuery from "@/hooks/queries/use-partner";
-import { AssociatedPartner } from "@/lib/types/partners";
+import { AssociatedPartner, Partner } from "@/lib/types/partners";
 import { ProviderDetails } from "@/lib/types/provider";
 
 export const useCuratorProviderModalPartners = (
@@ -11,7 +11,7 @@ export const useCuratorProviderModalPartners = (
   provider: ProviderDetails | null,
   invalidateProvider: (email: string) => Promise<void>,
 ) => {
-  const { usePartnersList, addProvider, removeProvider } = usePartnerQuery();
+  const { usePartnersList, addProvider, removeProvider, isAddingProvider, isRemovingProvider } = usePartnerQuery();
   const { data: allPartnersData = [] } = usePartnersList({ enabled: isOpen });
 
   const [partnerSearchQuery, setPartnerSearchQuery] = useState("");
@@ -20,7 +20,7 @@ export const useCuratorProviderModalPartners = (
 
   const associatedPartners: AssociatedPartner[] = useMemo(() => {
     const providerPartners = provider?.partners || [];
-    return providerPartners.map((p: any) => ({
+    return providerPartners.map((p) => ({
       id: String(p.id),
       name: p.name,
       logo: p.logo,
@@ -31,8 +31,8 @@ export const useCuratorProviderModalPartners = (
   const availablePartners: AssociatedPartner[] = useMemo(() => {
     const associatedIds = new Set(associatedPartners.map((p) => p.id));
     return allPartnersData
-      .filter((p: any) => !associatedIds.has(String(p.id)))
-      .map((p: any) => ({
+      .filter((p: Partner) => !associatedIds.has(String(p.id)))
+      .map((p: Partner) => ({
         id: String(p.id),
         name: p.name,
         logo: p.logo,
@@ -74,5 +74,7 @@ export const useCuratorProviderModalPartners = (
     setPartnerToRemove,
     handleAddPartner,
     handleRemovePartner,
+    isAddingPartner: isAddingProvider,
+    isRemovingPartner: isRemovingProvider,
   };
 };

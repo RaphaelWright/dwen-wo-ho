@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
 import ProviderDetailsModal from "@/components/modals/provider-details";
@@ -11,7 +11,6 @@ import { useCuratorProviders } from "@/hooks/curator/use-curator-providers";
 
 export default function ProvidersPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const {
     isLoading,
     isError,

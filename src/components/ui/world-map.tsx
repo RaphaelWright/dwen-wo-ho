@@ -62,6 +62,8 @@ export default function WorldMap({
 
   return (
     <div className="w-full aspect-3/4 md:aspect-square bg-card rounded-lg relative font-sans overflow-hidden">
+      {/* Inline SVG data URL from dotted-map — next/image impractical */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
         className="h-full w-full mask-[linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)] pointer-events-none select-none object-cover"

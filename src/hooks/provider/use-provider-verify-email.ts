@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export function useProviderVerifyEmail() {
   const [isRunning, setIsRunning] = useState(true);
@@ -48,11 +49,10 @@ export function useProviderVerifyEmail() {
           )}&step=photo`,
         );
       }
-    } catch (error: any) {
-      const errorMsg =
-        (error as any)?.response?.data?.message ||
-        "Verification failed. Please try again.";
-      setErrorMessage(errorMsg);
+    } catch (error: unknown) {
+      setErrorMessage(
+        getCleanErrorMessage(error) || "Verification failed. Please try again.",
+      );
     }
   };
 

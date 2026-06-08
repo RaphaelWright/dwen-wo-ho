@@ -14,6 +14,7 @@ import {
 } from "@/atoms/notification";
 
 import { CuratorNotification } from "@/lib/types/notification";
+import type { Route } from "next";
 
 import {
   useClearNotificationsMutation,
@@ -84,65 +85,40 @@ export const useCuratorNotification = () => {
         setIsOpen(true);
       }, 500);
 
-      type === "success"
-        ? toast.success(message, {
-            action: {
-              label: "Open",
+      const handleToastAction = () => {
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+        );
 
-              onClick: () => {
-                // Mark as read when interacted with from the toast
+        if (link) {
+          router.push(link as Route);
+        } else {
+          setIsOpen(true);
+        }
+      };
 
-                setNotifications((prev) =>
-                  prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
-                );
-
-                if (link) {
-                  router.push(link as any);
-                } else {
-                  setIsOpen(true);
-                }
-              },
-            },
-          })
-        : type === "error"
-          ? toast.error(message, {
-              action: {
-                label: "Open",
-
-                onClick: () => {
-                  // Mark as read when interacted with from the toast
-
-                  setNotifications((prev) =>
-                    prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
-                  );
-
-                  if (link) {
-                    router.push(link as any);
-                  } else {
-                    setIsOpen(true);
-                  }
-                },
-              },
-            })
-          : toast.info(message, {
-              action: {
-                label: "Open",
-
-                onClick: () => {
-                  // Mark as read when interacted with from the toast
-
-                  setNotifications((prev) =>
-                    prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
-                  );
-
-                  if (link) {
-                    router.push(link as any);
-                  } else {
-                    setIsOpen(true);
-                  }
-                },
-              },
-            });
+      if (type === "success") {
+        toast.success(message, {
+          action: {
+            label: "Open",
+            onClick: handleToastAction,
+          },
+        });
+      } else if (type === "error") {
+        toast.error(message, {
+          action: {
+            label: "Open",
+            onClick: handleToastAction,
+          },
+        });
+      } else {
+        toast.info(message, {
+          action: {
+            label: "Open",
+            onClick: handleToastAction,
+          },
+        });
+      }
     },
 
     [setNotifications, setIsOpen, router],

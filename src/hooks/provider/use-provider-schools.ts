@@ -14,7 +14,7 @@ export function useProviderSchools() {
     refetchInterval: REFETCH_INTERVAL,
   });
 
-  const { cachedSchools, atomLoading, updateSchoolInState, setSchoolsState } =
+  const { cachedSchools, atomLoading, schoolsState, updateSchoolInState, setSchoolsState } =
     useSchoolsState();
 
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
@@ -24,11 +24,11 @@ export function useProviderSchools() {
     previousSchoolsRef,
   );
 
-  const { loadSchoolsWithData } = useSchoolLoader(
+  useSchoolLoader(
     getProfileQuery,
     updateSchoolInState,
     setSchoolsState,
-    { schools: cachedSchools },
+    schoolsState,
     fetchSchoolData,
   );
 

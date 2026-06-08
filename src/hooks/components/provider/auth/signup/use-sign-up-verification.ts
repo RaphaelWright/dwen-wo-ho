@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { toast } from "@/components/ui/sonner";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
-import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import {
+  OTP_INPUT_FOCUS_DELAY_MS,
+  SIGN_UP_TEXTS,
+} from "@/lib/constants/components/provider/auth/signup";
 
 export const useSignUpVerification = ({
   email,
@@ -13,8 +17,19 @@ export const useSignUpVerification = ({
   const [isRunning, setIsRunning] = useState(true);
   const [seconds, setSeconds] = useState(120);
   const [errorMessage, setErrorMessage] = useState("");
+  const otpInputRef = useRef<HTMLInputElement>(null);
 
   const { verifyEmailMutation, sendVerificationEmailMutation } = useAuthQuery();
+
+  useEffect(() => {
+    if (verifyEmailMutation.isPending) return;
+
+    const timer = setTimeout(() => {
+      otpInputRef.current?.focus();
+    }, OTP_INPUT_FOCUS_DELAY_MS);
+
+    return () => clearTimeout(timer);
+  }, [verifyEmailMutation.isPending]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -46,7 +61,7 @@ export const useSignUpVerification = ({
           localStorage.setItem("token", token);
 
           // If refreshToken is present in TokenResponse or SignInResponse
-          const refreshTokenValue = (verifyResponse as any).refreshToken;
+          const refreshTokenValue = verifyResponse.refreshToken;
           if (refreshTokenValue) {
             localStorage.setItem("refreshToken", refreshTokenValue);
           }
@@ -58,23 +73,8 @@ export const useSignUpVerification = ({
           toast.error(SIGN_UP_TEXTS.errors.noToken);
         }
       }
-    } catch (error: any) {
-      let errorMsg = SIGN_UP_TEXTS.errors.verifyFailed;
-
-      if (error.response?.data?.message) {
-        errorMsg = error.response.data.message;
-      } else if (error.message) {
-        try {
-          if (error.message.trim().startsWith("{")) {
-            const parsed = JSON.parse(error.message);
-            errorMsg = parsed.message || error.message;
-          } else {
-            errorMsg = error.message;
-          }
-        } catch {
-          errorMsg = error.message;
-        }
-      }
+    } catch (error: unknown) {
+      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.verifyFailed;
 
       setErrorMessage(errorMsg);
       toast.error(errorMsg);
@@ -87,23 +87,8 @@ export const useSignUpVerification = ({
       setSeconds(120);
       setIsRunning(true);
       setErrorMessage("");
-    } catch (error: any) {
-      let errorMsg = SIGN_UP_TEXTS.errors.resendFailed;
-
-      if (error.response?.data?.message) {
-        errorMsg = error.response.data.message;
-      } else if (error.message) {
-        try {
-          if (error.message.trim().startsWith("{")) {
-            const parsed = JSON.parse(error.message);
-            errorMsg = parsed.message || error.message;
-          } else {
-            errorMsg = error.message;
-          }
-        } catch {
-          errorMsg = error.message;
-        }
-      }
+    } catch (error: unknown) {
+      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.resendFailed;
       setErrorMessage(errorMsg);
     }
   };
@@ -115,5 +100,6 @@ export const useSignUpVerification = ({
     sendVerificationEmailMutation,
     handleOTPComplete,
     handleResendCode,
+    otpInputRef,
   };
 };

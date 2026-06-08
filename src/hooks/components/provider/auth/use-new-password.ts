@@ -12,30 +12,8 @@ import {useAuthQuery} from "@/hooks/queries/use-auth";
 import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/new-password";
 import { setUserType } from "@/lib/utils/getUserType";
-
-const getCleanErrorMessage = (error: any): string => {
-  let message = NEW_PASSWORD_TEXTS.errors.general;
-
-  if (typeof error === "string") {
-    message = error;
-  } else if (error?.response?.data?.message) {
-    message = error.response.data.message;
-  } else if (error?.message) {
-    message = error.message;
-  }
-
-  if (typeof message === "string" && message.trim().startsWith("{")) {
-    try {
-      const parsed = JSON.parse(message);
-      if (parsed.message) return parsed.message;
-      if (parsed.error) return parsed.error;
-    } catch {
-      // Not JSON
-    }
-  }
-
-  return message;
-};
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import type { SignInResponse } from "@/lib/types/api/auth";
 
 export const useNewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -83,34 +61,51 @@ export const useNewPassword = () => {
 
       localStorage.removeItem("recoveryToken");
 
-      // Attempt to access token and userData since resetPassword might return SignInResponse natively
-      const token = (response as any)?.token;
-      const userData = (response as any)?.userData || response;
+      const signInPayload = response as unknown;
+      if (signInPayload && typeof signInPayload === "object") {
+        const signInResponse = signInPayload as SignInResponse;
+        const token = signInResponse.token;
+        const userData = signInResponse.userData ?? signInPayload;
 
-      if (token) {
-        localStorage.setItem("token", token);
-        if (userData?.userRole === "ROLE_CURATOR") {
-          localStorage.setItem("curatorToken", token);
-          setUserType("curator");
-        } else {
-          setUserType("provider");
+        if (token) {
+          localStorage.setItem("token", token);
+          if (
+            userData &&
+            typeof userData === "object" &&
+            "userRole" in userData &&
+            userData.userRole === "ROLE_CURATOR"
+          ) {
+            localStorage.setItem("curatorToken", token);
+            setUserType("curator");
+          } else {
+            setUserType("provider");
+          }
         }
-      }
 
-      const refreshTokenValue = (response as any)?.refreshToken;
-      if (refreshTokenValue) {
-        localStorage.setItem("refreshToken", refreshTokenValue);
+        const refreshTokenValue = signInResponse.refreshToken;
+        if (refreshTokenValue) {
+          localStorage.setItem("refreshToken", refreshTokenValue);
+        }
+
+        toast.success(NEW_PASSWORD_TEXTS.toasts.success);
+
+        if (
+          userData &&
+          typeof userData === "object" &&
+          "applicationStatus" in userData &&
+          userData.applicationStatus === "APPROVED"
+        ) {
+          router.push(ROUTES.provider.profile);
+        } else {
+          router.push(ROUTES.provider.home);
+        }
+        return;
       }
 
       toast.success(NEW_PASSWORD_TEXTS.toasts.success);
-
-      if (userData?.applicationStatus === "APPROVED") {
-        router.push(ROUTES.provider.profile);
-      } else {
-        router.push(ROUTES.provider.home);
-      }
-    } catch (error) {
-      setErrorMessage(getCleanErrorMessage(error));
+      router.push(ROUTES.provider.singIn);
+    } catch (error: unknown) {
+      setErrorMessage(getCleanErrorMessage(error) || NEW_PASSWORD_TEXTS.errors.general);
     }
   };
 

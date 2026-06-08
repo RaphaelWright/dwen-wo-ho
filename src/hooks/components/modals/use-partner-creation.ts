@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import usePartnerQuery from "@/hooks/queries/use-partner";
-import { partnersService } from "@/services/partners";
 import type { ICreatePartner, Partner } from "@/lib/types/partners";
 
 

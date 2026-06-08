@@ -5,13 +5,15 @@ import { useSearchParams, useRouter } from "next/navigation";
 import useUserQuery from "@/hooks/queries/use-user-profile";
 import { ROUTES } from "@/lib/constants/routes";
 import { calculateTimeAgo } from "@/lib/utils";
+import type { ProviderProfileResponse } from "@/lib/types/api/auth";
+import type { PendingUserInfo } from "./use-profile-actions";
 
 export const useProfileStatus = ({
   isInitialPending,
   setUserInfo,
 }: {
   isInitialPending?: boolean;
-  setUserInfo: React.Dispatch<React.SetStateAction<any>>;
+  setUserInfo: React.Dispatch<React.SetStateAction<PendingUserInfo>>;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,17 +43,17 @@ export const useProfileStatus = ({
   // Update modal with fetched profile data
   useEffect(() => {
     if (showPendingModal && getProfileQuery.data) {
-      const data = getProfileQuery.data;
-      setUserInfo((prev: any) => ({
+      const data = getProfileQuery.data as ProviderProfileResponse;
+      setUserInfo((prev) => ({
         ...prev,
-        name: `${(data as any).title ? `${(data as any).title} ` : ""}${
-          data.providerName || prev.name
+        name: `${data.title ? `${String(data.title)} ` : ""}${
+          String(data.providerName ?? prev.name)
         }`,
-        title: (data as any).professionalTitle || data.specialty || prev.title,
-        specialty: data.specialty || prev.specialty,
-        profileImage: data.profilePhotoURL,
-        timeAgo: (data as any).applicationDate
-          ? calculateTimeAgo((data as any).applicationDate)
+        title: String(data.professionalTitle ?? data.specialty ?? prev.title),
+        specialty: String(data.specialty ?? prev.specialty),
+        profileImage: data.profilePhotoURL as string | undefined,
+        timeAgo: data.applicationDate
+          ? calculateTimeAgo(String(data.applicationDate))
           : prev.timeAgo,
       }));
     }

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ROUTES } from "@/lib/constants/routes";
 import PendingVerificationModal from "@/components/modals/pending-verification";
 import { useProviderSignIn } from "@/hooks/provider/use-provider-signin";
@@ -123,21 +124,20 @@ const SignInContent = () => {
         >
           Back
         </Button>
-        <button
+        <LoadingButton
           form="login-form"
           type="submit"
-          disabled={!password.trim() || isLoading}
-          className={`text-sm sm:text-base lg:text-xl px-3 sm:px-4 lg:px-6 py-2 border-2 sm:border-4 font-bold rounded-md flex items-center gap-2 w-full sm:w-auto ${
+          loading={isLoading}
+          loadingText="Signing In..."
+          disabled={!password.trim()}
+          className={`text-sm sm:text-base lg:text-xl px-3 sm:px-4 lg:px-6 py-2 border-2 sm:border-4 font-bold rounded-md w-full sm:w-auto ${
             !password.trim() || isLoading
               ? "border-muted text-muted-foreground bg-muted-foreground/20 cursor-not-allowed"
               : "border-primary text-primary-foreground bg-primary/60 hover:bg-primary/80"
           }`}
         >
-          {isLoading && (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          )}
-          {isLoading ? "Signing In..." : "Sign In"}
-        </button>
+          Sign In
+        </LoadingButton>
       </div>
 
       {/* Pending Verification Modal */}

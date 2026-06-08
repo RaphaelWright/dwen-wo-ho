@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { FormActionButtonsProps } from "@/lib/types/components/patient/lock-in";
 import { LOCK_IN_TEXTS } from "@/lib/constants/components/patient/lock-in";
 
@@ -11,15 +12,14 @@ export function FormActionButtons({
       <Button type="button" variant="outline" onClick={onCancel}>
         {LOCK_IN_TEXTS.buttons.cancel}
       </Button>
-      <Button
+      <LoadingButton
         type="submit"
-        disabled={isSubmitting}
+        loading={isSubmitting}
+        loadingText={LOCK_IN_TEXTS.buttons.submitting}
         className="bg-primary hover:bg-primary/90"
       >
-        {isSubmitting
-          ? LOCK_IN_TEXTS.buttons.submitting
-          : LOCK_IN_TEXTS.buttons.submit}
-      </Button>
+        {LOCK_IN_TEXTS.buttons.submit}
+      </LoadingButton>
     </div>
   );
 }

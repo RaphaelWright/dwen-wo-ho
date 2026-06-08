@@ -4,17 +4,19 @@ import { useMemo, useState, useCallback } from "react";
 
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 
-import { UseCuratorSchoolSearchProps } from "@/lib/types/curator";
+import { UseCuratorSchoolSearchProps, SchoolDetailSearchSuggestion } from "@/lib/types/curator";
 
 import { SCHOOL_SEARCH_QUICK_FILTERS } from "@/lib/constants/components/curator/school-search";
 
 import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
 import type { FilterOption } from "@/components/shared/search-dropdown";
+import { SchoolIcon } from "@/lib/types/school";
 
-function matchesFilter(item: any, filter: FilterOption): boolean {
+function matchesFilter(item: object, filter: FilterOption): boolean {
+  const record = item as Record<string, unknown>;
   if (!filter.filterKey || !filter.filterValue) return true;
 
-  const value = item[filter.filterKey];
+  const value = record[filter.filterKey];
 
   if (value === undefined || value === null) {
     // For "contains" checks on arrays, undefined/null means no match
@@ -44,7 +46,7 @@ function matchesFilter(item: any, filter: FilterOption): boolean {
       return true;
     case "date":
       if (filterValue === "recent") {
-        const createdDate = new Date(value);
+        const createdDate = new Date(value as string | number | Date);
         const now = new Date();
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         return createdDate >= sevenDaysAgo;
@@ -84,11 +86,11 @@ export function useCuratorSchoolSearch({
     setLocalActiveFilters((prev) => prev.filter((f) => f.id !== filter.id));
   }, []);
 
-  const suggestions = useMemo(() => {
+  const suggestions = useMemo((): SchoolDetailSearchSuggestion[] => {
     const query = searchQuery.toLowerCase();
 
     // Helper to check if an item matches all active filters
-    const matchesAllFilters = (item: any) => {
+    const matchesAllFilters = (item: object) => {
       return localActiveFilters.every((filter) => matchesFilter(item, filter));
     };
 
@@ -116,16 +118,14 @@ export function useCuratorSchoolSearch({
         return schoolIcons
           .filter((i) => matchesAllFilters(i))
           .filter((i) => !query || i.name.toLowerCase().includes(query))
-          .map((i: any) => ({
+          .map((i: SchoolIcon) => ({
             id: i.id,
             name: i.name,
             avatarUrl:
               i.logoUrl ||
-              i.logo ||
-              i.photoPreview ||
               (typeof i.photo === "string" ? i.photo : undefined),
             type: i.type,
-            slogan: i.slogan || i.motto || "",
+            slogan: i.slogan || "",
             rank: i.rank,
           }))
           .slice(0, query ? 5 : 4);

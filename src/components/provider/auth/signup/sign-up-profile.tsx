@@ -5,7 +5,7 @@ import PendingVerificationModal from "@/components/modals/pending-verification";
 import PhotoStep from "./steps/photo-step";
 import BioStep from "./steps/bio-step";
 import SpecialtyStep from "./steps/specialty-step";
-import { Loader2 } from "lucide-react";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { SignUpProfileProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { useSignUpProfile } from "@/hooks/components/provider/auth/signup/sign-up-profile";
@@ -22,6 +22,7 @@ const SignUpProfile = (props: SignUpProfileProps) => {
     handleChange,
     handleBack,
     handleNext,
+    isCurrentStepValid,
   } = useSignUpProfile(props);
 
   const renderStepContent = () => {
@@ -67,16 +68,15 @@ const SignUpProfile = (props: SignUpProfileProps) => {
   return (
     <>
       <div className="h-full flex flex-col justify-between min-h-[80vh] animate-in fade-in zoom-in-95 duration-500">
-        <div className="flex-1 flex flex-col justify-center w-full max-w-4xl mx-auto px-4 md:px-8">
+        <div className="flex-1 flex flex-col justify-center w-full max-w-4xl mx-auto px-0 sm:px-4 md:px-8">
           {renderStepContent()}
         </div>
 
-        {currentStep !== 0 && (
-          <div className="border-t border-border bg-background/95 backdrop-blur-sm px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sticky bottom-0 z-10">
+        <div className="border-t border-border bg-background/95 backdrop-blur-sm px-3 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-8 sticky bottom-0 z-10">
             <Button
               variant="ghost"
               onClick={handleBack}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1"
+              className="text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1 w-full sm:w-auto justify-center sm:justify-start"
             >
               <span className="group-hover:-translate-x-1 transition-transform">
                 ←
@@ -84,19 +84,19 @@ const SignUpProfile = (props: SignUpProfileProps) => {
               {SIGN_UP_TEXTS.navigation.back}
             </Button>
 
-            <div className="flex items-center gap-2 sm:gap-4 order-1 sm:order-2">
+            <div className="flex items-center gap-1 sm:gap-4 order-1 sm:order-2 max-w-full overflow-x-auto">
               {steps.map((step, i) => (
-                <div key={step.index} className="flex items-center">
-                  <div className="flex items-center gap-2">
+                <div key={step.index} className="flex items-center shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <div
-                      className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
+                      className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-colors duration-300 ${
                         currentStep >= step.index
                           ? "bg-primary"
                           : "bg-muted-foreground/30"
                       }`}
                     />
                     <span
-                      className={`text-sm font-medium transition-colors duration-300 ${
+                      className={`text-xs sm:text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
                         currentStep >= step.index
                           ? "text-foreground"
                           : "text-muted-foreground"
@@ -106,25 +106,20 @@ const SignUpProfile = (props: SignUpProfileProps) => {
                     </span>
                   </div>
                   {i < steps.length - 1 && (
-                    <div className="w-8 h-px bg-border mx-2 sm:mx-4" />
+                    <div className="w-3 sm:w-8 h-px bg-border mx-1.5 sm:mx-4" />
                   )}
                 </div>
               ))}
             </div>
 
-            <Button
+            <LoadingButton
               onClick={handleNext}
-              disabled={
-                isSubmitting || (currentStep === 2 && !profileData.specialty)
-              }
-              className="rounded-full px-8 order-3 shadow-lg hover:shadow-xl transition-all"
+              loading={isSubmitting}
+              loadingText={SIGN_UP_TEXTS.profile.submitting}
+              disabled={!isCurrentStepValid}
+              className="rounded-full px-6 sm:px-8 order-3 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {SIGN_UP_TEXTS.profile.submitting}
-                </>
-              ) : currentStep === 2 ? (
+              {currentStep === 2 ? (
                 SIGN_UP_TEXTS.profile.submit
               ) : (
                 <span className="flex items-center gap-2">
@@ -134,9 +129,8 @@ const SignUpProfile = (props: SignUpProfileProps) => {
                   </span>
                 </span>
               )}
-            </Button>
+            </LoadingButton>
           </div>
-        )}
       </div>
 
       <PendingVerificationModal

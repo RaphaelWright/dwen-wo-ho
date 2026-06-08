@@ -11,7 +11,6 @@ import {
 
 const NewPasswordContent = () => {
   const {
-    control,
     register,
     handleSubmit,
     errors,
@@ -19,6 +18,7 @@ const NewPasswordContent = () => {
     togglePasswordVisibility,
     onSubmit,
     router,
+    isSubmitting,
   } = usePatientNewPassword();
 
   return (
@@ -35,7 +35,7 @@ const NewPasswordContent = () => {
         />
       </div>
 
-      <NewPasswordFooter onBack={() => router.back()} />
+      <NewPasswordFooter onBack={() => router.back()} isSubmitting={isSubmitting} />
 
       {/* <DevTool control={control} /> */}
     </div>

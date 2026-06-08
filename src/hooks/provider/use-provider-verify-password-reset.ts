@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/use-get-search-params";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export function useProviderVerifyPasswordReset() {
   const [isRunning, setIsRunning] = useState(true);
@@ -52,12 +53,8 @@ export function useProviderVerifyPasswordReset() {
       } else {
         toast.error("Invalid code or missing token");
       }
-    } catch (error: any) {
-      const errorMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Verification failed";
-      toast.error(errorMsg);
+    } catch (error: unknown) {
+      toast.error(getCleanErrorMessage(error) || "Verification failed");
     } finally {
       setIsVerifying(false);
     }
@@ -72,7 +69,7 @@ export function useProviderVerifyPasswordReset() {
     try {
       await recoverAccountMutation.mutateAsync({ email });
       toast.success("Code resent successfully");
-    } catch (error) {
+    } catch {
       toast.error("Failed to resend code");
     }
   };

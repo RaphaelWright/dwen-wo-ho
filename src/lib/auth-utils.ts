@@ -66,7 +66,7 @@ export const refreshToken = async (): Promise<string | null> => {
       }
 
       return null;
-    } catch (error) {
+    } catch {
       // Clear refresh token if refresh fails
       if (typeof window !== "undefined") {
         localStorage.removeItem("refreshToken");
@@ -188,14 +188,14 @@ export const performLogout = (
       }
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
-  } catch (error) {
+  } catch {
     // Silently handle errors when clearing cache
   }
 
   // Clear all sessionStorage
   try {
     sessionStorage.clear();
-  } catch (error) {
+  } catch {
     // Silently handle errors when clearing sessionStorage
   }
 
@@ -204,7 +204,7 @@ export const performLogout = (
     try {
       queryClient.clear();
       queryClient.resetQueries();
-    } catch (error) {
+    } catch {
       // Silently handle errors when clearing query cache
     }
   }

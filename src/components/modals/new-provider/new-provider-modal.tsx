@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { ProfileHero } from "./profile-hero";
@@ -12,8 +11,6 @@ import { ProfileTabs } from "./profile-tabs";
 import { ProfileFooter } from "./profile-footer";
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
 import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
-import { X } from "lucide-react";
-
 /**
  * Profile dialog with Overview / Schools / Partners tabs.
  *

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
 import { CuratorSidebar } from "@/components/ui/curator-sidebar";
@@ -33,6 +34,8 @@ function CuratorNotificationsSheet() {
     deleteNotification,
     isMarkingRead,
     isDeleting,
+    isMarkingAllRead,
+    isClearing,
   } = useCuratorNotification();
   return (
     <NotificationsSheet<CuratorNotification>
@@ -45,7 +48,9 @@ function CuratorNotificationsSheet() {
       clearAllNotifications={clearNotifications}
       isMarkingRead={isMarkingRead}
       isDeleting={isDeleting}
-      onNavigate={(link) => router.push(link as any)}
+      isMarkingAllRead={isMarkingAllRead}
+      isClearing={isClearing}
+      onNavigate={(link) => router.push(link as Route)}
       getNotificationActionUrl={(n) => getCuratorNotificationRoute(n) ?? "#"}
       getNotificationId={(n) => n.id}
       isNotificationUnread={(n) => !n.read}

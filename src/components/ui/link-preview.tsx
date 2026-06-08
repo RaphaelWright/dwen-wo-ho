@@ -31,8 +31,6 @@ export const LinkPreview = ({
   className,
   width = 200,
   height = 125,
-  quality = 50,
-  layout = "fixed",
   isStatic = false,
   imageSrc = "",
 }: LinkPreviewProps) => {
@@ -67,8 +65,9 @@ export const LinkPreview = ({
 
   const translateX = useSpring(x, springConfig);
 
-  const handleMouseMove = (event: any) => {
-    const targetRect = event.target.getBoundingClientRect();
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement;
+    const targetRect = target.getBoundingClientRect();
     const eventOffsetX = event.clientX - targetRect.left;
     const offsetFromCenter = (eventOffsetX - targetRect.width / 2) / 2; // Reduce the effect to make it subtle
     x.set(offsetFromCenter);
@@ -78,6 +77,8 @@ export const LinkPreview = ({
     <>
       {isMounted ? (
         <div className="hidden">
+          {/* External microlink screenshot URL — next/image impractical */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             width={width}
@@ -133,6 +134,8 @@ export const LinkPreview = ({
                   className="block p-1 bg-white border-2 border-transparent shadow rounded-xl hover:border-neutral-200 dark:hover:border-neutral-800"
                   style={{ fontSize: 0 }}
                 >
+                  {/* External/dynamic preview URL — next/image impractical */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={isStatic ? imageSrc : src}
                     width={width}

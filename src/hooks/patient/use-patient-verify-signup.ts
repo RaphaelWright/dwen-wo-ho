@@ -27,8 +27,7 @@ export function usePatientSignUpVerify() {
     return () => clearInterval(intervalId);
   }, [isRunning, seconds]);
 
-  const handleComplete = useCallback(
-    (value: string) => {
+  const handleComplete = useCallback(() => {
       router.push(`${ROUTES.patient.newPassword}?email=${params.email}`);
     },
     [router, params.email],

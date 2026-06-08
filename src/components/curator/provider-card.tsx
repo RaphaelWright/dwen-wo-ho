@@ -3,7 +3,7 @@ import Image from "next/image";
 import { timeAgo } from "@/lib/utils/timeAgo";
 import { FiCheck, FiX } from "react-icons/fi";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ProviderCardProps } from "@/lib/types/components/curator/provider-card";
 import { DEFAULT_PROVIDER_IMAGE } from "@/lib/constants/components/curator/provider-card";
 import { useProviderCard } from "@/hooks/components/curator/use-provider-card";
@@ -61,43 +61,30 @@ const ProviderCard = (props: ProviderCardProps) => {
                 <FiCheck className="w-4 h-4" />
                 Approved
               </div>
-              <Button
+
+              <LoadingButton
                 onClick={handleRejectClick}
-                disabled={isActionDisabled}
+                loading={isRejecting}
+                loadingText="Rejecting..."
+                disabled={isActionDisabled && !isRejecting}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
-                {isRejecting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-                    Rejecting...
-                  </>
-                ) : (
-                  <>
-                    <FiX className="w-4 h-4" />
-                    Reject
-                  </>
-                )}
-              </Button>
+                <FiX className="w-4 h-4" />
+                Reject
+              </LoadingButton>
             </>
           ) : provider.applicationStatus === "REJECTED" ? (
             <>
-              <Button
+              <LoadingButton
                 onClick={handleApproveClick}
-                disabled={isActionDisabled}
+                loading={isApproving}
+                loadingText="Approving..."
+                disabled={isActionDisabled && !isApproving}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
-                {isApproving ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Approving...
-                  </>
-                ) : (
-                  <>
-                    <FiCheck className="w-4 h-4" />
-                    Approve
-                  </>
-                )}
-              </Button>
+                <FiCheck className="w-4 h-4" />
+                Approve
+              </LoadingButton>
               <div className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold text-sm border border-red-200">
                 <FiX className="w-4 h-4" />
                 Rejected
@@ -105,40 +92,27 @@ const ProviderCard = (props: ProviderCardProps) => {
             </>
           ) : (
             <>
-              <Button
+              <LoadingButton
                 onClick={handleApproveClick}
-                disabled={isActionDisabled}
+                loading={isApproving}
+                loadingText="Approving..."
+                disabled={isActionDisabled && !isApproving}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
-                {isApproving ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Approving...
-                  </>
-                ) : (
-                  <>
-                    <FiCheck className="w-4 h-4" />
-                    Approve
-                  </>
-                )}
-              </Button>
-              <Button
+                <FiCheck className="w-4 h-4" />
+                Approve
+              </LoadingButton>
+
+              <LoadingButton
                 onClick={handleRejectClick}
-                disabled={isActionDisabled}
+                loading={isRejecting}
+                loadingText="Rejecting..."
+                disabled={isActionDisabled && !isRejecting}
                 className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
               >
-                {isRejecting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
-                    Rejecting...
-                  </>
-                ) : (
-                  <>
-                    <FiX className="w-4 h-4" />
-                    Reject
-                  </>
-                )}
-              </Button>
+                <FiX className="w-4 h-4" />
+                Reject
+              </LoadingButton>
             </>
           )}
         </div>

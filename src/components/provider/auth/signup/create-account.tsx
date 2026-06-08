@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/constants/routes";
 import { useCreateAccount } from "@/hooks/components/provider/auth/signup/use-create-account";
+import { Label } from "@/components/ui/label";
+import PasswordStrengthIndicator from "@/components/shared/password-strength-indicator";
 
 const CreateAccount = (props: CreateAccountProps) => {
   const { agreedToTerms, onAgreedToTermsChange } = props;
@@ -27,9 +29,12 @@ const CreateAccount = (props: CreateAccountProps) => {
     errors,
     onSubmit,
     handleTitleChange,
+    isTitleSelectOpen,
+    setIsTitleSelectOpen,
     email,
     title,
     fullName,
+    password,
   } = useCreateAccount(props);
 
   return (
@@ -56,26 +61,25 @@ const CreateAccount = (props: CreateAccountProps) => {
         {/* Form Fields */}
         <div className="space-y-6">
           <div className="space-y-2">
+            <Label>Email<span className="text-destructive">*</span></Label>
             <Input
               {...register("email")}
               value={email}
               placeholder={SIGN_UP_TEXTS.createAccount.emailPlaceholder}
               disabled
-              className="h-12 bg-muted/50 border-input/20 text-lg font-medium text-muted-foreground cursor-not-allowed"
+              className="h-12 bg-muted border-border text-lg font-medium text-muted-foreground cursor-not-allowed"
             />
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-xl font-bold">
-              {SIGN_UP_TEXTS.createAccount.professionalTitle}
-            </h2>
+           <Label>{SIGN_UP_TEXTS.createAccount.professionalTitle}<span className="text-destructive">*</span></Label>
             <FormSelect
               value={title}
               onValueChange={handleTitleChange}
-              placeholder={
-                SIGN_UP_TEXTS.createAccount.professionalTitlePlaceholder
-              }
-              className="w-full h-12 rounded-lg border-input text-lg bg-background focus:ring-primary"
+              placeholder="Select your professional title"
+              className="w-full h-12 rounded-lg border-input"
+              open={isTitleSelectOpen}
+              onOpenChange={setIsTitleSelectOpen}
             >
               <div className="py-1">
                 {PROFESSIONAL_TITLES.map((item) => (
@@ -92,6 +96,7 @@ const CreateAccount = (props: CreateAccountProps) => {
           </div>
 
           <div className="space-y-2">
+            <Label>Full Name<span className="text-destructive">*</span></Label>
             <Input
               {...register("fullName")}
               placeholder={SIGN_UP_TEXTS.createAccount.fullNamePlaceholder}
@@ -100,6 +105,14 @@ const CreateAccount = (props: CreateAccountProps) => {
                   ? "border-destructive focus-visible:ring-destructive/30"
                   : "border-input focus-visible:ring-primary/30"
               }`}
+              autoCapitalize="words"
+              autoComplete="name"
+              autoCorrect="on"
+              spellCheck="true"
+              maxLength={100}
+              minLength={3}
+              required
+              autoSave="on"
             />
             {fullName && title && (
               <p className="text-center text-muted-foreground text-sm font-medium mt-2 animate-in fade-in">
@@ -117,6 +130,7 @@ const CreateAccount = (props: CreateAccountProps) => {
           </div>
 
           <div className="space-y-2">
+            <Label>Password<span className="text-destructive">*</span></Label>
             <div className="relative">
               <Input
                 {...register("password")}
@@ -124,8 +138,7 @@ const CreateAccount = (props: CreateAccountProps) => {
                 placeholder={SIGN_UP_TEXTS.createAccount.passwordPlaceholder}
                 className={`h-12 pl-4 pr-16 text-lg transition-all duration-200 ${
                   errors?.password
-                    ? "border-destructive focus-visible:ring-destructive/30"
-                    : "border-input focus-visible:ring-primary/30"
+                    && "border-destructive focus-visible:ring-destructive/30"
                 }`}
               />
               <Button
@@ -133,6 +146,7 @@ const CreateAccount = (props: CreateAccountProps) => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
                 variant="ghost"
+                size="sm"
               >
                 {showPassword ? (
                   <span className="text-xs font-semibold">HIDE</span>
@@ -141,6 +155,7 @@ const CreateAccount = (props: CreateAccountProps) => {
                 )}
               </Button>
             </div>
+            {password && <PasswordStrengthIndicator password={password} />}
             {errors?.password && (
               <p className="text-sm text-destructive font-medium pl-1">
                 {errors.password.message as string}

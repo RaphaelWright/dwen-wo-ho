@@ -12,7 +12,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
             <span className="text-lg">💬</span>
             Status Message
           </h4>
-          <p className="text-gray-500 italic">"{provider.status}"</p>
+          <p className="text-gray-500 italic">&quot;{provider.status}&quot;</p>
         </div>
       )}
 

@@ -4,8 +4,36 @@ import { motion } from "motion/react";
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import * as d3 from "d3-geo";
-import { feature } from "topojson-client"; // Actually we are using GeoJSON directly
+import type { Feature, FeatureCollection, Geometry } from "geojson";
 import ghanaGeoUrl from "@/data/ghana-regions.json";
+
+interface GhanaRegionProperties {
+  region: string;
+  capital?: string;
+}
+
+type GhanaFeature = Feature<Geometry, GhanaRegionProperties>;
+
+interface GhanaGeoJson extends FeatureCollection {
+  features: GhanaFeature[];
+}
+
+interface GhanaRegion extends GhanaFeature {
+  id: string;
+  name: string;
+  capital?: string;
+  path: string | null;
+  centroid: { x: number; y: number };
+  className: string;
+}
+
+interface ConnectingLine {
+  id: string;
+  start: { x: number; y: number };
+  end: { x: number; y: number };
+}
+
+const ghanaGeo = ghanaGeoUrl as GhanaGeoJson;
 
 // Map colors suitable for dark/light mode
 const REGION_COLORS = [
@@ -32,10 +60,9 @@ export default function GhanaMap({ className }: { className?: string }) {
 
   // Projection setup
   const projection = useMemo(() => {
-    // Create a feature collection to fit the projection
-    const collection = {
+    const collection: FeatureCollection = {
       type: "FeatureCollection",
-      features: (ghanaGeoUrl as any).features,
+      features: ghanaGeo.features,
     };
 
     // Use geoIdentity for planar projection to avoid spherical winding issues
@@ -43,7 +70,7 @@ export default function GhanaMap({ className }: { className?: string }) {
     return d3
       .geoIdentity()
       .reflectY(true)
-      .fitSize([500, 600], collection as any);
+      .fitSize([500, 600], collection);
   }, []);
 
   const pathGenerator = useMemo(() => {
@@ -51,9 +78,8 @@ export default function GhanaMap({ className }: { className?: string }) {
   }, [projection]);
 
   // Extract features and calculate centroids
-  const regions = useMemo(() => {
-    // @ts-ignore - Importing JSON directly
-    return ghanaGeoUrl.features.map((feature: any, idx: number) => {
+  const regions = useMemo((): GhanaRegion[] => {
+    return ghanaGeo.features.map((feature, idx) => {
       const centroid = pathGenerator.centroid(feature);
       return {
         ...feature,
@@ -68,8 +94,8 @@ export default function GhanaMap({ className }: { className?: string }) {
   }, [pathGenerator]);
 
   // Create connecting lines (looping through regions)
-  const connectingLines = useMemo(() => {
-    return regions.map((region: any, idx: number) => {
+  const connectingLines = useMemo((): ConnectingLine[] => {
+    return regions.map((region, idx) => {
       const nextRegion = regions[(idx + 1) % regions.length];
       return {
         id: `line-${region.id}-${nextRegion.id}`,
@@ -89,10 +115,10 @@ export default function GhanaMap({ className }: { className?: string }) {
         style={{ filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))" }}
       >
         {/* Regions Layer */}
-        {regions.map((region: any) => (
+        {regions.map((region) => (
           <motion.path
             key={region.id}
-            d={region.path}
+            d={region.path ?? undefined}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{
               opacity: hoveredRegion === region.id ? 0.9 : 0.8,
@@ -110,7 +136,7 @@ export default function GhanaMap({ className }: { className?: string }) {
 
         {/* Connecting Lines Layer */}
         <g className="pointer-events-none">
-          {connectingLines.map((line: any, idx: number) => {
+          {connectingLines.map((line, idx) => {
             const midX = (line.start.x + line.end.x) / 2;
             const midY = Math.min(line.start.y, line.end.y) - 40; // Curve upwards
             const path = `M ${line.start.x} ${line.start.y} Q ${midX} ${midY} ${line.end.x} ${line.end.y}`;
@@ -147,7 +173,7 @@ export default function GhanaMap({ className }: { className?: string }) {
         </defs>
 
         {/* Labels Layer (Regional Capitals) */}
-        {regions.map((region: any) => {
+        {regions.map((region) => {
           if (!region.capital) return null;
 
           return (

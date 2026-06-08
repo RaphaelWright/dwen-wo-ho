@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmationModalProps } from "@/lib/types/shared-ui";
+import { Spinner } from "@/components/ui/spinner";
 
 export const ConfirmationModal = ({
   isOpen,
@@ -12,6 +13,7 @@ export const ConfirmationModal = ({
   cancelText = "Cancel",
   variant = "danger",
   isLoading = false,
+  loadingText = "Processing...",
 }: ConfirmationModalProps) => {
   const variantStyles = {
     success: "bg-green-500 hover:bg-green-600 text-white",
@@ -44,10 +46,10 @@ export const ConfirmationModal = ({
             className={`flex-1 py-2.5 sm:py-2 text-center font-medium rounded-lg transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]}`}
           >
             {isLoading ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Processing...
-              </div>
+              <span className="flex items-center justify-center gap-2">
+                <Spinner className="text-current" />
+                {loadingText}
+              </span>
             ) : (
               confirmText
             )}

@@ -14,6 +14,7 @@ import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { getProviderRedirectInfo } from "@/lib/utils/auth-redirect";
 import { useAccountRecovery } from "@/hooks/auth/use-account-recovery";
+import type { Route } from "next";
 
 export const useProviderSignIn = ({
   email,
@@ -92,7 +93,7 @@ export const useProviderSignIn = ({
           ? `${redirectInfo.path}?email=${encodeURIComponent(values.email)}&step=${redirectInfo.step}`
           : redirectInfo.path;
           
-        router.push(targetPath as any);
+        router.push(targetPath as Route);
         return;
       }
 
@@ -101,7 +102,7 @@ export const useProviderSignIn = ({
       setIsRedirecting(true);
       router.push(ROUTES.provider.home);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errMessage = getCleanErrorMessage(error);
       
       if (errMessage.includes("ACCOUNT PENDING")) {

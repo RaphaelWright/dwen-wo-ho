@@ -9,7 +9,6 @@ export interface SchoolSuggestionCardProps {
   type?: string;
   slogan?: string;
   rank?: number | string;
-  [key: string]: any; // Allows passing the rest of the school object safely
 }
 
 export function SchoolSuggestionCard({
@@ -65,7 +64,7 @@ export function SchoolSuggestionCard({
             <>
               {(type || rank) && <span className="shrink-0 opacity-40">•</span>}
               <span className="truncate italic text-[11px] opacity-80 min-w-10">
-                "{slogan}"
+                &quot;{slogan}&quot;
               </span>
             </>
           )}

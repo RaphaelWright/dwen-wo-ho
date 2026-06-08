@@ -197,7 +197,7 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
         }}
       >
         {/* Hidden SVG filter definition */}
-        {/* <GlassFilter id={filterId} scale={displacementScale} mapUrl={mapUrl} /> */}
+        <GlassFilter id={filterId} scale={displacementScale} mapUrl={mapUrl} />
 
         {/* ── Backdrop layer ─────────────────────────────────
             This is the layer that gets blurred + displaced.

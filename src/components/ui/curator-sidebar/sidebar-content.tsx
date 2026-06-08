@@ -23,8 +23,6 @@ export const SidebarContent = ({
   collapsed,
   navItems,
   pathname,
-  theme,
-  mounted,
   unreadCount,
   onToggleCollapse,
   onLogoutClick,

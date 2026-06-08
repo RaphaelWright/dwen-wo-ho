@@ -21,7 +21,9 @@ export function VerifyPasswordResetFooter({
       <div className="scale-90 sm:scale-100">
         <Stepper
           steps={recoverSteps}
-          step={VERIFY_PASSWORD_RESET_TEXTS.footer.step as any}
+          step={
+            VERIFY_PASSWORD_RESET_TEXTS.footer.step as (typeof recoverSteps)[number]
+          }
         />
       </div>
       <div className="w-22 sm:w-25" />{" "}

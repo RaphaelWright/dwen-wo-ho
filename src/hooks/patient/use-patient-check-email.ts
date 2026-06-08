@@ -8,6 +8,8 @@ import { ROUTES } from "@/lib/constants/routes";
 import { PatientCheckEmailFormSchema } from "@/lib/schemas/patient-auth-schema";
 import { PatientCheckEmailFormData } from "@/lib/types/components/patient/check-email";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function usePatientCheckEmail() {
   const router = useRouter();
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -23,14 +25,14 @@ export function usePatientCheckEmail() {
     },
   });
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = EMAIL_REGEX;
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setIsValidEmail(emailRegex.test(value));
     },
-    [],
+    [emailRegex],
   );
 
   const onSubmit = useCallback(

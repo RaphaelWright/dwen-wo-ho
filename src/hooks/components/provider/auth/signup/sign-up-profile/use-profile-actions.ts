@@ -9,6 +9,21 @@ import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { calculateTimeAgo } from "@/lib/utils";
 import { setUserType } from "@/lib/utils/getUserType";
+import { validateProviderProfileStep } from "@/lib/utils/provider-profile-validation";
+import { formatGhanaPhoneForApi } from "@/lib/utils/ghana-phone";
+import {
+  ProviderProfileData,
+  ProviderProfileStep,
+} from "@/lib/types/provider/auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+
+export interface PendingUserInfo {
+  name: string;
+  title: string;
+  specialty: string;
+  timeAgo: string;
+  profileImage?: string;
+}
 
 export const useProfileActions = ({
   email,
@@ -20,32 +35,28 @@ export const useProfileActions = ({
 }: {
   email: string;
   password?: string;
-  profileData: any;
+  profileData: ProviderProfileData;
   currentStep: number;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setUserInfo: React.Dispatch<React.SetStateAction<any>>;
+  setUserInfo: React.Dispatch<React.SetStateAction<PendingUserInfo>>;
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { addSpecialtyMutation, updateProfileMutation, loginMutation } = useAuthQuery();
 
   const handleNext = async () => {
+    const stepValidation = validateProviderProfileStep(
+      currentStep as ProviderProfileStep,
+      profileData,
+    );
+
+    if (!stepValidation.isValid) {
+      toast.error(stepValidation.error ?? SIGN_UP_TEXTS.errors.fillAllFields);
+      return;
+    }
+
     if (currentStep === 0) {
-      if (!profileData.photo) return;
       setCurrentStep((prev) => prev + 1);
-      return;
-    }
-
-    if (
-      currentStep === 1 &&
-      (!profileData.bio.trim() || !profileData.phoneNumber.trim())
-    ) {
-      toast.error(SIGN_UP_TEXTS.errors.fillAllFields);
-      return;
-    }
-
-    if (currentStep === 2 && !profileData.specialty) {
-      toast.error(SIGN_UP_TEXTS.errors.selectSpecialty);
       return;
     }
 
@@ -53,19 +64,22 @@ export const useProfileActions = ({
       setIsSubmitting(true);
       try {
         const data = await updateProfileMutation.mutateAsync({
-          officePhoneNumber: profileData.phoneNumber,
+          officePhoneNumber: formatGhanaPhoneForApi(profileData.phoneNumber),
           status: profileData.bio,
         });
 
         if (data) {
-          setUserInfo((prev: any) => ({
+          setUserInfo((prev) => ({
             ...prev,
             name: `${data.title ? `${data.title} ` : ""}${
               data.name || prev.name
             }`,
             title: data.specialty || prev.title,
             specialty: data.specialty || prev.specialty,
-            profileImage: data.avatarUrl || prev.profileImage,
+            profileImage:
+              typeof data.avatarUrl === "string"
+                ? data.avatarUrl
+                : prev.profileImage,
             timeAgo: data.memberSince
               ? calculateTimeAgo(data.memberSince as string)
               : prev.timeAgo,
@@ -74,8 +88,8 @@ export const useProfileActions = ({
 
         toast.success(SIGN_UP_TEXTS.errors.profileUpdated);
         setCurrentStep(currentStep + 1);
-      } catch (error) {
-        toast.error((error as any)?.message || SIGN_UP_TEXTS.errors.updateProfileFailed);
+      } catch (error: unknown) {
+        toast.error(getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.updateProfileFailed);
       } finally {
         setIsSubmitting(false);
       }
@@ -127,8 +141,8 @@ export const useProfileActions = ({
         } else {
           router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route);
         }
-      } catch (error) {
-        toast.error((error as any)?.message || SIGN_UP_TEXTS.errors.addSpecialtyFailed);
+      } catch (error: unknown) {
+        toast.error(getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.addSpecialtyFailed);
       } finally {
         setIsSubmitting(false);
       }

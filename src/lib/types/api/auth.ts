@@ -23,6 +23,7 @@ export interface CheckEmailResponse {
 
 export interface TokenResponse {
   token: string;
+  refreshToken?: string;
 }
 
 export interface RefreshTokenResponse {
@@ -38,6 +39,16 @@ export interface ProviderProfileResponse {
   id: string;
   email: string;
   officePhoneNumber?: string;
+  phoneNumber?: string;
   status?: string;
+  applicationStatus?: "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE";
+  providerName?: string;
+  professionalTitle?: string;
+  specialty?: string;
+  profilePhotoURL?: string;
+  profileURL?: string;
+  title?: string;
+  applicationDate?: string;
+  isVerified?: boolean;
   [key: string]: unknown;
 }

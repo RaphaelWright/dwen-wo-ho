@@ -33,6 +33,8 @@ export interface PatientActionResponseDTO {
   date?: string;
   notes?: string;
   createdAt: string;
+  providerId?: string;
+  createdBy?: string;
 }
 
 export interface AddPatientActionRequest {

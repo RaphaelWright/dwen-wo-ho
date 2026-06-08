@@ -20,7 +20,6 @@ interface UseProviderSearchConfigProps {
 export function useProviderSearchConfig({
   searchQuery,
   setSearchQuery,
-  appliedSearchQuery,
   setAppliedSearchQuery,
   localActiveFilters,
   toggleFilter,
@@ -39,13 +38,13 @@ export function useProviderSearchConfig({
     const hasLowScoreFilter = localActiveFilters.some(f => f.id === "low-score");
 
     // Helper to check if an item matches all active filters (excluding score sorts)
-    const matchesAllFilters = (item: any) => {
+    const matchesAllFilters = (item: PatientCase) => {
       return localActiveFilters.every((filter) => {
         // Skip score sorting filters - they only sort, don't filter
         if (filter.id === "high-score" || filter.id === "low-score") return true;
         // For status filter
         if (filter.filterKey === "status" && filter.filterType === "exact") {
-          return item[filter.filterKey] === filter.filterValue;
+          return item.status === filter.filterValue;
         }
         return true;
       });

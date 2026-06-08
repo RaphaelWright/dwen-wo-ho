@@ -2,7 +2,8 @@
 
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { formatTime } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { Spinner } from "@/components/ui/spinner";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { useSignUpVerification } from "@/hooks/components/provider/auth/signup/use-sign-up-verification";
@@ -16,6 +17,7 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
     sendVerificationEmailMutation,
     handleOTPComplete,
     handleResendCode,
+    otpInputRef,
   } = useSignUpVerification(props);
 
   return (
@@ -37,74 +39,66 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
       <div className="text-center space-y-8">
         {verifyEmailMutation.isPending ? (
           <div className="flex flex-col items-center gap-4 py-8">
-            <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <Spinner className="size-10 text-primary" />
             <p className="text-muted-foreground font-medium animate-pulse">
               {SIGN_UP_TEXTS.verification.verifying}
             </p>
           </div>
         ) : (
-          <div className="space-y-8">
-            <div className="flex justify-center">
-              <InputOTP
-                maxLength={6}
-                onComplete={handleOTPComplete}
-                containerClassName="gap-2 flex justify-center"
-              >
-                <InputOTPSlot
-                  index={0}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-                <InputOTPSlot
-                  index={1}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-                <InputOTPSlot
-                  index={2}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-                <InputOTPSlot
-                  index={3}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-                <InputOTPSlot
-                  index={4}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-                <InputOTPSlot
-                  index={5}
-                  className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
-                />
-              </InputOTP>
-            </div>
+          <div className="mx-auto flex w-fit flex-col gap-8">
+            <InputOTP
+              ref={otpInputRef}
+              maxLength={6}
+              onComplete={handleOTPComplete}
+              containerClassName="gap-2 flex justify-center"
+            >
+              <InputOTPSlot
+                index={0}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+              <InputOTPSlot
+                index={1}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+              <InputOTPSlot
+                index={2}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+              <InputOTPSlot
+                index={3}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+              <InputOTPSlot
+                index={4}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+              <InputOTPSlot
+                index={5}
+                className="w-12 h-14 text-2xl font-bold border rounded-lg border-input bg-muted/30 focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-200"
+              />
+            </InputOTP>
 
-            <div className="flex flex-col items-center gap-4 w-full">
-              <Button
-                variant="outline"
-                disabled={
-                  seconds > 0 || sendVerificationEmailMutation.isPending
-                }
-                onClick={handleResendCode}
-                className="w-full h-12 text-base font-medium hover:bg-muted/50 transition-colors"
-              >
-                {sendVerificationEmailMutation.isPending ? (
-                  <span className="flex items-center gap-2">
-                    {SIGN_UP_TEXTS.verification.sending}{" "}
-                    <span className="animate-pulse">...</span>
+            <LoadingButton
+              variant="outline"
+              loading={sendVerificationEmailMutation.isPending}
+              loadingText={SIGN_UP_TEXTS.verification.sending}
+              disabled={seconds > 0}
+              onClick={handleResendCode}
+              className="w-full h-12 text-base font-medium hover:bg-muted/50 transition-colors"
+            >
+              {seconds > 0 ? (
+                <span className="flex items-center gap-2">
+                  Resend code in{" "}
+                  <span className="font-bold text-primary w-8">
+                    {formatTime(seconds)}
                   </span>
-                ) : seconds > 0 ? (
-                  <span className="flex items-center gap-2">
-                    Resend code in{" "}
-                    <span className="font-bold text-primary w-8">
-                      {formatTime(seconds)}
-                    </span>
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    {SIGN_UP_TEXTS.verification.resend} →
-                  </span>
-                )}
-              </Button>
-            </div>
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  {SIGN_UP_TEXTS.verification.resend} →
+                </span>
+              )}
+            </LoadingButton>
           </div>
         )}
 

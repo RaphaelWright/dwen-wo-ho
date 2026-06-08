@@ -2,11 +2,14 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { ROUTES } from "@/lib/constants/routes";
 import { calculateTimeAgo } from "@/lib/utils";
+import type { ProviderProfileResponse } from "@/lib/types/api/auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export function useProfileUpdates(
-  getProfileQuery: any,
+  getProfileQuery: UseQueryResult<ProviderProfileResponse, Error>,
   router: ReturnType<typeof useRouter>,
   setShowPendingModal: React.Dispatch<React.SetStateAction<boolean>>,
   setUserInfo: React.Dispatch<React.SetStateAction<{
@@ -26,22 +29,20 @@ export function useProfileUpdates(
         data.applicationStatus === "PENDING" ||
         data.status === "PENDING" ||
         data.applicationStatus === "REJECTED" ||
-        (data as any).isVerified === false;
+        data.isVerified === false;
 
       if (isPending) {
         setUserInfo({
-          name: `${(data as any).title ? `${(data as any).title} ` : ""}${
-            data.providerName || "Provider"
+          name: `${data.title ? `${String(data.title)} ` : ""}${
+            String(data.providerName ?? "Provider")
           }`,
-          title:
-            (data as any).professionalTitle ||
-            data.specialty ||
-            "Health Provider",
-          specialty: data.specialty || "",
-          profileImage: data.profilePhotoURL,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          timeAgo: (data as any).applicationDate
-            ? calculateTimeAgo((data as any).applicationDate)
+          title: String(
+            data.professionalTitle ?? data.specialty ?? "Health Provider",
+          ),
+          specialty: String(data.specialty ?? ""),
+          profileImage: data.profilePhotoURL as string | undefined,
+          timeAgo: data.applicationDate
+            ? calculateTimeAgo(String(data.applicationDate))
             : "Recently",
         });
         setShowPendingModal(true);
@@ -76,12 +77,11 @@ export function useProfileUpdates(
 
     // Handle API errors - don't redirect on auth errors if we have pendingUser
     if (getProfileQuery.error) {
-      const error = getProfileQuery.error as any;
-      // If it's an auth error but we have pendingUser, show the modal
+      const errorMessage = getCleanErrorMessage(getProfileQuery.error);
       const pendingUserStr = localStorage.getItem("pendingUser");
       if (
         pendingUserStr &&
-        (error?.message?.includes("401") || error?.message?.includes("Invalid"))
+        (errorMessage.includes("401") || errorMessage.includes("Invalid"))
       ) {
         try {
           const pendingData = JSON.parse(pendingUserStr);
@@ -107,7 +107,7 @@ export function useProfileUpdates(
             });
             setShowPendingModal(true);
           }
-        } catch (e) {
+        } catch {
           // Ignore parse errors
         }
       }

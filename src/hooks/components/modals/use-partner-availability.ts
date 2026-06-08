@@ -3,10 +3,11 @@
 import { useMemo } from "react";
 import { AssociatedSchool, AssociatedProvider } from "@/lib/types/partners";
 import { School } from "@/lib/types/school";
+import { Provider } from "@/lib/types/provider";
 
 interface UsePartnerAvailabilityProps {
   allSchools: School[];
-  providersList: any[];
+  providersList: Provider[];
   associatedSchools: AssociatedSchool[];
   associatedProviders: AssociatedProvider[];
 }
@@ -31,14 +32,14 @@ export const usePartnerAvailability = ({
   const availableProviders = useMemo(() => {
     const associatedProviderIds = new Set(associatedProviders.map((p) => p.email));
     return providersList
-      .filter((p: any) => !associatedProviderIds.has(p.email))
-      .map((p: any) => ({
+      .filter((p) => !associatedProviderIds.has(p.email))
+      .map((p) => ({
         id: p.email,
         email: p.email,
-        providerName: p.providerName,
-        providerTitle: p.providerTitle,
-        specialty: p.specialty,
-        profilePhotoURL: p.profilePhotoURL,
+        providerName: p.providerName ?? p.email,
+        providerTitle: p.providerTitle ?? undefined,
+        specialty: p.specialty ?? undefined,
+        profilePhotoURL: p.profilePhotoURL ?? undefined,
       }));
   }, [providersList, associatedProviders]);
 

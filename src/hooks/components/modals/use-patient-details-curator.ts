@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { patientsService } from "@/services/patients";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { ProviderSummaryDTO } from "@/lib/types/api/shared";
 
 export const usePatientDetailsCurator = ({
   isOpen,
@@ -104,7 +105,7 @@ export const usePatientDetailsCurator = ({
         data: patientResult.starProvider,
         icon: "⭐",
         colorClass: "bg-primary",
-        getContent: (p: any) => `${p.fullName} (${p.specialty})`,
+        getContent: (p: ProviderSummaryDTO) => `${p.fullName} (${p.specialty})`,
       },
       {
         id: "referred",
@@ -112,7 +113,7 @@ export const usePatientDetailsCurator = ({
         data: patientResult.referredProvider,
         icon: "→",
         colorClass: "bg-secondary",
-        getContent: (p: any) => p.fullName,
+        getContent: (p: ProviderSummaryDTO) => p.fullName,
       },
     ];
   }, [patientResult]);

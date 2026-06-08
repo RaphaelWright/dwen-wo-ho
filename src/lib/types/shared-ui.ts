@@ -34,6 +34,7 @@ export interface ConfirmationModalProps {
   cancelText?: string;
   variant?: "danger" | "warning" | "info" | "success";
   isLoading?: boolean;
+  loadingText?: string;
 }
 
 export interface NavItem {

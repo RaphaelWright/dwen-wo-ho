@@ -1,7 +1,8 @@
 import { Lock, Star, CheckCircle, User, Eye, Venus, Mars } from "lucide-react";
 import type { SchoolTab } from "@/lib/types/components/curator/school-details";
+import type { FilterOption } from "@/components/shared/search-dropdown";
 
-export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, any[]> = {
+export const SCHOOL_SEARCH_QUICK_FILTERS: Record<SchoolTab, FilterOption[]> = {
   patients: [
     {
       id: "new",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { patientsService } from "@/services/patients";
 import useUserQuery from "@/hooks/queries/use-user-profile";
@@ -18,8 +18,6 @@ export function useProviderSchoolDetails() {
   const { getProfileQuery } = useUserQuery();
   const { useSchool, useSchoolStudents } = useSchoolsQuery();
   const { createPatientResult } = usePatientResultQuery();
-
-  const [accessDenied, setAccessDenied] = useState(false);
 
   // Check access
   const providerSchools = getProfileQuery.data?.schools || [];
@@ -101,7 +99,7 @@ export function useProviderSchoolDetails() {
     students: studentsQuery.data ?? [],
     isLoading: schoolQuery.isLoading,
     studentsLoading: studentsQuery.isLoading,
-    accessDenied,
+    accessDenied: isReady && !hasAccess,
     handleStudentClick,
   };
 }

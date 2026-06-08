@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import useUserQuery from "../queries/use-user-profile";
 import { DEFAULT_PROVIDER_USER_INFO } from "@/lib/constants/mock-data";
-import { is } from "zod/v4/locales";
 
 export default function useProviderDashboardAuth() {
   const [showPendingModal, setShowPendingModal] = useState(false);

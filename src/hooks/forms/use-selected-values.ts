@@ -7,6 +7,8 @@ export function useSelectedValuesFromReactHookForm<T extends FieldValues>(
   options: Omit<UseFormProps<T>, "resolver"> = {}
 ) {
   const form = useForm<T>({
+    // Zod 4 schema inference does not align with @hookform/resolvers types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema as any),
     ...options,
   });

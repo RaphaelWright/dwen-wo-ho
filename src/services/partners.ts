@@ -102,7 +102,7 @@ export const partnersService = {
         : [];
 
     return {
-      partner: partnerData,
+      partner: partnerData as Partner,
       associatedSchools: partnerSchools,
       associatedProviders: partnerProviders,
     };

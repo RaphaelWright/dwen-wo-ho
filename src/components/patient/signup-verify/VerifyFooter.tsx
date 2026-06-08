@@ -15,7 +15,7 @@ export function VerifyFooter({ onBack }: VerifyFooterProps) {
       </Button>
       <Stepper
         steps={signUpSteps}
-        step={SIGNUP_VERIFY_TEXTS.footer.step as any}
+        step={SIGNUP_VERIFY_TEXTS.footer.step as (typeof signUpSteps)[number]}
       />
       <Button className="invisible rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase">
         {SIGNUP_VERIFY_TEXTS.footer.next}

@@ -46,8 +46,8 @@ export default function NotFound() {
             Oops! Page Not Found
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed font-medium">
-            It looks like you've wandered off the path. The page you're looking
-            for doesn't exist or has been moved.
+            It looks like you&apos;ve wandered off the path. The page you&apos;re
+            looking for doesn&apos;t exist or has been moved.
           </p>
         </motion.div>
 

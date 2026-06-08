@@ -44,4 +44,19 @@ export interface UseCuratorSchoolSearchProps {
   providers: SchoolProvider[];
 }
 
+/** Normalized suggestion row for school-details SearchDropdown (all tabs). */
+export interface SchoolDetailSearchSuggestion {
+  id?: number | string;
+  email?: string;
+  name: string;
+  score?: number;
+  status?: string;
+  avatarUrl?: string;
+  type?: string;
+  slogan?: string;
+  rank?: number | string;
+  time?: string;
+  preview?: string;
+}
+
 export type FilterType = "all" | "JHS" | "SHS" | "COLLEGE";

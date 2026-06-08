@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { useProvidersQuery } from "@/hooks/queries/use-provider";
 import usePartnerQuery from "@/hooks/queries/use-partner";
-import { partnersService } from "@/services/partners";
 import { FiUsers } from "react-icons/fi";
 import { MdSchool } from "react-icons/md";
 import { Handshake } from "lucide-react";
@@ -15,6 +14,7 @@ import {
   PartnerDetailsTab,
   AssociatedSchool,
   AssociatedProvider,
+  Partner,
 } from "@/lib/types/partners";
 
 export const usePartnerDetails = ({
@@ -23,7 +23,7 @@ export const usePartnerDetails = ({
   isOpen,
 }: {
   partnerId: string;
-  partnerProp: any;
+  partnerProp: Partner | null | undefined;
   isOpen: boolean;
 }) => {
   const { useSchools } = useSchoolsQuery();
@@ -66,7 +66,8 @@ export const usePartnerDetails = ({
   const { data: partnerDetails, isLoading: isLoadingDetails } =
     usePartnerFullDetails(partnerId, { enabled: isOpen });
 
-  const partner = partnerDetails?.partner ?? partnerProp;
+  const partner: Partner | null =
+    partnerDetails?.partner ?? partnerProp ?? null;
   const associatedSchools = partnerDetails?.associatedSchools ?? [];
   const associatedProviders = partnerDetails?.associatedProviders ?? [];
 

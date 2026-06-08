@@ -18,7 +18,8 @@ import {
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, Loader2, ChevronDown, Search, Smile } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { Upload, ChevronDown, Search, Smile } from "lucide-react";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -45,6 +46,7 @@ export default function EditFieldDialog({
   saveEdit,
   uploadAvatar,
   isUploadingAvatar,
+  isSaving = false,
   profileData,
 }: {
   editOpen: ProviderDashboardState["editOpen"];
@@ -56,11 +58,13 @@ export default function EditFieldDialog({
   saveEdit: ProviderDashboardState["saveEdit"];
   uploadAvatar?: (file: File) => Promise<{ avatarUrl: string }>;
   isUploadingAvatar?: boolean;
+  isSaving?: boolean;
   profileData?: { avatarUrl?: string; name?: string };
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const isPhotoField = editFieldKey === "photo";
+  const isSavingChanges = Boolean(isUploadingAvatar || isSaving);
   const isTitleField = editFieldKey === "title";
   const isSpecialtyField = editFieldKey === "specialty";
   const isStatusField = editFieldKey === "status";
@@ -333,7 +337,7 @@ export default function EditFieldDialog({
               setEditOpen(false);
             }}
             className="flex-1 py-2.5 rounded-xl border border-destructive/50 text-[13px] font-semibold cursor-pointer text-destructive hover:bg-destructive! hover:text-white transition-all duration-300 ease-in-out"
-            disabled={isUploadingAvatar}
+            disabled={isSavingChanges}
           >
             Cancel
           </motion.button>
@@ -341,13 +345,15 @@ export default function EditFieldDialog({
           <motion.button
             whileTap={{ scale: 0.97 }}
             onClick={handleUpload}
-            disabled={isPhotoField ? !selectedFile || isUploadingAvatar : false}
+            disabled={
+              isPhotoField ? !selectedFile || isSavingChanges : isSavingChanges
+            }
             className="flex-1 py-2.5 rounded-xl text-[13px] font-semibold text-primary border border-primary/50 cursor-pointer hover:bg-primary hover:text-white transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {isUploadingAvatar ? (
+            {isSavingChanges ? (
               <>
-                <Loader2 size={14} className="animate-spin" />
-                Uploading…
+                <Spinner className="size-3.5" />
+                {isUploadingAvatar ? "Uploading…" : "Saving…"}
               </>
             ) : (
               "Save Changes"

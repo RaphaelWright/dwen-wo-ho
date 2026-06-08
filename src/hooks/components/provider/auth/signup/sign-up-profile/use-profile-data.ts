@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { ProviderProfileData } from "@/lib/types/provider/auth";
+import type { PendingUserInfo } from "./use-profile-actions";
 
 export const useProfileData = ({
   initialFullName,
@@ -13,14 +15,14 @@ export const useProfileData = ({
   initialSpecialty?: string;
   initialProfileImage?: string;
 }) => {
-  const [profileData, setProfileData] = useState({
-    photo: null as string | null,
+  const [profileData, setProfileData] = useState<ProviderProfileData>({
+    photo: null,
     phoneNumber: "",
     bio: "",
     specialty: "",
   });
 
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo, setUserInfo] = useState<PendingUserInfo>({
     name: `${initialTitle} ${initialFullName}`,
     title: initialTitle,
     specialty: initialSpecialty || "",
@@ -29,7 +31,7 @@ export const useProfileData = ({
   });
 
   const handleChange = (
-    property: keyof typeof profileData,
+    property: keyof ProviderProfileData,
     value: string | null,
   ) => {
     setProfileData((prev) => ({ ...prev, [property]: value }));

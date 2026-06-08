@@ -11,7 +11,8 @@ export default function AboutPage() {
               About Dwen Wo Ho
             </h1>
             <p className="text-lg leading-relaxed mb-6">
-              Dwen Wo Ho, meaning "Think About Yourself" or "Self Care" in Twi,
+              Dwen Wo Ho, meaning &quot;Think About Yourself&quot; or
+              &quot;Self Care&quot; in Twi,
               is dedicated to empowering individuals to prioritize their
               holistic wellness. We believe that true health encompasses mental,
               physical, and emotional well-being.
