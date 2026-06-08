@@ -12,6 +12,7 @@ import {
   SIGN_UP_TEXTS,
   TITLE_SELECT_OPEN_DELAY_MS,
 } from "@/lib/constants/components/provider/auth/signup";
+import { toTitleCase } from "@/lib/utils/smart-typing";
 
 export const useCreateAccount = ({
   email: propEmail,
@@ -41,7 +42,7 @@ export const useCreateAccount = ({
     defaultValues: {
       email: propEmail || "",
       title: propTitle || "",
-      fullName: propFullName || "",
+      fullName: propFullName ? toTitleCase(propFullName) : "",
       password: "",
     },
   });
@@ -67,16 +68,18 @@ export const useCreateAccount = ({
     setErrorMessage("");
 
     try {
+      const formattedFullName = toTitleCase(values.fullName);
+
       await signupMutation.mutateAsync({
         email: values.email,
         password: values.password,
-        fullName: values.fullName,
+        fullName: formattedFullName,
         professionalTitle: values.title,
       });
 
       onNext({
         email: values.email,
-        fullName: values.fullName,
+        fullName: formattedFullName,
         title: values.title,
         password: values.password,
       });
@@ -116,6 +119,21 @@ export const useCreateAccount = ({
     setValue("title", value, { shouldValidate: true });
   };
 
+  const fullNameRegister = register("fullName");
+
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = toTitleCase(e.target.value);
+    e.target.value = formatted;
+    fullNameRegister.onChange(e);
+  };
+
+  const handleFullNameBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const formatted = toTitleCase(e.target.value);
+    e.target.value = formatted;
+    setValue("fullName", formatted, { shouldValidate: true });
+    fullNameRegister.onBlur(e);
+  };
+
   const email = watch("email");
   const title = watch("title");
   const fullName = watch("fullName");
@@ -131,6 +149,9 @@ export const useCreateAccount = ({
     errors,
     onSubmit,
     handleTitleChange,
+    fullNameRegister,
+    handleFullNameChange,
+    handleFullNameBlur,
     isTitleSelectOpen,
     setIsTitleSelectOpen,
     email,

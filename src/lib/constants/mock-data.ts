@@ -6,14 +6,6 @@ export const DEFAULT_PENDING_USER_INFO = {
   timeAgo: "2 hours ago",
 };
 
-export const DEFAULT_PROVIDER_USER_INFO = {
-  name: "Provider",
-  title: "Health Provider",
-  specialty: "",
-  timeAgo: "Recently",
-  profileImage: undefined as string | undefined,
-};
-
 export interface MockAction {
   title: string;
   subtitle: string;

@@ -12,7 +12,6 @@ const SignUpPageContent = () => {
     title,
     specialty,
     profileImage,
-    isPending,
     profileStep,
     handleBack,
   } = useProviderSignup();
@@ -24,7 +23,6 @@ const SignUpPageContent = () => {
       title={title}
       specialty={specialty}
       profileImage={profileImage}
-      isPending={isPending}
       profileStep={profileStep}
       onBack={handleBack}
     />

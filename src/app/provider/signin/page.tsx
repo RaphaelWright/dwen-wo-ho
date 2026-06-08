@@ -6,7 +6,6 @@ import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { ROUTES } from "@/lib/constants/routes";
-import PendingVerificationModal from "@/components/modals/pending-verification";
 import { useProviderSignIn } from "@/hooks/provider/use-provider-signin";
 
 const SignInContent = () => {
@@ -23,9 +22,6 @@ const SignInContent = () => {
     handlePasswordChange,
     isLoading,
     errorMessage,
-    showPendingModal,
-    setShowPendingModal,
-    userInfo,
     email,
     router,
   } = useProviderSignIn();
@@ -139,13 +135,6 @@ const SignInContent = () => {
           Sign In
         </LoadingButton>
       </div>
-
-      {/* Pending Verification Modal */}
-      <PendingVerificationModal
-        isOpen={showPendingModal}
-        onClose={() => setShowPendingModal(false)}
-        userInfo={userInfo}
-      />
     </div>
   );
 };

@@ -29,6 +29,9 @@ const CreateAccount = (props: CreateAccountProps) => {
     errors,
     onSubmit,
     handleTitleChange,
+    fullNameRegister,
+    handleFullNameChange,
+    handleFullNameBlur,
     isTitleSelectOpen,
     setIsTitleSelectOpen,
     email,
@@ -67,7 +70,7 @@ const CreateAccount = (props: CreateAccountProps) => {
               value={email}
               placeholder={SIGN_UP_TEXTS.createAccount.emailPlaceholder}
               disabled
-              className="h-12 bg-muted border-border text-lg font-medium text-muted-foreground cursor-not-allowed"
+              className="h-12 bg-muted text-lg font-medium text-muted-foreground cursor-not-allowed"
             />
           </div>
 
@@ -98,7 +101,9 @@ const CreateAccount = (props: CreateAccountProps) => {
           <div className="space-y-2">
             <Label>Full Name<span className="text-destructive">*</span></Label>
             <Input
-              {...register("fullName")}
+              {...fullNameRegister}
+              onChange={handleFullNameChange}
+              onBlur={handleFullNameBlur}
               placeholder={SIGN_UP_TEXTS.createAccount.fullNamePlaceholder}
               className={`h-12 text-lg transition-all duration-200 ${
                 errors?.fullName

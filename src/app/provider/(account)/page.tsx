@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import MainContent from "@/components/provider/new/main-content";
 import UrgentPanel from "@/components/shared/urgent-panel";
@@ -16,6 +17,8 @@ import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-ca
 import { type MobilePanel } from "@/hooks/provider/use-provider-dashboard-mobile";
 import { PendingApprovalModal } from "@/components/provider/pending-approval-modal";
 import { cn } from "@/lib/utils";
+import { toPendingApprovalUserInfo } from "@/lib/utils/provider-pending-modal";
+import { performLogout } from "@/lib/auth-utils";
 import type { PatientCase } from "@/lib/types/api/patient-results";
 import ProviderActivityLog from "@/components/provider/provider-activity-log";
 import ProviderNavbar from "@/components/provider/new/nav-bar";
@@ -26,8 +29,9 @@ import useProviderDashboardAuth from "@/hooks/provider/use-provider-dashboard-au
 
 export default function ProviderHomePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [mounted, setMounted] = useState(false);
-  const { isApproved, isLoading, userInfo } = useProviderDashboardAuth();
+  const { isApproved, isLoading: isAuthLoading } = useProviderDashboardAuth();
   const dashboard = useProviderDashboard();
   const {
     setActiveSchool,
@@ -98,21 +102,22 @@ export default function ProviderHomePage() {
   }, [notifications, setNotifOpen]);
 
   // ── Early returns (AFTER all hooks are called) ──
-  if (!isApproved && !isLoading) {
+  if (!isApproved && !isAuthLoading) {
+    if (isInitLoading || !profileData.name) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      );
+    }
+
     const handleLogout = () => {
-      localStorage.removeItem("token");
-      router.push(ROUTES.provider.auth);
+      performLogout(queryClient, ROUTES.provider.auth);
     };
 
     return (
       <PendingApprovalModal
-        userInfo={{
-          name: userInfo.name,
-          title: userInfo.title,
-          specialty: userInfo.specialty,
-          profileImage: userInfo.profileImage,
-          timeAgo: "Just now",
-        }}
+        userInfo={toPendingApprovalUserInfo(profileData)}
         onLogout={handleLogout}
       />
     );

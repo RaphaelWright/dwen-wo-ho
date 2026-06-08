@@ -28,7 +28,7 @@ export const DesktopNav = () => {
               {isHovered && (
                 <motion.div
                   layoutId="hover-pill"
-                  className="absolute -inset-x-4 -inset-y-1 bg-gray-100 rounded-full -z-10"
+                  className="absolute -inset-x-4 -inset-y-1 bg-muted-foreground/10 rounded-full -z-10"
                   transition={{
                     type: "spring",
                     stiffness: 350,
@@ -56,7 +56,7 @@ export const DesktopNav = () => {
                   "text-sm font-medium transition-colors py-2 relative z-10",
                   isActive
                     ? "text-green-700"
-                    : "text-gray-600 hover:text-black",
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {item.name}

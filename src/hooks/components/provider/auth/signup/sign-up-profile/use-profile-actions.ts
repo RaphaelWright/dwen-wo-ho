@@ -7,23 +7,15 @@ import { toast } from "@/components/ui/sonner";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { calculateTimeAgo } from "@/lib/utils";
 import { setUserType } from "@/lib/utils/getUserType";
 import { validateProviderProfileStep } from "@/lib/utils/provider-profile-validation";
-import { formatGhanaPhoneForApi } from "@/lib/utils/ghana-phone";
+import type { ProviderProfileBioStepData } from "@/lib/schemas/provider-auth-schema";
 import {
   ProviderProfileData,
   ProviderProfileStep,
 } from "@/lib/types/provider/auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-
-export interface PendingUserInfo {
-  name: string;
-  title: string;
-  specialty: string;
-  timeAgo: string;
-  profileImage?: string;
-}
+import { toSentenceCase } from "@/lib/utils/smart-typing";
 
 export const useProfileActions = ({
   email,
@@ -31,14 +23,12 @@ export const useProfileActions = ({
   profileData,
   currentStep,
   setCurrentStep,
-  setUserInfo,
 }: {
   email: string;
   password?: string;
   profileData: ProviderProfileData;
   currentStep: number;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  setUserInfo: React.Dispatch<React.SetStateAction<PendingUserInfo>>;
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -63,28 +53,11 @@ export const useProfileActions = ({
     if (currentStep === 1) {
       setIsSubmitting(true);
       try {
-        const data = await updateProfileMutation.mutateAsync({
-          officePhoneNumber: formatGhanaPhoneForApi(profileData.phoneNumber),
-          status: profileData.bio,
+        const bioStepData = stepValidation.data as ProviderProfileBioStepData;
+        await updateProfileMutation.mutateAsync({
+          officePhoneNumber: bioStepData.phoneNumber,
+          status: toSentenceCase(bioStepData.bio),
         });
-
-        if (data) {
-          setUserInfo((prev) => ({
-            ...prev,
-            name: `${data.title ? `${data.title} ` : ""}${
-              data.name || prev.name
-            }`,
-            title: data.specialty || prev.title,
-            specialty: data.specialty || prev.specialty,
-            profileImage:
-              typeof data.avatarUrl === "string"
-                ? data.avatarUrl
-                : prev.profileImage,
-            timeAgo: data.memberSince
-              ? calculateTimeAgo(data.memberSince as string)
-              : prev.timeAgo,
-          }));
-        }
 
         toast.success(SIGN_UP_TEXTS.errors.profileUpdated);
         setCurrentStep(currentStep + 1);

@@ -78,7 +78,7 @@ export const SIGN_UP_TEXTS = {
   bioStep: {
     officePhoneLabel: "Phone Number",
     officePhonePlaceholder:
-      "Enter your 10 digits phone number",
+      "Enter your phone number (e.g. 0555555555)",
     countryCode: "+233",
     ghanaFlagSrc: "/ghana-flag.png",
     privateInfo:

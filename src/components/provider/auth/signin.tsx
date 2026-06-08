@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense } from "react";
-import PendingVerificationModal from "@/components/modals/pending-verification";
 import LoadingOverlay from "@/components/ui/loading-overlay";
 import { BaseSignInForm } from "@/components/auth/BaseSignInForm";
 import { useProviderSignIn } from "@/hooks/auth/use-provider-signin";
@@ -17,9 +16,6 @@ const SignInContent = (props: ProviderSignInProps) => {
     isRecovering,
     handleRecoverAccount,
     errorMessage,
-    showPendingModal,
-    setShowPendingModal,
-    userInfo,
   } = useProviderSignIn(props);
 
   return (
@@ -36,12 +32,6 @@ const SignInContent = (props: ProviderSignInProps) => {
         isLoading={isLoading}
         isRecovering={isRecovering}
         errorMessage={errorMessage}
-      />
-
-      <PendingVerificationModal
-        isOpen={showPendingModal}
-        onClose={() => setShowPendingModal(false)}
-        userInfo={userInfo}
       />
 
       <LoadingOverlay
