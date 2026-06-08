@@ -10,7 +10,6 @@ import {
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { setUserType } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
-import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { getProviderRedirectInfo } from "@/lib/utils/auth-redirect";
 import { useAccountRecovery } from "@/hooks/auth/use-account-recovery";
@@ -28,12 +27,6 @@ export const useProviderSignIn = ({
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [showPendingModal, setShowPendingModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    ...DEFAULT_PENDING_USER_INFO,
-    profileImage: undefined as string | undefined,
-  });
-
   const { loginMutation } = useAuthQuery();
   const { handleRecoverAccount, isRecovering, recoveryError } = useAccountRecovery(email, onForgotPassword);
 
@@ -78,10 +71,6 @@ export const useProviderSignIn = ({
       if (userData) {
         const redirectInfo = getProviderRedirectInfo(userData, response);
 
-        if (redirectInfo.userInfo) {
-          setUserInfo(redirectInfo.userInfo);
-        }
-
         if (redirectInfo.isPending) {
           localStorage.setItem("pendingUser", JSON.stringify(userData));
         } else {
@@ -106,12 +95,6 @@ export const useProviderSignIn = ({
       const errMessage = getCleanErrorMessage(error);
       
       if (errMessage.includes("ACCOUNT PENDING")) {
-        setUserInfo({
-          name: "Provider",
-          title: "Health Provider",
-          timeAgo: "Recently",
-          profileImage: undefined,
-        });
         router.push(ROUTES.provider.home);
         return;
       }
@@ -137,8 +120,5 @@ export const useProviderSignIn = ({
     isLoading: loginMutation.isPending || isRedirecting,
     isRecovering,
     handleRecoverAccount,
-    showPendingModal,
-    setShowPendingModal,
-    userInfo,
   };
 };

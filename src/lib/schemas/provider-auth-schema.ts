@@ -59,13 +59,26 @@ export const ProviderProfilePhotoStepSchema = z.object({
     }),
 });
 
+export const GhanaPhoneNumberSchema = z
+  .string()
+  .transform((value) => value.replace(/\D/g, ""))
+  .pipe(
+    z
+      .string()
+      .refine(
+        (digits) => /^\d{9}$/.test(digits) || /^0\d{9}$/.test(digits),
+        {
+          message:
+            "Please enter a valid 9-digit number or 10-digit number starting with 0",
+        },
+      )
+      .transform((digits) =>
+        digits.length === 10 ? `+233${digits.slice(1)}` : `+233${digits}`,
+      ),
+  );
+
 export const ProviderProfileBioStepSchema = z.object({
-  phoneNumber: z
-    .string()
-    .length(10, { message: "Please enter a valid 10-digit phone number" })
-    .regex(/^0\d{9}$/, {
-      message: "Phone number must start with 0 and be 10 digits",
-    }),
+  phoneNumber: GhanaPhoneNumberSchema,
   bio: z
     .string()
     .trim()

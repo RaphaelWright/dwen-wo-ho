@@ -39,7 +39,7 @@ const SpecialtyStep = (props: SpecialtyStepProps) => {
                 }
                 className={`h-auto py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 ${
                   selectedSpecialty === specialty
-                    ? "shadow-md scale-[1.02] ring-2 ring-primary ring-offset-2"
+                    ? "shadow-md scale-[1.02] "
                     : "hover:bg-muted/50 hover:border-primary/50 text-muted-foreground hover:text-foreground"
                 }`}
               >

@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 import { Loader2 } from "lucide-react";
 
 const SignUpContent = (props: ProviderSignUpProps) => {
-  const { specialty, profileImage, isPending, profileStep } = props;
+  const { specialty, profileImage, profileStep } = props;
   const {
     currentStep,
     setCurrentStep,
@@ -68,7 +68,6 @@ const SignUpContent = (props: ProviderSignUpProps) => {
             password={signUpData.password}
             specialty={specialty}
             profileImage={profileImage}
-            isPending={isPending}
             onBack={() => setCurrentStep("verify")}
             startStep={profileStep || 0}
           />

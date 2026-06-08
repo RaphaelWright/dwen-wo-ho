@@ -23,6 +23,7 @@ export const validateProviderProfileStep = (
   return {
     isValid: result.success,
     error: result.success ? undefined : result.error.issues[0]?.message,
+    data: result.success ? result.data : undefined,
   };
 };
 

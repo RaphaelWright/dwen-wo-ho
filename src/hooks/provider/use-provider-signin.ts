@@ -11,7 +11,6 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "@/lib/api";
-import { DEFAULT_PENDING_USER_INFO } from "@/lib/constants/mock-data";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import useGetSearchParams from "@/hooks/use-get-search-params";
 
@@ -22,10 +21,6 @@ export function useProviderSignIn() {
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [showPendingModal, setShowPendingModal] = useState(false);
-  const [userInfo] = useState({
-    ...DEFAULT_PENDING_USER_INFO,
-  });
 
   const form = useForm<ProviderLoginFormData>({
     resolver: zodResolver(ProviderLoginSchema),
@@ -60,17 +55,14 @@ export function useProviderSignIn() {
       });
 
       if (response?.success) {
-        // Store token if needed
         if (response?.data?.token) {
           localStorage.setItem("token", response?.data?.token);
         }
 
-        // Store refresh token if available
         if (response?.data?.refreshToken) {
           localStorage.setItem("refreshToken", response?.data?.refreshToken);
         }
 
-        // Check for pending status
         const userData = response?.data;
         const isPending =
           userData?.applicationStatus === "PENDING" ||
@@ -79,12 +71,10 @@ export function useProviderSignIn() {
           response?.message === "ACCOUNT PENDING";
 
         if (isPending) {
-          const userDataStr = JSON.stringify(userData);
-          localStorage.setItem("pendingUser", userDataStr);
-          router.push(ROUTES.provider.home);
-        } else {
-          router.push(ROUTES.provider.home);
+          localStorage.setItem("pendingUser", JSON.stringify(userData));
         }
+
+        router.push(ROUTES.provider.home);
       } else {
         setErrorMessage(
           getCleanErrorMessage(response?.message ?? "Sign in failed"),
@@ -93,7 +83,6 @@ export function useProviderSignIn() {
     } catch (error: unknown) {
       const errorMsg = getCleanErrorMessage(error);
 
-      // Check if error is about incomplete profile
       if (errorMsg && errorMsg.includes("Profile is not complete")) {
         localStorage.setItem("profileCompletionEmail", values.email);
 
@@ -148,9 +137,6 @@ export function useProviderSignIn() {
     handlePasswordChange,
     isLoading,
     errorMessage,
-    showPendingModal,
-    setShowPendingModal,
-    userInfo,
     email: searchEmail,
     router,
   };

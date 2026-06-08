@@ -8,7 +8,7 @@ import { useBioStep } from "@/hooks/components/provider/auth/signup/use-bio-step
 
 const BioStep = (props: BioStepProps) => {
   const { phoneNumber, bio } = props;
-  const { handlePhoneChange, handleBioChange } = useBioStep(props);
+  const { handlePhoneChange, handleBioChange, handleBioBlur } = useBioStep(props);
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -41,13 +41,13 @@ const BioStep = (props: BioStepProps) => {
                 onChange={handlePhoneChange}
                 placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
                 maxLength={10}
-                className="h-full border-0 pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none"
+                className="h-full pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none"
               />
-              <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+              {/* <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
                 <span className="text-[10px] sm:text-xs font-medium text-muted-foreground bg-muted px-1.5 sm:px-2 py-1 rounded-md">
                   {10 - phoneNumber.length} left
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -75,6 +75,7 @@ const BioStep = (props: BioStepProps) => {
             <Textarea
               value={bio}
               onChange={handleBioChange}
+              onBlur={handleBioBlur}
               placeholder={SIGN_UP_TEXTS.bioStep.bioPlaceholder}
               maxLength={140}
               minLength={10}

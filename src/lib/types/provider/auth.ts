@@ -28,7 +28,6 @@ export interface ProviderSignUpProps {
   title?: string;
   specialty?: string;
   profileImage?: string;
-  isPending?: boolean;
   onBack?: () => void;
   profileStep: number | null;
 }
@@ -59,7 +58,6 @@ export interface SignUpProfileProps {
   title: string;
   specialty?: string;
   profileImage?: string;
-  isPending?: boolean;
   onBack?: () => void;
   startStep?: number;
   password?: string;

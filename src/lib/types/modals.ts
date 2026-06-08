@@ -77,19 +77,6 @@ export interface PatientDetailsModalProps {
 // Re-export canonical types for consumers that import from this module
 export type { PatientResult, LockInAssessment };
 
-export interface PendingVerificationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isLoading?: boolean;
-  userInfo?: {
-    name: string;
-    title: string;
-    specialty?: string;
-    profileImage?: string;
-    timeAgo?: string;
-  };
-}
-
 export interface ProfessionalTitleModalProps {
   isOpen: boolean;
   onClose: () => void;
