@@ -14,5 +14,6 @@ export const NEW_PASSWORD_TEXTS = {
     back: "Back",
     step: "New Password",
     done: "DONE",
+    submitting: "Saving...",
   },
 };

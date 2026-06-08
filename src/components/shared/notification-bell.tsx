@@ -30,6 +30,10 @@ export const NotificationBell = ({
   className,
   ...props
 }: NotificationBellProps) => {
+  void badgeColor;
+  void badgeSize;
+  void pulseColor;
+
   return (
     <div className={cn("flex items-center gap-2.5", containerClassName)}>
       <motion.button

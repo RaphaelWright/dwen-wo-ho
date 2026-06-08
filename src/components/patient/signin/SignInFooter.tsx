@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { LoadingButton } from "@/components/ui/loading-button";
+import { ArrowLeft } from "lucide-react";
 import { SignInFooterProps } from "@/lib/types/components/patient/signin";
 import { SIGN_IN_TEXTS } from "@/lib/constants/components/patient/signin";
 
@@ -16,21 +17,20 @@ export function SignInFooter({ onBack, isLoading, errors }: SignInFooterProps) {
         <ArrowLeft className="h-4 w-4" />
         {SIGN_IN_TEXTS.footer.back}
       </Button>
-      <Button
+      <LoadingButton
         form="login-form"
         type="submit"
-        disabled={isLoading || hasErrors}
-        className={`rounded-full px-8 py-2.5 text-sm font-semibold flex items-center gap-2 transition-all duration-200 shadow-md ${
+        loading={isLoading}
+        loadingText={SIGN_IN_TEXTS.footer.signingIn}
+        disabled={hasErrors}
+        className={`rounded-full px-8 py-2.5 text-sm font-semibold transition-all duration-200 shadow-md ${
           isLoading || hasErrors
             ? "bg-muted text-muted-foreground cursor-not-allowed shadow-none"
             : "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:scale-[1.02] active:scale-[0.98]"
         }`}
       >
-        {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-        {isLoading
-          ? SIGN_IN_TEXTS.footer.signingIn
-          : SIGN_IN_TEXTS.footer.signIn}
-      </Button>
+        {SIGN_IN_TEXTS.footer.signIn}
+      </LoadingButton>
     </div>
   );
 }

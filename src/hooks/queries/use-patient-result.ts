@@ -74,7 +74,7 @@ export default function usePatientResultQuery() {
       lockinId: string | number;
       comment: string;
     }) => lockinsService.addComment(lockinId, comment),
-    onSuccess: (_, { lockinId }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.patientResult],
       });

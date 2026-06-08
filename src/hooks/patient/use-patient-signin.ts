@@ -8,6 +8,7 @@ import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { LoginSchema } from "@/lib/schemas/patient-auth-schema";
 import { PatientSignInFormData } from "@/lib/types/components/patient/signin";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 
 export function usePatientSignIn({ email }: { email: string | null }) {
   const router = useRouter();
@@ -35,23 +36,8 @@ export function usePatientSignIn({ email }: { email: string | null }) {
           // Redirection should likely be to patient home or dashboard
           router.push(ROUTES.patient.lockIn);
         },
-        onError: (error: any) => {
-          let message = "Sign in failed";
-
-          if (error?.response?.data?.message) {
-            message = error.response.data.message;
-          } else if (error?.message) {
-            message = error.message;
-          }
-
-          if (typeof message === "string" && message.trim().startsWith("{")) {
-            try {
-              const parsed = JSON.parse(message);
-              if (parsed.message) message = parsed.message;
-            } catch {}
-          }
-
-          setErrorMessage(message);
+        onError: (error: unknown) => {
+          setErrorMessage(getCleanErrorMessage(error) || "Sign in failed");
         },
       });
     },

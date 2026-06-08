@@ -8,7 +8,6 @@ import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/routes";
 import {
   CuratorNotification,
   ProviderNotification,
-  ProviderNotificationAction,
 } from "@/lib/types/notification";
 
 export const providerNotificationRouteConfig = {

@@ -5,10 +5,9 @@ import PatientCard from "@/components/shared/patient-card";
 import { PatientsTabProps } from "@/lib/types/components/curator/school-details";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useDeleteBulkPatientRecords } from "@/hooks/curator/use-curator-delete-patient-records";
-import { SpinnerCustom } from "@/components/ui/custom-spinner";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
+import { useDeleteBulkPatientRecords } from "@/hooks/curator/use-curator-delete-patient-records";
 
 export function PatientsTab({
   patients,
@@ -96,19 +95,16 @@ export function PatientsTab({
             className="bg-background border-primary"
           />
         </div>
-        <Button
-          variant={"destructive"}
-          disabled={selectedPatients.size < 1 || bulkDeletePending}
+        <LoadingButton
+          variant="destructive"
+          loading={bulkDeletePending}
+          disabled={selectedPatients.size < 1}
           onClick={() => setShowBulkDeleteModal(true)}
         >
-          {bulkDeletePending ? (
-            <SpinnerCustom />
-          ) : (
-            <div className="flex gap-2 items-center justify-center">
-              Delete <Trash className="size-4 text-white" />
-            </div>
-          )}
-        </Button>
+          <div className="flex gap-2 items-center justify-center">
+            Delete <Trash className="size-4 text-white" />
+          </div>
+        </LoadingButton>
       </div>
       {filteredPatients.map((patient, index) => {
         return (

@@ -15,21 +15,20 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-background/50 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/50 p-4 backdrop-blur-sm"
+      aria-busy="true"
+      aria-live="polite"
     >
-      {/* Loading bar at bottom */}
       <motion.div
-        initial={{ y: "100%" }}
-        animate={{ y: "10%" }}
+        initial={{ opacity: 0, scale: 0.95, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="absolute bottom-14 left-1/2 transform -translate-x-1/2 w-2/5 bg-card rounded-lg shadow-2xl"
+        className="w-full max-w-sm rounded-lg bg-card shadow-2xl"
       >
-        <div className="p-8 flex flex-col items-center justify-center space-y-6">
-          {/* Throbber spinner - 3 concentric circles */}
-          <div className="relative w-16 h-16">
-            {/* Outer circle */}
+        <div className="flex flex-col items-center justify-center gap-6 p-8">
+          <div className="relative size-16">
             <motion.div
-              className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full"
+              className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent"
               animate={{ rotate: 360 }}
               transition={{
                 duration: 1.5,
@@ -37,9 +36,8 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
                 ease: "linear",
               }}
             />
-            {/* Middle circle */}
             <motion.div
-              className="absolute inset-2 border-3 border-primary border-t-transparent rounded-full"
+              className="absolute inset-2 rounded-full border-3 border-primary border-t-transparent"
               animate={{ rotate: -360 }}
               transition={{
                 duration: 1.2,
@@ -47,9 +45,8 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
                 ease: "linear",
               }}
             />
-            {/* Inner circle */}
             <motion.div
-              className="absolute inset-4 border-2 border-primary border-t-transparent rounded-full"
+              className="absolute inset-4 rounded-full border-2 border-primary border-t-transparent"
               animate={{ rotate: 360 }}
               transition={{
                 duration: 0.9,
@@ -59,12 +56,11 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
             />
           </div>
 
-          {/* Loading text */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg font-medium text-muted-foreground text-center"
+            className="text-center text-lg font-medium text-muted-foreground"
           >
             {text}
           </motion.p>

@@ -5,6 +5,7 @@ import Layout from "@/app/provider/auth/layout";
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { Suspense } from "react";
 import { formatTime, recoverSteps } from "@/lib/utils";
@@ -59,13 +60,15 @@ const VerifyContent = () => {
             <InputOTPSlot index={5} className="otp-slot" />
           </InputOTP>
           <div>
-            <Button
-              disabled={seconds > 0 || recoverAccountMutation.isPending}
+            <LoadingButton
+              loading={recoverAccountMutation.isPending}
+              loadingText="Sending..."
+              disabled={seconds > 0}
               onClick={handleResendCode}
               className="rounded-md mt-4 bg-secondary disabled:bg-secondary/50 hover:bg-secondary/90 text-secondary-foreground"
             >
               Resend code <ArrowRightIcon className="w-4 h-4" />
-            </Button>
+            </LoadingButton>
             <span className="ml-4 border rounded-full p-2 text-sm">
               {formatTime(seconds)}
             </span>

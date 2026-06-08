@@ -14,7 +14,10 @@ export function SignUpFooter({ onBack }: SignUpFooterProps) {
       >
         {SIGN_UP_TEXTS.footer.back}
       </Button>
-      <Stepper steps={signUpSteps} step={SIGN_UP_TEXTS.footer.step as any} />
+      <Stepper
+        steps={signUpSteps}
+        step={SIGN_UP_TEXTS.footer.step as (typeof signUpSteps)[number]}
+      />
       <Input
         form="login-form"
         type="submit"

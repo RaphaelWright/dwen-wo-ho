@@ -54,6 +54,8 @@ export interface SchoolIcon {
   rank: number;
   schoolId: number | string | null;
   lockIns: string[];
+  logoUrl?: string;
+  type?: string;
 }
 
 export interface Partner {

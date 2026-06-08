@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { CheckCircle2, Upload } from "lucide-react";
 import Image from "next/image";
 import { PhotoStepProps } from "@/lib/types/provider/auth";
@@ -12,8 +11,6 @@ import { Input } from "@/components/ui/input";
 const PhotoStep = ({
   profilePhoto,
   onChange,
-  onNext,
-  onBack,
 }: PhotoStepProps) => {
   const {
     isPhotoModalOpen,
@@ -27,7 +24,7 @@ const PhotoStep = ({
     handleAddPhoto,
     handleFileClick,
     handleUploadClick,
-  } = usePhotoStep({ onChange, onNext });
+  } = usePhotoStep({ onChange });
 
   return (
     <>
@@ -51,10 +48,10 @@ const PhotoStep = ({
               </>
             ) : (
               <>
-                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                   {SIGN_UP_TEXTS.photoStep.addPhoto}
                 </h1>
-                <p className="text-muted-foreground text-lg px-4">
+                <p className="text-muted-foreground text-base sm:text-lg">
                   {SIGN_UP_TEXTS.photoStep.photoDescription}
                 </p>
               </>
@@ -68,7 +65,7 @@ const PhotoStep = ({
                 onClick={handleFileClick}
                 className="cursor-pointer group relative"
               >
-                <div className="w-52 h-52 rounded-full overflow-hidden border-4 border-background ring-4 ring-muted shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:ring-primary/50">
+                <div className="w-40 h-40 sm:w-52 sm:h-52 rounded-full overflow-hidden border-4 border-background ring-4 ring-muted shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:ring-primary/50">
                   <Image
                     width={208}
                     height={208}
@@ -84,7 +81,7 @@ const PhotoStep = ({
             ) : (
               <div
                 onClick={handleUploadClick}
-                className="w-52 h-52 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-muted/30 transition-all duration-300 bg-muted/10 group"
+                className="w-40 h-40 sm:w-52 sm:h-52 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-muted/30 transition-all duration-300 bg-muted/10 group"
               >
                 <div className="w-16 h-16 rounded-full bg-background shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
                   <Upload className="w-8 h-8 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -105,8 +102,6 @@ const PhotoStep = ({
         onChange={handlePhotoUpload}
         className="hidden"
       />
-
-      {/* Navigation is handled by parent SignUpProfile component now, removing local nav */}
 
       <PhotoCropperModal
         isOpen={isPhotoModalOpen}

@@ -8,10 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  NavItem,
-  SidebarNavItemProps,
-} from "@/lib/types/components/curator/sidebar";
+import { SidebarNavItemProps } from "@/lib/types/components/curator/sidebar";
 
 export const SidebarNavItem = ({
   item,

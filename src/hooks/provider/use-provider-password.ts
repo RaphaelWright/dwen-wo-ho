@@ -11,13 +11,20 @@ import {
 } from "@/lib/schemas/provider-auth-schema";
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+
+interface StoredSignupData {
+  email: string;
+  fullName: string;
+  professionalTitle: string;
+}
 
 export function useProviderPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [signupData, setSignupData] = useState<any>(null);
+  const [signupData, setSignupData] = useState<StoredSignupData | null>(null);
   const params = useParams();
   const { email } = params;
   const router = useRouter();
@@ -65,11 +72,10 @@ export function useProviderPassword() {
 
         router.push(`${ROUTES.provider.signUp}/${email}/profile` as Route);
       }
-    } catch (error: any) {
-      const errorMsg =
-        (error as any)?.response?.data?.message ||
-        "Account creation failed. Please try again.";
-      setErrorMessage(errorMsg);
+    } catch (error: unknown) {
+      setErrorMessage(
+        getCleanErrorMessage(error) || "Account creation failed. Please try again.",
+      );
     }
   };
 

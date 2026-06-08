@@ -14,6 +14,7 @@ export const useMemberCreation = ({
     name: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const memberTitles = ["Coach", "Advisor", "Ambassador"];
 
@@ -26,14 +27,13 @@ export const useMemberCreation = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.name.trim()) return;
+    if (!formData.title || !formData.name.trim() || isSubmitting) return;
 
-    // Simulate API call
-    setIsSubmitted(true);
+    setIsSubmitting(true);
 
-    // Reset form after 2 seconds
     setTimeout(() => {
-      setIsSubmitted(false);
+      setIsSubmitted(true);
+      setIsSubmitting(false);
       onMemberCreated?.(formData);
       onClose();
     }, 2000);
@@ -42,6 +42,7 @@ export const useMemberCreation = ({
   return {
     formData,
     isSubmitted,
+    isSubmitting,
     memberTitles,
     handleInputChange,
     handleSubmit,

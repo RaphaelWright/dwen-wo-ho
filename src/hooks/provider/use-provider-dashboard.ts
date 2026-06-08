@@ -37,14 +37,16 @@ import {
 } from "@/hooks/queries/use-notifications-mutations";
 import type { PatientCase } from "@/lib/types/api/patient-results";
 import type { ProviderAssociatedSchool } from "@/lib/types/api/providers";
+import type { ProviderNotification } from "@/lib/types/notification";
 import type { FilterOption } from "@/components/shared/search-dropdown";
 import { useProviderSearchConfig } from "./use-provider-search-config";
 import { useProviderDashboardMobile } from "./use-provider-dashboard-mobile";
 
-function matchesFilter(item: any, filter: FilterOption): boolean {
+function matchesFilter(item: object, filter: FilterOption): boolean {
+  const record = item as Record<string, unknown>;
   if (!filter.filterKey || !filter.filterValue) return true;
 
-  const value = item[filter.filterKey];
+  const value = record[filter.filterKey];
 
   if (value === undefined || value === null) return true;
 
@@ -140,7 +142,9 @@ export default function useProviderDashboard() {
 
   const markAllRead = useCallback(async () => {
     // Optimistic update
-    setNotifications((prev: any[]) => prev.map((n) => ({ ...n, read: true })));
+    setNotifications((prev: ProviderNotification[]) =>
+      prev.map((n) => ({ ...n, read: true, unread: false })),
+    );
     // Persist to backend
     await markAllReadMutation.mutateAsync();
     // Invalidate cache to ensure consistency
@@ -152,9 +156,9 @@ export default function useProviderDashboard() {
   const markOneRead = useCallback(
     async (id: string | number) => {
       // Optimistic update - handle both 'id' (curator) and 'notificationId' (provider) fields
-      setNotifications((prev: any[]) =>
+      setNotifications((prev: ProviderNotification[]) =>
         prev.map((n) =>
-          n.id === id || n.notificationId === id
+          n.notificationId === id
             ? { ...n, read: true, unread: false }
             : n,
         ),
@@ -182,8 +186,8 @@ export default function useProviderDashboard() {
   const deleteNotification = useCallback(
     async (id: string | number) => {
       // Optimistic update - handle both 'id' (curator) and 'notificationId' (provider) fields
-      setNotifications((prev: any[]) =>
-        prev.filter((n) => n.id !== id && n.notificationId !== id),
+      setNotifications((prev: ProviderNotification[]) =>
+        prev.filter((n) => n.notificationId !== id),
       );
       // Persist to backend
       await deleteMutation.mutateAsync(id);
@@ -205,7 +209,7 @@ export default function useProviderDashboard() {
 
   /** Open the edit dialog for a given profile field */
   const openEdit = useCallback(
-    (key: any, label: any, current: any) => {
+    (key: string, label: string, current: string) => {
       setEditFieldKey(key);
       setEditFieldLabel(label);
       setEditValue(current);
@@ -255,8 +259,8 @@ export default function useProviderDashboard() {
   ]);
 
   /* ── School filter helpers ────────────────────────── */
-  const handleSelectSchool = (id: any) => {
-    setActiveSchool(id);
+  const handleSelectSchool = (id: string | number) => {
+    setActiveSchool(String(id));
     // Reset status chip when switching school so counts feel fresh
     setActiveStatus("all");
   };
@@ -300,7 +304,7 @@ export default function useProviderDashboard() {
     );
 
     // Helper to check if an item matches all active filters (excluding score sorts)
-    const matchesAllFilters = (item: any) => {
+    const matchesAllFilters = (item: PatientCase) => {
       return localActiveFilters.every((filter) => {
         // Skip score sorting filters - they only sort, don't filter
         if (filter.id === "high-score" || filter.id === "low-score")

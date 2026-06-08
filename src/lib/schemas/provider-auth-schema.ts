@@ -21,7 +21,10 @@ export const ProviderSignUpSchema = z.object({
     .email({ message: "Please enter a valid email" })
     .min(1, "Please enter your email address"),
   title: z.string().min(1, { message: "Please select your title" }),
-  fullName: z.string().min(1, { message: "Please enter full name" }),
+  fullName: z
+    .string()
+    .trim()
+    .min(3, { message: "Please enter your full name" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
@@ -46,3 +49,40 @@ export const ProviderPasswordSchema = z
   });
 
 export type ProviderPasswordFormData = z.infer<typeof ProviderPasswordSchema>;
+
+export const ProviderProfilePhotoStepSchema = z.object({
+  photo: z
+    .string()
+    .nullable()
+    .refine((value): value is string => !!value && value.length > 0, {
+      message: "Please upload a photo",
+    }),
+});
+
+export const ProviderProfileBioStepSchema = z.object({
+  phoneNumber: z
+    .string()
+    .length(10, { message: "Please enter a valid 10-digit phone number" })
+    .regex(/^0\d{9}$/, {
+      message: "Phone number must start with 0 and be 10 digits",
+    }),
+  bio: z
+    .string()
+    .trim()
+    .min(10, { message: "Status must be at least 10 characters" })
+    .max(140, { message: "Status must be 140 characters or less" }),
+});
+
+export const ProviderProfileSpecialtyStepSchema = z.object({
+  specialty: z.string().min(1, { message: "Please select a specialty" }),
+});
+
+export type ProviderProfilePhotoStepData = z.infer<
+  typeof ProviderProfilePhotoStepSchema
+>;
+export type ProviderProfileBioStepData = z.infer<
+  typeof ProviderProfileBioStepSchema
+>;
+export type ProviderProfileSpecialtyStepData = z.infer<
+  typeof ProviderProfileSpecialtyStepSchema
+>;

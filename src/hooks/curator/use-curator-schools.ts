@@ -5,14 +5,16 @@ import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { useAtom } from "jotai";
 import { curatorSchoolsAtom, SchoolWithExtras } from "@/atoms/curator-schools";
 import { FilterType } from "@/lib/types/curator";
+import { School } from "@/lib/types/school";
 import { parseCampuses } from "@/lib/utils/parseCampuses";
 import { SCHOOLS_LIST_SEARCH_QUICK_FILTERS } from "@/lib/constants/components/curator/schools-list-search";
 import type { FilterOption } from "@/components/shared/search-dropdown";
 
-function matchesFilter(item: any, filter: FilterOption): boolean {
+function matchesFilter(item: object, filter: FilterOption): boolean {
+  const record = item as Record<string, unknown>;
   if (!filter.filterKey || !filter.filterValue) return true;
 
-  const value = item[filter.filterKey];
+  const value = record[filter.filterKey];
 
   if (value === undefined || value === null) return true;
 
@@ -28,7 +30,7 @@ function matchesFilter(item: any, filter: FilterOption): boolean {
   }
 }
 
-export function getFirstCampus(campuses: any): string {
+export function getFirstCampus(campuses: School["campuses"]): string {
   const parsed = parseCampuses(campuses);
   return parsed.length > 0 ? parsed[0] : "";
 }
@@ -93,7 +95,7 @@ export function useCuratorSchools() {
     const query = searchQuery.toLowerCase().trim();
 
     // Helper to check if an item matches all active filters
-    const matchesAllFilters = (item: any) => {
+    const matchesAllFilters = (item: object) => {
       return localActiveFilters.every((filter) => matchesFilter(item, filter));
     };
 
@@ -101,8 +103,9 @@ export function useCuratorSchools() {
 
     if (query) {
       filtered = filtered.filter((school) => {
+        const schoolWithExtras = school as SchoolWithExtras;
         const nameMatch = school.name?.toLowerCase().includes(query);
-        const nicknameMatch = (school as any).nickname
+        const nicknameMatch = schoolWithExtras.nickname
           ?.toLowerCase()
           .includes(query);
         const typeMatch = school.type?.toLowerCase().includes(query);
@@ -111,13 +114,16 @@ export function useCuratorSchools() {
     }
 
     return filtered
-      .map((school) => ({
-        id: school.id,
-        name: school.name,
-        avatarUrl: (school as any).logoUrl || (school as any).logo,
-        type: school.type,
-        slogan: (school as any).nickname || (school as any).motto || "",
-      }))
+      .map((school) => {
+        const schoolWithExtras = school as SchoolWithExtras;
+        return {
+          id: school.id,
+          name: school.name,
+          avatarUrl: schoolWithExtras.logo ?? school.logo,
+          type: school.type,
+          slogan: schoolWithExtras.nickname || school.motto || "",
+        };
+      })
       .slice(0, query ? 5 : 4);
   }, [searchQuery, allSchools, localActiveFilters]);
 

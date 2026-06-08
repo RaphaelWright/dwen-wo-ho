@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { ClientOnly } from "../ui/client-only";
 
 export default function ScoreRing({ score }: { score: number | string }) {
-  let cleanedScore = typeof score === "string" ? parseInt(score) : score;
+  const cleanedScore = typeof score === "string" ? parseInt(score) : score;
   const color = getScoreColor(cleanedScore);
   const radius = 18;
   const circumference = 2 * Math.PI * radius;

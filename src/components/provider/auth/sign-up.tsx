@@ -95,7 +95,7 @@ const SignUpContent = (props: ProviderSignUpProps) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {renderStepContent()}
       </div>
 

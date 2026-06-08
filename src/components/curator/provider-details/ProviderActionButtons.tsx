@@ -1,5 +1,5 @@
 import { CheckCircle, XCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ProviderActionButtonsProps } from "@/lib/types/components/curator/provider-details";
 
 export function ProviderActionButtons({
@@ -14,23 +14,25 @@ export function ProviderActionButtons({
           Review Actions
         </h2>
         <div className="flex space-x-4">
-          <Button
+          <LoadingButton
             onClick={onApprove}
-            disabled={isLoading}
+            loading={isLoading}
+            loadingText="Approving..."
             className="flex items-center space-x-2 bg-success hover:bg-success/90 text-primary-foreground px-6 py-3"
           >
             <CheckCircle className="w-5 h-5" />
             <span>Approve Provider</span>
-          </Button>
-          <Button
+          </LoadingButton>
+          <LoadingButton
             onClick={onReject}
-            disabled={isLoading}
+            loading={isLoading}
+            loadingText="Rejecting..."
             variant="destructive"
             className="flex items-center space-x-2 px-6 py-3"
           >
             <XCircle className="w-5 h-5" />
             <span>Reject Provider</span>
-          </Button>
+          </LoadingButton>
         </div>
       </div>
     </div>

@@ -14,4 +14,5 @@ export interface NewPasswordFormProps {
 
 export interface NewPasswordFooterProps {
   onBack: () => void;
+  isSubmitting?: boolean;
 }

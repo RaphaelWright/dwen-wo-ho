@@ -32,7 +32,7 @@ export async function getSchoolLockInCount(
     }
 
     return 0;
-  } catch (error) {
+  } catch {
     return 0;
   }
 }
@@ -64,9 +64,14 @@ export async function getLatestPatientResult(
     }
 
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
+}
+
+interface SchoolPatientResultSummary {
+  patientName: string;
+  createdAt: string;
 }
 
 export async function checkForNewPatients(
@@ -83,7 +88,7 @@ export async function checkForNewPatients(
 
     if (response?.success && response.data && response.data.length > 0) {
       const sorted = response.data.sort(
-        (a: any, b: any) =>
+        (a: SchoolPatientResultSummary, b: SchoolPatientResultSummary) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
 
@@ -102,13 +107,13 @@ export async function checkForNewPatients(
     }
 
     return { hasNew: false };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
 
 // Debounced function creator
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: never[]) => unknown>(
   func: T,
   delay: number,
 ): (...args: Parameters<T>) => void {
@@ -121,7 +126,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Request deduplication
-const pendingRequests = new Map<string, Promise<any>>();
+const pendingRequests = new Map<string, Promise<unknown>>();
 
 export async function deduplicatedRequest<T>(
   key: string,
@@ -129,7 +134,7 @@ export async function deduplicatedRequest<T>(
 ): Promise<T> {
   // If request is already pending, return the same promise
   if (pendingRequests.has(key)) {
-    return pendingRequests.get(key)!;
+    return pendingRequests.get(key)! as Promise<T>;
   }
 
   // Create new request

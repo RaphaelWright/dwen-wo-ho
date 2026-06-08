@@ -1,5 +1,6 @@
 import { ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { SchoolFooterProps } from "@/lib/types/components/modals/school-creation";
 
 export const SchoolFooter = ({
@@ -52,24 +53,16 @@ export const SchoolFooter = ({
             >
               Cancel
             </Button>
-            <Button
+            <LoadingButton
               type="button"
               onClick={handleConfirm}
-              disabled={isPending}
-              className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              loading={isPending}
+              loadingText="Creating..."
+              className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isPending ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <Check className="w-4 h-4" />
-                  Confirm & Create
-                </>
-              )}
-            </Button>
+              <Check className="w-4 h-4" />
+              Confirm & Create
+            </LoadingButton>
           </div>
         </>
       )}

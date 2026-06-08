@@ -8,6 +8,10 @@ interface FormSelectProps {
   placeholder?: string;
   className?: string;
   children: React.ReactNode;
+  autoFocus?: boolean;
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const FormSelect = React.forwardRef<
@@ -15,24 +19,38 @@ const FormSelect = React.forwardRef<
   FormSelectProps
 >(
   (
-    { value, onValueChange, placeholder, className, children, ...props },
+    {
+      value,
+      onValueChange,
+      placeholder,
+      className,
+      children,
+      defaultOpen,
+      open,
+      onOpenChange,
+      ...props
+    },
     ref
   ) => {
     const baseStyles =
-      "font-bold w-full rounded-xl border-2 sm:border-4 text-gray-500 p-2 sm:p-3 bg-gray-200/50 !h-12 sm:!h-14 hover:bg-gray-300/50 transition-colors";
-
-    const fontSizeStyles = "text-base sm:text-lg md:text-lg lg:text-lg";
+      "w-full rounded-xl border  p-2 sm:p-3 !h-12 sm:!h-14 hover:bg-muted transition-colors";
 
     return (
-      <Select value={value} onValueChange={onValueChange}>
+      <Select
+        value={value}
+        onValueChange={onValueChange}
+        defaultOpen={defaultOpen}
+        open={open}
+        onOpenChange={onOpenChange}
+      >
         <SelectTrigger
           ref={ref}
-          className={cn(baseStyles, fontSizeStyles, className)}
+          className={cn(baseStyles, className)}
           {...props}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent className="w-full border-2 sm:border-4 border-gray-300 rounded-xl shadow-lg bg-white p-0">
+        <SelectContent className="w-full border rounded-xl shadow-lg p-0">
           {children}
         </SelectContent>
       </Select>

@@ -4,11 +4,12 @@ import { Logo } from "@/components/shared/Logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
 import type { useProviderSearchConfig } from "@/hooks/provider/use-provider-search-config";
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
+import type { PatientCase } from "@/lib/types/api/patient-results";
 import { ClientOnly } from "@/components/ui/client-only";
 import { NotificationBell } from "@/components/shared/notification-bell";
 import { ROUTES } from "@/lib/constants/routes";
@@ -160,13 +161,12 @@ export default function ProviderNavbar({
             onFilterChange={searchConfig.onFilterChange}
             onRemoveFilter={searchConfig.removeFilter}
             getSuggestionValue={searchConfig.getSuggestionValue}
-            renderSuggestion={(p: any) => (
+            renderSuggestion={(p: PatientCase) => (
               <PatientSuggestionCard
                 name={p.patientName}
-                score={p.lockinScore}
+                score={p.score}
                 status={p.status}
                 school={p.schoolName}
-                {...p}
               />
             )}
             onSubmitSearch={searchConfig.onSubmitSearch}

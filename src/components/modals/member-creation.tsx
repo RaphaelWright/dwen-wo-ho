@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2Icon, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { MemberCreationModalProps } from "@/lib/types/modals";
 import { useMemberCreation } from "@/hooks/components/modals/use-member-creation";
 
@@ -14,6 +15,7 @@ const MemberCreationModal = ({
   const {
     formData,
     isSubmitted,
+    isSubmitting,
     memberTitles,
     handleInputChange,
     handleSubmit,
@@ -146,16 +148,16 @@ const MemberCreationModal = ({
                 >
                   Cancel
                 </Button>
-                <Button
+                <LoadingButton
                   type="submit"
                   form="member-form"
-                  disabled={
-                    !formData.title || !formData.name.trim() || isSubmitted
-                  }
+                  loading={isSubmitting}
+                  loadingText="Adding..."
+                  disabled={!formData.title || !formData.name.trim() || isSubmitted}
                   className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:shadow-none"
                 >
                   {isSubmitted ? "Added" : "Add Member"}
-                </Button>
+                </LoadingButton>
               </div>
             </div>
           </motion.div>

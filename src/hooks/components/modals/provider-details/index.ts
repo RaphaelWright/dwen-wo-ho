@@ -58,6 +58,7 @@ export const useProviderDetails = ({
       schools.setSchoolSearchQuery("");
       partners.setPartnerSearchQuery("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only setters from schools/partners are needed
   }, [
     isOpen,
     pathname,

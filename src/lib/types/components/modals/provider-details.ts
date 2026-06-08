@@ -66,9 +66,11 @@ export interface ProviderConfirmationModalsProps {
   partnerToAdd: AssociatedPartner | null;
   setPartnerToAdd: (partner: AssociatedPartner | null) => void;
   handleAddPartner: (partner: AssociatedPartner) => void;
+  isAddingPartner?: boolean;
   partnerToRemove: AssociatedPartner | null;
   setPartnerToRemove: (partner: AssociatedPartner | null) => void;
   handleRemovePartner: (partner: AssociatedPartner) => void;
+  isRemovingPartner?: boolean;
   providerName: string | undefined;
   showApproveModal: boolean;
   setShowApproveModal: (show: boolean) => void;

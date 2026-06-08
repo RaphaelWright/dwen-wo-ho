@@ -2,6 +2,7 @@
 
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { signUpSteps } from "@/lib/utils";
 import Stepper from "@/components/miscellaneous/stepper";
 import { useProviderPassword } from "@/hooks/provider/use-provider-password";
@@ -117,21 +118,20 @@ const PasswordSetup = () => {
           Back
         </Button>
         <Stepper steps={signUpSteps} step="Profile" />
-        <button
+        <LoadingButton
           form="password-form"
           type="submit"
-          disabled={!password || !confirmPassword || signupMutation.isPending}
-          className={`text-xl px-6 py-2 border-4 font-bold rounded-md flex items-center gap-2 ${
+          loading={signupMutation.isPending}
+          loadingText="Setting Password..."
+          disabled={!password || !confirmPassword}
+          className={`text-xl px-6 py-2 border-4 font-bold rounded-md ${
             password && confirmPassword && !signupMutation.isPending
               ? "border-primary text-primary-foreground bg-primary hover:bg-primary/90"
               : "border-uted text-muted-foreground bg-muted cursor-not-allowed"
           }`}
         >
-          {signupMutation.isPending && (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          )}
-          {signupMutation.isPending ? "Setting Password..." : "Next"}
-        </button>
+          Next
+        </LoadingButton>
       </div>
     </div>
   );

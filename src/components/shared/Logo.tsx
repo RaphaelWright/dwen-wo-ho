@@ -65,7 +65,7 @@ export const Logo = ({
 
   if (withLink) {
     return (
-      <Link href={href as any} className={className}>
+      <Link href={href as Route} className={className}>
         {content}
       </Link>
     );

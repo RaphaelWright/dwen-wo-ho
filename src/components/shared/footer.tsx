@@ -49,7 +49,7 @@ export default function Footer() {
             {/* shadcn Subscribe Form */}
             <PlaceholdersAndVanishInput
               placeholders={NEWSLETTER_PLACEHOLDERS}
-              onChange={(e) => {}}
+              onChange={() => {}}
               onSubmit={(e) => {
                 e.preventDefault();
               }}
@@ -124,7 +124,7 @@ export default function Footer() {
             {FOOTER_BOTTOM_LINKS.map((link) => (
               <li key={link.label}>
                 <Link
-                  href={link.href as any}
+                  href={link.href}
                   className="hover:text-primary transition-colors text-sm sm:text-base"
                 >
                   {link.label}

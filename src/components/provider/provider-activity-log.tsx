@@ -12,6 +12,7 @@ import {
 import { useProviderActivityQuery } from "@/hooks/queries/use-provider";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { ProviderActivityItem } from "@/lib/types/api/providers";
+import type { School } from "@/lib/types/school";
 
 const getActivityIcon = (action?: string) => {
   const normAction = action?.toLowerCase() || "";
@@ -32,7 +33,7 @@ export default function ProviderActivityLog() {
   const { useSchools } = useSchoolsQuery();
   const { data: schoolsData } = useSchools();
   // Depending on how schoolsResponse is shaped, it might be an array directly or have a .data wrapper
-  const schools = Array.isArray(schoolsData) ? schoolsData : (schoolsData as any)?.data || [];
+  const schools: School[] = schoolsData ?? [];
 
   // Debounce search manually for simplicity
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +95,7 @@ export default function ProviderActivityLog() {
             className="w-full sm:w-48 px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">All Schools</option>
-            {schools.map((s: any) => (
+            {schools.map((s) => (
               <option key={s.id} value={s.id}>{s.name || `School #${s.id}`}</option>
             ))}
           </select>

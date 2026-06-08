@@ -1,5 +1,6 @@
 import { Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { SchoolEditFooterProps } from "@/lib/types/components/modals/school-edit";
 
 export const SchoolEditFooter = ({
@@ -18,14 +19,16 @@ export const SchoolEditFooter = ({
         <Ban className="w-4 h-4" />
         Disable School
       </Button>
-      <Button
+      <LoadingButton
         type="submit"
         form="school-edit-form"
-        disabled={isPending || !hasChanges}
+        loading={isPending}
+        loadingText="Updating..."
+        disabled={!hasChanges}
         className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isPending ? "Updating..." : "Update School"}
-      </Button>
+        Update School
+      </LoadingButton>
     </div>
   );
 };

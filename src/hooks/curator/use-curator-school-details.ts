@@ -15,39 +15,7 @@ import { useSchoolUI, CuratorSchoolTabType } from "./school/use-school-ui";
 import { useSchoolActions } from "./school/use-school-actions";
 import { useSchoolIcons } from "./school/use-school-icons";
 import { useSchoolSubscription } from "@/hooks/use-school-subscription";
-import type { FilterOption } from "@/components/shared/search-dropdown";
-
-function matchesFilter(patient: any, filter: FilterOption): boolean {
-  if (!filter.filterKey || !filter.filterValue) return true;
-
-  const value = patient[filter.filterKey];
-
-  if (value === undefined || value === null) return true;
-
-  const filterValue = filter.filterValue;
-
-  switch (filter.filterType) {
-    case "exact":
-      return String(value).toLowerCase() === String(filterValue).toLowerCase();
-    case "contains":
-      return String(value).toLowerCase().includes(filterValue.toLowerCase());
-    case "score":
-      if (filterValue === "high") {
-        return typeof value === "number" && value >= 5;
-      }
-      return true;
-    case "date":
-      if (filterValue === "recent") {
-        const createdDate = new Date(value);
-        const now = new Date();
-        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        return createdDate >= sevenDaysAgo;
-      }
-      return true;
-    default:
-      return true;
-  }
-}
+import type { SchoolTab } from "@/lib/types/components/curator/school-details";
 
 export type { CuratorSchoolTabType };
 
@@ -76,15 +44,12 @@ export function useCuratorSchoolDetails() {
   const {
     searchQuery,
     appliedSearchQuery,
-    setAppliedSearchQuery,
     activeTab,
     selectedProviderEmail,
     editingIcon,
     setShowAddIconModal,
     setEditingIcon,
     setShowDisableModal,
-    activeFilter,
-    setActiveFilter,
   } = schoolUI;
 
   const schoolActions = useSchoolActions(
@@ -126,7 +91,7 @@ export function useCuratorSchoolDetails() {
 
   const selectedProvider = useMemo(() => {
     if (!selectedProviderEmail) return undefined;
-    const p = providers.find((p: any) => p.email === selectedProviderEmail);
+    const p = providers.find((provider) => provider.email === selectedProviderEmail);
     if (!p) return undefined;
 
     return {
@@ -151,7 +116,7 @@ export function useCuratorSchoolDetails() {
 
   const searchResult = useCuratorSchoolSearch({
     searchQuery,
-    activeTab: activeTab as any,
+    activeTab: activeTab as SchoolTab,
     patients: patients,
     schoolIcons,
     providers,

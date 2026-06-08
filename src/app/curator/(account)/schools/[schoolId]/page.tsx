@@ -45,7 +45,6 @@ export default function SchoolDetailsPage() {
     setSearchQuery,
     appliedSearchQuery,
     setAppliedSearchQuery,
-    isSearchOpen,
     showEditModal,
     setShowEditModal,
     showDisableModal,
@@ -228,11 +227,21 @@ export default function SchoolDetailsPage() {
                 }}
                 onRemoveFilter={removeFilter}
                 getSuggestionValue={(s) => s.name}
-                renderSuggestion={(props: any) =>
+                renderSuggestion={(suggestion) =>
                   activeTab === "icons" ? (
-                    <SchoolSuggestionCard {...props} />
+                    <SchoolSuggestionCard
+                      name={suggestion.name}
+                      avatarUrl={suggestion.avatarUrl}
+                      type={suggestion.type}
+                      slogan={suggestion.slogan}
+                      rank={suggestion.rank}
+                    />
                   ) : (
-                    <PatientSuggestionCard {...props} />
+                    <PatientSuggestionCard
+                      name={suggestion.name}
+                      score={suggestion.score ?? 0}
+                      status={suggestion.status ?? ""}
+                    />
                   )
                 }
                 onSubmitSearch={(query) => setAppliedSearchQuery(query)}
@@ -245,10 +254,15 @@ export default function SchoolDetailsPage() {
                       ) as Route,
                     );
                   } else if (activeTab === "providers" && suggestion.email) {
-                    handleProviderClick(suggestion);
-                  } else if (activeTab === "icons") {
-                    setEditingIcon(suggestion);
-                    setShowAddIconModal(true);
+                    handleProviderClick({ email: suggestion.email });
+                  } else if (activeTab === "icons" && suggestion.id != null) {
+                    const icon = schoolIcons.find(
+                      (i) => String(i.id) === String(suggestion.id),
+                    );
+                    if (icon) {
+                      setEditingIcon(icon);
+                      setShowAddIconModal(true);
+                    }
                   }
                 }}
                 onResetSearch={() => {

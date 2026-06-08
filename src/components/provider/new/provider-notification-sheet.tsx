@@ -3,6 +3,7 @@ import { getProviderNotificationRoute } from "@/lib/config/notification-routing"
 import { ProviderNotification } from "@/lib/types/notification";
 import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
 import { useRouter } from "next/navigation";
+import type { Route } from "next";
 
 export default function ProviderNotificationsSheet({
   notifications,
@@ -14,6 +15,8 @@ export default function ProviderNotificationsSheet({
   router,
   isMarkingRead,
   isDeleting,
+  isMarkingAllRead,
+  isClearing,
   getNotificationId,
   isNotificationUnread,
   getAvatarUrl,
@@ -31,6 +34,8 @@ export default function ProviderNotificationsSheet({
   router: ReturnType<typeof useRouter>;
   isMarkingRead: boolean;
   isDeleting: boolean;
+  isMarkingAllRead: boolean;
+  isClearing: boolean;
   getNotificationId: (n: ProviderNotification) => string;
   isNotificationUnread: (n: ProviderNotification) => boolean;
   getAvatarUrl: (n: ProviderNotification) => string | null | undefined;
@@ -48,10 +53,12 @@ export default function ProviderNotificationsSheet({
       markOneRead={markOneRead}
       deleteOne={deleteNotification}
       clearAllNotifications={clearAllNotifications}
-      onNavigate={(link) => router.push(link as any)}
+      onNavigate={(link) => router.push(link as Route)}
       getNotificationActionUrl={(n) => getProviderNotificationRoute(n) ?? "#"}
       isMarkingRead={isMarkingRead}
       isDeleting={isDeleting}
+      isMarkingAllRead={isMarkingAllRead}
+      isClearing={isClearing}
       getNotificationId={getNotificationId}
       isNotificationUnread={isNotificationUnread}
       getAvatarUrl={getAvatarUrl}

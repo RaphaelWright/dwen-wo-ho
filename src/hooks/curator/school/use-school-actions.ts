@@ -9,8 +9,8 @@ export function useSchoolActions(
   schoolId: string,
   school: School | null,
   router: ReturnType<typeof useRouter>,
-  disableSchool: (id: string) => Promise<any>,
-  invalidateSchool: (id: string) => Promise<any>,
+  disableSchool: (id: string) => Promise<unknown>,
+  invalidateSchool: (id: string) => Promise<unknown>,
   setShowDisableModal: (show: boolean) => void
 ) {
   const [isActionLoading, setIsActionLoading] = useState(false);

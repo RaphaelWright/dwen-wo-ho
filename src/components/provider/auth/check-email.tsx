@@ -1,7 +1,6 @@
 import { Logo } from "@/components/shared/Logo";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { ROUTES } from "@/lib/constants/routes";
 import { ProviderEmailFormData } from "@/lib/schemas/provider-auth-schema";
 import Link from "next/link";
@@ -78,39 +77,44 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                   placeholder={CHECK_EMAIL_TEXTS.form.emailPlaceholder}
                   className={`h-14 pl-4 pr-16 text-lg transition-all duration-200 ${
                     errors?.email
-                      ? "border-destructive focus-visible:ring-destructive/30"
-                      : "border-input focus-visible:ring-primary/30"
+                      && "border-destructive focus-visible:ring-destructive/30"
                   }`}
                   disabled={isLoading}
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  maxLength={255}
+                  minLength={3}
+                  required
+                  autoSave="on"
+                  autoFocus
                 />
-                <Button
+                <LoadingButton
                   type="submit"
                   size="icon"
-                  disabled={isLoading || !!errors?.email}
+                  loading={isLoading}
+                  disabled={!!errors?.email}
                   className={`absolute right-2 top-2 h-10 w-10 rounded-lg transition-all duration-300 ${
                     !errors?.email && !isLoading
                       ? "bg-primary text-primary-foreground hover:bg-primary/90"
                       : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed"
                   }`}
                 >
-                  {isLoading ? (
-                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-5 h-5"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  )}
-                </Button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-5 h-5"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </LoadingButton>
               </div>
               {errors?.email && (
                 <p className="text-sm text-destructive font-medium pl-1">

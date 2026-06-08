@@ -41,6 +41,8 @@ export default function ProviderHomePage() {
     deleteNotification,
     isMarkingRead,
     isDeleting,
+    isMarkingAllRead,
+    isClearing,
     activeSchool,
     handleSelectSchool,
     schools,
@@ -63,6 +65,8 @@ export default function ProviderHomePage() {
     saveEdit,
     uploadAvatar,
     isUploadingAvatar,
+    isSaving,
+    isUpdatingPhoneNumber,
     isInitLoading,
     searchConfig,
     activePanel,
@@ -91,7 +95,7 @@ export default function ProviderHomePage() {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [notifications]);
+  }, [notifications, setNotifOpen]);
 
   // ── Early returns (AFTER all hooks are called) ──
   if (!isApproved && !isLoading) {
@@ -229,9 +233,6 @@ export default function ProviderHomePage() {
                           name={p.patientName}
                           score={p.score ?? 0}
                           status={p.status}
-                          time={
-                            p.time ? new Date(p.time).toLocaleDateString() : ""
-                          }
                         />
                       )}
                       onSubmitSearch={searchConfig.onSubmitSearch}
@@ -339,6 +340,8 @@ export default function ProviderHomePage() {
         router={router}
         isMarkingRead={isMarkingRead}
         isDeleting={isDeleting}
+        isMarkingAllRead={isMarkingAllRead}
+        isClearing={isClearing}
         getNotificationId={(n) => n.notificationId}
         isNotificationUnread={(n) => n.unread}
         getAvatarUrl={(n) => n.avatarUrl}
@@ -364,6 +367,7 @@ export default function ProviderHomePage() {
         saveEdit={saveEdit}
         uploadAvatar={uploadAvatar}
         isUploadingAvatar={isUploadingAvatar}
+        isSaving={isSaving || isUpdatingPhoneNumber}
         profileData={profileData}
       />
     </div>

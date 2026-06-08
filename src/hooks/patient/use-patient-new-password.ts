@@ -60,5 +60,6 @@ export function usePatientNewPassword() {
     togglePasswordVisibility,
     onSubmit,
     router,
+    isSubmitting: loginMutation.isPending,
   };
 }

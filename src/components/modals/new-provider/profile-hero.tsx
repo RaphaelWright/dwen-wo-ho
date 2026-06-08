@@ -4,12 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { CheckCircle2, Pencil } from "lucide-react";
+import type { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
 
 export function ProfileHero({
   profileData,
   onEdit,
 }: {
-  profileData: any;
+  profileData: Partial<ProviderProfileData>;
   onEdit: (key: string, label: string, current: string) => void;
 }) {
   const fullName = `${profileData.title} ${profileData.name}`;

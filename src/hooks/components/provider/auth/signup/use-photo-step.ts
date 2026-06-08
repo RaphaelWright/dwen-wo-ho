@@ -8,14 +8,12 @@ import { getCroppedImg, Area } from "@/lib/utils/image-utils";
 
 export const usePhotoStep = ({
   onChange,
-  onNext,
 }: {
   onChange: (field: "photo", value: string | null) => void;
-  onNext: () => void;
 }) => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [, setSelectedFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -82,8 +80,6 @@ export const usePhotoStep = ({
 
         toast.success(SIGN_UP_TEXTS.photoStep.successUpload);
         setIsPhotoModalOpen(false);
-        // Automatically move to next step as per requirements
-        onNext();
       } catch (error) {
         toast.error(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

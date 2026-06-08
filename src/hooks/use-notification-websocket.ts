@@ -28,14 +28,13 @@ import {
   getProviderNotificationRoute,
 } from "@/lib/config/notification-routing";
 import { Route } from "next";
-
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 
 export function useNotificationWebSocket() {
   const pathname = usePathname();
-  // Using useMemo with pathname forces userType to re-evaluate on navigation (e.g. after login)
-  const userType = useMemo(() => getUserType(), [pathname]);
+  // Re-evaluate user type when route changes (e.g. after login)
+  void pathname;
+  const userType = getUserType();
 
   // Use role-specific atoms
   const [curatorNotifications, setCuratorNotifications] = useAtom(
@@ -44,10 +43,10 @@ export function useNotificationWebSocket() {
   const [providerNotifications, setProviderNotifications] = useAtom(
     providerNotificationListAtom,
   );
-  const [curatorSheetOpen, setCuratorSheetOpen] = useAtom(
+  const [, setCuratorSheetOpen] = useAtom(
     isCuratorNotificationSheetOpenAtom,
   );
-  const [providerSheetOpen, setProviderSheetOpen] = useAtom(
+  const [, setProviderSheetOpen] = useAtom(
     isProviderNotificationSheetOpenAtom,
   );
 

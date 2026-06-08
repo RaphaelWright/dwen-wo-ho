@@ -12,13 +12,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import type {
-  CuratorNotification,
-  NotificationItem,
-  ProviderNotification,
-} from "@/lib/types/notification";
-
 import { CheckCircle, Trash2, X } from "lucide-react";
+
+import { Spinner } from "@/components/ui/spinner";
 
 import { cn } from "@/lib/utils";
 
@@ -27,8 +23,6 @@ import { NotificationSkeleton } from "./notification-skeleton";
 import NotifItem from "./notification-item";
 
 type FilterType = "all" | "unread" | "read";
-
-type Variant = "curator" | "provider";
 
 interface NotificationsSheetProps<N> {
   notifications: N[];
@@ -43,6 +37,8 @@ interface NotificationsSheetProps<N> {
   isLoading?: boolean;
   isMarkingRead?: boolean;
   isDeleting?: boolean;
+  isMarkingAllRead?: boolean;
+  isClearing?: boolean;
   // Type-specific helpers
   getNotificationId: (n: N) => string | number | undefined;
   isNotificationUnread: (n: N) => boolean;
@@ -64,8 +60,8 @@ export default function NotificationsSheet<N>({
   onNavigate,
   isLoading = false,
   getNotificationActionUrl,
-  isMarkingRead: globalMarkingRead = false,
-  isDeleting: globalDeleting = false,
+  isMarkingAllRead = false,
+  isClearing = false,
   getNotificationId,
   isNotificationUnread,
   getAvatarUrl,
@@ -208,9 +204,14 @@ export default function NotificationsSheet<N>({
                     <TooltipTrigger asChild>
                       <button
                         onClick={markAllRead}
-                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-info/15 hover:text-info active:scale-95"
+                        disabled={isMarkingAllRead}
+                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-info/15 hover:text-info active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <CheckCircle className="size-4" />
+                        {isMarkingAllRead ? (
+                          <Spinner className="size-4" />
+                        ) : (
+                          <CheckCircle className="size-4" />
+                        )}
                       </button>
                     </TooltipTrigger>
 
@@ -227,9 +228,14 @@ export default function NotificationsSheet<N>({
                     <TooltipTrigger asChild>
                       <button
                         onClick={clearAllNotifications}
-                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive active:scale-95"
+                        disabled={isClearing}
+                        className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Trash2 className="size-4" />
+                        {isClearing ? (
+                          <Spinner className="size-4" />
+                        ) : (
+                          <Trash2 className="size-4" />
+                        )}
                       </button>
                     </TooltipTrigger>
 
@@ -300,7 +306,7 @@ export default function NotificationsSheet<N>({
                     }
                     onClick={() => {
                       onNavigate?.(getNotificationActionUrl(n));
-                      notifId && markOneRead(notifId);
+                      if (notifId) markOneRead(notifId);
                     }}
                     isMarkingRead={itemIsMarkingRead}
                     isDeleting={itemIsDeleting}

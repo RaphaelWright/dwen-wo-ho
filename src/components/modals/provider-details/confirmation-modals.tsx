@@ -18,6 +18,8 @@ export const ProviderConfirmationModals = ({
   partnerToRemove,
   setPartnerToRemove,
   handleRemovePartner,
+  isAddingPartner,
+  isRemovingPartner,
   providerName,
   showApproveModal,
   setShowApproveModal,
@@ -56,18 +58,19 @@ export const ProviderConfirmationModals = ({
       {/* Add Partner Confirmation Modal */}
       <ConfirmationModal
         isOpen={partnerToAdd !== null}
-        onClose={() => setPartnerToAdd(null)}
+        onClose={() => !isAddingPartner && setPartnerToAdd(null)}
         onConfirm={() => partnerToAdd && handleAddPartner(partnerToAdd)}
         title="Add Partner Confirmation"
         message={`Are you sure you want to add ${partnerToAdd?.name} to ${providerName || "this provider"}?`}
         confirmText="Yes, Add Partner"
         variant="success"
+        isLoading={isAddingPartner}
       />
 
       {/* Remove Partner Confirmation Modal */}
       <ConfirmationModal
         isOpen={partnerToRemove !== null}
-        onClose={() => setPartnerToRemove(null)}
+        onClose={() => !isRemovingPartner && setPartnerToRemove(null)}
         onConfirm={() =>
           partnerToRemove && handleRemovePartner(partnerToRemove)
         }
@@ -75,6 +78,7 @@ export const ProviderConfirmationModals = ({
         message={`Are you sure you want to remove ${partnerToRemove?.name} from ${providerName || "this provider"}?`}
         confirmText="Yes, Remove Partner"
         variant="danger"
+        isLoading={isRemovingPartner}
       />
 
       {/* Approve Provider Confirmation Modal */}

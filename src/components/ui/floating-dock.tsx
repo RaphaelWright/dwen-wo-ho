@@ -32,12 +32,20 @@ export const FloatingDock = ({
   itemClassName?: string;
 }) => {
   return (
-    <FloatingDockDesktop
-      items={items}
-      className={desktopClassName}
-      tooltipClassName={tooltipClassName}
-      itemClassName={itemClassName}
-    />
+    <>
+      <FloatingDockDesktop
+        items={items}
+        className={desktopClassName}
+        tooltipClassName={tooltipClassName}
+        itemClassName={itemClassName}
+      />
+      <FloatingDockMobile
+        items={items}
+        className={mobileClassName}
+        tooltipClassName={tooltipClassName}
+        itemClassName={itemClassName}
+      />
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import { WAITLIST_CONTENT } from "@/lib/constants/components/modals/waitlist";
 import { useWaitlistForm } from "@/hooks/components/modals/use-waitlist";
 import { WaitlistModalProps } from "@/lib/types/modals";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
   const { formData, handleInputChange, loading, success, error, handleSubmit } =
@@ -72,18 +72,19 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
               ))}
             </div>
             <div className="flex justify-end mt-2">
-              <Button
+              <LoadingButton
                 type="submit"
-                className="bg-success text-success-foreground text-2xl font-bold rounded px-6 py-2 disabled:opacity-50"
+                loading={loading}
+                loadingText={FORM.LOADING_BUTTON}
                 disabled={
-                  loading ||
                   !formData.fullName ||
                   !formData.whatsappNumber ||
                   !formData.email
                 }
+                className="bg-success text-success-foreground text-2xl font-bold rounded px-6 py-2 disabled:opacity-50"
               >
-                {loading ? FORM.LOADING_BUTTON : FORM.SUBMIT_BUTTON}
-              </Button>
+                {FORM.SUBMIT_BUTTON}
+              </LoadingButton>
             </div>
             {success && (
               <div className="text-success font-bold text-center">

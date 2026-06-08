@@ -13,7 +13,6 @@ export const createImage = (url: string): Promise<HTMLImageElement> =>
 export const getCroppedImg = async (
   imageSrc: string,
   pixelCrop: Area,
-  _imageName: string = "cropped.jpg",
 ): Promise<Blob | null> => {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");

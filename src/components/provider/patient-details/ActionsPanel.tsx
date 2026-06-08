@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Activity, Clock, CheckCircle2, Plus, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
 import { PatientActionResponseDTO } from "@/lib/types/api/patient-results";
 import { ActionTab } from "@/hooks/provider/use-provider-patient-details";
@@ -137,13 +138,15 @@ export function ActionsPanel({
                 rows={2}
               />
               <div className="flex gap-2">
-                <Button
+                <LoadingButton
                   type="submit"
-                  disabled={isAddingAction || !formData.title.trim()}
+                  loading={isAddingAction}
+                  loadingText="Saving..."
+                  disabled={!formData.title.trim()}
                   className="flex-1 h-8 text-xs"
                 >
-                  {isAddingAction ? "Saving..." : "Save Action"}
-                </Button>
+                  Save Action
+                </LoadingButton>
               </div>
             </motion.form>
           )}

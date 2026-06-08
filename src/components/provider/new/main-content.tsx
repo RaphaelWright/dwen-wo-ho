@@ -2,12 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Filter,
   LayoutGrid,
-  Search,
   Sparkles,
   UserRoundX,
-  X,
   Zap,
 } from "lucide-react";
 import { NEW_PROVIDER_STATUS_CHIPS } from "@/lib/constants/components/provider/dashboard";
@@ -107,7 +104,7 @@ export default function MainContent({
               No patients found
             </p>
             <p className="text-sm mt-1.5 text-slate-500 dark:text-slate-400 max-w-xs text-center leading-relaxed">
-              Try adjusting your filters or search query to find what you're
+              Try adjusting your filters or search query to find what you&apos;re
               looking for
             </p>
           </motion.div>

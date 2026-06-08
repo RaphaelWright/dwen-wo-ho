@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BioStepProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { Input } from "@/components/ui/input";
@@ -10,36 +11,58 @@ const BioStep = (props: BioStepProps) => {
   const { handlePhoneChange, handleBioChange } = useBioStep(props);
 
   return (
-    <div className="space-y-8 px-4 md:px-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-6">
         <div className="space-y-2">
-          <div className="relative">
-            <Input
-              type="tel"
-              value={phoneNumber}
-              onChange={handlePhoneChange}
-              placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
-              maxLength={10}
-              className="h-14 pl-4 pr-16 text-lg border-input bg-background focus-visible:ring-primary transition-all duration-200 shadow-sm"
-            />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-              <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
-                {10 - phoneNumber.length} left
+          <Label htmlFor="office-phone">
+            {SIGN_UP_TEXTS.bioStep.officePhoneLabel}<span className="text-destructive">*</span>
+          </Label>
+          <div className="group flex h-12 items-stretch overflow-hidden rounded-lg border border-input bg-background shadow-sm transition-all duration-200 focus-within:border-ring focus-within:ring focus-within:ring-primary/50">
+            <div className="flex shrink-0 items-center gap-1.5 border-r border-border bg-muted/40 px-2 sm:px-3 pointer-events-none">
+              <Image
+                src={SIGN_UP_TEXTS.bioStep.ghanaFlagSrc}
+                alt=""
+                width={24}
+                height={16}
+                className="rounded-sm object-cover"
+                aria-hidden
+              />
+              <span className="text-sm font-medium text-foreground tabular-nums">
+                {SIGN_UP_TEXTS.bioStep.countryCode}
               </span>
             </div>
+            <div className="relative min-w-0 flex-1">
+              <Input
+                id="office-phone"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel-national"
+                value={phoneNumber}
+                onChange={handlePhoneChange}
+                placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
+                maxLength={10}
+                className="h-full border-0 pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none"
+              />
+              <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                <span className="text-[10px] sm:text-xs font-medium text-muted-foreground bg-muted px-1.5 sm:px-2 py-1 rounded-md">
+                  {10 - phoneNumber.length} left
+                </span>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground text-center">
+          <p className="text-sm text-muted-foreground">
             {SIGN_UP_TEXTS.bioStep.privateInfo}
           </p>
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between px-1">
-            <Label className="text-lg font-semibold">
+          <div className="flex items-center justify-between gap-2">
+            <Label className="shrink-0">
               {SIGN_UP_TEXTS.bioStep.status}
+              <span className="text-destructive">*</span>
             </Label>
             <span
-              className={`text-xs font-medium px-2 py-1 rounded-md ${
+              className={`text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-1 rounded-md shrink-0 whitespace-nowrap ${
                 140 - bio.length < 10
                   ? "bg-destructive/10 text-destructive"
                   : "bg-muted text-muted-foreground"
@@ -54,9 +77,10 @@ const BioStep = (props: BioStepProps) => {
               onChange={handleBioChange}
               placeholder={SIGN_UP_TEXTS.bioStep.bioPlaceholder}
               maxLength={140}
-              className="min-h-40 p-4 text-lg border-input bg-background focus-visible:ring-primary resize-none shadow-sm transition-all duration-200"
+              minLength={10}
+              className="min-h-40 p-4 border-input bg-background focus-visible:ring-primary/50 resize-none shadow-sm transition-all duration-200"
             />
-            <p className="text-sm text-muted-foreground text-center mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               {SIGN_UP_TEXTS.bioStep.bioDescription}
             </p>
           </div>

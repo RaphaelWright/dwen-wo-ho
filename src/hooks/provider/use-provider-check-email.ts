@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { ProviderEmailSchema } from "@/lib/schemas/provider-auth-schema";
 
 export function useProviderCheckEmail({
@@ -28,10 +29,9 @@ export function useProviderCheckEmail({
       if (response) {
         onEmailSubmit(email, response.emailExists || false);
       }
-    } catch (error) {
-      // Parse error message - it might be stringified JSON
+    } catch (error: unknown) {
       let errorMessage = "Failed to verify email. Please try again.";
-      const rawError = (error as any)?.message || "";
+      const rawError = getCleanErrorMessage(error);
 
       // Try to parse if it's JSON
       try {

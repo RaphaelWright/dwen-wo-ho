@@ -1,19 +1,14 @@
 "use client";
 
-import { Clock } from "lucide-react";
-
 import ScoreRing from "@/components/shared/score-ring";
 
 import { getStatusConfig } from "@/lib/utils/new-provider";
 
 export interface PatientSuggestionCardProps {
   name: string;
-
   score: number;
-
   status: string;
-
-  [key: string]: any; // Allows passing the rest of the patient object safely
+  school?: string;
 }
 
 export function PatientSuggestionCard({
@@ -24,7 +19,6 @@ export function PatientSuggestionCard({
   status,
 
   school,
-  ...rest
 }: PatientSuggestionCardProps) {
   const cfg = getStatusConfig(status);
 

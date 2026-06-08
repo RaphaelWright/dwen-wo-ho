@@ -82,7 +82,7 @@ export function ProfileTabs({
           {/* Overview */}
           <TabsContent value="overview" className="p-6 mt-0">
             <InfoCard label="Current Status Message">
-              "{profileData.status}"
+              &quot;{profileData.status}&quot;
             </InfoCard>
 
             <SectionLabel className="mt-5">Contact</SectionLabel>

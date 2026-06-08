@@ -64,8 +64,8 @@ export function useProviderPatientDetails() {
     if (!providerId) return [];
     return allActions.filter(
       (action: PatientActionResponseDTO) =>
-        (action as any).providerId === providerId ||
-        (action as any).createdBy === providerId,
+        action.providerId === providerId ||
+        action.createdBy === providerId,
     );
   }, [allActions, providerId]);
 
@@ -194,8 +194,7 @@ export function useProviderPatientDetails() {
   }, [patientResult, providerId]);
 
   // Treatment status mutation
-  const { usePatientFullDetails, updateActionStatus, isUpdating } =
-    usePatientResultQuery();
+  const { updateActionStatus, isUpdating } = usePatientResultQuery();
 
   const handleUpdateActionStatus = useCallback(
     async (actionStatus: "TREATING" | "NOT_TREATING") => {

@@ -2,9 +2,9 @@
 
 import { BioStepProps } from "@/lib/types/provider/auth";
 
-export const useBioStep = ({ phoneNumber, bio, onChange }: BioStepProps) => {
+export const useBioStep = ({ onChange }: BioStepProps) => {
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange("phoneNumber", e.target.value);
+    onChange("phoneNumber", e.target.value.replace(/\D/g, "").slice(0, 10));
   };
 
   const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

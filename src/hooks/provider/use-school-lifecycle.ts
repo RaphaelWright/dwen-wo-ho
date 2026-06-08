@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { clearAllCaches } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
 import { SchoolWithExtras as SchoolWithExtrasAtom } from "@/atoms/provider-schools";
 import { POLL_INTERVAL } from "@/lib/constants/provider-schools";
+import type { ProviderProfileResponse } from "@/lib/types/api/auth";
 
 export function useSchoolLifecycle(
-  getProfileQuery: any,
-  loadSchoolsWithData: () => Promise<void>,
+  getProfileQuery: UseQueryResult<ProviderProfileResponse, Error>,
+  loadSchoolsWithData: (isBackground?: boolean) => Promise<void>,
   previousSchoolsRef: React.RefObject<Map<number, SchoolWithExtrasAtom>>,
   isInitialLoadRef: React.RefObject<boolean>,
   abortControllerRef: React.RefObject<AbortController | null>,
 ) {
-  // Listen for profile changes
   useEffect(() => {
     if (!getProfileQuery.data || isInitialLoadRef.current) return;
 
@@ -25,12 +26,12 @@ export function useSchoolLifecycle(
       ),
     );
     const cachedSchoolIds = new Set(
-      Array.from(previousSchoolsRef.current.keys()),
+      Array.from(previousSchoolsRef.current?.keys() ?? []),
     );
 
     cachedSchoolIds.forEach((cachedId) => {
       if (!currentSchoolIds.has(cachedId)) {
-        const removedSchool = previousSchoolsRef.current.get(cachedId);
+        const removedSchool = previousSchoolsRef.current?.get(cachedId);
         if (removedSchool) {
           toast.error(`${removedSchool.name} is no longer available`);
         }
@@ -47,16 +48,15 @@ export function useSchoolLifecycle(
         }
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refs are stable containers
   }, [getProfileQuery.data]);
 
-  // Initial load
   useEffect(() => {
     if (!getProfileQuery.data) return;
 
     loadSchoolsWithData();
   }, [getProfileQuery.data, loadSchoolsWithData]);
 
-  // Background polling with debouncing
   useEffect(() => {
     if (!getProfileQuery.data) return;
 
@@ -67,19 +67,18 @@ export function useSchoolLifecycle(
 
       if (now - lastPollRef.current >= POLL_INTERVAL) {
         lastPollRef.current = now;
-        loadSchoolsWithData();
+        loadSchoolsWithData(true);
       }
     }, POLL_INTERVAL);
 
+    const controller = abortControllerRef.current;
+
     return () => {
       clearInterval(interval);
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      controller?.abort();
     };
   }, [getProfileQuery.data, loadSchoolsWithData, abortControllerRef]);
 
-  // Clear caches on unmount
   useEffect(() => {
     return () => {
       clearAllCaches();

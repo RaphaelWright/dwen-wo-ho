@@ -40,7 +40,7 @@ const NewPasswordContent = () => {
       </div>
       <form
         id="login-form"
-        onSubmit={handleSubmit(onSubmit, (errors) => {})}
+        onSubmit={handleSubmit(onSubmit)}
         className="px-22"
       >
         <h1 className="text-5xl text-center font-extrabold">
