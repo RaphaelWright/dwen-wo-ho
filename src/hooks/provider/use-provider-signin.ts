@@ -12,6 +12,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { api } from "@/lib/api";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { toast } from "@/components/ui/sonner";
 import useGetSearchParams from "@/hooks/use-get-search-params";
 
 export function useProviderSignIn() {
@@ -20,8 +21,6 @@ export function useProviderSignIn() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
   const form = useForm<ProviderLoginFormData>({
     resolver: zodResolver(ProviderLoginSchema),
     defaultValues: {
@@ -46,7 +45,6 @@ export function useProviderSignIn() {
 
   const onSubmit = async (values: ProviderLoginFormData) => {
     setIsLoading(true);
-    setErrorMessage("");
 
     try {
       const response = await api(STATIC_ENDPOINTS.AUTH.LOGIN, {
@@ -76,7 +74,7 @@ export function useProviderSignIn() {
 
         router.push(ROUTES.provider.home);
       } else {
-        setErrorMessage(
+        toast.error(
           getCleanErrorMessage(response?.message ?? "Sign in failed"),
         );
       }
@@ -112,7 +110,7 @@ export function useProviderSignIn() {
           );
         }
       } else {
-        setErrorMessage(errorMsg);
+        toast.error(errorMsg);
       }
     } finally {
       setIsLoading(false);
@@ -136,7 +134,6 @@ export function useProviderSignIn() {
     password,
     handlePasswordChange,
     isLoading,
-    errorMessage,
     email: searchEmail,
     router,
   };

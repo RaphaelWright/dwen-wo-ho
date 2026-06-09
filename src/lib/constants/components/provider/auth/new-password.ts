@@ -1,15 +1,17 @@
 export const NEW_PASSWORD_TEXTS = {
-  header: {
-    signIn: "Sign in",
-  },
   form: {
     title: "Create New Password",
-    passwordPlaceholder: "Password (6 or more characters)",
-    repeatPasswordPlaceholder: "Repeat Password",
-    show: "SHOW",
-    hide: "HIDE",
+    subtitle: "Set a new password for your provider account",
+    emailLabel: "Email",
+    passwordLabel: "Password",
+    confirmPasswordLabel: "Confirm password",
+    repeatPasswordPlaceholder: "Repeat your password",
+    savePassword: "Save password",
     back: "Back",
-    done: "DONE",
+  },
+  passwordMatch: {
+    match: "Passwords match",
+    mismatch: "Passwords don't match",
   },
   toasts: {
     sessionExpired: "Session expired or invalid. Please verify code again.",
@@ -20,4 +22,5 @@ export const NEW_PASSWORD_TEXTS = {
     general: "An unexpected error occurred.",
     passwordResetFailed: "Password reset failed",
   },
+  loading: "Loading...",
 };

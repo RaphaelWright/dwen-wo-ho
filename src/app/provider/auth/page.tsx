@@ -6,11 +6,13 @@ import SignIn from "@/components/provider/auth/signin";
 import SignUp from "@/components/provider/auth/sign-up";
 import VerifyPasswordReset from "@/components/provider/auth/verify-password-reset";
 import { useProviderAuth } from "@/hooks/provider/use-provider-auth";
+import { SIGN_IN_TEXTS } from "@/lib/constants/components/provider/auth/signin";
 
 const ProviderAuthPageContent = () => {
   const {
     step,
     email,
+    passwordResetSuccess,
     isCheckingAuth,
     profileStep,
     handleEmailSubmit,
@@ -29,6 +31,11 @@ const ProviderAuthPageContent = () => {
         return (
           <SignIn
             email={email}
+            successMessage={
+              passwordResetSuccess
+                ? SIGN_IN_TEXTS.success.passwordReset
+                : undefined
+            }
             onBack={handleBackToEmail}
             onForgotPassword={handleForgotPassword}
             onProfileIncomplete={(step) => handleProfileIncomplete(step)}

@@ -26,17 +26,26 @@ export const useAuthQuery = () => {
     mutationFn: authService.checkEmail,
   });
 
-  const sendVerificationEmailMutation = useMutation({
-    mutationKey: ["auth", "sendVerificationEmail"],
-    mutationFn: authService.sendVerificationEmail,
-  });
-
-  const resendVerificationEmailMutation = useMutation({
-    mutationKey: ["auth", "resendVerificationEmail"],
-    mutationFn: authService.resendVerificationEmail,
+  const resendSignupVerificationMutation = useMutation({
+    mutationKey: ["auth", "resendSignupVerification"],
+    mutationFn: authService.resendSignupVerification,
     onSuccess: () => {
       toast.success(SIGN_UP_TEXTS.toasts.resend);
     },
+    // onError: (error) => {
+    //   toast.error(error.message);
+    // },
+  });
+
+  const resendPasswordResetVerificationMutation = useMutation({
+    mutationKey: ["auth", "resendPasswordResetVerification"],
+    mutationFn: authService.resendPasswordResetVerification,
+    onSuccess: () => {
+      toast.success(SIGN_UP_TEXTS.toasts.resend);
+    },
+    // onError: (error) => {
+    //   toast.error(error.message);
+    // },
   });
 
   const recoverAccountMutation = useMutation({
@@ -82,7 +91,7 @@ export const useAuthQuery = () => {
     signupMutation,
     verifyEmailMutation,
     checkEmailMutation,
-    sendVerificationEmailMutation,
+    resendSignupVerificationMutation,
     recoverAccountMutation,
     submitRecoveryCodeMutation,
     resetPasswordMutation,
@@ -90,7 +99,7 @@ export const useAuthQuery = () => {
     updateProfileMutation,
     addSpecialtyMutation,
     logout,
-    resendVerificationEmailMutation,
+    resendPasswordResetVerificationMutation,
   };
 };
 

@@ -16,6 +16,7 @@ export function useProviderAuth() {
   const searchParams = useSearchParams();
   const initialStep = (searchParams.get("step") as AuthStep) || "check-email";
   const initialEmail = searchParams.get("email");
+  const passwordResetSuccess = searchParams.get("reset") === "success";
 
   const [step, setStep] = useState<AuthStep>("check-email");
   const [email, setEmail] = useState<string>(initialEmail || "");
@@ -118,11 +119,17 @@ export function useProviderAuth() {
   useEffect(() => {
     if (isCheckingAuth) return;
 
+    if (initialEmail) {
+      setEmail(decodeURIComponent(initialEmail));
+    }
+
+    if (initialStep === "sign-in" && !initialEmail) {
+      setStep("check-email");
+      return;
+    }
+
     if (initialStep) {
       setStep(initialStep);
-    }
-    if (initialEmail) {
-      setEmail(initialEmail);
     }
   }, [initialStep, initialEmail, isCheckingAuth]);
 
@@ -162,6 +169,7 @@ export function useProviderAuth() {
   return {
     step,
     email,
+    passwordResetSuccess,
     isCheckingAuth,
     profileStep,
     handleEmailSubmit,

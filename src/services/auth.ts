@@ -72,23 +72,22 @@ export const authService = {
     throw new Error("Email verification failed");
   },
 
-  sendVerificationEmail: async (data: { email: string }): Promise<void> => {
-    const response = await api(STATIC_ENDPOINTS.EMAIL.SEND_VERIFICATION, {
+  resendSignupVerification: async (data: { email: string }): Promise<void> => {
+    const response = await api(STATIC_ENDPOINTS.AUTH.RESEND_SIGNUP_VERIFICATION, {
       method: "POST",
       body: JSON.stringify(data),
     });
     if (!response?.success)
-      throw new Error("Failed to send verification email");
+      throw new Error("Failed to resend signup verification email");
   },
 
-
-  resendVerificationEmail: async (data: { email: string }): Promise<void> => {
-    const response = await api(STATIC_ENDPOINTS.EMAIL.RESEND_VERIFICATION, {
+  resendPasswordResetVerification: async (data: { email: string }): Promise<void> => {
+    const response = await api(STATIC_ENDPOINTS.EMAIL.RESEND_PASSWORD_RESET_VERIFICATION, {
       method: "POST",
       body: JSON.stringify(data),
     });
     if (!response?.success)
-      throw new Error("Failed to resend verification email");
+      throw new Error("Failed to resend password reset verification email");
   },
 
 

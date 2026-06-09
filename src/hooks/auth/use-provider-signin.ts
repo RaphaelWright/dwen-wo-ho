@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "@/components/ui/sonner";
 import { useRouter } from "next/navigation";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import {
@@ -25,12 +26,11 @@ export const useProviderSignIn = ({
   onProfileIncomplete?: (step: number) => void;
 }) => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { loginMutation } = useAuthQuery();
-  const { handleRecoverAccount, isRecovering, recoveryError } = useAccountRecovery(email, onForgotPassword);
+  const { handleRecoverAccount, isRecovering } = useAccountRecovery(email, onForgotPassword);
 
-  const { register, handleSubmit, errors } =
+  const { register, handleSubmit, errors, setValue } =
     useSelectedValuesFromReactHookForm(ProviderLoginSchema, {
       mode: "onChange",
       defaultValues: {
@@ -39,8 +39,13 @@ export const useProviderSignIn = ({
       },
     });
 
+  useEffect(() => {
+    if (email) {
+      setValue("email", email, { shouldValidate: true });
+    }
+  }, [email, setValue]);
+
   const onSubmit = async (values: ProviderLoginFormData) => {
-    setErrorMessage("");
     localStorage.removeItem("token");
     localStorage.removeItem("curatorToken");
     localStorage.removeItem("refreshToken");
@@ -106,7 +111,7 @@ export const useProviderSignIn = ({
         
         router.push(`/provider/signup?email=${encodeURIComponent(email)}&step=${step}`);
       } else {
-        setErrorMessage(errMessage);
+        toast.error(errMessage);
       }
     }
   };
@@ -116,7 +121,6 @@ export const useProviderSignIn = ({
     handleSubmit,
     errors,
     onSubmit: handleSubmit(onSubmit),
-    errorMessage: errorMessage || recoveryError,
     isLoading: loginMutation.isPending || isRedirecting,
     isRecovering,
     handleRecoverAccount,

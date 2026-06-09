@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Eye, EyeOff, AlertCircle, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { SignInFormProps } from "@/lib/types/components/patient/signin";
 import { SIGN_IN_TEXTS } from "@/lib/constants/components/patient/signin";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,6 @@ export function SignInForm({
   showPassword,
   onTogglePassword,
   onSubmit,
-  errorMessage,
   forgotPasswordHref,
 }: SignInFormProps) {
   return (
@@ -80,14 +79,6 @@ export function SignInForm({
           </div>
         </div>
       </div>
-
-      {/* Error Message */}
-      {errorMessage && (
-        <div className="mt-4 flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/15 px-4 py-3 animate-in fade-in slide-in-from-top-1 duration-200">
-          <AlertCircle className="h-4 w-4 text-destructive shrink-0" />
-          <p className="text-destructive text-sm font-medium">{errorMessage}</p>
-        </div>
-      )}
 
       {/* Forgot Password Link */}
       <div className="text-center mt-6">

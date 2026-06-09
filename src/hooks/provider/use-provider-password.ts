@@ -12,6 +12,7 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { toast } from "@/components/ui/sonner";
 
 interface StoredSignupData {
   email: string;
@@ -23,7 +24,6 @@ export function useProviderPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [signupData, setSignupData] = useState<StoredSignupData | null>(null);
   const params = useParams();
   const { email } = params;
@@ -47,11 +47,9 @@ export function useProviderPassword() {
 
   const onSubmit = async (values: ProviderPasswordFormData) => {
     if (!signupData) {
-      setErrorMessage("Signup data not found. Please start over.");
+      toast.error("Signup data not found. Please start over.");
       return;
     }
-
-    setErrorMessage("");
 
     try {
       // Complete the account creation with password
@@ -73,7 +71,7 @@ export function useProviderPassword() {
         router.push(`${ROUTES.provider.signUp}/${email}/profile` as Route);
       }
     } catch (error: unknown) {
-      setErrorMessage(
+      toast.error(
         getCleanErrorMessage(error) || "Account creation failed. Please try again.",
       );
     }
@@ -94,7 +92,6 @@ export function useProviderPassword() {
     togglePasswordVisibility,
     showConfirmPassword,
     toggleConfirmPasswordVisibility,
-    errorMessage,
     signupMutation,
     router,
   };

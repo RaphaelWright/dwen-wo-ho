@@ -13,7 +13,6 @@ export const useWaitlistForm = (onSuccess?: () => void) => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
 
   const resetForm = () => {
     setFormData({
@@ -21,7 +20,6 @@ export const useWaitlistForm = (onSuccess?: () => void) => {
       whatsappNumber: "",
       email: "",
     });
-    setError("");
     setSuccess(false);
   };
 
@@ -35,7 +33,6 @@ export const useWaitlistForm = (onSuccess?: () => void) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     setSuccess(false);
     try {
       const res = await fetch(`${API_URL}/waitlists`, {
@@ -71,7 +68,6 @@ export const useWaitlistForm = (onSuccess?: () => void) => {
     handleInputChange,
     loading,
     success,
-    error,
     handleSubmit,
   };
 };

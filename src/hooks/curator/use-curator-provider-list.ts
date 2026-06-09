@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { curatorProvidersService } from "@/services/curator-providers";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { ProviderDetails } from "@/lib/types/provider";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { toast } from "@/components/ui/sonner";
 
 async function fetchProviderDetails(email: string): Promise<ProviderDetails> {
   const result = await curatorProvidersService.getProvider(email);
@@ -17,8 +18,6 @@ export function useCuratorProviderList(
   email: string,
   isAuthenticated: boolean | null,
 ) {
-  const [errorMessage, setErrorMessage] = useState("");
-
   const tryFallbackData = useCallback((): ProviderDetails | null => {
     if (typeof window !== "undefined") {
       const fallbackDataStr = sessionStorage.getItem(`provider_${email}`);
@@ -73,10 +72,9 @@ export function useCuratorProviderList(
   // Use fallback data if query failed
   const provider = providerData ?? tryFallbackData();
 
-  // Set error message if query fails and no fallback
   useEffect(() => {
     if (queryError && !provider) {
-      setErrorMessage("Failed to load provider details. Please try again.");
+      toast.error("Failed to load provider details. Please try again.");
     }
   }, [queryError, provider]);
 
@@ -90,7 +88,5 @@ export function useCuratorProviderList(
   return {
     provider,
     isLoading,
-    errorMessage,
-    setErrorMessage,
   };
 }

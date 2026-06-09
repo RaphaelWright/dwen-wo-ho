@@ -13,7 +13,6 @@ const Verify = () => {
   const {
     email,
     seconds,
-    errorMessage,
     handleOTPComplete,
     resetTimer,
     verifyEmailMutation,
@@ -89,14 +88,6 @@ const Verify = () => {
               </div>
             )}
 
-            {/* Error Message */}
-            {errorMessage && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                <p className="text-destructive text-center text-sm font-medium">
-                  {errorMessage}
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
