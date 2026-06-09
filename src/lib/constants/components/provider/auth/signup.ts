@@ -48,6 +48,7 @@ export const SIGN_UP_TEXTS = {
     creating: "Creating your account",
     sending: "Sending",
     resend: "Resend code",
+    resending: "Resending code",
   },
   profile: {
     steps: {
@@ -112,6 +113,7 @@ export const SIGN_UP_TEXTS = {
   },
   toasts: {
     verified: "Account verified successfully",
+    resend: "Verification email resent",
   },
   loading: "Loading",
 };

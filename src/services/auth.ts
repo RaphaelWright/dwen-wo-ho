@@ -81,6 +81,17 @@ export const authService = {
       throw new Error("Failed to send verification email");
   },
 
+
+  resendVerificationEmail: async (data: { email: string }): Promise<void> => {
+    const response = await api(STATIC_ENDPOINTS.EMAIL.RESEND_VERIFICATION, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (!response?.success)
+      throw new Error("Failed to resend verification email");
+  },
+
+
   recoverAccount: async (data: { email: string }): Promise<void> => {
     const response = await api(STATIC_ENDPOINTS.AUTH.RECOVER_ACCOUNT, {
       method: "POST",

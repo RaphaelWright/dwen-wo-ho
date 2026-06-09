@@ -32,6 +32,7 @@ export const STATIC_ENDPOINTS = {
   },
   EMAIL: {
     SEND_VERIFICATION: `${BASE_URLS.EMAIL}/send-verification`,
+    RESEND_VERIFICATION: `${BASE_URLS.AUTH}/resend-verification`,
   },
   SPECIALTIES: `${BASE_URLS.SPECIALTIES}`,
   CURATOR: {
