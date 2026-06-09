@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/auth";
 import { performLogout } from "@/lib/auth-utils";
 import { ROUTES } from "@/lib/constants/routes";
+import { toast } from "sonner";
+import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 
 export const useAuthQuery = () => {
   const loginMutation = useMutation({
@@ -27,6 +29,14 @@ export const useAuthQuery = () => {
   const sendVerificationEmailMutation = useMutation({
     mutationKey: ["auth", "sendVerificationEmail"],
     mutationFn: authService.sendVerificationEmail,
+  });
+
+  const resendVerificationEmailMutation = useMutation({
+    mutationKey: ["auth", "resendVerificationEmail"],
+    mutationFn: authService.resendVerificationEmail,
+    onSuccess: () => {
+      toast.success(SIGN_UP_TEXTS.toasts.resend);
+    },
   });
 
   const recoverAccountMutation = useMutation({
@@ -80,6 +90,7 @@ export const useAuthQuery = () => {
     updateProfileMutation,
     addSpecialtyMutation,
     logout,
+    resendVerificationEmailMutation,
   };
 };
 

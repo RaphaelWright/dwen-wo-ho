@@ -15,11 +15,11 @@ export const useSignUpVerification = ({
   onNext,
 }: SignUpVerificationProps) => {
   const [isRunning, setIsRunning] = useState(true);
-  const [seconds, setSeconds] = useState(120);
+  const [seconds, setSeconds] = useState(60);
   const [errorMessage, setErrorMessage] = useState("");
   const otpInputRef = useRef<HTMLInputElement>(null);
 
-  const { verifyEmailMutation, sendVerificationEmailMutation } = useAuthQuery();
+  const { verifyEmailMutation, sendVerificationEmailMutation, resendVerificationEmailMutation } = useAuthQuery();
 
   useEffect(() => {
     if (verifyEmailMutation.isPending) return;
@@ -83,8 +83,8 @@ export const useSignUpVerification = ({
 
   const handleResendCode = async () => {
     try {
-      await sendVerificationEmailMutation.mutateAsync({ email });
-      setSeconds(120);
+      await resendVerificationEmailMutation.mutateAsync({ email });
+      setSeconds(60);
       setIsRunning(true);
       setErrorMessage("");
     } catch (error: unknown) {
@@ -101,5 +101,6 @@ export const useSignUpVerification = ({
     handleOTPComplete,
     handleResendCode,
     otpInputRef,
+    resendVerificationEmailMutation,
   };
 };
