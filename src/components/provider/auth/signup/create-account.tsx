@@ -20,7 +20,6 @@ import PasswordStrengthIndicator from "@/components/shared/password-strength-ind
 const CreateAccount = (props: CreateAccountProps) => {
   const { agreedToTerms, onAgreedToTermsChange } = props;
   const {
-    errorMessage,
     showPassword,
     setShowPassword,
     signupMutation,
@@ -168,16 +167,6 @@ const CreateAccount = (props: CreateAccountProps) => {
             )}
           </div>
         </div>
-
-        {/* Error Message */}
-        {errorMessage && (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
-            <p className="text-destructive text-sm font-medium">
-              {errorMessage}
-            </p>
-          </div>
-        )}
 
         {/* Terms & Conditions */}
         <div className="flex items-center justify-center space-x-3 mt-4">

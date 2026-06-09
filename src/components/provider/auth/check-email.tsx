@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
 
 const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
-  const { checkEmailExists, isLoading, errorMessage, form } =
+  const { checkEmailExists, isLoading, form } =
     useProviderCheckEmail({ onEmailSubmit });
   const { register, handleSubmit, errors } = form;
 
@@ -123,14 +123,6 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
               )}
             </div>
 
-            {errorMessage && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
-                <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
-                <p className="text-destructive text-sm font-medium">
-                  {errorMessage}
-                </p>
-              </div>
-            )}
           </form>
 
           <div className="pt-8 text-center">

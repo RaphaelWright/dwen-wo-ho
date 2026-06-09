@@ -13,6 +13,7 @@ import {
   TITLE_SELECT_OPEN_DELAY_MS,
 } from "@/lib/constants/components/provider/auth/signup";
 import { toTitleCase } from "@/lib/utils/smart-typing";
+import { toast } from "@/components/ui/sonner";
 
 export const useCreateAccount = ({
   email: propEmail,
@@ -22,7 +23,6 @@ export const useCreateAccount = ({
   onNext,
   onValidityChange,
 }: CreateAccountProps) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isTitleSelectOpen, setIsTitleSelectOpen] = useState<boolean>(false);
 
@@ -61,11 +61,9 @@ export const useCreateAccount = ({
 
   const onSubmit = async (values: ProviderSignUpFormData) => {
     if (!agreedToTerms) {
-      setErrorMessage(SIGN_UP_TEXTS.errors.termsRequired);
+      toast.error(SIGN_UP_TEXTS.errors.termsRequired);
       return;
     }
-
-    setErrorMessage("");
 
     try {
       const formattedFullName = toTitleCase(values.fullName);
@@ -111,7 +109,7 @@ export const useCreateAccount = ({
           errorMsg = error.message;
         }
       }
-      setErrorMessage(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -140,7 +138,6 @@ export const useCreateAccount = ({
   const password = watch("password");
 
   return {
-    errorMessage,
     showPassword,
     setShowPassword,
     signupMutation,

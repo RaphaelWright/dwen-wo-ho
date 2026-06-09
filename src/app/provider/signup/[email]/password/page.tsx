@@ -20,7 +20,6 @@ const PasswordSetup = () => {
     togglePasswordVisibility,
     showConfirmPassword,
     toggleConfirmPasswordVisibility,
-    errorMessage,
     signupMutation,
     router,
   } = useProviderPassword();
@@ -101,13 +100,6 @@ const PasswordSetup = () => {
           </div>
         </div>
 
-        {errorMessage && (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-4">
-            <p className="text-destructive text-center font-medium">
-              {errorMessage}
-            </p>
-          </div>
-        )}
       </form>
 
       <div className="flex border-t border-gray-500 px-10 pt-10 items-center justify-between">

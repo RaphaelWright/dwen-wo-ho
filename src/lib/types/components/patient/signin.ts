@@ -12,7 +12,6 @@ export interface SignInFormProps {
   showPassword: boolean;
   onTogglePassword: () => void;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-  errorMessage?: string;
   forgotPasswordHref?: Route;
 }
 

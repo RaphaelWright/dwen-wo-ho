@@ -28,3 +28,10 @@ export interface PasswordStrengthResult {
 export interface PasswordStrengthIndicatorProps {
   password: string;
 }
+
+export interface PasswordMatchIndicatorProps {
+  password: string;
+  confirmPassword: string;
+  matchLabel: string;
+  mismatchLabel: string;
+}

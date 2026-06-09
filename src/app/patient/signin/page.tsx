@@ -18,7 +18,6 @@ const SignInContent = () => {
     errors,
     onSubmit,
     isLoading,
-    errorMessage,
     showPassword,
     togglePasswordVisibility,
     router,
@@ -37,7 +36,6 @@ const SignInContent = () => {
         showPassword={showPassword}
         onTogglePassword={togglePasswordVisibility}
         onSubmit={onSubmit}
-        errorMessage={errorMessage}
         forgotPasswordHref={`${ROUTES.patient.verifyPasswordReset}?email=${email}`}
       />
 

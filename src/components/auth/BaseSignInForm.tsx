@@ -19,7 +19,7 @@ export const BaseSignInForm = ({
   onRecoverAccount,
   isLoading,
   isRecovering,
-  errorMessage,
+  successMessage,
   forgotPasswordHref,
 }: BaseSignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,16 +54,23 @@ export const BaseSignInForm = ({
           </p>
         </div>
 
+        {successMessage && (
+          <div className="bg-success/10 border border-success/20 rounded-lg p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+            <div className="h-2 w-2 rounded-full bg-success shrink-0" />
+            <p className="text-success text-sm font-medium">{successMessage}</p>
+          </div>
+        )}
+
         <div className="space-y-4">
           <div className="space-y-2">
-            {role === "patient" && (
-              <Label className="text-base font-medium pl-1">Email</Label>
-            )}
+            <Label className="text-base font-medium pl-1">Email</Label>
             <Input
               {...register("email")}
-              value={email}
-              disabled
-              className="h-12 bg-muted/50 border-input/20 text-lg font-medium text-muted-foreground cursor-not-allowed"
+              defaultValue={email}
+              readOnly
+              tabIndex={-1}
+              placeholder={email ? undefined : "Enter your email on the previous step"}
+              className="h-12 bg-muted text-lg font-medium text-foreground cursor-not-allowed opacity-100 disabled:opacity-100 border-input"
             />
           </div>
 
@@ -103,22 +110,13 @@ export const BaseSignInForm = ({
           </div>
         </div>
 
-        {errorMessage && (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
-            <p className="text-destructive text-sm font-medium">
-              {errorMessage}
-            </p>
-          </div>
-        )}
-
         <div className="pt-2">
           <LoadingButton
             form="login-form"
             type="submit"
             loading={isLoading}
             loadingText="Signing In..."
-            disabled={Object.keys(errors).length > 0}
+            disabled={!email || Object.keys(errors).length > 0}
             className="w-full h-12 text-lg font-bold rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
             Sign In

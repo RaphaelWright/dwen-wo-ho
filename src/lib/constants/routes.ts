@@ -12,7 +12,7 @@ export const ROUTES = {
     signUp: "/provider/signup",
     checkEmail: "/provider/check-email",
     verifyEmail: "/provider/signup",
-    verifyPasswordReset: "/provider/verify-password-reset",
+    verifyPasswordReset: "/provider/auth?step=reset-password",
     newPassword: "/provider/new-password",
     auth: "/provider/auth",
     profile: "/provider/profile",

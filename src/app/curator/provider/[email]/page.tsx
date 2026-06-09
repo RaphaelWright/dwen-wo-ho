@@ -24,8 +24,6 @@ const ProviderDetailsPage = () => {
 
     isActionLoading,
 
-    errorMessage,
-
     successMessage,
 
     isAuthenticated,
@@ -91,14 +89,6 @@ const ProviderDetailsPage = () => {
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-600 text-center font-medium">
-              {errorMessage}
-            </p>
-          </div>
-        )}
-
         {successMessage && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
             <p className="text-green-600 text-center font-medium">

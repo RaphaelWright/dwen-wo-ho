@@ -5,12 +5,12 @@ export interface CheckEmailProps {
 export interface UseProviderCheckEmailReturn {
   checkEmailExists: (email: string) => Promise<void>;
   isLoading: boolean;
-  errorMessage: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any; // Using any for now to avoid complex RHF types in return, or specific form type
 }
 
 export interface ProviderSignInProps {
+  successMessage?: string;
   email: string;
   onBack: () => void;
   onForgotPassword?: () => void;

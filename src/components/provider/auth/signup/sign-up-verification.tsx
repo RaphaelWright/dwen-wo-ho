@@ -12,12 +12,11 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
   const { email } = props;
   const {
     seconds,
-    errorMessage,
     verifyEmailMutation,
     handleOTPComplete,
     handleResendCode,
     otpInputRef,
-    resendVerificationEmailMutation,
+    resendSignupVerificationMutation
   } = useSignUpVerification(props);
 
   return (
@@ -80,7 +79,7 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
 
             <LoadingButton
               variant="outline"
-              loading={resendVerificationEmailMutation.isPending}
+              loading={resendSignupVerificationMutation.isPending}
               loadingText={SIGN_UP_TEXTS.verification.resending}
               disabled={seconds > 0}
               onClick={handleResendCode}
@@ -102,15 +101,6 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
           </div>
         )}
 
-        {/* Error Message */}
-        {errorMessage && (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
-            <div className="h-2 w-2 rounded-full bg-destructive shrink-0" />
-            <p className="text-destructive text-sm font-medium">
-              {errorMessage}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

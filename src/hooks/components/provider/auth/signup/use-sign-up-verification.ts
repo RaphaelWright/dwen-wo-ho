@@ -16,10 +16,9 @@ export const useSignUpVerification = ({
 }: SignUpVerificationProps) => {
   const [isRunning, setIsRunning] = useState(true);
   const [seconds, setSeconds] = useState(60);
-  const [errorMessage, setErrorMessage] = useState("");
   const otpInputRef = useRef<HTMLInputElement>(null);
 
-  const { verifyEmailMutation, sendVerificationEmailMutation, resendVerificationEmailMutation } = useAuthQuery();
+  const { verifyEmailMutation, resendSignupVerificationMutation } = useAuthQuery();
 
   useEffect(() => {
     if (verifyEmailMutation.isPending) return;
@@ -46,8 +45,6 @@ export const useSignUpVerification = ({
   }, [isRunning, seconds]);
 
   const handleOTPComplete = async (value: string) => {
-    setErrorMessage("");
-
     try {
       const verifyResponse = await verifyEmailMutation.mutateAsync({
         code: value,
@@ -69,38 +66,32 @@ export const useSignUpVerification = ({
           toast.success(SIGN_UP_TEXTS.toasts.verified);
           onNext();
         } else {
-          setErrorMessage(SIGN_UP_TEXTS.errors.verifySuccessLoginFailed);
           toast.error(SIGN_UP_TEXTS.errors.noToken);
         }
       }
     } catch (error: unknown) {
       const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.verifyFailed;
-
-      setErrorMessage(errorMsg);
       toast.error(errorMsg);
     }
   };
 
   const handleResendCode = async () => {
     try {
-      await resendVerificationEmailMutation.mutateAsync({ email });
+      await resendSignupVerificationMutation.mutateAsync({ email });
       setSeconds(60);
       setIsRunning(true);
-      setErrorMessage("");
     } catch (error: unknown) {
       const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.resendFailed;
-      setErrorMessage(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
   return {
     seconds,
-    errorMessage,
     verifyEmailMutation,
-    sendVerificationEmailMutation,
+    resendSignupVerificationMutation,
     handleOTPComplete,
     handleResendCode,
     otpInputRef,
-    resendVerificationEmailMutation,
   };
 };

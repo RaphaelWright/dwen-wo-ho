@@ -12,28 +12,19 @@ export function useCuratorProviderDetails() {
 
   const { isAuthenticated, router } = useCuratorAuth();
 
-  const {
-    provider,
-    isLoading,
-    errorMessage: dataError,
-  } = useCuratorProviderList(email, isAuthenticated);
+  const { provider, isLoading } = useCuratorProviderList(email, isAuthenticated);
 
   const {
     isActionLoading,
-    errorMessage: actionError,
     successMessage,
     handleApprove,
     handleReject,
   } = useCuratorProviderApproval(email);
 
-  // Combine errors or prioritize one
-  const errorMessage = dataError || actionError;
-
   return {
     provider,
     isLoading,
     isActionLoading,
-    errorMessage,
     successMessage,
     isAuthenticated,
     handleApprove,

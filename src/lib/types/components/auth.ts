@@ -15,6 +15,6 @@ export interface BaseSignInFormProps {
   onRecoverAccount?: () => void;
   isLoading: boolean;
   isRecovering?: boolean;
-  errorMessage?: string;
+  successMessage?: string;
   forgotPasswordHref?: Route;
 }

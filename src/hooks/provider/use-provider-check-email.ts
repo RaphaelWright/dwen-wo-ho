@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
+import { toast } from "@/components/ui/sonner";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { ProviderEmailSchema } from "@/lib/schemas/provider-auth-schema";
@@ -11,7 +11,6 @@ export function useProviderCheckEmail({
 }: {
   onEmailSubmit: (email: string, emailExists: boolean) => void;
 }) {
-  const [errorMessage, setErrorMessage] = useState("");
   const { checkEmailMutation } = useAuthQuery();
 
   const { register, handleSubmit, errors } = useSelectedValuesFromReactHookForm(
@@ -23,7 +22,6 @@ export function useProviderCheckEmail({
 
   const checkEmailExists = async (email: string) => {
     try {
-      setErrorMessage("");
       const response = await checkEmailMutation.mutateAsync({ email });
 
       if (response) {
@@ -74,14 +72,13 @@ export function useProviderCheckEmail({
         userFriendlyMessage = errorMessage;
       }
 
-      setErrorMessage(userFriendlyMessage);
+      toast.error(userFriendlyMessage);
     }
   };
 
   return {
     checkEmailExists,
     isLoading: checkEmailMutation.isPending,
-    errorMessage,
     form: { register, handleSubmit, errors },
   };
 }

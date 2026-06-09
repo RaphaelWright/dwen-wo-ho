@@ -5,11 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { toast } from "@/components/ui/sonner";
 
 export function useProviderVerifyEmail() {
   const [isRunning, setIsRunning] = useState(true);
   const [seconds, setSeconds] = useState(120); // 2 minutes
-  const [errorMessage, setErrorMessage] = useState("");
   const params = useParams();
   const { email } = params;
   const { verifyEmailMutation } = useAuthQuery();
@@ -30,8 +30,6 @@ export function useProviderVerifyEmail() {
   }, [isRunning, seconds]);
 
   const handleOTPComplete = async (value: string) => {
-    setErrorMessage("");
-
     try {
       const response = await verifyEmailMutation.mutateAsync({
         code: value,
@@ -50,7 +48,7 @@ export function useProviderVerifyEmail() {
         );
       }
     } catch (error: unknown) {
-      setErrorMessage(
+      toast.error(
         getCleanErrorMessage(error) || "Verification failed. Please try again.",
       );
     }
@@ -65,7 +63,6 @@ export function useProviderVerifyEmail() {
     email,
     seconds,
     isRunning,
-    errorMessage,
     handleOTPComplete,
     resetTimer,
     verifyEmailMutation,

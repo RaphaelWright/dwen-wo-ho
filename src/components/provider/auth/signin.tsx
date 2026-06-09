@@ -15,7 +15,6 @@ const SignInContent = (props: ProviderSignInProps) => {
     isLoading,
     isRecovering,
     handleRecoverAccount,
-    errorMessage,
   } = useProviderSignIn(props);
 
   return (
@@ -31,7 +30,7 @@ const SignInContent = (props: ProviderSignInProps) => {
         onRecoverAccount={handleRecoverAccount}
         isLoading={isLoading}
         isRecovering={isRecovering}
-        errorMessage={errorMessage}
+        successMessage={props.successMessage}
       />
 
       <LoadingOverlay

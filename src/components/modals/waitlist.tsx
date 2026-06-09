@@ -9,7 +9,7 @@ import { Input } from "../ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 
 const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
-  const { formData, handleInputChange, loading, success, error, handleSubmit } =
+  const { formData, handleInputChange, loading, success, handleSubmit } =
     useWaitlistForm(() => onClose());
 
   const { TITLE, SUBTITLE, IMAGE, FORM, BRAND, FIELDS } = WAITLIST_CONTENT;
@@ -89,11 +89,6 @@ const WaitListModal = ({ isOpen, onClose }: WaitlistModalProps) => {
             {success && (
               <div className="text-success font-bold text-center">
                 {WAITLIST_CONTENT.MESSAGES.SUCCESS}
-              </div>
-            )}
-            {error && (
-              <div className="text-destructive font-bold text-center">
-                {error}
               </div>
             )}
           </form>

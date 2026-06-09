@@ -9,11 +9,11 @@ import { ROUTES } from "@/lib/constants/routes";
 import { LoginSchema } from "@/lib/schemas/patient-auth-schema";
 import { PatientSignInFormData } from "@/lib/types/components/patient/signin";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { toast } from "@/components/ui/sonner";
 
 export function usePatientSignIn({ email }: { email: string | null }) {
   const router = useRouter();
   const { loginMutation } = useAuthQuery();
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -30,14 +30,13 @@ export function usePatientSignIn({ email }: { email: string | null }) {
 
   const onSubmit = useCallback(
     (values: PatientSignInFormData) => {
-      setErrorMessage("");
       loginMutation.mutate(values, {
         onSuccess: () => {
           // Redirection should likely be to patient home or dashboard
           router.push(ROUTES.patient.lockIn);
         },
         onError: (error: unknown) => {
-          setErrorMessage(getCleanErrorMessage(error) || "Sign in failed");
+          toast.error(getCleanErrorMessage(error) || "Sign in failed");
         },
       });
     },
@@ -59,7 +58,6 @@ export function usePatientSignIn({ email }: { email: string | null }) {
     errors,
     onSubmit: handleSubmit(onSubmit),
     isLoading: loginMutation.isPending,
-    errorMessage,
     showPassword,
     togglePasswordVisibility,
     router,

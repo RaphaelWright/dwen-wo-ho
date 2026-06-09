@@ -8,32 +8,36 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/sonner";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/use-get-search-params";
-import {useAuthQuery} from "@/hooks/queries/use-auth";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/new-password";
 import { setUserType } from "@/lib/utils/getUserType";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import type { SignInResponse } from "@/lib/types/api/auth";
+import type { Route } from "next";
 
 export const useNewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const email = useGetSearchParams("email");
   const router = useRouter();
   const { resetPasswordMutation } = useAuthQuery();
 
   const {
-    control,
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid },
   } = useForm<z.infer<typeof ProviderPasswordSchema>>({
     resolver: zodResolver(ProviderPasswordSchema),
+    mode: "onChange",
     defaultValues: {
       password: "",
       confirmPassword: "",
     },
   });
+
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
   useEffect(() => {
     if (!email) {
@@ -44,12 +48,23 @@ export const useNewPassword = () => {
     const storedToken = localStorage.getItem("recoveryToken");
     if (!storedToken) {
       toast.error(NEW_PASSWORD_TEXTS.toasts.sessionExpired);
-      router.push(`${ROUTES.provider.verifyPasswordReset}?email=${email}`);
+      router.push(
+        `${ROUTES.provider.verifyPasswordReset}&email=${encodeURIComponent(email)}`,
+      );
     }
   }, [email, router]);
 
+  const handleBack = () => {
+    if (!email) {
+      router.back();
+      return;
+    }
+    router.push(
+      `${ROUTES.provider.verifyPasswordReset}&email=${encodeURIComponent(email)}`,
+    );
+  };
+
   const onSubmit = async (values: z.infer<typeof ProviderPasswordSchema>) => {
-    setErrorMessage("");
     try {
       const storedToken = localStorage.getItem("recoveryToken");
 
@@ -103,22 +118,28 @@ export const useNewPassword = () => {
       }
 
       toast.success(NEW_PASSWORD_TEXTS.toasts.success);
-      router.push(ROUTES.provider.singIn);
+      router.push(
+        `${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email ?? "")}&reset=success` as Route,
+      );
     } catch (error: unknown) {
-      setErrorMessage(getCleanErrorMessage(error) || NEW_PASSWORD_TEXTS.errors.general);
+      toast.error(
+        getCleanErrorMessage(error) || NEW_PASSWORD_TEXTS.errors.general,
+      );
     }
   };
 
   return {
+    email,
     showPassword,
     setShowPassword,
-    errorMessage,
-    control,
+    password,
+    confirmPassword,
+    isFormValid: isValid,
     register,
     handleSubmit,
     errors,
     onSubmit,
-    router,
+    handleBack,
     resetPasswordMutation,
   };
 };

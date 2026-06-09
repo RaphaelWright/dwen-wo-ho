@@ -114,6 +114,7 @@ export const SIGN_UP_TEXTS = {
   toasts: {
     verified: "Account verified successfully",
     resend: "Verification email resent",
+    send: "Verification email sent",
   },
   loading: "Loading",
 };

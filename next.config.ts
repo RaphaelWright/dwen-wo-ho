@@ -39,6 +39,20 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/provider/verify-password-reset",
+        destination: "/provider/auth?step=reset-password",
+        permanent: true,
+      },
+      {
+        source: "/provider/signin",
+        destination: "/provider/auth?step=sign-in",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

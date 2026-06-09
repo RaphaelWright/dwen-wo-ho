@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { curatorProvidersService } from "@/services/curator-providers";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { toast } from "@/components/ui/sonner";
 
 export function useCuratorProviderApproval(email: string) {
   const [isActionLoading, setIsActionLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleApprove = async () => {
     setIsActionLoading(true);
-    setErrorMessage("");
     setSuccessMessage("");
 
     try {
@@ -24,10 +23,10 @@ export function useCuratorProviderApproval(email: string) {
           window.location.reload();
         }, 2000);
       } else {
-        setErrorMessage(response.message || "Failed to approve provider");
+        toast.error(response.message || "Failed to approve provider");
       }
     } catch (error: unknown) {
-      setErrorMessage(
+      toast.error(
         getCleanErrorMessage(error) || "Failed to approve provider. Please try again.",
       );
     } finally {
@@ -37,7 +36,6 @@ export function useCuratorProviderApproval(email: string) {
 
   const handleReject = async () => {
     setIsActionLoading(true);
-    setErrorMessage("");
     setSuccessMessage("");
 
     try {
@@ -50,10 +48,10 @@ export function useCuratorProviderApproval(email: string) {
           window.location.reload();
         }, 2000);
       } else {
-        setErrorMessage(response.message || "Failed to reject provider");
+        toast.error(response.message || "Failed to reject provider");
       }
     } catch (error: unknown) {
-      setErrorMessage(
+      toast.error(
         getCleanErrorMessage(error) || "Failed to reject provider. Please try again.",
       );
     } finally {
@@ -63,10 +61,8 @@ export function useCuratorProviderApproval(email: string) {
 
   return {
     isActionLoading,
-    errorMessage,
     successMessage,
     handleApprove,
     handleReject,
-    setErrorMessage, // Export if needed for clearing
   };
 }
