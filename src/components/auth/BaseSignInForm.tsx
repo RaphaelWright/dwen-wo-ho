@@ -2,15 +2,16 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "../ui/label";
 import { BaseSignInFormProps } from "@/lib/types/components/auth";
 import { useTheme } from "next-themes";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export const BaseSignInForm = ({
-  role,
+  audience,
   email,
   register,
   errors,
@@ -24,11 +25,7 @@ export const BaseSignInForm = ({
 }: BaseSignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="h-full flex flex-col justify-between gap-10 min-h-screen py-4 sm:py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -39,7 +36,7 @@ export const BaseSignInForm = ({
         />
         <p className="font-bold text-lg sm:text-2xl text-muted-foreground">
           <span className="text-sm font-normal">for </span>
-          {role === "patient" ? "Patients" : "Providers"}
+          {audience === "patient" ? "Patients" : "Providers"}
         </p>
       </div>
 
@@ -128,7 +125,7 @@ export const BaseSignInForm = ({
         </div>
 
         <div className="text-center pt-4">
-          {role === "patient" && forgotPasswordHref ? (
+          {audience === "patient" && forgotPasswordHref ? (
             <Button
               type="button"
               variant="link"

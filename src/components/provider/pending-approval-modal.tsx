@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { m } from "motion/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LoadingButton } from "@/components/ui/loading-button";
 import {
@@ -31,13 +32,10 @@ export function PendingApprovalModal({
     .toUpperCase()
     .slice(0, 2);
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
   return (
     <div className="min-h-screen backdrop-blur-xs flex items-center justify-center p-4 fixed inset-0 z-50 ">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -107,7 +105,7 @@ export function PendingApprovalModal({
                   strokeWidth="3"
                   className="text-yellow-500/15"
                 />
-                <motion.circle
+                <m.circle
                   cx="36"
                   cy="36"
                   r="32"
@@ -241,7 +239,7 @@ export function PendingApprovalModal({
             {PENDING_APPROVAL_TEXTS.logout}
           </LoadingButton>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

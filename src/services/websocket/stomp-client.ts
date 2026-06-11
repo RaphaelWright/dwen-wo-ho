@@ -258,8 +258,3 @@ class StompWebSocketClient {
 
 // Export singleton instance
 export const stompClient = StompWebSocketClient.getInstance();
-
-// React-friendly hook helper
-export function useStompClient() {
-  return stompClient;
-}

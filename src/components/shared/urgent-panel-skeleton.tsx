@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 /**
  * Skeleton loader for UrgentPanel.
@@ -28,7 +28,7 @@ export function UrgentPanelSkeleton() {
       <div className="flex-1 p-3 overflow-y-auto no-scrollbar min-h-0 flex flex-col pb-20">
         <div className="flex flex-col gap-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <motion.div
+            <m.div
               key={`urgent-skeleton-${i}`}
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -45,7 +45,7 @@ export function UrgentPanelSkeleton() {
                 <div className="w-20 h-3 rounded bg-destructive/10 animate-pulse" />
                 <div className="w-14 h-3 rounded bg-destructive/10 animate-pulse" />
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

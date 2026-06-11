@@ -8,7 +8,7 @@ const Stepper = <T extends string[]>({ steps, step }: IStepperProps<T>) => {
 
   return (
     <div className="w-full overflow-x-auto py-2">
-      <ul role="list" className="flex items-center min-w-max space-x-2">
+      <ul className="flex items-center min-w-max space-x-2">
         {steps.map((item, itemIdx) => {
           const currentStatusIndex = steps.findIndex(
             (currStatus) => currStatus.toLowerCase() === item.toLowerCase(),

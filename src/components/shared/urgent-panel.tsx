@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import UrgentCard, { type UrgentPatient } from "./urgent-card";
 import { cn } from "@/lib/utils";
 import { UrgentPanelSkeleton } from "./urgent-panel-skeleton";
@@ -38,7 +38,7 @@ export default function UrgentPanel({
       : (patients?.filter((p) => p.schoolId === Number(activeSchool)) ?? []);
 
   // Sort by newest first (descending) - prioritize urgentCareEnteredAt, fallback to time
-  const sorted = [...filtered].sort((a, b) => {
+  const sorted = filtered.toSorted((a, b) => {
     const dateA = new Date(a.urgentCareEnteredAt || a.time);
     const dateB = new Date(b.urgentCareEnteredAt || b.time);
     return dateB.getTime() - dateA.getTime();
@@ -62,7 +62,7 @@ export default function UrgentPanel({
           </div>
 
           {/* Count badge */}
-          <motion.span
+          <m.span
             animate={{
               boxShadow: [
                 "0 0 0 0 rgba(239,68,68,.5)",
@@ -74,7 +74,7 @@ export default function UrgentPanel({
             className="text-xs p-2 flex items-center justify-center font-bold text-destructive size-7 rounded-full bg-white"
           >
             {sorted.length > 99 ? "99+" : sorted.length}
-          </motion.span>
+          </m.span>
         </div>
       </div>
 
@@ -97,14 +97,14 @@ export default function UrgentPanel({
           </AnimatePresence>
 
           {sorted.length === 0 && (
-            <motion.p
+            <m.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-center text-[12px] py-8"
               style={{ color: "#555e72" }}
             >
               {emptyStateText}
-            </motion.p>
+            </m.p>
           )}
         </div>
       </div>

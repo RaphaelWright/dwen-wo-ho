@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "motion/react";
 import { SchoolEditModalProps } from "@/lib/types/modals";
 import { useSchoolEdit } from "@/hooks/components/modals/use-school-edit";
 import { useClickOutside } from "@/hooks/use-click-outside";
@@ -36,7 +36,7 @@ const SchoolEditModal = ({
     <AnimatePresence >
       {isOpen && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -44,7 +44,7 @@ const SchoolEditModal = ({
             onClick={onClose}
           />
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -74,7 +74,7 @@ const SchoolEditModal = ({
                 hasChanges={hasChanges}
               />
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

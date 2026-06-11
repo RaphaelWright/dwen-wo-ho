@@ -12,6 +12,7 @@ import { SchoolsTab } from "./provider-details/schools-tab";
 import { PartnersTab } from "./provider-details/partners-tab";
 import { ProviderFooter } from "./provider-details/footer";
 import { ProviderConfirmationModals } from "./provider-details/confirmation-modals";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 const ProviderDetailsModal = ({
   isOpen,
@@ -77,10 +78,14 @@ const ProviderDetailsModal = ({
   return (
     <>
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Close dialog"
         className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
+        onKeyDown={activateOnKeyboard(onClose)}
       >
         <div
           className={`relative bg-card text-foreground rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border transition-all duration-300 ease-in-out ${

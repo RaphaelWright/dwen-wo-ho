@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { CircleCheck, CircleX } from "lucide-react";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import {
@@ -36,7 +36,7 @@ const PasswordStrengthIndicator = ({
   return (
     <div className="flex flex-col gap-2 mt-2">
       <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-        <motion.div
+        <m.div
           className={cn(
             "h-full rounded-full transition-colors duration-700",
             tone === "destructive" && "bg-destructive",

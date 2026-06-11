@@ -16,6 +16,7 @@ export const MobileHeader = ({
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-background/80 backdrop-blur-lg border-b border-border/60 flex items-center justify-between px-4 z-50">
       <button
+        type="button"
         onClick={onToggle}
         className="text-foreground p-2 hover:bg-accent rounded-lg transition-colors"
       >

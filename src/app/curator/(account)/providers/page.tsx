@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
@@ -9,7 +9,7 @@ import ProviderCard from "@/components/curator/provider-card";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { useCuratorProviders } from "@/hooks/curator/use-curator-providers";
 
-export default function ProvidersPage() {
+function ProvidersPageContent() {
   const searchParams = useSearchParams();
   const {
     isLoading,
@@ -107,6 +107,7 @@ export default function ProvidersPage() {
           <div className="flex items-center gap-2 flex-wrap">
             {filterOptions.map((option) => (
               <button
+                type="button"
                 key={option.id}
                 onClick={() => setFilter(option.id)}
                 className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
@@ -201,5 +202,13 @@ export default function ProvidersPage() {
         />
       </div>
     </WidthConstraint>
+  );
+}
+
+export default function ProvidersPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProvidersPageContent />
+    </Suspense>
   );
 }

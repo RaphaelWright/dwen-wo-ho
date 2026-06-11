@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import * as d3 from "d3-geo";
@@ -116,7 +116,7 @@ export default function GhanaMap({ className }: { className?: string }) {
       >
         {/* Regions Layer */}
         {regions.map((region) => (
-          <motion.path
+          <m.path
             key={region.id}
             d={region.path ?? undefined}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -142,7 +142,7 @@ export default function GhanaMap({ className }: { className?: string }) {
             const path = `M ${line.start.x} ${line.start.y} Q ${midX} ${midY} ${line.end.x} ${line.end.y}`;
 
             return (
-              <motion.path
+              <m.path
                 key={line.id}
                 d={path}
                 fill="none"
@@ -177,7 +177,7 @@ export default function GhanaMap({ className }: { className?: string }) {
           if (!region.capital) return null;
 
           return (
-            <motion.g
+            <m.g
               key={`label-group-${region.id}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -204,7 +204,7 @@ export default function GhanaMap({ className }: { className?: string }) {
                   ? region.name.toUpperCase()
                   : region.capital}
               </text>
-            </motion.g>
+            </m.g>
           );
         })}
       </svg>

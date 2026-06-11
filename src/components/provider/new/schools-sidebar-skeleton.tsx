@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 /**
  * Skeleton loader for SchoolsSidebar.
@@ -28,7 +28,7 @@ export function SchoolsSidebarSkeleton() {
 
           {/* Individual school items */}
           {Array.from({ length: 5 }).map((_, i) => (
-            <motion.div
+            <m.div
               key={`school-skeleton-${i}`}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -40,7 +40,7 @@ export function SchoolsSidebarSkeleton() {
                 <div className="w-32 h-4 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
               </div>
               <div className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

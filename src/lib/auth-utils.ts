@@ -1,6 +1,6 @@
 import { ROUTES } from "@/lib/constants/routes";
 import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { api } from "./api";
+import { API_BASE_URL } from "@/configs/config";
 import { setUserType, getStoredUserType } from "./utils/getUserType";
 import type { QueryClient } from "@tanstack/react-query";
 
@@ -29,16 +29,23 @@ export const refreshToken = async (): Promise<string | null> => {
         return null;
       }
 
-      // Call refresh token endpoint
-      const response = await api(STATIC_ENDPOINTS.AUTH.REFRESH_TOKEN, {
-        method: "POST",
-        body: JSON.stringify({ refreshToken: refreshTokenValue }),
-      });
+      // Call refresh token endpoint directly (not via api()) to avoid a
+      // circular dependency between this module and lib/api.ts.
+      const res = await fetch(
+        `${API_BASE_URL}${STATIC_ENDPOINTS.AUTH.REFRESH_TOKEN}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "*/*" },
+          body: JSON.stringify({ refreshToken: refreshTokenValue }),
+        },
+      );
 
-      if (response?.success && response.data) {
+      if (res.ok) {
+        const json = await res.json();
+        const data = json?.data ?? json;
         // Store new access token and refresh token
-        const newAccessToken = response.data.accessToken || response.data.token;
-        const newRefreshToken = response.data.refreshToken;
+        const newAccessToken = data?.accessToken || data?.token;
+        const newRefreshToken = data?.refreshToken;
 
         if (newAccessToken) {
           // Check stored user type first, then fallback to curatorToken check
@@ -133,12 +140,6 @@ export const handleTokenExpiration = async () => {
   }, 1000);
 };
 
-export const isAuthError = (status: number): boolean => {
-  // Only 401 (Unauthorized) is an auth error that requires token refresh
-  // 403 (Forbidden) means user is authenticated but lacks permission - don't refresh/logout
-  return status === 401;
-};
-
 /**
  * Comprehensive logout function that clears all authentication data,
  * cache, and storage to prevent auth confusion between different users.
@@ -160,7 +161,7 @@ export const performLogout = (
     "curatorToken",
     "refreshToken",
     "userType",
-    "pendingUser",
+    "pendingUser:v1",
     "recoveryToken",
     "profileCompletionEmail",
     "authToken",

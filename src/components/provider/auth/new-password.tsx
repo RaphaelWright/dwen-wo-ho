@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/miscellaneous/stepper";
@@ -28,11 +29,7 @@ const NewPasswordContent = () => {
     resetPasswordMutation,
   } = useNewPassword();
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">

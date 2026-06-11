@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "motion/react";
 import { X, Upload, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -32,14 +32,14 @@ const PartnerCreationModal = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 backdrop-blur-3xl bg-background/80 z-50"
             onClick={onClose}
           />
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -78,11 +78,16 @@ const PartnerCreationModal = ({
                 >
                   {/* Name */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="partner-name"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Partner Name
                     </label>
                     <div className="relative">
                       <input
+                        id="partner-name"
+                        aria-label="Partner name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full pl-12 pr-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -94,10 +99,15 @@ const PartnerCreationModal = ({
 
                   {/* Nickname */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="partner-nickname"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Nickname (Optional)
                     </label>
                     <input
+                      id="partner-nickname"
+                      aria-label="Nickname"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
                       className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -106,10 +116,15 @@ const PartnerCreationModal = ({
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="partner-slogan"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Slogan
                     </label>
                     <input
+                      id="partner-slogan"
+                      aria-label="Slogan"
                       value={slogan}
                       onChange={(e) => setSlogan(e.target.value)}
                       className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
@@ -119,13 +134,18 @@ const PartnerCreationModal = ({
 
                   {/* Logo */}
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="partner-logo"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Partner Logo
                     </label>
                     <input
+                      id="partner-logo"
                       ref={fileInputRef}
                       type="file"
                       accept="image/*"
+                      aria-label="Upload logo"
                       className="hidden"
                       onChange={handleFileChange}
                     />
@@ -186,7 +206,7 @@ const PartnerCreationModal = ({
                 </LoadingButton>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

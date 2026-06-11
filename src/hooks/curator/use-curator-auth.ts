@@ -15,6 +15,9 @@ export function useCuratorAuth() {
     return null;
   });
 
+  // Client-side guard kept intentionally: auth state lives in localStorage, which
+  // is unavailable to Next.js middleware / server redirects, so this check must
+  // run in the browser after mount.
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import {
   LayoutGrid,
   Sparkles,
@@ -84,7 +84,7 @@ export default function MainContent({
         </AnimatePresence>
 
         {filteredPatients.length === 0 && (
-          <motion.div
+          <m.div
             key="empty"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -107,7 +107,7 @@ export default function MainContent({
               Try adjusting your filters or search query to find what you&apos;re
               looking for
             </p>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </main>

@@ -18,7 +18,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -213,7 +213,7 @@ export default function PatientDetailsPage() {
 
             {metrics.map((category, idx) => (
               <div
-                key={idx}
+                key={category.name}
                 className="bg-card rounded-3xl shadow-sm border border-border overflow-hidden group hover:border-primary/20 transition-colors duration-300"
               >
                 <div className="px-6 py-4 border-b border-border bg-muted/20 flex items-center gap-4">
@@ -239,8 +239,8 @@ export default function PatientDetailsPage() {
                 </div>
 
                 <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-                  {category.items.map((item, i) => (
-                    <div key={i} className="flex flex-col gap-2">
+                  {category.items.map((item) => (
+                    <div key={item.name} className="flex flex-col gap-2">
                       <div className="flex justify-between items-end mb-1">
                         <span className="font-medium text-foreground text-sm">
                           {item.name}
@@ -259,7 +259,7 @@ export default function PatientDetailsPage() {
                       </p>
 
                       <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mt-1">
-                        <motion.div
+                        <m.div
                           initial={{ width: 0 }}
                           animate={{ width: "100%" }}
                           className="h-full rounded-full opacity-60"

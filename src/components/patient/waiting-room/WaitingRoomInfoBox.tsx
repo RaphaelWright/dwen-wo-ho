@@ -7,8 +7,8 @@ export function WaitingRoomInfoBox() {
         {WAITING_ROOM_TEXTS.infoBox.title}
       </h3>
       <ul className="space-y-4 text-muted-foreground">
-        {WAITING_ROOM_TEXTS.infoBox.items.map((item, index) => (
-          <li key={index} className="flex items-start gap-3">
+        {WAITING_ROOM_TEXTS.infoBox.items.map((item) => (
+          <li key={item} className="flex items-start gap-3">
             <span className="text-primary text-xl leading-none">•</span>
             <span>{item}</span>
           </li>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Activity, Clock, CheckCircle2, Plus, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
@@ -91,7 +91,7 @@ export function ActionsPanel({
         {/* Add Action Form */}
         <AnimatePresence>
           {isFormOpen && (
-            <motion.form
+            <m.form
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -112,6 +112,7 @@ export function ActionsPanel({
               </div>
               <input
                 type="text"
+                aria-label="Action title"
                 placeholder="Action title..."
                 value={formData.title}
                 onChange={(e) =>
@@ -121,6 +122,7 @@ export function ActionsPanel({
               />
               <input
                 type="text"
+                aria-label="Action type"
                 placeholder="Type (e.g., Assessment, Treatment)..."
                 value={formData.type}
                 onChange={(e) =>
@@ -129,6 +131,7 @@ export function ActionsPanel({
                 className="w-full px-3 py-2 text-sm bg-background border border-border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary/20"
               />
               <textarea
+                aria-label="Action notes"
                 placeholder="Notes (optional)..."
                 value={formData.notes}
                 onChange={(e) =>
@@ -148,7 +151,7 @@ export function ActionsPanel({
                   Save Action
                 </LoadingButton>
               </div>
-            </motion.form>
+            </m.form>
           )}
         </AnimatePresence>
 

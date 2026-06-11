@@ -2,13 +2,10 @@ import { PARTNER_SCHOOLS } from "@/lib/constants/components/social-proof";
 import WidthConstraint from "../ui/width-constraint";
 import { MarqueeRow } from "../shared/marquee-row";
 
-const SocialProof = () => {
-  const row1Items = [
-    ...PARTNER_SCHOOLS.slice(0, 10),
-    ...PARTNER_SCHOOLS.slice(0, 10),
-  ];
-  const row2Items = [...PARTNER_SCHOOLS.slice(4), ...PARTNER_SCHOOLS.slice(4)];
+const row1Items = PARTNER_SCHOOLS.slice(0, 10);
+const row2Items = PARTNER_SCHOOLS.slice(4);
 
+const SocialProof = () => {
   return (
     <WidthConstraint>
       <div className="text-center mb-8">

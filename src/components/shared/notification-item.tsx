@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Check, Trash2 } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 /**
  * A single notification row in the notifications sheet with redesigned card layout.
@@ -49,13 +50,19 @@ export default function NotifItem<N>({
   const timestamp = getTimestamp(notif);
   const relativeTime = timeAgo(timestamp);
 
+  const handleActivate = () => {
+    if (isUnread) onMarkRead();
+    onClick?.();
+  };
+
   return (
     <TooltipProvider delayDuration={200}>
       <div
-        onClick={() => {
-          if (isUnread) onMarkRead();
-          onClick?.();
-        }}
+        role="button"
+        tabIndex={0}
+        aria-label={title || "Notification"}
+        onClick={handleActivate}
+        onKeyDown={activateOnKeyboard(handleActivate)}
         className={cn(
           "relative flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all duration-300 ease-in-out",
           isUnread
@@ -123,6 +130,7 @@ export default function NotifItem<N>({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       onMarkRead();
@@ -143,6 +151,7 @@ export default function NotifItem<N>({
               </Tooltip>
             ) : (
               <button
+                type="button"
                 disabled
                 className="flex items-center justify-center w-7 h-7 rounded-md text-muted-foreground/50 cursor-not-allowed"
               >
@@ -154,6 +163,7 @@ export default function NotifItem<N>({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       onDelete();

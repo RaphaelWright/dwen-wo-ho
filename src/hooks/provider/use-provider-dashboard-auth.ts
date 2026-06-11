@@ -1,21 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import useUserQuery from "../queries/use-user-profile";
 
+const emptySubscribe = () => () => {};
+
+const readHasAuth = () =>
+  !!(localStorage.getItem("token") || localStorage.getItem("refreshToken"));
+
 export default function useProviderDashboardAuth() {
-  const [hasAuth, setHasAuth] = useState(false);
+  // SSR-safe read of auth tokens without a mount effect (avoids hydration
+  // mismatch: server renders false, client reads localStorage after hydration).
+  const hasAuth = useSyncExternalStore(emptySubscribe, readHasAuth, () => false);
   const [pollApproval, setPollApproval] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-    const refreshToken = localStorage.getItem("refreshToken");
-    setHasAuth(!!(token || refreshToken));
-  }, []);
 
   const { getProfileQuery } = useUserQuery({
     enabled: hasAuth,

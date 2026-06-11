@@ -24,7 +24,12 @@ const COMMON_TITLES = [
  * @param name - The provider's name that might contain a title
  * @returns An object with the extracted title and cleaned name
  */
-export const extractTitleFromName = (
+const TITLE_PATTERNS = COMMON_TITLES.map((title) => ({
+  title,
+  regex: new RegExp(`^${title.replace(".", "\\.")}\\s+`, "i"),
+}));
+
+const extractTitleFromName = (
   name: string
 ): { title: string | null; cleanedName: string } => {
   if (!name || typeof name !== "string") {
@@ -32,13 +37,11 @@ export const extractTitleFromName = (
   }
 
   const trimmedName = name.trim();
-  
+
   // Check if name starts with any common title
-  for (const title of COMMON_TITLES) {
-    // Case-insensitive check with word boundary
-    const titleRegex = new RegExp(`^${title.replace(".", "\\.")}\\s+`, "i");
-    if (titleRegex.test(trimmedName)) {
-      const cleanedName = trimmedName.replace(titleRegex, "").trim();
+  for (const { title, regex } of TITLE_PATTERNS) {
+    if (regex.test(trimmedName)) {
+      const cleanedName = trimmedName.replace(regex, "").trim();
       return { title, cleanedName };
     }
   }
@@ -97,28 +100,5 @@ export const getProviderTitle = (
   return title;
 };
 
-/**
- * Gets the cleaned provider name without title
- * @param providerName - The provider's name
- * @param providerTitle - The provider's title (optional, explicitly provided)
- * @returns The cleaned name without title
- */
-export const getProviderNameWithoutTitle = (
-  providerName: string,
-  providerTitle?: string | null
-): string => {
-  if (!providerName) {
-    return "";
-  }
-
-  // If title is explicitly provided, return name as-is (assuming it doesn't contain title)
-  if (providerTitle) {
-    return providerName.trim();
-  }
-
-  // Otherwise, extract and return cleaned name
-  const { cleanedName } = extractTitleFromName(providerName);
-  return cleanedName;
-};
 
 

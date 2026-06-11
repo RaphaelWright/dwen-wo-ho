@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { timeAgo } from "@/lib/utils/timeAgo";
 import ScoreRing from "@/components/shared/score-ring";
 
@@ -41,7 +41,7 @@ export default function UrgentCard({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -78,7 +78,7 @@ export default function UrgentCard({
                 </span>
               </p>
               <div className="flex items-center gap-1.5 mt-1">
-                <motion.div
+                <m.div
                   animate={{ opacity: [1, 0.4, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
                   className="size-1.5 rounded-full shrink-0 bg-destructive"
@@ -92,7 +92,7 @@ export default function UrgentCard({
             <div className="self-center">
               <ScoreRing score={patient.score || patient.lockedInScore} />
             </div>
-          </motion.div>
+          </m.div>
         </TooltipTrigger>
         <TooltipContent side="top" sideOffset={5}>
           <p className="text-xs font-semibold text-destructive">

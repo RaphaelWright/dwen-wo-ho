@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { Search, RotateCcw, X } from "lucide-react";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
@@ -16,6 +16,8 @@ export interface FilterOption {
   filterValue?: string;
   filterType?: "exact" | "contains" | "score" | "date";
 }
+
+const EMPTY_FILTER_OPTIONS: FilterOption[] = [];
 
 export interface SearchDropdownProps<T extends object> {
   searchQuery: string;
@@ -44,8 +46,8 @@ export function SearchDropdown<T extends object>({
   onSearchChange,
   placeholders = ["Search..."],
   suggestions,
-  quickFilters = [],
-  activeFilters = [],
+  quickFilters = EMPTY_FILTER_OPTIONS,
+  activeFilters = EMPTY_FILTER_OPTIONS,
   onSelectOption,
   onFilterChange,
   onRemoveFilter,
@@ -87,8 +89,9 @@ export function SearchDropdown<T extends object>({
     <div className={`relative z-30 ${className}`} ref={containerRef}>
       <div
         className="relative w-full"
+        // Opening on focus covers both pointer (clicking the field focuses it)
+        // and keyboard (tabbing in) without a click handler on a static node.
         onFocus={() => setIsOpen(true)}
-        onClick={() => setIsOpen(true)}
       >
         <InputGroup className="w-full relative z-20 rounded-2xl focus-within:ring-1 focus-within:ring-primary!">
           <PlaceholdersAndVanishInput
@@ -113,7 +116,7 @@ export function SearchDropdown<T extends object>({
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
@@ -134,7 +137,7 @@ export function SearchDropdown<T extends object>({
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {activeFilters.map((filter) => (
-                    <motion.div
+                    <m.div
                       key={filter.id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -158,7 +161,7 @@ export function SearchDropdown<T extends object>({
                           <X className="size-3 text-primary" />
                         </button>
                       )}
-                    </motion.div>
+                    </m.div>
                   ))}
                 </div>
                 <div className="my-4 h-px w-full bg-border/50" />
@@ -172,9 +175,9 @@ export function SearchDropdown<T extends object>({
               </h4>
               <div className="space-y-1">
                 {suggestions.length > 0 ? (
-                  suggestions.map((item, idx) => (
-                    <motion.div
-                      key={idx}
+                  suggestions.map((item) => (
+                    <m.div
+                      key={getSuggestionValue ? getSuggestionValue(item) : JSON.stringify(item)}
                       whileHover={{ x: 5 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
@@ -188,7 +191,7 @@ export function SearchDropdown<T extends object>({
                       className="cursor-pointer rounded-2xl border border-transparent p-2.5 transition-colors hover:border-border/50 hover:bg-muted/60"
                     >
                       <RenderSuggestion {...item} />
-                    </motion.div>
+                    </m.div>
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-muted/20 py-10 text-center">
@@ -227,7 +230,7 @@ export function SearchDropdown<T extends object>({
                   </div>
                   <div className="flex flex-wrap gap-2 justify-between">
                     {quickFilters.map((filter) => (
-                      <motion.button
+                      <m.button
                         key={filter.id}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.95 }}
@@ -247,13 +250,13 @@ export function SearchDropdown<T extends object>({
                         <span className="text-[12px] font-medium text-primary">
                           {filter.label}
                         </span>
-                      </motion.button>
+                      </m.button>
                     ))}
                   </div>
                 </div>
               </>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

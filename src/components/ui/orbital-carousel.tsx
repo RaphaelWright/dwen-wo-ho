@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export interface OrbitalItem {
@@ -19,6 +19,9 @@ export interface OrbitalCarouselProps {
   showOrbitPath?: boolean;
 }
 
+// Calculate cardinal positions for items
+const getCardinalOffset = (index: number, total: number) => (index * 360) / total;
+
 export default function OrbitalCarousel({
   items,
   orbitRadius = 200,
@@ -28,10 +31,6 @@ export default function OrbitalCarousel({
   itemClassName,
   showOrbitPath = true,
 }: OrbitalCarouselProps) {
-  // Calculate cardinal positions for items
-  const getCardinalOffset = (index: number, total: number) => {
-    return (index * 360) / total;
-  };
   return (
     <div
       className={cn(
@@ -99,7 +98,7 @@ function OrbitingItem({
   }
 
   return (
-    <motion.div
+    <m.div
       className="absolute top-1/2 left-1/2"
       style={{
         width: itemSize,
@@ -108,7 +107,7 @@ function OrbitingItem({
       initial={{
         x: xKeyframes[0],
         y: yKeyframes[0],
-        scale: 0,
+        scale: 0.5,
         opacity: 0,
       }}
       animate={{
@@ -149,6 +148,6 @@ function OrbitingItem({
       >
         {content}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

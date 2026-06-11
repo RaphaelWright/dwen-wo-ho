@@ -162,6 +162,7 @@ export default function ProviderSchoolDetailsPage() {
             <div className="space-y-3">
               {students.map((student, index) => (
                 <button
+                  type="button"
                   key={`${student.studentName}-${index}`}
                   onClick={() => handleStudentClick(student)}
                   className="w-full text-left flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-primary/30 hover:bg-muted/50 transition-colors"

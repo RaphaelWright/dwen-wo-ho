@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { FiFileText, FiPlus } from "react-icons/fi";
 import { ROUTES } from "@/lib/constants/routes";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
@@ -16,14 +17,10 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const pathname = usePathname();
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
 
   const { notifications, unreadCount, setIsOpen } = useCuratorNotification();
   const { data: summary } = useCuratorSummary();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Auto-collapse sidebar on non-main pages
   useEffect(() => {

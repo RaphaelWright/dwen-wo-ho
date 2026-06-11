@@ -6,11 +6,11 @@ export function ProviderStatsGrid({ stats }: ProviderStatsGridProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {statItems.map((item, index) => {
+      {statItems.map((item) => {
         const Icon = item.icon;
         return (
           <div
-            key={index}
+            key={item.label}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
           >
             <div className="flex items-center justify-between mb-4">

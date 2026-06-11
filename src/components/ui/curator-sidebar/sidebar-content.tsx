@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { FiBell, FiLogOut } from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { cn } from "@/lib/utils";
@@ -72,13 +72,13 @@ export const SidebarContent = ({
       {/* Navigation section label */}
       <div className="flex-1 overflow-y-auto py-4">
         {!collapsed && (
-          <motion.p
+          <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60"
           >
             Navigation
-          </motion.p>
+          </m.p>
         )}
 
         <nav className={cn("space-y-1", collapsed ? "px-2" : "px-3")}>
@@ -99,6 +99,7 @@ export const SidebarContent = ({
         {/* Notification Menu Item */}
         <div className="pt-2 mt-2">
           <button
+            type="button"
             onClick={() => setIsOpen(true)}
             className={cn(
               "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
@@ -113,7 +114,7 @@ export const SidebarContent = ({
 
             <AnimatePresence mode="wait">
               {!collapsed && (
-                <motion.span
+                <m.span
                   initial={{ opacity: 0, width: 0 }}
                   animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
@@ -121,20 +122,20 @@ export const SidebarContent = ({
                   className="whitespace-nowrap overflow-hidden"
                 >
                   Notifications
-                </motion.span>
+                </m.span>
               )}
             </AnimatePresence>
 
             {/* Unread Badge */}
             {!collapsed && unreadCount > 0 && (
-              <motion.span
+              <m.span
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-success text-white px-1.5"
               >
                 {unreadCount > 99 ? "99+" : unreadCount}
-              </motion.span>
+              </m.span>
             )}
 
             {/* Collapsed Badge */}
@@ -146,6 +147,7 @@ export const SidebarContent = ({
 
         {/* Collapse toggle — desktop only */}
         <button
+          type="button"
           onClick={onToggleCollapse}
           className={cn(
             "hidden md:flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200",
@@ -167,6 +169,7 @@ export const SidebarContent = ({
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
               <button
+                type="button"
                 onClick={onLogoutClick}
                 className="flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
               >

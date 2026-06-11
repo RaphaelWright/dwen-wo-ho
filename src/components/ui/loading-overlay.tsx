@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 interface LoadingOverlayProps {
   text: string;
@@ -11,7 +11,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
   if (!isVisible) return null;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -19,7 +19,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
       aria-busy="true"
       aria-live="polite"
     >
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.95, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -27,7 +27,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
       >
         <div className="flex flex-col items-center justify-center gap-6 p-8">
           <div className="relative size-16">
-            <motion.div
+            <m.div
               className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent"
               animate={{ rotate: 360 }}
               transition={{
@@ -36,7 +36,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
                 ease: "linear",
               }}
             />
-            <motion.div
+            <m.div
               className="absolute inset-2 rounded-full border-3 border-primary border-t-transparent"
               animate={{ rotate: -360 }}
               transition={{
@@ -45,7 +45,7 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
                 ease: "linear",
               }}
             />
-            <motion.div
+            <m.div
               className="absolute inset-4 rounded-full border-2 border-primary border-t-transparent"
               animate={{ rotate: 360 }}
               transition={{
@@ -56,17 +56,17 @@ const LoadingOverlay = ({ text, isVisible }: LoadingOverlayProps) => {
             />
           </div>
 
-          <motion.p
+          <m.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="text-center text-lg font-medium text-muted-foreground"
           >
             {text}
-          </motion.p>
+          </m.p>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 };
 

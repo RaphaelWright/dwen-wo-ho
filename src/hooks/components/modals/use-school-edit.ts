@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { School, SchoolFormData } from "@/lib/types/school";
 
@@ -16,13 +16,15 @@ export const useSchoolEdit = ({
   onDisableSchool?: () => void;
 }) => {
   const [showCampusDropdown, setShowCampusDropdown] = useState(false);
-  const [selectedCampuses, setSelectedCampuses] = useState<string[]>([]);
+  const [selectedCampuses, setSelectedCampuses] = useState<string[]>(
+    school?.campuses || [],
+  );
   const [formData, setFormData] = useState<SchoolFormData>({
-    name: "",
-    nickname: "",
-    motto: "",
-    campuses: [],
-    type: "",
+    name: school?.name || "",
+    nickname: school?.nickname || "",
+    motto: school?.motto || "",
+    campuses: school?.campuses || [],
+    type: school?.type || "",
     logo: undefined,
   });
 
@@ -31,7 +33,11 @@ export const useSchoolEdit = ({
   const campusDropdownRef = useRef<HTMLDivElement>(null);
   const [hasChanges, setHasChanges] = useState(false);
 
-  useEffect(() => {
+  // Re-seed the form while rendering when a different school arrives, instead
+  // of mirroring the prop into state via an effect.
+  const [prevSchool, setPrevSchool] = useState(school);
+  if (school !== prevSchool) {
+    setPrevSchool(school);
     if (school) {
       setFormData({
         name: school.name || "",
@@ -44,7 +50,7 @@ export const useSchoolEdit = ({
       setSelectedCampuses(school.campuses || []);
       setHasChanges(false);
     }
-  }, [school]);
+  }
 
   const handleInputChange = (field: string, value: string) => {
     const processedValue = field === "motto" ? value.toUpperCase() : value;

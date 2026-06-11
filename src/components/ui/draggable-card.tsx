@@ -1,15 +1,13 @@
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useRef, useState, useEffect } from "react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  animate,
-  useVelocity,
-  useAnimationControls,
-} from "motion/react";
+import { m, useMotionValue, useSpring, useTransform, animate, useVelocity, useAnimationControls } from "motion/react";
+
+const springConfig = {
+  stiffness: 100,
+  damping: 20,
+  mass: 0.5,
+};
 
 export const DraggableCardBody = ({
   className,
@@ -32,12 +30,6 @@ export const DraggableCardBody = ({
   // physics biatch
   const velocityX = useVelocity(mouseX);
   const velocityY = useVelocity(mouseY);
-
-  const springConfig = {
-    stiffness: 100,
-    damping: 20,
-    mass: 0.5,
-  };
 
   const rotateX = useSpring(
     useTransform(mouseY, [-300, 300], [25, -25]),
@@ -105,7 +97,7 @@ export const DraggableCardBody = ({
   };
 
   return (
-    <motion.div
+    <m.div
       ref={cardRef}
       drag
       dragConstraints={constraints}
@@ -156,7 +148,6 @@ export const DraggableCardBody = ({
         rotateX,
         rotateY,
         opacity,
-        willChange: "transform",
       }}
       animate={controls}
       whileHover={{ scale: 1.02 }}
@@ -168,13 +159,13 @@ export const DraggableCardBody = ({
       )}
     >
       {children}
-      <motion.div
+      <m.div
         style={{
           opacity: glareOpacity,
         }}
         className="pointer-events-none absolute inset-0 bg-white select-none"
       />
-    </motion.div>
+    </m.div>
   );
 };
 

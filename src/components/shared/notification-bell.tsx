@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, HTMLMotionProps } from "framer-motion";
+import { m, HTMLMotionProps } from "motion/react";
 import { Bell, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,7 @@ export const NotificationBell = ({
 
   return (
     <div className={cn("flex items-center gap-2.5", containerClassName)}>
-      <motion.button
+      <m.button
         whileTap={{ scale: 0.95 }}
         onClick={onOpenNotifs}
         className={cn(
@@ -54,7 +54,7 @@ export const NotificationBell = ({
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
             {/* Green beacon pulse - top right */}
-            {/* <motion.div
+            {/* <m.div
               animate={{
                 boxShadow: [
                   `0 0 0 0 ${pulseColor}`,
@@ -71,7 +71,7 @@ export const NotificationBell = ({
             /> */}
           </>
         )}
-      </motion.button>
+      </m.button>
     </div>
   );
 };

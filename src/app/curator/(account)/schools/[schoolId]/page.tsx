@@ -21,7 +21,7 @@ import { SearchDropdown } from "@/components/shared/search-dropdown";
 import { SCHOOL_DETAILS_SEARCH_PLACEHOLDERS } from "@/lib/constants/components/curator/school-details";
 import type { SchoolTab } from "@/lib/types/components/curator/school-details";
 import { Users, ChevronLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
 
@@ -112,7 +112,7 @@ export default function SchoolDetailsPage() {
         {/* Main content */}
 
         <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 relative z-10">
-          <motion.button
+          <m.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ x: -4 }}
@@ -121,7 +121,7 @@ export default function SchoolDetailsPage() {
           >
             <ChevronLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Schools
-          </motion.button>
+          </m.button>
 
           <SchoolHeaderCard
             school={school}

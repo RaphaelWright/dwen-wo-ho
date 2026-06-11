@@ -2,13 +2,14 @@
 
 import {
   type CSSProperties,
-  forwardRef,
+  type Ref,
   useId,
   useEffect,
   useState,
   type ReactNode,
 } from "react";
 import { useTheme } from "next-themes";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 /* ── Generate a smooth radial displacement map on a canvas ────
    Center = rgb(128,128,0) → no displacement.
@@ -133,24 +134,42 @@ export interface LiquidGlassProps {
 /* ── Shared displacement map cache ─────────────────────────── */
 let cachedMapUrl: string | null = null;
 
+/* ── Static style bases (hoisted to avoid recreating per render) ── */
+const GLASS_BACKDROP_BASE: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 0,
+  width: "100%",
+  height: "100%",
+};
+
+const GLASS_BORDER_BASE: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 50,
+  pointerEvents: "none",
+  padding: "1.5px",
+  WebkitMask:
+    "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+  WebkitMaskComposite: "xor",
+  maskComposite: "exclude" as CSSProperties["maskComposite"],
+};
+
 /* ── Component ───────────────────────────────────────────────── */
-const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
-  (
-    {
-      children,
-      cornerRadius = 24,
-      blur = 2,
-      saturation = 160,
-      displacementScale = 6,
-      className = "",
-      style,
-      padding = "20px 24px",
-      showBorder = true,
-      tint = "rgba(255,255,255,0.1)",
-      onClick,
-    },
-    ref,
-  ) => {
+const LiquidGlass = ({
+  children,
+  cornerRadius = 24,
+  blur = 2,
+  saturation = 160,
+  displacementScale = 6,
+  className = "",
+  style,
+  padding = "20px 24px",
+  showBorder = true,
+  tint = "rgba(255,255,255,0.1)",
+  onClick,
+  ref,
+}: LiquidGlassProps & { ref?: Ref<HTMLDivElement> }) => {
     const filterId = useId().replace(/:/g, "_"); // : is invalid in CSS url()
     const [mapUrl, setMapUrl] = useState(cachedMapUrl ?? "");
 
@@ -186,6 +205,9 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
       <div
         ref={ref}
         onClick={onClick}
+        onKeyDown={onClick ? activateOnKeyboard(onClick) : undefined}
+        role={onClick ? "button" : undefined}
+        tabIndex={onClick ? 0 : undefined}
         className={className}
         style={{
           position: "relative",
@@ -204,16 +226,11 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
             It sits behind the content via z-index.            */}
         <span
           style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 0,
+            ...GLASS_BACKDROP_BASE,
             backdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
             WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
             filter: `url(#${filterId})`,
-            // background: tint,
             borderRadius: cornerRadius,
-            width: "100%",
-            height: "100%",
           }}
         />
 
@@ -223,17 +240,9 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
         {showBorder && (
           <span
             style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 50,
-              pointerEvents: "none",
+              ...GLASS_BORDER_BASE,
               borderRadius: cornerRadius,
-              padding: "1.5px",
               background: borderGradient,
-              WebkitMask:
-                "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude" as CSSProperties["maskComposite"],
               boxShadow: isDark
                 ? "0 0 0 0.5px rgba(255,255,255,0.15) inset, " +
                   "0 1px 2px rgba(255,255,255,0.1) inset, " +
@@ -273,9 +282,6 @@ const LiquidGlass = forwardRef<HTMLDivElement, LiquidGlassProps>(
         </div>
       </div>
     );
-  },
-);
-
-LiquidGlass.displayName = "LiquidGlass";
+};
 
 export default LiquidGlass;

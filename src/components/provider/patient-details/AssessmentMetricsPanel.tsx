@@ -1,7 +1,7 @@
 "use client";
 
 import { Brain, AlertCircle, BookOpen } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { MetricCategory } from "@/hooks/provider/use-provider-patient-details";
 
 interface AssessmentMetricsPanelProps {
@@ -18,7 +18,7 @@ export function AssessmentMetricsPanel({ metrics }: AssessmentMetricsPanelProps)
       {metrics.map((category, idx) => {
         const Icon = categoryIcons[idx] || Brain;
         return (
-          <motion.div
+          <m.div
             key={category.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ export function AssessmentMetricsPanel({ metrics }: AssessmentMetricsPanelProps)
             {/* Metrics Grid */}
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {category.items.map((item, i) => (
-                <div key={i} className="flex flex-col gap-2">
+                <div key={item.name} className="flex flex-col gap-2">
                   <div className="flex justify-between items-end mb-1">
                     <span className="font-medium text-foreground text-sm">
                       {item.name}
@@ -62,7 +62,7 @@ export function AssessmentMetricsPanel({ metrics }: AssessmentMetricsPanelProps)
 
                   {/* Progress Bar */}
                   <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mt-1">
-                    <motion.div
+                    <m.div
                       initial={{ width: 0 }}
                       animate={{ width: "100%" }}
                       transition={{ duration: 0.8, delay: 0.2 + i * 0.1 }}
@@ -73,7 +73,7 @@ export function AssessmentMetricsPanel({ metrics }: AssessmentMetricsPanelProps)
                 </div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         );
       })}
     </div>

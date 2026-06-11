@@ -35,14 +35,11 @@ export const useCuratorProviderModalSchools = (
 
   const availableSchools: AssociatedSchool[] = useMemo(() => {
     const associatedIds = new Set(associatedSchools.map((s) => s.id));
-    return allSchools
-      .filter((s) => !associatedIds.has(String(s.id)))
-      .map((s) => ({
-        id: String(s.id),
-        name: s.name,
-        logo: s.logo,
-        isAssociated: false,
-      }));
+    return allSchools.flatMap((s) =>
+      associatedIds.has(String(s.id))
+        ? []
+        : [{ id: String(s.id), name: s.name, logo: s.logo, isAssociated: false }],
+    );
   }, [allSchools, associatedSchools]);
 
   const filteredAvailableSchools = useMemo(() => {

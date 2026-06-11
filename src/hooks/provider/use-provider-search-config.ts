@@ -62,9 +62,9 @@ export function useProviderSearchConfig({
 
     // Sort by score if High/Low Score filter is active
     if (hasHighScoreFilter) {
-      filtered = [...filtered].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      filtered = filtered.toSorted((a, b) => (b.score ?? 0) - (a.score ?? 0));
     } else if (hasLowScoreFilter) {
-      filtered = [...filtered].sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
+      filtered = filtered.toSorted((a, b) => (a.score ?? 0) - (b.score ?? 0));
     }
 
     return filtered.slice(0, query ? 5 : 4);

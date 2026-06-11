@@ -1,12 +1,6 @@
 "use client";
 import React from "react";
-import {
-  motion,
-  useAnimationFrame,
-  useMotionTemplate,
-  useMotionValue,
-  useTransform,
-} from "motion/react";
+import { m, useAnimationFrame, useMotionTemplate, useMotionValue, useTransform } from "motion/react";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -63,7 +57,7 @@ export function MovingButton({
   );
 }
 
-export const MovingBorder = ({
+const MovingBorder = ({
   children,
   duration = 3000,
   rx,
@@ -116,7 +110,7 @@ export const MovingBorder = ({
           ref={pathRef}
         />
       </svg>
-      <motion.div
+      <m.div
         style={{
           position: "absolute",
           top: 0,
@@ -126,7 +120,7 @@ export const MovingBorder = ({
         }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </>
   );
 };

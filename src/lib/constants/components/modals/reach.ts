@@ -39,8 +39,3 @@ export const REACH_METRICS = [
     bg: "bg-green-50",
   },
 ];
-
-export const REACH_ITEMS = {
-  SCHOOLS: REACH_SCHOOLS,
-  METRICS: REACH_METRICS,
-};

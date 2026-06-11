@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { RotateCcw } from "lucide-react";
 import Cropper from "react-easy-crop";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
@@ -24,7 +24,7 @@ export const PhotoCropperModal = ({
     <AnimatePresence>
       {isOpen && imageSrc && (
         <>
-          <motion.div
+          <m.div
             key="photo-cropper-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -33,7 +33,7 @@ export const PhotoCropperModal = ({
             onClick={onClose}
           />
 
-          <motion.div
+          <m.div
             key="photo-cropper-content"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -113,7 +113,7 @@ export const PhotoCropperModal = ({
                 </LoadingButton>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

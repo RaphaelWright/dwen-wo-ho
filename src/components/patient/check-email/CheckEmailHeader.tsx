@@ -4,16 +4,12 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/patient/check-email";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { ArrowRight } from "lucide-react";
 
 export function CheckEmailHeader() {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="flex justify-between items-center">

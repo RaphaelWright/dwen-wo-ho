@@ -74,6 +74,7 @@ export default function CuratorPagesPage() {
             const isActive = activeTab === tab.id;
             return (
               <button
+                type="button"
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-8 py-3 rounded-full text-base font-semibold transition-all
@@ -103,6 +104,7 @@ export default function CuratorPagesPage() {
                   <p className="mt-6 text-lg text-foreground flex items-center gap-2">
                     You can
                     <button
+                      type="button"
                       onClick={openAddCoverPage}
                       className="px-5 py-2 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition"
                     >
@@ -118,6 +120,7 @@ export default function CuratorPagesPage() {
                   <p className="text-lg mb-2">
                     You can{" "}
                     <button
+                      type="button"
                       onClick={openAddCoverPage}
                       className="py-1.5 bg-foreground text-background rounded-full font-semibold hover:bg-foreground/80 transition-colors px-4"
                     >
@@ -129,6 +132,7 @@ export default function CuratorPagesPage() {
                 <div className="space-y-6">
                   {displayCoverPages.map((page) => (
                     <button
+                      type="button"
                       key={page.id}
                       onClick={() => handleCoverPageClick(page)}
                       className="relative w-full rounded-xl overflow-hidden border-2 border-primary hover:border-primary/70 transition-all cursor-pointer"
@@ -189,6 +193,7 @@ export default function CuratorPagesPage() {
                   .sort((a, b) => a.rank - b.rank)
                   .map((icon) => (
                     <button
+                      type="button"
                       key={icon.id}
                       onClick={() => handleIconClick(icon)}
                       className="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 h-96"
@@ -215,9 +220,9 @@ export default function CuratorPagesPage() {
                             </p>
                             <div className="flex flex-col items-center gap-1 mt-2">
                               {(icon.lockIns || []).length > 0 ? (
-                                (icon.lockIns || []).map((item, i) => (
+                                (icon.lockIns || []).map((item) => (
                                   <span
-                                    key={i}
+                                    key={item}
                                     className="text-background/90 text-sm flex items-center gap-1.5"
                                   >
                                     <Lock className="w-3.5 h-3.5 text-warning shrink-0" />
@@ -246,6 +251,7 @@ export default function CuratorPagesPage() {
               <p className="text-lg text-foreground mb-2">
                 You can{" "}
                 <button
+                  type="button"
                   onClick={openAddIcon}
                   className="px-3 py-1.5 bg-foreground text-background rounded-full font-semibold hover:bg-foreground/80 transition-colors"
                 >

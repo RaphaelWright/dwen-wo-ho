@@ -1,10 +1,5 @@
 const JsonLd = ({ data }: { data: Record<string, unknown> }) => {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
+  return <script type="application/ld+json">{JSON.stringify(data)}</script>;
 };
 
 export default JsonLd;

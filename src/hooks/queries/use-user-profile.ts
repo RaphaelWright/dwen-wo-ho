@@ -6,7 +6,7 @@ const useUserQuery = (options?: {
   refetchInterval?: number;
   enabled?: boolean;
 }) => {
-  const getProfileQuery = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEYS.auth, QUERY_KEYS.profile],
     queryFn: authService.getProfile,
     staleTime: 2 * 60 * 1000, // 2 minutes
@@ -15,7 +15,7 @@ const useUserQuery = (options?: {
   });
 
   return {
-    getProfileQuery,
+    getProfileQuery: { data, isLoading },
   };
 };
 

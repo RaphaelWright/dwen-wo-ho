@@ -15,6 +15,9 @@ export function usePatientSignUp() {
   const email = useGetSearchParams("email");
   const router = useRouter();
 
+  // Client-side guard kept intentionally: the redirect depends on a value that
+  // only exists in the browser (URL search param / localStorage auth tokens),
+  // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
     if (!email) {
       router.push(ROUTES.patient.checkEmail);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValueEvent, useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { useRef, useState } from "react";
 
 export const useHeader = () => {

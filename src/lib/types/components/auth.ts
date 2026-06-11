@@ -4,7 +4,7 @@ import type { Route } from "next";
 export type AuthStep = "check-email" | "sign-in" | "sign-up" | "reset-password";
 
 export interface BaseSignInFormProps {
-  role: "patient" | "provider";
+  audience: "patient" | "provider";
   email: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>;

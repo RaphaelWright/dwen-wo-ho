@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 /**
  * Skeleton loader for provider dashboard main content.
@@ -36,7 +36,7 @@ export function ProviderDashboardSkeleton() {
       {/* ── Patient cards skeleton ── */}
       <div className="flex flex-col gap-2">
         {Array.from({ length: 6 }).map((_, i) => (
-          <motion.div
+          <m.div
             key={`skeleton-${i}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ export function ProviderDashboardSkeleton() {
 
             {/* Action button skeleton */}
             <div className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse" />
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </main>

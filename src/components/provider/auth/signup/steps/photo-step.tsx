@@ -7,6 +7,7 @@ import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { PhotoCropperModal } from "@/components/modals/photo-cropper-modal";
 import { usePhotoStep } from "@/hooks/components/provider/auth/signup/use-photo-step";
 import { Input } from "@/components/ui/input";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 const PhotoStep = ({
   profilePhoto,
@@ -62,7 +63,11 @@ const PhotoStep = ({
           <div className="flex justify-center py-4">
             {profilePhoto ? (
               <div
+                role="button"
+                tabIndex={0}
+                aria-label="Change profile photo"
                 onClick={handleFileClick}
+                onKeyDown={activateOnKeyboard(handleFileClick)}
                 className="cursor-pointer group relative"
               >
                 <div className="w-40 h-40 sm:w-52 sm:h-52 rounded-full overflow-hidden border-4 border-background ring-4 ring-muted shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:ring-primary/50">
@@ -80,7 +85,11 @@ const PhotoStep = ({
               </div>
             ) : (
               <div
+                role="button"
+                tabIndex={0}
+                aria-label="Upload profile photo"
                 onClick={handleUploadClick}
+                onKeyDown={activateOnKeyboard(handleUploadClick)}
                 className="w-40 h-40 sm:w-52 sm:h-52 rounded-full border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-muted/30 transition-all duration-300 bg-muted/10 group"
               >
                 <div className="w-16 h-16 rounded-full bg-background shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">

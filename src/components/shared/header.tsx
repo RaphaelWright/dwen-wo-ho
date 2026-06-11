@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { DesktopNav } from "./header/desktop-nav";
@@ -8,20 +8,16 @@ import { HeaderActions } from "./header/header-actions";
 import { MobileNav } from "./header/mobile-nav";
 import { useHeader } from "@/hooks/components/shared/use-header";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 const Header = ({ className }: { className?: string }) => {
   const { isOpen, setIsOpen, navRef, isFloating } = useHeader();
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
-        <motion.header
+        <m.header
           layout
           ref={navRef}
           transition={{
@@ -62,7 +58,7 @@ const Header = ({ className }: { className?: string }) => {
 
           {/* Mobile Menu */}
           <MobileNav isOpen={isOpen} setIsOpen={setIsOpen} />
-        </motion.header>
+        </m.header>
       </div>
 
       <div className="h-16" />

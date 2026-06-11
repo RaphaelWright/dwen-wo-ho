@@ -79,16 +79,18 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
               Specialties
             </h4>
             <div className="flex flex-wrap gap-2">
-              {provider.specialties
-                .filter((s: string) => s && s.trim())
-                .map((specialty: string, index: number) => (
-                  <span
-                    key={index}
-                    className="px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:border-primary/50 transition-colors shadow-sm"
-                  >
-                    {specialty}
-                  </span>
-                ))}
+              {provider.specialties.flatMap((specialty: string) =>
+                specialty && specialty.trim()
+                  ? [
+                      <span
+                        key={specialty}
+                        className="px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:border-primary/50 transition-colors shadow-sm"
+                      >
+                        {specialty}
+                      </span>,
+                    ]
+                  : [],
+              )}
             </div>
           </div>
         )}

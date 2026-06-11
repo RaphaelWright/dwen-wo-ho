@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { BrainCircuit, Pencil } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -92,7 +92,7 @@ export function ProfileTabs({
             </div>
 
             <SectionLabel>Specialty</SectionLabel>
-            <motion.button
+            <m.button
               whileHover={{ backgroundColor: "rgba(139,92,246,.25)" }}
               onClick={() =>
                 onEdit("specialty", "Specialty", profileData.specialty ?? "")
@@ -104,7 +104,7 @@ export function ProfileTabs({
                 {profileData.specialty}
               </span>
               <Pencil size={10} />
-            </motion.button>
+            </m.button>
 
             <SectionLabel>Activity</SectionLabel>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">

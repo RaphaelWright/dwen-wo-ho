@@ -30,7 +30,7 @@ const getStrengthTone = (score: number): PasswordStrengthTone => {
   return "success";
 };
 
-export const evaluatePasswordRequirements = (
+const evaluatePasswordRequirements = (
   password: string
 ): PasswordRequirements => ({
   length: PASSWORD_REQUIREMENT_CHECKS.length.test(password),

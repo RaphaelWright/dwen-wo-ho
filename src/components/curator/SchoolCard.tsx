@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { School, Loader2, MapPin } from "lucide-react";
@@ -6,6 +6,12 @@ import { ROUTES } from "@/lib/constants/routes";
 import { SchoolWithExtras } from "@/atoms/curator-schools";
 import { getFirstCampus } from "@/hooks/curator/use-curator-schools";
 import { Badge } from "../ui/badge";
+
+// Format student count for display (e.g., 1.2k)
+const formatCount = (count: number) => {
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+  return count;
+};
 
 export function SchoolCard({
   school,
@@ -16,14 +22,8 @@ export function SchoolCard({
 }) {
   const firstCampus = getFirstCampus(school.campuses);
 
-  // Format student count for display (e.g., 1.2k)
-  const formatCount = (count: number) => {
-    if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
-    return count;
-  };
-
   return (
-    <motion.div
+    <m.div
       initial="initial"
       whileHover="hover"
       className="w-full max-w-xs mx-auto bg-card dark:bg-muted/80 rounded-lg"
@@ -35,7 +35,7 @@ export function SchoolCard({
         {/* Header Section (Image Background) */}
         <div className="relative h-48 w-full overflow-hidden">
           {/* Background Image Layer */}
-          <motion.div
+          <m.div
             variants={{
               initial: { scale: 1 },
               hover: { scale: 0.9 },
@@ -49,6 +49,7 @@ export function SchoolCard({
                 alt={school.name}
                 fill
                 priority={priority}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover aspect-square"
               />
             ) : (
@@ -56,10 +57,10 @@ export function SchoolCard({
                 <School className="w-6 h-6 text-muted-foreground/30" />
               </div>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Dark Overlay */}
-          <motion.div
+          <m.div
             variants={{
               initial: { backgroundColor: "rgba(0, 0, 0, 0.2)" },
               hover: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
@@ -82,7 +83,7 @@ export function SchoolCard({
 
           {/* Centered Circular Logo */}
           <div className="absolute inset-0 z-20 flex items-center justify-center">
-            <motion.div
+            <m.div
               variants={{
                 initial: { scale: 1, y: 0 },
                 hover: { scale: 1.1, y: -3 },
@@ -101,7 +102,7 @@ export function SchoolCard({
               ) : (
                 <School className="w-4 h-4 text-background/80" />
               )}
-            </motion.div>
+            </m.div>
           </div>
         </div>
 
@@ -142,6 +143,6 @@ export function SchoolCard({
           </div>
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   );
 }

@@ -16,6 +16,12 @@ import {
 } from "@/lib/types/provider/auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { toSentenceCase } from "@/lib/utils/smart-typing";
+import { applyProviderAuthTokens } from "@/lib/utils/provider-auth-tokens";
+import {
+  clearProviderSignupPassword,
+  getProviderSignupPassword,
+} from "@/lib/utils/provider-signup-password";
+import { hasProviderAuthToken } from "@/lib/utils/provider-signup-resume";
 
 export const useProfileActions = ({
   email,
@@ -33,6 +39,53 @@ export const useProfileActions = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { addSpecialtyMutation, updateProfileMutation, loginMutation } = useAuthQuery();
+
+  const redirectToSignIn = () => {
+    router.push(
+      `${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route,
+    );
+  };
+
+  const finishSignup = async () => {
+    const resolvedPassword =
+      password?.trim() || getProviderSignupPassword(email) || undefined;
+
+    if (hasProviderAuthToken()) {
+      clearProviderSignupPassword(email);
+      setUserType("provider");
+      router.push(ROUTES.provider.home);
+      return;
+    }
+
+    if (!resolvedPassword) {
+      redirectToSignIn();
+      return;
+    }
+
+    try {
+      const loginResponse = await loginMutation.mutateAsync({
+        email,
+        password: resolvedPassword,
+      });
+
+      if (!loginResponse) {
+        toast.error(SIGN_UP_TEXTS.errors.autoLoginFailed);
+        redirectToSignIn();
+        return;
+      }
+
+      clearProviderSignupPassword(email);
+      applyProviderAuthTokens({
+        token: loginResponse.token,
+        refreshToken: loginResponse.refreshToken,
+        userRole: loginResponse.userData?.userRole,
+      });
+      router.push(ROUTES.provider.home);
+    } catch {
+      toast.error(SIGN_UP_TEXTS.errors.autoLoginFailed);
+      redirectToSignIn();
+    }
+  };
 
   const handleNext = async () => {
     const stepValidation = validateProviderProfileStep(
@@ -77,43 +130,7 @@ export const useProfileActions = ({
         });
 
         toast.success(SIGN_UP_TEXTS.errors.specialtyAdded);
-
-        if (password) {
-          try {
-            const loginResponse = await loginMutation.mutateAsync({
-              email,
-              password,
-            });
-
-            if (loginResponse) {
-              const { token, refreshToken: refreshTokenValue, userData } = loginResponse;
-
-              if (refreshTokenValue) {
-                localStorage.setItem("refreshToken", refreshTokenValue);
-                localStorage.removeItem("token");
-              } else if (token) {
-                localStorage.setItem("token", token);
-              }
-
-              if (userData?.userRole === "ROLE_CURATOR") {
-                localStorage.setItem("curatorToken", token || refreshTokenValue);
-                setUserType("curator");
-              } else {
-                setUserType("provider");
-              }
-
-              router.push(ROUTES.provider.home);
-            } else {
-              toast.error(SIGN_UP_TEXTS.errors.autoLoginFailed);
-              router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route);
-            }
-          } catch {
-            toast.error(SIGN_UP_TEXTS.errors.autoLoginFailed);
-            router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route);
-          }
-        } else {
-          router.push(`${ROUTES.provider.auth}?step=sign-in&email=${encodeURIComponent(email)}` as Route);
-        }
+        await finishSignup();
       } catch (error: unknown) {
         toast.error(getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.addSpecialtyFailed);
       } finally {

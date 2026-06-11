@@ -5,6 +5,9 @@ import { isProviderNotificationSheetOpenAtom } from "@/atoms/notification";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
 
+// isMarkingRead/isDeleting/isMarkingAllRead/isClearing are independent,
+// concurrent async states forwarded to NotificationsSheet, not a single status
+// union, so they are intentionally kept as separate flags.
 export default function ProviderNotificationsSheet({
   notifications,
   setNotifOpen,

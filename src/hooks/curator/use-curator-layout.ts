@@ -17,6 +17,9 @@ export function useCuratorLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // Client-side guard kept intentionally: auth state lives in localStorage, which
+  // is unavailable to Next.js middleware / server redirects, so this check must
+  // run in the browser after mount.
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {

@@ -9,6 +9,9 @@ export async function processBatch<T, R>(
 ): Promise<R[]> {
   const results: R[] = [];
 
+  // Intentional sequential await-in-loop: each batch must settle before the
+  // next starts so concurrency stays bounded to `batchSize` (avoids hammering
+  // the API). Parallelizing across batches would defeat the rate limit.
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
     const batchResults = await Promise.all(
@@ -112,40 +115,8 @@ export async function checkForNewPatients(
   }
 }
 
-// Debounced function creator
-export function debounce<T extends (...args: never[]) => unknown>(
-  func: T,
-  delay: number,
-): (...args: Parameters<T>) => void {
-  let timeoutId: NodeJS.Timeout;
-
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func(...args), delay);
-  };
-}
-
 // Request deduplication
 const pendingRequests = new Map<string, Promise<unknown>>();
-
-export async function deduplicatedRequest<T>(
-  key: string,
-  requestFn: () => Promise<T>,
-): Promise<T> {
-  // If request is already pending, return the same promise
-  if (pendingRequests.has(key)) {
-    return pendingRequests.get(key)! as Promise<T>;
-  }
-
-  // Create new request
-  const promise = requestFn().finally(() => {
-    // Clean up after request completes
-    pendingRequests.delete(key);
-  });
-
-  pendingRequests.set(key, promise);
-  return promise;
-}
 
 // Clear all pending requests
 export function clearAllCaches() {

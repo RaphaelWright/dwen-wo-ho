@@ -2,14 +2,10 @@
 import { Logo } from "@/components/shared/Logo";
 import { SIGN_IN_TEXTS } from "@/lib/constants/components/patient/signin";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export function SignInHeader() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
   const { theme } = useTheme();
   return (
     <div className="flex items-center px-8 justify-between w-full">

@@ -39,6 +39,9 @@ export const useNewPassword = () => {
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
 
+  // Client-side guard kept intentionally: the redirect depends on values that
+  // only exist in the browser (URL search param + localStorage recovery token),
+  // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
     if (!email) {
       router.push(ROUTES.provider.checkEmail);

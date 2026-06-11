@@ -30,14 +30,11 @@ export const useCuratorProviderModalPartners = (
 
   const availablePartners: AssociatedPartner[] = useMemo(() => {
     const associatedIds = new Set(associatedPartners.map((p) => p.id));
-    return allPartnersData
-      .filter((p: Partner) => !associatedIds.has(String(p.id)))
-      .map((p: Partner) => ({
-        id: String(p.id),
-        name: p.name,
-        logo: p.logo,
-        isAssociated: false,
-      }));
+    return allPartnersData.flatMap((p: Partner) =>
+      associatedIds.has(String(p.id))
+        ? []
+        : [{ id: String(p.id), name: p.name, logo: p.logo, isAssociated: false }],
+    );
   }, [allPartnersData, associatedPartners]);
 
   const filteredAvailablePartners = useMemo(() => {

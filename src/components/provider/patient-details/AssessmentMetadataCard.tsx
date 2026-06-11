@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { LockInAssessment } from "@/lib/types/lockin";
 
 interface AssessmentMetadataCardProps {
@@ -10,7 +10,7 @@ interface AssessmentMetadataCardProps {
 
 export function AssessmentMetadataCard({ lockInAssessment }: AssessmentMetadataCardProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
@@ -67,6 +67,6 @@ export function AssessmentMetadataCard({ lockInAssessment }: AssessmentMetadataC
           </div>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

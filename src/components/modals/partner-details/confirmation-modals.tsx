@@ -2,6 +2,9 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { PartnerConfirmationModalsProps } from "@/lib/types/components/modals/partner-details";
 
+// The isAdding*/isRemoving* booleans drive several independent confirmation
+// modals that can each be in-flight concurrently. They are intentionally kept
+// as separate flags rather than a single variant union.
 export const PartnerConfirmationModals = ({
   schoolToAdd,
   setSchoolToAdd,

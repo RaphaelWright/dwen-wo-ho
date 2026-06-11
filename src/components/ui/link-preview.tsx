@@ -3,12 +3,8 @@ import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
 
 import { encode } from "qss";
 import React from "react";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useSpring,
-} from "motion/react";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { AnimatePresence, m, useMotionValue, useSpring } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -24,6 +20,8 @@ type LinkPreviewProps = {
   | { isStatic: true; imageSrc: string }
   | { isStatic?: false; imageSrc?: never }
 );
+
+const springConfig = { stiffness: 100, damping: 15 };
 
 export const LinkPreview = ({
   children,
@@ -54,13 +52,8 @@ export const LinkPreview = ({
 
   const [isOpen, setOpen] = React.useState(false);
 
-  const [isMounted, setIsMounted] = React.useState(false);
+  const isMounted = useHydrated();
 
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const springConfig = { stiffness: 100, damping: 15 };
   const x = useMotionValue(0);
 
   const translateX = useSpring(x, springConfig);
@@ -79,12 +72,7 @@ export const LinkPreview = ({
         <div className="hidden">
           {/* External microlink screenshot URL — next/image impractical */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            width={width}
-            height={height}
-            alt="hidden image"
-          />
+          <img src={src} width={width} height={height} alt="" />
         </div>
       ) : null}
 
@@ -111,7 +99,7 @@ export const LinkPreview = ({
         >
           <AnimatePresence>
             {isOpen && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20, scale: 0.6 }}
                 animate={{
                   opacity: 1,
@@ -141,10 +129,10 @@ export const LinkPreview = ({
                     width={width}
                     height={height}
                     className="rounded-lg"
-                    alt="preview image"
+                    alt="Link preview"
                   />
                 </a>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </HoverCardPrimitive.Content>

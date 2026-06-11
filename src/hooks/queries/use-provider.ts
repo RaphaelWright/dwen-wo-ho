@@ -3,7 +3,6 @@ import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { curatorProvidersService } from "@/services/curator-providers";
-import { providerDashboardService } from "@/services/provider-dashboard";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import type { ProviderActivityParams } from "@/lib/types/api/providers";
 
@@ -11,13 +10,6 @@ export const useProviderActivityQuery = (params?: ProviderActivityParams) =>
   useQuery({
     queryKey: [QUERY_KEYS.providers, "activity", params],
     queryFn: () => curatorProvidersService.getActivity(params),
-    staleTime: 60 * 1000,
-  });
-
-export const useProviderNotificationsQuery = () =>
-  useQuery({
-    queryKey: [QUERY_KEYS.providers, "notifications"],
-    queryFn: () => providerDashboardService.getNotifications(),
     staleTime: 60 * 1000,
   });
 
@@ -37,26 +29,31 @@ export const useProviderSchoolsSummary = () =>
     gcTime: 10 * 60 * 1000,
   });
 
+// Single provider query — hoisted; closes over no component state.
+const useProvider = (email: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.providers, email],
+    queryFn: () => curatorProvidersService.getProvider(email),
+    enabled: !!email,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
 export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   const queryClient = useQueryClient();
 
-  const providersQuery = useQuery({
+  const {
+    data: providers,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: [QUERY_KEYS.providers],
     queryFn: curatorProvidersService.getProviders,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     enabled: options?.enabled ?? true,
   });
-
-  // Get single provider
-  const useProvider = (email: string) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.providers, email],
-      queryFn: () => curatorProvidersService.getProvider(email),
-      enabled: !!email,
-      staleTime: 3 * 60 * 1000, // 3 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
-    });
 
   // Approve provider mutation
   const approveProviderMutation = useMutation({
@@ -111,7 +108,12 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
       schoolId: string | number;
     }) => curatorProvidersService.addSchoolToProvider(providerId, schoolId),
     onSuccess: (_, { providerId }) => {
-      if (typeof providerId === "string") invalidateProvider(providerId);
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.providers] });
+      if (typeof providerId === "string") {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.providers, providerId],
+        });
+      }
       toast.success("School added to provider successfully");
     },
     onError: (error: Error) =>
@@ -128,7 +130,12 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
     }) =>
       curatorProvidersService.removeSchoolFromProvider(providerId, schoolId),
     onSuccess: (_, { providerId }) => {
-      if (typeof providerId === "string") invalidateProvider(providerId);
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.providers] });
+      if (typeof providerId === "string") {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.providers, providerId],
+        });
+      }
       toast.success("School removed from provider successfully");
     },
     onError: (error: Error) =>
@@ -138,10 +145,10 @@ export const useProvidersQuery = (options?: { enabled?: boolean }) => {
   // Return all queries and mutations
   return {
     // Queries
-    providers: providersQuery.data,
-    isLoading: providersQuery.isLoading,
-    isError: providersQuery.isError,
-    error: providersQuery.error,
+    providers,
+    isLoading,
+    isError,
+    error,
     // Single provider query helper
     useProvider,
     // Mutations

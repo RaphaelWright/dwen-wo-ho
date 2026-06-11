@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, User, Activity, School, Calendar } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { PatientResult } from "@/lib/types/patient";
 import { LockInAssessment } from "@/lib/types/lockin";
@@ -22,7 +22,7 @@ export function PatientDetailsHeader({
   onBack,
 }: PatientDetailsHeaderProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-card rounded-3xl shadow-sm border border-border p-6 md:p-8 mb-8 relative overflow-hidden"
@@ -135,6 +135,6 @@ export function PatientDetailsHeader({
           </div>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

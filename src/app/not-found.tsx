@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
 import { Home, ArrowLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { ROUTES } from "@/lib/constants/routes";
 
 export default function NotFound() {
@@ -14,17 +14,17 @@ export default function NotFound() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center">
         {/* Logo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-8 flex justify-center"
         >
           <Logo />
-        </motion.div>
+        </m.div>
 
         {/* Animated 404 */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
@@ -33,10 +33,10 @@ export default function NotFound() {
           <h1 className="text-[10rem] md:text-[14rem] font-bold leading-none tracking-tighter text-destructive/80 drop-shadow-sm select-none">
             404
           </h1>
-        </motion.div>
+        </m.div>
 
         {/* Main Message */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -49,10 +49,10 @@ export default function NotFound() {
             It looks like you&apos;ve wandered off the path. The page you&apos;re
             looking for doesn&apos;t exist or has been moved.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Action Buttons */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -79,10 +79,10 @@ export default function NotFound() {
               Go Back
             </span>
           </Button>
-        </motion.div>
+        </m.div>
 
         {/* Helpful Links */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
@@ -116,7 +116,7 @@ export default function NotFound() {
               Provider Login
             </Button>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

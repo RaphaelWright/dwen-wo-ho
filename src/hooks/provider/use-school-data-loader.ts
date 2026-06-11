@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { processBatch } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
@@ -9,7 +8,7 @@ import {
   SchoolWithExtras as SchoolWithExtrasAtom,
 } from "@/atoms/provider-schools";
 import { BATCH_SIZE } from "@/lib/constants/provider-schools";
-import type { ProviderProfileResponse } from "@/lib/types/api/auth";
+import type { ProfileQueryHandle } from "@/lib/types/api/auth";
 
 type ProviderSchoolsState = {
   schools: SchoolWithExtrasAtom[];
@@ -18,7 +17,7 @@ type ProviderSchoolsState = {
 };
 
 export function useSchoolDataLoader(
-  getProfileQuery: UseQueryResult<ProviderProfileResponse, Error>,
+  getProfileQuery: ProfileQueryHandle,
   updateSchoolInState: (
     id: number | string,
     data: Partial<SchoolWithExtrasAtom>,
@@ -32,7 +31,10 @@ export function useSchoolDataLoader(
     isBackground?: boolean,
   ) => Promise<SchoolWithExtrasAtom>,
 ) {
-  const previousSchoolsRef = useRef<Map<number, SchoolWithExtrasAtom>>(new Map());
+  const previousSchoolsRef = useRef<Map<number, SchoolWithExtrasAtom>>(null!);
+  if (!previousSchoolsRef.current) {
+    previousSchoolsRef.current = new Map();
+  }
   const isInitialLoadRef = useRef(true);
   const abortControllerRef = useRef<AbortController | null>(null);
 

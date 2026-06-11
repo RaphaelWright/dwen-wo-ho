@@ -60,6 +60,7 @@ export const ProvidersTab = ({
 
           return (
             <button
+              type="button"
               key={provider.email}
               onClick={() => onProviderClick(provider)}
               className="flex flex-col items-center text-center group transition-all duration-200"

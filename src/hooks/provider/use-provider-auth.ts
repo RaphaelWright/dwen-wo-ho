@@ -48,7 +48,7 @@ export function useProviderAuth() {
           localStorage.removeItem("curatorToken");
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("userType");
-          localStorage.removeItem("pendingUser");
+          localStorage.removeItem("pendingUser:v1");
         }
         setUserType(null);
         if (!hasRedirectedRef.current) {
@@ -72,9 +72,9 @@ export function useProviderAuth() {
             const redirectInfo = getProviderRedirectInfo(profileData);
 
             if (redirectInfo.isPending) {
-              localStorage.setItem("pendingUser", JSON.stringify(profileData));
+              localStorage.setItem("pendingUser:v1", JSON.stringify(profileData));
             } else {
-              localStorage.removeItem("pendingUser");
+              localStorage.removeItem("pendingUser:v1");
             }
 
             hasRedirectedRef.current = true;

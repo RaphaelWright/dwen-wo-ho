@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
 import { ProviderDetails } from "@/lib/types/provider";
@@ -50,7 +50,14 @@ export const useProviderDetails = ({
     pathname === ROUTES.curator.providers ? "overview" : "schools",
   );
 
-  useEffect(() => {
+  // Reset the active tab and searches while rendering when the modal opens or
+  // the route changes, instead of mirroring those props into state via an
+  // effect.
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (isOpen !== prevIsOpen || pathname !== prevPathname) {
+    setPrevIsOpen(isOpen);
+    setPrevPathname(pathname);
     if (isOpen) {
       setActiveTab(
         pathname === ROUTES.curator.providers ? "overview" : "schools",
@@ -58,13 +65,7 @@ export const useProviderDetails = ({
       schools.setSchoolSearchQuery("");
       partners.setPartnerSearchQuery("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only setters from schools/partners are needed
-  }, [
-    isOpen,
-    pathname,
-    schools.setSchoolSearchQuery,
-    partners.setPartnerSearchQuery,
-  ]);
+  }
 
   const applicationStatusConfig = useMemo(() => {
     if (!provider?.applicationStatus) return null;

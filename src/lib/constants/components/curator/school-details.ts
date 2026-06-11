@@ -21,8 +21,6 @@ export const SCHOOL_DETAILS_SEARCH_PLACEHOLDERS: Record<SchoolTab, string[]> = {
   ],
 };
 
-export const URGENT_CARE_SKELETON_COUNT = 3;
-
 export const SCHOOL_TABS_CONFIG = [
   {
     key: "patients" as const,

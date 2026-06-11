@@ -1,7 +1,10 @@
-import { handleTokenExpiration, isAuthError } from "./auth-utils";
 import { toast } from "@/components/ui/sonner";
 import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { API_BASE_URL } from "@/configs/config";
+
+// Only 401 (Unauthorized) is an auth error that requires token refresh.
+// 403 (Forbidden) means the user is authenticated but lacks permission.
+const isAuthError = (status: number): boolean => status === 401;
 
 const isPublicEndpoint = (endpoint: string): boolean => {
   return PUBLIC_ENDPOINTS.some((path) => endpoint.includes(path));
@@ -96,7 +99,10 @@ export async function api(endpoint: string, options: RequestInit = {}) {
       if (isAuthError(response.status) && !isPublicEndpoint(endpoint)) {
         if (typeof window !== "undefined") {
           toast.error("Your session has expired. Please log in again.");
-          handleTokenExpiration();
+          // Lazy import to avoid a circular dependency with auth-utils.
+          void import("./auth-utils").then((mod) =>
+            mod.handleTokenExpiration(),
+          );
         }
       }
       throw await extractErrorFromResponse(response);

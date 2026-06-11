@@ -50,6 +50,7 @@ export default function SchoolSelectionModal({
             </div>
             <input
               type="text"
+              aria-label="Search schools"
               placeholder="Search schools"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

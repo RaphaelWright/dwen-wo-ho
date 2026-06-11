@@ -75,7 +75,7 @@ export const useDeleteNotificationMutation = () => {
  * Curator: 🔧 Workaround (deletes one-by-one, bulk endpoint not implemented)
  * Provider: ✅ Real endpoint DELETE /providers/notifications
  */
-export const useClearAllNotificationsMutation = () => {
+const useClearAllNotificationsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => unifiedNotificationsService.clearAllNotifications(),
@@ -85,22 +85,6 @@ export const useClearAllNotificationsMutation = () => {
     },
     onError: (error: Error) =>
       toast.error(error.message || "Failed to clear notifications"),
-  });
-};
-
-/**
- * Send notification - Curator only.
- * Curator: ✅ POST /curator/notifications/send
- * Provider: ❌ Throws error (not allowed)
- */
-export const useSendNotificationMutation = () => {
-  return useMutation({
-    mutationFn: unifiedNotificationsService.sendNotification,
-    onSuccess: () => {
-      toast.success("Notification sent");
-    },
-    onError: (error: Error) =>
-      toast.error(error.message || "Failed to send notification"),
   });
 };
 

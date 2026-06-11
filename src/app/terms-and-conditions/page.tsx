@@ -1,4 +1,17 @@
 import WidthConstraint from "@/components/ui/width-constraint";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata(
+  "Terms and Conditions",
+  "The terms and conditions governing your use of Dwen Wo Ho.",
+  "/terms-and-conditions",
+);
+
+const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 
 export default function TermsAndConditionsPage() {
   return (
@@ -6,9 +19,7 @@ export default function TermsAndConditionsPage() {
       <WidthConstraint>
         <h1 className="text-4xl font-bold mb-8">Terms and Conditions</h1>
         <div className="prose dark:prose-invert max-w-none">
-          <p className="mb-4">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
+          <p className="mb-4">Last updated: {LAST_UPDATED}</p>
           <p>
             Please read these Terms and Conditions carefully before using the
             Dwen Wo Ho website and services.

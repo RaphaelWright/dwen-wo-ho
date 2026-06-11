@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPin, ChevronDown, Upload, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import {
   CAMPUS_OPTIONS,
@@ -29,10 +29,14 @@ export const FormStep = ({
       {/* Name & Nickname */}
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-foreground">
+          <label
+            htmlFor="school-name"
+            className="text-sm font-semibold text-foreground"
+          >
             School Name <span className="text-destructive">*</span>
           </label>
           <Input
+            id="school-name"
             type="text"
             value={formData.name}
             onChange={(e) => handleInputChange("name", e.target.value)}
@@ -41,10 +45,14 @@ export const FormStep = ({
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-foreground">
+          <label
+            htmlFor="school-nickname"
+            className="text-sm font-semibold text-foreground"
+          >
             Nickname (Optional)
           </label>
           <Input
+            id="school-nickname"
             type="text"
             value={formData.nickname}
             onChange={(e) => handleInputChange("nickname", e.target.value)}
@@ -132,7 +140,7 @@ export const FormStep = ({
 
           <AnimatePresence>
             {showCampusDropdown && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
@@ -154,7 +162,7 @@ export const FormStep = ({
                     </Button>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
