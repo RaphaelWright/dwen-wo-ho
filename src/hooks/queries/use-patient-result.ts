@@ -4,20 +4,47 @@ import { patientsService } from "@/services/patients";
 import { lockinsService } from "@/services/lockins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
+// Hoisted query hooks — they close over no component state.
+const usePatientFullDetails = (
+  patientId: string,
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.patientResult, "full-details", patientId],
+    queryFn: () => patientsService.getFullPatientDetails(patientId),
+    enabled: (options?.enabled ?? true) && !!patientId,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+const useAvailableProvidersForReferral = (
+  resultId: string | number,
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    queryKey: [
+      QUERY_KEYS.patientResult,
+      "available-providers",
+      String(resultId),
+    ],
+    queryFn: () => patientsService.getAvailableProvidersForReferral(resultId),
+    enabled: (options?.enabled ?? false) && !!resultId,
+    staleTime: 2 * 60 * 1000,
+  });
+
+const usePatientActions = (
+  resultId: string | number,
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.patientResult, "actions", String(resultId)],
+    queryFn: () => patientsService.getPatientActions(resultId),
+    enabled: (options?.enabled ?? true) && !!resultId,
+    staleTime: 2 * 60 * 1000,
+  });
+
 export default function usePatientResultQuery() {
   const queryClient = useQueryClient();
-
-  const usePatientFullDetails = (
-    patientId: string,
-    options?: { enabled?: boolean },
-  ) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.patientResult, "full-details", patientId],
-      queryFn: () => patientsService.getFullPatientDetails(patientId),
-      enabled: (options?.enabled ?? true) && !!patientId,
-      staleTime: 3 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    });
 
   const createPatientResultMutation = useMutation({
     mutationFn: patientsService.createPatientResult,
@@ -85,21 +112,6 @@ export default function usePatientResultQuery() {
     },
   });
 
-  const useAvailableProvidersForReferral = (
-    resultId: string | number,
-    options?: { enabled?: boolean },
-  ) =>
-    useQuery({
-      queryKey: [
-        QUERY_KEYS.patientResult,
-        "available-providers",
-        String(resultId),
-      ],
-      queryFn: () => patientsService.getAvailableProvidersForReferral(resultId),
-      enabled: (options?.enabled ?? false) && !!resultId,
-      staleTime: 2 * 60 * 1000,
-    });
-
   const setReferredProviderMutation = useMutation({
     mutationFn: ({
       resultId,
@@ -118,17 +130,6 @@ export default function usePatientResultQuery() {
       toast.error(error.message || "Failed to set referral");
     },
   });
-
-  const usePatientActions = (
-    resultId: string | number,
-    options?: { enabled?: boolean },
-  ) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.patientResult, "actions", String(resultId)],
-      queryFn: () => patientsService.getPatientActions(resultId),
-      enabled: (options?.enabled ?? true) && !!resultId,
-      staleTime: 2 * 60 * 1000,
-    });
 
   const addPatientActionMutation = useMutation({
     mutationFn: ({

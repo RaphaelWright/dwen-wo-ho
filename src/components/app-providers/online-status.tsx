@@ -1,8 +1,62 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useOnlineStatus } from "@/hooks/use-online-status";
 import { WifiOff, Wifi } from "lucide-react";
+
+// Custom spring easing for premium feel
+const SPRING_EASING = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+
+const overlayBaseStyle: CSSProperties = {
+  position: "fixed",
+  inset: 0,
+  zIndex: 9998,
+  backgroundColor: "rgba(0, 0, 0, 0.15)",
+  backdropFilter: "blur(6px) saturate(0.5)",
+  // Only animate opacity so the (expensive) backdrop blur is never animated.
+  transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+};
+
+const pillBaseStyle: CSSProperties = {
+  position: "fixed",
+  bottom: "2rem",
+  left: "50%",
+  zIndex: 9999,
+  display: "flex",
+  alignItems: "center",
+  gap: "0.75rem",
+  padding: "0.75rem 1.25rem",
+  borderRadius: "9999px",
+  background: "rgba(24, 24, 27, 0.85)",
+  backdropFilter: "blur(12px)",
+  color: "#e4e4e7",
+  fontSize: "0.875rem",
+  fontWeight: 500,
+  letterSpacing: "-0.01em",
+  // Animate only transform + opacity, never the static backdrop blur.
+  transition: `transform 0.5s ${SPRING_EASING}, opacity 0.5s ${SPRING_EASING}`,
+};
+
+const pingDotStyle: CSSProperties = {
+  position: "absolute",
+  display: "inline-flex",
+  height: "100%",
+  width: "100%",
+  borderRadius: "50%",
+  backgroundColor: "#ef4444",
+  opacity: 0.75,
+  animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+};
+
+const solidDotStyle: CSSProperties = {
+  position: "relative",
+  display: "inline-flex",
+  height: 8,
+  width: 8,
+  borderRadius: "50%",
+  backgroundColor: "#ef4444",
+  boxShadow: "0 0 8px rgba(239, 68, 68, 0.8)",
+};
 
 export function OnlineStatus() {
   const isOnline = useOnlineStatus();
@@ -32,49 +86,25 @@ export function OnlineStatus() {
 
   if (isOnline === null) return null;
 
-  // Custom spring easing for premium feel
-  const springEasing = "cubic-bezier(0.34, 1.56, 0.64, 1)";
-
   return (
     <>
       {/* Dimming overlay - Upgraded with desaturation and softer blur */}
       <div
         style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 9998,
-          backgroundColor: "rgba(0, 0, 0, 0.15)",
-          backdropFilter: "blur(6px) saturate(0.5)",
-          transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+          ...overlayBaseStyle,
           opacity: isOnline ? 0 : 1,
           pointerEvents: isOnline ? "none" : "auto",
         }}
       />
 
       {/* Offline pill - Upgraded to dark glassmorphism */}
-      <div
-        role="status"
+      <output
         aria-live="assertive"
         style={{
-          position: "fixed",
-          bottom: "2rem",
-          left: "50%",
-          transform: `translateX(-50%) translateY(${isOnline ? "2rem" : "0"}) scale(${isOnline ? 0.95 : 1})`,
-          zIndex: 9999,
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-          padding: "0.75rem 1.25rem",
-          borderRadius: "9999px",
-          background: "rgba(24, 24, 27, 0.85)", // Translucent dark
-          backdropFilter: "blur(12px)",
+          ...pillBaseStyle,
           border: "1px solid rgba(255, 255, 255, 0.08)",
-          color: "#e4e4e7",
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          letterSpacing: "-0.01em",
           boxShadow: "0 20px 40px -8px rgba(0,0,0,0.5)",
-          transition: `all 0.5s ${springEasing}`,
+          transform: `translateX(-50%) translateY(${isOnline ? "2rem" : "0"}) scale(${isOnline ? 0.95 : 1})`,
           opacity: isOnline ? 0 : 1,
           pointerEvents: isOnline ? "none" : "auto",
         }}
@@ -92,57 +122,20 @@ export function OnlineStatus() {
             marginLeft: "0.25rem",
           }}
         >
-          <span
-            style={{
-              position: "absolute",
-              display: "inline-flex",
-              height: "100%",
-              width: "100%",
-              borderRadius: "50%",
-              backgroundColor: "#ef4444",
-              opacity: 0.75,
-              animation: "ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite",
-            }}
-          />
-          <span
-            style={{
-              position: "relative",
-              display: "inline-flex",
-              height: 8,
-              width: 8,
-              borderRadius: "50%",
-              backgroundColor: "#ef4444",
-              boxShadow: "0 0 8px rgba(239, 68, 68, 0.8)",
-            }}
-          />
+          <span style={pingDotStyle} />
+          <span style={solidDotStyle} />
         </span>
-      </div>
+      </output>
 
       {/* Back online pill - Upgraded to match styling with subtle green accents */}
-      <div
-        role="status"
+      <output
         aria-live="polite"
         style={{
-          position: "fixed",
-          bottom: "2rem",
-          left: "50%",
-          transform: `translateX(-50%) translateY(${showRestoredBanner ? "0" : "2rem"}) scale(${showRestoredBanner ? 1 : 0.95})`,
-          zIndex: 9999,
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-          padding: "0.75rem 1.25rem",
-          borderRadius: "9999px",
-          background: "rgba(24, 24, 27, 0.85)",
-          backdropFilter: "blur(12px)",
+          ...pillBaseStyle,
           border: "1px solid rgba(52, 211, 153, 0.2)",
-          color: "#e4e4e7",
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          letterSpacing: "-0.01em",
           boxShadow:
-            "0 20px 40px -8px rgba(0,0,0,0.5), 0 0 20px rgba(52, 211, 153, 0.15)", // Subtle green glow
-          transition: `all 0.5s ${springEasing}`,
+            "0 20px 40px -8px rgba(0,0,0,0.5), 0 0 20px rgba(52, 211, 153, 0.15)",
+          transform: `translateX(-50%) translateY(${showRestoredBanner ? "0" : "2rem"}) scale(${showRestoredBanner ? 1 : 0.95})`,
           opacity: showRestoredBanner ? 1 : 0,
           pointerEvents: "none",
         }}
@@ -151,7 +144,7 @@ export function OnlineStatus() {
           <Wifi size={18} strokeWidth={2.5} />
         </div>
         <span>Connection restored</span>
-      </div>
+      </output>
 
       <style>{`
         @keyframes ping {

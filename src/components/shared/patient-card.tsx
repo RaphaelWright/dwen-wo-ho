@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { useRouter } from "next/navigation";
 import { getScoreColor, getStatusConfig } from "@/lib/utils/new-provider";
 import ScoreRing from "./score-ring";
@@ -194,7 +194,7 @@ export default function PatientCard<
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
@@ -244,7 +244,7 @@ export default function PatientCard<
         </div>
 
         {/* Action button */}
-        <motion.button
+        <m.button
           onClick={handleActionClick}
           whileHover={{
             scale: 1.03,
@@ -255,7 +255,7 @@ export default function PatientCard<
           className="shrink-0 px-4 py-1.5 rounded-xl border text-[12px] font-semibold cursor-pointer bg-card transition-all duration-300 ease-in-out"
         >
           {cfg.actionLabel}
-        </motion.button>
+        </m.button>
         {showCheckbox && (
           <Checkbox
             id={`patient-${id}-checkbox`}
@@ -268,6 +268,6 @@ export default function PatientCard<
           />
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

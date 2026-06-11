@@ -1,7 +1,5 @@
 import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { axiosFormData } from "@/configs/axiosInstance";
-import { checkResponse } from "@/lib/api-utils";
 import {
   SignInResponse,
   CheckEmailResponse,
@@ -138,11 +136,14 @@ export const authService = {
   },
 
   addPhoto: async (data: FormData): Promise<AddPhotoResponse> => {
-    const response = await axiosFormData.post(
-      STATIC_ENDPOINTS.AUTH.ADD_PHOTO,
-      data,
-    );
-    return checkResponse(response, 200) as AddPhotoResponse;
+    const response = await api(STATIC_ENDPOINTS.AUTH.ADD_PHOTO, {
+      method: "POST",
+      body: data,
+    });
+    if (response?.success && response.data) {
+      return response.data as AddPhotoResponse;
+    }
+    throw new Error("Failed to add photo");
   },
 
   updateProfile: async (data: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useMarquee } from "@/hooks/components/use-marquee";
@@ -25,14 +25,14 @@ export const MarqueeRow = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <motion.div
+      <m.div
         className="flex gap-16 items-center shrink-0"
         initial={{ x: direction === "left" ? "0%" : "-50%" }}
         animate={controls}
       >
         {items.concat(items).map((uni, idx) => (
           <div
-            key={`${direction}-${idx}`}
+            key={`${direction}-marquee-${idx}`}
             className={cn(
               "cursor-pointer shrink-0 transition-all duration-300 ease-out relative w-13.75 h-13.75",
               hoveredIndex !== null &&
@@ -53,7 +53,7 @@ export const MarqueeRow = ({
             />
           </div>
         ))}
-      </motion.div>
+      </m.div>
     </div>
   );
 };

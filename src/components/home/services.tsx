@@ -63,9 +63,9 @@ const Services = () => {
       </div>
 
       <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem]">
-        {items.map((item, i) => (
+        {items.map((item) => (
           <BentoGridItem
-            key={i}
+            key={item.title}
             title={item.title}
             description={<span className="text-sm">{item.description}</span>}
             header={item.header}

@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  forwardRef,
+  type Ref,
   useState,
-  useEffect,
   type CSSProperties,
   type ReactNode,
 } from "react";
 import { useTheme } from "next-themes";
-import { motion } from "motion/react";
+import { useHydrated } from "@/hooks/use-hydrated";
+import { m } from "motion/react";
 import LiquidGlass from "@/components/ui/liquid-glass";
 import { cn } from "@/lib/utils";
 
@@ -86,6 +86,9 @@ interface TabItemInternalProps {
   isDark: boolean;
 }
 
+// Booleans here (active / hovered / showLabels / isDark) are independent UI
+// states that can be true in any combination, so they are intentionally kept as
+// separate flags rather than collapsed into a single variant union.
 function TabItem({
   tab,
   isActive,
@@ -116,7 +119,7 @@ function TabItem({
       )}
       {/* ── Hover pill — slides between tabs with glass ── */}
       {isHovered && !isActive && (
-        <motion.div
+        <m.div
           layoutId={layoutId}
           className="absolute w-full h-full rounded-lg z-0 overflow-hidden"
           transition={{
@@ -133,7 +136,7 @@ function TabItem({
                 : "bg-black/5 shadow-[0_0_0_0.5px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.5),inset_0_-0.5px_1px_rgba(0,0,0,0.02)]",
             )}
           />
-        </motion.div>
+        </m.div>
       )}
 
       {/* Icon bubble container */}
@@ -179,33 +182,29 @@ function TabItem({
    LiquidGlassNavbar
    ═══════════════════════════════════════════════════════════════ */
 
-const LiquidGlassNavbar = forwardRef<HTMLDivElement, LiquidGlassNavbarProps>(
-  (
-    {
-      tabs,
-      activeTab: controlledActive,
-      defaultActiveTab,
-      onTabChange,
-      className,
-      style,
-      showLabels = true,
-      layoutId = "glass-hover-pill",
-      // LiquidGlass props with navbar-tuned defaults
-      cornerRadius = 999,
-      blur = 8,
-      saturation = 160,
-      displacementScale = 6,
-      tint,
-      padding = "0px 6px",
-      showBorder = true,
-    },
-    ref,
-  ) => {
+const LiquidGlassNavbar = ({
+  tabs,
+  activeTab: controlledActive,
+  defaultActiveTab,
+  onTabChange,
+  className,
+  style,
+  showLabels = true,
+  layoutId = "glass-hover-pill",
+  // LiquidGlass props with navbar-tuned defaults
+  cornerRadius = 999,
+  blur = 8,
+  saturation = 160,
+  displacementScale = 6,
+  tint,
+  padding = "0px 6px",
+  showBorder = true,
+  ref,
+}: LiquidGlassNavbarProps & { ref?: Ref<HTMLDivElement> }) => {
     const { resolvedTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
 
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
+    const mounted = useHydrated();
 
     // Support both controlled and uncontrolled modes
     const [internalActive, setInternalActive] = useState(
@@ -270,9 +269,6 @@ const LiquidGlassNavbar = forwardRef<HTMLDivElement, LiquidGlassNavbarProps>(
         </div>
       </LiquidGlass>
     );
-  },
-);
-
-LiquidGlassNavbar.displayName = "LiquidGlassNavbar";
+};
 
 export default LiquidGlassNavbar;

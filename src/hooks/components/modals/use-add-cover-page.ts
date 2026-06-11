@@ -43,7 +43,13 @@ export const useAddCoverPage = ({
     imageSize,
   } = useImageEditor({ photoPreview });
 
-  useEffect(() => {
+  // Seed/reset the wizard while rendering when the modal opens or the edited
+  // record changes, instead of mirroring those props into state via an effect.
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+  const [prevEditData, setPrevEditData] = useState(editData);
+  if (isOpen !== prevIsOpen || editData !== prevEditData) {
+    setPrevIsOpen(isOpen);
+    setPrevEditData(editData);
     if (isOpen && editData) {
       setPhotoPreview(editData.photoPreview);
       setSelectedColor(editData.color);
@@ -60,7 +66,7 @@ export const useAddCoverPage = ({
         fileInputRef.current.value = "";
       }
     }
-  }, [isOpen, editData, resetEditor]);
+  }
 
   useEffect(() => {
     if (step === "edit-image" && imageSize) {

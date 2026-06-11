@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Users, Pencil, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { IconsTabProps } from "@/lib/types/components/curator/school-details";
 
 export function IconsTab({
@@ -45,7 +45,7 @@ export function IconsTab({
       {filteredIcons
         .sort((a, b) => a.rank - b.rank)
         .map((icon) => (
-          <motion.button
+          <m.button
             layout
             key={icon.id}
             onClick={() => onIconClick(icon)}
@@ -81,9 +81,9 @@ export function IconsTab({
               </h3>
 
               <div className="mt-auto flex flex-wrap gap-1.5">
-                {(icon.lockIns || []).slice(0, 3).map((item, i) => (
+                {(icon.lockIns || []).slice(0, 3).map((item) => (
                   <span
-                    key={i}
+                    key={item}
                     className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground border border-border"
                   >
                     <Lock className="w-2.5 h-2.5" />
@@ -97,7 +97,7 @@ export function IconsTab({
                 )}
               </div>
             </div>
-          </motion.button>
+          </m.button>
         ))}
     </div>
   );

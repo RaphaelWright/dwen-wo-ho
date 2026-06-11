@@ -6,5 +6,3 @@ export const SCHOOL_FILTER_OPTIONS: { label: string; value: FilterType }[] = [
   { label: "SHS", value: "SHS" },
   { label: "COLLEGE", value: "COLLEGE" },
 ];
-
-export const SCHOOL_SELECTION_TABS = SCHOOL_FILTER_OPTIONS;

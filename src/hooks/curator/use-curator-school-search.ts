@@ -10,7 +10,6 @@ import { SCHOOL_SEARCH_QUICK_FILTERS } from "@/lib/constants/components/curator/
 
 import { compactTimeAgo } from "@/lib/utils/compactTimeAgo";
 import type { FilterOption } from "@/components/shared/search-dropdown";
-import { SchoolIcon } from "@/lib/types/school";
 
 function matchesFilter(item: object, filter: FilterOption): boolean {
   const record = item as Record<string, unknown>;
@@ -94,12 +93,15 @@ export function useCuratorSchoolSearch({
       return localActiveFilters.every((filter) => matchesFilter(item, filter));
     };
 
+    const limit = query ? 5 : 4;
+    const results: SchoolDetailSearchSuggestion[] = [];
+
     switch (activeTab) {
       case "patients":
-        return patients
-          .filter((p) => matchesAllFilters(p))
-          .filter((p) => !query || p.patientName?.toLowerCase().includes(query))
-          .map((p) => ({
+        for (const p of patients) {
+          if (!matchesAllFilters(p)) continue;
+          if (query && !p.patientName?.toLowerCase().includes(query)) continue;
+          results.push({
             id: p.id,
             name: p.patientName,
             score: p.lockinScore ?? 0,
@@ -111,14 +113,16 @@ export function useCuratorSchoolSearch({
                   : "new",
             time: compactTimeAgo(p.createdAt || ""),
             preview: p.comment || "",
-          }))
-          .slice(0, query ? 5 : 4);
+          });
+          if (results.length >= limit) break;
+        }
+        return results;
 
       case "icons":
-        return schoolIcons
-          .filter((i) => matchesAllFilters(i))
-          .filter((i) => !query || i.name.toLowerCase().includes(query))
-          .map((i: SchoolIcon) => ({
+        for (const i of schoolIcons) {
+          if (!matchesAllFilters(i)) continue;
+          if (query && !i.name.toLowerCase().includes(query)) continue;
+          results.push({
             id: i.id,
             name: i.name,
             avatarUrl:
@@ -127,28 +131,30 @@ export function useCuratorSchoolSearch({
             type: i.type,
             slogan: i.slogan || "",
             rank: i.rank,
-          }))
-          .slice(0, query ? 5 : 4);
+          });
+          if (results.length >= limit) break;
+        }
+        return results;
 
       case "providers":
-        return providers
-          .filter((p) => matchesAllFilters(p))
-          .filter(
-            (p) =>
-              !query ||
-              formatProviderName(p.providerName, p.providerTitle)
-                .toLowerCase()
-                .includes(query),
-          )
-          .map((p) => ({
+        for (const p of providers) {
+          if (!matchesAllFilters(p)) continue;
+          const providerName = formatProviderName(
+            p.providerName,
+            p.providerTitle,
+          );
+          if (query && !providerName.toLowerCase().includes(query)) continue;
+          results.push({
             email: p.email,
-            name: formatProviderName(p.providerName, p.providerTitle),
+            name: providerName,
             score: 0,
             status: p.applicationStatus === "APPROVED" ? "new" : "ignored",
             time: p.specialty || "",
             preview: p.applicationStatus || "",
-          }))
-          .slice(0, query ? 5 : 4);
+          });
+          if (results.length >= limit) break;
+        }
+        return results;
 
       default:
         return [];

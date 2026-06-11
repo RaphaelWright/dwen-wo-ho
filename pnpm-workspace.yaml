@@ -2,3 +2,11 @@ onlyBuiltDependencies:
   - msw
   - sharp
   - unrs-resolver
+
+# Delay installs until releases have had time to be vetted (7 days),
+# reducing exposure to malware shipped in freshly published versions.
+minimumReleaseAge: 10080
+
+# Reject updates whose trust signals (provenance, signatures) weaken between
+# versions instead of silently accepting the downgrade.
+trustPolicy: no-downgrade

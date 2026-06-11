@@ -1,11 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-  motion,
-} from "motion/react";
+import { useMotionValueEvent, useScroll, useTransform, m } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export const StickyScroll = ({
@@ -56,7 +51,9 @@ export const StickyScroll = ({
     offset: ["start start", "end end"],
   });
 
-  // Calculate all node positions relative to the beam track's coordinate system
+  // Measure node positions from layout (not from the `content` prop directly)
+  // so this stays a DOM-measurement effect rather than prop-synced state. A
+  // ResizeObserver re-measures whenever the rendered content changes size.
   useEffect(() => {
     const calculatePositions = () => {
       if (!contentContainerRef.current) return;
@@ -73,10 +70,19 @@ export const StickyScroll = ({
     };
 
     calculatePositions();
-    setTimeout(calculatePositions, 100);
+    const timeoutId = setTimeout(calculatePositions, 100);
     window.addEventListener("resize", calculatePositions);
-    return () => window.removeEventListener("resize", calculatePositions);
-  }, [content]);
+
+    const container = contentContainerRef.current;
+    const resizeObserver = new ResizeObserver(calculatePositions);
+    if (container) resizeObserver.observe(container);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", calculatePositions);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   // Smoothly animate beam height based on scroll progress
   const beamHeight = useTransform(
@@ -111,7 +117,7 @@ export const StickyScroll = ({
   });
 
   return (
-    <motion.div
+    <m.div
       animate={{
         backgroundColor: colors[activeCard % colors.length],
       }}
@@ -133,7 +139,7 @@ export const StickyScroll = ({
             className="absolute left-4.75 hidden md:block w-0.5 bg-neutral-800"
           >
             {/* Smoothly growing beam tied directly to scroll progress */}
-            <motion.div
+            <m.div
               style={{
                 height: beamHeight,
               }}
@@ -156,7 +162,7 @@ export const StickyScroll = ({
             >
               {/* Numbered node - positioned at top-0 of this div */}
               <div className="absolute -left-16 top-0 z-20 hidden md:flex h-10 w-10 items-center justify-center">
-                <motion.div
+                <m.div
                   animate={{
                     backgroundColor:
                       activeCard >= index ? activeNodeColor : inactiveNodeColor,
@@ -179,10 +185,10 @@ export const StickyScroll = ({
                   className="flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold text-white"
                 >
                   {index + 1}
-                </motion.div>
+                </m.div>
               </div>
 
-              <motion.h2
+              <m.h2
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                   x: activeCard === index ? 0 : -10,
@@ -194,8 +200,8 @@ export const StickyScroll = ({
                 )}
               >
                 {item.title}
-              </motion.h2>
-              <motion.p
+              </m.h2>
+              <m.p
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                   x: activeCard === index ? 0 : -10,
@@ -207,9 +213,9 @@ export const StickyScroll = ({
                 )}
               >
                 {item.description}
-              </motion.p>
+              </m.p>
               {/* Display visual content inline on mobile */}
-              <motion.div
+              <m.div
                 animate={{
                   opacity: activeCard === index ? 1 : 0.3,
                   x: activeCard === index ? 0 : -10,
@@ -218,13 +224,13 @@ export const StickyScroll = ({
                 className="mt-6 block lg:hidden w-full overflow-hidden rounded-xl aspect-video md:aspect-square"
               >
                 {item.content ?? null}
-              </motion.div>
+              </m.div>
             </div>
           ))}
         </div>
       </div>
 
-      <motion.div
+      <m.div
         style={{
           background: linearGradients[activeCard % linearGradients.length],
         }}
@@ -235,7 +241,7 @@ export const StickyScroll = ({
         )}
       >
         {content[activeCard].content ?? null}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 };

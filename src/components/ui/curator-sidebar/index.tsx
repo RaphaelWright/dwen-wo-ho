@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { SidebarProps } from "@/lib/types/components/curator/sidebar";
@@ -56,7 +56,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
       {/* Mobile Overlay */}
       <AnimatePresence>
         {isMobileSidebarOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -68,7 +68,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
-      <motion.aside
+      <m.aside
         initial={false}
         animate={{
           width: isCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
@@ -77,12 +77,12 @@ export const CuratorSidebar = (props: SidebarProps) => {
         className="hidden md:flex flex-col h-screen bg-card border-r border-border/60 shrink-0 overflow-hidden relative"
       >
         <SidebarContent {...sidebarContentProps} collapsed={isCollapsed} />
-      </motion.aside>
+      </m.aside>
 
       {/* Mobile Sidebar (drawer) */}
       <AnimatePresence>
         {isMobileSidebarOpen && (
-          <motion.aside
+          <m.aside
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -90,7 +90,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
             className="md:hidden fixed top-14 left-0 bottom-0 w-72 bg-card border-r border-border/60 shadow-2xl z-40 overflow-hidden"
           >
             <SidebarContent {...sidebarContentProps} collapsed={false} />
-          </motion.aside>
+          </m.aside>
         )}
       </AnimatePresence>
 

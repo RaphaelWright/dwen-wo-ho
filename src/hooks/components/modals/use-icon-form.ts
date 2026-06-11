@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { AddIconModalProps } from "@/lib/types/modals";
 
 export const useIconForm = ({
@@ -19,17 +19,28 @@ export const useIconForm = ({
   const [name, setName] = useState("");
   const [slogan, setSlogan] = useState("");
   const [rank, setRank] = useState(1);
-  const [lockIns, setLockIns] = useState<string[]>([]);
+  const [lockIns, setLockIns] = useState<{ id: string; value: string }[]>([]);
   const [newLockInInput, setNewLockInInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  // Seed/reset the form while rendering when the modal opens or the edited
+  // record changes, instead of mirroring props into state via an effect.
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+  const [prevEditData, setPrevEditData] = useState(editData);
+  if (isOpen !== prevIsOpen || editData !== prevEditData) {
+    setPrevIsOpen(isOpen);
+    setPrevEditData(editData);
     if (isOpen && editData) {
       setPhotoPreview(editData.photoPreview);
       setName(editData.name);
       setSlogan(editData.slogan);
       setRank(editData.rank);
-      setLockIns(editData.lockIns || []);
+      setLockIns(
+        (editData.lockIns || []).map((value) => ({
+          id: crypto.randomUUID(),
+          value,
+        })),
+      );
     } else if (isOpen && !editData) {
       // Reset for new icon
       setSelectedPhoto(null);
@@ -43,23 +54,24 @@ export const useIconForm = ({
         fileInputRef.current.value = "";
       }
     }
-  }, [isOpen, editData]);
+  }
 
   const handleAddLockIn = () => {
     if (newLockInInput.trim()) {
-      setLockIns([...lockIns, newLockInInput.trim()]);
+      setLockIns([
+        ...lockIns,
+        { id: crypto.randomUUID(), value: newLockInInput.trim() },
+      ]);
       setNewLockInInput("");
     }
   };
 
-  const handleUpdateLockIn = (index: number, value: string) => {
-    const updated = [...lockIns];
-    updated[index] = value;
-    setLockIns(updated);
+  const handleUpdateLockIn = (id: string, value: string) => {
+    setLockIns(lockIns.map((lockIn) => (lockIn.id === id ? { ...lockIn, value } : lockIn)));
   };
 
-  const handleRemoveLockIn = (index: number) => {
-    setLockIns(lockIns.filter((_, i) => i !== index));
+  const handleRemoveLockIn = (id: string) => {
+    setLockIns(lockIns.filter((lockIn) => lockIn.id !== id));
   };
 
   const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +93,9 @@ export const useIconForm = ({
         name: name.trim(),
         slogan: slogan.trim(),
         rank,
-        lockIns: lockIns.filter((item) => item.trim() !== ""),
+        lockIns: lockIns.flatMap((lockIn) =>
+          lockIn.value.trim() !== "" ? [lockIn.value] : [],
+        ),
       });
       // Reset state
       setSelectedPhoto(null);

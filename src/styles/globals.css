@@ -436,3 +436,22 @@ a,
 label {
   cursor: default !important;
 }
+
+/* Respect users who prefer reduced motion (WCAG 2.3.3): neutralize animations,
+   transitions, and smooth scrolling globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

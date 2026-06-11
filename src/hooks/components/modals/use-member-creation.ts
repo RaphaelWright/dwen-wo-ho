@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+const memberTitles = ["Coach", "Advisor", "Ambassador"];
+
 export const useMemberCreation = ({
   onMemberCreated,
   onClose,
@@ -15,8 +17,6 @@ export const useMemberCreation = ({
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const memberTitles = ["Coach", "Advisor", "Ambassador"];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({

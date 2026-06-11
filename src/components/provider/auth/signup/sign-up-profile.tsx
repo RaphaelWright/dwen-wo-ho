@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import PhotoStep from "./steps/photo-step";
 import BioStep from "./steps/bio-step";
@@ -8,6 +9,12 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { SignUpProfileProps } from "@/lib/types/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { useSignUpProfile } from "@/hooks/components/provider/auth/signup/sign-up-profile";
+
+const steps = [
+  { label: SIGN_UP_TEXTS.profile.steps.photo, index: 0 },
+  { label: SIGN_UP_TEXTS.profile.steps.bio, index: 1 },
+  { label: SIGN_UP_TEXTS.profile.steps.specialty, index: 2 },
+];
 
 const SignUpProfile = (props: SignUpProfileProps) => {
   const {
@@ -21,50 +28,43 @@ const SignUpProfile = (props: SignUpProfileProps) => {
     hideBackAtRoot,
   } = useSignUpProfile(props);
 
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <PhotoStep
-            profilePhoto={profileData.photo}
-            onChange={(field, value) => handleChange(field, value)}
-            onNext={handleNext}
-            onBack={handleBack}
-          />
-        );
+  let stepContent: ReactNode = null;
+  switch (currentStep) {
+    case 0:
+      stepContent = (
+        <PhotoStep
+          profilePhoto={profileData.photo}
+          onChange={(field, value) => handleChange(field, value)}
+          onNext={handleNext}
+          onBack={handleBack}
+        />
+      );
+      break;
 
-      case 1:
-        return (
-          <BioStep
-            phoneNumber={profileData.phoneNumber}
-            bio={profileData.bio}
-            onChange={(field, value) => handleChange(field, value)}
-          />
-        );
+    case 1:
+      stepContent = (
+        <BioStep
+          phoneNumber={profileData.phoneNumber}
+          bio={profileData.bio}
+          onChange={(field, value) => handleChange(field, value)}
+        />
+      );
+      break;
 
-      case 2:
-        return (
-          <SpecialtyStep
-            specialty={profileData.specialty}
-            onChange={(field, value) => handleChange(field, value)}
-          />
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const steps = [
-    { label: SIGN_UP_TEXTS.profile.steps.photo, index: 0 },
-    { label: SIGN_UP_TEXTS.profile.steps.bio, index: 1 },
-    { label: SIGN_UP_TEXTS.profile.steps.specialty, index: 2 },
-  ];
+    case 2:
+      stepContent = (
+        <SpecialtyStep
+          specialty={profileData.specialty}
+          onChange={(field, value) => handleChange(field, value)}
+        />
+      );
+      break;
+  }
 
   return (
     <div className="h-full flex flex-col justify-between min-h-[80vh] animate-in fade-in zoom-in-95 duration-500">
       <div className="flex-1 flex flex-col justify-center w-full max-w-4xl mx-auto px-0 sm:px-4 md:px-8">
-        {renderStepContent()}
+        {stepContent}
       </div>
 
       <div className="border-t border-border bg-background/95 backdrop-blur-sm px-3 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-8 sticky bottom-0 z-10">

@@ -3,15 +3,11 @@
 import { Logo } from "@/components/shared/Logo";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/patient/new-password";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 export function NewPasswordHeader() {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="flex items-center justify-between w-full">

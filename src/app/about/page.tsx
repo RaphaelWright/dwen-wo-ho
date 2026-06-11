@@ -1,5 +1,12 @@
 import WidthConstraint from "@/components/ui/width-constraint";
 import Image from "next/image";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata(
+  "About",
+  "Learn about Dwen Wo Ho — accessible, confidential mental healthcare for students across Ghana.",
+  "/about",
+);
 
 export default function AboutPage() {
   return (

@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { toast } from "@/components/ui/sonner";
 import { clearAllCaches } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
 import { SchoolWithExtras as SchoolWithExtrasAtom } from "@/atoms/provider-schools";
 import { POLL_INTERVAL } from "@/lib/constants/provider-schools";
-import type { ProviderProfileResponse } from "@/lib/types/api/auth";
+import type { ProfileQueryHandle } from "@/lib/types/api/auth";
 
 export function useSchoolLifecycle(
-  getProfileQuery: UseQueryResult<ProviderProfileResponse, Error>,
+  getProfileQuery: ProfileQueryHandle,
   loadSchoolsWithData: (isBackground?: boolean) => Promise<void>,
   previousSchoolsRef: React.RefObject<Map<number, SchoolWithExtrasAtom>>,
   isInitialLoadRef: React.RefObject<boolean>,

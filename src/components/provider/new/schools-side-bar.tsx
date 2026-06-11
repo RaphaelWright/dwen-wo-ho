@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { School } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -78,7 +78,7 @@ export default function SchoolsSidebar({
                   .toUpperCase() || "?";
 
             return (
-              <motion.button
+              <m.button
                 key={school.id}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -133,7 +133,7 @@ export default function SchoolsSidebar({
                     {school.count} patients
                   </p>
                 </div>
-              </motion.button>
+              </m.button>
             );
           })}
         </div>

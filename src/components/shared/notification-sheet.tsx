@@ -24,6 +24,10 @@ import NotifItem from "./notification-item";
 
 type FilterType = "all" | "unread" | "read";
 
+// The isLoading/isMarkingRead/isDeleting/isMarkingAllRead/isClearing booleans
+// are independent, concurrent async states (e.g. clearing while a single delete
+// is in flight), not a single mutually-exclusive status. They are intentionally
+// kept as separate flags rather than collapsed into one variant union.
 interface NotificationsSheetProps<N> {
   notifications: N[];
   getNotificationActionUrl: (n: N) => string;
@@ -155,6 +159,7 @@ export default function NotificationsSheet<N>({
         className="fixed inset-y-0 right-0 z-50 w-100 max-w-[90vw] sm:max-w-sm bg-background border-l shadow-lg flex flex-col p-0 will-change-[translate] translate-x-full transition-[translate] duration-150 ease-[cubic-bezier(0.32,0.72,0,1)]"
       >
         <button
+          type="button"
           onClick={() => onOpenChange(false)}
           className="absolute right-2 top-2 size-7 rounded-full border bg-background flex items-center justify-center shadow-sm transition-all hover:scale-110 hover:bg-muted group z-50"
         >
@@ -203,6 +208,7 @@ export default function NotificationsSheet<N>({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
+                        type="button"
                         onClick={markAllRead}
                         disabled={isMarkingAllRead}
                         className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-info/15 hover:text-info active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -227,6 +233,7 @@ export default function NotificationsSheet<N>({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
+                        type="button"
                         onClick={clearAllNotifications}
                         disabled={isClearing}
                         className="flex items-center justify-center rounded-md p-1.5 h-fit text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -353,6 +360,7 @@ function FilterTab({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={cn(
         "relative px-3 py-1.5 rounded-md text-[11px] font-semibold transition-all duration-200 ease-out",

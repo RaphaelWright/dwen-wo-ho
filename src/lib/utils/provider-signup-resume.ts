@@ -11,10 +11,16 @@ const PROFILE_STEP_SLUGS: ProviderSignupProfileStepSlug[] = [
   "specialty",
 ];
 
+function getProviderProfilePhotoUrl(
+  userData: ProviderProfileResumeInput,
+): string | undefined {
+  return userData.profileURL || userData.profilePhotoURL || undefined;
+}
+
 export function getProviderProfileResumeStep(
   userData: ProviderProfileResumeInput,
 ): ProviderSignupProfileStepSlug | null {
-  if (!userData.profileURL) {
+  if (!getProviderProfilePhotoUrl(userData)) {
     return "photo";
   }
   if (!userData.officePhoneNumber) {
@@ -31,12 +37,6 @@ export function profileStepSlugToIndex(
 ): ProviderSignupProfileStepIndex {
   const index = PROFILE_STEP_SLUGS.indexOf(slug);
   return (index >= 0 ? index : 0) as ProviderSignupProfileStepIndex;
-}
-
-export function profileStepIndexToSlug(
-  index: number,
-): ProviderSignupProfileStepSlug | null {
-  return PROFILE_STEP_SLUGS[index] ?? null;
 }
 
 export function isProviderSignupProfileStepSlug(
@@ -91,5 +91,5 @@ export function clearProviderAuthStorage(): void {
   localStorage.removeItem("token");
   localStorage.removeItem("curatorToken");
   localStorage.removeItem("refreshToken");
-  localStorage.removeItem("pendingUser");
+  localStorage.removeItem("pendingUser:v1");
 }

@@ -15,8 +15,13 @@ import { parseCampuses } from "@/lib/utils/parseCampuses";
 export function useSchoolData(schoolId: string) {
   const { useSchool, invalidateSchool, disableSchool } = useSchoolsQuery();
 
-  const { patientsOverviewQuery, providersQuery, invalidateSchoolProviders } =
-    useSchoolDetailsQuery(schoolId);
+  const {
+    patientsOverviewData,
+    patientsOverviewLoading,
+    providersData,
+    providersLoading,
+    invalidateSchoolProviders,
+  } = useSchoolDetailsQuery(schoolId);
 
   const schoolQuery = useSchool(schoolId);
 
@@ -36,11 +41,11 @@ export function useSchoolData(schoolId: string) {
     return s;
   }, [rawSchool]);
 
-  const overviewData = patientsOverviewQuery.data;
+  const overviewData = patientsOverviewData;
 
   const patients = (overviewData?.patients as SchoolPatientRecord[]) ?? [];
 
-  const providers = providersQuery.data ?? [];
+  const providers = providersData ?? [];
 
   const urgentCare = overviewData?.urgentCare ?? {
     totalUrgentCarePatients: 0,
@@ -71,11 +76,11 @@ export function useSchoolData(schoolId: string) {
 
     campusLabel,
 
-    patientsLoading: patientsOverviewQuery.isLoading,
+    patientsLoading: patientsOverviewLoading,
 
-    providersLoading: providersQuery.isLoading,
+    providersLoading,
 
-    urgentLoading: patientsOverviewQuery.isLoading,
+    urgentLoading: patientsOverviewLoading,
 
     invalidateSchool,
 

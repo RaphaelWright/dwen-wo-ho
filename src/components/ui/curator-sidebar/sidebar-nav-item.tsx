@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
   Tooltip,
@@ -39,7 +39,7 @@ export const SidebarNavItem = ({
 
       <AnimatePresence mode="wait">
         {!collapsed && (
-          <motion.span
+          <m.span
             initial={{ opacity: 0, width: 0 }}
             animate={{ opacity: 1, width: "auto" }}
             exit={{ opacity: 0, width: 0 }}
@@ -47,12 +47,12 @@ export const SidebarNavItem = ({
             className="whitespace-nowrap overflow-hidden"
           >
             {item.label}
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
 
       {!collapsed && item.count !== undefined && (
-        <motion.span
+        <m.span
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
@@ -64,12 +64,12 @@ export const SidebarNavItem = ({
           )}
         >
           {item.count}
-        </motion.span>
+        </m.span>
       )}
 
       {/* Active indicator bar */}
       {isActive && (
-        <motion.div
+        <m.div
           layoutId="activeIndicator"
           className="absolute left-0 top-1/2 -translate-y-1/2 w-0.75 h-5 bg-primary rounded-r-full"
           style={{ left: collapsed ? "-10px" : "-12px" }}
@@ -88,7 +88,7 @@ export const SidebarNavItem = ({
               {content}
             </Link>
           ) : (
-            <button onClick={item.onClick} className="w-full">
+            <button type="button" onClick={item.onClick} className="w-full">
               {content}
             </button>
           )}
@@ -109,7 +109,11 @@ export const SidebarNavItem = ({
   }
 
   return (
-    <button onClick={item.onClick} className="w-full text-left">
+    <button
+      type="button"
+      onClick={item.onClick}
+      className="w-full text-left"
+    >
       {content}
     </button>
   );

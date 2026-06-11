@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import type { Route } from "next";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,15 @@ export function useProviderPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [signupData, setSignupData] = useState<StoredSignupData | null>(null);
+  // Lazily read once from localStorage; only consumed in the submit handler so
+  // there is no render output to mismatch during hydration.
+  const [signupData] = useState<StoredSignupData | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    const data = localStorage.getItem("signupData");
+    return data ? (JSON.parse(data) as StoredSignupData) : null;
+  });
   const params = useParams();
   const { email } = params;
   const router = useRouter();
@@ -37,13 +45,6 @@ export function useProviderPassword() {
       confirmPassword: "",
     },
   });
-
-  useEffect(() => {
-    const data = localStorage.getItem("signupData");
-    if (data) {
-      setSignupData(JSON.parse(data));
-    }
-  }, []);
 
   const onSubmit = async (values: ProviderPasswordFormData) => {
     if (!signupData) {

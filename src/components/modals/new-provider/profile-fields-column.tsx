@@ -5,7 +5,7 @@ import {
   NEW_PROVIDER_FIELD_HOVER,
 } from "@/lib/constants/components/provider/dashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { Pencil } from "lucide-react";
 import { ReactNode } from "react";
 import type { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
@@ -133,7 +133,7 @@ function FieldRow({
   onEdit: () => void;
 }) {
   return (
-    <motion.button
+    <m.button
       whileHover={NEW_PROVIDER_FIELD_HOVER}
       onClick={onEdit}
       className="flex items-center gap-3 px-3 py-2.5 rounded-xl border cursor-pointer text-left w-full"
@@ -143,6 +143,6 @@ function FieldRow({
         {value}
       </span>
       <Pencil size={12} className="shrink-0" />
-    </motion.button>
+    </m.button>
   );
 }

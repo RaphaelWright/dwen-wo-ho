@@ -1,7 +1,7 @@
 export type Area = { x: number; y: number; width: number; height: number };
 export type Point = { x: number; y: number };
 
-export const createImage = (url: string): Promise<HTMLImageElement> =>
+const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
     const image = new window.Image();
     image.addEventListener("load", () => resolve(image));

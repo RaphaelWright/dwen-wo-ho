@@ -1,11 +1,10 @@
 "use client";
 
-import type { UseQueryResult } from "@tanstack/react-query";
 import { useSchoolDataLoader } from "./use-school-data-loader";
 import { useSchoolLifecycle } from "./use-school-lifecycle";
 import { School } from "@/lib/types/school";
 import { SchoolWithExtras as SchoolWithExtrasAtom } from "@/atoms/provider-schools";
-import type { ProviderProfileResponse } from "@/lib/types/api/auth";
+import type { ProfileQueryHandle } from "@/lib/types/api/auth";
 
 type ProviderSchoolsState = {
   schools: SchoolWithExtrasAtom[];
@@ -14,7 +13,7 @@ type ProviderSchoolsState = {
 };
 
 export function useSchoolLoader(
-  getProfileQuery: UseQueryResult<ProviderProfileResponse, Error>,
+  getProfileQuery: ProfileQueryHandle,
   updateSchoolInState: (
     id: number | string,
     data: Partial<SchoolWithExtrasAtom>,

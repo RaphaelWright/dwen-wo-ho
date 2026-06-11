@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 
 /**
  * Skeleton loader for notification items in the notification sheet.
@@ -10,7 +10,7 @@ export function NotificationSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div className="flex flex-col gap-2 py-4">
       {Array.from({ length: count }).map((_, i) => (
-        <motion.div
+        <m.div
           key={`notif-skeleton-${i}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ export function NotificationSkeleton({ count = 5 }: { count?: number }) {
             <div className="w-7 h-7 rounded-md bg-muted animate-pulse" />
             <div className="w-7 h-7 rounded-md bg-muted animate-pulse" />
           </div>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );

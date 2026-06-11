@@ -189,15 +189,17 @@ export default function useProviderDashboard() {
       setNotifications((prev: ProviderNotification[]) =>
         prev.filter((n) => n.notificationId !== id),
       );
-      // Persist to backend
+      // Persist to backend first so the refetch below reflects the deletion.
       await deleteMutation.mutateAsync(id);
-      // Invalidate cache and refetch immediately
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.providers, "notifications"],
-      });
-      await queryClient.refetchQueries({
-        queryKey: [QUERY_KEYS.providers, "notifications"],
-      });
+      // Invalidate + refetch are independent, so run them in parallel.
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.providers, "notifications"],
+        }),
+        queryClient.refetchQueries({
+          queryKey: [QUERY_KEYS.providers, "notifications"],
+        }),
+      ]);
     },
     [setNotifications, deleteMutation, queryClient],
   );
@@ -325,9 +327,9 @@ export default function useProviderDashboard() {
 
     // Sort by score if High/Low Score filter is active
     if (hasHighScoreFilter) {
-      filtered = [...filtered].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      filtered = filtered.toSorted((a, b) => (b.score ?? 0) - (a.score ?? 0));
     } else if (hasLowScoreFilter) {
-      filtered = [...filtered].sort((a, b) => (a.score ?? 0) - (b.score ?? 0));
+      filtered = filtered.toSorted((a, b) => (a.score ?? 0) - (b.score ?? 0));
     }
 
     return filtered.slice(0, query ? 5 : 4);

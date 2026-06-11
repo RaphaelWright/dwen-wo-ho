@@ -15,15 +15,16 @@ async function fetchSchoolProviders(
 export default function useSchoolDetailsQuery(schoolId: string) {
   const queryClient = useQueryClient();
 
-  const patientsOverviewQuery = useQuery({
-    queryKey: QUERY_KEYS.schoolPatientsOverview(schoolId),
-    queryFn: () => schoolsService.getPatientsOverview(schoolId),
-    enabled: !!schoolId,
-    staleTime: 2 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-  });
+  const { data: patientsOverviewData, isLoading: patientsOverviewLoading } =
+    useQuery({
+      queryKey: QUERY_KEYS.schoolPatientsOverview(schoolId),
+      queryFn: () => schoolsService.getPatientsOverview(schoolId),
+      enabled: !!schoolId,
+      staleTime: 2 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+    });
 
-  const providersQuery = useQuery({
+  const { data: providersData, isLoading: providersLoading } = useQuery({
     queryKey: QUERY_KEYS.schoolProviders(schoolId),
     queryFn: () => fetchSchoolProviders(schoolId),
     enabled: !!schoolId,
@@ -40,8 +41,10 @@ export default function useSchoolDetailsQuery(schoolId: string) {
   );
 
   return {
-    patientsOverviewQuery,
-    providersQuery,
+    patientsOverviewData,
+    patientsOverviewLoading,
+    providersData,
+    providersLoading,
     invalidateSchoolProviders,
   };
 }

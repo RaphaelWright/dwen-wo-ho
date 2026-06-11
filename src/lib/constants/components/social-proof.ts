@@ -14,7 +14,3 @@ export const PARTNER_SCHOOLS = [
   { name: "Adisadel College", logo: "/schools/adisadel.png" },
   { name: "St. James Seminary", logo: "/schools/st-james.png" },
 ];
-
-export const SOCIAL_PROOF_TITLES = {
-  TITLE: "Trusted by top educational institutions in Ghana",
-};

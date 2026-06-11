@@ -3,6 +3,13 @@
 import { ConfirmationModalProps } from "@/lib/types/shared-ui";
 import { Spinner } from "@/components/ui/spinner";
 
+const variantStyles = {
+  success: "bg-green-500 hover:bg-green-600 text-white",
+  danger: "bg-red-500 hover:bg-red-600 text-white",
+  warning: "bg-yellow-500 hover:bg-yellow-600 text-white",
+  info: "bg-blue-500 hover:bg-blue-600 text-white",
+};
+
 export const ConfirmationModal = ({
   isOpen,
   onClose,
@@ -15,13 +22,6 @@ export const ConfirmationModal = ({
   isLoading = false,
   loadingText = "Processing...",
 }: ConfirmationModalProps) => {
-  const variantStyles = {
-    success: "bg-green-500 hover:bg-green-600 text-white",
-    danger: "bg-red-500 hover:bg-red-600 text-white",
-    warning: "bg-yellow-500 hover:bg-yellow-600 text-white",
-    info: "bg-blue-500 hover:bg-blue-600 text-white",
-  };
-
   return (
     <div
       className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
@@ -41,6 +41,7 @@ export const ConfirmationModal = ({
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <button
+            type="button"
             onClick={onConfirm}
             disabled={isLoading}
             className={`flex-1 py-2.5 sm:py-2 text-center font-medium rounded-lg transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]}`}
@@ -55,6 +56,7 @@ export const ConfirmationModal = ({
             )}
           </button>
           <button
+            type="button"
             onClick={onClose}
             disabled={isLoading}
             className="flex-1 py-2.5 sm:py-2 text-center font-medium bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"

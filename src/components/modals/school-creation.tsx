@@ -1,5 +1,5 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { SchoolCreationModalProps } from "@/lib/types/modals";
 import { useSchoolCreation } from "@/hooks/components/modals/use-school-creation";
 import { useClickOutside } from "@/hooks/use-click-outside";
@@ -42,7 +42,7 @@ const SchoolCreationModal = ({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -51,7 +51,7 @@ const SchoolCreationModal = ({
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -98,7 +98,7 @@ const SchoolCreationModal = ({
                 isPending={createSchoolMutation.isPending}
               />
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

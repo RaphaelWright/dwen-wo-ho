@@ -1,7 +1,5 @@
 import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { axiosFormData } from "@/configs/axiosInstance";
-import { checkResponse } from "@/lib/api-utils";
 import {
   Partner,
   ICreatePartner,
@@ -42,11 +40,14 @@ export const partnersService = {
     if (data.slogan) formData.append("slogan", data.slogan);
     if (data.logo) formData.append("logo", data.logo);
 
-    const response = await axiosFormData.post(
-      STATIC_ENDPOINTS.PARTNERS,
-      formData,
-    );
-    return checkResponse(response, 201);
+    const response = await api(STATIC_ENDPOINTS.PARTNERS, {
+      method: "POST",
+      body: formData,
+    });
+    if (response?.success && response.data) {
+      return response.data;
+    }
+    throw new Error("Failed to create partner");
   },
 
   disablePartner: async (partnerId: string | number): Promise<void> => {

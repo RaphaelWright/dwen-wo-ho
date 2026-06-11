@@ -3,31 +3,27 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "./button";
-import { flushSync } from "react-dom";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
 
-  function changeTheme(theme: string) {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        flushSync(() => {
-          setTheme(theme);
-        });
-      });
+  function changeTheme(next: string) {
+    const startViewTransition =
+      typeof document !== "undefined"
+        ? document.startViewTransition?.bind(document)
+        : undefined;
+
+    if (startViewTransition) {
+      startViewTransition(() => setTheme(next));
       return;
-    } else {
-      setTheme(theme);
     }
-  }
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+    setTheme(next);
+  }
 
   if (!mounted) {
     return (

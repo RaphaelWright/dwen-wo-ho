@@ -48,6 +48,9 @@ export function useProviderSignupGuard(
     }
     hasRunRef.current = true;
 
+    // Client-side guard kept intentionally: resume/redirect decisions depend on
+    // localStorage auth tokens and an authenticated profile fetch, neither of
+    // which is available to Next.js middleware / server redirects.
     const resolveGuard = async () => {
       const email = emailParam
         ? decodeURIComponent(emailParam)

@@ -1,4 +1,17 @@
 import WidthConstraint from "@/components/ui/width-constraint";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata(
+  "Privacy Policy",
+  "How Dwen Wo Ho collects, uses, and protects your personal information.",
+  "/privacy-policy",
+);
+
+const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 
 export default function PrivacyPolicyPage() {
   return (
@@ -6,9 +19,7 @@ export default function PrivacyPolicyPage() {
       <WidthConstraint>
         <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
         <div className="prose dark:prose-invert max-w-none">
-          <p className="mb-4">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
+          <p className="mb-4">Last updated: {LAST_UPDATED}</p>
           <p>
             At Dwen Wo Ho, we are committed to protecting your privacy. This
             Privacy Policy explains how we collect, use, and share your personal

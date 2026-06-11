@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { LogOut, ChevronDown, Trash2, WifiOff, Wifi } from "lucide-react";
 import {
   DropdownMenu,
@@ -41,9 +41,9 @@ export function ProfileFooter() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <motion.button className="flex items-center gap-2 px-4 py-2 rounded-xl border text-[12.5px] font-semibold cursor-pointer bg-destructive/80! text-white! hover:bg-transparent! hover:border-destructive! hover:text-destructive! transition-all duration-300 ease-in-out">
+          <m.button className="flex items-center gap-2 px-4 py-2 rounded-xl border text-[12.5px] font-semibold cursor-pointer bg-destructive/80! text-white! hover:bg-transparent! hover:border-destructive! hover:text-destructive! transition-all duration-300 ease-in-out">
             <LogOut size={13} /> Log Out <ChevronDown size={12} />
-          </motion.button>
+          </m.button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="border">

@@ -16,6 +16,8 @@ import {
   WELLNESS_TIPS,
 } from "@/lib/constants/components/footer";
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function Footer() {
   return (
     <footer className="bg-footer-bg text-footer-foreground py-10 ">
@@ -73,8 +75,8 @@ export default function Footer() {
               Wellness Tips
             </h3>
             <ul className="space-y-6">
-              {WELLNESS_TIPS.map((tip, index) => (
-                <li key={index} className="flex items-start">
+              {WELLNESS_TIPS.map((tip) => (
+                <li key={tip.title} className="flex items-start">
                   <div className="mr-4 mt-1 shrink-0">
                     <ArrowRight className="w-5 h-5 text-teal-400" />
                   </div>
@@ -99,10 +101,9 @@ export default function Footer() {
             </h3>
             <div className="grid grid-cols-2 gap-2">
               {COMMUNITY_GALLERY_IMAGES.map((item, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="block relative aspect-square hover:opacity-50 transition-opacity overflow-hidden rounded-lg"
+                <div
+                  key={item.alt}
+                  className="block relative aspect-square overflow-hidden rounded-lg"
                 >
                   <Image
                     src={item.src}
@@ -112,7 +113,7 @@ export default function Footer() {
                     sizes="(max-width: 768px) 50vw, 25vw"
                     priority={i === 0}
                   />
-                </a>
+                </div>
               ))}
             </div>
           </div>
@@ -133,15 +134,10 @@ export default function Footer() {
             ))}
           </ul>
           <div className="flex items-center space-x-2 mt-4 md:mt-0 md:ml-auto">
-            <a
-              href="#"
-              className="text-white font-medium hover:text-primary transition-colors text-sm sm:text-base"
-            >
+            <span className="text-white font-medium text-sm sm:text-base">
               Just Go Health
-            </a>
-            <span className="opacity-50 text-sm">
-              &copy; {new Date().getFullYear()}
             </span>
+            <span className="opacity-50 text-sm">&copy; {CURRENT_YEAR}</span>
           </div>
         </div>
       </WidthConstraint>

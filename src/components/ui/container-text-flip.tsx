@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useId } from "react";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { cn } from "@/lib/utils";
 
 export interface ContainerTextFlipProps {
@@ -53,7 +53,7 @@ export function ContainerTextFlip({
   }, [words, interval]);
 
   return (
-    <motion.div
+    <m.div
       layout
       layoutId={`words-here-${id}`}
       style={{ width }} // Use style for width to allow framer-motion to animate it smoothly alongside layout
@@ -64,7 +64,7 @@ export function ContainerTextFlip({
         className,
       )}
     >
-      <motion.div
+      <m.div
         key={currentWordIndex}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -77,8 +77,8 @@ export function ContainerTextFlip({
         ref={textRef}
       >
         {words[currentWordIndex].split("").map((letter, index) => (
-          <motion.span
-            key={index}
+          <m.span
+            key={`${currentWordIndex}-${index}-${letter}`}
             initial={{
               opacity: 0,
               filter: "blur(10px)",
@@ -94,9 +94,9 @@ export function ContainerTextFlip({
             className="inline-block"
           >
             {letter === " " ? "\u00A0" : letter}
-          </motion.span>
+          </m.span>
         ))}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }

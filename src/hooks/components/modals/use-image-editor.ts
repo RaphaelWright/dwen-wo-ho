@@ -47,8 +47,11 @@ export const useImageEditor = ({
     setPosY(0);
   }, [imageSize]);
 
-  // Reset when photo changes
-  useEffect(() => {
+  // Reset the editor while rendering when a new photo arrives, instead of
+  // mirroring the prop into state via an effect.
+  const [prevPhotoPreview, setPrevPhotoPreview] = useState(photoPreview);
+  if (photoPreview !== prevPhotoPreview) {
+    setPrevPhotoPreview(photoPreview);
     if (photoPreview) {
       setScale(1);
       setRotation(0);
@@ -56,7 +59,7 @@ export const useImageEditor = ({
       setPosY(0);
       setImageSize(null);
     }
-  }, [photoPreview]);
+  }
 
   // Handle Dragging
   const handlePanStart = (e: React.MouseEvent) => {

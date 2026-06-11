@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Pencil } from "lucide-react";
 import { MdSchool } from "react-icons/md";
 import { SchoolHeaderCardProps } from "@/lib/types/components/curator/school-details";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 export function SchoolHeaderCard({
   school,
@@ -15,7 +16,11 @@ export function SchoolHeaderCard({
         <div className="flex flex-row items-center gap-6 min-w-0">
           {/* Logo */}
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Edit school logo"
             onClick={onEditClick}
+            onKeyDown={activateOnKeyboard(onEditClick)}
             className="cursor-pointer relative shrink-0"
           >
             <div className="relative size-20 sm:size-25 rounded-2xl overflow-hidden border-4 border-card shadow-lg bg-muted group-hover:shadow-xl transition-all duration-300">
@@ -43,7 +48,14 @@ export function SchoolHeaderCard({
 
           {/* Info */}
           <div className="flex-1 min-w-0">
-            <div onClick={onEditClick} className="cursor-pointer group/title">
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Edit school details"
+              onClick={onEditClick}
+              onKeyDown={activateOnKeyboard(onEditClick)}
+              className="cursor-pointer group/title"
+            >
               <h1 className="text-xl sm:text-2xl min-[1222px]:text-3xl 2xl:text-4xl font-bold text-foreground leading-tight group-hover/title:text-primary transition-colors truncate">
                 {school.name}
               </h1>

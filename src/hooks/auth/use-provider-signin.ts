@@ -83,9 +83,9 @@ export const useProviderSignIn = ({
         const redirectInfo = getProviderRedirectInfo(userData, response);
 
         if (redirectInfo.isPending) {
-          localStorage.setItem("pendingUser", JSON.stringify(userData));
+          localStorage.setItem("pendingUser:v1", JSON.stringify(userData));
         } else {
-          localStorage.removeItem("pendingUser");
+          localStorage.removeItem("pendingUser:v1");
         }
 
         setIsRedirecting(true);
@@ -97,7 +97,7 @@ export const useProviderSignIn = ({
         return;
       }
 
-      localStorage.removeItem("pendingUser");
+      localStorage.removeItem("pendingUser:v1");
       setIsRedirecting(true);
       router.replace(ROUTES.provider.home as Route);
     } catch (error: unknown) {

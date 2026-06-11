@@ -33,19 +33,6 @@ export const NEW_PROVIDER_EDITABLE_FIELDS = [
   },
 ];
 
-export const NEW_PROVIDER_LOGOUT_OPTIONS = [
-  { icon: "LogOut", label: "Log out of account", danger: false },
-  { icon: "SwitchCamera", label: "Switch account", danger: false },
-  { icon: "Lock", label: "Lock screen", danger: false },
-  { icon: "WifiOff", label: "Go offline", danger: false },
-  { icon: "Trash2", label: "Delete account", danger: true },
-];
-
-export const NEW_PROVIDER_LOGOUT_ITEMS = [
-  { icon: "LogOut", label: "Log out of account", danger: false },
-  { icon: "WifiOff", label: "Go offline", danger: false },
-];
-
 export const NEW_PROVIDER_FIELD_HOVER = {
   borderColor: "hsl(288 29% 50% / 0.5)",
   backgroundColor: "hsl(288 29% 50% / 0.15)",

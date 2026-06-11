@@ -11,6 +11,8 @@ import { getColorHex } from "@/lib/utils/color-utils";
 import { PatientActionResponseDTO } from "@/lib/types/api/patient-results";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
+const EMPTY_HISTORY_ACTIONS: PatientActionResponseDTO[] = [];
+
 export type ActionTab = "pending" | "history";
 
 export interface MetricItem {
@@ -71,7 +73,7 @@ export function useProviderPatientDetails() {
 
   // For now, all actions are shown as pending (type doesn't have status field)
   const pendingActions = actions;
-  const historyActions: PatientActionResponseDTO[] = [];
+  const historyActions = EMPTY_HISTORY_ACTIONS;
 
   // Add action mutation
   const addActionMutation = useMutation({

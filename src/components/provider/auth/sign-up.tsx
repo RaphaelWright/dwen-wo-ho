@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, type ReactNode } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/miscellaneous/stepper";
@@ -32,56 +33,49 @@ const SignUpContent = (props: ProviderSignUpProps) => {
     profileStep,
   } = useProviderSignUp(props);
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  let stepContent: ReactNode = null;
+  switch (currentStep) {
+    case "create":
+      stepContent = (
+        <CreateAccount
+          email={signUpData.email}
+          fullName={signUpData.fullName}
+          title={signUpData.title}
+          agreedToTerms={agreedToTerms}
+          onAgreedToTermsChange={setAgreedToTerms}
+          onNext={handleCreateAccountNext}
+          onValidityChange={setIsFormValid}
+        />
+      );
+      break;
 
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case "create":
-        return (
-          <CreateAccount
-            email={signUpData.email}
-            fullName={signUpData.fullName}
-            title={signUpData.title}
-            agreedToTerms={agreedToTerms}
-            onAgreedToTermsChange={setAgreedToTerms}
-            onNext={handleCreateAccountNext}
-            onValidityChange={setIsFormValid}
-          />
-        );
+    case "verify":
+      stepContent = (
+        <SignUpVerification
+          email={signUpData.email}
+          onNext={handleVerificationNext}
+        />
+      );
+      break;
 
-      case "verify":
-        return (
-          <SignUpVerification
-            email={signUpData.email}
-            onNext={handleVerificationNext}
-          />
-        );
-
-      case "profile":
-        return (
-          <SignUpProfile
-            email={signUpData.email}
-            fullName={signUpData.fullName}
-            title={signUpData.title}
-            password={signUpData.password}
-            specialty={specialty}
-            profileImage={profileImage}
-            onBack={
-              isResumeLocked ? undefined : () => handleBack()
-            }
-            startStep={profileStep ?? 0}
-            isResumeLocked={isResumeLocked}
-          />
-        );
-
-      default:
-        return null;
-    }
-  };
+    case "profile":
+      stepContent = (
+        <SignUpProfile
+          email={signUpData.email}
+          fullName={signUpData.fullName}
+          title={signUpData.title}
+          password={signUpData.password}
+          specialty={specialty}
+          profileImage={profileImage}
+          onBack={isResumeLocked ? undefined : () => handleBack()}
+          startStep={profileStep ?? 0}
+          isResumeLocked={isResumeLocked}
+        />
+      );
+      break;
+  }
 
   return (
     <div className="relative min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
@@ -114,7 +108,7 @@ const SignUpContent = (props: ProviderSignUpProps) => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          {renderStepContent()}
+          {stepContent}
         </div>
 
         {currentStep !== "profile" && (

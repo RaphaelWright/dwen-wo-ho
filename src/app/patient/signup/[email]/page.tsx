@@ -1,30 +1,12 @@
-"use client";
+import { getMetadata } from "@/lib/metadata";
+import PatientSignUpVerifyView from "./view";
 
-import { usePatientSignUpVerify } from "@/hooks/patient/use-patient-verify-signup";
-import {
-  VerifyHeader,
-  VerifyOTPSection,
-  VerifyFooter,
-} from "@/components/patient/signup-verify";
+export const metadata = getMetadata(
+  "Verify Email",
+  "Verify your email address to complete your Dwen Wo Ho sign up.",
+  "/patient/signup",
+);
 
-const VerifyPage = () => {
-  const { email, seconds, handleComplete, handleResend, router } =
-    usePatientSignUpVerify();
-
-  return (
-    <div className="h-full flex flex-col justify-between">
-      <VerifyHeader />
-
-      <VerifyOTPSection
-        email={email}
-        seconds={seconds}
-        onComplete={handleComplete}
-        onResend={handleResend}
-      />
-
-      <VerifyFooter onBack={() => router.back()} />
-    </div>
-  );
-};
-
-export default VerifyPage;
+export default function PatientSignUpVerifyPage() {
+  return <PatientSignUpVerifyView />;
+}

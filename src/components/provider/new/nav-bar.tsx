@@ -4,7 +4,7 @@ import { Logo } from "@/components/shared/Logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashboard";
 import type { useProviderSearchConfig } from "@/hooks/provider/use-provider-search-config";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchDropdown } from "@/components/shared/search-dropdown";
@@ -32,7 +32,7 @@ const ProviderIdentity = ({
   const fallback = providerName?.charAt(0).toUpperCase() || "PR";
 
   return (
-    <motion.button
+    <m.button
       onClick={onOpenProfile}
       whileHover={{
         paddingLeft: "10px",
@@ -75,7 +75,7 @@ const ProviderIdentity = ({
           <span className="text-white font-black text-lg">{ranking}</span>
         </div>
       )}
-    </motion.button>
+    </m.button>
   );
 };
 
@@ -138,13 +138,13 @@ export default function ProviderNavbar({
       <div className="flex items-center gap-4 ml-auto">
         {/* Mobile search toggle */}
         <div className="min-[1065px]:hidden">
-          <motion.button
+          <m.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setSearchOpen?.(!searchOpen)}
             className="size-9 flex items-center justify-center rounded-lg border cursor-pointer bg-card/90 hover:bg-muted/80"
           >
             <Search className="size-5" />
-          </motion.button>
+          </m.button>
         </div>
 
         {/* Provider identity — desktop only */}

@@ -35,6 +35,7 @@ export default function PartnersPage() {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5" />
             <input
               type="text"
+              aria-label="Search partners"
               placeholder="Search partners by name, nickname, or slogan..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,6 +68,7 @@ export default function PartnersPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPartners.map((partner) => (
               <button
+                type="button"
                 key={partner.id}
                 onClick={() => handlePartnerClick(partner)}
                 className="text-left rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow"

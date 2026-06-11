@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "motion/react";
 import { X, Users, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReachModalProps } from "@/lib/types/modals";
@@ -17,14 +17,14 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 backdrop-blur-3xl bg-background/80 z-50"
             onClick={onClose}
           />
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -74,17 +74,25 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                   </div>
 
                   <div className="flex-1 bg-card border border-border rounded-2xl p-6 shadow-sm">
-                    <label className="block text-sm font-semibold text-foreground mb-2">
+                    <label
+                      htmlFor="baseline-target"
+                      className="block text-sm font-semibold text-foreground mb-2"
+                    >
                       Set Baseline Target
                     </label>
                     <div className="flex gap-3">
                       <input
+                        id="baseline-target"
+                        aria-label="Baseline target"
                         value={baseline}
                         onChange={(e) => setBaseline(e.target.value)}
                         className="flex-1 px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-lg font-medium"
                         placeholder="e.g. 300,000"
                       />
-                      <button className="px-6 py-3 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/80 transition-colors">
+                      <button
+                        type="button"
+                        className="px-6 py-3 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/80 transition-colors"
+                      >
                         Update
                       </button>
                     </div>
@@ -124,9 +132,9 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                     Participating Schools
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {REACH_SCHOOLS.map((school, i) => (
+                    {REACH_SCHOOLS.map((school) => (
                       <div
-                        key={i}
+                        key={school}
                         className="flex items-center gap-3 p-4 bg-card border border-border rounded-xl hover:border-border hover:shadow-sm transition-all"
                       >
                         <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center text-muted-foreground font-bold text-sm">
@@ -141,7 +149,7 @@ const ReachModal = ({ isOpen, onClose }: ReachModalProps) => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

@@ -1,9 +1,9 @@
 "use client";
 
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Testimonial = {
   quote: string;
@@ -39,15 +39,12 @@ export const AnimatedTestimonials = ({
     }
   }, [autoplay, handleNext]);
 
-  const [randomRotations, setRandomRotations] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (testimonials.length > 0) {
-      setRandomRotations(
-        testimonials.map(() => Math.floor(Math.random() * 21) - 10),
-      );
-    }
-  }, [testimonials]);
+  // Derived once per testimonials list instead of mirrored into state via an
+  // effect (the random tilt only needs to change when the list changes).
+  const randomRotations = useMemo(
+    () => testimonials.map(() => Math.floor(Math.random() * 21) - 10),
+    [testimonials],
+  );
   return (
     <div className="mx-auto max-w-sm px-4 py-12 md:py-20 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
       <div className="relative grid grid-cols-1 gap-12 md:gap-20 md:grid-cols-2">
@@ -55,7 +52,7 @@ export const AnimatedTestimonials = ({
           <div className="relative h-64 sm:h-72 md:h-80 w-full">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
-                <motion.div
+                <m.div
                   key={testimonial.src}
                   initial={{
                     opacity: 0,
@@ -95,13 +92,13 @@ export const AnimatedTestimonials = ({
                     draggable={false}
                     className="h-full w-full rounded-3xl object-cover object-center"
                   />
-                </motion.div>
+                </m.div>
               ))}
             </AnimatePresence>
           </div>
         </div>
         <div className="flex flex-col justify-between py-4">
-          <motion.div
+          <m.div
             key={active}
             initial={{
               y: 20,
@@ -126,10 +123,10 @@ export const AnimatedTestimonials = ({
             <p className="text-sm text-muted-foreground">
               {testimonials[active].designation}
             </p>
-            <motion.p className="mt-8 text-lg text-muted-foreground">
+            <m.p className="mt-8 text-lg text-muted-foreground">
               {testimonials[active].quote.split(" ").map((word, index) => (
-                <motion.span
-                  key={index}
+                <m.span
+                  key={`${active}-${index}-${word}`}
                   initial={{
                     filter: "blur(10px)",
                     opacity: 0,
@@ -148,18 +145,20 @@ export const AnimatedTestimonials = ({
                   className="inline-block"
                 >
                   {word}&nbsp;
-                </motion.span>
+                </m.span>
               ))}
-            </motion.p>
-          </motion.div>
+            </m.p>
+          </m.div>
           <div className="flex gap-4 pt-12 md:pt-0">
             <button
+              type="button"
               onClick={handlePrev}
               className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-secondary"
             >
               <IconArrowLeft className="h-5 w-5 text-foreground transition-transform duration-300 group-hover/button:rotate-12" />
             </button>
             <button
+              type="button"
               onClick={handleNext}
               className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-secondary"
             >

@@ -6,55 +6,54 @@ import { schoolsService } from "@/services/schools";
 import { lockinsService } from "@/services/lockins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
-// ─── Query Hook ──────────────────────────────────────────────────────────────
+// ─── Query Hooks ─────────────────────────────────────────────────────────────
+// Hoisted to module scope; they close over no component state, only imported
+// services and constants.
+const useSchools = (options?: { enabled?: boolean }) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.schools],
+    queryFn: () => schoolsService.getSchools(),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
+  });
+
+const useSchoolsWithRefetch = (options?: { enabled?: boolean }) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.schools],
+    queryFn: () => schoolsService.getSchools(),
+    staleTime: 0,
+    gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
+  });
+
+const useSchool = (schoolId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.schools, schoolId],
+    queryFn: () => schoolsService.getSchool(schoolId),
+    enabled: !!schoolId,
+  });
+
+const useSchoolLockin = (schoolId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.schoolsLockin, schoolId],
+    queryFn: () => lockinsService.getSchoolLockIn(schoolId),
+    enabled: !!schoolId,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+const useSchoolStudents = (schoolId: string, options?: { enabled?: boolean }) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.schools, "students", schoolId],
+    queryFn: () => schoolsService.getSchoolStudents(schoolId),
+    enabled: (options?.enabled ?? true) && !!schoolId,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
 export default function useSchoolsQuery() {
   const queryClient = useQueryClient();
-
-  const useSchools = (options?: { enabled?: boolean }) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.schools],
-      queryFn: () => schoolsService.getSchools(),
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-      enabled: options?.enabled ?? true,
-    });
-
-  const useSchoolsWithRefetch = (options?: { enabled?: boolean }) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.schools],
-      queryFn: () => schoolsService.getSchools(),
-      staleTime: 0,
-      gcTime: 10 * 60 * 1000,
-      enabled: options?.enabled ?? true,
-    });
-
-  const useSchool = (schoolId: string) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.schools, schoolId],
-      queryFn: () => schoolsService.getSchool(schoolId),
-      enabled: !!schoolId,
-    });
-
-  const useSchoolLockin = (schoolId: string) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.schoolsLockin, schoolId],
-      queryFn: () => lockinsService.getSchoolLockIn(schoolId),
-      enabled: !!schoolId,
-      staleTime: 3 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    });
-
-  const useSchoolStudents = (
-    schoolId: string,
-    options?: { enabled?: boolean },
-  ) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.schools, "students", schoolId],
-      queryFn: () => schoolsService.getSchoolStudents(schoolId),
-      enabled: (options?.enabled ?? true) && !!schoolId,
-      staleTime: 3 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    });
 
   const invalidateSchool = useCallback(
     async (schoolId: string) => {

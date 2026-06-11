@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { LockInAssessment } from "@/lib/types/lockin";
 
 interface SchoolComparisonCardProps {
@@ -14,7 +14,7 @@ export function SchoolComparisonCard({ lockInAssessment }: SchoolComparisonCardP
   const averages = lockInAssessment.schoolTypeAverages;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
@@ -203,6 +203,6 @@ export function SchoolComparisonCard({ lockInAssessment }: SchoolComparisonCardP
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

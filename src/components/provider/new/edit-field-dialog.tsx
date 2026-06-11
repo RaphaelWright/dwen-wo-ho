@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect, KeyboardEvent, ChangeEvent } from "react";
-import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, KeyboardEvent, ChangeEvent } from "react";
+import { m } from "motion/react";
 
 import {
   Dialog,
@@ -19,9 +18,9 @@ import type { ProviderDashboardState } from "@/hooks/provider/use-provider-dashb
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Spinner } from "@/components/ui/spinner";
-import { Upload, ChevronDown, Search, Smile } from "lucide-react";
-
-const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
+import { Upload } from "lucide-react";
+import { SearchableSelectField } from "./edit-field/searchable-select-field";
+import { EmojiStatusField } from "./edit-field/emoji-status-field";
 
 /**
  * Small edit popup for a single profile field.
@@ -70,47 +69,6 @@ export default function EditFieldDialog({
   const isStatusField = editFieldKey === "status";
   const isSelectField = isTitleField || isSpecialtyField;
   const selectItems = isTitleField ? PROVIDER_TITLES : PROVIDER_SPECIALTIES;
-
-  // Searchable select state
-  const [selectOpen, setSelectOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const selectRef = useRef<HTMLDivElement>(null);
-
-  // Emoji picker state
-  const [emojiOpen, setEmojiOpen] = useState(false);
-  const emojiRef = useRef<HTMLDivElement>(null);
-
-  // Filter items based on search
-  const filteredItems = selectItems.filter((item) =>
-    item.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-
-  // Close select when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        selectRef.current &&
-        !selectRef.current.contains(event.target as Node)
-      ) {
-        setSelectOpen(false);
-      }
-      if (
-        emojiRef.current &&
-        !emojiRef.current.contains(event.target as Node)
-      ) {
-        setEmojiOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Reset search when dialog opens/closes or field changes
-  useEffect(() => {
-    setSearchQuery("");
-    setSelectOpen(false);
-    setEmojiOpen(false);
-  }, [editOpen, editFieldKey]);
 
   const hint = isPhotoField
     ? "Upload a new profile photo"
@@ -170,17 +128,18 @@ export default function EditFieldDialog({
               ref={fileInputRef}
               type="file"
               accept="image/*"
+              aria-label="Upload profile photo"
               onChange={handleFileChange}
               className="hidden"
             />
-            <motion.button
+            <m.button
               whileTap={{ scale: 0.97 }}
               onClick={() => fileInputRef.current?.click()}
               className="flex items-center gap-2 px-4 py-2 rounded-xl border text-[12.5px] font-semibold cursor-pointer hover:bg-primary/10 transition-all"
             >
               <Upload size={14} />
               {selectedFile ? "Change Photo" : "Select Photo"}
-            </motion.button>
+            </m.button>
             {selectedFile && (
               <p className="text-[11px] text-muted-foreground">
                 Selected: {selectedFile.name}
@@ -189,127 +148,20 @@ export default function EditFieldDialog({
           </div>
         ) : isSelectField ? (
           /* Searchable Select Dropdown for Title/Specialty */
-          <div className="relative mb-2" ref={selectRef}>
-            <button
-              type="button"
-              onClick={() => setSelectOpen(!selectOpen)}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary/20"
-            >
-              <span
-                className={
-                  editValue ? "text-foreground" : "text-muted-foreground"
-                }
-              >
-                {editValue ||
-                  `Select ${editFieldLabel?.toLowerCase() || "value"}`}
-              </span>
-              <ChevronDown
-                size={16}
-                className={`text-muted-foreground transition-transform ${selectOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            <AnimatePresence>
-              {selectOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md"
-                >
-                  {/* Search input */}
-                  <div className="p-2 border-b border-border">
-                    <div className="relative">
-                      <Search
-                        size={14}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
-                      />
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search..."
-                        className="w-full pl-8 pr-3 py-1.5 text-sm bg-transparent border-0 focus:outline-none focus:ring-0"
-                        autoFocus
-                      />
-                    </div>
-                  </div>
-
-                  {/* Items list - scrollable with native scrollbar */}
-                  <div className="max-h-52 overflow-y-auto">
-                    {filteredItems.length > 0 ? (
-                      filteredItems.map((item) => (
-                        <button
-                          key={item}
-                          type="button"
-                          onClick={() => {
-                            setEditValue(item);
-                            setSelectOpen(false);
-                            setSearchQuery("");
-                          }}
-                          className={`w-full px-3 py-2 text-left text-sm transition-colors hover:bg-accent ${
-                            editValue === item
-                              ? "bg-accent text-accent-foreground"
-                              : "text-foreground"
-                          }`}
-                        >
-                          {item}
-                        </button>
-                      ))
-                    ) : (
-                      <div className="px-3 py-2 text-sm text-muted-foreground text-center">
-                        No {editFieldLabel?.toLowerCase()} found.
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <SearchableSelectField
+            key={editFieldKey}
+            value={editValue}
+            onChange={setEditValue}
+            label={editFieldLabel}
+            items={selectItems}
+          />
         ) : isStatusField ? (
           /* Emoji Picker for Status */
-          <div className="relative mb-2" ref={emojiRef}>
-            <div className="flex items-center gap-2">
-              <Input
-                type="text"
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="flex-1 focus:ring-1 focus:ring-primary/20"
-                placeholder="Enter status or pick emoji..."
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => setEmojiOpen(!emojiOpen)}
-                className="p-2 rounded-md border border-input bg-background hover:bg-accent transition-colors"
-              >
-                <Smile size={18} className="text-muted-foreground" />
-              </button>
-            </div>
-
-            <AnimatePresence>
-              {emojiOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute z-50 right-0 mt-2"
-                >
-                  <EmojiPicker
-                    onEmojiClick={(emojiData) => {
-                      setEditValue((prev) => prev + emojiData.emoji);
-                    }}
-                    height={350}
-                    skinTonesDisabled
-                    previewConfig={{ showPreview: false }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <EmojiStatusField
+            value={editValue}
+            onChange={setEditValue}
+            onKeyDown={handleKeyDown}
+          />
         ) : (
           /* Text Input for other fields */
           <Input
@@ -330,7 +182,7 @@ export default function EditFieldDialog({
 
         {/* Actions */}
         <div className="flex gap-2 mt-2">
-          <motion.button
+          <m.button
             whileTap={{ scale: 0.97 }}
             onClick={() => {
               setSelectedFile(null);
@@ -340,9 +192,9 @@ export default function EditFieldDialog({
             disabled={isSavingChanges}
           >
             Cancel
-          </motion.button>
+          </m.button>
 
-          <motion.button
+          <m.button
             whileTap={{ scale: 0.97 }}
             onClick={handleUpload}
             disabled={
@@ -358,7 +210,7 @@ export default function EditFieldDialog({
             ) : (
               "Save Changes"
             )}
-          </motion.button>
+          </m.button>
         </div>
       </DialogContent>
     </Dialog>

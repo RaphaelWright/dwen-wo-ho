@@ -51,52 +51,6 @@ export type SubscriptionTopic =
   | "/topic/curator/patient-results"
   | `/topic/school/${string}/patient-results`;
 
-// Role-based topic mapping
-export interface RoleTopics {
-  curator: string[];
-  provider: string[];
-}
-
-export const ROLE_BASED_TOPICS: Record<
-  "curator" | "provider",
-  { required: string[]; dynamic: string[] }
-> = {
-  curator: {
-    required: ["/user/queue/notifications", "/topic/curator/patient-results"],
-    dynamic: [], // School-specific topics added dynamically
-  },
-  provider: {
-    required: ["/user/queue/notifications"],
-    dynamic: [
-      "/topic/provider/{providerId}/notifications",
-      "/topic/provider/{providerId}/urgent",
-      "/topic/provider/{providerId}/patients",
-      "/topic/provider/school/{schoolId}/urgent",
-    ],
-  },
-};
-
-// Notification types by role (for frontend filtering if needed)
-export const CURATOR_NOTIFICATION_TYPES = [
-  "PROVIDER_REGISTRATION",
-  "PROVIDER_APPLICATION_UPDATE",
-  "SCHOOL_REGISTRATION",
-  "NEW_PATIENT_ADDED",
-  "CRITICAL_ALERT",
-  "ADMIN_ACTION_REQUIRED",
-];
-
-export const PROVIDER_NOTIFICATION_TYPES = [
-  "PATIENT_LOCK_IN",
-  "OPEN_PATIENTS_AVAILABLE",
-  "PATIENT_REFERRED",
-  "ACTION_STATUS_CHANGED",
-  "STAR_PROVIDER_ASSIGNED",
-  "PROVIDER_APPLICATION_UPDATE",
-  "CRITICAL_ALERT",
-  "PROVIDER_SCHOOL_CHANGE",
-];
-
 // Urgent case event (from /topic/provider/{id}/urgent)
 export interface UrgentCasePatient {
   patientId: number;

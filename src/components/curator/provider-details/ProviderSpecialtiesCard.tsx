@@ -14,9 +14,9 @@ export function ProviderSpecialtiesCard({
           Specialties
         </h2>
         <div className="flex flex-wrap gap-2">
-          {specialties.map((specialty, index) => (
+          {specialties.map((specialty) => (
             <span
-              key={index}
+              key={specialty}
               className="px-3 py-1 bg-primary text-primary-foreground rounded-full text-sm font-medium"
             >
               {specialty}

@@ -7,6 +7,7 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import { ProviderCardProps } from "@/lib/types/components/curator/provider-card";
 import { DEFAULT_PROVIDER_IMAGE } from "@/lib/constants/components/curator/provider-card";
 import { useProviderCard } from "@/hooks/components/curator/use-provider-card";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 
 const ProviderCard = (props: ProviderCardProps) => {
   const { provider } = props;
@@ -21,7 +22,14 @@ const ProviderCard = (props: ProviderCardProps) => {
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${formatProviderName(
+        provider.providerName || "",
+        provider.providerTitle,
+      )}`}
       onClick={handleViewDetails}
+      onKeyDown={activateOnKeyboard(handleViewDetails)}
       className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 group hover:scale-[1.02] flex flex-col items-center w-full relative"
     >
       {/* Provider Image - Centered at Top */}

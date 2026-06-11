@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { CheckCircle2Icon, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
@@ -26,7 +26,7 @@ const MemberCreationModal = ({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -35,7 +35,7 @@ const MemberCreationModal = ({
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -74,9 +74,9 @@ const MemberCreationModal = ({
                 >
                   {/* Title Selection */}
                   <div className="space-y-3">
-                    <label className="text-sm font-semibold text-foreground">
+                    <span className="block text-sm font-semibold text-foreground">
                       Role / Title
-                    </label>
+                    </span>
                     <div className="grid grid-cols-3 gap-3">
                       {memberTitles.map((title) => (
                         <button
@@ -97,12 +97,17 @@ const MemberCreationModal = ({
 
                   {/* Name Input */}
                   <div className="space-y-3">
-                    <label className="text-sm font-semibold text-foreground">
+                    <label
+                      htmlFor="member-name"
+                      className="text-sm font-semibold text-foreground"
+                    >
                       Full Name
                     </label>
                     <div className="relative">
                       <input
+                        id="member-name"
                         type="text"
+                        aria-label="Full name"
                         value={formData.name}
                         onChange={(e) =>
                           handleInputChange("name", e.target.value)
@@ -117,7 +122,7 @@ const MemberCreationModal = ({
                   {/* Success Message */}
                   <AnimatePresence>
                     {isSubmitted && (
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 10, height: 0 }}
                         animate={{ opacity: 1, y: 0, height: "auto" }}
                         exit={{ opacity: 0, y: -10, height: 0 }}
@@ -132,7 +137,7 @@ const MemberCreationModal = ({
                             has been added successfully!
                           </p>
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
                 </form>
@@ -160,7 +165,7 @@ const MemberCreationModal = ({
                 </LoadingButton>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

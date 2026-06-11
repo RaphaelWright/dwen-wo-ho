@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import MainContent from "@/components/provider/new/main-content";
 import UrgentPanel from "@/components/shared/urgent-panel";
 import ProfileModal from "@/components/modals/new-provider/new-provider-modal";
@@ -191,7 +191,7 @@ export default function ProviderHomePage() {
           {searchOpen && (
             <>
               {/* Click-outside backdrop */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -200,7 +200,7 @@ export default function ProviderHomePage() {
               />
 
               {/* Search bar container */}
-              <motion.div
+              <m.div
                 initial={{ y: -60, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -60, opacity: 0 }}
@@ -251,7 +251,7 @@ export default function ProviderHomePage() {
                     />
                   </LiquidGlass>
                 </div>
-              </motion.div>
+              </m.div>
             </>
           )}
         </AnimatePresence>
@@ -259,7 +259,7 @@ export default function ProviderHomePage() {
         {/* Panel content */}
         <AnimatePresence mode="wait">
           {activePanel === "schools" && (
-            <motion.div
+            <m.div
               key="schools"
               variants={panelVariants}
               initial="enter"
@@ -275,10 +275,10 @@ export default function ProviderHomePage() {
                 totalPatientCount={totalPatientCount}
                 isLoading={isInitLoading}
               />
-            </motion.div>
+            </m.div>
           )}
           {activePanel === "patients" && (
-            <motion.div
+            <m.div
               key="patients"
               variants={panelVariants}
               initial="enter"
@@ -294,10 +294,10 @@ export default function ProviderHomePage() {
                 countForChip={countForChip}
                 isLoading={isInitLoading}
               />
-            </motion.div>
+            </m.div>
           )}
           {activePanel === "urgent" && (
-            <motion.div
+            <m.div
               key="urgent"
               variants={panelVariants}
               initial="enter"
@@ -311,10 +311,10 @@ export default function ProviderHomePage() {
                 activeSchool={activeSchool}
                 isLoading={isInitLoading}
               />
-            </motion.div>
+            </m.div>
           )}
           {activePanel === "activity" && (
-            <motion.div
+            <m.div
               key="activity"
               variants={panelVariants}
               initial="enter"
@@ -324,7 +324,7 @@ export default function ProviderHomePage() {
               className="absolute inset-0 h-screen overflow-y-auto bg-background"
             >
               <ProviderActivityLog />
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 

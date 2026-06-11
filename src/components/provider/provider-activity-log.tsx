@@ -62,8 +62,9 @@ export default function ProviderActivityLog() {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
         <p className="text-red-600 font-medium mb-2">Failed to load activity log</p>
-        <button 
-          onClick={() => refetch()} 
+        <button
+          type="button"
+          onClick={() => refetch()}
           className="text-sm bg-red-100 px-4 py-2 rounded-md hover:bg-red-200 transition-colors"
         >
           Try Again
@@ -81,6 +82,7 @@ export default function ProviderActivityLog() {
             <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xl" />
             <input
               title="Search provider activity"
+              aria-label="Search provider activity"
               type="text"
               placeholder="Search details..."
               value={search}
@@ -113,6 +115,7 @@ export default function ProviderActivityLog() {
         </div>
 
         <button
+          type="button"
           title="Refresh activity log"
           onClick={() => refetch()}
           className="p-2 rounded-lg bg-muted text-muted-foreground hover:text-foreground transition-colors border border-border self-end sm:self-auto"
@@ -179,7 +182,8 @@ export default function ProviderActivityLog() {
         {/* Pagination minimal */}
         {totalPages > 1 && (
           <div className="p-4 border-t border-border flex items-center justify-between bg-muted/20">
-            <button 
+            <button
+              type="button"
               title="Previous page"
               disabled={page <= 0}
               onClick={() => setPage(p => Math.max(0, p - 1))}
@@ -190,7 +194,8 @@ export default function ProviderActivityLog() {
             <span className="text-sm text-muted-foreground">
               Page {page + 1} of {totalPages}
             </span>
-            <button 
+            <button
+              type="button"
               title="Next page"
               disabled={page >= totalPages - 1}
               onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}

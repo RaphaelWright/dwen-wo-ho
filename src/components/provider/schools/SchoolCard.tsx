@@ -3,14 +3,14 @@ import { MdSchool } from "react-icons/md";
 import { SchoolCardProps } from "@/lib/types/provider/schools";
 import { Button } from "@/components/ui/button";
 
-export function SchoolCard({ school, onClick }: SchoolCardProps) {
-  const getFirstCampus = (campuses: string[] | null | undefined): string => {
-    if (campuses && Array.isArray(campuses) && campuses.length > 0) {
-      return campuses[0];
-    }
-    return "";
-  };
+const getFirstCampus = (campuses: string[] | null | undefined): string => {
+  if (campuses && Array.isArray(campuses) && campuses.length > 0) {
+    return campuses[0];
+  }
+  return "";
+};
 
+export function SchoolCard({ school, onClick }: SchoolCardProps) {
   const firstCampus = getFirstCampus(school.campuses);
   const displayNickname = school.nickname
     ? firstCampus

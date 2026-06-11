@@ -60,14 +60,20 @@ export function useNotificationWebSocket() {
   const queryClient = useQueryClient();
 
   // Separate queries for each role to maintain type safety
-  const curatorQuery = useQuery<CuratorNotificationListResponse, Error>({
+  const { data: curatorData, refetch: refetchCurator } = useQuery<
+    CuratorNotificationListResponse,
+    Error
+  >({
     queryKey: [QUERY_KEYS.curator, "notifications"],
     queryFn: () => curatorService.getNotifications(),
     staleTime: 5 * 60 * 1000,
     enabled: userType === "curator",
   });
 
-  const providerQuery = useQuery<ProviderNotificationListResponse, Error>({
+  const { data: providerData, refetch: refetchProvider } = useQuery<
+    ProviderNotificationListResponse,
+    Error
+  >({
     queryKey: [QUERY_KEYS.providers, "notifications"],
     queryFn: () => providerDashboardService.getNotifications(),
     staleTime: 5 * 60 * 1000,
@@ -75,9 +81,7 @@ export function useNotificationWebSocket() {
   });
 
   const initialNotifications =
-    userType === "curator"
-      ? curatorQuery.data?.data?.items
-      : providerQuery.data?.items;
+    userType === "curator" ? curatorData?.data?.items : providerData?.items;
 
   // Seed notifications from HTTP on initial load and when data changes
   useEffect(() => {
@@ -86,10 +90,10 @@ export function useNotificationWebSocket() {
     // Map based on user type since curator and provider have different formats
     if (userType === "curator") {
       setCuratorNotifications(initialNotifications as CuratorNotification[]);
-      setUnreadCount(curatorQuery.data?.data?.unreadCount || 0);
+      setUnreadCount(curatorData?.data?.unreadCount || 0);
     } else {
       setProviderNotifications(initialNotifications as ProviderNotification[]);
-      setUnreadCount(providerQuery.data?.unreadCount || 0);
+      setUnreadCount(providerData?.unreadCount || 0);
     }
   }, [
     initialNotifications,
@@ -97,8 +101,8 @@ export function useNotificationWebSocket() {
     setProviderNotifications,
     setUnreadCount,
     userType,
-    curatorQuery.data?.data?.unreadCount,
-    providerQuery.data?.unreadCount,
+    curatorData?.data?.unreadCount,
+    providerData?.unreadCount,
   ]);
 
   const handleNotification = useCallback(
@@ -226,11 +230,11 @@ export function useNotificationWebSocket() {
     );
     // Re-fetch notifications from REST API
     if (userType === "curator") {
-      curatorQuery.refetch();
+      refetchCurator();
     } else if (userType === "provider") {
-      providerQuery.refetch();
+      refetchProvider();
     }
-  }, [userType, curatorQuery, providerQuery]);
+  }, [userType, refetchCurator, refetchProvider]);
 
   useEffect(() => {
     // Listen for WebSocket events

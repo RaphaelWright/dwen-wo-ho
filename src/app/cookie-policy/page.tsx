@@ -1,4 +1,17 @@
 import WidthConstraint from "@/components/ui/width-constraint";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata(
+  "Cookie Policy",
+  "How Dwen Wo Ho uses cookies and similar technologies.",
+  "/cookie-policy",
+);
+
+const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 
 export default function CookiePolicyPage() {
   return (
@@ -6,9 +19,7 @@ export default function CookiePolicyPage() {
       <WidthConstraint>
         <h1 className="text-4xl font-bold mb-8">Cookie Policy</h1>
         <div className="prose dark:prose-invert max-w-none">
-          <p className="mb-4">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
+          <p className="mb-4">Last updated: {LAST_UPDATED}</p>
           <p>
             This Cookie Policy explains what cookies are, how we use them,
             andyour choices regarding cookies.

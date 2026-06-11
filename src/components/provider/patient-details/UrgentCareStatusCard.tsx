@@ -1,7 +1,7 @@
 "use client";
 
 import { Stethoscope } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { LockInAssessment } from "@/lib/types/lockin";
 
 interface UrgentCareStatusCardProps {
@@ -10,7 +10,7 @@ interface UrgentCareStatusCardProps {
 
 export function UrgentCareStatusCard({ lockInAssessment }: UrgentCareStatusCardProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
@@ -69,6 +69,6 @@ export function UrgentCareStatusCard({ lockInAssessment }: UrgentCareStatusCardP
           </div>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

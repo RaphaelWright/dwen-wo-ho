@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import FeatureComingSoonModal from "@/components/modals/feature-coming-soon";
 import { CreateModalProps } from "@/lib/types/components/curator/create-modal";
 import { useCreateModal } from "@/hooks/components/curator/use-create-modal";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 import { Button } from "../ui/button";
 
 const CreateModal = ({
@@ -27,8 +28,12 @@ const CreateModal = ({
   return (
     <>
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Close dialog"
         className="fixed inset-0 backdrop-blur-3xl bg-background/80 flex items-center justify-center z-50 p-4"
         onClick={() => setShowCreateModal(false)}
+        onKeyDown={activateOnKeyboard(() => setShowCreateModal(false))}
       >
         <div
           className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all border border-border"

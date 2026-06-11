@@ -3,7 +3,7 @@
 import { NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useDesktopNav } from "@/hooks/components/shared/use-desktop-nav";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import Link from "next/link";
 
 export const DesktopNav = () => {
@@ -26,7 +26,7 @@ export const DesktopNav = () => {
             >
               {/* Hover Pill Effect */}
               {isHovered && (
-                <motion.div
+                <m.div
                   layoutId="hover-pill"
                   className="absolute -inset-x-4 -inset-y-1 bg-muted-foreground/10 rounded-full -z-10"
                   transition={{
@@ -39,7 +39,7 @@ export const DesktopNav = () => {
 
               {/* The Active Dot (Above) */}
               {isActive && (
-                <motion.div
+                <m.div
                   layoutId="nav-dot"
                   className="absolute -top-3 left-0 right-0 mx-auto w-1.5 h-1.5 rounded-full bg-green-600"
                   transition={{
@@ -64,7 +64,7 @@ export const DesktopNav = () => {
 
               {/* The Active Underline (Below) */}
               {isActive && (
-                <motion.div
+                <m.div
                   layoutId="nav-underline"
                   className="absolute -bottom-1 left-0 right-0 h-0.5 bg-green-600 rounded-full"
                   transition={{

@@ -6,6 +6,7 @@ import TanstackQueryProvider from "./tanstack-query-provider";
 import JotaiProvider from "./jotai-provider";
 import { StompProvider } from "@/components/providers/stomp-provider";
 import { OnlineStatus } from "./online-status";
+import MotionProvider from "./motion-provider";
 
 export default function Providers({
   children,
@@ -23,7 +24,7 @@ export default function Providers({
         <TanstackQueryProvider>
           <StompProvider>
             <OnlineStatus />
-            {children}
+            <MotionProvider>{children}</MotionProvider>
           </StompProvider>
         </TanstackQueryProvider>
       </JotaiProvider>

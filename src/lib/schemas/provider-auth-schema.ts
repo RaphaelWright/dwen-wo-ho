@@ -2,14 +2,12 @@ import * as z from "zod";
 
 export const ProviderEmailSchema = z.object({
   email: z
-    .string()
     .email({ message: "Please enter a valid email" })
     .min(1, "Please enter your email address"),
 });
 
 export const ProviderLoginSchema = z.object({
   email: z
-    .string()
     .email({ message: "Please enter a valid email" })
     .min(1, "Please enter your email address"),
   password: z.string().min(1, { message: "Please enter password" }),
@@ -17,7 +15,6 @@ export const ProviderLoginSchema = z.object({
 
 export const ProviderSignUpSchema = z.object({
   email: z
-    .string()
     .email({ message: "Please enter a valid email" })
     .min(1, "Please enter your email address"),
   title: z.string().min(1, { message: "Please select your title" }),
@@ -59,7 +56,7 @@ export const ProviderProfilePhotoStepSchema = z.object({
     }),
 });
 
-export const GhanaPhoneNumberSchema = z
+const GhanaPhoneNumberSchema = z
   .string()
   .transform((value) => value.replace(/\D/g, ""))
   .pipe(

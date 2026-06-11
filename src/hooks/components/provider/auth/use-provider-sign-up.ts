@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import { ProviderSignUpProps } from "@/lib/types/provider/auth";
 import { useProviderSignupGuard } from "@/hooks/provider/use-provider-signup-guard";
 import { hasProviderAuthToken } from "@/lib/utils/provider-signup-resume";
+import {
+  getProviderSignupPassword,
+  saveProviderSignupPassword,
+} from "@/lib/utils/provider-signup-password";
 
 type SignUpStep = "create" | "verify" | "profile";
 
@@ -34,7 +38,9 @@ export const useProviderSignUp = ({
     ? (profileStepFromGuard ?? profileStepProp ?? null)
     : (profileStepProp ?? null);
 
-  const [currentStep, setCurrentStep] = useState<SignUpStep>("create");
+  const [currentStep, setCurrentStep] = useState<SignUpStep>(
+    profileStep != null || isResumeLocked ? "profile" : "create",
+  );
   const [agreedToTerms, setAgreedToTerms] = useState<boolean>(false);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [signUpData, setSignUpData] = useState({
@@ -45,26 +51,33 @@ export const useProviderSignUp = ({
   });
 
   useEffect(() => {
-    if (propEmail) {
-      setSignUpData((prev) => ({ ...prev, email: propEmail }));
+    if (!propEmail) {
+      return;
     }
+
+    const storedPassword = getProviderSignupPassword(propEmail);
+
+    setSignUpData((prev) => ({
+      ...prev,
+      email: propEmail,
+      password: storedPassword ?? prev.password,
+    }));
   }, [propEmail]);
 
-  useEffect(() => {
-    if (profileStep == null) {
-      return;
+  // Advance to the profile step while rendering when resume/guard props flip,
+  // instead of mirroring those props into state via effects.
+  const [prevProfileStep, setPrevProfileStep] = useState(profileStep);
+  const [prevIsResumeLocked, setPrevIsResumeLocked] = useState(isResumeLocked);
+  if (
+    profileStep !== prevProfileStep ||
+    isResumeLocked !== prevIsResumeLocked
+  ) {
+    setPrevProfileStep(profileStep);
+    setPrevIsResumeLocked(isResumeLocked);
+    if (profileStep != null || isResumeLocked) {
+      setCurrentStep("profile");
     }
-
-    setCurrentStep("profile");
-  }, [profileStep]);
-
-  useEffect(() => {
-    if (!isResumeLocked) {
-      return;
-    }
-
-    setCurrentStep("profile");
-  }, [isResumeLocked]);
+  }
 
   const handleCreateAccountNext = (data: {
     email: string;
@@ -72,6 +85,10 @@ export const useProviderSignUp = ({
     title: string;
     password?: string;
   }) => {
+    if (data.password) {
+      saveProviderSignupPassword(data.email, data.password);
+    }
+
     setSignUpData((prev) => ({ ...prev, ...data }));
     setCurrentStep("verify");
   };

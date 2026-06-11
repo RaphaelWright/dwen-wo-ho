@@ -2,7 +2,7 @@
 
 import { type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
 import { Search } from "lucide-react";
@@ -105,7 +105,7 @@ export function FilterTabBar<T extends string = string>({
               )}
             >
               {isActive && (
-                <motion.div
+                <m.div
                   layoutId={activeTabLayoutId}
                   className="absolute inset-0 bg-primary/5 rounded-lg shadow-sm"
                   transition={{
@@ -138,14 +138,18 @@ export function FilterTabBar<T extends string = string>({
 
       {renderActions && (
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={activeTab}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
           >
+            {/* Intentional render prop: `renderActions` is part of this
+                component's public API so callers can inject tab-specific
+                actions. The output is keyed by `activeTab`, so identity is
+                stable per tab and no state is lost. */}
             {renderActions(activeTab)}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       )}
 

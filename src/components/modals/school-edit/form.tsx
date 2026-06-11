@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPin, ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { CAMPUS_OPTIONS } from "@/lib/constants/components/modals/school-creation";
 import { SCHOOL_TYPES } from "@/lib/constants/components/modals/school-edit";
@@ -125,7 +125,7 @@ export const SchoolEditForm = ({
 
           <AnimatePresence>
             {showCampusDropdown && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
@@ -148,7 +148,7 @@ export const SchoolEditForm = ({
                     </Button>
                   ))}
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

@@ -12,10 +12,10 @@ export const parseCampuses = (campuses: unknown): string[] => {
         // Fall back to splitting by comma if JSON parse fails
       }
     }
-    return campuses
-      .split(",")
-      .map((c) => c.trim())
-      .filter(Boolean);
+    return campuses.split(",").flatMap((c) => {
+      const trimmed = c.trim();
+      return trimmed ? [trimmed] : [];
+    });
   }
 
   if (Array.isArray(campuses)) {

@@ -37,15 +37,15 @@ export const getUserType = (): "curator" | "provider" | "patient" | null => {
     return null;
   }
 
+  // Read auth tokens once to avoid repeated storage lookups.
+  const curatorToken = localStorage.getItem("curatorToken");
+  const providerToken = localStorage.getItem("token");
+  const patientToken = localStorage.getItem("patientToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+
   // First check stored user type
   const storedUserType = getStoredUserType();
   if (storedUserType) {
-    // Verify tokens exist for the stored type
-    const curatorToken = localStorage.getItem("curatorToken");
-    const providerToken = localStorage.getItem("token");
-    const patientToken = localStorage.getItem("patientToken");
-    const refreshToken = localStorage.getItem("refreshToken");
-
     if (storedUserType === "curator" && (curatorToken || refreshToken)) {
       return "curator";
     }
@@ -58,28 +58,22 @@ export const getUserType = (): "curator" | "provider" | "patient" | null => {
   }
 
   // Fallback: Check for curator token first (curators have both curatorToken and token)
-  const curatorToken = localStorage.getItem("curatorToken");
   if (curatorToken) {
     setUserType("curator");
     return "curator";
   }
 
-  // Check for provider token
-  const providerToken = localStorage.getItem("token");
-  const refreshToken = localStorage.getItem("refreshToken");
-  
   // If we have refreshToken and stored type is provider, return provider
   if (refreshToken && storedUserType === "provider") {
     return "provider";
   }
-  
+
   if (providerToken) {
     setUserType("provider");
     return "provider";
   }
 
   // Check for patient token (if exists)
-  const patientToken = localStorage.getItem("patientToken");
   if (patientToken) {
     setUserType("patient");
     return "patient";

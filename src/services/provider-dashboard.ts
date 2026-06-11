@@ -1,5 +1,4 @@
 import { api } from "@/lib/api";
-import { axiosFormData } from "@/configs/axiosInstance";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import type {
   ProviderDashboardInitResponse,
@@ -46,17 +45,17 @@ export const providerDashboardService = {
   uploadAvatar: async (file: File): Promise<{ avatarUrl: string }> => {
     const formData = new FormData();
     formData.append("image", file);
-    const response = await axiosFormData.post(
-      STATIC_ENDPOINTS.AUTH.ADD_PHOTO,
-      formData,
-    );
+    const response = await api(STATIC_ENDPOINTS.AUTH.ADD_PHOTO, {
+      method: "POST",
+      body: formData,
+    });
 
-    return (
-      response.data?.data?.profilePhotoUrl ??
-      response.data?.profilePhotoUrl ??
-      response.data?.data?.avatarUrl ??
-      response.data?.avatarUrl
-    );
+    const data = response?.data as
+      | { profilePhotoUrl?: string; avatarUrl?: string }
+      | undefined;
+
+    return (data?.profilePhotoUrl ??
+      data?.avatarUrl) as unknown as { avatarUrl: string };
   },
 
   getPatients: async (

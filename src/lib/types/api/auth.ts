@@ -52,3 +52,14 @@ export interface ProviderProfileResponse {
   isVerified?: boolean;
   [key: string]: unknown;
 }
+
+/**
+ * Narrowed view of the provider profile query shared between the profile hook
+ * and its consumers. Only the fields actually read downstream are exposed so
+ * the query result can be destructured (preserving TanStack's tracked-property
+ * optimization) instead of passing the whole query object around.
+ */
+export interface ProfileQueryHandle {
+  data: ProviderProfileResponse | undefined;
+  isLoading: boolean;
+}

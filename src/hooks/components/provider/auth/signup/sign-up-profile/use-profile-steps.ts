@@ -19,7 +19,7 @@ export const useProfileSteps = (
       return;
     }
 
-    setCurrentStep(currentStep - 1);
+    setCurrentStep((step) => step - 1);
   };
 
   return {

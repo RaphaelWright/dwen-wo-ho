@@ -5,6 +5,37 @@ import { toast } from "@/components/ui/sonner";
 import { partnersService } from "@/services/partners";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
+// Hoisted query hooks — they close over no component state.
+const usePartnersList = (options?: { enabled?: boolean }) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.partners],
+    queryFn: partnersService.getPartners,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: options?.enabled ?? true,
+  });
+
+const usePartner = (partnerId: string) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.partners, partnerId],
+    queryFn: () => partnersService.getPartner(partnerId),
+    enabled: !!partnerId,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+const usePartnerFullDetails = (
+  partnerId: string,
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    queryKey: [QUERY_KEYS.partners, partnerId],
+    queryFn: () => partnersService.getPartnerWithDetails(partnerId),
+    enabled: (options?.enabled ?? true) && !!partnerId,
+    staleTime: 3 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
 export default function usePartnerQuery() {
   const queryClient = useQueryClient();
 
@@ -26,24 +57,6 @@ export default function usePartnerQuery() {
     },
   });
 
-  const usePartnersList = (options?: { enabled?: boolean }) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.partners],
-      queryFn: partnersService.getPartners,
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-      enabled: options?.enabled ?? true,
-    });
-
-  const usePartner = (partnerId: string) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.partners, partnerId],
-      queryFn: () => partnersService.getPartner(partnerId),
-      enabled: !!partnerId,
-      staleTime: 3 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    });
-
   const addSchoolMutation = useMutation({
     mutationFn: ({
       partnerId,
@@ -53,24 +66,14 @@ export default function usePartnerQuery() {
       schoolId: string | number;
     }) => partnersService.addSchoolToPartner(partnerId, schoolId),
     onSuccess: (_, { partnerId }) => {
-      invalidatePartners(partnerId);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.partners, partnerId],
+      });
       toast.success("School added successfully");
     },
     onError: (error: Error) =>
       toast.error(error.message || "Failed to add school"),
   });
-
-  const usePartnerFullDetails = (
-    partnerId: string,
-    options?: { enabled?: boolean },
-  ) =>
-    useQuery({
-      queryKey: [QUERY_KEYS.partners, partnerId],
-      queryFn: () => partnersService.getPartnerWithDetails(partnerId),
-      enabled: (options?.enabled ?? true) && !!partnerId,
-      staleTime: 3 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-    });
 
   const invalidatePartners = useCallback(
     async (partnerId?: string) => {
@@ -96,7 +99,9 @@ export default function usePartnerQuery() {
       schoolId: string | number;
     }) => partnersService.removeSchoolFromPartner(partnerId, schoolId),
     onSuccess: (_, { partnerId }) => {
-      invalidatePartners(partnerId);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.partners, partnerId],
+      });
       toast.success("School removed successfully");
     },
     onError: (error: Error) =>
@@ -112,7 +117,9 @@ export default function usePartnerQuery() {
       providerId: string | number;
     }) => partnersService.addProviderToPartner(partnerId, providerId),
     onSuccess: (_, { partnerId }) => {
-      invalidatePartners(partnerId);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.partners, partnerId],
+      });
       toast.success("Provider added successfully");
     },
     onError: (error: Error) =>
@@ -128,7 +135,9 @@ export default function usePartnerQuery() {
       providerId: string | number;
     }) => partnersService.removeProviderFromPartner(partnerId, providerId),
     onSuccess: (_, { partnerId }) => {
-      invalidatePartners(partnerId);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.partners, partnerId],
+      });
       toast.success("Provider removed successfully");
     },
     onError: (error: Error) =>

@@ -12,7 +12,8 @@ import { LoadingButton } from "@/components/ui/loading-button";
 
 import { Spinner } from "@/components/ui/spinner";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 
 import { formatTime, recoverSteps } from "@/lib/utils";
 
@@ -51,11 +52,7 @@ const VerifyContent = (props: VerifyPasswordResetProps) => {
 
   const { theme } = useTheme();
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="h-full flex flex-col justify-between min-h-screen py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">

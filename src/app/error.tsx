@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
 import { Home, RefreshCcw } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { ROUTES } from "@/lib/constants/routes";
 
 export default function Error({
@@ -19,17 +19,17 @@ export default function Error({
     <div className="min-h-screen bg-destructive/5 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full text-center">
         {/* Logo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-8 flex justify-center"
         >
           <Logo />
-        </motion.div>
+        </m.div>
 
         {/* Animated Error */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
@@ -38,10 +38,10 @@ export default function Error({
           <h1 className="text-[8rem] md:text-[12rem] font-bold leading-none tracking-tighter text-destructive drop-shadow-sm select-none">
             Error
           </h1>
-        </motion.div>
+        </m.div>
 
         {/* Main Message */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -54,10 +54,10 @@ export default function Error({
             We apologize for the inconvenience. Our team has been notified and
             is looking into the issue.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Action Buttons */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -84,10 +84,10 @@ export default function Error({
               Return Home
             </span>
           </Button>
-        </motion.div>
+        </m.div>
 
         {/* Helpful Links */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.7 }}
@@ -121,7 +121,7 @@ export default function Error({
               Provider Login
             </Button>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

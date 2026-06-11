@@ -1,12 +1,12 @@
-"use client";
+import { getMetadata } from "@/lib/metadata";
+import ProviderCheckEmailView from "./view";
 
-import CheckEmail from "@/components/provider/auth/check-email";
-import { useProviderCheckEmailPage } from "@/hooks/provider/use-provider-check-email-page";
+export const metadata = getMetadata(
+  "Check Your Email",
+  "Confirm your email address to continue with Dwen Wo Ho.",
+  "/provider/check-email",
+);
 
-const ProviderCheckEmailPage = () => {
-  const { handleEmailSubmit } = useProviderCheckEmailPage();
-
-  return <CheckEmail onEmailSubmit={handleEmailSubmit} />;
-};
-
-export default ProviderCheckEmailPage;
+export default function ProviderCheckEmailPage() {
+  return <ProviderCheckEmailView />;
+}

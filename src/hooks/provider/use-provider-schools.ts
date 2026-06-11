@@ -17,7 +17,10 @@ export function useProviderSchools() {
   const { cachedSchools, atomLoading, schoolsState, updateSchoolInState, setSchoolsState } =
     useSchoolsState();
 
-  const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(new Map());
+  const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(null!);
+  if (!previousSchoolsRef.current) {
+    previousSchoolsRef.current = new Map();
+  }
 
   const { fetchSchoolData } = useSchoolDataFetcher(
     updateSchoolInState,

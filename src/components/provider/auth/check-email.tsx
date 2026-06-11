@@ -1,5 +1,5 @@
 import { Logo } from "@/components/shared/Logo";
-import { useState, useEffect } from "react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { ROUTES } from "@/lib/constants/routes";
 import { ProviderEmailFormData } from "@/lib/schemas/provider-auth-schema";
@@ -21,11 +21,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
     checkEmailExists(values.email);
   };
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   return (
     <div className="h-full flex flex-col justify-between min-h-screen py-4 sm:py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">

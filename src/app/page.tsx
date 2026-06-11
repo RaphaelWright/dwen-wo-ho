@@ -9,6 +9,9 @@ import HomePageHero from "@/components/hero/home-hero";
 import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
 import { testimonials } from "@/lib/constants/mock-data";
 import Footer from "@/components/shared/footer";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata();
 
 export default function HomePage() {
   return (

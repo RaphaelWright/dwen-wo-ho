@@ -10,7 +10,7 @@ import {
   ProviderNotification,
 } from "@/lib/types/notification";
 
-export const providerNotificationRouteConfig = {
+const providerNotificationRouteConfig = {
   [PROVIDER_NOTIFICATION_ACTIONS.OPEN_PATIENT]:
     DYNAMIC_ROUTES.provider.patientDetails,
 
@@ -60,7 +60,7 @@ export function getProviderNotificationRoute(
   );
 }
 
-export const curatorNotificationRouteConfig = {
+const curatorNotificationRouteConfig = {
   [CURATOR_NOTIFICATION_ACTIONS.OPEN_SCHOOL]: (id: string | number) =>
     DYNAMIC_ROUTES.curator.schoolDetails(id),
   [CURATOR_NOTIFICATION_ACTIONS.OPEN_PROVIDER]: (id: string | number) =>

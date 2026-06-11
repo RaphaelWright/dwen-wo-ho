@@ -9,6 +9,13 @@ import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
 import { testimonials } from "@/lib/constants/mock-data";
 import Footer from "@/components/shared/footer";
 import ProviderPageHero from "@/components/hero/providers";
+import { getMetadata } from "@/lib/metadata";
+
+export const metadata = getMetadata(
+  "For Providers",
+  "Join Dwen Wo Ho as a mental health provider and connect with students who need your care.",
+  "/for-providers",
+);
 
 export default function ProvidersPage() {
   return (

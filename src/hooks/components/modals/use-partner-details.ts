@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { useProvidersQuery } from "@/hooks/queries/use-provider";
 import usePartnerQuery from "@/hooks/queries/use-partner";
@@ -86,13 +86,17 @@ export const usePartnerDetails = ({
       providerSearchQuery,
     });
 
-  useEffect(() => {
+  // Reset the modal while rendering when it opens, instead of mirroring the
+  // open prop into state via an effect.
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (isOpen) {
       setActiveTab("overview");
       setSchoolSearchQuery("");
       setProviderSearchQuery("");
     }
-  }, [isOpen]);
+  }
 
   const handleAddSchool = async (school: AssociatedSchool) => {
     await addSchool({ partnerId, schoolId: String(school.id) });

@@ -9,11 +9,12 @@ import { usePatientResultWebSocket } from "@/hooks/use-patient-result-websocket"
 import { subscriptionManager } from "@/services/websocket/subscription-manager";
 import { getUserType, hasValidToken } from "@/lib/utils/getUserType";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 export function StompProvider({ children }: { children: ReactNode }) {
   const { connect, disconnect, connectionStatus } = useStompWebSocket();
-  const [isAuth, setIsAuth] = useState(false);
+  // Tracked in a ref: only read inside the auth effect to detect transitions,
+  // never rendered, so it shouldn't cause extra renders or chained updates.
+  const isAuthRef = useRef(false);
   const pathname = usePathname();
 
   // Initialize WebSocket hooks (they listen for events)
@@ -27,19 +28,19 @@ export function StompProvider({ children }: { children: ReactNode }) {
     const userType = getUserType();
     const valid = !!(userType && hasValidToken());
     console.log(
-      `[StompProvider] Auth check - userType: ${userType}, valid: ${valid}, isAuth: ${isAuth}`,
+      `[StompProvider] Auth check - userType: ${userType}, valid: ${valid}, isAuth: ${isAuthRef.current}`,
     );
 
-    if (valid && !isAuth) {
-      setIsAuth(true);
+    if (valid && !isAuthRef.current) {
+      isAuthRef.current = true;
       console.log(`[StompProvider] Connecting...`);
       connect();
-    } else if (!valid && isAuth) {
-      setIsAuth(false);
+    } else if (!valid && isAuthRef.current) {
+      isAuthRef.current = false;
       console.log(`[StompProvider] Disconnecting...`);
       disconnect();
     }
-  }, [connect, disconnect, pathname, isAuth]);
+  }, [connect, disconnect, pathname]);
 
   // Track if this is first connection or reconnect
   const wasConnectedRef = useRef(false);

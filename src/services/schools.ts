@@ -1,7 +1,5 @@
 import { api } from "@/lib/api";
 import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
-import { axiosFormData } from "@/configs/axiosInstance";
-import { checkResponse } from "@/lib/api-utils";
 import { ICreateSchool, IUpdateSchool, School } from "@/lib/types/school";
 import { SchoolProvider } from "@/lib/types/provider";
 import { patientsService } from "./patients";
@@ -48,11 +46,14 @@ export const schoolsService = {
       formData.append("logo", data.logo);
     }
 
-    const response = await axiosFormData.post(
-      STATIC_ENDPOINTS.SCHOOLS,
-      formData,
-    );
-    return checkResponse(response, 201);
+    const response = await api(STATIC_ENDPOINTS.SCHOOLS, {
+      method: "POST",
+      body: formData,
+    });
+    if (response?.success && response.data) {
+      return response.data as School;
+    }
+    throw new Error("Failed to create school");
   },
 
   updateSchool: async (data: IUpdateSchool): Promise<School> => {

@@ -20,8 +20,8 @@ export const useProviderCard = ({
     onShowRejectModal(provider.email);
   };
 
-  const handleViewDetails = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleViewDetails = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     onViewDetails(provider.email);
   };
 
