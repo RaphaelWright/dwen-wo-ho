@@ -31,7 +31,11 @@ export default function ProviderHomePage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [mounted, setMounted] = useState(false);
-  const { isApproved, isLoading: isAuthLoading } = useProviderDashboardAuth();
+  const {
+    isApproved,
+    isLoading: isAuthLoading,
+    authProfile,
+  } = useProviderDashboardAuth();
   const dashboard = useProviderDashboard();
   const {
     setActiveSchool,
@@ -106,15 +110,15 @@ export default function ProviderHomePage() {
   };
 
   // ── Early returns (AFTER all hooks are called) ──
-  if (!isApproved && !isAuthLoading) {
-    if (isInitLoading || !profileData.name) {
-      return (
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
-      );
-    }
-  }
+  // if (!isApproved && !isAuthLoading) {
+  //   if (isInitLoading || !profileData.name) {
+  //     return (
+  //       <div className="min-h-screen bg-background flex items-center justify-center">
+  //         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+  //       </div>
+  //     );
+  //   }
+  // }
 
   if (!mounted) {
     return (
@@ -123,6 +127,10 @@ export default function ProviderHomePage() {
       </div>
     );
   }
+
+  console.log(profileData);
+  console.log(authProfile);
+  console.log(Object.keys(profileData).length);
 
   return (
     <div className="overflow-x-hidden h-dvh min-[1065px]:h-screen min-[1065px]:overflow-hidden flex flex-col w-full px-0.5 min-[1065px]:px-0">
@@ -371,7 +379,9 @@ export default function ProviderHomePage() {
 
       {!isApproved && !isAuthLoading && (
         <PendingApprovalModal
-          userInfo={toPendingApprovalUserInfo(profileData)}
+          userInfo={toPendingApprovalUserInfo(
+            Object.keys(profileData).length > 0 ? profileData : authProfile,
+          )}
           onLogout={handleLogout}
         />
       )}
