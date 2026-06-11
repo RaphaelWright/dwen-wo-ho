@@ -13,6 +13,8 @@ const SignUpPageContent = () => {
     specialty,
     profileImage,
     profileStep,
+    isResumeLocked,
+    isCheckingGuard,
     handleBack,
   } = useProviderSignup();
 
@@ -24,6 +26,8 @@ const SignUpPageContent = () => {
       specialty={specialty}
       profileImage={profileImage}
       profileStep={profileStep}
+      isResumeLocked={isResumeLocked}
+      isCheckingGuard={isCheckingGuard}
       onBack={handleBack}
     />
   );

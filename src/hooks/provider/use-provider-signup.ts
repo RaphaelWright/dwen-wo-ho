@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import useGetSearchParams from "@/hooks/use-get-search-params";
+import { useProviderSignupGuard } from "@/hooks/provider/use-provider-signup-guard";
+import {
+  isProviderSignupProfileStepSlug,
+  profileStepSlugToIndex,
+  hasProviderAuthToken,
+} from "@/lib/utils/provider-signup-resume";
 
 export function useProviderSignup() {
   const router = useRouter();
@@ -12,12 +18,24 @@ export function useProviderSignup() {
   const email = useGetSearchParams("email");
   const step = useGetSearchParams("step");
 
-  const getProfileStep = () => {
-    if (step === "photo") return 0;
-    if (step === "bio") return 1;
-    if (step === "specialty") return 2;
-    return null;
+  const guard = useProviderSignupGuard();
+
+  const getProfileStepFromUrl = () => {
+    if (!isProviderSignupProfileStepSlug(step)) {
+      return null;
+    }
+
+    return profileStepSlugToIndex(step);
   };
+
+  const urlProfileStep = getProfileStepFromUrl();
+  const isResumeLocked =
+    guard.isResumeLocked ||
+    (urlProfileStep !== null && hasProviderAuthToken());
+
+  const profileStep = isResumeLocked
+    ? (guard.profileStep ?? urlProfileStep)
+    : urlProfileStep;
 
   const handleBack = () => {
     router.back();
@@ -29,7 +47,9 @@ export function useProviderSignup() {
     title: title ?? undefined,
     specialty: specialty ?? undefined,
     profileImage: photo ?? undefined,
-    profileStep: getProfileStep(),
+    profileStep,
+    isResumeLocked,
+    isCheckingGuard: guard.isChecking,
     handleBack,
   };
 }

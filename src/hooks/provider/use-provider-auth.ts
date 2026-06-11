@@ -10,6 +10,11 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { refreshToken } from "@/lib/auth-utils";
 import { authService } from "@/services/auth";
+import { getProviderRedirectInfo } from "@/lib/utils/auth-redirect";
+import {
+  buildProviderSignupResumeUrl,
+  isProviderSignupProfileStepSlug,
+} from "@/lib/utils/provider-signup-resume";
 import type { AuthStep } from "@/lib/types/components/auth";
 
 export function useProviderAuth() {
@@ -56,22 +61,40 @@ export function useProviderAuth() {
         try {
           const profileData = await authService.getProfile();
 
-          if (profileData) {
-            const userType = getUserType();
-
-            if (userType === "curator" && !hasRedirectedRef.current) {
+          if (profileData && !hasRedirectedRef.current) {
+            if (getUserType() === "curator") {
               hasRedirectedRef.current = true;
               isCheckingRef.current = false;
               window.location.href = ROUTES.curator.schools;
               return true;
             }
 
-            if (userType === "provider" && !hasRedirectedRef.current) {
-              hasRedirectedRef.current = true;
-              isCheckingRef.current = false;
-              window.location.href = ROUTES.provider.home;
-              return true;
+            const redirectInfo = getProviderRedirectInfo(profileData);
+
+            if (redirectInfo.isPending) {
+              localStorage.setItem("pendingUser", JSON.stringify(profileData));
+            } else {
+              localStorage.removeItem("pendingUser");
             }
+
+            hasRedirectedRef.current = true;
+            isCheckingRef.current = false;
+
+            const profileEmail = profileData.email || "";
+            if (
+              redirectInfo.step &&
+              profileEmail &&
+              isProviderSignupProfileStepSlug(redirectInfo.step)
+            ) {
+              window.location.href = buildProviderSignupResumeUrl(
+                profileEmail,
+                redirectInfo.step,
+              );
+            } else {
+              window.location.href = redirectInfo.path;
+            }
+
+            return true;
           }
 
           clearAuthAndProceed();

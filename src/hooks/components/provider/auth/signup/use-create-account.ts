@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import {
@@ -12,8 +14,20 @@ import {
   SIGN_UP_TEXTS,
   TITLE_SELECT_OPEN_DELAY_MS,
 } from "@/lib/constants/components/provider/auth/signup";
+import { ROUTES } from "@/lib/constants/routes";
 import { toTitleCase } from "@/lib/utils/smart-typing";
+import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { toast } from "@/components/ui/sonner";
+
+function isExistingAccountError(message: string): boolean {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes("already exists") ||
+    normalized.includes("already registered") ||
+    normalized.includes("already verified") ||
+    normalized.includes("user exists")
+  );
+}
 
 export const useCreateAccount = ({
   email: propEmail,
@@ -23,6 +37,7 @@ export const useCreateAccount = ({
   onNext,
   onValidityChange,
 }: CreateAccountProps) => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isTitleSelectOpen, setIsTitleSelectOpen] = useState<boolean>(false);
 
@@ -82,33 +97,16 @@ export const useCreateAccount = ({
         password: values.password,
       });
     } catch (error: unknown) {
-      let errorMsg = SIGN_UP_TEXTS.errors.general;
+      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.general;
 
-      if (
-        error &&
-        typeof error === "object" &&
-        "response" in error &&
-        error.response &&
-        typeof error.response === "object" &&
-        "data" in error.response &&
-        error.response.data &&
-        typeof error.response.data === "object" &&
-        "message" in error.response.data &&
-        typeof error.response.data.message === "string"
-      ) {
-        errorMsg = error.response.data.message;
-      } else if (error instanceof Error) {
-        try {
-          if (error.message.trim().startsWith("{")) {
-            const parsed = JSON.parse(error.message) as { message?: string };
-            errorMsg = parsed.message || error.message;
-          } else {
-            errorMsg = error.message;
-          }
-        } catch {
-          errorMsg = error.message;
-        }
+      if (isExistingAccountError(errorMsg)) {
+        toast.error(SIGN_UP_TEXTS.errors.accountExists);
+        router.push(
+          `${ROUTES.provider.singIn}&email=${encodeURIComponent(values.email)}` as Route,
+        );
+        return;
       }
+
       toast.error(errorMsg);
     }
   };

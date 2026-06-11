@@ -30,6 +30,8 @@ export interface ProviderSignUpProps {
   profileImage?: string;
   onBack?: () => void;
   profileStep: number | null;
+  isResumeLocked?: boolean;
+  isCheckingGuard?: boolean;
 }
 
 export interface CreateAccountProps {
@@ -61,6 +63,7 @@ export interface SignUpProfileProps {
   onBack?: () => void;
   startStep?: number;
   password?: string;
+  isResumeLocked?: boolean;
 }
 
 export interface ProviderProfileData {

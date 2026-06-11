@@ -24,17 +24,20 @@ export const BaseSignInForm = ({
 }: BaseSignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const { theme } = useTheme();
- const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-  
+
   return (
-    <div className="h-full flex flex-col justify-between min-h-screen py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div className="flex items-center px-8 justify-between w-full">
-        <Logo variant={mounted && theme === "light" ? "black" : "white"} />
-        <p className="font-bold text-2xl text-muted-foreground">
+    <div className="h-full flex flex-col justify-between gap-10 min-h-screen py-4 sm:py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+      <div className="flex items-center px-4 sm:px-8 justify-between w-full">
+        <Logo
+          variant={mounted && theme === "light" ? "black" : "white"}
+          className="w-[140px] sm:w-auto h-auto"
+        />
+        <p className="font-bold text-lg sm:text-2xl text-muted-foreground">
           <span className="text-sm font-normal">for </span>
           {role === "patient" ? "Patients" : "Providers"}
         </p>
@@ -43,9 +46,9 @@ export const BaseSignInForm = ({
       <form
         id="login-form"
         onSubmit={onSubmit}
-        className="px-8 md:px-12 w-full max-w-md mx-auto space-y-8"
+        className="px-4 sm:px-8 md:px-12 w-full max-w-md mx-auto space-y-8"
       >
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-4">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
             Welcome back
           </h1>
@@ -55,10 +58,9 @@ export const BaseSignInForm = ({
         </div>
 
         {successMessage && (
-          <div className="bg-success/10 border border-success/20 rounded-lg p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
-            <div className="h-2 w-2 rounded-full bg-success shrink-0" />
-            <p className="text-success text-sm font-medium">{successMessage}</p>
-          </div>
+          <p className="text-success text-sm font-medium text-center">
+            {successMessage}
+          </p>
         )}
 
         <div className="space-y-4">
@@ -69,8 +71,10 @@ export const BaseSignInForm = ({
               defaultValue={email}
               readOnly
               tabIndex={-1}
-              placeholder={email ? undefined : "Enter your email on the previous step"}
-              className="h-12 bg-muted text-lg font-medium text-foreground cursor-not-allowed opacity-100 disabled:opacity-100 border-input"
+              placeholder={
+                email ? undefined : "Enter your email on the previous step"
+              }
+              className="h-12 bg-muted font-medium text-foreground cursor-not-allowed opacity-100 disabled:opacity-100 border-input"
             />
           </div>
 
@@ -81,7 +85,7 @@ export const BaseSignInForm = ({
                 {...register("password")}
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
-                className={`h-12 pl-4 pr-16 text-lg transition-all duration-200 ${
+                className={`h-12 pl-4 pr-16 transition-all duration-200 ${
                   errors?.password
                     ? "border-destructive focus-visible:ring-destructive/30"
                     : "border-input focus-visible:ring-primary/30"

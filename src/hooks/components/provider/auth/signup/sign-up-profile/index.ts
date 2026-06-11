@@ -11,8 +11,10 @@ export const useSignUpProfile = ({
   onBack,
   startStep = 0,
   password,
+  isResumeLocked,
 }: SignUpProfileProps) => {
-  const { currentStep, setCurrentStep, handleBack } = useProfileSteps(startStep, onBack);
+  const { currentStep, setCurrentStep, handleBack, hideBackAtRoot } =
+    useProfileSteps(startStep, onBack, isResumeLocked);
 
   const { profileData, handleChange } = useProfileData();
 
@@ -37,5 +39,6 @@ export const useSignUpProfile = ({
     handleBack,
     handleNext,
     isCurrentStepValid,
+    hideBackAtRoot,
   };
 };

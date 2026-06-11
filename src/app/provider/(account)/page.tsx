@@ -101,6 +101,10 @@ export default function ProviderHomePage() {
     };
   }, [notifications, setNotifOpen]);
 
+  const handleLogout = () => {
+    performLogout(queryClient, ROUTES.provider.auth);
+  };
+
   // ── Early returns (AFTER all hooks are called) ──
   if (!isApproved && !isAuthLoading) {
     if (isInitLoading || !profileData.name) {
@@ -110,17 +114,6 @@ export default function ProviderHomePage() {
         </div>
       );
     }
-
-    const handleLogout = () => {
-      performLogout(queryClient, ROUTES.provider.auth);
-    };
-
-    return (
-      <PendingApprovalModal
-        userInfo={toPendingApprovalUserInfo(profileData)}
-        onLogout={handleLogout}
-      />
-    );
   }
 
   if (!mounted) {
@@ -375,6 +368,13 @@ export default function ProviderHomePage() {
         isSaving={isSaving || isUpdatingPhoneNumber}
         profileData={profileData}
       />
+
+      {!isApproved && !isAuthLoading && (
+        <PendingApprovalModal
+          userInfo={toPendingApprovalUserInfo(profileData)}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 }

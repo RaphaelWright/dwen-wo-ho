@@ -78,15 +78,13 @@ export const SIGN_UP_TEXTS = {
   },
   bioStep: {
     officePhoneLabel: "Phone Number",
-    officePhonePlaceholder:
-      "Enter your phone number (e.g. 0555555555)",
+    officePhonePlaceholder: "Enter your phone number (e.g. 0555555555)",
     countryCode: "+233",
     ghanaFlagSrc: "/ghana-flag.png",
     privateInfo:
       "This is private and will not be shared with anyone outside JustGo Health.",
     status: "My Slogan",
-    bioPlaceholder:
-      "One thing I want my patients to know (min. 10 characters)",
+    bioPlaceholder: "One thing I want my patients to know",
     bioDescription: "Introduce yourself to the world of mental health.",
   },
   specialtyStep: {
@@ -94,8 +92,16 @@ export const SIGN_UP_TEXTS = {
     subtitle:
       "Click to choose your specialty. You can add more than one later.",
   },
+  resume: {
+    checking: "Checking your profile...",
+    signInRequired: "Sign in to continue your profile.",
+    continueProfile: "Continue setting up your profile.",
+    sessionExpired:
+      "Your session has expired. Please sign in again after verifying your email.",
+  },
   errors: {
     termsRequired: "Please agree to Terms & Conditions",
+    accountExists: "Account already exists. Sign in to continue.",
     createFailed: "Failed to create account",
     general: "Failed to create account. Please try again.",
     verifyFailed: "Verification failed. Please try again.",
@@ -115,6 +121,7 @@ export const SIGN_UP_TEXTS = {
     verified: "Account verified successfully",
     resend: "Verification email resent",
     send: "Verification email sent",
+    resendPasswordReset: "Recovery code resent",
   },
   loading: "Loading",
 };

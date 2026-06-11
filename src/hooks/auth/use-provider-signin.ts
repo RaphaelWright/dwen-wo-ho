@@ -11,8 +11,16 @@ import {
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { setUserType } from "@/lib/utils/getUserType";
 import { ROUTES } from "@/lib/constants/routes";
+import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { getProviderRedirectInfo } from "@/lib/utils/auth-redirect";
+import {
+  buildProviderSignupResumeUrl,
+  clearProviderAuthStorage,
+  hasProviderAuthToken,
+  isProfileIncompleteError,
+  parseProfileIncompleteStepFromMessage,
+} from "@/lib/utils/provider-signup-resume";
 import { useAccountRecovery } from "@/hooks/auth/use-account-recovery";
 import type { Route } from "next";
 
@@ -28,7 +36,10 @@ export const useProviderSignIn = ({
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { loginMutation } = useAuthQuery();
-  const { handleRecoverAccount, isRecovering } = useAccountRecovery(email, onForgotPassword);
+  const { handleRecoverAccount, isRecovering } = useAccountRecovery(
+    email,
+    onForgotPassword,
+  );
 
   const { register, handleSubmit, errors, setValue } =
     useSelectedValuesFromReactHookForm(ProviderLoginSchema, {
@@ -46,11 +57,6 @@ export const useProviderSignIn = ({
   }, [email, setValue]);
 
   const onSubmit = async (values: ProviderLoginFormData) => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("curatorToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("pendingUser");
-
     try {
       const response = await loginMutation.mutateAsync({
         email: values.email,
@@ -83,36 +89,45 @@ export const useProviderSignIn = ({
         }
 
         setIsRedirecting(true);
-        const targetPath = redirectInfo.step 
+        const targetPath = redirectInfo.step
           ? `${redirectInfo.path}?email=${encodeURIComponent(values.email)}&step=${redirectInfo.step}`
           : redirectInfo.path;
-          
-        router.push(targetPath as Route);
+
+        router.replace(targetPath as Route);
         return;
       }
 
-      // Final fallback
       localStorage.removeItem("pendingUser");
       setIsRedirecting(true);
-      router.push(ROUTES.provider.home);
-
+      router.replace(ROUTES.provider.home as Route);
     } catch (error: unknown) {
       const errMessage = getCleanErrorMessage(error);
-      
+
       if (errMessage.includes("ACCOUNT PENDING")) {
-        router.push(ROUTES.provider.home);
+        router.replace(ROUTES.provider.home as Route);
         return;
       }
 
-      if (errMessage.includes("Profile is not complete")) {
-        const step = errMessage.includes("upload your profile photo") ? "photo" :
-                     errMessage.includes("office phone number") ? "bio" :
-                     errMessage.includes("add your specialty") ? "specialty" : "photo";
-        
-        router.push(`/provider/signup?email=${encodeURIComponent(email)}&step=${step}`);
-      } else {
-        toast.error(errMessage);
+      if (isProfileIncompleteError(errMessage)) {
+        const step = parseProfileIncompleteStepFromMessage(errMessage);
+
+        if (hasProviderAuthToken()) {
+          setUserType("provider");
+          toast.info(SIGN_UP_TEXTS.resume.continueProfile);
+          setIsRedirecting(true);
+          router.replace(
+            buildProviderSignupResumeUrl(values.email, step) as Route,
+          );
+          return;
+        }
+
+        toast.error(SIGN_UP_TEXTS.resume.sessionExpired);
+        return;
       }
+
+      clearProviderAuthStorage();
+      setUserType(null);
+      toast.error(errMessage);
     }
   };
 

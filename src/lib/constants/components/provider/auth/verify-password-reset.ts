@@ -3,8 +3,8 @@ export const VERIFY_PASSWORD_RESET_TEXTS = {
     signIn: "Sign In",
   },
   content: {
-    title: "Enter Verification Code",
-    subtitlePart1: "A 6-digit verification code was just sent to",
+    title: "Enter account recovery code",
+    subtitlePart1: "A 6-digit recovery code was just sent to",
     resendButton: "Resend code",
     verifying: "Verifying code...",
   },

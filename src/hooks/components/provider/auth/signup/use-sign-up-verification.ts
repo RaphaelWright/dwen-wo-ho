@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { toast } from "@/components/ui/sonner";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { setUserType } from "@/lib/utils/getUserType";
+import { buildProviderSignupResumeUrl } from "@/lib/utils/provider-signup-resume";
 import {
   OTP_INPUT_FOCUS_DELAY_MS,
   SIGN_UP_TEXTS,
@@ -14,6 +18,7 @@ export const useSignUpVerification = ({
   email,
   onNext,
 }: SignUpVerificationProps) => {
+  const router = useRouter();
   const [isRunning, setIsRunning] = useState(true);
   const [seconds, setSeconds] = useState(60);
   const otpInputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +68,11 @@ export const useSignUpVerification = ({
             localStorage.setItem("refreshToken", refreshTokenValue);
           }
 
+          setUserType("provider");
           toast.success(SIGN_UP_TEXTS.toasts.verified);
+          router.replace(
+            buildProviderSignupResumeUrl(email.trim(), "photo") as Route,
+          );
           onNext();
         } else {
           toast.error(SIGN_UP_TEXTS.errors.noToken);
