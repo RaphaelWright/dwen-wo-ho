@@ -16,7 +16,7 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
     handleOTPComplete,
     handleResendCode,
     otpInputRef,
-    resendSignupVerificationMutation
+    resendSignupVerificationMutation,
   } = useSignUpVerification(props);
 
   return (
@@ -78,7 +78,7 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
             </InputOTP>
 
             <LoadingButton
-              variant="outline"
+              variant={seconds > 0 ? "outline" : "default"}
               loading={resendSignupVerificationMutation.isPending}
               loadingText={SIGN_UP_TEXTS.verification.resending}
               disabled={seconds > 0}
@@ -94,13 +94,12 @@ const SignUpVerification = (props: SignUpVerificationProps) => {
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  {SIGN_UP_TEXTS.verification.resend} →
+                  {SIGN_UP_TEXTS.verification.resend}
                 </span>
               )}
             </LoadingButton>
           </div>
         )}
-
       </div>
     </div>
   );

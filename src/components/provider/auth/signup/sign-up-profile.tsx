@@ -18,6 +18,7 @@ const SignUpProfile = (props: SignUpProfileProps) => {
     handleBack,
     handleNext,
     isCurrentStepValid,
+    hideBackAtRoot,
   } = useSignUpProfile(props);
 
   const renderStepContent = () => {
@@ -67,16 +68,20 @@ const SignUpProfile = (props: SignUpProfileProps) => {
       </div>
 
       <div className="border-t border-border bg-background/95 backdrop-blur-sm px-3 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-8 sticky bottom-0 z-10">
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          className="text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1 w-full sm:w-auto justify-center sm:justify-start"
-        >
-          <span className="group-hover:-translate-x-1 transition-transform">
-            ←
-          </span>{" "}
-          {SIGN_UP_TEXTS.navigation.back}
-        </Button>
+        {hideBackAtRoot ? (
+          <div className="order-2 sm:order-1 w-full sm:w-auto" aria-hidden />
+        ) : (
+          <Button
+            variant="ghost"
+            onClick={handleBack}
+            className="text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1 w-full sm:w-auto justify-center sm:justify-start"
+          >
+            <span className="group-hover:-translate-x-1 transition-transform">
+              ←
+            </span>{" "}
+            {SIGN_UP_TEXTS.navigation.back}
+          </Button>
+        )}
 
         <div className="flex items-center gap-1 sm:gap-4 order-1 sm:order-2 max-w-full overflow-x-auto">
           {steps.map((step, i) => (

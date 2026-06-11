@@ -8,6 +8,7 @@ export const ROUTES = {
     cookiePolicy: "/cookie-policy",
   },
   provider: {
+    application: "/provider/application",
     singIn: "/provider/auth?step=sign-in",
     signUp: "/provider/signup",
     checkEmail: "/provider/check-email",

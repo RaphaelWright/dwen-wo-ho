@@ -41,7 +41,7 @@ export const useAuthQuery = () => {
     mutationKey: ["auth", "resendPasswordResetVerification"],
     mutationFn: authService.resendPasswordResetVerification,
     onSuccess: () => {
-      toast.success(SIGN_UP_TEXTS.toasts.resend);
+      toast.success(SIGN_UP_TEXTS.toasts.resendPasswordReset);
     },
     // onError: (error) => {
     //   toast.error(error.message);
@@ -84,8 +84,6 @@ export const useAuthQuery = () => {
     performLogout(queryClient, redirectTo || ROUTES.provider.auth);
   };
 
-
-
   return {
     loginMutation,
     signupMutation,
@@ -102,4 +100,3 @@ export const useAuthQuery = () => {
     resendPasswordResetVerificationMutation,
   };
 };
-

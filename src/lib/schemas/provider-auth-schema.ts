@@ -65,13 +65,10 @@ export const GhanaPhoneNumberSchema = z
   .pipe(
     z
       .string()
-      .refine(
-        (digits) => /^\d{9}$/.test(digits) || /^0\d{9}$/.test(digits),
-        {
-          message:
-            "Please enter a valid 9-digit number or 10-digit number starting with 0",
-        },
-      )
+      .refine((digits) => /^\d{9}$/.test(digits) || /^0\d{9}$/.test(digits), {
+        message:
+          "Please enter a valid 9-digit number or 10-digit number starting with 0",
+      })
       .transform((digits) =>
         digits.length === 10 ? `+233${digits.slice(1)}` : `+233${digits}`,
       ),
@@ -82,8 +79,8 @@ export const ProviderProfileBioStepSchema = z.object({
   bio: z
     .string()
     .trim()
-    .min(10, { message: "Status must be at least 10 characters" })
-    .max(140, { message: "Status must be 140 characters or less" }),
+    .min(1, { message: "My Slogan must be at least 1 character" })
+    .max(140, { message: "My Slogan must be 140 characters or less" }),
 });
 
 export const ProviderProfileSpecialtyStepSchema = z.object({

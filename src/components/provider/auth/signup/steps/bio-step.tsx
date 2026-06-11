@@ -8,14 +8,16 @@ import { useBioStep } from "@/hooks/components/provider/auth/signup/use-bio-step
 
 const BioStep = (props: BioStepProps) => {
   const { phoneNumber, bio } = props;
-  const { handlePhoneChange, handleBioChange, handleBioBlur } = useBioStep(props);
+  const { handlePhoneChange, handleBioChange, handleBioBlur } =
+    useBioStep(props);
 
   return (
     <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="office-phone">
-            {SIGN_UP_TEXTS.bioStep.officePhoneLabel}<span className="text-destructive">*</span>
+            {SIGN_UP_TEXTS.bioStep.officePhoneLabel}
+            <span className="text-destructive">*</span>
           </Label>
           <div className="group flex h-12 items-stretch overflow-hidden rounded-lg border border-input bg-background shadow-sm transition-all duration-200 focus-within:border-ring focus-within:ring focus-within:ring-primary/50">
             <div className="flex shrink-0 items-center gap-1.5 border-r border-border bg-muted/40 px-2 sm:px-3 pointer-events-none">
@@ -41,7 +43,7 @@ const BioStep = (props: BioStepProps) => {
                 onChange={handlePhoneChange}
                 placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
                 maxLength={10}
-                className="h-full pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none"
+                className="h-full pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none border-0"
               />
               {/* <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
                 <span className="text-[10px] sm:text-xs font-medium text-muted-foreground bg-muted px-1.5 sm:px-2 py-1 rounded-md">

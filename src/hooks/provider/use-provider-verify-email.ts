@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/constants/routes";
+import type { Route } from "next";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { setUserType } from "@/lib/utils/getUserType";
+import { buildProviderSignupResumeUrl } from "@/lib/utils/provider-signup-resume";
+import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { toast } from "@/components/ui/sonner";
 
 export function useProviderVerifyEmail() {
   const [isRunning, setIsRunning] = useState(true);
-  const [seconds, setSeconds] = useState(120); // 2 minutes
+  const [seconds, setSeconds] = useState(120);
   const params = useParams();
   const { email } = params;
   const { verifyEmailMutation } = useAuthQuery();
@@ -31,25 +34,29 @@ export function useProviderVerifyEmail() {
 
   const handleOTPComplete = async (value: string) => {
     try {
+      const decodedEmail = decodeURIComponent(email as string);
       const response = await verifyEmailMutation.mutateAsync({
         code: value,
-        email: decodeURIComponent(email as string),
+        email: decodedEmail,
       });
 
       if (response) {
         if (response.token) {
           localStorage.setItem("token", response.token);
         }
-        // Redirect to profile setup (photo step)
-        router.push(
-          `${ROUTES.provider.signUp}?email=${encodeURIComponent(
-            email as string,
-          )}&step=photo`,
+
+        if (response.refreshToken) {
+          localStorage.setItem("refreshToken", response.refreshToken);
+        }
+
+        setUserType("provider");
+        router.replace(
+          buildProviderSignupResumeUrl(decodedEmail, "photo") as Route,
         );
       }
     } catch (error: unknown) {
       toast.error(
-        getCleanErrorMessage(error) || "Verification failed. Please try again.",
+        getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.verifyFailed,
       );
     }
   };
