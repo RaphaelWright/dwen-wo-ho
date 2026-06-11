@@ -48,5 +48,6 @@ export default function useProviderDashboardAuth() {
   return {
     isApproved: applicationStatus === "APPROVED",
     isLoading: hasAuth && getProfileQuery.isLoading,
+    authProfile: getProfileQuery.data,
   };
-};
+}
