@@ -19,7 +19,7 @@ export function useSchoolIcons() {
       data: IconFormData,
       editingIcon: SchoolIcon | null,
       schoolId: number | null,
-      onComplete: () => void
+      onComplete: () => void,
     ) => {
       if (editingIcon) {
         const updated: SchoolIcon = {

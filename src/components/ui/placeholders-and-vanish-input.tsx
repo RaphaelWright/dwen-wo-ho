@@ -60,7 +60,7 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-xl overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
+        "relative mx-auto h-12 w-full max-w-xl overflow-hidden rounded-xl bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200 dark:bg-zinc-800",
         internalValue && "bg-gray-50",
         className,
       )}
@@ -68,7 +68,7 @@ export function PlaceholdersAndVanishInput({
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
+          "pointer-events-none absolute top-[20%] left-2 origin-top-left scale-50 transform pr-20 text-base invert filter sm:left-8 dark:invert-0",
           !animating ? "opacity-0" : "opacity-100",
         )}
         ref={canvasRef}
@@ -86,7 +86,7 @@ export function PlaceholdersAndVanishInput({
         value={internalValue}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base border-none h-full rounded-xl focus:outline-none focus:ring-0 pl-2 sm:pl-4 pr-20",
+          "relative h-full w-full rounded-xl border-none pr-20 pl-2 text-sm focus:ring-0 focus:outline-none sm:pl-4 sm:text-base",
           animating && "text-transparent dark:text-transparent",
         )}
       />
@@ -102,7 +102,7 @@ export function PlaceholdersAndVanishInput({
           disabled={!internalValue}
           type="submit"
           aria-label="Submit"
-          className="absolute right-1 top-1/2  -translate-y-1/2 size-8  rounded-full bg-foreground disabled:bg-muted/80 text-background disabled:text-muted-foreground/50 transition duration-300 flex items-center justify-center"
+          className="bg-foreground disabled:bg-muted/80 text-background disabled:text-muted-foreground/50 absolute top-1/2 right-1 flex size-8 -translate-y-1/2 items-center justify-center rounded-full transition duration-300"
         >
           <m.svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +137,7 @@ export function PlaceholdersAndVanishInput({
         </button>
       )}
 
-      <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 flex items-center rounded-full">
         <AnimatePresence mode="wait">
           {!internalValue && (
             <m.p
@@ -158,7 +158,7 @@ export function PlaceholdersAndVanishInput({
                 duration: 0.5,
                 ease: "easeInOut",
               }}
-              className="dark:text-zinc-500 text-sm font-normal text-neutral-500 pl-6 sm:pl-8 text-left w-[calc(100%-2rem)] truncate"
+              className="w-[calc(100%-2rem)] truncate pl-6 text-left text-sm font-normal text-neutral-500 sm:pl-8 dark:text-zinc-500"
             >
               {placeholders[currentPlaceholder]}
             </m.p>

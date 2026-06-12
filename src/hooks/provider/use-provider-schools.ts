@@ -14,8 +14,13 @@ export function useProviderSchools() {
     refetchInterval: REFETCH_INTERVAL,
   });
 
-  const { cachedSchools, atomLoading, schoolsState, updateSchoolInState, setSchoolsState } =
-    useSchoolsState();
+  const {
+    cachedSchools,
+    atomLoading,
+    schoolsState,
+    updateSchoolInState,
+    setSchoolsState,
+  } = useSchoolsState();
 
   const previousSchoolsRef = useRef<Map<number, SchoolWithExtras>>(null!);
   if (!previousSchoolsRef.current) {

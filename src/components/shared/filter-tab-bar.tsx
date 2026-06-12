@@ -78,13 +78,13 @@ export function FilterTabBar<T extends string = string>({
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row items-center justify-between gap-4",
+        "flex flex-col items-center justify-between gap-4 sm:flex-row",
         className,
       )}
     >
       <div
         className={cn(
-          "flex w-full sm:w-auto p-1 bg-muted/80 rounded-xl",
+          "bg-muted/80 flex w-full rounded-xl p-1 sm:w-auto",
           tabsClassName,
         )}
       >
@@ -98,16 +98,16 @@ export function FilterTabBar<T extends string = string>({
               onClick={() => onTabChange(tab.key)}
               variant="ghost"
               className={cn(
-                "relative flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-transparent",
+                "relative flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-transparent sm:flex-none sm:px-6",
                 isActive
-                  ? "bg-primary text-white hover:bg-primary/5"
+                  ? "bg-primary hover:bg-primary/5 text-white"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
               {isActive && (
                 <m.div
                   layoutId={activeTabLayoutId}
-                  className="absolute inset-0 bg-primary/5 rounded-lg shadow-sm"
+                  className="bg-primary/5 absolute inset-0 rounded-lg shadow-sm"
                   transition={{
                     type: "spring",
                     bounce: 0.2,
@@ -116,12 +116,12 @@ export function FilterTabBar<T extends string = string>({
                 />
               )}
               <span className="relative z-10 flex items-center justify-center gap-2">
-                <Icon className="w-4 h-4 shrink-0" />
-                <span className="hidden sm:inline capitalize">{tab.label}</span>
+                <Icon className="h-4 w-4 shrink-0" />
+                <span className="hidden capitalize sm:inline">{tab.label}</span>
                 {showBadge && (
                   <span
                     className={cn(
-                      "px-2 py-0.5 rounded-full text-[10px] font-bold min-w-5 text-center",
+                      "min-w-5 rounded-full px-2 py-0.5 text-center text-[10px] font-bold",
                       isActive
                         ? "bg-white/20 text-white"
                         : "bg-muted-foreground/10 text-muted-foreground",
@@ -156,7 +156,7 @@ export function FilterTabBar<T extends string = string>({
       {hasSearch && (
         <div
           className={cn(
-            "flex flex-col items-end gap-3 w-full md:w-auto mt-4 md:mt-0",
+            "mt-4 flex w-full flex-col items-end gap-3 md:mt-0 md:w-auto",
             searchClassName,
           )}
         >
@@ -171,13 +171,13 @@ export function FilterTabBar<T extends string = string>({
                 e.preventDefault();
               }}
               className={cn(
-                "w-full bg-muted/50 focus-within:bg-background border border-transparent focus-within:border-primary/20",
+                "bg-muted/50 focus-within:bg-background focus-within:border-primary/20 w-full border border-transparent",
                 searchInputClassName,
               )}
               submitButton={
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition duration-200 flex items-center justify-center"
+                  className="bg-primary/10 text-primary hover:bg-primary absolute top-1/2 right-2 z-50 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full transition duration-200 hover:text-white"
                 >
                   <Search className="h-4 w-4" />
                 </button>

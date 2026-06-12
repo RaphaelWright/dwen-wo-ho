@@ -28,13 +28,13 @@ export const BaseSignInForm = ({
   const mounted = useHydrated();
 
   return (
-    <div className="h-full flex flex-col justify-between gap-10 min-h-screen py-4 sm:py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div className="flex items-center px-4 sm:px-8 justify-between w-full">
+    <div className="animate-in fade-in slide-in-from-bottom-8 flex h-full min-h-screen flex-col justify-between gap-10 py-4 duration-700 sm:py-8">
+      <div className="flex w-full items-center justify-between px-4 sm:px-8">
         <Logo
           variant={mounted && theme === "light" ? "black" : "white"}
-          className="w-[140px] sm:w-auto h-auto"
+          className="h-auto w-[140px] sm:w-auto"
         />
-        <p className="font-bold text-lg sm:text-2xl text-muted-foreground">
+        <p className="text-muted-foreground text-lg font-bold sm:text-2xl">
           <span className="text-sm font-normal">for </span>
           {audience === "patient" ? "Patients" : "Providers"}
         </p>
@@ -43,10 +43,10 @@ export const BaseSignInForm = ({
       <form
         id="login-form"
         onSubmit={onSubmit}
-        className="px-4 sm:px-8 md:px-12 w-full max-w-md mx-auto space-y-8"
+        className="mx-auto w-full max-w-md space-y-8 px-4 sm:px-8 md:px-12"
       >
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+        <div className="space-y-4 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight md:text-4xl">
             Welcome back
           </h1>
           <p className="text-muted-foreground">
@@ -55,14 +55,14 @@ export const BaseSignInForm = ({
         </div>
 
         {successMessage && (
-          <p className="text-success text-sm font-medium text-center">
+          <p className="text-success text-center text-sm font-medium">
             {successMessage}
           </p>
         )}
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label className="text-base font-medium pl-1">Email</Label>
+            <Label className="pl-1 text-base font-medium">Email</Label>
             <Input
               {...register("email")}
               defaultValue={email}
@@ -71,18 +71,18 @@ export const BaseSignInForm = ({
               placeholder={
                 email ? undefined : "Enter your email on the previous step"
               }
-              className="h-12 bg-muted font-medium text-foreground cursor-not-allowed opacity-100 disabled:opacity-100 border-input"
+              className="bg-muted text-foreground border-input h-12 cursor-not-allowed font-medium opacity-100 disabled:opacity-100"
             />
           </div>
 
           <div className="space-y-2">
-            <Label className="text-base font-medium pl-1">Password</Label>
+            <Label className="pl-1 text-base font-medium">Password</Label>
             <div className="relative">
               <Input
                 {...register("password")}
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
-                className={`h-12 pl-4 pr-16 transition-all duration-200 ${
+                className={`h-12 pr-16 pl-4 transition-all duration-200 ${
                   errors?.password
                     ? "border-destructive focus-visible:ring-destructive/30"
                     : "border-input focus-visible:ring-primary/30"
@@ -94,7 +94,7 @@ export const BaseSignInForm = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
               >
                 {showPassword ? (
                   <span className="text-xs font-semibold">HIDE</span>
@@ -104,7 +104,7 @@ export const BaseSignInForm = ({
               </Button>
             </div>
             {errors?.password && (
-              <p className="text-sm text-destructive font-medium pl-1">
+              <p className="text-destructive pl-1 text-sm font-medium">
                 {errors.password.message as string}
               </p>
             )}
@@ -118,18 +118,18 @@ export const BaseSignInForm = ({
             loading={isLoading}
             loadingText="Signing In..."
             disabled={!email || Object.keys(errors).length > 0}
-            className="w-full h-12 text-lg font-bold rounded-lg shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            className="h-12 w-full rounded-lg text-lg font-bold shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
             Sign In
           </LoadingButton>
         </div>
 
-        <div className="text-center pt-4">
+        <div className="pt-4 text-center">
           {audience === "patient" && forgotPasswordHref ? (
             <Button
               type="button"
               variant="link"
-              className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto font-normal"
+              className="text-muted-foreground hover:text-primary h-auto p-0 font-normal transition-colors"
               asChild
             >
               <Link href={forgotPasswordHref}>Forgot your password?</Link>
@@ -141,7 +141,7 @@ export const BaseSignInForm = ({
               onClick={onRecoverAccount}
               loading={isRecovering}
               loadingText="Sending recovery email..."
-              className="text-muted-foreground hover:text-primary transition-colors p-0 h-auto font-normal"
+              className="text-muted-foreground hover:text-primary h-auto p-0 font-normal transition-colors"
             >
               Forgot your password?
             </LoadingButton>
@@ -149,13 +149,13 @@ export const BaseSignInForm = ({
         </div>
       </form>
 
-      <div className="flex border-t border-border px-8 pt-6 items-center justify-center">
+      <div className="border-border flex items-center justify-center border-t px-8 pt-6">
         <Button
           variant="ghost"
           onClick={onBack}
-          className="text-muted-foreground hover:text-foreground flex items-center gap-2 group"
+          className="text-muted-foreground hover:text-foreground group flex items-center gap-2"
         >
-          <span className="group-hover:-translate-x-1 transition-transform duration-300">
+          <span className="transition-transform duration-300 group-hover:-translate-x-1">
             ←
           </span>{" "}
           Back to email

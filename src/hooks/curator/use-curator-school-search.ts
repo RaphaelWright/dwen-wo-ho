@@ -4,7 +4,10 @@ import { useMemo, useState, useCallback } from "react";
 
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 
-import { UseCuratorSchoolSearchProps, SchoolDetailSearchSuggestion } from "@/lib/types/curator";
+import {
+  UseCuratorSchoolSearchProps,
+  SchoolDetailSearchSuggestion,
+} from "@/lib/types/curator";
 
 import { SCHOOL_SEARCH_QUICK_FILTERS } from "@/lib/constants/components/curator/school-search";
 
@@ -126,8 +129,7 @@ export function useCuratorSchoolSearch({
             id: i.id,
             name: i.name,
             avatarUrl:
-              i.logoUrl ||
-              (typeof i.photo === "string" ? i.photo : undefined),
+              i.logoUrl || (typeof i.photo === "string" ? i.photo : undefined),
             type: i.type,
             slogan: i.slogan || "",
             rank: i.rank,

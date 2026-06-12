@@ -7,6 +7,11 @@
       "skillPath": "skills/shadcn/SKILL.md",
       "computedHash": "eee4f8123d0ce59aa1b2dbf7ea302e6ae1177ff9eb9ec7cb846ccac087e0025e"
     },
+    "tanstack-query": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "be55d2665a2644210c94f5986afe5e391be94c1df256b18cb94861ff2b597685"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",

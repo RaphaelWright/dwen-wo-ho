@@ -21,10 +21,7 @@ export const useProviderSignUp = ({
   isCheckingGuard: isCheckingGuardProp,
 }: ProviderSignUpProps) => {
   const runInternalGuard = isCheckingGuardProp === undefined;
-  const internalGuard = useProviderSignupGuard(
-    propEmail,
-    runInternalGuard,
-  );
+  const internalGuard = useProviderSignupGuard(propEmail, runInternalGuard);
 
   const isCheckingGuard = isCheckingGuardProp ?? internalGuard.isChecking;
   const guardResumeLocked = isResumeLockedProp ?? internalGuard.isResumeLocked;

@@ -9,11 +9,11 @@ export function LockInDetailsSection({
   timeToExamOptions,
 }: LockInDetailsSectionProps) {
   return (
-    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
-      <h2 className="text-xl font-bold text-foreground mb-4">
+    <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
+      <h2 className="text-foreground mb-4 text-xl font-bold">
         {LOCK_IN_TEXTS.details.title}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
           <Label htmlFor="reasonForLockin">
             {LOCK_IN_TEXTS.details.reasonLabel}
@@ -22,7 +22,7 @@ export function LockInDetailsSection({
             id="reasonForLockin"
             {...register("reasonForLockin")}
             {...register("reasonForLockin")}
-            className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+            className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
           >
             <option value="">{LOCK_IN_TEXTS.details.reasonPlaceholder}</option>
             {reasonOptions.map((reason) => (
@@ -32,7 +32,7 @@ export function LockInDetailsSection({
             ))}
           </select>
           {errors.reasonForLockin && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="mt-1 text-sm text-red-500">
               {errors.reasonForLockin.message}
             </p>
           )}
@@ -44,7 +44,7 @@ export function LockInDetailsSection({
             id="timeToExam"
             {...register("timeToExam")}
             {...register("timeToExam")}
-            className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+            className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
           >
             <option value="">{LOCK_IN_TEXTS.details.timePlaceholder}</option>
             {timeToExamOptions.map((time) => (
@@ -54,7 +54,7 @@ export function LockInDetailsSection({
             ))}
           </select>
           {errors.timeToExam && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="mt-1 text-sm text-red-500">
               {errors.timeToExam.message}
             </p>
           )}

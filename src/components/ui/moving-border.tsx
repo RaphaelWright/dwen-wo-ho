@@ -1,6 +1,12 @@
 "use client";
 import React from "react";
-import { m, useAnimationFrame, useMotionTemplate, useMotionValue, useTransform } from "motion/react";
+import {
+  m,
+  useAnimationFrame,
+  useMotionTemplate,
+  useMotionValue,
+  useTransform,
+} from "motion/react";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +44,7 @@ export function MovingButton({
         style={{ borderRadius: `calc(${borderRadius} * 0.96)` }}
       >
         <MovingBorder duration={duration} rx="30%" ry="30%">
-          <div className={cn("h-20 w-20 bg-accent", borderClassName)} />
+          <div className={cn("bg-accent h-20 w-20", borderClassName)} />
         </MovingBorder>
       </div>
 

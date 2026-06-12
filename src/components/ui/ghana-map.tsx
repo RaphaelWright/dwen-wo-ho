@@ -67,10 +67,7 @@ export default function GhanaMap({ className }: { className?: string }) {
 
     // Use geoIdentity for planar projection to avoid spherical winding issues
     // reflectY(true) is needed because SVG Y-axis is top-down, while Latitude is bottom-up
-    return d3
-      .geoIdentity()
-      .reflectY(true)
-      .fitSize([500, 600], collection);
+    return d3.geoIdentity().reflectY(true).fitSize([500, 600], collection);
   }, []);
 
   const pathGenerator = useMemo(() => {
@@ -107,11 +104,11 @@ export default function GhanaMap({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn("relative w-full aspect-3/4 max-w-lg mx-auto", className)}
+      className={cn("relative mx-auto aspect-3/4 w-full max-w-lg", className)}
     >
       <svg
         viewBox="0 0 500 600"
-        className="w-full h-full drop-shadow-xl"
+        className="h-full w-full drop-shadow-xl"
         style={{ filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))" }}
       >
         {/* Regions Layer */}
@@ -126,7 +123,7 @@ export default function GhanaMap({ className }: { className?: string }) {
             }}
             transition={{ duration: 0.3 }}
             className={cn(
-              "stroke-white stroke-[1px] cursor-pointer transition-colors duration-200",
+              "cursor-pointer stroke-white stroke-[1px] transition-colors duration-200",
               region.className,
             )}
             onMouseEnter={() => setHoveredRegion(region.id)}

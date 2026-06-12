@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { ProviderEmailSchema } from "@/lib/schemas/provider-auth-schema";

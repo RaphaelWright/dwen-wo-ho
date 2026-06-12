@@ -101,9 +101,9 @@ export default function EditFieldDialog({
     <Dialog open={editOpen} onOpenChange={setEditOpen}>
       <DialogContent
         aria-describedby={undefined}
-        className="w-95 rounded-3xl border p-0 pb-4 px-6 gap-0"
+        className="w-95 gap-0 rounded-3xl border p-0 px-6 pb-4"
       >
-        <DialogHeader className="mb-4 mt-10">
+        <DialogHeader className="mt-10 mb-4">
           <DialogTitle className="text-[16px] font-bold">
             Edit {editFieldLabel}
           </DialogTitle>
@@ -111,8 +111,8 @@ export default function EditFieldDialog({
 
         {/* Photo Upload UI */}
         {isPhotoField ? (
-          <div className="flex flex-col items-center gap-4 mb-4">
-            <Avatar className="w-24 h-24">
+          <div className="mb-4 flex flex-col items-center gap-4">
+            <Avatar className="h-24 w-24">
               <AvatarImage
                 src={
                   selectedFile
@@ -135,13 +135,13 @@ export default function EditFieldDialog({
             <m.button
               whileTap={{ scale: 0.97 }}
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl border text-[12.5px] font-semibold cursor-pointer hover:bg-primary/10 transition-all"
+              className="hover:bg-primary/10 flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2 text-[12.5px] font-semibold transition-all"
             >
               <Upload size={14} />
               {selectedFile ? "Change Photo" : "Select Photo"}
             </m.button>
             {selectedFile && (
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-muted-foreground text-[11px]">
                 Selected: {selectedFile.name}
               </p>
             )}
@@ -169,7 +169,7 @@ export default function EditFieldDialog({
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="mb-2 focus:ring-1 focus:ring-primary/20"
+            className="focus:ring-primary/20 mb-2 focus:ring-1"
             placeholder="Enter value…"
             autoFocus
           />
@@ -177,18 +177,18 @@ export default function EditFieldDialog({
 
         {/* Hint */}
         {hint && (
-          <p className="text-[11px] mb-5 text-muted-foreground">{hint}</p>
+          <p className="text-muted-foreground mb-5 text-[11px]">{hint}</p>
         )}
 
         {/* Actions */}
-        <div className="flex gap-2 mt-2">
+        <div className="mt-2 flex gap-2">
           <m.button
             whileTap={{ scale: 0.97 }}
             onClick={() => {
               setSelectedFile(null);
               setEditOpen(false);
             }}
-            className="flex-1 py-2.5 rounded-xl border border-destructive/50 text-[13px] font-semibold cursor-pointer text-destructive hover:bg-destructive! hover:text-white transition-all duration-300 ease-in-out"
+            className="border-destructive/50 text-destructive hover:bg-destructive! flex-1 cursor-pointer rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-300 ease-in-out hover:text-white"
             disabled={isSavingChanges}
           >
             Cancel
@@ -200,7 +200,7 @@ export default function EditFieldDialog({
             disabled={
               isPhotoField ? !selectedFile || isSavingChanges : isSavingChanges
             }
-            className="flex-1 py-2.5 rounded-xl text-[13px] font-semibold text-primary border border-primary/50 cursor-pointer hover:bg-primary hover:text-white transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="text-primary border-primary/50 hover:bg-primary flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-300 ease-in-out hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSavingChanges ? (
               <>

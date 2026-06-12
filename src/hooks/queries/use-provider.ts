@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { curatorProvidersService } from "@/services/curator-providers";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import type { ProviderActivityParams } from "@/lib/types/api/providers";

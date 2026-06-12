@@ -53,7 +53,7 @@ export default function ProfileFieldsColumn({
   ];
 
   return (
-    <div className="w-full p-6 border-b md:border-b-0 md:border-r flex flex-col gap-1.5 overflow-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent shrink-0 max-h-[40vh] md:max-h-none">
+    <div className="flex max-h-[40vh] w-full shrink-0 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent flex-col gap-1.5 overflow-hidden overflow-y-auto border-b p-6 md:max-h-none md:border-r md:border-b-0">
       {/* ── Editable ── */}
       <SectionLabel>Editable</SectionLabel>
 
@@ -97,7 +97,7 @@ export default function ProfileFieldsColumn({
 
       {readOnlyFields.map((f) => (
         <div key={f.label} className="flex items-center gap-3 px-3 py-2">
-          <span className="text-[11.5px] w-22.5 shrink-0">{f.label}</span>
+          <span className="w-22.5 shrink-0 text-[11.5px]">{f.label}</span>
           <span className="text-[13px]">{f.value}</span>
         </div>
       ))}
@@ -116,7 +116,7 @@ function SectionLabel({
 }) {
   return (
     <p
-      className={`text-[10px] font-bold tracking-widest uppercase mb-2 ${className}`}
+      className={`mb-2 text-[10px] font-bold tracking-widest uppercase ${className}`}
     >
       {children}
     </p>
@@ -136,10 +136,10 @@ function FieldRow({
     <m.button
       whileHover={NEW_PROVIDER_FIELD_HOVER}
       onClick={onEdit}
-      className="flex items-center gap-3 px-3 py-2.5 rounded-xl border cursor-pointer text-left w-full"
+      className="flex w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left"
     >
-      <span className="text-[11.5px] w-22.5 shrink-0">{label}</span>
-      <span className="text-[13px] font-medium flex-1 truncate flex items-center">
+      <span className="w-22.5 shrink-0 text-[11.5px]">{label}</span>
+      <span className="flex flex-1 items-center truncate text-[13px] font-medium">
         {value}
       </span>
       <Pencil size={12} className="shrink-0" />

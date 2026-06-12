@@ -6,7 +6,7 @@ import { patientsService } from "@/services/patients";
 import useUserQuery from "@/hooks/queries/use-user-profile";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { LockInStudent } from "@/lib/types/lockin";
 
 // ─── Hook ────────────────────────────────────────────────────────────────────

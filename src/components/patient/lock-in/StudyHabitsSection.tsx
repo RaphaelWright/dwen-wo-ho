@@ -1,6 +1,9 @@
 "use client";
 
-import { StudyHabitsSectionProps, LockInFormData } from "@/lib/types/components/patient/lock-in";
+import {
+  StudyHabitsSectionProps,
+  LockInFormData,
+} from "@/lib/types/components/patient/lock-in";
 import { Label } from "@/components/ui/label";
 import { LOCK_IN_TEXTS } from "@/lib/constants/components/patient/lock-in";
 
@@ -11,8 +14,8 @@ export function StudyHabitsSection({
   studyFrequencyOptions,
 }: StudyHabitsSectionProps) {
   return (
-    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
-      <h2 className="text-xl font-bold text-foreground mb-4">
+    <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
+      <h2 className="text-foreground mb-4 text-xl font-bold">
         {LOCK_IN_TEXTS.study.title}
       </h2>
       <div className="space-y-4">
@@ -24,7 +27,7 @@ export function StudyHabitsSection({
             id="motivationToStudy"
             {...register("motivationToStudy")}
             {...register("motivationToStudy")}
-            className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+            className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
           >
             <option value="">
               {LOCK_IN_TEXTS.study.motivationPlaceholder}
@@ -36,7 +39,7 @@ export function StudyHabitsSection({
             ))}
           </select>
           {errors.motivationToStudy && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="mt-1 text-sm text-red-500">
               {errors.motivationToStudy.message}
             </p>
           )}
@@ -49,7 +52,7 @@ export function StudyHabitsSection({
               id={field.name}
               {...register(field.name as keyof LockInFormData)}
               {...register(field.name as keyof LockInFormData)}
-              className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+              className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
             >
               <option value="">{LOCK_IN_TEXTS.study.placeholder}</option>
               {studyFrequencyOptions.map((option) => (
@@ -59,7 +62,7 @@ export function StudyHabitsSection({
               ))}
             </select>
             {errors[field.name as keyof LockInFormData] && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors[field.name as keyof LockInFormData]?.message}
               </p>
             )}

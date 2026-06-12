@@ -13,10 +13,10 @@ const VerifyContent = () => {
     usePatientVerifyPasswordReset();
 
   return (
-    <div className="w-full h-full min-h-screen flex flex-col justify-between px-6 sm:px-8 md:px-12 lg:px-16 py-6 animate-in fade-in zoom-in-95 duration-700">
+    <div className="animate-in fade-in zoom-in-95 flex h-full min-h-screen w-full flex-col justify-between px-6 py-6 duration-700 sm:px-8 md:px-12 lg:px-16">
       <VerifyPasswordResetHeader />
 
-      <div className="flex-1 flex items-center justify-center py-12">
+      <div className="flex flex-1 items-center justify-center py-12">
         <VerifyPasswordResetOTPSection
           email={email}
           seconds={seconds}

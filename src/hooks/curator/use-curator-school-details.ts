@@ -91,7 +91,9 @@ export function useCuratorSchoolDetails() {
 
   const selectedProvider = useMemo(() => {
     if (!selectedProviderEmail) return undefined;
-    const p = providers.find((provider) => provider.email === selectedProviderEmail);
+    const p = providers.find(
+      (provider) => provider.email === selectedProviderEmail,
+    );
     if (!p) return undefined;
 
     return {
@@ -176,3 +178,7 @@ export function useCuratorSchoolDetails() {
     clearFilters: searchResult.clearFilters,
   };
 }
+
+export type CuratorSchoolDetailsState = ReturnType<
+  typeof useCuratorSchoolDetails
+>;

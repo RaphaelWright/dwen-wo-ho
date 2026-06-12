@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="flex w-full h-screen overflow-hidden">
-      <section className="hidden md:block h-full w-1/2 bg-accent">
+    <main className="flex h-screen w-full overflow-hidden">
+      <section className="bg-accent hidden h-full w-1/2 md:block">
         <Image
           src="/auth/worried-lady.png"
           alt="worried-lady"
@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           priority
         />
       </section>
-      <section className="h-full w-full md:w-1/2 overflow-y-auto ">
+      <section className="h-full w-full overflow-y-auto md:w-1/2">
         {children}
       </section>
     </main>

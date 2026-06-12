@@ -8,7 +8,7 @@ import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { setUserType } from "@/lib/utils/getUserType";
 import { buildProviderSignupResumeUrl } from "@/lib/utils/provider-signup-resume";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 export function useProviderVerifyEmail() {
   const [isRunning, setIsRunning] = useState(true);

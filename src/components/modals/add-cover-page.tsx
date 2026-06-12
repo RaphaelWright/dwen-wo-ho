@@ -42,23 +42,23 @@ export default function AddCoverPageModal(props: AddCoverPageModalProps) {
   if (!props.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-3xl">
-      <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border">
+    <div className="bg-background fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-3xl">
+      <div className="bg-card text-foreground border-border flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        <div className="border-border flex items-center justify-between border-b p-6">
           <button
             type="button"
             onClick={handleBack}
-            className="w-10 h-10 bg-muted rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
+            className="bg-muted hover:bg-muted-foreground/40 flex h-10 w-10 items-center justify-center rounded-full transition-colors"
           >
-            <ArrowBigLeftIcon className="w-6 h-6" />
+            <ArrowBigLeftIcon className="h-6 w-6" />
           </button>
-          <h2 className="text-2xl font-bold text-foreground">{headerTitle}</h2>
+          <h2 className="text-foreground text-2xl font-bold">{headerTitle}</h2>
           <button
             type="button"
             onClick={headerAction.onClick}
             disabled={headerAction.disabled}
-            className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+            className={`rounded-lg px-6 py-2 font-semibold transition-colors ${
               headerAction.disabled
                 ? "bg-muted text-muted-foreground cursor-not-allowed"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"

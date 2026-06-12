@@ -9,14 +9,14 @@ export const SchoolEditFooter = ({
   hasChanges,
 }: SchoolEditFooterProps) => {
   return (
-    <div className="px-8 py-6 border-t border-border bg-muted/40 flex justify-between items-center">
+    <div className="border-border bg-muted/40 flex items-center justify-between border-t px-8 py-6">
       <Button
         type="button"
         onClick={handleDisable}
         variant="ghost"
-        className="px-6 font-medium text-destructive hover:text-destructive hover:bg-destructive/10 flex items-center gap-2"
+        className="text-destructive hover:text-destructive hover:bg-destructive/10 flex items-center gap-2 px-6 font-medium"
       >
-        <Ban className="w-4 h-4" />
+        <Ban className="h-4 w-4" />
         Disable School
       </Button>
       <LoadingButton
@@ -25,7 +25,7 @@ export const SchoolEditFooter = ({
         loading={isPending}
         loadingText="Updating..."
         disabled={!hasChanges}
-        className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20 px-8 font-semibold shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
       >
         Update School
       </LoadingButton>

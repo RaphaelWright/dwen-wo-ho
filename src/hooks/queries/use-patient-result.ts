@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { patientsService } from "@/services/patients";
 import { lockinsService } from "@/services/lockins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";

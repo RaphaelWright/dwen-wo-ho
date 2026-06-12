@@ -24,26 +24,26 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
   const mounted = useHydrated();
 
   return (
-    <div className="h-full flex flex-col justify-between min-h-screen py-4 sm:py-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-      <div className="relative z-10 flex items-center px-4 sm:px-8 justify-between w-full">
-        <div className="transform hover:scale-105 transition-transform duration-300">
+    <div className="animate-in fade-in slide-in-from-bottom-8 flex h-full min-h-screen flex-col justify-between py-4 duration-700 sm:py-8">
+      <div className="relative z-10 flex w-full items-center justify-between px-4 sm:px-8">
+        <div className="transform transition-transform duration-300 hover:scale-105">
           <Logo
             variant={mounted && theme === "light" ? "black" : "white"}
-            className="w-32 h-auto sm:w-auto"
+            className="h-auto w-32 sm:w-auto"
           />
         </div>
         <Link
           href={ROUTES.patient.checkEmail}
-          className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:bg-muted/50 sm:px-4 py-2 rounded-full"
+          className="text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full py-2 text-sm font-medium transition-colors sm:px-4"
         >
           {CHECK_EMAIL_TEXTS.header.switchToPatients}
         </Link>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-8 md:px-12 w-full max-w-md mx-auto">
+      <div className="mx-auto flex w-full max-w-md flex-1 items-center justify-center px-4 sm:px-8 md:px-12">
         <div className="w-full space-y-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+          <div className="space-y-4 text-center">
+            <h1 className="text-2xl leading-tight font-extrabold tracking-tight sm:text-3xl md:text-4xl">
               {CHECK_EMAIL_TEXTS.form.titlePart1}{" "}
               <span className="text-primary">
                 {CHECK_EMAIL_TEXTS.form.signIn}
@@ -53,7 +53,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                 {CHECK_EMAIL_TEXTS.form.signUp}
               </span>
               <br />
-              <span className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-bold">
+              <span className="text-muted-foreground text-xl font-bold sm:text-2xl md:text-3xl">
                 {CHECK_EMAIL_TEXTS.form.titlePart2}
               </span>
             </h1>
@@ -68,14 +68,14 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
             className="space-y-6"
           >
             <div className="space-y-2">
-              <Label className="text-sm sm:text-base font-medium pl-1">
+              <Label className="pl-1 text-sm font-medium sm:text-base">
                 {CHECK_EMAIL_TEXTS.form.emailLabel}
               </Label>
               <div className="relative">
                 <Input
                   {...register("email")}
                   placeholder={CHECK_EMAIL_TEXTS.form.emailPlaceholder}
-                  className={`h-14 pl-4 pr-16 text-base sm:text-lg transition-all duration-200 ${
+                  className={`h-14 pr-16 pl-4 text-base transition-all duration-200 sm:text-lg ${
                     errors?.email &&
                     "border-destructive focus-visible:ring-destructive/30"
                   }`}
@@ -95,7 +95,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                   size="icon"
                   loading={isLoading}
                   disabled={!!errors?.email}
-                  className={`absolute right-2 top-2 h-10 w-10 rounded-lg transition-all duration-300 ${
+                  className={`absolute top-2 right-2 h-10 w-10 rounded-lg transition-all duration-300 ${
                     !errors?.email && !isLoading
                       ? "bg-primary text-primary-foreground hover:bg-primary/90"
                       : "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed"
@@ -109,7 +109,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="w-5 h-5"
+                    className="h-5 w-5"
                   >
                     <path d="M5 12h14" />
                     <path d="m12 5 7 7-7 7" />
@@ -117,7 +117,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
                 </LoadingButton>
               </div>
               {errors?.email && (
-                <p className="text-sm text-destructive font-medium pl-1">
+                <p className="text-destructive pl-1 text-sm font-medium">
                   {errors.email.message as string}
                 </p>
               )}
@@ -125,7 +125,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
           </form>
 
           <div className="pt-8 text-center">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 className="text-primary text-xl font-bold">
               {CHECK_EMAIL_TEXTS.welcome.title}
             </h2>
           </div>

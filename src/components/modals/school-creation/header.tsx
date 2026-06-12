@@ -7,13 +7,13 @@ export const SchoolHeader = ({
   handleClose,
 }: SchoolHeaderProps) => {
   return (
-    <div className="px-8 py-6 border-b border-border flex items-center justify-between bg-muted/30">
+    <div className="border-border bg-muted/30 flex items-center justify-between border-b px-8 py-6">
       <div className="flex items-center gap-4">
         <div>
-          <h2 className="text-xl font-bold text-foreground">
+          <h2 className="text-foreground text-xl font-bold">
             {currentStep === 1 ? "New School" : "Review School Details"}
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {currentStep === 1
               ? "Add a new educational institution"
               : "Review and confirm school information"}
@@ -24,9 +24,9 @@ export const SchoolHeader = ({
         onClick={handleClose}
         variant="outline"
         size="icon"
-        className="w-8 h-8 rounded-full"
+        className="h-8 w-8 rounded-full"
       >
-        <X className="w-4 h-4" />
+        <X className="h-4 w-4" />
       </Button>
     </div>
   );

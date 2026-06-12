@@ -61,7 +61,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
             onClick={() => setIsMobileSidebarOpen(false)}
           />
         )}
@@ -74,7 +74,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
           width: isCollapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_EXPANDED_WIDTH,
         }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="hidden md:flex flex-col h-screen bg-card border-r border-border/60 shrink-0 overflow-hidden relative"
+        className="bg-card border-border/60 relative hidden h-screen shrink-0 flex-col overflow-hidden border-r md:flex"
       >
         <SidebarContent {...sidebarContentProps} collapsed={isCollapsed} />
       </m.aside>
@@ -87,7 +87,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="md:hidden fixed top-14 left-0 bottom-0 w-72 bg-card border-r border-border/60 shadow-2xl z-40 overflow-hidden"
+            className="bg-card border-border/60 fixed top-14 bottom-0 left-0 z-40 w-72 overflow-hidden border-r shadow-2xl md:hidden"
           >
             <SidebarContent {...sidebarContentProps} collapsed={false} />
           </m.aside>

@@ -122,7 +122,7 @@ export const StickyScroll = ({
         backgroundColor: colors[activeCard % colors.length],
       }}
       transition={{ duration: 0.5 }}
-      className="relative flex h-[60vh] md:h-150 justify-center overflow-y-auto rounded-xs p-6 md:px-10 md:py-14 scrollbar-hide"
+      className="scrollbar-hide relative flex h-[60vh] justify-center overflow-y-auto rounded-xs p-6 md:h-150 md:px-10 md:py-14"
       ref={containerRef}
     >
       <div className="relative flex w-full max-w-4xl items-start pt-10">
@@ -136,7 +136,7 @@ export const StickyScroll = ({
                 nodePositions[0] +
                 "px",
             }}
-            className="absolute left-4.75 hidden md:block w-0.5 bg-neutral-800"
+            className="absolute left-4.75 hidden w-0.5 bg-neutral-800 md:block"
           >
             {/* Smoothly growing beam tied directly to scroll progress */}
             <m.div
@@ -161,7 +161,7 @@ export const StickyScroll = ({
               }}
             >
               {/* Numbered node - positioned at top-0 of this div */}
-              <div className="absolute -left-16 top-0 z-20 hidden md:flex h-10 w-10 items-center justify-center">
+              <div className="absolute top-0 -left-16 z-20 hidden h-10 w-10 items-center justify-center md:flex">
                 <m.div
                   animate={{
                     backgroundColor:
@@ -195,7 +195,7 @@ export const StickyScroll = ({
                 }}
                 transition={{ duration: 0.3 }}
                 className={cn(
-                  "text-xl md:text-2xl font-bold leading-8",
+                  "text-xl leading-8 font-bold md:text-2xl",
                   titleClassName,
                 )}
               >
@@ -208,7 +208,7 @@ export const StickyScroll = ({
                 }}
                 transition={{ duration: 0.3, delay: 0.05 }}
                 className={cn(
-                  "text-sm md:text-base mt-4 max-w-sm bg",
+                  "bg mt-4 max-w-sm text-sm md:text-base",
                   descriptionClassName,
                 )}
               >
@@ -221,7 +221,7 @@ export const StickyScroll = ({
                   x: activeCard === index ? 0 : -10,
                 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
-                className="mt-6 block lg:hidden w-full overflow-hidden rounded-xl aspect-video md:aspect-square"
+                className="mt-6 block aspect-video w-full overflow-hidden rounded-xl md:aspect-square lg:hidden"
               >
                 {item.content ?? null}
               </m.div>
@@ -236,7 +236,7 @@ export const StickyScroll = ({
         }}
         transition={{ duration: 0.5 }}
         className={cn(
-          "sticky top-5 hidden lg:block overflow-hidden border rounded-2xl border-transparent shadow-2xl",
+          "sticky top-5 hidden overflow-hidden rounded-2xl border border-transparent shadow-2xl lg:block",
           contentClassName,
         )}
       >

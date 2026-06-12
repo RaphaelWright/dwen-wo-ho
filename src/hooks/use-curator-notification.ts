@@ -6,7 +6,7 @@ import { useCallback } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 import {
   curatorNotificationListAtom,

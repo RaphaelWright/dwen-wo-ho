@@ -34,27 +34,27 @@ export function ProfileFooter() {
   };
 
   return (
-    <div className="px-7 py-4 border-t flex items-center justify-between shrink-0">
-      <p className="text-[11.5px] text-muted-foreground">
+    <div className="flex shrink-0 items-center justify-between border-t px-7 py-4">
+      <p className="text-muted-foreground text-[11.5px]">
         <span className="text-primary">✏</span> Click any field to edit
       </p>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <m.button className="flex items-center gap-2 px-4 py-2 rounded-xl border text-[12.5px] font-semibold cursor-pointer bg-destructive/80! text-white! hover:bg-transparent! hover:border-destructive! hover:text-destructive! transition-all duration-300 ease-in-out">
+          <m.button className="bg-destructive/80! hover:border-destructive! hover:text-destructive! flex cursor-pointer items-center gap-2 rounded-xl border px-4 py-2 text-[12.5px] font-semibold text-white! transition-all duration-300 ease-in-out hover:bg-transparent!">
             <LogOut size={13} /> Log Out <ChevronDown size={12} />
           </m.button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="border">
           <DropdownMenuItem
-            className="flex items-center gap-2 text-[12.5px] cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 text-[12.5px]"
             onClick={handleLogoutClick}
           >
             <LogOut size={13} /> Log out of account
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="flex items-center gap-2 text-[12.5px] cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 text-[12.5px]"
             onClick={toggleOffline}
           >
             {isOffline ? <Wifi size={13} /> : <WifiOff size={13} />}
@@ -62,7 +62,7 @@ export function ProfileFooter() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="flex items-center gap-2 text-[12.5px] cursor-pointer text-destructive"
+            className="text-destructive flex cursor-pointer items-center gap-2 text-[12.5px]"
             onClick={() => {
               // TODO: Implement delete account
             }}

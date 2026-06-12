@@ -66,6 +66,15 @@ export interface SignUpProfileProps {
   isResumeLocked?: boolean;
 }
 
+export interface SignUpProfileContentProps {
+  currentStep: number;
+  profileData: ProviderProfileData;
+  onFieldChange: (
+    property: keyof ProviderProfileData,
+    value: string | null,
+  ) => void;
+}
+
 export interface ProviderProfileData {
   photo: string | null;
   phoneNumber: string;
@@ -89,6 +98,4 @@ export interface BioStepProps {
 export interface PhotoStepProps {
   profilePhoto: string | null;
   onChange: (field: "photo", value: string | null) => void;
-  onNext: () => void;
-  onBack: () => void;
 }

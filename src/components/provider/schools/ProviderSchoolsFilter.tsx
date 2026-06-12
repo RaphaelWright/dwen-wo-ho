@@ -15,15 +15,15 @@ export function ProviderSchoolsFilter({
       {/* Search Bar */}
       <div className="mb-6">
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <FiSearch className="h-5 w-5 text-muted-foreground" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+            <FiSearch className="text-muted-foreground h-5 w-5" />
           </div>
           <Input
             type="text"
             placeholder="Search schools by name, nickname, type, or location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-background border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder-muted-foreground"
+            className="bg-background border-input focus:ring-primary/20 focus:border-primary text-foreground placeholder-muted-foreground w-full rounded-xl border py-3 pr-4 pl-12 transition-all focus:ring-2 focus:outline-none"
           />
         </div>
       </div>
@@ -34,10 +34,10 @@ export function ProviderSchoolsFilter({
           <Button
             key={filter.value}
             onClick={() => setActiveFilter(filter.value)}
-            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+            className={`rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${
               activeFilter === filter.value
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "bg-background text-muted-foreground hover:bg-muted border border-border"
+                ? "bg-primary text-primary-foreground shadow-primary/20 shadow-md"
+                : "bg-background text-muted-foreground hover:bg-muted border-border border"
             }`}
           >
             {filter.label}

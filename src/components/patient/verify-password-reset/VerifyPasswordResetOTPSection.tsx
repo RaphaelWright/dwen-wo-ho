@@ -17,59 +17,59 @@ export function VerifyPasswordResetOTPSection({
   onResend,
 }: VerifyPasswordResetOTPSectionProps) {
   return (
-    <div className="flex flex-col items-center max-w-lg mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="text-center space-y-3 mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+    <div className="animate-in fade-in slide-in-from-bottom-4 mx-auto flex w-full max-w-lg flex-col items-center duration-700">
+      <div className="mb-8 space-y-3 text-center">
+        <h1 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
           {VERIFY_PASSWORD_RESET_TEXTS.otpSection.title}
         </h1>
         <div className="flex flex-col items-center gap-1">
           <p className="text-muted-foreground text-sm font-medium">
             {VERIFY_PASSWORD_RESET_TEXTS.otpSection.subtitlePart1}
           </p>
-          <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold">
+          <span className="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm font-semibold">
             {email}
           </span>
         </div>
       </div>
 
-      <div className="w-full flex justify-center mb-8">
+      <div className="mb-8 flex w-full justify-center">
         <InputOTP maxLength={6} onComplete={onComplete}>
           <InputOTPGroup>
             <InputOTPSlot
               index={0}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
             <InputOTPSlot
               index={1}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
             <InputOTPSlot
               index={2}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
           </InputOTPGroup>
           <InputOTPSeparator />
           <InputOTPGroup>
             <InputOTPSlot
               index={3}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
             <InputOTPSlot
               index={4}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
             <InputOTPSlot
               index={5}
-              className="h-10 w-10 sm:h-12 sm:w-12 text-lg sm:text-xl"
+              className="h-10 w-10 text-lg sm:h-12 sm:w-12 sm:text-xl"
             />
           </InputOTPGroup>
         </InputOTP>
       </div>
 
-      <div className="flex flex-col items-center gap-4 w-full">
+      <div className="flex w-full flex-col items-center gap-4">
         {seconds > 0 ? (
-          <div className="flex items-center gap-2 text-muted-foreground bg-muted/50 px-4 py-2 rounded-full border border-border/50 animate-in fade-in">
-            <Timer className="w-4 h-4 animate-pulse" />
+          <div className="text-muted-foreground bg-muted/50 border-border/50 animate-in fade-in flex items-center gap-2 rounded-full border px-4 py-2">
+            <Timer className="h-4 w-4 animate-pulse" />
             <span className="text-sm font-medium tabular-nums">
               Resend code in {formatTime(seconds)}
             </span>
@@ -78,9 +78,9 @@ export function VerifyPasswordResetOTPSection({
           <Button
             onClick={onResend}
             variant="ghost"
-            className="group flex items-center gap-2 text-primary hover:text-primary hover:bg-primary/10 transition-all duration-300"
+            className="group text-primary hover:text-primary hover:bg-primary/10 flex items-center gap-2 transition-all duration-300"
           >
-            <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             <span className="font-semibold">
               {VERIFY_PASSWORD_RESET_TEXTS.otpSection.resendButton}
             </span>

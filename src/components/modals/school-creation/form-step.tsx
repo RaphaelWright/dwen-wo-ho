@@ -31,7 +31,7 @@ export const FormStep = ({
         <div className="space-y-2">
           <label
             htmlFor="school-name"
-            className="text-sm font-semibold text-foreground"
+            className="text-foreground text-sm font-semibold"
           >
             School Name <span className="text-destructive">*</span>
           </label>
@@ -40,14 +40,14 @@ export const FormStep = ({
             type="text"
             value={formData.name}
             onChange={(e) => handleInputChange("name", e.target.value)}
-            className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
             placeholder="e.g. Achimota School"
           />
         </div>
         <div className="space-y-2">
           <label
             htmlFor="school-nickname"
-            className="text-sm font-semibold text-foreground"
+            className="text-foreground text-sm font-semibold"
           >
             Nickname (Optional)
           </label>
@@ -56,7 +56,7 @@ export const FormStep = ({
             type="text"
             value={formData.nickname}
             onChange={(e) => handleInputChange("nickname", e.target.value)}
-            className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
             placeholder="e.g. Motown"
           />
         </div>
@@ -64,13 +64,13 @@ export const FormStep = ({
 
       {/* Motto */}
       <div className="space-y-2">
-        <Label className="text-sm font-semibold text-foreground">
+        <Label className="text-foreground text-sm font-semibold">
           Motto <span className="text-destructive">*</span>
         </Label>
         <Textarea
           value={formData.motto}
           onChange={(e) => handleInputChange("motto", e.target.value)}
-          className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+          className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full resize-none rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
           placeholder="Enter school motto"
           rows={3}
         />
@@ -78,7 +78,7 @@ export const FormStep = ({
 
       {/* Type */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-foreground">
+        <Label className="text-foreground text-sm font-semibold">
           Type <span className="text-destructive">*</span>
         </Label>
         <div className="flex gap-4">
@@ -87,7 +87,7 @@ export const FormStep = ({
               key={type}
               type="button"
               onClick={() => handleInputChange("type", type)}
-              className={`flex-1 px-6 py-3 rounded-lg font-bold transition-colors ${
+              className={`flex-1 rounded-lg px-6 py-3 font-bold transition-colors ${
                 formData.type === type
                   ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -102,11 +102,11 @@ export const FormStep = ({
       {/* Campuses */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-semibold text-foreground">
+          <Label className="text-foreground text-sm font-semibold">
             Campuses
           </Label>
           {selectedCampuses.length > 0 && (
-            <span className="text-xs font-medium text-secondary-accent bg-secondary-accent/10 px-2 py-1 rounded-full">
+            <span className="text-secondary-accent bg-secondary-accent/10 rounded-full px-2 py-1 text-xs font-medium">
               {selectedCampuses.length} selected
             </span>
           )}
@@ -115,10 +115,10 @@ export const FormStep = ({
           <Button
             type="button"
             onClick={() => setShowCampusDropdown(!showCampusDropdown)}
-            className="w-full px-4 py-3 bg-muted border border-border rounded-xl text-left flex items-center justify-between hover:bg-muted/80 transition-colors"
+            className="bg-muted border-border hover:bg-muted/80 flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors"
           >
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-4 h-4" />
+            <div className="text-muted-foreground flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
               <span
                 className={
                   selectedCampuses.length > 0
@@ -132,7 +132,7 @@ export const FormStep = ({
               </span>
             </div>
             <ChevronDown
-              className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+              className={`text-muted-foreground h-4 w-4 transition-transform duration-200 ${
                 showCampusDropdown ? "rotate-180" : ""
               }`}
             />
@@ -144,7 +144,7 @@ export const FormStep = ({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-20 overflow-hidden"
+                className="bg-card border-border absolute top-full right-0 left-0 z-20 mt-2 overflow-hidden rounded-xl border shadow-xl"
               >
                 <div className="max-h-48 overflow-y-auto p-2">
                   {CAMPUS_OPTIONS.map((campus) => (
@@ -152,7 +152,7 @@ export const FormStep = ({
                       key={campus}
                       type="button"
                       onClick={() => handleCampusToggle(campus)}
-                      className={`bg-transparent shadow-none border-0 w-full text-left px-4 py-2.5 rounded-lg transition-colors ${
+                      className={`w-full rounded-lg border-0 bg-transparent px-4 py-2.5 text-left shadow-none transition-colors ${
                         selectedCampuses.includes(campus)
                           ? "bg-muted text-foreground font-medium"
                           : "hover:bg-muted/50 text-muted-foreground"
@@ -170,7 +170,7 @@ export const FormStep = ({
 
       {/* Logo */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-foreground">
+        <Label className="text-foreground text-sm font-semibold">
           School Logo
         </Label>
         <div className="flex items-center gap-6">
@@ -182,7 +182,7 @@ export const FormStep = ({
                   alt="Uploaded logo"
                   width={128}
                   height={128}
-                  className="w-32 h-32 object-cover rounded-lg border shadow-sm"
+                  className="h-32 w-32 rounded-lg border object-cover shadow-sm"
                 />
                 <div className="absolute top-1 right-1 flex gap-1">
                   <Input
@@ -194,7 +194,7 @@ export const FormStep = ({
                   />
                   <Label
                     htmlFor="logo-change"
-                    className="bg-primary/80 hover:bg-primary text-primary-foreground rounded-full p-1.5 cursor-pointer transition-colors"
+                    className="bg-primary/80 hover:bg-primary text-primary-foreground cursor-pointer rounded-full p-1.5 transition-colors"
                     title="Change logo"
                   >
                     <Upload size={12} />
@@ -220,15 +220,15 @@ export const FormStep = ({
                 />
                 <Label
                   htmlFor="logo-upload"
-                  className="w-full h-32 bg-muted border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/80 hover:border-primary/30 transition-all group"
+                  className="bg-muted border-border hover:bg-muted/80 hover:border-primary/30 group flex h-32 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed transition-all"
                 >
-                  <div className="w-10 h-10 bg-background rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <Upload className="w-5 h-5 text-secondary-accent" />
+                  <div className="bg-background mb-3 flex h-10 w-10 items-center justify-center rounded-full shadow-sm transition-transform group-hover:scale-110">
+                    <Upload className="text-secondary-accent h-5 w-5" />
                   </div>
-                  <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
+                  <span className="text-muted-foreground group-hover:text-primary text-sm font-medium transition-colors">
                     Click to upload logo
                   </span>
-                  <span className="text-xs text-muted-foreground mt-1">
+                  <span className="text-muted-foreground mt-1 text-xs">
                     PNG, JPG up to 5MB
                   </span>
                 </Label>

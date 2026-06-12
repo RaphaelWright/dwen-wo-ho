@@ -9,39 +9,39 @@ export const ProviderHeader = ({
   statusConfig,
 }: ProviderHeaderProps) => {
   return (
-    <div className="relative bg-muted/80 p-6 flex items-center gap-6 border-b border-border">
+    <div className="bg-muted/80 border-border relative flex items-center gap-6 border-b p-6">
       <Button
         onClick={onClose}
         variant="ghost"
-        className="absolute top-4 right-4 w-10 h-10 bg-muted/80 hover:bg-destructive/5 backdrop-blur-sm text-muted-foreground hover:text-foreground rounded-full flex items-center justify-center transition-all duration-200 hover:rotate-90 p-0 border border-border/50"
+        className="bg-muted/80 hover:bg-destructive/5 text-muted-foreground hover:text-foreground border-border/50 absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full border p-0 backdrop-blur-sm transition-all duration-200 hover:rotate-90"
         aria-label="Close modal"
       >
-        <FiX className="w-5 h-5 text-destructive" />
+        <FiX className="text-destructive h-5 w-5" />
       </Button>
 
-      <div className="w-24 h-24 rounded-full overflow-hidden ring-4 ring-card shadow-lg shrink-0 bg-muted">
+      <div className="ring-card bg-muted h-24 w-24 shrink-0 overflow-hidden rounded-full shadow-lg ring-4">
         <Image
           src={provider.profilePhotoURL || "/auth/lawyer.jpg"}
           alt={provider.fullName || "Provider"}
           width={96}
           height={96}
           priority
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       </div>
 
       <div className="text-foreground flex-1">
-        <h2 className="text-2xl font-bold mb-1 text-foreground">
+        <h2 className="text-foreground mb-1 text-2xl font-bold">
           {provider?.fullName ?? "Provider"}
         </h2>
         {provider?.professionalTitle && (
-          <p className="text-muted-foreground text-sm mb-2">
+          <p className="text-muted-foreground mb-2 text-sm">
             {provider.professionalTitle}
           </p>
         )}
         {statusConfig && (
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-sm font-semibold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}
+            className={`inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-sm font-semibold ${statusConfig.bg} ${statusConfig.text} border ${statusConfig.border}`}
           >
             {provider.applicationStatus}
           </span>

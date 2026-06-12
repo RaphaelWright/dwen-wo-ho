@@ -63,7 +63,7 @@ function DialogContent({
         // Callers can still add <DialogDescription> when semantically useful.
         aria-describedby={undefined}
         className={cn(
-          "bg-background border-5 border-primary/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-3xl px-6 py-3 shadow-lg duration-200 sm:max-w-lg",
+          "bg-background border-primary/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-3xl border-5 px-6 py-3 shadow-lg duration-200 sm:max-w-lg",
           className,
         )}
         {...props}
@@ -72,9 +72,9 @@ function DialogContent({
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            className="ring-offset-background data-[state=open]:bg-accent data-[state=open]:text-destructive opacity-70 hover:opacity-100 focus:ring-destructive/10 focus:ring-1 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6 absolute right-4 top-4 size-7 rounded-full border bg-background flex items-center justify-center shadow-sm transition-all hover:scale-110 hover:bg-muted group z-50"
+            className="ring-offset-background data-[state=open]:bg-accent data-[state=open]:text-destructive focus:ring-destructive/10 bg-background hover:bg-muted group absolute top-4 right-4 z-50 flex size-7 items-center justify-center rounded-full border opacity-70 shadow-sm transition-all hover:scale-110 hover:opacity-100 focus:ring-1 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6"
           >
-            <X className="size-4 text-destructive" />
+            <X className="text-destructive size-4" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

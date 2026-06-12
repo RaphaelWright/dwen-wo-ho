@@ -170,118 +170,124 @@ const LiquidGlass = ({
   onClick,
   ref,
 }: LiquidGlassProps & { ref?: Ref<HTMLDivElement> }) => {
-    const filterId = useId().replace(/:/g, "_"); // : is invalid in CSS url()
-    const [mapUrl, setMapUrl] = useState(cachedMapUrl ?? "");
+  const filterId = useId().replace(/:/g, "_"); // : is invalid in CSS url()
+  const [mapUrl, setMapUrl] = useState(cachedMapUrl ?? "");
 
-    useEffect(() => {
-      if (!cachedMapUrl) {
-        cachedMapUrl = generateDisplacementMap(128);
-      }
-      setMapUrl(cachedMapUrl);
-    }, []);
+  useEffect(() => {
+    if (!cachedMapUrl) {
+      cachedMapUrl = generateDisplacementMap(128);
+    }
+    setMapUrl(cachedMapUrl);
+  }, []);
 
-    const { resolvedTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
-    const borderGradient = showBorder
-      ? isDark
-        ? `linear-gradient(
+  const borderGradient = showBorder
+    ? isDark
+      ? `linear-gradient(
             135deg,
             rgba(255,255,255,0.0) 0%,
             rgba(255,255,255,0.25) 33%,
             rgba(255,255,255,0.5) 66%,
             rgba(255,255,255,0.0) 100%
           )`
-        : `linear-gradient(
+      : `linear-gradient(
             135deg,
             rgba(0,0,0,0.0) 0%,
             rgba(0,0,0,0.06) 33%,
             rgba(0,0,0,0.12) 66%,
             rgba(0,0,0,0.0) 100%
           )`
-      : "none";
+    : "none";
 
-    return (
-      <div
-        ref={ref}
-        onClick={onClick}
-        onKeyDown={onClick ? activateOnKeyboard(onClick) : undefined}
-        role={onClick ? "button" : undefined}
-        tabIndex={onClick ? 0 : undefined}
-        className={className}
-        style={{
-          position: "relative",
-          borderRadius: cornerRadius,
-          overflow: "hidden",
-          cursor: onClick ? "pointer" : undefined,
-          background: tint,
-          ...style,
-        }}
-      >
-        {/* Hidden SVG filter definition */}
-        <GlassFilter id={filterId} scale={displacementScale} mapUrl={mapUrl} />
+  const interactiveProps = onClick
+    ? {
+        onClick,
+        onKeyDown: activateOnKeyboard(onClick),
+        role: "button" as const,
+        tabIndex: 0,
+      }
+    : {};
 
-        {/* ── Backdrop layer ─────────────────────────────────
+  return (
+    <div
+      ref={ref}
+      {...interactiveProps}
+      className={className}
+      style={{
+        position: "relative",
+        borderRadius: cornerRadius,
+        overflow: "hidden",
+        cursor: onClick ? "pointer" : undefined,
+        background: tint,
+        ...style,
+      }}
+    >
+      {/* Hidden SVG filter definition */}
+      <GlassFilter id={filterId} scale={displacementScale} mapUrl={mapUrl} />
+
+      {/* ── Backdrop layer ─────────────────────────────────
             This is the layer that gets blurred + displaced.
             It sits behind the content via z-index.            */}
-        <span
-          style={{
-            ...GLASS_BACKDROP_BASE,
-            backdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
-            WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
-            filter: `url(#${filterId})`,
-            borderRadius: cornerRadius,
-          }}
-        />
+      <span
+        style={{
+          ...GLASS_BACKDROP_BASE,
+          backdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
+          WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation}%)`,
+          filter: `url(#${filterId})`,
+          borderRadius: cornerRadius,
+        }}
+      />
 
-        {/* ── Gloss border ───────────────────────────────────
+      {/* ── Gloss border ───────────────────────────────────
             Thin edge highlight using mask-composite to cut out
             the interior — only the 1.5px border is visible.   */}
-        {showBorder && (
-          <span
-            style={{
-              ...GLASS_BORDER_BASE,
-              borderRadius: cornerRadius,
-              background: borderGradient,
-              boxShadow: isDark
-                ? "0 0 0 0.5px rgba(255,255,255,0.15) inset, " +
-                  "0 1px 2px rgba(255,255,255,0.1) inset, " +
-                  "0 1px 3px rgba(0,0,0,0.2)"
-                : "0 0 0 0.5px rgba(0,0,0,0.08) inset, " +
-                  "0 1px 2px rgba(255,255,255,0.5) inset, " +
-                  "0 1px 3px rgba(0,0,0,0.08)",
-            }}
-          />
-        )}
-
-        {/* ── Outer shadow layer ─────────────────────────────
-            A subtle drop-shadow on the glass panel itself.    */}
+      {showBorder && (
         <span
           style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: -1,
+            ...GLASS_BORDER_BASE,
             borderRadius: cornerRadius,
+            background: borderGradient,
             boxShadow: isDark
-              ? "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)"
-              : "0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)",
-            pointerEvents: "none",
+              ? "0 0 0 0.5px rgba(255,255,255,0.15) inset, " +
+                "0 1px 2px rgba(255,255,255,0.1) inset, " +
+                "0 1px 3px rgba(0,0,0,0.2)"
+              : "0 0 0 0.5px rgba(0,0,0,0.08) inset, " +
+                "0 1px 2px rgba(255,255,255,0.5) inset, " +
+                "0 1px 3px rgba(0,0,0,0.08)",
           }}
         />
+      )}
 
-        {/* ── Content ────────────────────────────────────────
+      {/* ── Outer shadow layer ─────────────────────────────
+            A subtle drop-shadow on the glass panel itself.    */}
+      <span
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: -1,
+          borderRadius: cornerRadius,
+          boxShadow: isDark
+            ? "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)"
+            : "0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Content ────────────────────────────────────────
             Sharp, un-blurred children on top.                 */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            padding,
-          }}
-        >
-          {children}
-        </div>
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          padding,
+        }}
+      >
+        {children}
       </div>
-    );
+    </div>
+  );
 };
 
 export default LiquidGlass;

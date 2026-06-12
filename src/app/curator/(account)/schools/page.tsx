@@ -58,8 +58,8 @@ export default function SchoolsPage() {
   if (isError) {
     return (
       <WidthConstraint>
-        <div className="flex flex-col gap-8 p-8 items-center justify-center min-h-[40vh]">
-          <div className="text-center text-destructive font-medium">
+        <div className="flex min-h-[40vh] flex-col items-center justify-center gap-8 p-8">
+          <div className="text-destructive text-center font-medium">
             Failed to load schools
           </div>
 
@@ -73,11 +73,11 @@ export default function SchoolsPage() {
 
   return (
     <WidthConstraint>
-      <div className="p-4 md:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+      <div className="animate-in fade-in slide-in-from-bottom-4 space-y-8 p-4 duration-700 md:p-8">
+        <div className="flex flex-col gap-4 2xl:flex-row 2xl:items-center 2xl:justify-between">
           {/* Header */}
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+            <h1 className="text-foreground text-3xl font-bold tracking-tight md:text-4xl">
               Schools
             </h1>
 
@@ -87,7 +87,7 @@ export default function SchoolsPage() {
           </div>
 
           {/* Header Actions */}
-          <div className="hidden 2xl:flex items-center gap-4">
+          <div className="hidden items-center gap-4 2xl:flex">
             <NotificationBell
               unreadCount={unreadCount}
               onOpenNotifs={() => setIsOpen(true)}
@@ -95,7 +95,7 @@ export default function SchoolsPage() {
           </div>
         </div>
 
-        <div className="flex flex-col min-[1229px]:flex-row gap-4 justify-between object-center">
+        <div className="flex flex-col justify-between gap-4 object-center min-[1229px]:flex-row">
           {/* Search & Filters */}
           <FilterTabBar<FilterType>
             tabs={FILTER_OPTIONS.map((opt) => ({
@@ -154,25 +154,25 @@ export default function SchoolsPage() {
 
         {/* Content */}
         {isLoading && !hasCachedData ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <div className="flex flex-col items-center justify-center gap-4 py-20">
+            <Loader2 className="text-primary h-10 w-10 animate-spin" />
 
             <p className="text-muted-foreground font-medium">
               Loading schools...
             </p>
           </div>
         ) : schoolsList.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center gap-4 animate-in fade-in zoom-in-95 duration-500">
-            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-              <School className="w-10 h-10 text-muted-foreground" />
+          <div className="animate-in fade-in zoom-in-95 flex flex-col items-center justify-center gap-4 py-20 text-center duration-500">
+            <div className="bg-muted flex h-20 w-20 items-center justify-center rounded-full">
+              <School className="text-muted-foreground h-10 w-10" />
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-foreground">
+              <h3 className="text-foreground text-xl font-semibold">
                 No schools found
               </h3>
 
-              <p className="text-muted-foreground max-w-sm mx-auto">
+              <p className="text-muted-foreground mx-auto max-w-sm">
                 {activeFilter === "all"
                   ? "There are no schools registered yet."
                   : `There are no schools under the "${FILTER_OPTIONS.find((f) => f.value === activeFilter)?.label}" category.`}
@@ -180,7 +180,7 @@ export default function SchoolsPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6 pb-20">
+          <div className="grid grid-cols-1 gap-6 pb-20 lg:grid-cols-2 2xl:grid-cols-3">
             {schoolsList.map((school, i) => (
               <div
                 key={school.id}

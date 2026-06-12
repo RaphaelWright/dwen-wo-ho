@@ -21,14 +21,14 @@ export function PhotoColorStep({
         <div className="flex-1">
           <label
             htmlFor="cover-photo"
-            className="block text-sm font-semibold text-foreground mb-3"
+            className="text-foreground mb-3 block text-sm font-semibold"
           >
             Photo
           </label>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors text-base"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 w-full rounded-lg px-6 py-3 text-base font-semibold transition-colors"
           >
             + Photo
           </button>
@@ -43,13 +43,13 @@ export function PhotoColorStep({
           />
         </div>
         <div className="relative flex-1" ref={colorDropdownRef}>
-          <span className="block text-sm font-semibold text-foreground mb-3">
+          <span className="text-foreground mb-3 block text-sm font-semibold">
             Colors
           </span>
           <button
             type="button"
             onClick={() => setShowColorDropdown(!showColorDropdown)}
-            className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-between text-base"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-full items-center justify-between rounded-lg px-6 py-3 text-base font-semibold transition-colors"
           >
             <span>
               {selectedColor
@@ -58,30 +58,30 @@ export function PhotoColorStep({
                 : "Colors"}
             </span>
             <ChevronDown
-              className={`w-5 h-5 transition-transform ${
+              className={`h-5 w-5 transition-transform ${
                 showColorDropdown ? "rotate-180" : ""
               }`}
             />
           </button>
           {showColorDropdown && (
-            <div className="absolute z-10 mt-2 w-full bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
-              <div className="p-4 space-y-2 max-h-64 overflow-y-auto">
+            <div className="bg-card border-border absolute z-10 mt-2 w-full overflow-hidden rounded-xl border shadow-2xl">
+              <div className="max-h-64 space-y-2 overflow-y-auto p-4">
                 {COVER_PAGE_COLORS.map((color) => (
                   <button
                     type="button"
                     key={color.hex}
                     onClick={() => handleColorSelect(color)}
-                    className="w-full flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg transition-colors text-left"
+                    className="hover:bg-muted/50 flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors"
                   >
                     <div
-                      className="w-12 h-12 rounded-lg border-2 border-border shrink-0"
+                      className="border-border h-12 w-12 shrink-0 rounded-lg border-2"
                       style={{ backgroundColor: `#${color.hex}` }}
                     />
                     <div>
-                      <p className="font-semibold text-foreground">
+                      <p className="text-foreground font-semibold">
                         {color.name}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         #{color.hex}
                       </p>
                     </div>
@@ -92,22 +92,24 @@ export function PhotoColorStep({
           )}
         </div>
       </div>
-      <div className="border-b border-border" />
+      <div className="border-border border-b" />
       <div>
         <div
-          className="w-full h-64 rounded-xl border-2 border-border overflow-hidden flex items-center justify-center"
+          className="border-border flex h-64 w-full items-center justify-center overflow-hidden rounded-xl border-2"
           style={{
-            backgroundColor: selectedColor ? `#${selectedColor}` : "var(--muted)",
+            backgroundColor: selectedColor
+              ? `#${selectedColor}`
+              : "var(--muted)",
           }}
         >
           {photoPreview ? (
-            <div className="relative w-full h-full">
+            <div className="relative h-full w-full">
               <Image
                 src={photoPreview}
                 alt="Cover preview"
                 width={400}
                 height={300}
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover"
               />
             </div>
           ) : (

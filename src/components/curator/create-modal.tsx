@@ -31,37 +31,37 @@ const CreateModal = ({
         role="button"
         tabIndex={0}
         aria-label="Close dialog"
-        className="fixed inset-0 backdrop-blur-3xl bg-background/80 flex items-center justify-center z-50 p-4"
+        className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-3xl"
         onClick={() => setShowCreateModal(false)}
         onKeyDown={activateOnKeyboard(() => setShowCreateModal(false))}
       >
         <div
-          className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden transform transition-all border border-border"
+          className="bg-card text-foreground border-border w-full max-w-3xl transform overflow-hidden rounded-2xl border shadow-2xl transition-all"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="px-8 py-6 border-b border-border flex items-center justify-between bg-muted/30">
+          <div className="border-border bg-muted/30 flex items-center justify-between border-b px-8 py-6">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">
+              <h2 className="text-foreground text-2xl font-bold">
                 Creative Studios
               </h2>
-              <p className="text-muted-foreground text-sm mt-1">
+              <p className="text-muted-foreground mt-1 text-sm">
                 Select a module to create or manage content
               </p>
             </div>
             <Button
               variant="outline"
               size="icon"
-              className="w-10 h-10 rounded-full"
+              className="h-10 w-10 rounded-full"
               onClick={() => setShowCreateModal(false)}
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
 
           {/* Grid */}
           <div className="p-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -69,14 +69,14 @@ const CreateModal = ({
                     key={item.id}
                     onClick={() => handleItemClick(item)}
                     variant="ghost"
-                    className="flex flex-col items-center group p-4 rounded-xl hover:bg-muted transition-all duration-200 border border-transparent hover:border-border h-auto"
+                    className="group hover:bg-muted hover:border-border flex h-auto flex-col items-center rounded-xl border border-transparent p-4 transition-all duration-200"
                   >
                     <div
-                      className={`w-16 h-16 rounded-2xl ${item.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200 shadow-sm`}
+                      className={`h-16 w-16 rounded-2xl ${item.bgColor} mb-4 flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-110`}
                     >
-                      <Icon className={`w-8 h-8 ${item.color}`} />
+                      <Icon className={`h-8 w-8 ${item.color}`} />
                     </div>
-                    <h3 className="font-semibold text-foreground text-sm">
+                    <h3 className="text-foreground text-sm font-semibold">
                       {item.label}
                     </h3>
                   </Button>
@@ -86,8 +86,8 @@ const CreateModal = ({
           </div>
 
           {/* Footer */}
-          <div className="px-8 py-4 bg-muted/30 border-t border-border text-center">
-            <p className="text-xs text-muted-foreground font-medium">
+          <div className="bg-muted/30 border-border border-t px-8 py-4 text-center">
+            <p className="text-muted-foreground text-xs font-medium">
               JUSTGO HEALTH CURATOR PORTAL
             </p>
           </div>

@@ -22,9 +22,9 @@ export const MobileNav = ({
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="lg:hidden bg-white border-t border-gray-100"
+          className="border-t border-gray-100 bg-white lg:hidden"
         >
-          <ul className="flex flex-col p-6 gap-4">
+          <ul className="flex flex-col gap-4 p-6">
             {NAV_ITEMS.map((item) => (
               <li key={item.name} className="border-b border-gray-50 pb-2">
                 <Link

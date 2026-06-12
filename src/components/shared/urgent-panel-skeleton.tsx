@@ -8,24 +8,24 @@ import { m } from "motion/react";
  */
 export function UrgentPanelSkeleton() {
   return (
-    <aside className="w-full shrink-0 flex flex-col h-full border-l bg-destructive/5 overflow-hidden">
+    <aside className="bg-destructive/5 flex h-full w-full shrink-0 flex-col overflow-hidden border-l">
       {/* Header skeleton */}
-      <div className="px-4 pt-5 pb-4 border-b shrink-0 border-muted bg-destructive text-white">
+      <div className="border-muted bg-destructive shrink-0 border-b px-4 pt-5 pb-4 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-bold">
-            <div className="size-7 rounded-xl flex items-center justify-center text-sm border bg-white border-white">
-              <div className="w-4 h-4 rounded bg-slate-200 animate-pulse" />
+            <div className="flex size-7 items-center justify-center rounded-xl border border-white bg-white text-sm">
+              <div className="h-4 w-4 animate-pulse rounded bg-slate-200" />
             </div>
-            <div className="w-20 h-4 rounded bg-white/50 animate-pulse" />
+            <div className="h-4 w-20 animate-pulse rounded bg-white/50" />
           </div>
 
           {/* Count badge skeleton */}
-          <div className="text-sm flex items-center justify-center font-bold text-destructive size-6 rounded-full bg-white animate-pulse" />
+          <div className="text-destructive flex size-6 animate-pulse items-center justify-center rounded-full bg-white text-sm font-bold" />
         </div>
       </div>
 
       {/* Card list skeleton */}
-      <div className="flex-1 p-3 overflow-y-auto no-scrollbar min-h-0 flex flex-col pb-20">
+      <div className="no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto p-3 pb-20">
         <div className="flex flex-col gap-2">
           {Array.from({ length: 4 }).map((_, i) => (
             <m.div
@@ -33,17 +33,17 @@ export function UrgentPanelSkeleton() {
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.15, delay: i * 0.05 }}
-              className="p-4 rounded-lg border border-destructive/20 bg-destructive/5 backdrop-blur-sm"
+              className="border-destructive/20 bg-destructive/5 rounded-lg border p-4 backdrop-blur-sm"
             >
               {/* Patient name row */}
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-24 h-4 rounded bg-destructive/20 animate-pulse" />
-                <div className="w-16 h-4 rounded-full bg-destructive/20 animate-pulse" />
+              <div className="mb-2 flex items-center gap-2">
+                <div className="bg-destructive/20 h-4 w-24 animate-pulse rounded" />
+                <div className="bg-destructive/20 h-4 w-16 animate-pulse rounded-full" />
               </div>
               {/* School and time row */}
               <div className="flex items-center justify-between">
-                <div className="w-20 h-3 rounded bg-destructive/10 animate-pulse" />
-                <div className="w-14 h-3 rounded bg-destructive/10 animate-pulse" />
+                <div className="bg-destructive/10 h-3 w-20 animate-pulse rounded" />
+                <div className="bg-destructive/10 h-3 w-14 animate-pulse rounded" />
               </div>
             </m.div>
           ))}

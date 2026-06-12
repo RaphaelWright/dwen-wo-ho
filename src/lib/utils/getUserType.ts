@@ -4,7 +4,9 @@ const USER_TYPE_KEY = "userType";
  * Stores the user type in localStorage
  * @param userType - The user type to store
  */
-export const setUserType = (userType: "curator" | "provider" | "patient" | null): void => {
+export const setUserType = (
+  userType: "curator" | "provider" | "patient" | null,
+): void => {
   if (typeof window === "undefined") {
     return;
   }
@@ -20,12 +22,20 @@ export const setUserType = (userType: "curator" | "provider" | "patient" | null)
  * Gets the stored user type from localStorage
  * @returns "curator" | "provider" | "patient" | null
  */
-export const getStoredUserType = (): "curator" | "provider" | "patient" | null => {
+export const getStoredUserType = ():
+  | "curator"
+  | "provider"
+  | "patient"
+  | null => {
   if (typeof window === "undefined") {
     return null;
   }
 
-  return localStorage.getItem(USER_TYPE_KEY) as "curator" | "provider" | "patient" | null;
+  return localStorage.getItem(USER_TYPE_KEY) as
+    | "curator"
+    | "provider"
+    | "patient"
+    | null;
 };
 
 /**
@@ -103,5 +113,3 @@ export const hasValidToken = (): boolean => {
 
   return !!(curatorToken || providerToken || patientToken || refreshToken);
 };
-
-

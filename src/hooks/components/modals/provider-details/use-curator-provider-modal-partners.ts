@@ -11,12 +11,21 @@ export const useCuratorProviderModalPartners = (
   provider: ProviderDetails | null,
   invalidateProvider: (email: string) => Promise<void>,
 ) => {
-  const { usePartnersList, addProvider, removeProvider, isAddingProvider, isRemovingProvider } = usePartnerQuery();
+  const {
+    usePartnersList,
+    addProvider,
+    removeProvider,
+    isAddingProvider,
+    isRemovingProvider,
+  } = usePartnerQuery();
   const { data: allPartnersData = [] } = usePartnersList({ enabled: isOpen });
 
   const [partnerSearchQuery, setPartnerSearchQuery] = useState("");
-  const [partnerToAdd, setPartnerToAdd] = useState<AssociatedPartner | null>(null);
-  const [partnerToRemove, setPartnerToRemove] = useState<AssociatedPartner | null>(null);
+  const [partnerToAdd, setPartnerToAdd] = useState<AssociatedPartner | null>(
+    null,
+  );
+  const [partnerToRemove, setPartnerToRemove] =
+    useState<AssociatedPartner | null>(null);
 
   const associatedPartners: AssociatedPartner[] = useMemo(() => {
     const providerPartners = provider?.partners || [];
@@ -33,7 +42,14 @@ export const useCuratorProviderModalPartners = (
     return allPartnersData.flatMap((p: Partner) =>
       associatedIds.has(String(p.id))
         ? []
-        : [{ id: String(p.id), name: p.name, logo: p.logo, isAssociated: false }],
+        : [
+            {
+              id: String(p.id),
+              name: p.name,
+              logo: p.logo,
+              isAssociated: false,
+            },
+          ],
     );
   }, [allPartnersData, associatedPartners]);
 

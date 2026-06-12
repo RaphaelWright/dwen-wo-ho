@@ -41,7 +41,7 @@ const FormSelect = ({
       <SelectTrigger ref={ref} className={cn(baseStyles, className)} {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent className="w-full border rounded-xl shadow-lg p-0">
+      <SelectContent className="w-full rounded-xl border p-0 shadow-lg">
         {children}
       </SelectContent>
     </Select>
@@ -49,5 +49,3 @@ const FormSelect = ({
 };
 
 export { FormSelect };
-
-

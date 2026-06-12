@@ -12,14 +12,13 @@ export function useCuratorProviderDetails() {
 
   const { isAuthenticated, router } = useCuratorAuth();
 
-  const { provider, isLoading } = useCuratorProviderList(email, isAuthenticated);
+  const { provider, isLoading } = useCuratorProviderList(
+    email,
+    isAuthenticated,
+  );
 
-  const {
-    isActionLoading,
-    successMessage,
-    handleApprove,
-    handleReject,
-  } = useCuratorProviderApproval(email);
+  const { isActionLoading, successMessage, handleApprove, handleReject } =
+    useCuratorProviderApproval(email);
 
   return {
     provider,

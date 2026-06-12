@@ -13,16 +13,16 @@ export const PartnerTabs = ({
           <Button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-6 py-4 text-sm font-semibold border-b-2 transition-colors rounded-none ${
+            className={`flex items-center gap-2 rounded-none border-b-2 px-6 py-4 text-sm font-semibold transition-colors ${
               activeTab === tab.id
                 ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300"
+                : "text-muted-foreground hover:text-foreground border-transparent hover:border-gray-300"
             }`}
           >
-            <tab.icon className="w-5 h-5" />
+            <tab.icon className="h-5 w-5" />
             {tab.label}
             {tab.count !== undefined && tab.count !== null && (
-              <span className="px-2 py-0.5 rounded-full bg-gray-100 text-xs font-medium">
+              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium">
                 {tab.count}
               </span>
             )}

@@ -4,7 +4,7 @@ import { type z } from "zod";
 
 export function useSelectedValuesFromReactHookForm<T extends FieldValues>(
   schema: z.ZodSchema<T>,
-  options: Omit<UseFormProps<T>, "resolver"> = {}
+  options: Omit<UseFormProps<T>, "resolver"> = {},
 ) {
   const form = useForm<T>({
     // Zod 4 schema inference does not align with @hookform/resolvers types
@@ -23,5 +23,3 @@ export function useSelectedValuesFromReactHookForm<T extends FieldValues>(
     getValues: form.getValues,
   } as const;
 }
-
-

@@ -3,7 +3,7 @@ import { SIGN_UP_TEXTS } from "@/lib/constants/components/patient/signup";
 
 export function SignUpHeader() {
   return (
-    <div className="flex items-center px-8 justify-between w-full">
+    <div className="flex w-full items-center justify-between px-8">
       <Logo />
       <p className="font-bold">
         {SIGN_UP_TEXTS.header.for}{" "}

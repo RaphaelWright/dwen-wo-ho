@@ -59,13 +59,13 @@ const ProviderAuthPageContent = () => {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-background transition-colors duration-300">
+    <div className="bg-background relative min-h-screen w-full transition-colors duration-300">
       {/* Loading overlay */}
       {isCheckingAuth && (
-        <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-300">
-          <div className="text-center space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-            <p className="text-muted-foreground font-medium animate-pulse">
+        <div className="bg-background/80 animate-in fade-in absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm duration-300">
+          <div className="space-y-4 text-center">
+            <div className="border-primary mx-auto h-12 w-12 animate-spin rounded-full border-b-2" />
+            <p className="text-muted-foreground animate-pulse font-medium">
               Checking authentication...
             </p>
           </div>
@@ -75,7 +75,7 @@ const ProviderAuthPageContent = () => {
       {/* Auth form content */}
       <div
         className={`transition-opacity duration-500 ease-in-out ${
-          isCheckingAuth ? "opacity-0 pointer-events-none" : "opacity-100"
+          isCheckingAuth ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
         {authContent}
@@ -88,8 +88,8 @@ const ProviderAuthView = () => {
   return (
     <Suspense
       fallback={
-        <div className="h-screen w-full flex items-center justify-center bg-background">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="bg-background flex h-screen w-full items-center justify-center">
+          <div className="border-primary h-12 w-12 animate-spin rounded-full border-b-2" />
         </div>
       }
     >

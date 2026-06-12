@@ -2,7 +2,11 @@
 
 import { useMemo } from "react";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
-import { AssociatedSchool, AssociatedProvider, UsePartnerSearchProps } from "@/lib/types/partners";
+import {
+  AssociatedSchool,
+  AssociatedProvider,
+  UsePartnerSearchProps,
+} from "@/lib/types/partners";
 
 export const usePartnerSearch = ({
   availableSchools,

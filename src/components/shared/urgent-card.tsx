@@ -55,10 +55,10 @@ export default function UrgentCard({
               transition: { duration: 0.15 },
             }}
             onClick={() => onClick?.(patient)}
-            className="flex items-start gap-3 p-3 rounded-xl border cursor-pointer bg-card"
+            className="bg-card flex cursor-pointer items-start gap-3 rounded-xl border p-3"
           >
             {/* Avatar */}
-            <Avatar className="size-8.5 shrink-0 border border-border">
+            <Avatar className="border-border size-8.5 shrink-0 border">
               <AvatarImage src={patient.avatarUrl} />
               <AvatarFallback>
                 {patient.patientName
@@ -68,22 +68,22 @@ export default function UrgentCard({
             </Avatar>
 
             {/* Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold truncate transition-colors text-foreground">
+            <div className="min-w-0 flex-1">
+              <p className="text-foreground truncate text-sm font-bold transition-colors">
                 {patient.patientName}{" "}
               </p>
-              <p className="text-sm font-bold truncate transition-colors">
-                <span className="text-xs mt-0.5 text-muted-foreground ml-1">
+              <p className="truncate text-sm font-bold transition-colors">
+                <span className="text-muted-foreground mt-0.5 ml-1 text-xs">
                   {patient.schoolNickname || patient.schoolName}
                 </span>
               </p>
-              <div className="flex items-center gap-1.5 mt-1">
+              <div className="mt-1 flex items-center gap-1.5">
                 <m.div
                   animate={{ opacity: [1, 0.4, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
-                  className="size-1.5 rounded-full shrink-0 bg-destructive"
+                  className="bg-destructive size-1.5 shrink-0 rounded-full"
                 />
-                <span className="text-[10.5px] text-muted-foreground">
+                <span className="text-muted-foreground text-[10.5px]">
                   {timeAgo(patient.urgentCareEnteredAt || patient.time)}
                 </span>
               </div>
@@ -95,7 +95,7 @@ export default function UrgentCard({
           </m.div>
         </TooltipTrigger>
         <TooltipContent side="top" sideOffset={5}>
-          <p className="text-xs font-semibold text-destructive">
+          <p className="text-destructive text-xs font-semibold">
             Open {patient.patientName}&apos;s case
           </p>
         </TooltipContent>

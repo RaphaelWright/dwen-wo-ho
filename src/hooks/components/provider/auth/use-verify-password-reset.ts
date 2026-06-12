@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { ROUTES } from "@/lib/constants/routes";
 import useGetSearchParams from "@/hooks/use-get-search-params";
 import { VerifyPasswordResetProps } from "@/lib/types/provider/auth";
@@ -66,7 +66,9 @@ export const useVerifyPasswordReset = ({
         localStorage.setItem("recoveryToken", response.token);
         localStorage.removeItem("refreshToken");
         toast.success(VERIFY_PASSWORD_RESET_TEXTS.toasts.success);
-        router.push(`${ROUTES.provider.newPassword}?email=${encodeURIComponent(email)}`);
+        router.push(
+          `${ROUTES.provider.newPassword}?email=${encodeURIComponent(email)}`,
+        );
       } else {
         toast.error(VERIFY_PASSWORD_RESET_TEXTS.errors.invalidCode);
       }
@@ -84,11 +86,12 @@ export const useVerifyPasswordReset = ({
       setSeconds(60);
       setIsRunning(true);
     } catch (error: unknown) {
-      const errorMsg = getCleanErrorMessage(error) || VERIFY_PASSWORD_RESET_TEXTS.errors.resendFailed;
+      const errorMsg =
+        getCleanErrorMessage(error) ||
+        VERIFY_PASSWORD_RESET_TEXTS.errors.resendFailed;
       toast.error(errorMsg);
     }
   };
-
 
   const handleBack = () => {
     if (onBack) {

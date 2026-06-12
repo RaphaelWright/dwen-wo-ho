@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { clearAllCaches } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
 import { SchoolWithExtras as SchoolWithExtrasAtom } from "@/atoms/provider-schools";

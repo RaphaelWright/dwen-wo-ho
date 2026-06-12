@@ -34,14 +34,19 @@ export function useProviderSearchConfig({
     const query = searchQuery.toLowerCase().trim();
 
     // Check if score sorting filters are active
-    const hasHighScoreFilter = localActiveFilters.some(f => f.id === "high-score");
-    const hasLowScoreFilter = localActiveFilters.some(f => f.id === "low-score");
+    const hasHighScoreFilter = localActiveFilters.some(
+      (f) => f.id === "high-score",
+    );
+    const hasLowScoreFilter = localActiveFilters.some(
+      (f) => f.id === "low-score",
+    );
 
     // Helper to check if an item matches all active filters (excluding score sorts)
     const matchesAllFilters = (item: PatientCase) => {
       return localActiveFilters.every((filter) => {
         // Skip score sorting filters - they only sort, don't filter
-        if (filter.id === "high-score" || filter.id === "low-score") return true;
+        if (filter.id === "high-score" || filter.id === "low-score")
+          return true;
         // For status filter
         if (filter.filterKey === "status" && filter.filterType === "exact") {
           return item.status === filter.filterValue;
@@ -70,23 +75,35 @@ export function useProviderSearchConfig({
     return filtered.slice(0, query ? 5 : 4);
   }, [searchQuery, filteredPatients, localActiveFilters]);
 
-  const onSelectOption = useCallback((val: string) => {
-    setSearchQuery(val);
-  }, [setSearchQuery]);
+  const onSelectOption = useCallback(
+    (val: string) => {
+      setSearchQuery(val);
+    },
+    [setSearchQuery],
+  );
 
-  const onFilterChange = useCallback((filter: FilterOption) => {
-    if (filter.filterKey) {
-      toggleFilter(filter);
-    }
-  }, [toggleFilter]);
+  const onFilterChange = useCallback(
+    (filter: FilterOption) => {
+      if (filter.filterKey) {
+        toggleFilter(filter);
+      }
+    },
+    [toggleFilter],
+  );
 
-  const onSubmitSearch = useCallback((query: string) => {
-    setAppliedSearchQuery(query);
-  }, [setAppliedSearchQuery]);
+  const onSubmitSearch = useCallback(
+    (query: string) => {
+      setAppliedSearchQuery(query);
+    },
+    [setAppliedSearchQuery],
+  );
 
-  const onSuggestionAction = useCallback((p: PatientCase) => {
-    router.push(`/provider/patients/${p.patientId}`);
-  }, [router]);
+  const onSuggestionAction = useCallback(
+    (p: PatientCase) => {
+      router.push(`/provider/patients/${p.patientId}`);
+    },
+    [router],
+  );
 
   const onResetSearch = useCallback(() => {
     setSearchQuery("");

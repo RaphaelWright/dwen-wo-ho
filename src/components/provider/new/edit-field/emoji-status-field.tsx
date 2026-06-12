@@ -28,14 +28,14 @@ export function EmojiStatusField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
-          className="flex-1 focus:ring-1 focus:ring-primary/20"
+          className="focus:ring-primary/20 flex-1 focus:ring-1"
           placeholder="Enter status or pick emoji..."
           autoFocus
         />
         <button
           type="button"
           onClick={() => setEmojiOpen(!emojiOpen)}
-          className="p-2 rounded-md border border-input bg-background hover:bg-accent transition-colors"
+          className="border-input bg-background hover:bg-accent rounded-md border p-2 transition-colors"
         >
           <Smile size={18} className="text-muted-foreground" />
         </button>
@@ -48,7 +48,7 @@ export function EmojiStatusField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 right-0 mt-2"
+            className="absolute right-0 z-50 mt-2"
           >
             <EmojiPicker
               onEmojiClick={(emojiData) => {

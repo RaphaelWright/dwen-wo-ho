@@ -7,7 +7,7 @@ export function WaitingRoomFooter({ onBack }: WaitingRoomFooterProps) {
     <div className="mt-12 text-center">
       <Button
         onClick={onBack}
-        className="text-primary hover:text-primary/80 font-medium text-sm underline transition-colors"
+        className="text-primary hover:text-primary/80 text-sm font-medium underline transition-colors"
       >
         {WAITING_ROOM_TEXTS.footer.backText}
       </Button>

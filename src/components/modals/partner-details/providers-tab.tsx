@@ -20,17 +20,17 @@ export const ProvidersTab = ({
     <div className="space-y-6">
       {/* Associated Providers */}
       <div>
-        <h4 className="font-semibold text-gray-900 mb-3">
+        <h4 className="mb-3 font-semibold text-gray-900">
           Associated Providers
         </h4>
         {isLoadingProviders ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+          <div className="text-muted-foreground py-8 text-center">
+            <div className="border-primary mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2"></div>
             <p>Loading providers...</p>
           </div>
         ) : associatedProviders.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <FiUsers className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+          <div className="py-8 text-center text-gray-500">
+            <FiUsers className="mx-auto mb-2 h-12 w-12 text-gray-300" />
             <p>No providers associated yet</p>
           </div>
         ) : (
@@ -39,22 +39,22 @@ export const ProvidersTab = ({
               <Button
                 key={provider.email}
                 onClick={() => handleProviderClick(provider)}
-                className="w-full flex items-center justify-between p-4 bg-background border border-border rounded-lg hover:border-primary/30 transition-colors text-left"
+                className="bg-background border-border hover:border-primary/30 flex w-full items-center justify-between rounded-lg border p-4 text-left transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {provider.profilePhotoURL ? (
-                    <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-gray-200">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-gray-200">
                       <Image
                         src={provider.profilePhotoURL}
                         alt={provider.providerName}
                         width={48}
                         height={48}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center shrink-0">
-                      <FiUsers className="w-6 h-6 text-white" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500">
+                      <FiUsers className="h-6 w-6 text-white" />
                     </div>
                   )}
                   <div>
@@ -76,10 +76,10 @@ export const ProvidersTab = ({
                     e.stopPropagation();
                     setProviderToRemove(provider);
                   }}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-destructive/50 text-destructive hover:bg-destructive/10 transition-colors"
+                  className="border-destructive/50 text-destructive hover:bg-destructive/10 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors"
                   aria-label="Remove provider"
                 >
-                  <FiMinus className="w-4 h-4" />
+                  <FiMinus className="h-4 w-4" />
                 </Button>
               </Button>
             ))}
@@ -89,11 +89,11 @@ export const ProvidersTab = ({
 
       {/* Available Providers */}
       <div>
-        <h4 className="font-semibold text-gray-900 mb-3">
+        <h4 className="mb-3 font-semibold text-gray-900">
           Available Providers
         </h4>
         <div className="relative mb-4">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <FiSearch className="h-5 w-5 text-gray-400" />
           </div>
           <Input
@@ -101,12 +101,12 @@ export const ProvidersTab = ({
             placeholder="Search providers..."
             value={providerSearchQuery}
             onChange={(e) => setProviderSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder-muted-foreground"
+            className="bg-background border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder-muted-foreground w-full rounded-lg border py-2 pr-4 pl-10 transition-all focus:ring-2 focus:outline-none"
           />
         </div>
 
         {filteredAvailableProviders.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">
+          <p className="py-4 text-center text-gray-500">
             {providerSearchQuery
               ? "No providers found matching your search."
               : "All providers are already associated."}
@@ -116,22 +116,22 @@ export const ProvidersTab = ({
             {filteredAvailableProviders.map((provider: AssociatedProvider) => (
               <div
                 key={provider.email}
-                className="flex items-center justify-between p-4 bg-background border border-border rounded-lg hover:border-primary/30 transition-colors"
+                className="bg-background border-border hover:border-primary/30 flex items-center justify-between rounded-lg border p-4 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {provider.profilePhotoURL ? (
-                    <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-gray-200">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-gray-200">
                       <Image
                         src={provider.profilePhotoURL}
                         alt={provider.providerName}
                         width={48}
                         height={48}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-full flex items-center justify-center shrink-0">
-                      <FiUsers className="w-6 h-6 text-white" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500">
+                      <FiUsers className="h-6 w-6 text-white" />
                     </div>
                   )}
                   <div>
@@ -150,10 +150,10 @@ export const ProvidersTab = ({
                 </div>
                 <Button
                   onClick={() => setProviderToAdd(provider)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-success/50 text-success hover:bg-success/10 transition-colors"
+                  className="border-success/50 text-success hover:bg-success/10 flex h-8 w-8 items-center justify-center rounded-full border-2 transition-colors"
                   aria-label="Add provider"
                 >
-                  <FiPlus className="w-4 h-4" />
+                  <FiPlus className="h-4 w-4" />
                 </Button>
               </div>
             ))}

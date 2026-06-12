@@ -4,7 +4,7 @@ import { ProviderProfileCardProps } from "@/lib/types/components/curator/provide
 
 export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
   return (
-    <div className="bg-card shadow-lg rounded-lg overflow-hidden mb-8 border border-border">
+    <div className="bg-card border-border mb-8 overflow-hidden rounded-lg border shadow-lg">
       <div className="px-6 py-8">
         <div className="flex items-start space-x-6">
           {/* Profile Image */}
@@ -18,36 +18,36 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
                 className="rounded-full object-cover"
               />
             ) : (
-              <div className="w-30 h-30 rounded-full bg-primary flex items-center justify-center">
-                <User className="w-16 h-16 text-primary-foreground" />
+              <div className="bg-primary flex h-30 w-30 items-center justify-center rounded-full">
+                <User className="text-primary-foreground h-16 w-16" />
               </div>
             )}
           </div>
 
           {/* Provider Info */}
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-foreground mb-2 text-3xl font-bold">
               {provider.professionalTitle
                 ? `${provider.professionalTitle} `
                 : ""}
               {provider.fullName}
             </h1>
-            <div className="flex items-center space-x-2 mb-4">
-              <Mail className="w-5 h-5 text-muted-foreground" />
+            <div className="mb-4 flex items-center space-x-2">
+              <Mail className="text-muted-foreground h-5 w-5" />
               <span className="text-muted-foreground">{provider.email}</span>
             </div>
 
             {provider.officePhoneNumber && (
-              <div className="flex items-center space-x-2 mb-2">
-                <Phone className="w-5 h-5 text-muted-foreground" />
+              <div className="mb-2 flex items-center space-x-2">
+                <Phone className="text-muted-foreground h-5 w-5" />
                 <span className="text-muted-foreground">
                   {provider.officePhoneNumber}
                 </span>
               </div>
             )}
 
-            <div className="flex items-center space-x-2 mb-4">
-              <Calendar className="w-5 h-5 text-muted-foreground" />
+            <div className="mb-4 flex items-center space-x-2">
+              <Calendar className="text-muted-foreground h-5 w-5" />
               <span className="text-muted-foreground">
                 Applied:{" "}
                 {provider.createdAt
@@ -58,10 +58,10 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
 
             {(provider.status || provider.bio) && (
               <div className="mb-4">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <h3 className="text-foreground mb-2 text-lg font-semibold">
                   Bio/Status
                 </h3>
-                <p className="text-muted-foreground bg-muted p-4 rounded-lg">
+                <p className="text-muted-foreground bg-muted rounded-lg p-4">
                   {provider.bio || provider.status}
                 </p>
               </div>

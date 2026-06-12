@@ -34,15 +34,15 @@ const PasswordStrengthIndicator = ({
     evaluatePasswordStrength(password);
 
   return (
-    <div className="flex flex-col gap-2 mt-2">
-      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+    <div className="mt-2 flex flex-col gap-2">
+      <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
         <m.div
           className={cn(
             "h-full rounded-full transition-colors duration-700",
             tone === "destructive" && "bg-destructive",
             tone === "warning" && "bg-warning",
             tone === "successLight" && "bg-success/50",
-            tone === "success" && "bg-success"
+            tone === "success" && "bg-success",
           )}
           initial={false}
           animate={{ width: `${score}%` }}
@@ -55,7 +55,7 @@ const PasswordStrengthIndicator = ({
           tone === "destructive" && "text-destructive",
           tone === "warning" && "text-warning",
           tone === "successLight" && "text-success/80",
-          tone === "success" && "text-success"
+          tone === "success" && "text-success",
         )}
       >
         {SIGN_UP_TEXTS.createAccount.passwordStrength.label}:{" "}
@@ -70,7 +70,7 @@ const PasswordStrengthIndicator = ({
               key={key}
               className={cn(
                 "flex items-center gap-1.5 text-sm",
-                met ? "text-success" : "text-muted-foreground"
+                met ? "text-success" : "text-muted-foreground",
               )}
             >
               {met ? (

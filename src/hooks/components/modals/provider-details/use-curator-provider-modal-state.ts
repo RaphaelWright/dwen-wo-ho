@@ -8,7 +8,9 @@ export const useCuratorProviderModalState = (
   onShowApproveModal?: (email: string) => void,
   onShowRejectModal?: (email: string) => void,
 ) => {
-  const { approveProvider, rejectProvider } = useProvidersQuery({ enabled: false });
+  const { approveProvider, rejectProvider } = useProvidersQuery({
+    enabled: false,
+  });
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
 

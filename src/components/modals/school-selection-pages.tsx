@@ -28,25 +28,25 @@ export default function SchoolSelectionModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-3xl">
-      <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border">
+    <div className="bg-background fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-3xl">
+      <div className="bg-card text-foreground border-border flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        <div className="border-border flex items-center justify-between border-b p-6">
           <Button
             onClick={onClose}
-            className="w-10 h-10 bg-muted rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
+            className="bg-muted hover:bg-muted-foreground/40 flex h-10 w-10 items-center justify-center rounded-full transition-colors"
           >
-            <ArrowBigLeftIcon className="w-6 h-6" />
+            <ArrowBigLeftIcon className="h-6 w-6" />
           </Button>
-          <h2 className="text-2xl font-bold text-foreground">Select School</h2>
+          <h2 className="text-foreground text-2xl font-bold">Select School</h2>
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
         {/* Search Bar */}
-        <div className="p-6 border-b border-border">
+        <div className="border-border border-b p-6">
           <div className="relative">
-            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-              <FiSearch className="h-5 w-5 text-foreground" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+              <FiSearch className="text-foreground h-5 w-5" />
             </div>
             <input
               type="text"
@@ -54,22 +54,22 @@ export default function SchoolSelectionModal({
               placeholder="Search schools"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-12 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder-muted-foreground"
+              className="bg-muted border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder-muted-foreground w-full rounded-xl border py-3 pr-12 pl-4 transition-all focus:ring-2 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Filter Buttons */}
-        <div className="px-6 pt-2 pb-2 border-b border-border">
-          <div className="flex flex-wrap gap-2 justify-center">
+        <div className="border-border border-b px-6 pt-2 pb-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {SCHOOL_FILTER_OPTIONS.map((filter) => (
               <Button
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value)}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${
                   activeFilter === filter.value
-                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                    : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                    ? "bg-primary text-primary-foreground shadow-primary/20 shadow-md"
+                    : "bg-card text-muted-foreground hover:bg-muted border-border border"
                 }`}
               >
                 {filter.label}
@@ -79,18 +79,18 @@ export default function SchoolSelectionModal({
         </div>
 
         {/* Schools List - Fixed height to show 6 cards (3 rows × 2 columns), rest scrollable */}
-        <div className="p-6 overflow-y-auto" style={{ maxHeight: "20rem" }}>
+        <div className="overflow-y-auto p-6" style={{ maxHeight: "20rem" }}>
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
                 <p className="text-muted-foreground">Loading schools...</p>
               </div>
             </div>
           ) : filteredSchools.length === 0 ? (
-            <div className="text-center py-20">
-              <MdSchool className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
+            <div className="py-20 text-center">
+              <MdSchool className="text-muted-foreground/50 mx-auto mb-4 h-16 w-16" />
+              <h3 className="text-foreground mb-2 text-xl font-semibold">
                 No schools found
               </h3>
               <p className="text-muted-foreground">
@@ -104,53 +104,53 @@ export default function SchoolSelectionModal({
               {/* Platform/Default Option */}
               <Button
                 onClick={handleSelectPlatform}
-                className="flex items-center gap-4 p-4 bg-muted rounded-xl hover:bg-muted/80 transition-all text-left h-20 w-full"
+                className="bg-muted hover:bg-muted/80 flex h-20 w-full items-center gap-4 rounded-xl p-4 text-left transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-secondary-accent flex items-center justify-center shrink-0">
-                  <span className="text-primary-foreground font-bold text-lg">
+                <div className="bg-secondary-accent flex h-12 w-12 shrink-0 items-center justify-center rounded-full">
+                  <span className="text-primary-foreground text-lg font-bold">
                     +
                   </span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-foreground">
+                <div className="min-w-0 flex-1">
+                  <p className="text-foreground font-semibold">
                     Platform (Default)
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Default cover page for all schools
                   </p>
                 </div>
               </Button>
 
               {/* Schools List */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
+              <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2">
                 {filteredSchools.map((school) => (
                   <Button
                     key={school.id}
                     onClick={() => handleSchoolClick(school)}
                     variant={"secondary"}
-                    className="flex items-center gap-6 p-4 rounded-full transition-all text-left h-14 w-80"
+                    className="flex h-14 w-80 items-center gap-6 rounded-full p-4 text-left transition-all"
                   >
                     {school.logo ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
+                      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full">
                         <Image
                           src={school.logo}
                           alt={school.name}
                           width={48}
                           height={48}
-                          className="w-full h-full object-cover"
+                          className="h-full w-full object-cover"
                         />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shrink-0">
-                        <MdSchool className="w-6 h-6 text-muted-foreground" />
+                      <div className="bg-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+                        <MdSchool className="text-muted-foreground h-6 w-6" />
                       </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-primary-foreground truncate">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-primary-foreground truncate font-semibold">
                         {school.name}
                       </p>
                       {school.type && (
-                        <p className="text-sm text-primary-foreground/80">
+                        <p className="text-primary-foreground/80 text-sm">
                           {school.type}
                         </p>
                       )}

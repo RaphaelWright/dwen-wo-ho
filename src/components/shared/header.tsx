@@ -16,7 +16,7 @@ const Header = ({ className }: { className?: string }) => {
   const mounted = useHydrated();
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div className="pointer-events-none fixed top-0 right-0 left-0 z-50 flex justify-center">
         <m.header
           layout
           ref={navRef}
@@ -25,9 +25,9 @@ const Header = ({ className }: { className?: string }) => {
           }}
           className={cn(
             "pointer-events-auto relative z-50 overflow-hidden",
-            "bg-background/90 backdrop-blur-md border border-border dark:border-border/30",
+            "bg-background/90 border-border dark:border-border/30 border backdrop-blur-md",
             isFloating
-              ? "mt-2 w-[95%] sm:w-[80%] max-w-7xl rounded-full shadow-md mx-auto"
+              ? "mx-auto mt-2 w-[95%] max-w-7xl rounded-full shadow-md sm:w-[80%]"
               : "mt-0 w-full max-w-full rounded-none shadow-sm",
             className,
           )}
@@ -35,7 +35,7 @@ const Header = ({ className }: { className?: string }) => {
           <div className="px-6">
             <div
               className={cn(
-                "flex items-center justify-between h-16",
+                "flex h-16 items-center justify-between",
                 isFloating && "h-14.5",
               )}
             >

@@ -48,29 +48,29 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
     {
       href: ROUTES.curator.schools,
       label: "Schools",
-      icon: <MdSchool className="text-lg shrink-0" />,
+      icon: <MdSchool className="shrink-0 text-lg" />,
       count: summary?.schoolCount,
     },
     {
       href: ROUTES.curator.providers,
       label: "Providers",
-      icon: <MdHealthAndSafety className="text-lg shrink-0" />,
+      icon: <MdHealthAndSafety className="shrink-0 text-lg" />,
       count: summary?.providerCount,
     },
     {
       href: ROUTES.curator.partners,
       label: "Partners",
-      icon: <MdHandshake className="text-lg shrink-0" />,
+      icon: <MdHandshake className="shrink-0 text-lg" />,
       count: summary?.partnerCount,
     },
     {
       href: ROUTES.curator.pages,
       label: "Pages",
-      icon: <FiFileText className="text-lg shrink-0" />,
+      icon: <FiFileText className="shrink-0 text-lg" />,
     },
     {
       label: "Create",
-      icon: <FiPlus className="text-lg shrink-0" />,
+      icon: <FiPlus className="shrink-0 text-lg" />,
       onClick: () => {
         onCreateClick();
         setIsMobileSidebarOpen(false);

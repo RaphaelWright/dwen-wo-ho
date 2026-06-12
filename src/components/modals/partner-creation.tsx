@@ -36,7 +36,7 @@ const PartnerCreationModal = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 backdrop-blur-3xl bg-background/80 z-50"
+            className="bg-background/80 fixed inset-0 z-50 backdrop-blur-3xl"
             onClick={onClose}
           />
           <m.div
@@ -46,15 +46,15 @@ const PartnerCreationModal = ({
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-xl mx-auto overflow-hidden flex flex-col border border-border">
+            <div className="bg-card text-foreground border-border mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
               {/* Header */}
-              <div className="px-8 py-6 border-b border-border flex items-center justify-between bg-muted/30">
+              <div className="border-border bg-muted/30 flex items-center justify-between border-b px-8 py-6">
                 <div className="flex items-center gap-4">
                   <div>
-                    <h2 className="text-xl font-bold text-foreground">
+                    <h2 className="text-foreground text-xl font-bold">
                       New Partner
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Add a new partner organization
                     </p>
                   </div>
@@ -63,9 +63,9 @@ const PartnerCreationModal = ({
                   onClick={onClose}
                   variant="outline"
                   size="icon"
-                  className="w-8 h-8 rounded-full"
+                  className="h-8 w-8 rounded-full"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
 
@@ -80,7 +80,7 @@ const PartnerCreationModal = ({
                   <div className="space-y-2">
                     <label
                       htmlFor="partner-name"
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Partner Name
                     </label>
@@ -90,10 +90,10 @@ const PartnerCreationModal = ({
                         aria-label="Partner name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                        className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border py-3 pr-4 pl-12 transition-all focus:ring-2 focus:outline-none"
                         placeholder="e.g. Ministry of Health"
                       />
-                      <Building2 className="w-5 h-5 text-muted-foreground absolute left-4 top-1/2 transform -translate-y-1/2" />
+                      <Building2 className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform" />
                     </div>
                   </div>
 
@@ -101,7 +101,7 @@ const PartnerCreationModal = ({
                   <div className="space-y-2">
                     <label
                       htmlFor="partner-nickname"
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Nickname (Optional)
                     </label>
@@ -110,7 +110,7 @@ const PartnerCreationModal = ({
                       aria-label="Nickname"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)}
-                      className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
                       placeholder="e.g. MoH"
                     />
                   </div>
@@ -118,7 +118,7 @@ const PartnerCreationModal = ({
                   <div className="space-y-2">
                     <label
                       htmlFor="partner-slogan"
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Slogan
                     </label>
@@ -127,7 +127,7 @@ const PartnerCreationModal = ({
                       aria-label="Slogan"
                       value={slogan}
                       onChange={(e) => setSlogan(e.target.value)}
-                      className="w-full px-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
                       placeholder="e.g. The Sound Of Young America"
                     />
                   </div>
@@ -136,7 +136,7 @@ const PartnerCreationModal = ({
                   <div className="space-y-2">
                     <label
                       htmlFor="partner-logo"
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Partner Logo
                     </label>
@@ -152,29 +152,29 @@ const PartnerCreationModal = ({
                     <button
                       type="button"
                       onClick={handlePickLogo}
-                      className="w-full h-32 bg-muted border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/80 hover:border-primary/30 transition-all group overflow-hidden relative"
+                      className="bg-muted border-border hover:bg-muted/80 hover:border-primary/30 group relative flex h-32 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed transition-all"
                     >
                       {logo ? (
-                        <div className="relative w-full h-full p-4">
+                        <div className="relative h-full w-full p-4">
                           <Image
                             src={logo}
                             alt="Logo preview"
                             width={128}
                             height={128}
-                            className="object-contain w-full h-full"
+                            className="h-full w-full object-contain"
                           />
-                          <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors flex items-center justify-center">
-                            <span className="opacity-0 group-hover:opacity-100 bg-background/90 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
+                          <div className="bg-foreground/0 group-hover:bg-foreground/10 absolute inset-0 flex items-center justify-center transition-colors">
+                            <span className="bg-background/90 rounded-full px-3 py-1 text-xs font-medium opacity-0 shadow-sm group-hover:opacity-100">
                               Change
                             </span>
                           </div>
                         </div>
                       ) : (
                         <>
-                          <div className="w-10 h-10 bg-background rounded-full shadow-sm flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <Upload className="w-5 h-5 text-primary" />
+                          <div className="bg-background mb-3 flex h-10 w-10 items-center justify-center rounded-full shadow-sm transition-transform group-hover:scale-110">
+                            <Upload className="text-primary h-5 w-5" />
                           </div>
-                          <span className="text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
+                          <span className="text-muted-foreground group-hover:text-primary text-sm font-medium transition-colors">
                             Click to upload logo
                           </span>
                         </>
@@ -185,7 +185,7 @@ const PartnerCreationModal = ({
               </div>
 
               {/* Footer */}
-              <div className="px-8 py-6 border-t border-border bg-muted/30 flex justify-end gap-3">
+              <div className="border-border bg-muted/30 flex justify-end gap-3 border-t px-8 py-6">
                 <Button
                   type="button"
                   onClick={onClose}
@@ -200,7 +200,7 @@ const PartnerCreationModal = ({
                   loading={createPartnerMutation.isPending}
                   loadingText="Creating..."
                   disabled={!name.trim()}
-                  className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:shadow-none"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20 px-8 font-semibold shadow-lg disabled:opacity-50 disabled:shadow-none"
                 >
                   Create Partner
                 </LoadingButton>

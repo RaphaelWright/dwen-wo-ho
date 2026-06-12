@@ -1,6 +1,10 @@
 "use client";
 
-import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from "react-hook-form";
 import * as z from "zod/v4";
 import LoadingOverlay from "@/components/ui/loading-overlay";
 import { Input } from "@/components/ui/input";
@@ -56,9 +60,9 @@ const NewPasswordForm = ({
       <form
         id="new-password-form"
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-lg mx-auto space-y-8 px-8 animate-in fade-in slide-in-from-bottom-8 duration-700"
+        className="animate-in fade-in slide-in-from-bottom-8 mx-auto w-full max-w-lg space-y-8 px-8 duration-700"
       >
-        <div className="text-center space-y-2">
+        <div className="space-y-2 text-center">
           <h1 className="text-3xl font-extrabold tracking-tight text-balance">
             {NEW_PASSWORD_TEXTS.form.title}
           </h1>
@@ -76,7 +80,7 @@ const NewPasswordForm = ({
             <Input
               value={email ? decodeURIComponent(email) : ""}
               disabled
-              className="h-12 bg-muted text-lg font-medium text-muted-foreground cursor-not-allowed"
+              className="bg-muted text-muted-foreground h-12 cursor-not-allowed text-lg font-medium"
             />
           </div>
 
@@ -91,7 +95,7 @@ const NewPasswordForm = ({
                 type={showPassword ? "text" : "password"}
                 placeholder={SIGN_UP_TEXTS.createAccount.passwordPlaceholder}
                 className={cn(
-                  "h-12 pl-4 pr-16 text-lg transition-all duration-200",
+                  "h-12 pr-16 pl-4 text-lg transition-all duration-200",
                   errors?.password &&
                     "border-destructive focus-visible:ring-destructive/30",
                 )}
@@ -100,7 +104,7 @@ const NewPasswordForm = ({
               <Button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
                 variant="ghost"
                 size="sm"
               >
@@ -113,7 +117,7 @@ const NewPasswordForm = ({
             </div>
             {password && <PasswordStrengthIndicator password={password} />}
             {errors?.password && (
-              <p className="text-sm text-destructive font-medium pl-1">
+              <p className="text-destructive pl-1 text-sm font-medium">
                 {errors.password.message}
               </p>
             )}
@@ -130,7 +134,7 @@ const NewPasswordForm = ({
                 type={showPassword ? "text" : "password"}
                 placeholder={NEW_PASSWORD_TEXTS.form.repeatPasswordPlaceholder}
                 className={cn(
-                  "h-12 pl-4 pr-16 text-lg transition-all duration-200",
+                  "h-12 pr-16 pl-4 text-lg transition-all duration-200",
                   passwordsMatch &&
                     "border-success focus-visible:ring-success/30",
                   passwordsMismatch &&
@@ -147,7 +151,7 @@ const NewPasswordForm = ({
               <Button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
                 variant="ghost"
                 size="sm"
               >
@@ -165,13 +169,12 @@ const NewPasswordForm = ({
               mismatchLabel={NEW_PASSWORD_TEXTS.passwordMatch.mismatch}
             />
             {errors?.confirmPassword && (
-              <p className="text-sm text-destructive font-medium pl-1">
+              <p className="text-destructive pl-1 text-sm font-medium">
                 {errors.confirmPassword.message}
               </p>
             )}
           </div>
         </div>
-
       </form>
     </>
   );

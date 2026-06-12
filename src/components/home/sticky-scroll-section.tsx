@@ -12,7 +12,7 @@ export function StickyScrollSection() {
         width={1080}
         height={800}
         quality={100}
-        className="h-full w-full object-cover rounded-2xl"
+        className="h-full w-full rounded-2xl object-cover"
         alt={item.alt}
       />
     ),

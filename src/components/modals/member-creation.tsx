@@ -30,7 +30,7 @@ const MemberCreationModal = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-3xl z-50"
+            className="bg-background/80 fixed inset-0 z-50 backdrop-blur-3xl"
             onClick={onClose}
           />
 
@@ -42,15 +42,15 @@ const MemberCreationModal = ({
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-xl mx-auto overflow-hidden flex flex-col border border-border">
+            <div className="bg-card text-foreground border-border mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
               {/* Header */}
-              <div className="px-8 py-6 border-b border-border flex items-center justify-between bg-muted/30">
+              <div className="border-border bg-muted/30 flex items-center justify-between border-b px-8 py-6">
                 <div className="flex items-center gap-4">
                   <div>
-                    <h2 className="text-xl font-bold text-foreground">
+                    <h2 className="text-foreground text-xl font-bold">
                       New Member
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       Add a team member to your organization
                     </p>
                   </div>
@@ -59,9 +59,9 @@ const MemberCreationModal = ({
                   onClick={onClose}
                   variant="outline"
                   size="icon"
-                  className="w-8 h-8 rounded-full"
+                  className="h-8 w-8 rounded-full"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
 
@@ -74,7 +74,7 @@ const MemberCreationModal = ({
                 >
                   {/* Title Selection */}
                   <div className="space-y-3">
-                    <span className="block text-sm font-semibold text-foreground">
+                    <span className="text-foreground block text-sm font-semibold">
                       Role / Title
                     </span>
                     <div className="grid grid-cols-3 gap-3">
@@ -83,10 +83,10 @@ const MemberCreationModal = ({
                           key={title}
                           type="button"
                           onClick={() => handleInputChange("title", title)}
-                          className={`py-3 px-2 rounded-xl font-medium text-sm transition-all duration-200 flex flex-col items-center gap-2 ${
+                          className={`flex flex-col items-center gap-2 rounded-xl px-2 py-3 text-sm font-medium transition-all duration-200 ${
                             formData.title === title
-                              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 ring-2 ring-primary ring-offset-2"
-                              : "bg-muted text-muted-foreground hover:bg-muted/80 border border-transparent hover:border-border"
+                              ? "bg-primary text-primary-foreground shadow-primary/20 ring-primary shadow-md ring-2 ring-offset-2"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80 hover:border-border border border-transparent"
                           }`}
                         >
                           {title}
@@ -99,7 +99,7 @@ const MemberCreationModal = ({
                   <div className="space-y-3">
                     <label
                       htmlFor="member-name"
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Full Name
                     </label>
@@ -112,10 +112,10 @@ const MemberCreationModal = ({
                         onChange={(e) =>
                           handleInputChange("name", e.target.value)
                         }
-                        className="w-full pl-12 pr-4 py-3 bg-muted border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                        className="bg-muted border-border focus:ring-primary/20 focus:border-primary w-full rounded-xl border py-3 pr-4 pl-12 transition-all focus:ring-2 focus:outline-none"
                         placeholder="Enter member's full name"
                       />
-                      <UserPlus className="w-5 h-5 text-muted-foreground absolute left-4 top-1/2 transform -translate-y-1/2" />
+                      <UserPlus className="text-muted-foreground absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform" />
                     </div>
                   </div>
 
@@ -128,9 +128,9 @@ const MemberCreationModal = ({
                         exit={{ opacity: 0, y: -10, height: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="flex items-center gap-3 p-4 bg-success/10 border border-success/20 rounded-xl text-success">
-                          <CheckCircle2Icon className="w-5 h-5 shrink-0" />
-                          <p className="font-medium text-sm">
+                        <div className="bg-success/10 border-success/20 text-success flex items-center gap-3 rounded-xl border p-4">
+                          <CheckCircle2Icon className="h-5 w-5 shrink-0" />
+                          <p className="text-sm font-medium">
                             <span className="font-bold">
                               {formData.title} {formData.name}
                             </span>{" "}
@@ -144,7 +144,7 @@ const MemberCreationModal = ({
               </div>
 
               {/* Footer */}
-              <div className="px-8 py-6 border-t border-border bg-muted/30 flex justify-end gap-3">
+              <div className="border-border bg-muted/30 flex justify-end gap-3 border-t px-8 py-6">
                 <Button
                   type="button"
                   onClick={onClose}
@@ -158,8 +158,10 @@ const MemberCreationModal = ({
                   form="member-form"
                   loading={isSubmitting}
                   loadingText="Adding..."
-                  disabled={!formData.title || !formData.name.trim() || isSubmitted}
-                  className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 disabled:opacity-50 disabled:shadow-none"
+                  disabled={
+                    !formData.title || !formData.name.trim() || isSubmitted
+                  }
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20 px-8 font-semibold shadow-lg disabled:opacity-50 disabled:shadow-none"
                 >
                   {isSubmitted ? "Added" : "Add Member"}
                 </LoadingButton>

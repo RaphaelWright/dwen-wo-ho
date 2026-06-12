@@ -9,7 +9,7 @@ export type { CuratorPagesTabType } from "./use-curator-tabs";
 
 export function useCuratorContentPages() {
   const { activeTab, setActiveTab, tabs } = useCuratorTabs();
-  
+
   const {
     selectedSchool,
     showSchoolModal,
@@ -66,3 +66,7 @@ export function useCuratorContentPages() {
     closeAddIcon,
   };
 }
+
+export type CuratorContentPagesState = ReturnType<
+  typeof useCuratorContentPages
+>;

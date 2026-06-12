@@ -52,17 +52,17 @@ export default function SchoolsSidebar({
   ];
 
   return (
-    <aside className="w-[96%] mx-auto shrink-0 flex flex-col overflow-y-auto no-scrollbar  h-fit pb-40 md:pb-10  lg:bg-[#fcf1e9] lg:dark:bg-muted lg:rounded-2xl lg:mt-6">
+    <aside className="no-scrollbar lg:dark:bg-muted mx-auto flex h-fit w-[96%] shrink-0 flex-col overflow-y-auto pb-40 md:pb-10 lg:mt-6 lg:rounded-2xl lg:bg-[#fcf1e9]">
       {/* Header label */}
-      <div className="px-4 pt-5 pb-3 shrink-0">
-        <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
+      <div className="shrink-0 px-4 pt-5 pb-3">
+        <p className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
           My Schools
         </p>
       </div>
 
       {/* School list */}
       <ScrollArea className="flex-1 px-2.5 pb-4">
-        <div className="flex flex-col gap-2 overflow-y-auto no-scrollbar max-h-[77vh]">
+        <div className="no-scrollbar flex max-h-[77vh] flex-col gap-2 overflow-y-auto">
           {displaySchools.map((school) => {
             const isActive = activeSchool === school.id;
             const isAll = school.id === "all";
@@ -87,16 +87,16 @@ export default function SchoolsSidebar({
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleSelectSchool(school.id)}
                 className={cn(
-                  "flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl cursor-pointer w-full text-left transition-all duration-300 ease-in-out lg:bg-card",
+                  "lg:bg-card flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left transition-all duration-300 ease-in-out",
                   isActive
                     ? "bg-primary/15 hover:bg-primary/15 lg:bg-primary"
-                    : "bg-transparent hover:bg-card dark:bg-card/90",
+                    : "hover:bg-card dark:bg-card/90 bg-transparent",
                 )}
               >
                 {/* Logo */}
                 <Avatar
                   className={cn(
-                    "size-8 rounded-lg flex items-center justify-center shrink-0 border text-[12px] font-black bg-white",
+                    "flex size-8 shrink-0 items-center justify-center rounded-lg border bg-white text-[12px] font-black",
                   )}
                 >
                   <AvatarImage src={school.avatarUrl} />
@@ -107,7 +107,7 @@ export default function SchoolsSidebar({
                     )}
                   >
                     {isAll ? (
-                      <School className="size-4 text-primary" />
+                      <School className="text-primary size-4" />
                     ) : (
                       shortLabel
                     )}
@@ -115,10 +115,10 @@ export default function SchoolsSidebar({
                 </Avatar>
 
                 {/* Name + count */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <p
                     className={cn(
-                      "text-[12.5px] font-semibold truncate",
+                      "truncate text-[12.5px] font-semibold",
                       isActive ? "text-white" : "text-muted-foreground",
                     )}
                   >

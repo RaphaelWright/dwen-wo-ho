@@ -12,7 +12,7 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 interface StoredSignupData {
   email: string;
@@ -73,7 +73,8 @@ export function useProviderPassword() {
       }
     } catch (error: unknown) {
       toast.error(
-        getCleanErrorMessage(error) || "Account creation failed. Please try again.",
+        getCleanErrorMessage(error) ||
+          "Account creation failed. Please try again.",
       );
     }
   };

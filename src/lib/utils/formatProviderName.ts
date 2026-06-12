@@ -30,7 +30,7 @@ const TITLE_PATTERNS = COMMON_TITLES.map((title) => ({
 }));
 
 const extractTitleFromName = (
-  name: string
+  name: string,
 ): { title: string | null; cleanedName: string } => {
   if (!name || typeof name !== "string") {
     return { title: null, cleanedName: name };
@@ -58,7 +58,7 @@ const extractTitleFromName = (
  */
 export const formatProviderName = (
   providerName: string,
-  providerTitle?: string | null
+  providerTitle?: string | null,
 ): string => {
   if (!providerName) {
     return "";
@@ -71,7 +71,7 @@ export const formatProviderName = (
 
   // Otherwise, try to extract title from the name
   const { title, cleanedName } = extractTitleFromName(providerName);
-  
+
   if (title) {
     return `${title} ${cleanedName}`.trim();
   }
@@ -88,7 +88,7 @@ export const formatProviderName = (
  */
 export const getProviderTitle = (
   providerName: string,
-  providerTitle?: string | null
+  providerTitle?: string | null,
 ): string | null => {
   // If title is explicitly provided, use it
   if (providerTitle) {
@@ -99,6 +99,3 @@ export const getProviderTitle = (
   const { title } = extractTitleFromName(providerName);
   return title;
 };
-
-
-

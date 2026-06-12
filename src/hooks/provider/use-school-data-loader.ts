@@ -1,12 +1,10 @@
 "use client";
 
 import { useCallback, useRef } from "react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { processBatch } from "@/lib/school-api-utils";
 import { School } from "@/lib/types/school";
-import {
-  SchoolWithExtras as SchoolWithExtrasAtom,
-} from "@/atoms/provider-schools";
+import { SchoolWithExtras as SchoolWithExtrasAtom } from "@/atoms/provider-schools";
 import { BATCH_SIZE } from "@/lib/constants/provider-schools";
 import type { ProfileQueryHandle } from "@/lib/types/api/auth";
 
@@ -81,7 +79,9 @@ export function useSchoolDataLoader(
         if (schoolsState.schools.length === 0) {
           setSchoolsState((prev) => ({
             ...prev,
-            schools: schoolsArray.map((s) => ({ ...s }) as SchoolWithExtrasAtom),
+            schools: schoolsArray.map(
+              (s) => ({ ...s }) as SchoolWithExtrasAtom,
+            ),
           }));
         }
 

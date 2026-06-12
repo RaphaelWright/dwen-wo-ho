@@ -18,7 +18,7 @@ const SignInContent = (props: ProviderSignInProps) => {
   } = useProviderSignIn(props);
 
   return (
-    <div className="min-h-screen h-full flex flex-col">
+    <div className="flex h-full min-h-screen flex-col">
       <BaseSignInForm
         audience="provider"
         email={props.email}
@@ -44,7 +44,7 @@ const SignInContent = (props: ProviderSignInProps) => {
 const ProviderSignIn = (props: ProviderSignInProps) => {
   return (
     <Suspense fallback={<div>{SIGN_IN_TEXTS.loading.loading}</div>}>
-      <SignInContent {...props} />
+      <SignInContent key={props.email} {...props} />
     </Suspense>
   );
 };

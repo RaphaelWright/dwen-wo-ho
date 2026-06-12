@@ -40,7 +40,7 @@ export const NotificationBell = ({
         whileTap={{ scale: 0.95 }}
         onClick={onOpenNotifs}
         className={cn(
-          "relative size-9 flex items-center justify-center rounded-lg border bg-card/90 hover:bg-muted/80 transition-colors",
+          "bg-card/90 hover:bg-muted/80 relative flex size-9 items-center justify-center rounded-lg border transition-colors",
           className,
         )}
         aria-label="Open notifications"
@@ -50,7 +50,7 @@ export const NotificationBell = ({
         {unreadCount > 0 && (
           <>
             {/* Unread count badge - top left */}
-            <span className="absolute -top-2 -left-2 flex items-center justify-center size-5 text-[8.5px] font-bold text-white bg-success rounded-full">
+            <span className="bg-success absolute -top-2 -left-2 flex size-5 items-center justify-center rounded-full text-[8.5px] font-bold text-white">
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
             {/* Green beacon pulse - top right */}

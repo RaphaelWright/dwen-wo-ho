@@ -81,14 +81,14 @@ const ProviderDetailsModal = ({
         role="button"
         tabIndex={0}
         aria-label="Close dialog"
-        className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300 ease-in-out ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={onClose}
         onKeyDown={activateOnKeyboard(onClose)}
       >
         <div
-          className={`relative bg-card text-foreground rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-border transition-all duration-300 ease-in-out ${
+          className={`bg-card text-foreground border-border relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border shadow-2xl transition-all duration-300 ease-in-out ${
             isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -111,7 +111,7 @@ const ProviderDetailsModal = ({
           <div className="flex-1 overflow-y-auto px-6 pb-6">
             {showLoading ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                <div className="border-primary mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
                 <p className="text-muted-foreground font-medium">
                   Loading provider details...
                 </p>

@@ -7,7 +7,9 @@ import { School } from "@/lib/types/school";
 export function useCuratorCoverPages(selectedSchool: School | null) {
   const [coverPages, setCoverPages] = useState<CoverPage[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(null);
+  const [editingCoverPage, setEditingCoverPage] = useState<CoverPage | null>(
+    null,
+  );
 
   const handleCoverPageComplete = useCallback(
     (data: { photo: File | null; color: string; slogan: string }) => {

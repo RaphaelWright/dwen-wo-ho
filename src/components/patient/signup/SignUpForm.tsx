@@ -16,7 +16,7 @@ export function SignUpForm({
 }: SignUpFormProps) {
   return (
     <form id="login-form" onSubmit={onSubmit} className="px-12">
-      <h1 className="text-5xl text-center font-extrabold">
+      <h1 className="text-center text-5xl font-extrabold">
         {SIGN_UP_TEXTS.form.title}
       </h1>
       <div className="my-16 space-y-5">
@@ -25,19 +25,19 @@ export function SignUpForm({
           value={email}
           placeholder={email}
           disabled
-          className={`font-bold w-full rounded-xl border-4 text-2xl text-muted-foreground p-4 bg-muted border-transparent`}
+          className={`text-muted-foreground bg-muted w-full rounded-xl border-4 border-transparent p-4 text-2xl font-bold`}
         />
 
         <div className="flex flex-col space-y-2">
           <Input
             {...register("fullName")}
             placeholder={SIGN_UP_TEXTS.form.fullNamePlaceholder}
-            className={`font-bold w-full rounded-xl border-4 ${
+            className={`w-full rounded-xl border-4 font-bold ${
               errors.fullName ? "border-destructive" : "border-transparent"
-            } text-2xl text-muted-foreground p-4 bg-muted`}
+            } text-muted-foreground bg-muted p-4 text-2xl`}
           />
           {errors.fullName && (
-            <span className="text-red-500 text-sm ml-4">
+            <span className="ml-4 text-sm text-red-500">
               {errors.fullName.message}
             </span>
           )}
@@ -48,16 +48,16 @@ export function SignUpForm({
             {...register("phoneNumber")}
             type="tel"
             placeholder={SIGN_UP_TEXTS.form.phoneNumberPlaceholder}
-            className={`font-bold w-full rounded-xl border-4 ${
+            className={`w-full rounded-xl border-4 font-bold ${
               errors.phoneNumber ? "border-destructive" : "border-transparent"
-            } text-2xl text-muted-foreground p-4 bg-muted`}
+            } text-muted-foreground bg-muted p-4 text-2xl`}
           />
           {errors.phoneNumber && (
-            <span className="text-red-500 text-sm ml-4">
+            <span className="ml-4 text-sm text-red-500">
               {errors.phoneNumber.message}
             </span>
           )}
-          <h2 className="ml-4 text-gray-500 text-lg md:text-3xl font-bold">
+          <h2 className="ml-4 text-lg font-bold text-gray-500 md:text-3xl">
             {SIGN_UP_TEXTS.form.emergencyNote}
           </h2>
         </div>
@@ -67,26 +67,26 @@ export function SignUpForm({
             {...register("password")}
             placeholder={SIGN_UP_TEXTS.form.passwordPlaceholder}
             type={showPassword ? "text" : "password"}
-            className={`font-bold w-full rounded-xl border-4 ${
+            className={`w-full rounded-xl border-4 font-bold ${
               errors.password ? "border-destructive" : "border-success"
-            } text-2xl text-muted-foreground p-4 bg-muted`}
+            } text-muted-foreground bg-muted p-4 text-2xl`}
           />
           <Button
             type="button"
             onClick={onTogglePassword}
-            className="absolute top-8.5 right-4 transform -translate-y-1/2 text-gray-500 font-semibold"
+            className="absolute top-8.5 right-4 -translate-y-1/2 transform font-semibold text-gray-500"
           >
             {showPassword ? SIGN_UP_TEXTS.form.hide : SIGN_UP_TEXTS.form.show}
           </Button>
           {errors.password && (
-            <span className="text-red-500 text-sm ml-4">
+            <span className="ml-4 text-sm text-red-500">
               {errors.password.message}
             </span>
           )}
         </div>
       </div>
 
-      <h1 className="text-2xl font-bold text-center text-gray-500">
+      <h1 className="text-center text-2xl font-bold text-gray-500">
         <Checkbox className="mr-4 rounded-none border-black" />
         {SIGN_UP_TEXTS.form.agreeTo}{" "}
         <Link href={ROUTES.public.landing} className="text-destructive">

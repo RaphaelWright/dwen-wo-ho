@@ -9,7 +9,7 @@ import Link from "next/link";
 export const DesktopNav = () => {
   const { pathname, hoveredIndex, setHoveredIndex } = useDesktopNav();
   return (
-    <nav className="hidden lg:flex items-center mx-auto">
+    <nav className="mx-auto hidden items-center lg:flex">
       <ul
         className="flex items-center gap-8"
         onMouseLeave={() => setHoveredIndex(null)}
@@ -28,7 +28,7 @@ export const DesktopNav = () => {
               {isHovered && (
                 <m.div
                   layoutId="hover-pill"
-                  className="absolute -inset-x-4 -inset-y-1 bg-muted-foreground/10 rounded-full -z-10"
+                  className="bg-muted-foreground/10 absolute -inset-x-4 -inset-y-1 -z-10 rounded-full"
                   transition={{
                     type: "spring",
                     stiffness: 350,
@@ -41,7 +41,7 @@ export const DesktopNav = () => {
               {isActive && (
                 <m.div
                   layoutId="nav-dot"
-                  className="absolute -top-3 left-0 right-0 mx-auto w-1.5 h-1.5 rounded-full bg-green-600"
+                  className="absolute -top-3 right-0 left-0 mx-auto h-1.5 w-1.5 rounded-full bg-green-600"
                   transition={{
                     type: "spring",
                     stiffness: 300,
@@ -53,7 +53,7 @@ export const DesktopNav = () => {
               <Link
                 href={item.path}
                 className={cn(
-                  "text-sm font-medium transition-colors py-2 relative z-10",
+                  "relative z-10 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "text-green-700"
                     : "text-muted-foreground hover:text-foreground",
@@ -66,7 +66,7 @@ export const DesktopNav = () => {
               {isActive && (
                 <m.div
                   layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-green-600 rounded-full"
+                  className="absolute right-0 -bottom-1 left-0 h-0.5 rounded-full bg-green-600"
                   transition={{
                     type: "spring",
                     stiffness: 300,

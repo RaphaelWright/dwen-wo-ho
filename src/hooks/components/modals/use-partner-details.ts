@@ -49,9 +49,7 @@ export const usePartnerDetails = ({
   const [schoolSearchQuery, setSchoolSearchQuery] = useState("");
   const [providerSearchQuery, setProviderSearchQuery] = useState("");
 
-  const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(
-    null,
-  );
+  const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(null);
   const [schoolToRemove, setSchoolToRemove] = useState<AssociatedSchool | null>(
     null,
   );
@@ -124,7 +122,11 @@ export const usePartnerDetails = ({
 
   const tabs = useMemo(
     () => [
-      { id: "overview" as PartnerDetailsTab, label: "Overview", icon: Handshake },
+      {
+        id: "overview" as PartnerDetailsTab,
+        label: "Overview",
+        icon: Handshake,
+      },
       {
         id: "schools" as PartnerDetailsTab,
         label: "Schools",

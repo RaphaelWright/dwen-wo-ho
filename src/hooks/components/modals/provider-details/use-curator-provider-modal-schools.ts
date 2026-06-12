@@ -6,14 +6,19 @@ import useSchoolsQuery from "@/hooks/queries/use-schools";
 import { AssociatedSchool } from "@/lib/types/partners";
 import { ProviderAssociatedSchool } from "@/lib/types/api/providers";
 import { ProviderDetails } from "@/lib/types/provider";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 export const useCuratorProviderModalSchools = (
   isOpen: boolean,
   providerEmail: string,
   provider: ProviderDetails | null,
 ) => {
-  const { addSchoolToProvider, removeSchoolFromProvider, isAddingSchool, isRemovingSchool } = useProvidersQuery({
+  const {
+    addSchoolToProvider,
+    removeSchoolFromProvider,
+    isAddingSchool,
+    isRemovingSchool,
+  } = useProvidersQuery({
     enabled: false,
   });
   const { useSchools: useSchoolsListQuery } = useSchoolsQuery();
@@ -21,7 +26,9 @@ export const useCuratorProviderModalSchools = (
 
   const [schoolSearchQuery, setSchoolSearchQuery] = useState("");
   const [schoolToAdd, setSchoolToAdd] = useState<AssociatedSchool | null>(null);
-  const [schoolToRemove, setSchoolToRemove] = useState<AssociatedSchool | null>(null);
+  const [schoolToRemove, setSchoolToRemove] = useState<AssociatedSchool | null>(
+    null,
+  );
 
   const associatedSchools: AssociatedSchool[] = useMemo(() => {
     const providerSchools = provider?.schools || [];
@@ -38,7 +45,14 @@ export const useCuratorProviderModalSchools = (
     return allSchools.flatMap((s) =>
       associatedIds.has(String(s.id))
         ? []
-        : [{ id: String(s.id), name: s.name, logo: s.logo, isAssociated: false }],
+        : [
+            {
+              id: String(s.id),
+              name: s.name,
+              logo: s.logo,
+              isAssociated: false,
+            },
+          ],
     );
   }, [allSchools, associatedSchools]);
 

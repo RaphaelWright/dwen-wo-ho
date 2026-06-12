@@ -42,9 +42,7 @@ export function profileStepSlugToIndex(
 export function isProviderSignupProfileStepSlug(
   value: string | null | undefined,
 ): value is ProviderSignupProfileStepSlug {
-  return (
-    value === "photo" || value === "bio" || value === "specialty"
-  );
+  return value === "photo" || value === "bio" || value === "specialty";
 }
 
 export function buildProviderSignupResumeUrl(

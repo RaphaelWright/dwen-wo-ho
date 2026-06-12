@@ -17,7 +17,7 @@ const PasswordMatchIndicator = ({
   return (
     <p
       className={cn(
-        "flex items-center gap-1.5 text-sm mt-2 animate-in fade-in slide-in-from-top-1 duration-200",
+        "animate-in fade-in slide-in-from-top-1 mt-2 flex items-center gap-1.5 text-sm duration-200",
         isMatch ? "text-success" : "text-destructive",
       )}
     >

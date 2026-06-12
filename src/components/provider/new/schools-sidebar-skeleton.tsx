@@ -8,22 +8,22 @@ import { m } from "motion/react";
  */
 export function SchoolsSidebarSkeleton() {
   return (
-    <aside className="w-[96%] mx-auto shrink-0 flex flex-col overflow-y-auto no-scrollbar h-fit pb-40 md:pb-10 lg:bg-[#fcf1e9] lg:dark:bg-muted lg:rounded-2xl lg:mt-6 lg:pb-2">
+    <aside className="no-scrollbar lg:dark:bg-muted mx-auto flex h-fit w-[96%] shrink-0 flex-col overflow-y-auto pb-40 md:pb-10 lg:mt-6 lg:rounded-2xl lg:bg-[#fcf1e9] lg:pb-2">
       {/* Header label skeleton */}
-      <div className="px-4 pt-5 pb-3 shrink-0">
-        <div className="w-20 h-3 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+      <div className="shrink-0 px-4 pt-5 pb-3">
+        <div className="h-3 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
       </div>
 
       {/* School list skeleton */}
       <div className="flex-1 px-2.5 pb-4">
         <div className="flex flex-col gap-2">
           {/* "All Schools" item */}
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-100/50 dark:bg-slate-800/30">
-            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+          <div className="flex items-center gap-3 rounded-xl bg-slate-100/50 px-3 py-2.5 dark:bg-slate-800/30">
+            <div className="h-8 w-8 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
             <div className="flex-1">
-              <div className="w-20 h-4 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-1" />
+              <div className="mb-1 h-4 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
             </div>
-            <div className="w-6 h-5 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+            <div className="h-5 w-6 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
           </div>
 
           {/* Individual school items */}
@@ -33,13 +33,13 @@ export function SchoolsSidebarSkeleton() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.1, delay: i * 0.05 }}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5"
             >
-              <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
-              <div className="flex-1 min-w-0">
-                <div className="w-32 h-4 rounded bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              <div className="h-8 w-8 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
+              <div className="min-w-0 flex-1">
+                <div className="h-4 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
               </div>
-              <div className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              <div className="h-5 w-5 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
             </m.div>
           ))}
         </div>

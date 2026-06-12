@@ -6,7 +6,9 @@ import { m, AnimatePresence } from "motion/react";
 import { RotateCcw } from "lucide-react";
 import Cropper from "react-easy-crop";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
+import { Z_INDEX_CLASSES } from "@/lib/constants/z-index";
 import { PhotoCropperModalProps } from "@/lib/types/modals";
+import { cn } from "@/lib/utils";
 import { usePhotoCropperModal } from "@/hooks/components/modals/use-photo-cropper-modal";
 
 export const PhotoCropperModal = ({
@@ -29,7 +31,10 @@ export const PhotoCropperModal = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-3xl"
+            className={cn(
+              "bg-background/80 fixed inset-0 backdrop-blur-3xl",
+              Z_INDEX_CLASSES.modal,
+            )}
             onClick={onClose}
           />
 
@@ -38,23 +43,26 @@ export const PhotoCropperModal = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className={cn(
+              "fixed inset-0 flex items-center justify-center p-4",
+              Z_INDEX_CLASSES.modal,
+            )}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card text-foreground flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border shadow-2xl">
+            <div className="bg-card text-foreground border-border flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
               {/* Header */}
-              <div className="border-b border-border bg-muted/30 px-8 py-6">
-                <h2 className="text-xl font-bold text-foreground">
+              <div className="border-border bg-muted/30 border-b px-8 py-6">
+                <h2 className="text-foreground text-xl font-bold">
                   {SIGN_UP_TEXTS.photoStep.editPhoto}
                 </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="text-muted-foreground mt-1 text-sm">
                   {SIGN_UP_TEXTS.photoStep.editPhotoDescription}
                 </p>
               </div>
 
               {/* Body */}
               <div className="flex flex-col gap-6 p-8">
-                <div className="relative h-96 w-full overflow-hidden bg-muted">
+                <div className="bg-muted relative h-96 w-full overflow-hidden">
                   <Cropper
                     image={imageSrc}
                     crop={crop}
@@ -76,7 +84,7 @@ export const PhotoCropperModal = ({
                     step="0.1"
                     value={zoom}
                     onChange={(e) => setZoom(Number(e.target.value))}
-                    className="h-2 w-full flex-1 cursor-pointer appearance-none rounded-lg bg-muted accent-muted-foreground"
+                    className="bg-muted accent-muted-foreground h-2 w-full flex-1 cursor-pointer appearance-none rounded-lg"
                     aria-label="Zoom"
                   />
                   <Button
@@ -92,12 +100,12 @@ export const PhotoCropperModal = ({
               </div>
 
               {/* Footer */}
-              <div className="flex justify-end gap-3 border-t border-border bg-muted/30 px-8 py-6">
+              <div className="border-border bg-muted/30 flex justify-end gap-3 border-t px-8 py-6">
                 <Button
                   type="button"
                   onClick={onCancel}
                   variant="outline"
-                  className="border-destructive px-6 text-destructive hover:border-destructive hover:bg-destructive hover:text-white"
+                  className="border-destructive text-destructive hover:border-destructive hover:bg-destructive px-6 hover:text-white"
                   disabled={isSaving}
                 >
                   {SIGN_UP_TEXTS.photoStep.cancel}
@@ -107,7 +115,7 @@ export const PhotoCropperModal = ({
                   onClick={onSave}
                   loading={isSaving}
                   loadingText={SIGN_UP_TEXTS.photoStep.uploading}
-                  className="bg-primary px-8 font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 disabled:opacity-50 disabled:shadow-none"
+                  className="bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 px-8 font-semibold shadow-lg disabled:opacity-50 disabled:shadow-none"
                 >
                   {SIGN_UP_TEXTS.photoStep.add}
                 </LoadingButton>

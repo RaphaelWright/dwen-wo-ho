@@ -33,14 +33,14 @@ const SchoolEditModal = ({
   });
 
   return (
-    <AnimatePresence >
+    <AnimatePresence>
       {isOpen && (
         <>
           <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -51,10 +51,10 @@ const SchoolEditModal = ({
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card rounded-3xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[90vh] border border-border">
+            <div className="bg-card border-border mx-auto flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border shadow-2xl">
               <SchoolEditHeader onClose={onClose} />
 
-              <div className="flex-1 overflow-y-auto p-8 no-scrollbar">
+              <div className="no-scrollbar flex-1 overflow-y-auto p-8">
                 <SchoolEditForm
                   formData={formData}
                   handleInputChange={handleInputChange}

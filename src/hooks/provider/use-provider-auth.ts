@@ -52,6 +52,19 @@ export function useProviderAuth() {
         }
         setUserType(null);
         if (!hasRedirectedRef.current) {
+          // Apply URL-derived step/email in the same render as the auth check
+          // completing — a single state transition that avoids a flash of the
+          // wrong step (previously a chained second useEffect handled this).
+          if (initialEmail) {
+            setEmail(decodeURIComponent(initialEmail));
+          }
+
+          const resolvedStep =
+            initialStep === "sign-in" && !initialEmail
+              ? "check-email"
+              : initialStep;
+          setStep(resolvedStep);
+
           isCheckingRef.current = false;
           setIsCheckingAuth(false);
         }
@@ -72,7 +85,10 @@ export function useProviderAuth() {
             const redirectInfo = getProviderRedirectInfo(profileData);
 
             if (redirectInfo.isPending) {
-              localStorage.setItem("pendingUser:v1", JSON.stringify(profileData));
+              localStorage.setItem(
+                "pendingUser:v1",
+                JSON.stringify(profileData),
+              );
             } else {
               localStorage.removeItem("pendingUser:v1");
             }
@@ -126,6 +142,16 @@ export function useProviderAuth() {
       }
 
       if (!hasRedirectedRef.current) {
+        // Reached when there's no token and no valid refresh — apply URL params
+        // immediately since no redirect will happen.
+        if (initialEmail) {
+          setEmail(decodeURIComponent(initialEmail));
+        }
+        const resolvedStep =
+          initialStep === "sign-in" && !initialEmail
+            ? "check-email"
+            : initialStep;
+        setStep(resolvedStep);
         isCheckingRef.current = false;
         setIsCheckingAuth(false);
       }
@@ -137,24 +163,7 @@ export function useProviderAuth() {
       isCheckingRef.current = false;
       hasCheckedRef.current = false;
     };
-  }, []);
-
-  useEffect(() => {
-    if (isCheckingAuth) return;
-
-    if (initialEmail) {
-      setEmail(decodeURIComponent(initialEmail));
-    }
-
-    if (initialStep === "sign-in" && !initialEmail) {
-      setStep("check-email");
-      return;
-    }
-
-    if (initialStep) {
-      setStep(initialStep);
-    }
-  }, [initialStep, initialEmail, isCheckingAuth]);
+  }, [initialEmail, initialStep]);
 
   const handleEmailSubmit = useCallback(
     (submittedEmail: string, emailExists: boolean) => {

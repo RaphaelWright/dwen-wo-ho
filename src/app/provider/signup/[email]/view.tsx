@@ -20,38 +20,38 @@ const Verify = () => {
   } = useProviderVerifyEmail();
 
   return (
-    <div className="h-full flex flex-col justify-between">
-      <div className="flex items-center px-4 sm:px-6 lg:px-8 justify-between w-full">
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex w-full items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
         <Link
           href={ROUTES.provider.singIn}
-          className="bg-muted text-destructive rounded-full px-4 py-2 text-sm font-medium hover:bg-muted/80 transition-colors"
+          className="bg-muted text-destructive hover:bg-muted/80 rounded-full px-4 py-2 text-sm font-medium transition-colors"
         >
           Sign In
         </Link>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col justify-center px-6">
-        <div className="w-full max-w-md mx-auto space-y-8">
+      <div className="flex flex-1 flex-col justify-center px-6">
+        <div className="mx-auto w-full max-w-md space-y-8">
           {/* Header Section */}
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="mb-2 text-3xl font-bold text-gray-900">
               Enter Verification Code
             </h1>
             <p className="text-gray-600">
               A 6-digit verification code was just sent to{" "}
-              <span className="font-semibold text-primary">
+              <span className="text-primary font-semibold">
                 {decodeURIComponent(email as string)}
               </span>
             </p>
           </div>
           {/* OTP Input Section */}
-          <div className="text-center space-y-6">
+          <div className="space-y-6 text-center">
             {verifyEmailMutation.isPending ? (
               <div className="flex flex-col items-center gap-4">
-                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-gray-600 font-medium">
+                <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+                <p className="font-medium text-gray-600">
                   Verifying your code...
                 </p>
               </div>
@@ -77,32 +77,31 @@ const Verify = () => {
                   <Button
                     disabled={seconds > 0}
                     onClick={resetTimer}
-                    className="rounded-lg px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground transition-colors"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground rounded-lg px-4 py-2 text-sm font-medium transition-colors"
                   >
                     Resend code →
                   </Button>
-                  <span className="text-sm text-gray-500 bg-gray-100 rounded-full px-3 py-1">
+                  <span className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500">
                     {formatTime(seconds)}
                   </span>
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>
       {/* Bottom Navigation */}
-      <div className="flex flex-col sm:flex-row border-t border-gray-500 px-4 sm:px-6 lg:px-10 pt-4 sm:pt-6 items-center justify-between space-y-4 sm:space-y-0">
+      <div className="flex flex-col items-center justify-between space-y-4 border-t border-gray-500 px-4 pt-4 sm:flex-row sm:space-y-0 sm:px-6 sm:pt-6 lg:px-10">
         <Button
           onClick={() => router.back()}
-          className="rounded-full px-3 sm:px-4 lg:px-6 border-2 sm:border-4 bg-background text-primary text-sm sm:text-base lg:text-xl font-bold border-primary uppercase w-full sm:w-auto"
+          className="bg-background text-primary border-primary w-full rounded-full border-2 px-3 text-sm font-bold uppercase sm:w-auto sm:border-4 sm:px-4 sm:text-base lg:px-6 lg:text-xl"
         >
           Back
         </Button>
-        <div className="flex-1 flex justify-center ml-3">
+        <div className="ml-3 flex flex-1 justify-center">
           <Stepper steps={signUpSteps} step="Verify" />
         </div>
-        <Button className="invisible rounded-full px-3 sm:px-4 lg:px-6 border-2 sm:border-4 bg-background text-primary text-sm sm:text-base lg:text-xl font-bold border-primary uppercase w-full sm:w-auto">
+        <Button className="bg-background text-primary border-primary invisible w-full rounded-full border-2 px-3 text-sm font-bold uppercase sm:w-auto sm:border-4 sm:px-4 sm:text-base lg:px-6 lg:text-xl">
           Next
         </Button>
       </div>

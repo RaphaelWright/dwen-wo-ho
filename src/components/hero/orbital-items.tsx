@@ -10,7 +10,7 @@ export const orbitalItemsLocal: OrbitalItem[] = [
         alt="Black Counsellor"
         width={120}
         height={120}
-        className="rounded-full object-cover w-full h-full"
+        className="h-full w-full rounded-full object-cover"
         priority
       />
     ),
@@ -23,7 +23,7 @@ export const orbitalItemsLocal: OrbitalItem[] = [
         alt="Counsellor Lady"
         width={120}
         height={120}
-        className="rounded-full object-cover w-full h-full"
+        className="h-full w-full rounded-full object-cover"
       />
     ),
   },
@@ -35,7 +35,7 @@ export const orbitalItemsLocal: OrbitalItem[] = [
         alt="Counsellor Man"
         width={120}
         height={120}
-        className="rounded-full object-cover w-full h-full"
+        className="h-full w-full rounded-full object-cover"
       />
     ),
   },
@@ -47,7 +47,7 @@ export const orbitalItemsLocal: OrbitalItem[] = [
         alt="Student Counsel"
         width={120}
         height={120}
-        className="rounded-full object-cover w-full h-full"
+        className="h-full w-full rounded-full object-cover"
       />
     ),
   },

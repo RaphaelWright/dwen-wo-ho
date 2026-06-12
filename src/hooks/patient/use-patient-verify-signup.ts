@@ -28,10 +28,8 @@ export function usePatientSignUpVerify() {
   }, [isRunning, seconds]);
 
   const handleComplete = useCallback(() => {
-      router.push(`${ROUTES.patient.newPassword}?email=${params.email}`);
-    },
-    [router, params.email],
-  );
+    router.push(`${ROUTES.patient.newPassword}?email=${params.email}`);
+  }, [router, params.email]);
 
   const handleResend = useCallback(() => {
     setSeconds(120);

@@ -8,15 +8,15 @@ const row2Items = PARTNER_SCHOOLS.slice(4);
 const SocialProof = () => {
   return (
     <WidthConstraint>
-      <div className="text-center mb-8">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+      <div className="mb-8 text-center">
+        <p className="text-muted-foreground text-sm font-semibold tracking-widest uppercase">
           Trusted by students from top schools
         </p>
       </div>
 
-      <div className="relative flex flex-col gap-8 overflow-hidden mask-gradient">
-        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-linear-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-linear-to-l from-background to-transparent z-10 pointer-events-none" />
+      <div className="mask-gradient relative flex flex-col gap-8 overflow-hidden">
+        <div className="from-background pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-8 bg-linear-to-r to-transparent sm:w-20" />
+        <div className="from-background pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-8 bg-linear-to-l to-transparent sm:w-20" />
 
         <MarqueeRow items={row1Items} direction="left" speed={40} />
         <MarqueeRow items={row2Items} direction="right" speed={45} />

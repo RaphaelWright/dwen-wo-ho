@@ -3,6 +3,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { m, AnimatePresence } from "motion/react";
 
+import { hashStringToRange } from "@/lib/utils/hash-to-range";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Testimonial = {
@@ -39,17 +40,16 @@ export const AnimatedTestimonials = ({
     }
   }, [autoplay, handleNext]);
 
-  // Derived once per testimonials list instead of mirrored into state via an
-  // effect (the random tilt only needs to change when the list changes).
-  const randomRotations = useMemo(
-    () => testimonials.map(() => Math.floor(Math.random() * 21) - 10),
+  // Deterministic per-src tilt — Math.random() mismatches SSR hydration.
+  const cardRotations = useMemo(
+    () => testimonials.map((t) => hashStringToRange(t.src, -10, 10)),
     [testimonials],
   );
   return (
-    <div className="mx-auto max-w-sm px-4 py-12 md:py-20 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
-      <div className="relative grid grid-cols-1 gap-12 md:gap-20 md:grid-cols-2">
+    <div className="mx-auto max-w-sm px-4 py-12 font-sans antialiased md:max-w-4xl md:px-8 md:py-20 lg:px-12">
+      <div className="relative grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-20">
         <div>
-          <div className="relative h-64 sm:h-72 md:h-80 w-full">
+          <div className="relative h-64 w-full sm:h-72 md:h-80">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
                 <m.div
@@ -58,13 +58,13 @@ export const AnimatedTestimonials = ({
                     opacity: 0,
                     scale: 0.9,
                     z: -100,
-                    rotate: randomRotations[index] || 0,
+                    rotate: cardRotations[index] || 0,
                   }}
                   animate={{
                     opacity: isActive(index) ? 1 : 0.7,
                     scale: isActive(index) ? 1 : 0.95,
                     z: isActive(index) ? 0 : -100,
-                    rotate: isActive(index) ? 0 : randomRotations[index] || 0,
+                    rotate: isActive(index) ? 0 : cardRotations[index] || 0,
                     zIndex: isActive(index)
                       ? 40
                       : testimonials.length + 2 - index,
@@ -74,7 +74,7 @@ export const AnimatedTestimonials = ({
                     opacity: 0,
                     scale: 0.9,
                     z: 100,
-                    rotate: randomRotations[index] || 0,
+                    rotate: cardRotations[index] || 0,
                   }}
                   transition={{
                     duration: 0.4,
@@ -117,13 +117,13 @@ export const AnimatedTestimonials = ({
               ease: "easeInOut",
             }}
           >
-            <h3 className="text-2xl font-bold text-foreground">
+            <h3 className="text-foreground text-2xl font-bold">
               {testimonials[active].name}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {testimonials[active].designation}
             </p>
-            <m.p className="mt-8 text-lg text-muted-foreground">
+            <m.p className="text-muted-foreground mt-8 text-lg">
               {testimonials[active].quote.split(" ").map((word, index) => (
                 <m.span
                   key={`${active}-${index}-${word}`}
@@ -153,16 +153,16 @@ export const AnimatedTestimonials = ({
             <button
               type="button"
               onClick={handlePrev}
-              className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-secondary"
+              className="group/button bg-secondary flex h-7 w-7 items-center justify-center rounded-full"
             >
-              <IconArrowLeft className="h-5 w-5 text-foreground transition-transform duration-300 group-hover/button:rotate-12" />
+              <IconArrowLeft className="text-foreground h-5 w-5 transition-transform duration-300 group-hover/button:rotate-12" />
             </button>
             <button
               type="button"
               onClick={handleNext}
-              className="group/button flex h-7 w-7 items-center justify-center rounded-full bg-secondary"
+              className="group/button bg-secondary flex h-7 w-7 items-center justify-center rounded-full"
             >
-              <IconArrowRight className="h-5 w-5 text-foreground transition-transform duration-300 group-hover/button:-rotate-12" />
+              <IconArrowRight className="text-foreground h-5 w-5 transition-transform duration-300 group-hover/button:-rotate-12" />
             </button>
           </div>
         </div>

@@ -47,15 +47,15 @@ export default function UrgentPanel({
   return (
     <aside
       className={cn(
-        "w-full shrink-0 flex flex-col h-full border-l bg-destructive/5 overflow-hidden",
+        "bg-destructive/5 flex h-full w-full shrink-0 flex-col overflow-hidden border-l",
         className,
       )}
     >
       {/* Header */}
-      <div className="px-4 pt-5 pb-4 border-b shrink-0 border-muted bg-destructive text-white">
+      <div className="border-muted bg-destructive shrink-0 border-b px-4 pt-5 pb-4 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-bold">
-            <div className="size-7 rounded-xl flex items-center justify-center text-sm border bg-white border-white">
+            <div className="flex size-7 items-center justify-center rounded-xl border border-white bg-white text-sm">
               🚨
             </div>
             {title}
@@ -71,7 +71,7 @@ export default function UrgentPanel({
               ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="text-xs p-2 flex items-center justify-center font-bold text-destructive size-7 rounded-full bg-white"
+            className="text-destructive flex size-7 items-center justify-center rounded-full bg-white p-2 text-xs font-bold"
           >
             {sorted.length > 99 ? "99+" : sorted.length}
           </m.span>
@@ -79,7 +79,7 @@ export default function UrgentPanel({
       </div>
 
       {/* Card list */}
-      <div className="flex-1 p-3 overflow-y-auto no-scrollbar min-h-0 flex flex-col pb-20">
+      <div className="no-scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto p-3 pb-20">
         <div className="flex flex-col gap-2">
           <AnimatePresence>
             {sorted.map((p, i) => (
@@ -100,7 +100,7 @@ export default function UrgentPanel({
             <m.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center text-[12px] py-8"
+              className="py-8 text-center text-[12px]"
               style={{ color: "#555e72" }}
             >
               {emptyStateText}

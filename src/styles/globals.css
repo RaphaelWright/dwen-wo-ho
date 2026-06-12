@@ -3,6 +3,10 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+/* Tailwind v4 gates hover behind @media (hover: hover), which fails on many
+   Windows touchscreen laptops even when using a mouse. Restore :hover behavior. */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (.group:hover &);
 
 @theme inline {
   --color-background: var(--background);
@@ -168,13 +172,25 @@
     font-family: var(--font-heading), sans-serif;
   }
 
-  button,
-  input[type="submit"] {
+  a[href],
+  button:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]),
+  label[for] {
     @apply cursor-pointer;
+  }
+
+  button:disabled,
+  input[type="submit"]:disabled,
+  [role="button"][aria-disabled="true"] {
+    @apply cursor-not-allowed;
   }
 }
 .otp-slot {
-  @apply w-12 h-12 border-2 border-border rounded-md text-2xl font-bold text-success;
+  @apply border-border text-success h-12 w-12 rounded-md border-2 text-2xl font-bold;
 }
 
 /* Custom slider styles and existing animations */
@@ -247,7 +263,7 @@
 }
 @media (min-width: 1024px) {
   ::-webkit-scrollbar {
-    @apply bg-background w-1 h-1;
+    @apply bg-background h-1 w-1;
   }
   ::-webkit-scrollbar-thumb {
     @apply bg-primary/60 rounded-4xl border-0;
@@ -425,16 +441,6 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px var(--color-input) inset;
   -webkit-text-fill-color: var(--color-foreground);
-}
-
-button,
-a,
-[role="button"],
-[role="tab"],
-[role="menuitem"],
-[role="option"],
-label {
-  cursor: default !important;
 }
 
 /* Respect users who prefer reduced motion (WCAG 2.3.3): neutralize animations,

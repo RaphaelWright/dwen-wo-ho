@@ -7,17 +7,17 @@ export function ProviderSpecialtiesCard({
   if (specialties.length === 0) return null;
 
   return (
-    <div className="bg-card shadow-lg rounded-lg overflow-hidden mb-8 border border-border">
+    <div className="bg-card border-border mb-8 overflow-hidden rounded-lg border shadow-lg">
       <div className="px-6 py-6">
-        <h2 className="text-xl font-bold text-foreground mb-4 flex items-center">
-          <Award className="w-6 h-6 mr-2" />
+        <h2 className="text-foreground mb-4 flex items-center text-xl font-bold">
+          <Award className="mr-2 h-6 w-6" />
           Specialties
         </h2>
         <div className="flex flex-wrap gap-2">
           {specialties.map((specialty) => (
             <span
               key={specialty}
-              className="px-3 py-1 bg-primary text-primary-foreground rounded-full text-sm font-medium"
+              className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-sm font-medium"
             >
               {specialty}
             </span>

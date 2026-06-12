@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { SignUpVerificationProps } from "@/lib/types/provider/auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { setUserType } from "@/lib/utils/getUserType";
@@ -23,7 +23,8 @@ export const useSignUpVerification = ({
   const [seconds, setSeconds] = useState(60);
   const otpInputRef = useRef<HTMLInputElement>(null);
 
-  const { verifyEmailMutation, resendSignupVerificationMutation } = useAuthQuery();
+  const { verifyEmailMutation, resendSignupVerificationMutation } =
+    useAuthQuery();
 
   useEffect(() => {
     if (verifyEmailMutation.isPending) return;
@@ -79,7 +80,8 @@ export const useSignUpVerification = ({
         }
       }
     } catch (error: unknown) {
-      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.verifyFailed;
+      const errorMsg =
+        getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.verifyFailed;
       toast.error(errorMsg);
     }
   };
@@ -90,7 +92,8 @@ export const useSignUpVerification = ({
       setSeconds(60);
       setIsRunning(true);
     } catch (error: unknown) {
-      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.resendFailed;
+      const errorMsg =
+        getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.resendFailed;
       toast.error(errorMsg);
     }
   };

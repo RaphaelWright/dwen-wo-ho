@@ -7,8 +7,8 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
     <div className="space-y-6">
       {/* Status Message */}
       {provider?.status && (
-        <div className="bg-teal-50 rounded-xl p-4 border border-teal-100">
-          <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+        <div className="rounded-xl border border-teal-100 bg-teal-50 p-4">
+          <h4 className="mb-2 flex items-center gap-2 font-semibold text-gray-800">
             <span className="text-lg">💬</span>
             Status Message
           </h4>
@@ -18,49 +18,49 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
 
       {/* Contact Info Section */}
       <div>
-        <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-          <FiUsers className="w-5 h-5 text-teal-600" />
+        <h4 className="text-foreground mb-3 flex items-center gap-2 font-semibold">
+          <FiUsers className="h-5 w-5 text-teal-600" />
           Contact Information
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-            <div className="size-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="bg-muted/50 border-border/50 hover:border-border flex items-center gap-3 rounded-lg border p-3 transition-colors">
+            <div className="bg-muted/50 text-muted-foreground ring-border flex size-10 items-center justify-center rounded-full shadow-sm ring-1">
               <FiMail className="size-5" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+              <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                 Email Address
               </p>
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-foreground text-sm font-medium">
                 {provider?.email}
               </p>
             </div>
           </div>
           {provider?.officePhoneNumber && (
-            <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-              <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
-                <FiPhone className="w-5 h-5" />
+            <div className="bg-muted/50 border-border/50 hover:border-border flex items-center gap-3 rounded-lg border p-3 transition-colors">
+              <div className="bg-muted/50 text-muted-foreground ring-border flex h-10 w-10 items-center justify-center rounded-full shadow-sm ring-1">
+                <FiPhone className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                   Phone Number
                 </p>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-foreground text-sm font-medium">
                   {provider.officePhoneNumber}
                 </p>
               </div>
             </div>
           )}
           {provider?.applicationDate && (
-            <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border/50 hover:border-border transition-colors">
-              <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center shadow-sm text-muted-foreground ring-1 ring-border">
-                <FiCalendar className="w-5 h-5" />
+            <div className="bg-muted/50 border-border/50 hover:border-border flex items-center gap-3 rounded-lg border p-3 transition-colors">
+              <div className="bg-muted/50 text-muted-foreground ring-border flex h-10 w-10 items-center justify-center rounded-full shadow-sm ring-1">
+                <FiCalendar className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+                <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                   Application Date
                 </p>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-foreground text-sm font-medium">
                   {timeAgo(provider.applicationDate)}
                 </p>
               </div>
@@ -74,8 +74,8 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
         provider.specialties.length > 0 &&
         provider.specialties.some((s: string) => s && s.trim()) && (
           <div>
-            <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-              <FiAward className="w-5 h-5 text-teal-600" />
+            <h4 className="text-foreground mb-3 flex items-center gap-2 font-semibold">
+              <FiAward className="h-5 w-5 text-teal-600" />
               Specialties
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -84,7 +84,7 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
                   ? [
                       <span
                         key={specialty}
-                        className="px-4 py-2 bg-card border border-border rounded-lg text-sm font-medium text-foreground hover:border-primary/50 transition-colors shadow-sm"
+                        className="bg-card border-border text-foreground hover:border-primary/50 rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-colors"
                       >
                         {specialty}
                       </span>,
@@ -96,12 +96,12 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
         )}
 
       {/* Additional Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-muted/30 rounded-lg p-4 border border-border">
-          <p className="text-sm text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="bg-muted/30 border-border rounded-lg border p-4">
+          <p className="text-muted-foreground mb-1 text-sm font-semibold tracking-wider uppercase">
             Member Since
           </p>
-          <p className="font-semibold text-foreground">
+          <p className="text-foreground font-semibold">
             {provider?.createdAt
               ? new Date(provider.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -111,11 +111,11 @@ export const OverviewTab = ({ provider }: OverviewTabProps) => {
               : "N/A"}
           </p>
         </div>
-        <div className="bg-muted/30 rounded-lg p-4 border border-border">
-          <p className="text-sm text-muted-foreground mb-1 uppercase tracking-wider font-semibold">
+        <div className="bg-muted/30 border-border rounded-lg border p-4">
+          <p className="text-muted-foreground mb-1 text-sm font-semibold tracking-wider uppercase">
             Last Updated
           </p>
-          <p className="font-semibold text-foreground">
+          <p className="text-foreground font-semibold">
             {provider?.updatedAt ? timeAgo(provider.updatedAt) : "N/A"}
           </p>
         </div>

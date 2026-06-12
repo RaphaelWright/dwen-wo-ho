@@ -40,7 +40,6 @@ export const useAddCoverPage = ({
     handlePanEnd,
     captureFrame,
     resetEditor,
-    imageSize,
   } = useImageEditor({ photoPreview });
 
   // Seed/reset the wizard while rendering when the modal opens or the edited
@@ -68,12 +67,6 @@ export const useAddCoverPage = ({
     }
   }
 
-  useEffect(() => {
-    if (step === "edit-image" && imageSize) {
-      setFitToFrame();
-    }
-  }, [step, imageSize, setFitToFrame]);
-
   const handlePhotoSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -94,6 +87,8 @@ export const useAddCoverPage = ({
   const handleGoFromPhotoColor = () => {
     if (selectedPhoto && selectedColor) {
       setStep("edit-image");
+      // Schedule after React commits the edit-image render so imageSize is available
+      requestAnimationFrame(() => setFitToFrame());
     }
   };
 
