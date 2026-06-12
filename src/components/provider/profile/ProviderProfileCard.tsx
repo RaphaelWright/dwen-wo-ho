@@ -5,10 +5,10 @@ import { ProviderProfileCardProps } from "@/lib/types/provider/profile";
 
 export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+    <div className="mb-8 rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
       <div className="flex items-start gap-6">
         {provider.profilePhotoURL ? (
-          <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 shrink-0">
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-gray-200">
             <Image
               src={provider.profilePhotoURL}
               alt={formatProviderName(
@@ -17,16 +17,16 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
               )}
               width={96}
               height={96}
-              className="object-cover w-full h-full"
+              className="h-full w-full object-cover"
             />
           </div>
         ) : (
-          <div className="w-24 h-24 rounded-full bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shrink-0">
-            <FiUser className="w-12 h-12 text-white" />
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500">
+            <FiUser className="h-12 w-12 text-white" />
           </div>
         )}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="mb-2 text-2xl font-bold text-gray-900">
             {formatProviderName(
               provider.providerName || "",
               provider.providerTitle,
@@ -34,22 +34,22 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
           </h2>
 
           {provider.specialty && (
-            <p className="text-lg text-gray-600 mb-4">{provider.specialty}</p>
+            <p className="mb-4 text-lg text-gray-600">{provider.specialty}</p>
           )}
           {provider.status && (
-            <p className="text-gray-700 italic mb-4">
+            <p className="mb-4 text-gray-700 italic">
               &quot;{provider.status}&quot;
             </p>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="flex items-center gap-3">
-              <FiMail className="w-5 h-5 text-gray-400 shrink-0" />
+              <FiMail className="h-5 w-5 shrink-0 text-gray-400" />
               <span className="text-gray-700">{provider.email}</span>
             </div>
             {provider.officePhoneNumber && (
               <div className="flex items-center gap-3">
-                <FiPhone className="w-5 h-5 text-gray-400 shrink-0" />
+                <FiPhone className="h-5 w-5 shrink-0 text-gray-400" />
                 <span className="text-gray-700">
                   {provider.officePhoneNumber}
                 </span>
@@ -57,7 +57,7 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
             )}
             {provider.applicationDate && (
               <div className="flex items-center gap-3">
-                <FiCalendar className="w-5 h-5 text-gray-400 shrink-0" />
+                <FiCalendar className="h-5 w-5 shrink-0 text-gray-400" />
                 <span className="text-gray-700">
                   Joined{" "}
                   {new Date(provider.applicationDate).toLocaleDateString()}
@@ -65,9 +65,9 @@ export function ProviderProfileCard({ provider }: ProviderProfileCardProps) {
               </div>
             )}
             <div className="flex items-center gap-3">
-              <FiAward className="w-5 h-5 text-gray-400 shrink-0" />
+              <FiAward className="h-5 w-5 shrink-0 text-gray-400" />
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                className={`rounded-full px-3 py-1 text-sm font-medium ${
                   provider.applicationStatus === "APPROVED"
                     ? "bg-green-100 text-green-800"
                     : provider.applicationStatus === "PENDING"

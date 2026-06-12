@@ -39,23 +39,23 @@ export default function AddIconModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background backdrop-blur-sm">
-      <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-5xl max-h-[85vh] overflow-hidden flex flex-col border border-border">
+    <div className="bg-background fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-card text-foreground border-border flex max-h-[85vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        <div className="border-border flex items-center justify-between border-b p-6">
           <Button
             onClick={onClose}
-            className="w-10 h-10 bg-muted rounded-full flex items-center justify-center hover:bg-muted-foreground/40 transition-colors"
+            className="bg-muted hover:bg-muted-foreground/40 flex h-10 w-10 items-center justify-center rounded-full transition-colors"
           >
-           <ArrowBigLeftIcon/>
+            <ArrowBigLeftIcon />
           </Button>
-          <h2 className="text-2xl font-bold text-foreground">{headerTitle}</h2>
+          <h2 className="text-foreground text-2xl font-bold">{headerTitle}</h2>
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
         {/* Content - Two Column Layout */}
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="flex flex-col lg:flex-row gap-6 h-full">
+          <div className="flex h-full flex-col gap-6 lg:flex-row">
             {/* Left Side - Preview */}
             <IconPreviewPanel
               photoPreview={photoPreview}
@@ -75,7 +75,7 @@ export default function AddIconModal({
             />
 
             {/* Separator Line */}
-            <div className="hidden lg:block w-px bg-border shrink-0"></div>
+            <div className="bg-border hidden w-px shrink-0 lg:block"></div>
 
             {/* Right Side - Form */}
             <IconFormFields
@@ -91,14 +91,14 @@ export default function AddIconModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-end p-6 border-t border-border bg-muted/20">
+        <div className="border-border bg-muted/20 flex items-center justify-end border-t p-6">
           <Button
             onClick={handleSubmit}
             disabled={isSubmitDisabled}
-            className={`px-8 py-3 rounded-lg font-semibold transition-colors h-auto ${
+            className={`h-auto rounded-lg px-8 py-3 font-semibold transition-colors ${
               isSubmitDisabled
                 ? "bg-muted text-muted-foreground cursor-not-allowed"
-                : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
+                : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/20 shadow-md"
             }`}
           >
             GO

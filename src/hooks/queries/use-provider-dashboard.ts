@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { providerDashboardService } from "@/services/provider-dashboard";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import type { ProviderUpdateProfileRequest } from "@/lib/types/api/provider-dashboard";
@@ -75,4 +75,3 @@ export const useUpdatePhoneNumberMutation = () => {
     },
   });
 };
-

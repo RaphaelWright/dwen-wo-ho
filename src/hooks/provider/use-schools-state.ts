@@ -2,7 +2,10 @@
 
 import { useCallback } from "react";
 import { useAtom } from "jotai";
-import { providerSchoolsAtom, SchoolWithExtras } from "@/atoms/provider-schools";
+import {
+  providerSchoolsAtom,
+  SchoolWithExtras,
+} from "@/atoms/provider-schools";
 
 export function useSchoolsState() {
   const [schoolsState, setSchoolsState] = useAtom(providerSchoolsAtom);

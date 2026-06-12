@@ -1,4 +1,4 @@
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
 import { API_BASE_URL } from "@/configs/config";
 

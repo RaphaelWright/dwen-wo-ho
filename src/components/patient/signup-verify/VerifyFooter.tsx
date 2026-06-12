@@ -6,10 +6,10 @@ import { SIGNUP_VERIFY_TEXTS } from "@/lib/constants/components/patient/signup-v
 
 export function VerifyFooter({ onBack }: VerifyFooterProps) {
   return (
-    <div className="flex border-t border-gray-500 px-10 pt-5 items-center justify-between">
+    <div className="flex items-center justify-between border-t border-gray-500 px-10 pt-5">
       <Button
         onClick={onBack}
-        className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted transition-colors"
+        className="bg-background text-primary border-primary hover:bg-muted rounded-full border-4 px-6 text-xl font-bold uppercase transition-colors"
       >
         {SIGNUP_VERIFY_TEXTS.footer.back}
       </Button>
@@ -17,7 +17,7 @@ export function VerifyFooter({ onBack }: VerifyFooterProps) {
         steps={signUpSteps}
         step={SIGNUP_VERIFY_TEXTS.footer.step as (typeof signUpSteps)[number]}
       />
-      <Button className="invisible rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase">
+      <Button className="bg-background text-primary border-primary invisible rounded-full border-4 px-6 text-xl font-bold uppercase">
         {SIGNUP_VERIFY_TEXTS.footer.next}
       </Button>
     </div>

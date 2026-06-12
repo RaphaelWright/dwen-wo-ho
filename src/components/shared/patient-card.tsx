@@ -208,35 +208,35 @@ export default function PatientCard<
         boxShadow: `-2px 0 0 0 ${scoreColor}`,
         transition: { duration: 0.15 },
       }}
-      className="relative flex items-center gap-4 px-5 py-4 rounded-xl border cursor-pointer overflow-hidden bg-card z-1"
+      className="bg-card relative z-1 flex cursor-pointer items-center gap-4 overflow-hidden rounded-xl border px-5 py-4"
     >
       {/* Content */}
-      <div className="relative z-10 flex items-center gap-4 w-full">
+      <div className="relative z-10 flex w-full items-center gap-4">
         <ScoreRing score={score || 0} />
 
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           {/* Name + time */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-[15px] font-bold">
               {patientName || "Unknown"}
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               {compactTimeAgo(time || "")} ago
             </span>
-            <span className="text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border border-info/25 text-info dark:text-blue-300 bg-info/10 max-w-30 truncate">
+            <span className="border-info/25 text-info bg-info/10 max-w-30 truncate rounded border px-2 py-0.75 text-[10.5px] font-bold tracking-wide uppercase dark:text-blue-300">
               {schoolNickname || schoolName}
             </span>
           </div>
 
           {/* Preview */}
-          <p className="text-[12.5px] mt-0.5 leading-snug line-clamp-1 text-muted-foreground/80">
+          <p className="text-muted-foreground/80 mt-0.5 line-clamp-1 text-[12.5px] leading-snug">
             {preview || ""}
           </p>
 
           {/* Tags */}
-          <div className="flex gap-2 mt-2 flex-wrap items-center">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <span
-              className={`inline-flex items-center gap-1 text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border ${cfg.cls}`}
+              className={`inline-flex items-center gap-1 rounded border px-2 py-0.75 text-[10.5px] font-bold tracking-wide uppercase ${cfg.cls}`}
             >
               {cfg.label}
             </span>
@@ -252,7 +252,7 @@ export default function PatientCard<
             color: "#ffff",
           }}
           whileTap={{ scale: 0.97 }}
-          className="shrink-0 px-4 py-1.5 rounded-xl border text-[12px] font-semibold cursor-pointer bg-card transition-all duration-300 ease-in-out"
+          className="bg-card shrink-0 cursor-pointer rounded-xl border px-4 py-1.5 text-[12px] font-semibold transition-all duration-300 ease-in-out"
         >
           {cfg.actionLabel}
         </m.button>

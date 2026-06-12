@@ -21,27 +21,27 @@ export default function ProviderPageHero() {
 
   return (
     <section className="relative flex items-center overflow-hidden">
-      <WidthConstraint className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-24 lg:mt-0">
+      <WidthConstraint className="mt-24 grid items-center gap-12 lg:mt-0 lg:grid-cols-2 lg:gap-16">
         {/* Left Content */}
         <m.div
           variants={HERO_CONTAINER_VARIANTS}
           initial="hidden"
           animate="visible"
-          className="flex flex-col justify-center text-left space-y-8 z-20"
+          className="z-20 flex flex-col justify-center space-y-8 text-left"
         >
           {/* Badge */}
           <m.div variants={HERO_ITEM_VARIANTS}>
             <div className="inline-flex items-center rounded-full">
               <ContainerTextFlip
                 words={HOME.BADGE_WORDS}
-                className="h-auto p-1.5! text-sm! md:text-sm! text-muted-foreground/90"
+                className="text-muted-foreground/90 h-auto p-1.5! text-sm! md:text-sm!"
               />
             </div>
           </m.div>
 
           {/* Heading */}
           <m.div variants={HERO_ITEM_VARIANTS}>
-            <h1 className="text-6xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1]">
+            <h1 className="text-primary text-6xl leading-[1.1] font-bold tracking-tight lg:text-8xl">
               {HOME.TITLE}
             </h1>
           </m.div>
@@ -49,7 +49,7 @@ export default function ProviderPageHero() {
           {/* Description */}
           <m.div
             variants={HERO_ITEM_VARIANTS}
-            className="text-lg text-muted-foreground leading-relaxed max-w-lg font-medium"
+            className="text-muted-foreground max-w-lg text-lg leading-relaxed font-medium"
           >
             <TextGenerateEffect words={HOME.DESCRIPTION} />
           </m.div>
@@ -62,7 +62,7 @@ export default function ProviderPageHero() {
             <Button
               onClick={handleProviderAuth}
               size="lg"
-              className="rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1"
+              className="bg-primary shadow-primary/50 h-12 transform rounded-lg px-8 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
               {BUTTON_TEXT}
             </Button>
@@ -76,9 +76,9 @@ export default function ProviderPageHero() {
             {HOME.FEATURES.map((feature) => (
               <div
                 key={feature}
-                className="flex items-center gap-3 text-muted-foreground font-medium"
+                className="text-muted-foreground flex items-center gap-3 font-medium"
               >
-                <div className="rounded-full bg-primary/70 p-0.5">
+                <div className="bg-primary/70 rounded-full p-0.5">
                   <CheckCircle2 className="size-4 text-white" />
                 </div>
                 <span>{feature}</span>
@@ -97,7 +97,7 @@ export default function ProviderPageHero() {
         >
           <OrbitalCarousel
             items={orbitalItemsLocal}
-            className="w-full max-w-full lg:max-w-xl mx-auto drop-shadow-2xl"
+            className="mx-auto w-full max-w-full drop-shadow-2xl lg:max-w-xl"
           />
         </m.div>
       </WidthConstraint>

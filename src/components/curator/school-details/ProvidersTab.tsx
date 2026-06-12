@@ -38,7 +38,7 @@ export const ProvidersTab = ({
       }
       EmptyIcon={Users}
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProviders.map((provider, index) => {
           const fullName = formatProviderName(
             provider.providerName,
@@ -63,11 +63,11 @@ export const ProvidersTab = ({
               type="button"
               key={provider.email}
               onClick={() => onProviderClick(provider)}
-              className="flex flex-col items-center text-center group transition-all duration-200"
+              className="group flex flex-col items-center text-center transition-all duration-200"
             >
               {/* Pastel square with avatar */}
               <div
-                className={`w-40 h-40 rounded-3xl bg-linear-to-br ${bgGradient} flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:scale-[1.03] transition-all duration-300`}
+                className={`h-40 w-40 rounded-3xl bg-linear-to-br ${bgGradient} mb-4 flex items-center justify-center transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-lg`}
               >
                 {provider.profilePhotoURL ? (
                   <Image
@@ -75,23 +75,23 @@ export const ProvidersTab = ({
                     alt={provider.providerName}
                     width={88}
                     height={88}
-                    className="w-22 h-22 rounded-full object-cover"
+                    className="h-22 w-22 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-22 h-22 rounded-full bg-white/40 backdrop-blur-sm flex items-center justify-center">
-                    <Users className="w-10 h-10 text-foreground/40" />
+                  <div className="flex h-22 w-22 items-center justify-center rounded-full bg-white/40 backdrop-blur-sm">
+                    <Users className="text-foreground/40 h-10 w-10" />
                   </div>
                 )}
               </div>
 
               {/* Full name (with title) */}
-              <h4 className="font-semibold text-foreground text-base group-hover:text-primary transition-colors">
+              <h4 className="text-foreground group-hover:text-primary text-base font-semibold transition-colors">
                 {fullName}
               </h4>
 
               {/* Specialty */}
               {provider.specialty && (
-                <p className="text-sm text-muted-foreground mt-0.5">
+                <p className="text-muted-foreground mt-0.5 text-sm">
                   {provider.specialty}
                 </p>
               )}

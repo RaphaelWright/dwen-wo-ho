@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="flex flex-col lg:flex-row w-full h-screen overflow-hidden">
-      <section className="h-full overflow-hidden hidden lg:block w-1/2 relative">
-        <div className="absolute inset-0 bg-destructive/5 z-10" />
+    <main className="flex h-screen w-full flex-col overflow-hidden lg:flex-row">
+      <section className="relative hidden h-full w-1/2 overflow-hidden lg:block">
+        <div className="bg-destructive/5 absolute inset-0 z-10" />
         <Image
           src="/auth/mental-health-2.png"
           alt="mental-health"
@@ -13,10 +13,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
           height={1080}
           quality={100}
           priority
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       </section>
-      <section className="h-full w-full lg:w-1/2 overflow-y-auto bg-background">
+      <section className="bg-background h-full w-full overflow-y-auto lg:w-1/2">
         {children}
       </section>
     </main>

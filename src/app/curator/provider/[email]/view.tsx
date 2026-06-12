@@ -39,9 +39,9 @@ const ProviderDetailsPage = () => {
 
   if (isAuthenticated === null) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4" />
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[#955aa4]" />
 
           <p className="text-gray-500">Loading...</p>
         </div>
@@ -61,9 +61,9 @@ const ProviderDetailsPage = () => {
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">
             Provider Not Found
           </h1>
 
@@ -88,10 +88,10 @@ const ProviderDetailsPage = () => {
         onBackClick={() => router.push(ROUTES.curator.providers)}
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         {successMessage && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <p className="text-green-600 text-center font-medium">
+          <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
+            <p className="text-center font-medium text-green-600">
               {successMessage}
             </p>
           </div>

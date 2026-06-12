@@ -32,12 +32,12 @@ const NewPasswordContent = () => {
   const mounted = useHydrated();
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-      <div className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border/50 transition-all duration-300">
-        <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-6 py-4">
+    <div className="bg-background text-foreground flex min-h-screen flex-col transition-colors duration-300">
+      <div className="bg-background/80 border-border/50 sticky top-0 z-50 w-full border-b backdrop-blur-md transition-all duration-300">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4">
           <Logo variant={mounted && theme === "light" ? "black" : "white"} />
-          <p className="text-xl font-semibold hidden sm:block">
-            <span className="text-sm font-normal text-muted-foreground mr-2">
+          <p className="hidden text-xl font-semibold sm:block">
+            <span className="text-muted-foreground mr-2 text-sm font-normal">
               {SIGN_UP_TEXTS.header.for}
             </span>
             {SIGN_UP_TEXTS.header.providers}
@@ -45,7 +45,7 @@ const NewPasswordContent = () => {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="animate-in fade-in slide-in-from-bottom-4 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 py-6 duration-700 sm:px-6 sm:py-8 lg:px-8">
         <NewPasswordForm
           email={email}
           showPassword={showPassword}
@@ -60,29 +60,29 @@ const NewPasswordContent = () => {
         />
       </div>
 
-      <div className="sticky bottom-0 z-50 bg-background/80 backdrop-blur-md border-t border-border flex flex-col sm:flex-row px-6 py-4 items-center justify-between gap-4 mt-auto transition-all duration-300">
-        <div className="flex w-full max-w-7xl mx-auto items-center justify-between gap-4 flex-col sm:flex-row">
+      <div className="bg-background/80 border-border sticky bottom-0 z-50 mt-auto flex flex-col items-center justify-between gap-4 border-t px-6 py-4 backdrop-blur-md transition-all duration-300 sm:flex-row">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
           <Button
             variant="ghost"
             onClick={handleBack}
-            className="rounded-full px-6 py-2 text-muted-foreground hover:text-foreground flex items-center gap-2 group order-2 sm:order-1"
+            className="text-muted-foreground hover:text-foreground group order-2 flex items-center gap-2 rounded-full px-6 py-2 sm:order-1"
           >
-            <span className="group-hover:-translate-x-1 transition-transform">
+            <span className="transition-transform group-hover:-translate-x-1">
               ←
             </span>{" "}
             {NEW_PASSWORD_TEXTS.form.back}
           </Button>
 
-          <div className="flex-1 flex justify-center order-1 sm:order-2 w-full sm:w-auto">
+          <div className="order-1 flex w-full flex-1 justify-center sm:order-2 sm:w-auto">
             <Stepper steps={recoverSteps} step="New Password" />
           </div>
 
-          <div className="order-3 w-full sm:w-auto flex justify-end">
+          <div className="order-3 flex w-full justify-end sm:w-auto">
             <Button
               form="new-password-form"
               type="submit"
               disabled={!isFormValid || resetPasswordMutation.isPending}
-              className="rounded-full px-8 shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
+              className="w-full rounded-full px-8 shadow-lg transition-all hover:shadow-xl sm:w-auto"
             >
               {NEW_PASSWORD_TEXTS.form.savePassword}{" "}
               <span className="ml-2">→</span>
@@ -98,8 +98,8 @@ const NewPassword = () => {
   return (
     <Suspense
       fallback={
-        <div className="h-screen w-full flex items-center justify-center bg-background">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="bg-background flex h-screen w-full items-center justify-center">
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
         </div>
       }
     >

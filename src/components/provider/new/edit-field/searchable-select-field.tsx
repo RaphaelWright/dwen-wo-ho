@@ -27,7 +27,7 @@ export function SearchableSelectField({
       <button
         type="button"
         onClick={() => setSelectOpen(!selectOpen)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-1 focus:ring-primary/20"
+        className="border-input bg-background focus:ring-primary/20 flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm focus:ring-1 focus:outline-none"
       >
         <span className={value ? "text-foreground" : "text-muted-foreground"}>
           {value || `Select ${label?.toLowerCase() || "value"}`}
@@ -45,14 +45,14 @@ export function SearchableSelectField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md"
+            className="bg-popover border-border absolute z-50 mt-1 w-full rounded-md border shadow-md"
           >
             {/* Search input */}
-            <div className="p-2 border-b border-border">
+            <div className="border-border border-b p-2">
               <div className="relative">
                 <Search
                   size={14}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2"
                 />
                 <input
                   type="text"
@@ -60,7 +60,7 @@ export function SearchableSelectField({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-full pl-8 pr-3 py-1.5 text-sm bg-transparent border-0 focus:outline-none focus:ring-0"
+                  className="w-full border-0 bg-transparent py-1.5 pr-3 pl-8 text-sm focus:ring-0 focus:outline-none"
                 />
               </div>
             </div>
@@ -77,7 +77,7 @@ export function SearchableSelectField({
                       setSelectOpen(false);
                       setSearchQuery("");
                     }}
-                    className={`w-full px-3 py-2 text-left text-sm transition-colors hover:bg-accent ${
+                    className={`hover:bg-accent w-full px-3 py-2 text-left text-sm transition-colors ${
                       value === item
                         ? "bg-accent text-accent-foreground"
                         : "text-foreground"
@@ -87,7 +87,7 @@ export function SearchableSelectField({
                   </button>
                 ))
               ) : (
-                <div className="px-3 py-2 text-sm text-muted-foreground text-center">
+                <div className="text-muted-foreground px-3 py-2 text-center text-sm">
                   No {label?.toLowerCase()} found.
                 </div>
               )}

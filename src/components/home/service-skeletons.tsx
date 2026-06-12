@@ -38,13 +38,13 @@ export const SkeletonOne = () => {
     <m.div
       initial="initial"
       whileHover="animate"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-300 via-purple-200 to-pink-100 rounded-lg"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex h-full min-h-24 w-full flex-1 flex-col space-y-2 rounded-lg bg-linear-to-b from-violet-300 via-purple-200 to-pink-100"
     >
       <m.div
         variants={SLIDE_RIGHT_VARIANTS}
-        className="flex flex-row rounded-2xl p-2 items-start space-x-2"
+        className="flex flex-row items-start space-x-2 rounded-2xl p-2"
       >
-        <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-purple-100">
           <Image
             src="/avatars/man-with-glasses.png"
             alt="Support"
@@ -53,25 +53,25 @@ export const SkeletonOne = () => {
             className="size-5 object-cover"
           />
         </div>
-        <div className="bg-gray-100 dark:bg-neutral-900 rounded-lg p-2 text-xs text-gray-700 dark:text-gray-300">
+        <div className="rounded-lg bg-gray-100 p-2 text-xs text-gray-700 dark:bg-neutral-900 dark:text-gray-300">
           Hello, I&apos;m here. How can I help you today?
         </div>
       </m.div>
       <m.div
         variants={SLIDE_LEFT_VARIANTS}
-        className="flex flex-row rounded-full p-2 items-center space-x-2 w-3/4 ml-auto  justify-end"
+        className="ml-auto flex w-3/4 flex-row items-center justify-end space-x-2 rounded-full p-2"
       >
-        <div className="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-2 text-xs text-purple-700 dark:text-purple-300">
+        <div className="rounded-lg bg-purple-100 p-2 text-xs text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
           I&apos;m feeling really anxious...
         </div>
-        <div className="h-8 w-8 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-          <div className="w-full h-full bg-gray-300 flex items-center justify-center text-[10px] text-gray-500">
+        <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-gray-200">
+          <div className="flex h-full w-full items-center justify-center bg-gray-300 text-[10px] text-gray-500">
             <Image
               src="/avatars/young-lady.png"
               alt="Support"
               width={100}
               height={100}
-              className="size-5 object-cover mt-0.5"
+              className="mt-0.5 size-5 object-cover"
             />
           </div>
         </div>
@@ -86,26 +86,26 @@ export const SkeletonTwo = () => {
       initial="initial"
       animate="animate"
       whileHover="hover"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-200 via-purple-300 to-pink-200 rounded-lg"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex h-full min-h-24 w-full flex-1 flex-col space-y-2 rounded-lg bg-linear-to-b from-violet-200 via-purple-300 to-pink-200"
     >
-      <m.div className="flex flex-row rounded-2xl p-2 items-center space-x-2  w-3/4">
-        <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-          <IconLock className="w-3 h-3 text-green-600" />
+      <m.div className="flex w-3/4 flex-row items-center space-x-2 rounded-2xl p-2">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100">
+          <IconLock className="h-3 w-3 text-green-600" />
         </div>
-        <p className="text-xs text-purple-900 bg-purple-100 p-2 rounded-xl">
+        <p className="rounded-xl bg-purple-100 p-2 text-xs text-purple-900">
           Is this anonymous?
         </p>
       </m.div>
 
       <m.div
         variants={SLIDE_LEFT_VARIANTS}
-        className="flex flex-row rounded-2xl p-2 items-center space-x-2  ml-auto"
+        className="ml-auto flex flex-row items-center space-x-2 rounded-2xl p-2"
       >
-        <p className="text-xs text-green-900 p-2 rounded-xl bg-green-50">
+        <p className="rounded-xl bg-green-50 p-2 text-xs text-green-900">
           Yes. E2E Encrypted 🔒
         </p>
-        <div className="h-6 w-6 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
-          <IconShieldLock className="w-3 h-3 text-purple-600" />
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-purple-100">
+          <IconShieldLock className="h-3 w-3 text-purple-600" />
         </div>
       </m.div>
     </m.div>
@@ -123,16 +123,16 @@ export const SkeletonThree = () => {
         repeat: Infinity,
         repeatType: "reverse",
       }}
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] rounded-lg bg-dot-black/[0.2] flex-col space-y-2 relative overflow-hidden"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex h-full min-h-24 w-full flex-1 flex-col space-y-2 overflow-hidden rounded-lg"
     >
-      <div className="overflow-hidden w-full h-full">
+      <div className="h-full w-full overflow-hidden">
         <Image
           src="/Students/15.jpeg"
           alt="Support"
           width={1080}
           height={800}
           quality={100}
-          className="object-cover w-full h-full"
+          className="h-full w-full object-cover"
         />
       </div>
     </m.div>
@@ -145,11 +145,11 @@ export const SkeletonFour = () => {
       initial="initial"
       animate="animate"
       whileHover="hover"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-row space-x-2"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex h-full min-h-24 w-full flex-1 flex-row space-x-2"
     >
       <m.div
         variants={CARD_FAN_FIRST}
-        className="h-full w-1/3 rounded-2xl  dark:border-white/10 border border-neutral-200 flex flex-col items-center justify-center relative overflow-hidden"
+        className="relative flex h-full w-1/3 flex-col items-center justify-center overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/10"
       >
         <div className="absolute inset-0 z-0">
           <Image
@@ -158,48 +158,48 @@ export const SkeletonFour = () => {
             width={1080}
             height={800}
             quality={100}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 /70/70" />
+          <div className="/70/70 absolute inset-0" />
         </div>
         <div className="relative z-10 flex flex-col items-center">
-          <div className="rounded-full h-10 w-10 bg-purple-100 flex items-center justify-center mb-2 overflow-hidden border-2 border-white shadow-sm">
+          <div className="mb-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-purple-100 shadow-sm">
             <Image
               src="/providers/counsellor.jpg"
               alt="Dr. Ama"
               width={1080}
               height={800}
               quality={100}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           </div>
-          <p className="sm:text-sm text-xs text-center font-semibold text-white mt-2">
+          <p className="mt-2 text-center text-xs font-semibold text-white sm:text-sm">
             Counsellor
           </p>
-          <p className="border border-purple-500 bg-purple-100 dark:bg-purple-900/20 text-purple-600 text-[10px] rounded-full px-2 py-0.5 mt-2">
+          <p className="mt-2 rounded-full border border-purple-500 bg-purple-100 px-2 py-0.5 text-[10px] text-purple-600 dark:bg-purple-900/20">
             Dr. Ama
           </p>
         </div>
       </m.div>
-      <m.div className="h-full relative z-20 w-1/3 rounded-2xl  dark:border-white/10 border border-neutral-200 flex flex-col items-center justify-center shadow-lg overflow-hidden backdrop-blur-xs">
+      <m.div className="relative z-20 flex h-full w-1/3 flex-col items-center justify-center overflow-hidden rounded-2xl border border-neutral-200 shadow-lg backdrop-blur-xs dark:border-white/10">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-linear-to-br from-green-50 to-purple-50 dark:from-green-900/20 dark:to-purple-900/20 opacity-50" />
+          <div className="absolute inset-0 bg-linear-to-br from-green-50 to-purple-50 opacity-50 dark:from-green-900/20 dark:to-purple-900/20" />
         </div>
         <div className="relative z-10 flex flex-col items-center">
-          <div className="rounded-full h-12 w-12 bg-green-100 flex items-center justify-center mb-2 border-2 border-white shadow-sm">
-            <IconHeartHandshake className="text-green-600 w-7 h-7" />
+          <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-green-100 shadow-sm">
+            <IconHeartHandshake className="h-7 w-7 text-green-600" />
           </div>
-          <p className="sm:text-sm text-xs text-center font-bold text-gray-800 dark:text-gray-100 mt-2">
+          <p className="mt-2 text-center text-xs font-bold text-gray-800 sm:text-sm dark:text-gray-100">
             Match!
           </p>
-          <p className="border border-green-500 bg-green-100 dark:bg-green-900/20 text-green-700 text-[10px] rounded-full px-2 py-0.5 mt-2">
+          <p className="mt-2 rounded-full border border-green-500 bg-green-100 px-2 py-0.5 text-[10px] text-green-700 dark:bg-green-900/20">
             98% Compatible
           </p>
         </div>
       </m.div>
       <m.div
         variants={CARD_FAN_SECOND}
-        className="h-full w-1/3 rounded-2xl  dark:border-white/10 border border-neutral-200 flex flex-col items-center justify-center relative overflow-hidden"
+        className="relative flex h-full w-1/3 flex-col items-center justify-center overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/10"
       >
         <div className="absolute inset-0 z-0">
           <Image
@@ -208,25 +208,25 @@ export const SkeletonFour = () => {
             width={1080}
             height={800}
             quality={100}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 /70/70" />
+          <div className="/70/70 absolute inset-0" />
         </div>
         <div className="relative z-10 flex flex-col items-center">
-          <div className="rounded-full size-10 bg-blue-100 flex items-center justify-center mb-2 overflow-hidden border-2 border-white shadow-sm">
+          <div className="mb-2 flex size-10 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-blue-100 shadow-sm">
             <Image
               src="/Students/2.jpg"
               alt="Mr.kofi"
               width={1080}
               height={800}
               quality={100}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           </div>
-          <p className="sm:text-sm text-xs text-center font-semibold text-white mt-2">
+          <p className="mt-2 text-center text-xs font-semibold text-white sm:text-sm">
             Student
           </p>
-          <p className="border border-blue-500 bg-blue-100 dark:bg-blue-900/20 text-blue-600 text-[10px] rounded-full px-2 py-0.5 mt-2">
+          <p className="mt-2 rounded-full border border-blue-500 bg-blue-100 px-2 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/20">
             Mr. Kojo
           </p>
         </div>
@@ -240,39 +240,39 @@ export const SkeletonFive = () => {
     <m.div
       initial="initial"
       whileHover="animate"
-      className="flex flex-1 w-full h-full min-h-24 dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex-col space-y-2 bg-linear-to-b from-violet-300 via-purple-200 to-pink-100 rounded-lg"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex h-full min-h-24 w-full flex-1 flex-col space-y-2 rounded-lg bg-linear-to-b from-violet-300 via-purple-200 to-pink-100"
     >
       <m.div
         variants={SLIDE_RIGHT_VARIANTS}
-        className="flex flex-row rounded-2xl p-2 items-start space-x-2 "
+        className="flex flex-row items-start space-x-2 rounded-2xl p-2"
       >
-        <div className="rounded-full h-8 w-8 bg-purple-50 flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gray-100 bg-purple-50">
           <Image
             src="/avatars/excited-lady.png"
             alt="User Avatart"
             width={100}
             height={100}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
-        <p className="text-xs text-green-900 bg-green-100 p-2 rounded-xl">
+        <p className="rounded-xl bg-green-100 p-2 text-xs text-green-900">
           Feeling much better after my session today...
         </p>
       </m.div>
       <m.div
         variants={SLIDE_LEFT_VARIANTS}
-        className="flex flex-row rounded-full p-2 items-center justify-end space-x-2 w-3/4 ml-auto "
+        className="ml-auto flex w-3/4 flex-row items-center justify-end space-x-2 rounded-full p-2"
       >
-        <p className="text-xs bg-purple-50 text-purple-900 rounded-xl p-2">
+        <p className="rounded-xl bg-purple-50 p-2 text-xs text-purple-900">
           Glad to hear that!
         </p>
-        <div className="rounded-full h-6 w-6 bg-green-100 flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-gray-100 bg-green-100">
           <Image
             src="/avatars/counsellor.png"
             alt="Counselor Avatar"
             width={100}
             height={100}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         </div>
       </m.div>

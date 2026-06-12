@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import useUserQuery from "@/hooks/queries/use-user-profile";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
 import { patientsService } from "@/services/patients";
@@ -66,8 +66,7 @@ export function useProviderPatientDetails() {
     if (!providerId) return [];
     return allActions.filter(
       (action: PatientActionResponseDTO) =>
-        action.providerId === providerId ||
-        action.createdBy === providerId,
+        action.providerId === providerId || action.createdBy === providerId,
     );
   }, [allActions, providerId]);
 

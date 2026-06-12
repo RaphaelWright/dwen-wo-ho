@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useReducer } from "react";
+import {
+  activityLogFilterReducer,
+  initialActivityLogFilterState,
+} from "@/lib/utils/provider-activity-filter-reducer";
 import { format } from "date-fns";
-import { 
-  MdSearch, 
-  MdRefresh, 
-  MdOutlineAssignment, 
+import {
+  MdSearch,
+  MdRefresh,
+  MdOutlineAssignment,
   MdOutlineLogin,
-  MdOutlineUpdate
+  MdOutlineUpdate,
 } from "react-icons/md";
 import { useProviderActivityQuery } from "@/hooks/queries/use-provider";
 import useSchoolsQuery from "@/hooks/queries/use-schools";
@@ -16,7 +20,7 @@ import type { School } from "@/lib/types/school";
 
 const getActivityIcon = (action?: string) => {
   const normAction = action?.toLowerCase() || "";
-  if (normAction.includes("login") || normAction.includes("sign in")) 
+  if (normAction.includes("login") || normAction.includes("sign in"))
     return <MdOutlineLogin className="text-blue-500" />;
   if (normAction.includes("update") || normAction.includes("edit"))
     return <MdOutlineUpdate className="text-yellow-500" />;
@@ -24,11 +28,8 @@ const getActivityIcon = (action?: string) => {
 };
 
 export default function ProviderActivityLog() {
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [page, setPage] = useState(0);
-  const [schoolId, setSchoolId] = useState("");
-  const [status, setStatus] = useState("");
+  const [{ search, debouncedSearch, page, schoolId, status }, dispatch] =
+    useReducer(activityLogFilterReducer, initialActivityLogFilterState);
 
   const { useSchools } = useSchoolsQuery();
   const { data: schoolsData } = useSchools();
@@ -37,13 +38,12 @@ export default function ProviderActivityLog() {
 
   // Debounce search manually for simplicity
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setPage(0);
+    dispatch({ type: "SET_SEARCH", search: e.target.value });
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setDebouncedSearch(search);
+    dispatch({ type: "SET_DEBOUNCED_SEARCH", search });
   };
 
   const { data, isLoading, isError, refetch } = useProviderActivityQuery({
@@ -51,7 +51,7 @@ export default function ProviderActivityLog() {
     page,
     limit: 15,
     ...(schoolId ? { schoolId } : {}),
-    ...(status ? { status } : {})
+    ...(status ? { status } : {}),
   });
 
   const activities = data?.items || [];
@@ -60,12 +60,14 @@ export default function ProviderActivityLog() {
 
   if (isError) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <p className="text-red-600 font-medium mb-2">Failed to load activity log</p>
+      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+        <p className="mb-2 font-medium text-red-600">
+          Failed to load activity log
+        </p>
         <button
           type="button"
           onClick={() => refetch()}
-          className="text-sm bg-red-100 px-4 py-2 rounded-md hover:bg-red-200 transition-colors"
+          className="rounded-md bg-red-100 px-4 py-2 text-sm transition-colors hover:bg-red-200"
         >
           Try Again
         </button>
@@ -76,10 +78,13 @@ export default function ProviderActivityLog() {
   return (
     <div className="flex flex-col gap-6">
       {/* Activity Filter Bar */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-card rounded-xl border border-border shadow-sm p-4">
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
-          <form onSubmit={handleSearchSubmit} className="relative w-full sm:max-w-xs">
-            <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xl" />
+      <div className="bg-card border-border flex flex-col items-center justify-between gap-4 rounded-xl border p-4 shadow-sm md:flex-row">
+        <div className="flex w-full flex-1 flex-col gap-3 sm:flex-row md:w-auto">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="relative w-full sm:max-w-xs"
+          >
+            <MdSearch className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-xl" />
             <input
               title="Search provider activity"
               aria-label="Search provider activity"
@@ -87,25 +92,31 @@ export default function ProviderActivityLog() {
               placeholder="Search details..."
               value={search}
               onChange={handleSearch}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
+              className="border-border bg-background focus:ring-primary/50 w-full rounded-lg border py-2 pr-4 pl-10 text-sm transition-all focus:ring-2 focus:outline-none"
             />
           </form>
-          
-          <select 
+
+          <select
             value={schoolId}
-            onChange={(e) => { setSchoolId(e.target.value); setPage(0); }}
-            className="w-full sm:w-48 px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+            onChange={(e) =>
+              dispatch({ type: "SET_SCHOOL_ID", schoolId: e.target.value })
+            }
+            className="border-border bg-background focus:ring-primary/50 w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none sm:w-48"
           >
             <option value="">All Schools</option>
             {schools.map((s) => (
-              <option key={s.id} value={s.id}>{s.name || `School #${s.id}`}</option>
+              <option key={s.id} value={s.id}>
+                {s.name || `School #${s.id}`}
+              </option>
             ))}
           </select>
 
           <select
             value={status}
-            onChange={(e) => { setStatus(e.target.value); setPage(0); }}
-            className="w-full sm:w-36 px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+            onChange={(e) =>
+              dispatch({ type: "SET_STATUS", status: e.target.value })
+            }
+            className="border-border bg-background focus:ring-primary/50 w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none sm:w-36"
           >
             <option value="">All Statuses</option>
             <option value="INFO">Info</option>
@@ -118,45 +129,53 @@ export default function ProviderActivityLog() {
           type="button"
           title="Refresh activity log"
           onClick={() => refetch()}
-          className="p-2 rounded-lg bg-muted text-muted-foreground hover:text-foreground transition-colors border border-border self-end sm:self-auto"
+          className="bg-muted text-muted-foreground hover:text-foreground border-border self-end rounded-lg border p-2 transition-colors sm:self-auto"
         >
           <MdRefresh className="text-xl" />
         </button>
       </div>
 
       {/* Activity List */}
-      <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-border font-semibold flex items-center justify-between">
+      <div className="bg-card border-border overflow-hidden rounded-xl border shadow-sm">
+        <div className="border-border flex items-center justify-between border-b p-4 font-semibold">
           <h3 className="text-lg">Recent Activities</h3>
-          <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full">
+          <span className="text-muted-foreground bg-muted rounded-full px-3 py-1 text-sm">
             {totalCount} Total
           </span>
         </div>
-        
-        <div className="divide-y divide-border">
+
+        <div className="divide-border divide-y">
           {isLoading ? (
-            <div className="p-8 flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex justify-center p-8">
+              <div className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"></div>
             </div>
           ) : activities.length === 0 ? (
-            <div className="p-12 text-center text-muted-foreground">
-              <MdOutlineAssignment className="mx-auto text-4xl mb-3 opacity-20" />
+            <div className="text-muted-foreground p-12 text-center">
+              <MdOutlineAssignment className="mx-auto mb-3 text-4xl opacity-20" />
               <p>No activity records found.</p>
             </div>
           ) : (
             activities.map((activity: ProviderActivityItem, idx: number) => (
-              <div key={activity.id || idx} className="p-4 hover:bg-muted/50 transition-colors flex gap-4">
-                <div className="mt-1 bg-background border border-border rounded-full p-2 h-10 w-10 flex items-center justify-center shrink-0">
+              <div
+                key={activity.id || idx}
+                className="hover:bg-muted/50 flex gap-4 p-4 transition-colors"
+              >
+                <div className="bg-background border-border mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border p-2">
                   {getActivityIcon(activity.action)}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-                    <h4 className="font-semibold text-sm truncate">
-                      {activity.providerName || activity.providerEmail || "Unknown Provider"}
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
+                    <h4 className="truncate text-sm font-semibold">
+                      {activity.providerName ||
+                        activity.providerEmail ||
+                        "Unknown Provider"}
                     </h4>
                     {activity.timestamp && (
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {format(new Date(activity.timestamp), "MMM d, yyyy • h:mm a")}
+                      <span className="text-muted-foreground text-xs whitespace-nowrap">
+                        {format(
+                          new Date(activity.timestamp),
+                          "MMM d, yyyy • h:mm a",
+                        )}
                       </span>
                     )}
                   </div>
@@ -164,12 +183,12 @@ export default function ProviderActivityLog() {
                     {activity.action || "Performed an action"}
                   </p>
                   {activity.details && (
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                    <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
                       {activity.details}
                     </p>
                   )}
                   {activity.schoolName && (
-                    <div className="mt-2 text-xs font-medium bg-primary/10 text-primary w-fit px-2 py-1 rounded-md">
+                    <div className="bg-primary/10 text-primary mt-2 w-fit rounded-md px-2 py-1 text-xs font-medium">
                       @ {activity.schoolName}
                     </div>
                   )}
@@ -178,28 +197,35 @@ export default function ProviderActivityLog() {
             ))
           )}
         </div>
-        
+
         {/* Pagination minimal */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-border flex items-center justify-between bg-muted/20">
+          <div className="border-border bg-muted/20 flex items-center justify-between border-t p-4">
             <button
               type="button"
               title="Previous page"
               disabled={page <= 0}
-              onClick={() => setPage(p => Math.max(0, p - 1))}
-              className="text-sm px-4 py-2 border border-border rounded-md bg-background disabled:opacity-50"
+              onClick={() =>
+                dispatch({ type: "SET_PAGE", page: Math.max(0, page - 1) })
+              }
+              className="border-border bg-background rounded-md border px-4 py-2 text-sm disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               Page {page + 1} of {totalPages}
             </span>
             <button
               type="button"
               title="Next page"
               disabled={page >= totalPages - 1}
-              onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-              className="text-sm px-4 py-2 border border-border rounded-md bg-background disabled:opacity-50"
+              onClick={() =>
+                dispatch({
+                  type: "SET_PAGE",
+                  page: Math.min(totalPages - 1, page + 1),
+                })
+              }
+              className="border-border bg-background rounded-md border px-4 py-2 text-sm disabled:opacity-50"
             >
               Next
             </button>

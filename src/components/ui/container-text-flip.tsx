@@ -30,23 +30,27 @@ export function ContainerTextFlip({
   const [width, setWidth] = useState(100);
   const textRef = React.useRef<HTMLDivElement>(null);
 
-  const updateWidthForWord = () => {
-    if (textRef.current) {
-      // Add some padding to the text width (30px on each side)
-      const textWidth = textRef.current.scrollWidth + 30;
-      setWidth(textWidth);
-    }
-  };
-
   useEffect(() => {
-    // Update width whenever the word changes
-    updateWidthForWord();
-  }, [currentWordIndex]);
+    // Initial width measurement after mount
+    requestAnimationFrame(() => {
+      if (textRef.current) {
+        const textWidth = textRef.current.scrollWidth + 30;
+        setWidth(textWidth);
+      }
+    });
 
-  useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-      // Width will be updated in the effect that depends on currentWordIndex
+      setCurrentWordIndex((prevIndex) => {
+        const next = (prevIndex + 1) % words.length;
+        // Measure width after React paints the new word
+        requestAnimationFrame(() => {
+          if (textRef.current) {
+            const textWidth = textRef.current.scrollWidth + 30;
+            setWidth(textWidth);
+          }
+        });
+        return next;
+      });
     }, interval);
 
     return () => clearInterval(intervalId);
@@ -58,7 +62,7 @@ export function ContainerTextFlip({
       layoutId={`words-here-${id}`}
       style={{ width }} // Use style for width to allow framer-motion to animate it smoothly alongside layout
       className={cn(
-        "relative inline-block rounded-lg pt-2 pb-3 text-center text-4xl font-bold md:text-7xl transition-colors duration-300",
+        "relative inline-block rounded-lg pt-2 pb-3 text-center text-4xl font-bold transition-colors duration-300 md:text-7xl",
         "bg-primary/5",
         "shadow-sm",
         className,
@@ -73,7 +77,7 @@ export function ContainerTextFlip({
           duration: animationDuration / 1000,
           ease: "easeInOut",
         }}
-        className={cn("inline-block whitespace-nowrap px-4", textClassName)} // Added padding directly here and whitespace-nowrap
+        className={cn("inline-block px-4 whitespace-nowrap", textClassName)} // Added padding directly here and whitespace-nowrap
         ref={textRef}
       >
         {words[currentWordIndex].split("").map((letter, index) => (

@@ -3,7 +3,7 @@ import { SIGNUP_VERIFY_TEXTS } from "@/lib/constants/components/patient/signup-v
 
 export function VerifyHeader() {
   return (
-    <div className="flex items-center px-8 justify-between w-full">
+    <div className="flex w-full items-center justify-between px-8">
       <Logo />
       <p className="font-bold">
         {SIGNUP_VERIFY_TEXTS.header.for}{" "}

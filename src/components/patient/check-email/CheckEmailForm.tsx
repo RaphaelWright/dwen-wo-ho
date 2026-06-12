@@ -16,13 +16,13 @@ export function CheckEmailForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full max-w-xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300"
+      className="animate-in fade-in slide-in-from-bottom-6 w-full max-w-xl delay-300 duration-700"
     >
       <div className="flex flex-col gap-3">
-        <Label className="text-sm font-semibold text-foreground/70 pl-1">
+        <Label className="text-foreground/70 pl-1 text-sm font-semibold">
           {CHECK_EMAIL_TEXTS.form.emailLabel}
         </Label>
-        <div className="group relative flex items-center gap-1 rounded-2xl dark:bg-input/50 backdrop-blur-md border border-border/30 shadow-lg transition-all duration-300 focus-within:border-primary/40 focus-within:shadow-[0_0_24px_rgba(126,34,206,0.1)]">
+        <div className="group dark:bg-input/50 border-border/30 focus-within:border-primary/40 relative flex items-center gap-1 rounded-2xl border shadow-lg backdrop-blur-md transition-all duration-300 focus-within:shadow-[0_0_24px_rgba(126,34,206,0.1)]">
           <Input
             {...register("email")}
             onChange={(e) => {
@@ -30,16 +30,16 @@ export function CheckEmailForm({
               onEmailChange(e);
             }}
             placeholder={CHECK_EMAIL_TEXTS.form.emailPlaceholder}
-            className="font-medium w-full border-none shadow-none text-base md:text-lg p-4 text-foreground placeholder:text-muted-foreground/40 h-auto rounded-2xl bg-transparent"
+            className="text-foreground placeholder:text-muted-foreground/40 h-auto w-full rounded-2xl border-none bg-transparent p-4 text-base font-medium shadow-none md:text-lg"
           />
           <Button
             type="submit"
             size="icon"
             disabled={!isValidEmail}
-            className={`mr-2 rounded-full size-9 md:size-10 shrink-0 transition-all duration-300 ${
+            className={`mr-2 size-9 shrink-0 rounded-full transition-all duration-300 md:size-10 ${
               isValidEmail
-                ? "bg-primary hover:bg-primary/90 hover:scale-105 shadow-md hover:shadow-lg hover:shadow-primary/25"
-                : "bg-muted text-muted-foreground opacity-30 cursor-not-allowed"
+                ? "bg-primary hover:bg-primary/90 hover:shadow-primary/25 shadow-md hover:scale-105 hover:shadow-lg"
+                : "bg-muted text-muted-foreground cursor-not-allowed opacity-30"
             }`}
           >
             <ArrowRight
@@ -48,8 +48,8 @@ export function CheckEmailForm({
           </Button>
         </div>
         {errors?.email?.message && (
-          <div className="flex items-center gap-1.5 pl-1 animate-in slide-in-from-top-1 fade-in duration-200">
-            <AlertCircle className="h-3.5 w-3.5 text-destructive shrink-0" />
+          <div className="animate-in slide-in-from-top-1 fade-in flex items-center gap-1.5 pl-1 duration-200">
+            <AlertCircle className="text-destructive h-3.5 w-3.5 shrink-0" />
             <p className="text-destructive text-sm font-medium">
               {errors.email.message}
             </p>

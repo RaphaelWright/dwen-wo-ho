@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { toast } from "@/components/ui/sonner";
+import { useState } from "react";
+import { toast } from "@/lib/utils/toast";
 import { useRouter } from "next/navigation";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import {
@@ -41,20 +41,16 @@ export const useProviderSignIn = ({
     onForgotPassword,
   );
 
-  const { register, handleSubmit, errors, setValue } =
-    useSelectedValuesFromReactHookForm(ProviderLoginSchema, {
+  const { register, handleSubmit, errors } = useSelectedValuesFromReactHookForm(
+    ProviderLoginSchema,
+    {
       mode: "onChange",
       defaultValues: {
         email,
         password: "",
       },
-    });
-
-  useEffect(() => {
-    if (email) {
-      setValue("email", email, { shouldValidate: true });
-    }
-  }, [email, setValue]);
+    },
+  );
 
   const onSubmit = async (values: ProviderLoginFormData) => {
     try {
@@ -63,7 +59,11 @@ export const useProviderSignIn = ({
         password: values.password,
       });
 
-      const { token, userData, refreshToken: refreshTokenValue } = response || {};
+      const {
+        token,
+        userData,
+        refreshToken: refreshTokenValue,
+      } = response || {};
 
       if (token) {
         localStorage.setItem("token", token);

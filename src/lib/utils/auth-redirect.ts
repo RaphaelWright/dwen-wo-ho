@@ -33,7 +33,9 @@ export interface RedirectInfo {
   step?: string;
 }
 
-function buildPendingUserInfo(userData: ProviderUserData): RedirectInfo["userInfo"] {
+function buildPendingUserInfo(
+  userData: ProviderUserData,
+): RedirectInfo["userInfo"] {
   let timeAgo = "Recently";
   const createdDate =
     userData.applicationTimestamp ||
@@ -65,8 +67,7 @@ function buildPendingUserInfo(userData: ProviderUserData): RedirectInfo["userInf
     title:
       userData.professionalTitle || userData.specialty || "Health Provider",
     timeAgo,
-    profileImage:
-      userData.profilePhotoURL || userData.profileURL || undefined,
+    profileImage: userData.profilePhotoURL || userData.profileURL || undefined,
   };
 }
 

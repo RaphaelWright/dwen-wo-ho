@@ -2,20 +2,20 @@ import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/patient/check-emai
 
 export function CheckEmailInfo() {
   return (
-    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 space-y-3">
+    <div className="animate-in fade-in slide-in-from-bottom-6 w-full max-w-2xl space-y-3 delay-500 duration-700">
       {/* Divider with label */}
       <div className="flex items-center gap-4">
-        <div className="flex-1 h-px bg-linear-to-r from-transparent via-primary/25 to-transparent" />
-        <span className="text-xs font-medium text-muted-foreground/60 uppercase tracking-widest">
+        <div className="via-primary/25 h-px flex-1 bg-linear-to-r from-transparent to-transparent" />
+        <span className="text-muted-foreground/60 text-xs font-medium tracking-widest uppercase">
           Join the Community
         </span>
-        <div className="flex-1 h-px bg-linear-to-r from-transparent via-primary/25 to-transparent" />
+        <div className="via-primary/25 h-px flex-1 bg-linear-to-r from-transparent to-transparent" />
       </div>
 
-      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-center text-foreground/90 leading-tight tracking-tight">
+      <h2 className="text-foreground/90 text-center text-lg leading-tight font-bold tracking-tight sm:text-xl md:text-2xl">
         {CHECK_EMAIL_TEXTS.info.title}
       </h2>
-      <p className="text-sm sm:text-base text-center text-muted-foreground/60 leading-relaxed max-w-lg mx-auto">
+      <p className="text-muted-foreground/60 mx-auto max-w-lg text-center text-sm leading-relaxed sm:text-base">
         {CHECK_EMAIL_TEXTS.info.subtitle}
       </p>
     </div>

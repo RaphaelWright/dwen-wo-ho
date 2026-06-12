@@ -7,7 +7,14 @@
 
 import { cn } from "@/lib/utils";
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
-import { AnimatePresence, MotionValue, m, useMotionValue, useSpring, useTransform } from "motion/react";
+import {
+  AnimatePresence,
+  MotionValue,
+  m,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "motion/react";
 
 import { useRef, useState } from "react";
 
@@ -79,13 +86,13 @@ const FloatingDockMobile = ({
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
               >
-                <div className="relative group flex items-center gap-2">
+                <div className="group relative flex items-center gap-2">
                   <m.div
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
                     className={cn(
-                      "rounded-md border border-border bg-card px-2 py-0.5 text-xs text-muted-foreground shadow-md whitespace-pre",
+                      "border-border bg-card text-muted-foreground rounded-md border px-2 py-0.5 text-xs whitespace-pre shadow-md",
                       tooltipClassName,
                     )}
                   >
@@ -95,7 +102,7 @@ const FloatingDockMobile = ({
                     href={item.href}
                     key={item.title}
                     className={cn(
-                      "flex size-8 items-center justify-center rounded-full bg-card text-secondary-foreground",
+                      "bg-card text-secondary-foreground flex size-8 items-center justify-center rounded-full",
                       itemClassName,
                     )}
                   >
@@ -110,9 +117,9 @@ const FloatingDockMobile = ({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex size-8 items-center justify-center rounded-full bg-background text-secondary-foreground"
+        className="bg-background text-secondary-foreground flex size-8 items-center justify-center rounded-full"
       >
-        <IconLayoutNavbarCollapse className="size-5 text-muted-foreground" />
+        <IconLayoutNavbarCollapse className="text-muted-foreground size-5" />
       </button>
     </div>
   );
@@ -135,7 +142,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto flex h-16 items-center gap-4 rounded-2xl bg-transparent px-4 pb-3 w-full",
+        "mx-auto flex h-16 w-full items-center gap-4 rounded-2xl bg-transparent px-4 pb-3",
         className,
       )}
     >
@@ -178,7 +185,11 @@ function IconContainer({
   const widthTransform = useTransform(distance, [-150, 0, 150], [40, 55, 40]);
   const heightTransform = useTransform(distance, [-150, 0, 150], [40, 55, 40]);
 
-  const widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 28, 20]);
+  const widthTransformIcon = useTransform(
+    distance,
+    [-150, 0, 150],
+    [20, 28, 20],
+  );
   const heightTransformIcon = useTransform(
     distance,
     [-150, 0, 150],
@@ -217,7 +228,7 @@ function IconContainer({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className={cn(
-          "relative flex aspect-square items-center justify-center rounded-full bg-card/10 hover:bg-accent hover:text-accent-foreground",
+          "bg-card/10 hover:bg-accent hover:text-accent-foreground relative flex aspect-square items-center justify-center rounded-full",
           itemClassName,
         )}
       >
@@ -228,7 +239,7 @@ function IconContainer({
               animate={{ opacity: 1, y: 0, x: "-50%" }}
               exit={{ opacity: 0, y: 2, x: "-50%" }}
               className={cn(
-                "absolute -top-8 left-1/2 w-fit rounded-md border border-border bg-popover px-2 py-0.5 text-xs whitespace-pre text-popover-foreground shadow-md",
+                "border-border bg-popover text-popover-foreground absolute -top-8 left-1/2 w-fit rounded-md border px-2 py-0.5 text-xs whitespace-pre shadow-md",
                 tooltipClassName,
               )}
             >

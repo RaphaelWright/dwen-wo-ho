@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 
 export function SignUpFooter({ onBack }: SignUpFooterProps) {
   return (
-    <div className="flex border-t border-gray-500 px-10 pt-10 items-center justify-between">
+    <div className="flex items-center justify-between border-t border-gray-500 px-10 pt-10">
       <Button
         onClick={onBack}
-        className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase hover:bg-muted transition-colors"
+        className="bg-background text-primary border-primary hover:bg-muted rounded-full border-4 px-6 text-xl font-bold uppercase transition-colors"
       >
         {SIGN_UP_TEXTS.footer.back}
       </Button>
@@ -22,7 +22,7 @@ export function SignUpFooter({ onBack }: SignUpFooterProps) {
         form="login-form"
         type="submit"
         value={SIGN_UP_TEXTS.footer.next}
-        className="text-xl px-6 py-2 border-4 font-bold border-primary rounded-md text-primary-foreground bg-primary/50 cursor-pointer hover:bg-primary/70 transition-colors"
+        className="border-primary text-primary-foreground bg-primary/50 hover:bg-primary/70 cursor-pointer rounded-md border-4 px-6 py-2 text-xl font-bold transition-colors"
       />
     </div>
   );

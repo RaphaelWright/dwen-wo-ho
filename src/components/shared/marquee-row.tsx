@@ -26,7 +26,7 @@ export const MarqueeRow = ({
       onMouseLeave={handleMouseLeave}
     >
       <m.div
-        className="flex gap-16 items-center shrink-0"
+        className="flex shrink-0 items-center gap-16"
         initial={{ x: direction === "left" ? "0%" : "-50%" }}
         animate={controls}
       >
@@ -34,10 +34,10 @@ export const MarqueeRow = ({
           <div
             key={`${direction}-marquee-${idx}`}
             className={cn(
-              "cursor-pointer shrink-0 transition-all duration-300 ease-out relative w-13.75 h-13.75",
+              "relative h-13.75 w-13.75 shrink-0 cursor-pointer transition-all duration-300 ease-out",
               hoveredIndex !== null &&
                 hoveredIndex !== idx &&
-                "blur-md scale-90 opacity-20",
+                "scale-90 opacity-20 blur-md",
               hoveredIndex === idx && "scale-110 opacity-100",
             )}
             onMouseEnter={() => setHoveredIndex(idx)}

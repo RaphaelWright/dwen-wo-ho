@@ -15,16 +15,16 @@ const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
 
 export default function CookiePolicyPage() {
   return (
-    <div className="py-20 bg-background text-foreground">
+    <div className="bg-background text-foreground py-20">
       <WidthConstraint>
-        <h1 className="text-4xl font-bold mb-8">Cookie Policy</h1>
+        <h1 className="mb-8 text-4xl font-bold">Cookie Policy</h1>
         <div className="prose dark:prose-invert max-w-none">
           <p className="mb-4">Last updated: {LAST_UPDATED}</p>
           <p>
             This Cookie Policy explains what cookies are, how we use them,
             andyour choices regarding cookies.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             1. What Are Cookies?
           </h2>
           <p>
@@ -32,17 +32,17 @@ export default function CookiePolicyPage() {
             visit a website. They help the website function properly and provide
             analytics data.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             2. How We Use Cookies
           </h2>
           <p>
             We use cookies to improve your experience on our website, analyze
             site traffic, and personalize content.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             3. Types of Cookies We Use
           </h2>
-          <ul className="list-disc pl-6 mb-4">
+          <ul className="mb-4 list-disc pl-6">
             <li>
               <strong>Essential Cookies:</strong> Necessary for the website to
               function.
@@ -56,7 +56,7 @@ export default function CookiePolicyPage() {
               websites to display relevant ads.
             </li>
           </ul>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             4. Managing Cookies
           </h2>
           <p>

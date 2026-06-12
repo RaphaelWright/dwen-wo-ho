@@ -4,6 +4,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { activateOnKeyboard } from "@/lib/utils/a11y";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,18 +63,26 @@ function InputGroupAddon({
   align = "inline-start",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+  const addonRef = React.useRef<HTMLDivElement>(null);
+  const focusInput = () => {
+    addonRef.current?.parentElement?.querySelector("input")?.focus();
+  };
+
   return (
     <div
+      ref={addonRef}
       role="group"
       data-slot="input-group-addon"
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
+      tabIndex={0}
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("button")) {
           return;
         }
         e.currentTarget.parentElement?.querySelector("input")?.focus();
       }}
+      onKeyDown={activateOnKeyboard(focusInput)}
       {...props}
     />
   );

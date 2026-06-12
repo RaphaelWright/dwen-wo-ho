@@ -9,7 +9,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { LoginSchema } from "@/lib/schemas/patient-auth-schema";
 import { PatientSignInFormData } from "@/lib/types/components/patient/signin";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 export function usePatientSignIn({ email }: { email: string | null }) {
   const router = useRouter();

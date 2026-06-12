@@ -40,12 +40,12 @@ const ProviderIdentity = ({
         scale: 0.99,
         transition: { duration: 0.4, ease: "easeInOut" },
       }}
-      className="flex flex-row items-center justify-between min-w-70 cursor-pointer py-2 pl-2.5 pr-3.5 rounded-full shrink-0 text-left bg-card/60 hover:bg-card border border-border/50 hover:shadow-md hover:border-primary/30"
+      className="bg-card/60 hover:bg-card border-border/50 hover:border-primary/30 flex min-w-70 shrink-0 cursor-pointer flex-row items-center justify-between rounded-full border py-2 pr-3.5 pl-2.5 text-left hover:shadow-md"
     >
       <div className="flex items-center gap-4">
         {/* Avatar */}
         <div className="relative">
-          <Avatar className="size-13.5 shrink-0 border-[3px] border-primary">
+          <Avatar className="border-primary size-13.5 shrink-0 border-[3px]">
             <AvatarImage src={avatarUrl} />
             <AvatarFallback className="text-lg">{fallback}</AvatarFallback>
           </Avatar>
@@ -53,17 +53,17 @@ const ProviderIdentity = ({
 
         {/* Name + spec */}
         <div className="text-center">
-          <div className="flex items-center justify-center gap-1.5 text-[17px] font-bold text-foreground">
+          <div className="text-foreground flex items-center justify-center gap-1.5 text-[17px] font-bold">
             {providerTitle} {providerName}
             {/* Verification Badge */}
             <div
-              className="size-4.5 rounded-full flex items-center justify-center text-white text-[10px] bg-sky-500 shrink-0 mt-0.5"
+              className="mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white"
               title="Verified Provider"
             >
               ✓
             </div>
           </div>
-          <div className="text-[13.5px] font-medium text-muted-foreground mt-0.5 tracking-tight">
+          <div className="text-muted-foreground mt-0.5 text-[13.5px] font-medium tracking-tight">
             {specialty}
           </div>
         </div>
@@ -71,8 +71,8 @@ const ProviderIdentity = ({
 
       {/* Ranking Badge */}
       {ranking && (
-        <div className="ml-3 shrink-0 flex items-center justify-center size-10 rounded-full bg-primary/90 ring-[2.5px] ring-primary ring-offset-[3px] ring-offset-background shadow-sm">
-          <span className="text-white font-black text-lg">{ranking}</span>
+        <div className="bg-primary/90 ring-primary ring-offset-background ml-3 flex size-10 shrink-0 items-center justify-center rounded-full shadow-sm ring-[2.5px] ring-offset-[3px]">
+          <span className="text-lg font-black text-white">{ranking}</span>
         </div>
       )}
     </m.button>
@@ -109,8 +109,8 @@ export default function ProviderNavbar({
   } = profileData ?? {};
 
   return (
-    <header className="flex min-[1065px]:grid min-[1065px]:grid-cols-3 items-center justify-between min-[1065px]:justify-stretch pl-1 pr-2 min-[1065px]:px-2 h-18 border-b">
-      <div className="flex gap-2 items-center">
+    <header className="flex h-18 items-center justify-between border-b pr-2 pl-1 min-[1065px]:grid min-[1065px]:grid-cols-3 min-[1065px]:justify-stretch min-[1065px]:px-2">
+      <div className="flex items-center gap-2">
         <ClientOnly fallback={<Logo variant="white" />}>
           <Logo
             variant={theme === "light" ? "black" : "white"}
@@ -119,11 +119,11 @@ export default function ProviderNavbar({
           />
         </ClientOnly>
         {/* Divider — desktop only */}
-        <div className="hidden min-[1065px]:block w-0.5 h-6 mx-5 shrink-0 bg-foreground/20" />
+        <div className="bg-foreground/20 mx-5 hidden h-6 w-0.5 shrink-0 min-[1065px]:block" />
       </div>
 
       {/* Search — desktop only */}
-      <div className="hidden min-[1065px]:flex -ml-10 xl:ml-[1vw] ">
+      <div className="-ml-10 hidden min-[1065px]:flex xl:ml-[1vw]">
         <ProviderIdentity
           providerTitle={title}
           providerName={name}
@@ -135,13 +135,13 @@ export default function ProviderNavbar({
       </div>
 
       {/* Right actions */}
-      <div className="flex items-center gap-4 ml-auto">
+      <div className="ml-auto flex items-center gap-4">
         {/* Mobile search toggle */}
         <div className="min-[1065px]:hidden">
           <m.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setSearchOpen?.(!searchOpen)}
-            className="size-9 flex items-center justify-center rounded-lg border cursor-pointer bg-card/90 hover:bg-muted/80"
+            className="bg-card/90 hover:bg-muted/80 flex size-9 cursor-pointer items-center justify-center rounded-lg border"
           >
             <Search className="size-5" />
           </m.button>

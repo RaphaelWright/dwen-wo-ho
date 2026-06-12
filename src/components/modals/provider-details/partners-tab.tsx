@@ -18,15 +18,15 @@ export const PartnersTab = ({
     <div className="space-y-6">
       {/* Associated Partners */}
       <div>
-        <h4 className="font-semibold mb-3">Associated Partners</h4>
+        <h4 className="mb-3 font-semibold">Associated Partners</h4>
         {isLoadingPartners ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto mb-2"></div>
+          <div className="text-muted-foreground py-8 text-center">
+            <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-b-2 border-teal-500"></div>
             <p>Loading partners...</p>
           </div>
         ) : associatedPartners.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
-            <FiUsers className="w-12 h-12 mx-auto mb-2 text-muted-foreground" />
+          <div className="text-muted-foreground py-8 text-center">
+            <FiUsers className="text-muted-foreground mx-auto mb-2 h-12 w-12" />
             <p>No partners associated yet</p>
           </div>
         ) : (
@@ -34,22 +34,22 @@ export const PartnersTab = ({
             {associatedPartners.map((partner: AssociatedPartner) => (
               <div
                 key={partner.id}
-                className="flex items-center justify-between p-4 bg-card border border-border rounded-lg hover:border-teal-500/30 transition-colors"
+                className="bg-card border-border flex items-center justify-between rounded-lg border p-4 transition-colors hover:border-teal-500/30"
               >
                 <div className="flex items-center gap-3">
                   {partner.logo ? (
-                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-border">
+                    <div className="border-border h-12 w-12 shrink-0 overflow-hidden rounded-lg border">
                       <Image
                         src={partner.logo}
                         alt={partner.name}
                         width={48}
                         height={48}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                   ) : (
-                    <div className="w-12 h-12 bg-linear-to-br from-teal-500 to-cyan-500 rounded-lg flex items-center justify-center shrink-0">
-                      <FiUsers className="w-6 h-6 text-white" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-teal-500 to-cyan-500">
+                      <FiUsers className="h-6 w-6 text-white" />
                     </div>
                   )}
                   <div>
@@ -59,10 +59,10 @@ export const PartnersTab = ({
                 <Button
                   onClick={() => setPartnerToRemove(partner)}
                   variant="ghost"
-                  className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-destructive text-destructive hover:bg-destructive/80 transition-colors p-0"
+                  className="border-destructive text-destructive hover:bg-destructive/80 flex h-8 w-8 items-center justify-center rounded-full border-2 p-0 transition-colors"
                   aria-label="Remove partner"
                 >
-                  <FiMinus className="w-4 h-4" />
+                  <FiMinus className="h-4 w-4" />
                 </Button>
               </div>
             ))}
@@ -72,29 +72,29 @@ export const PartnersTab = ({
 
       {/* Available Partners */}
       <div>
-        <h4 className="font-semibold mb-3">Available Partners</h4>
+        <h4 className="mb-3 font-semibold">Available Partners</h4>
         {isLoadingPartners ? (
-          <div className="text-center py-4 text-muted-foreground">
+          <div className="text-muted-foreground py-4 text-center">
             <p>Loading...</p>
           </div>
         ) : (
           <>
             {/* Search Bar */}
             <div className="relative mb-4">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FiSearch className="h-5 w-5 text-muted-foreground" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <FiSearch className="text-muted-foreground h-5 w-5" />
               </div>
               <Input
                 type="text"
                 placeholder="Search partners..."
                 value={partnerSearchQuery}
                 onChange={(e) => setPartnerSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-transparent border border-input transition-all placeholder-muted-foreground"
+                className="border-input placeholder-muted-foreground w-full border bg-transparent py-2 pr-4 pl-10 transition-all"
               />
             </div>
 
             {filteredAvailablePartners.length === 0 ? (
-              <p className="text-muted-foreground text-center py-4">
+              <p className="text-muted-foreground py-4 text-center">
                 {partnerSearchQuery
                   ? "No partners found matching your search."
                   : "All partners are already associated."}
@@ -104,22 +104,22 @@ export const PartnersTab = ({
                 {filteredAvailablePartners.map((partner: AssociatedPartner) => (
                   <div
                     key={partner.id}
-                    className="flex items-center justify-between p-4 bg-card/50 border border-border rounded-lg hover:bg-muted-foreground transition-colors"
+                    className="bg-card/50 border-border hover:bg-muted-foreground flex items-center justify-between rounded-lg border p-4 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       {partner.logo ? (
-                        <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-border">
+                        <div className="border-border h-12 w-12 shrink-0 overflow-hidden rounded-lg border">
                           <Image
                             src={partner.logo}
                             alt={partner.name}
                             width={48}
                             height={48}
-                            className="w-full h-full object-cover"
+                            className="h-full w-full object-cover"
                           />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 bg-muted-foreground rounded-lg flex items-center justify-center shrink-0">
-                          <FiUsers className="w-6 h-6 text-muted-foreground" />
+                        <div className="bg-muted-foreground flex h-12 w-12 shrink-0 items-center justify-center rounded-lg">
+                          <FiUsers className="text-muted-foreground h-6 w-6" />
                         </div>
                       )}
                       <div>
@@ -129,10 +129,10 @@ export const PartnersTab = ({
                     <Button
                       onClick={() => setPartnerToAdd(partner)}
                       variant="ghost"
-                      className="w-8 h-8 flex items-center justify-center rounded-full border-2 border-green-400 text-green-500 hover:bg-green-50 transition-colors p-0"
+                      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-green-400 p-0 text-green-500 transition-colors hover:bg-green-50"
                       aria-label="Add partner"
                     >
-                      <FiPlus className="w-4 h-4" />
+                      <FiPlus className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}

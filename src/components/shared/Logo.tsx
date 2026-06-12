@@ -21,7 +21,7 @@ export const Logo = ({
           src="/logos/logo-black.png"
           alt="JustGo Health"
           className={cn(
-            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out dark:hidden -ml-0.5",
+            "-ml-0.5 h-auto w-auto bg-contain transition-all duration-300 ease-in-out hover:scale-95 dark:hidden",
             className,
           )}
           width={180}
@@ -32,7 +32,7 @@ export const Logo = ({
           src="/logos/logo-white.png"
           alt="JustGo Health"
           className={cn(
-            "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out hidden dark:block -ml-0.5",
+            "-ml-0.5 hidden h-auto w-auto bg-contain transition-all duration-300 ease-in-out hover:scale-95 dark:block",
             className,
           )}
           width={180}
@@ -54,7 +54,7 @@ export const Logo = ({
         src={src}
         alt="JustGo Health"
         className={cn(
-          "bg-contain w-auto h-auto hover:scale-95 transition-all duration-300 ease-in-out -ml-0.5",
+          "-ml-0.5 h-auto w-auto bg-contain transition-all duration-300 ease-in-out hover:scale-95",
           className,
         )}
         width={180}

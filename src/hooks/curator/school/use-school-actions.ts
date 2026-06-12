@@ -11,7 +11,7 @@ export function useSchoolActions(
   router: ReturnType<typeof useRouter>,
   disableSchool: (id: string) => Promise<unknown>,
   invalidateSchool: (id: string) => Promise<unknown>,
-  setShowDisableModal: (show: boolean) => void
+  setShowDisableModal: (show: boolean) => void,
 ) {
   const [isActionLoading, setIsActionLoading] = useState(false);
 

@@ -5,7 +5,7 @@ export const OverviewTab = ({ partner }: OverviewTabProps) => {
     <div className="space-y-6">
       {partner?.slogan && (
         <div>
-          <h3 className="text-sm font-semibold text-gray-500 mb-2">Slogan</h3>
+          <h3 className="mb-2 text-sm font-semibold text-gray-500">Slogan</h3>
           <p className="text-lg text-gray-900 italic">
             &quot;{partner.slogan}&quot;
           </p>

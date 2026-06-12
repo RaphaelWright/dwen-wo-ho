@@ -46,9 +46,9 @@ export function ProfileTabs({
   return (
     <Tabs
       defaultValue="overview"
-      className="flex flex-col flex-1 overflow-hidden mt-5"
+      className="mt-5 flex flex-1 flex-col overflow-hidden"
     >
-      <TabsList className="flex w-full gap-0 rounded-none h-auto border-b bg-transparent px-2 md:px-6 md:space-x-2 overflow-x-visible">
+      <TabsList className="flex h-auto w-full gap-0 overflow-x-visible rounded-none border-b bg-transparent px-2 md:space-x-2 md:px-6">
         {[
           { value: "overview", label: "Overview" },
           { value: "schools", label: "Schools", badge: String(schools.length) },
@@ -57,16 +57,11 @@ export function ProfileTabs({
           <TabsTrigger
             key={tab.value}
             value={tab.value}
-            className="flex-1 md:flex-none rounded-2xl pb-2.5 pt-2.5 px-2 md:px-4 text-[12px] md:text-[13px] font-semibold hover:bg-primary/5
-                       data-[state=active]:text-primary
-                       data-[state=active]:border-b-2
-                       data-[state=active]:border-primary
-                       data-[state=active]:shadow-none
-                       data-[state=active]:bg-transparent"
+            className="hover:bg-primary/5 data-[state=active]:text-primary data-[state=active]:border-primary flex-1 rounded-2xl px-2 pt-2.5 pb-2.5 text-[12px] font-semibold data-[state=active]:border-b-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none md:flex-none md:px-4 md:text-[13px]"
           >
             {tab.label}
             {tab.badge && (
-              <span className="ml-1 md:ml-1.5 text-[10px] md:text-[11px]">
+              <span className="ml-1 text-[10px] md:ml-1.5 md:text-[11px]">
                 ({tab.badge})
               </span>
             )}
@@ -75,18 +70,18 @@ export function ProfileTabs({
       </TabsList>
 
       {/* ── Body split: fields col + tab content ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 flex-1 overflow-hidden">
+      <div className="grid flex-1 grid-cols-1 overflow-hidden md:grid-cols-2">
         <ProfileFieldsColumn profileData={profileData} onEdit={onEdit} />
 
-        <div className="flex-1 overflow-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+        <div className="flex-1 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent overflow-hidden overflow-y-auto">
           {/* Overview */}
-          <TabsContent value="overview" className="p-6 mt-0">
+          <TabsContent value="overview" className="mt-0 p-6">
             <InfoCard label="Current Status Message">
               &quot;{profileData.status}&quot;
             </InfoCard>
 
             <SectionLabel className="mt-5">Contact</SectionLabel>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-5">
+            <div className="mb-5 grid grid-cols-1 gap-2.5 md:grid-cols-2">
               <InfoCard label="Email">{profileData.email || "N/A"}</InfoCard>
               <InfoCard label="Phone">{profileData.phone}</InfoCard>
             </div>
@@ -97,7 +92,7 @@ export function ProfileTabs({
               onClick={() =>
                 onEdit("specialty", "Specialty", profileData.specialty ?? "")
               }
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-5 cursor-pointer text-primary"
+              className="text-primary mb-5 inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5"
             >
               <BrainCircuit size={13} />
               <span className="text-[12.5px] font-semibold">
@@ -107,7 +102,7 @@ export function ProfileTabs({
             </m.button>
 
             <SectionLabel>Activity</SectionLabel>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
               <InfoCard label="Member Since">
                 {formatDate(profileData.memberSince || "")}
               </InfoCard>
@@ -118,27 +113,27 @@ export function ProfileTabs({
           </TabsContent>
 
           {/* Schools */}
-          <TabsContent value="schools" className="p-6 mt-0">
+          <TabsContent value="schools" className="mt-0 p-6">
             <SectionLabel>Assigned Schools</SectionLabel>
             <div className="flex flex-col gap-2">
               {schools.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   No schools assigned
                 </p>
               ) : (
                 schools.map((s) => (
                   <div
                     key={s.schoolId}
-                    className="flex items-center gap-3 p-2.5 rounded-xl border bg-card"
+                    className="bg-card flex items-center gap-3 rounded-xl border p-2.5"
                   >
-                    <Avatar className="w-7 h-7 rounded-[6px] border shrink-0 bg-white">
+                    <Avatar className="h-7 w-7 shrink-0 rounded-[6px] border bg-white">
                       <AvatarImage
                         src={s.avatarUrl || undefined}
                         alt={s.schoolName}
                         className="object-cover"
                       />
                       <AvatarFallback
-                        className="text-[11px] font-black bg-white"
+                        className="bg-white text-[11px] font-black"
                         style={{ color: s.primaryColor || "#6366f1" }}
                       >
                         {s.schoolName?.charAt(0)?.toUpperCase() || "S"}
@@ -156,14 +151,14 @@ export function ProfileTabs({
           {/* Partners */}
           <TabsContent
             value="partners"
-            className="p-6 mt-0 flex flex-col items-center justify-center min-h-52"
+            className="mt-0 flex min-h-52 flex-col items-center justify-center p-6"
           >
             <div className="text-center">
-              <div className="text-4xl mb-3">🤝</div>
-              <p className="text-[14px] font-semibold mb-1 text-muted-foreground">
+              <div className="mb-3 text-4xl">🤝</div>
+              <p className="text-muted-foreground mb-1 text-[14px] font-semibold">
                 No partners yet
               </p>
-              <p className="text-[12.5px] text-muted-foreground">
+              <p className="text-muted-foreground text-[12.5px]">
                 Partner providers will appear here.
               </p>
             </div>

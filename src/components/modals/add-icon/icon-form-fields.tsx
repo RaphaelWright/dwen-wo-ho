@@ -19,7 +19,7 @@ export function IconFormFields({
       <div>
         <label
           htmlFor="icon-name"
-          className="block text-sm font-semibold text-foreground mb-3"
+          className="text-foreground mb-3 block text-sm font-semibold"
         >
           Name
         </label>
@@ -30,7 +30,7 @@ export function IconFormFields({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter name..."
-          className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+          className="bg-muted/50 border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
         />
       </div>
 
@@ -38,7 +38,7 @@ export function IconFormFields({
       <div>
         <label
           htmlFor="icon-slogan"
-          className="block text-sm font-semibold text-foreground mb-3"
+          className="text-foreground mb-3 block text-sm font-semibold"
         >
           Slogan
         </label>
@@ -49,7 +49,7 @@ export function IconFormFields({
           value={slogan}
           onChange={(e) => setSlogan(e.target.value)}
           placeholder="Enter slogan..."
-          className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+          className="bg-muted/50 border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
         />
       </div>
 
@@ -57,13 +57,13 @@ export function IconFormFields({
       <div>
         <label
           htmlFor="icon-photo"
-          className="block text-sm font-semibold text-foreground mb-3"
+          className="text-foreground mb-3 block text-sm font-semibold"
         >
           Photo
         </label>
         <Button
           onClick={() => fileInputRef.current?.click()}
-          className="w-full px-4 py-3 bg-muted/50 border border-border rounded-lg font-semibold hover:bg-muted transition-colors text-foreground h-auto justify-start"
+          className="bg-muted/50 border-border hover:bg-muted text-foreground h-auto w-full justify-start rounded-lg border px-4 py-3 font-semibold transition-colors"
         >
           + Photo
         </Button>
@@ -80,22 +80,22 @@ export function IconFormFields({
 
       {/* Rank Control */}
       <div>
-        <span className="block text-sm font-semibold text-foreground mb-3">
+        <span className="text-foreground mb-3 block text-sm font-semibold">
           Rank
         </span>
         <div className="flex items-center gap-4">
           <Button
             onClick={() => setRank(Math.max(1, rank - 1))}
-            className="w-10 h-10 bg-muted/50 border border-border rounded-lg flex items-center justify-center font-semibold text-foreground hover:bg-muted transition-colors"
+            className="bg-muted/50 border-border text-foreground hover:bg-muted flex h-10 w-10 items-center justify-center rounded-lg border font-semibold transition-colors"
           >
             -
           </Button>
-          <span className="text-2xl font-bold text-foreground min-w-12 text-center">
+          <span className="text-foreground min-w-12 text-center text-2xl font-bold">
             {rank}
           </span>
           <Button
             onClick={() => setRank(rank + 1)}
-            className="w-10 h-10 bg-muted/50 border border-border rounded-lg flex items-center justify-center font-semibold text-foreground hover:bg-muted transition-colors"
+            className="bg-muted/50 border-border text-foreground hover:bg-muted flex h-10 w-10 items-center justify-center rounded-lg border font-semibold transition-colors"
           >
             +
           </Button>

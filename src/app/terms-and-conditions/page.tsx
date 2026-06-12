@@ -15,16 +15,16 @@ const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
 
 export default function TermsAndConditionsPage() {
   return (
-    <div className="py-20 bg-background text-foreground">
+    <div className="bg-background text-foreground py-20">
       <WidthConstraint>
-        <h1 className="text-4xl font-bold mb-8">Terms and Conditions</h1>
+        <h1 className="mb-8 text-4xl font-bold">Terms and Conditions</h1>
         <div className="prose dark:prose-invert max-w-none">
           <p className="mb-4">Last updated: {LAST_UPDATED}</p>
           <p>
             Please read these Terms and Conditions carefully before using the
             Dwen Wo Ho website and services.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             1. Acceptance of Terms
           </h2>
           <p>
@@ -32,7 +32,7 @@ export default function TermsAndConditionsPage() {
             Terms. If you disagree with any part of the terms, you may not
             access the service.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             2. Use of Service
           </h2>
           <p>
@@ -41,14 +41,14 @@ export default function TermsAndConditionsPage() {
             website or impairment of the availability or accessibility of the
             website.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             3. Intellectual Property
           </h2>
           <p>
             The content, features, and functionality of this website are and
             will remain the exclusive property of Dwen Wo Ho and its licensors.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             4. Limitation of Liability
           </h2>
           <p>
@@ -56,7 +56,7 @@ export default function TermsAndConditionsPage() {
             special, consequential, or punitive damages arising out of your use
             of the service.
           </p>
-          <h2 className="text-2xl font-semibold mt-8 mb-4">
+          <h2 className="mt-8 mb-4 text-2xl font-semibold">
             5. Changes to Terms
           </h2>
           <p>

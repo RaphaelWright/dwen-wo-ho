@@ -15,24 +15,22 @@ export const ProviderFooter = ({
 }: ProviderFooterProps) => {
   const isTargetingThisProvider =
     isModerating && moderatingProviderEmail === providerEmail;
-  const isApproving =
-    currentAction === "approving" && isTargetingThisProvider;
-  const isRejecting =
-    currentAction === "rejecting" && isTargetingThisProvider;
+  const isApproving = currentAction === "approving" && isTargetingThisProvider;
+  const isRejecting = currentAction === "rejecting" && isTargetingThisProvider;
 
   return (
-    <div className="border-t border-border p-6 bg-muted/40 backdrop-blur-sm">
-      <div className="flex justify-between items-center gap-3">
+    <div className="border-border bg-muted/40 border-t p-6 backdrop-blur-sm">
+      <div className="flex items-center justify-between gap-3">
         {applicationStatus === "PENDING" && (
-          <div className="flex gap-2 flex-1">
+          <div className="flex flex-1 gap-2">
             <LoadingButton
               onClick={handleApproveClick}
               loading={isApproving}
               loadingText="Approving..."
               disabled={isTargetingThisProvider && !isApproving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 text-success border hover:bg-muted rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed h-auto"
+              className="bg-muted/80 text-success hover:bg-muted flex h-auto flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <FiCheck className="w-4 h-4" />
+              <FiCheck className="h-4 w-4" />
               Approve
             </LoadingButton>
             <LoadingButton
@@ -41,17 +39,17 @@ export const ProviderFooter = ({
               loadingText="Rejecting..."
               disabled={isTargetingThisProvider && !isRejecting}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted/50 text-destructive rounded-lg font-semibold transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed h-auto"
+              className="bg-muted/80 hover:bg-muted/50 text-destructive border-border flex h-auto flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <FiX className="w-4 h-4" />
+              <FiX className="h-4 w-4" />
               Reject
             </LoadingButton>
           </div>
         )}
         {applicationStatus === "APPROVED" && (
-          <div className="flex gap-2 flex-1">
-            <div className="flex-1 flex items-center justify-center gap-1 px-4 py-2.5 bg-success/50 text-success rounded-lg font-semibold text-sm border border-success">
-              <FiCheck className="w-4 h-4" />
+          <div className="flex flex-1 gap-2">
+            <div className="bg-success/50 text-success border-success flex flex-1 items-center justify-center gap-1 rounded-lg border px-4 py-2.5 text-sm font-semibold">
+              <FiCheck className="h-4 w-4" />
               Approved
             </div>
             <LoadingButton
@@ -60,27 +58,27 @@ export const ProviderFooter = ({
               loadingText="Rejecting..."
               disabled={isTargetingThisProvider && !isRejecting}
               variant="outline"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted/50 text-destructive rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed h-auto"
+              className="bg-muted/80 hover:bg-muted/50 text-destructive flex h-auto flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <FiX className="w-4 h-4" />
+              <FiX className="h-4 w-4" />
               Reject
             </LoadingButton>
           </div>
         )}
         {applicationStatus === "REJECTED" && (
-          <div className="flex gap-2 flex-1">
+          <div className="flex flex-1 gap-2">
             <LoadingButton
               onClick={handleApproveClick}
               loading={isApproving}
               loadingText="Approving..."
               disabled={isTargetingThisProvider && !isApproving}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted/50 text-foreground rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed h-auto"
+              className="bg-muted/80 hover:bg-muted/50 text-foreground flex h-auto flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <FiCheck className="w-4 h-4" />
+              <FiCheck className="h-4 w-4" />
               Approve
             </LoadingButton>
-            <div className="flex-1 flex items-center justify-center gap-1 px-4 py-2.5 bg-destructive/10 text-destructive rounded-lg font-semibold text-sm">
-              <FiX className="w-4 h-4" />
+            <div className="bg-destructive/10 text-destructive flex flex-1 items-center justify-center gap-1 rounded-lg px-4 py-2.5 text-sm font-semibold">
+              <FiX className="h-4 w-4" />
               Rejected
             </div>
           </div>

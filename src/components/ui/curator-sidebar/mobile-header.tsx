@@ -14,11 +14,11 @@ export const MobileHeader = ({
   setIsOpen,
 }: MobileHeaderProps) => {
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-background/80 backdrop-blur-lg border-b border-border/60 flex items-center justify-between px-4 z-50">
+    <div className="bg-background/80 border-border/60 fixed top-0 right-0 left-0 z-50 flex h-14 items-center justify-between border-b px-4 backdrop-blur-lg md:hidden">
       <button
         type="button"
         onClick={onToggle}
-        className="text-foreground p-2 hover:bg-accent rounded-lg transition-colors"
+        className="text-foreground hover:bg-accent rounded-lg p-2 transition-colors"
       >
         {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
       </button>

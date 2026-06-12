@@ -28,20 +28,20 @@ export function PatientSuggestionCard({
         <ScoreRing score={score} />
       </div>
 
-      <div className="flex-1 min-w-0">
-        <div className="truncate text-[15px] font-bold text-foreground transition-colors group-hover:text-primary">
+      <div className="min-w-0 flex-1">
+        <div className="text-foreground group-hover:text-primary truncate text-[15px] font-bold transition-colors">
           {name}
         </div>
 
-        <div className="mt-0.5 flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
+        <div className="text-muted-foreground mt-0.5 flex flex-wrap items-center gap-2 text-[12px]">
           <span
-            className={`inline-flex items-center gap-1 text-[10.5px] font-bold tracking-wide uppercase px-2 py-0.75 rounded border ${cfg.cls}`}
+            className={`inline-flex items-center gap-1 rounded border px-2 py-0.75 text-[10.5px] font-bold tracking-wide uppercase ${cfg.cls}`}
           >
             {status}
           </span>
 
           {school && (
-            <span className="flex items-center gap-1.5 whitespace-nowrap font-medium">
+            <span className="flex items-center gap-1.5 font-medium whitespace-nowrap">
               <span className="opacity-40">•</span>
               <span>{school}</span>
             </span>

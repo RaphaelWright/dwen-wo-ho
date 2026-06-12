@@ -6,16 +6,16 @@ export function ProviderStatusDisplay({
   updatedAt,
 }: ProviderStatusDisplayProps) {
   return (
-    <div className="bg-card shadow-lg rounded-lg overflow-hidden border border-border">
+    <div className="bg-card border-border overflow-hidden rounded-lg border shadow-lg">
       <div className="px-6 py-6 text-center">
-        <div className="flex justify-center mb-4">
+        <div className="mb-4 flex justify-center">
           {status === "APPROVED" ? (
-            <CheckCircle className="w-16 h-16 text-success" />
+            <CheckCircle className="text-success h-16 w-16" />
           ) : (
-            <XCircle className="w-16 h-16 text-destructive" />
+            <XCircle className="text-destructive h-16 w-16" />
           )}
         </div>
-        <h2 className="text-xl font-bold text-foreground mb-2">
+        <h2 className="text-foreground mb-2 text-xl font-bold">
           Provider {status === "APPROVED" ? "Approved" : "Rejected"}
         </h2>
         <p className="text-muted-foreground">

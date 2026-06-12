@@ -67,7 +67,11 @@ export const useIconForm = ({
   };
 
   const handleUpdateLockIn = (id: string, value: string) => {
-    setLockIns(lockIns.map((lockIn) => (lockIn.id === id ? { ...lockIn, value } : lockIn)));
+    setLockIns(
+      lockIns.map((lockIn) =>
+        lockIn.id === id ? { ...lockIn, value } : lockIn,
+      ),
+    );
   };
 
   const handleRemoveLockIn = (id: string) => {

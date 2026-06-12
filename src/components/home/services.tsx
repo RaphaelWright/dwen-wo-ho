@@ -52,17 +52,17 @@ const Services = () => {
 
   return (
     <WidthConstraint>
-      <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-        <h2 className="text-3xl lg:text-4xl font-bold">
+      <div className="mx-auto mb-16 max-w-2xl space-y-4 text-center">
+        <h2 className="text-3xl font-bold lg:text-4xl">
           {HERO.TITLE} <br />
           <span className="text-[#2bb572]">{HERO.TITLE_HIGHLIGHT}</span>
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">
+        <p className="text-lg text-gray-600 dark:text-gray-300">
           {HERO.SUBTITLE}
         </p>
       </div>
 
-      <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem]">
+      <BentoGrid className="mx-auto max-w-4xl md:auto-rows-[20rem]">
         {items.map((item) => (
           <BentoGridItem
             key={item.title}

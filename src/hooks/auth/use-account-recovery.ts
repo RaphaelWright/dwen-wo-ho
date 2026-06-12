@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
 import { ROUTES } from "@/lib/constants/routes";
 
-export const useAccountRecovery = (email: string, onForgotPassword?: () => void) => {
+export const useAccountRecovery = (
+  email: string,
+  onForgotPassword?: () => void,
+) => {
   const router = useRouter();
   const { recoverAccountMutation } = useAuthQuery();
 

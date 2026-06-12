@@ -15,20 +15,23 @@ const SpecialtyStep = (props: SpecialtyStepProps) => {
   } = useSpecialtyStep(props);
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="animate-in fade-in slide-in-from-bottom-4 mx-auto w-full max-w-2xl space-y-6 duration-500 sm:space-y-8">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+        <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">
           {SIGN_UP_TEXTS.specialtyStep.title}
         </h1>
-        <p className="text-base sm:text-lg text-muted-foreground">
+        <p className="text-muted-foreground text-base sm:text-lg">
           {SIGN_UP_TEXTS.specialtyStep.subtitle}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+      <div className="mx-auto grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
         {isLoadingSpecialties
           ? Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-14 w-full bg-muted rounded-xl animate-pulse" />
+              <div
+                key={i}
+                className="bg-muted h-14 w-full animate-pulse rounded-xl"
+              />
             ))
           : specialties.map((specialty) => (
               <Button
@@ -37,9 +40,9 @@ const SpecialtyStep = (props: SpecialtyStepProps) => {
                 variant={
                   selectedSpecialty === specialty ? "default" : "outline"
                 }
-                className={`h-auto py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-medium transition-all duration-200 ${
+                className={`h-auto rounded-xl px-4 py-3 text-base font-medium transition-all duration-200 sm:px-6 sm:py-4 sm:text-lg ${
                   selectedSpecialty === specialty
-                    ? "shadow-md scale-[1.02] "
+                    ? "scale-[1.02] shadow-md"
                     : "hover:bg-muted/50 hover:border-primary/50 text-muted-foreground hover:text-foreground"
                 }`}
               >

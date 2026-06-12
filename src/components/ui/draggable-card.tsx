@@ -1,7 +1,15 @@
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useRef, useState, useEffect } from "react";
-import { m, useMotionValue, useSpring, useTransform, animate, useVelocity, useAnimationControls } from "motion/react";
+import {
+  m,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  animate,
+  useVelocity,
+  useAnimationControls,
+} from "motion/react";
 
 const springConfig = {
   stiffness: 100,

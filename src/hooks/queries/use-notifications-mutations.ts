@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { unifiedNotificationsService } from "@/services/unified-notifications";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 import { getUserType } from "@/lib/utils/getUserType";
@@ -25,7 +25,8 @@ const getNotificationsQueryKey = () => {
 export const useMarkNotificationReadMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => unifiedNotificationsService.markNotificationRead(id),
+    mutationFn: (id: string) =>
+      unifiedNotificationsService.markNotificationRead(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: getNotificationsQueryKey() });
     },

@@ -2,10 +2,6 @@
 
 import type { Route } from "next";
 import type { UrgentPatient } from "@/components/shared/urgent-card";
-import SchoolEditModal from "@/components/modals/school-edit";
-import ProviderDetailsModal from "@/components/modals/provider-details";
-import AddIconModal from "@/components/modals/add-icon";
-import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
 import { useCuratorSchoolDetails } from "@/hooks/curator/use-curator-school-details";
 import {
@@ -24,8 +20,10 @@ import { Users, ChevronLeft } from "lucide-react";
 import { m } from "motion/react";
 import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-card";
 import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
+import SchoolDetailsModals from "@/components/curator/school-details/school-details-modals";
 
 export default function SchoolDetailsPage() {
+  const details = useCuratorSchoolDetails();
   const {
     router,
     schoolId,
@@ -38,47 +36,33 @@ export default function SchoolDetailsPage() {
     isLoading,
     patientsLoading,
     providersLoading,
-    isActionLoading,
     error,
     activeTab,
     searchQuery,
     setSearchQuery,
     appliedSearchQuery,
     setAppliedSearchQuery,
-    showEditModal,
     setShowEditModal,
-    showDisableModal,
-    setShowDisableModal,
-    showProviderModal,
-    setShowProviderModal,
-    selectedProviderEmail,
-    showAddIconModal,
+    handleDisableSchool,
     setShowAddIconModal,
-    editingIcon,
     setEditingIcon,
     handleProviderClick,
-    handleSchoolUpdated,
-    handleDisableSchool,
-    handleDisableConfirm,
-    handleIconComplete,
     compactTimeAgo,
-    loadProviders,
     suggestions,
     quickFilters,
     tabs,
     handleTabChange,
-    selectedProvider,
     localActiveFilters,
     toggleFilter,
     removeFilter,
     clearFilters,
-  } = useCuratorSchoolDetails();
+  } = details;
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-muted/5">
+      <div className="bg-muted/5 flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3" />
+          <div className="border-primary mx-auto mb-3 h-10 w-10 animate-spin rounded-full border-b-2" />
 
           <p className="text-muted-foreground text-sm">
             Loading school details...
@@ -90,11 +74,11 @@ export default function SchoolDetailsPage() {
 
   if (error || !school) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-muted/5">
+      <div className="bg-muted/5 flex min-h-screen flex-col items-center justify-center p-6">
         <Button
           onClick={() => router.push(ROUTES.curator.schools)}
           variant="ghost"
-          className="mb-3 text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground mb-3"
         >
           ← Back to Schools
         </Button>
@@ -107,17 +91,17 @@ export default function SchoolDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-primary/10 animate-in fade-in duration-500">
-      <div className="flex-1 flex flex-col lg:flex-row items-start relative w-full">
+    <div className="bg-primary/10 animate-in fade-in flex min-h-screen flex-col duration-500">
+      <div className="relative flex w-full flex-1 flex-col items-start lg:flex-row">
         {/* Main content */}
 
-        <div className="flex-1 min-w-0 w-full flex flex-col px-4 py-6 sm:px-6 relative z-10">
+        <div className="relative z-10 flex w-full min-w-0 flex-1 flex-col px-4 py-6 sm:px-6">
           <m.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ x: -4 }}
             onClick={() => router.push(ROUTES.curator.schools)}
-            className="group mb-6 flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground w-fit"
+            className="group text-muted-foreground hover:text-foreground mb-6 flex w-fit items-center gap-2 text-sm font-medium transition-colors"
           >
             <ChevronLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Schools
@@ -185,7 +169,7 @@ export default function SchoolDetailsPage() {
             // }
           />
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <FilterTabBar<SchoolTab>
               tabs={tabs}
               activeTab={activeTab}
@@ -198,14 +182,14 @@ export default function SchoolDetailsPage() {
 
                       setShowAddIconModal(true);
                     }}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 rounded-xl"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/20 rounded-xl shadow-md"
                   >
-                    <Users className="w-4 h-4 mr-2" />
+                    <Users className="mr-2 h-4 w-4" />
                     Add Icon
                   </Button>
                 ) : null
               }
-              className="2xl:mb-8 z-0"
+              className="z-0 2xl:mb-8"
               activeTabLayoutId="school-details-filter"
             />
 
@@ -329,7 +313,7 @@ export default function SchoolDetailsPage() {
         {/* Urgent Care Sidebar */}
 
         <UrgentPanel
-          className="w-full lg:w-95 h-dvh lg:h-screen lg:sticky lg:top-0 border-l border-border/50 bg-destructive/5 shrink-0"
+          className="border-border/50 bg-destructive/5 h-dvh w-full shrink-0 border-l lg:sticky lg:top-0 lg:h-screen lg:w-95"
           patients={urgentCare.patients}
           title="Urgent Care"
           emptyStateText="No urgent care patients"
@@ -344,61 +328,7 @@ export default function SchoolDetailsPage() {
         />
       </div>
 
-      {/* Modals */}
-
-      {school && (
-        <>
-          <SchoolEditModal
-            isOpen={showEditModal}
-            onClose={() => setShowEditModal(false)}
-            school={school}
-            onSchoolUpdated={handleSchoolUpdated}
-            onDisableSchool={handleDisableSchool}
-          />
-
-          <ConfirmationModal
-            isOpen={showDisableModal}
-            onClose={() => setShowDisableModal(false)}
-            onConfirm={handleDisableConfirm}
-            title="Disable School"
-            message={`Are you sure you want to disable ${school.name}? This cannot be undone.`}
-            confirmText="Yes, Disable"
-            variant="danger"
-            isLoading={isActionLoading}
-          />
-        </>
-      )}
-
-      <ProviderDetailsModal
-        isOpen={showProviderModal}
-        onClose={() => {
-          setShowProviderModal(false);
-          loadProviders();
-        }}
-        providerEmail={selectedProviderEmail}
-        provider={selectedProvider}
-      />
-
-      <AddIconModal
-        isOpen={showAddIconModal}
-        onClose={() => {
-          setShowAddIconModal(false);
-          setEditingIcon(null);
-        }}
-        onComplete={handleIconComplete}
-        editData={
-          editingIcon
-            ? {
-                photoPreview: editingIcon.photoPreview,
-                name: editingIcon.name,
-                slogan: editingIcon.slogan,
-                rank: editingIcon.rank,
-                lockIns: editingIcon.lockIns || [],
-              }
-            : null
-        }
-        selectedSchool={school}
-      />
+      <SchoolDetailsModals details={details} />
     </div>
   );
 }

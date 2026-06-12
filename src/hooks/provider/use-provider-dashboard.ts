@@ -158,9 +158,7 @@ export default function useProviderDashboard() {
       // Optimistic update - handle both 'id' (curator) and 'notificationId' (provider) fields
       setNotifications((prev: ProviderNotification[]) =>
         prev.map((n) =>
-          n.notificationId === id
-            ? { ...n, read: true, unread: false }
-            : n,
+          n.notificationId === id ? { ...n, read: true, unread: false } : n,
         ),
       );
       // Persist to backend if it's a string ID

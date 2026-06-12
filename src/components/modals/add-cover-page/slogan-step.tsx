@@ -14,7 +14,7 @@ export function SloganStep({
       <div>
         <label
           htmlFor="cover-slogan"
-          className="block text-sm font-semibold text-foreground mb-3"
+          className="text-foreground mb-3 block text-sm font-semibold"
         >
           Slogan
         </label>
@@ -25,24 +25,26 @@ export function SloganStep({
           value={slogan}
           onChange={(e) => setSlogan(e.target.value)}
           placeholder="Enter slogan..."
-          className="w-full px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+          className="bg-muted border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full rounded-lg border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
         />
       </div>
       <div>
         <div
-          className="w-full h-75 rounded-xl border-2 border-border overflow-hidden flex items-center justify-center"
+          className="border-border flex h-75 w-full items-center justify-center overflow-hidden rounded-xl border-2"
           style={{
-            backgroundColor: selectedColor ? `#${selectedColor}` : "var(--muted)",
+            backgroundColor: selectedColor
+              ? `#${selectedColor}`
+              : "var(--muted)",
           }}
         >
           {photoPreview ? (
-            <div className="relative w-full h-full">
+            <div className="relative h-full w-full">
               <Image
                 src={photoPreview}
                 alt="Cover preview"
                 width={400}
                 height={300}
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover"
               />
             </div>
           ) : (

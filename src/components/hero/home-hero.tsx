@@ -22,28 +22,28 @@ export default function HomePageHero() {
   const { HOME } = HERO_CONTENT;
 
   return (
-    <section className="relative w-full flex items-center justify-center overflow-hidden pt-6 pb-6">
-      <WidthConstraint className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section className="relative flex w-full items-center justify-center overflow-hidden pt-6 pb-6">
+      <WidthConstraint className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Left Content */}
         <m.div
           variants={HERO_CONTAINER_VARIANTS}
           initial="hidden"
           animate="visible"
-          className="flex flex-col justify-center text-left space-y-8 z-20"
+          className="z-20 flex flex-col justify-center space-y-8 text-left"
         >
           {/* Badge */}
           <m.div variants={HERO_ITEM_VARIANTS}>
             <div className="inline-flex items-center rounded-full">
               <ContainerTextFlip
                 words={HOME.BADGE_WORDS}
-                className="h-auto p-1.5! text-sm! md:text-sm! text-muted-foreground/90"
+                className="text-muted-foreground/90 h-auto p-1.5! text-sm! md:text-sm!"
               />
             </div>
           </m.div>
 
           {/* Heading */}
           <m.div variants={HERO_ITEM_VARIANTS}>
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight text-primary leading-[1.1]">
+            <h1 className="text-primary text-4xl leading-[1.1] font-bold tracking-tight md:text-6xl lg:text-8xl">
               {HOME.TITLE}
             </h1>
           </m.div>
@@ -51,7 +51,7 @@ export default function HomePageHero() {
           {/* Description */}
           <m.div
             variants={HERO_ITEM_VARIANTS}
-            className="text-lg text-muted-foreground leading-relaxed max-w-lg font-medium"
+            className="text-muted-foreground max-w-lg text-lg leading-relaxed font-medium"
           >
             <TextGenerateEffect words={HOME.DESCRIPTION} />
           </m.div>
@@ -59,12 +59,12 @@ export default function HomePageHero() {
           {/* Buttons */}
           <m.div
             variants={HERO_ITEM_VARIANTS}
-            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+            className="flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row"
           >
             <Button
               onClick={() => router.push(ROUTES.patient.checkEmail)}
               size="lg"
-              className="w-full sm:w-auto rounded-lg bg-primary text-white px-8 h-12 text-base font-bold shadow-lg shadow-primary/50 transition-all duration-300 transform hover:-translate-y-1"
+              className="bg-primary shadow-primary/50 h-12 w-full transform rounded-lg px-8 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 sm:w-auto"
             >
               {HOME.BUTTONS.GET_STARTED}
             </Button>
@@ -74,7 +74,7 @@ export default function HomePageHero() {
               size="lg"
               borderClassName="h-2 w-18 bg-primary/90"
               containerClassName="h-13 w-full sm:w-auto"
-              className="w-full sm:w-auto rounded-lg border-border text-primary bg-background hover:scale-95 px-8 h-12 text-base font-bold transition-all ease-in-out duration-300"
+              className="border-border text-primary bg-background h-12 w-full rounded-lg px-8 text-base font-bold transition-all duration-300 ease-in-out hover:scale-95 sm:w-auto"
             >
               {HOME.BUTTONS.LOCK_IN}
             </MovingButton>
@@ -88,9 +88,9 @@ export default function HomePageHero() {
             {HOME.FEATURES.map((feature) => (
               <div
                 key={feature}
-                className="flex items-center gap-3 text-muted-foreground font-medium"
+                className="text-muted-foreground flex items-center gap-3 font-medium"
               >
-                <div className="rounded-full bg-primary/70 p-0.5">
+                <div className="bg-primary/70 rounded-full p-0.5">
                   <CheckCircle2 className="size-4 text-white" />
                 </div>
                 <span>{feature}</span>
@@ -107,7 +107,7 @@ export default function HomePageHero() {
           transition={{ duration: 0.8 }}
           className="relative lg:-mr-12"
         >
-          <GhanaMap className="w-full max-w-full lg:max-w-xl mx-auto drop-shadow-2xl" />
+          <GhanaMap className="mx-auto w-full max-w-full drop-shadow-2xl lg:max-w-xl" />
         </m.div>
       </WidthConstraint>
     </section>

@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import useUserQuery from "../queries/use-user-profile";
+import { useEffect, useSyncExternalStore } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { authService } from "@/services/auth";
+import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 const emptySubscribe = () => () => {};
 
@@ -11,40 +13,45 @@ const readHasAuth = () =>
 export default function useProviderDashboardAuth() {
   // SSR-safe read of auth tokens without a mount effect (avoids hydration
   // mismatch: server renders false, client reads localStorage after hydration).
-  const hasAuth = useSyncExternalStore(emptySubscribe, readHasAuth, () => false);
-  const [pollApproval, setPollApproval] = useState(false);
+  const hasAuth = useSyncExternalStore(
+    emptySubscribe,
+    readHasAuth,
+    () => false,
+  );
 
-  const { getProfileQuery } = useUserQuery({
+  const { data: authProfile, isLoading: isProfileLoading } = useQuery({
+    queryKey: [QUERY_KEYS.auth, QUERY_KEYS.profile],
+    queryFn: authService.getProfile,
+    staleTime: 2 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     enabled: hasAuth,
-    refetchInterval: pollApproval ? 5000 : undefined,
+    refetchInterval: (query) => {
+      if (!hasAuth) return false;
+      const status =
+        query.state.data?.applicationStatus ?? query.state.data?.status;
+      return status && status !== "APPROVED" ? 5000 : false;
+    },
   });
 
   useEffect(() => {
-    const status =
-      getProfileQuery.data?.applicationStatus ?? getProfileQuery.data?.status;
-
-    setPollApproval(Boolean(hasAuth && status && status !== "APPROVED"));
-
-    if (!getProfileQuery.data) {
+    if (!authProfile) {
       return;
     }
 
     const providerId =
-      getProfileQuery.data.id ||
-      getProfileQuery.data.providerId ||
-      getProfileQuery.data.email;
+      authProfile.id || authProfile.providerId || authProfile.email;
 
     if (providerId && typeof providerId === "string") {
       localStorage.setItem("providerId", providerId);
     }
-  }, [getProfileQuery.data, hasAuth]);
+  }, [authProfile]);
 
   const applicationStatus =
-    getProfileQuery.data?.applicationStatus ?? getProfileQuery.data?.status;
+    authProfile?.applicationStatus ?? authProfile?.status;
 
   return {
     isApproved: applicationStatus === "APPROVED",
-    isLoading: hasAuth && getProfileQuery.isLoading,
-    authProfile: getProfileQuery.data,
+    isLoading: hasAuth && isProfileLoading,
+    authProfile,
   };
 }

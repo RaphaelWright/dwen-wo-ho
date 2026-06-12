@@ -23,14 +23,16 @@ export function EditImageStep({
 }: CoverEditImageStepProps) {
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Zoom, rotate, or drag the image to set the focus. The rectangle is what
         will show on the cover.
       </p>
       {/* Frame: fixed aspect, overflow hidden */}
       <div
         ref={editorContainerRef}
-        className="relative w-full rounded-xl border-2 border-border overflow-hidden bg-muted select-none"
+        role="application"
+        aria-label="Drag to reposition the cover image"
+        className="border-border bg-muted relative w-full overflow-hidden rounded-xl border-2 select-none"
         style={{
           aspectRatio: COVER_PAGE_CONSTANTS.EDIT_FRAME_ASPECT,
           maxHeight: 360,
@@ -76,10 +78,10 @@ export function EditImageStep({
               ),
             )
           }
-          className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
+          className="border-border hover:bg-muted rounded-lg border p-2 transition-colors"
           title="Zoom out"
         >
-          <ZoomOut className="w-5 h-5 text-foreground" />
+          <ZoomOut className="text-foreground h-5 w-5" />
         </button>
         <button
           type="button"
@@ -91,34 +93,34 @@ export function EditImageStep({
               ),
             )
           }
-          className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
+          className="border-border hover:bg-muted rounded-lg border p-2 transition-colors"
           title="Zoom in"
         >
-          <ZoomIn className="w-5 h-5 text-foreground" />
+          <ZoomIn className="text-foreground h-5 w-5" />
         </button>
         <button
           type="button"
           onClick={() => setRotation((r) => (r - 90) % 360)}
-          className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
+          className="border-border hover:bg-muted rounded-lg border p-2 transition-colors"
           title="Rotate left"
         >
-          <RotateCcw className="w-5 h-5 text-foreground" />
+          <RotateCcw className="text-foreground h-5 w-5" />
         </button>
         <button
           type="button"
           onClick={() => setRotation((r) => (r + 90) % 360)}
-          className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
+          className="border-border hover:bg-muted rounded-lg border p-2 transition-colors"
           title="Rotate right"
         >
-          <RotateCw className="w-5 h-5 text-foreground" />
+          <RotateCw className="text-foreground h-5 w-5" />
         </button>
         <button
           type="button"
           onClick={setFitToFrame}
-          className="p-2 rounded-lg border border-border hover:bg-muted flex items-center gap-1 transition-colors"
+          className="border-border hover:bg-muted flex items-center gap-1 rounded-lg border p-2 transition-colors"
           title="Fit to frame"
         >
-          <Maximize2 className="w-5 h-5 text-foreground" />
+          <Maximize2 className="text-foreground h-5 w-5" />
           <span className="text-sm font-medium">Fit</span>
         </button>
       </div>

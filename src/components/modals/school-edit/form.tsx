@@ -26,26 +26,26 @@ export const SchoolEditForm = ({
     <form id="school-edit-form" onSubmit={handleSubmit} className="space-y-8">
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-2">
-          <Label className="text-sm font-semibold text-foreground">
+          <Label className="text-foreground text-sm font-semibold">
             School Name
           </Label>
           <Input
             type="text"
             value={formData.name}
             onChange={(e) => handleInputChange("name", e.target.value)}
-            className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+            className="bg-muted/50 border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
             placeholder="e.g. Achimota School"
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-sm font-semibold text-foreground">
+          <Label className="text-foreground text-sm font-semibold">
             Nickname (Optional)
           </Label>
           <Input
             type="text"
             value={formData.nickname}
             onChange={(e) => handleInputChange("nickname", e.target.value)}
-            className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground placeholder:text-muted-foreground"
+            className="bg-muted/50 border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
             placeholder="e.g. Motown"
           />
         </div>
@@ -53,27 +53,27 @@ export const SchoolEditForm = ({
 
       {/* Motto */}
       <div className="space-y-2">
-        <Label className="text-sm font-semibold text-foreground">
+        <Label className="text-foreground text-sm font-semibold">
           Motto <span className="text-destructive">*</span>
         </Label>
         <Textarea
           value={formData.motto}
           onChange={(e) => handleInputChange("motto", e.target.value)}
-          className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none text-foreground placeholder:text-muted-foreground"
+          className="bg-muted/50 border-border focus:ring-primary/20 focus:border-primary text-foreground placeholder:text-muted-foreground w-full resize-none rounded-xl border px-4 py-3 transition-all focus:ring-2 focus:outline-none"
           placeholder="Enter school motto"
           rows={3}
         />
       </div>
 
       <div className="flex items-center gap-6">
-        <Label className="text-lg font-bold text-foreground w-24">Type</Label>
-        <div className="flex-1 flex gap-4 flex-wrap">
+        <Label className="text-foreground w-24 text-lg font-bold">Type</Label>
+        <div className="flex flex-1 flex-wrap gap-4">
           {SCHOOL_TYPES.map((type) => (
             <Button
               key={type}
               type="button"
               onClick={() => handleInputChange("type", type)}
-              className={`px-6 py-2 rounded-lg font-bold transition-colors ${
+              className={`rounded-lg px-6 py-2 font-bold transition-colors ${
                 formData.type === type
                   ? "bg-primary text-primary-foreground hover:bg-primary/90"
                   : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
@@ -87,11 +87,11 @@ export const SchoolEditForm = ({
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-semibold text-foreground">
+          <Label className="text-foreground text-sm font-semibold">
             Campuses
           </Label>
           {selectedCampuses.length > 0 && (
-            <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-full">
+            <span className="rounded-full bg-teal-50 px-2 py-1 text-xs font-medium text-teal-600">
               {selectedCampuses.length} selected
             </span>
           )}
@@ -100,10 +100,10 @@ export const SchoolEditForm = ({
           <Button
             type="button"
             onClick={() => setShowCampusDropdown(!showCampusDropdown)}
-            className="w-full px-4 py-3 bg-muted/50 border border-border rounded-xl text-left flex items-center justify-between hover:bg-muted transition-colors h-auto"
+            className="bg-muted/50 border-border hover:bg-muted flex h-auto w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors"
           >
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="w-4 h-4" />
+            <div className="text-muted-foreground flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
               <span
                 className={
                   selectedCampuses.length > 0
@@ -117,7 +117,7 @@ export const SchoolEditForm = ({
               </span>
             </div>
             <ChevronDown
-              className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
+              className={`text-muted-foreground h-4 w-4 transition-transform duration-200 ${
                 showCampusDropdown ? "rotate-180" : ""
               }`}
             />
@@ -129,18 +129,18 @@ export const SchoolEditForm = ({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl z-20 overflow-hidden"
+                className="bg-card border-border absolute top-full right-0 left-0 z-20 mt-2 overflow-hidden rounded-xl border shadow-xl"
               >
-                <div className="max-h-48 overflow-y-auto p-2 no-scrollbar">
+                <div className="no-scrollbar max-h-48 overflow-y-auto p-2">
                   {CAMPUS_OPTIONS.map((campus) => (
                     <Button
                       key={campus}
                       type="button"
                       onClick={() => handleCampusToggle(campus)}
                       variant="ghost"
-                      className={`w-full justify-start px-4 py-2.5 rounded-lg transition-colors ${
+                      className={`w-full justify-start rounded-lg px-4 py-2.5 transition-colors ${
                         selectedCampuses.includes(campus)
-                          ? "bg-primary/10 text-primary font-medium hover:bg-primary/20"
+                          ? "bg-primary/10 text-primary hover:bg-primary/20 font-medium"
                           : "hover:bg-muted text-foreground"
                       }`}
                     >
@@ -156,7 +156,7 @@ export const SchoolEditForm = ({
 
       {school.logo && (
         <div className="space-y-3">
-          <Label className="text-sm font-semibold text-foreground">
+          <Label className="text-foreground text-sm font-semibold">
             School Logo
           </Label>
           <div className="flex items-center gap-6">
@@ -167,7 +167,7 @@ export const SchoolEditForm = ({
                   alt="School logo"
                   width={128}
                   height={128}
-                  className="w-32 h-32 object-cover rounded-lg border border-border shadow-sm"
+                  className="border-border h-32 w-32 rounded-lg border object-cover shadow-sm"
                 />
               </div>
             </div>

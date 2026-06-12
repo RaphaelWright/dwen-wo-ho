@@ -9,11 +9,11 @@ export function VerifyPasswordResetFooter({
   onBack,
 }: VerifyPasswordResetFooterProps) {
   return (
-    <div className="flex border-t border-border/50 px-6 sm:px-10 py-4 items-center justify-between w-full bg-background/50 backdrop-blur-sm">
+    <div className="border-border/50 bg-background/50 flex w-full items-center justify-between border-t px-6 py-4 backdrop-blur-sm sm:px-10">
       <Button
         onClick={onBack}
         variant="outline"
-        className="rounded-full px-5 h-9 text-sm font-semibold gap-1.5 hover:bg-primary/5 hover:text-primary transition-colors border-primary/20 hover:border-primary/50"
+        className="hover:bg-primary/5 hover:text-primary border-primary/20 hover:border-primary/50 h-9 gap-1.5 rounded-full px-5 text-sm font-semibold transition-colors"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {VERIFY_PASSWORD_RESET_TEXTS.footer.back}
@@ -22,7 +22,8 @@ export function VerifyPasswordResetFooter({
         <Stepper
           steps={recoverSteps}
           step={
-            VERIFY_PASSWORD_RESET_TEXTS.footer.step as (typeof recoverSteps)[number]
+            VERIFY_PASSWORD_RESET_TEXTS.footer
+              .step as (typeof recoverSteps)[number]
           }
         />
       </div>

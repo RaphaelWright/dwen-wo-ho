@@ -23,7 +23,7 @@ const SignUpContent = () => {
   } = usePatientSignUp();
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="flex h-full flex-col justify-between">
       <SignUpHeader />
 
       <SignUpForm

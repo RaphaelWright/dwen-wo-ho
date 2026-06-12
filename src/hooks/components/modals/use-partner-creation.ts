@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import usePartnerQuery from "@/hooks/queries/use-partner";
 import type { ICreatePartner, Partner } from "@/lib/types/partners";
 
-
 export const usePartnerCreation = ({
   onPartnerCreated,
   onClose,
@@ -24,7 +23,10 @@ export const usePartnerCreation = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const { createPartner, isCreating } = usePartnerQuery();
-  const createPartnerMutation = { mutate: createPartner, isPending: isCreating };
+  const createPartnerMutation = {
+    mutate: createPartner,
+    isPending: isCreating,
+  };
 
   const handlePickLogo = () => fileInputRef.current?.click();
 

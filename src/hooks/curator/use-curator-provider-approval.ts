@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { curatorProvidersService } from "@/services/curator-providers";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 export function useCuratorProviderApproval(email: string) {
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -27,7 +27,8 @@ export function useCuratorProviderApproval(email: string) {
       }
     } catch (error: unknown) {
       toast.error(
-        getCleanErrorMessage(error) || "Failed to approve provider. Please try again.",
+        getCleanErrorMessage(error) ||
+          "Failed to approve provider. Please try again.",
       );
     } finally {
       setIsActionLoading(false);
@@ -52,7 +53,8 @@ export function useCuratorProviderApproval(email: string) {
       }
     } catch (error: unknown) {
       toast.error(
-        getCleanErrorMessage(error) || "Failed to reject provider. Please try again.",
+        getCleanErrorMessage(error) ||
+          "Failed to reject provider. Please try again.",
       );
     } finally {
       setIsActionLoading(false);

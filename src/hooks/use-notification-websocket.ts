@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { useRouter } from "next/navigation";
 import {
   curatorNotificationListAtom,
@@ -43,12 +43,8 @@ export function useNotificationWebSocket() {
   const [providerNotifications, setProviderNotifications] = useAtom(
     providerNotificationListAtom,
   );
-  const [, setCuratorSheetOpen] = useAtom(
-    isCuratorNotificationSheetOpenAtom,
-  );
-  const [, setProviderSheetOpen] = useAtom(
-    isProviderNotificationSheetOpenAtom,
-  );
+  const [, setCuratorSheetOpen] = useAtom(isCuratorNotificationSheetOpenAtom);
+  const [, setProviderSheetOpen] = useAtom(isProviderNotificationSheetOpenAtom);
 
   // Select the appropriate atoms based on role
   const notifications =

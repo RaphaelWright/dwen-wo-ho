@@ -51,22 +51,22 @@ export function ActionsPanel({
     activeTab === "pending" ? pendingActions : historyActions;
 
   return (
-    <div className="bg-card rounded-3xl shadow-sm border border-border h-full flex flex-col overflow-hidden">
-      <div className="p-6 flex-1 flex flex-col min-h-0">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-foreground">Actions History</h2>
-          <span className="text-xs text-muted-foreground">
+    <div className="bg-card border-border flex h-full flex-col overflow-hidden rounded-3xl border shadow-sm">
+      <div className="flex min-h-0 flex-1 flex-col p-6">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-foreground text-lg font-bold">Actions History</h2>
+          <span className="text-muted-foreground text-xs">
             {pendingActions.length} pending • {historyActions.length} completed
           </span>
         </div>
 
         {/* Tabs */}
-        <div className="flex p-1 bg-muted rounded-xl mb-6 shrink-0 gap-1">
+        <div className="bg-muted mb-6 flex shrink-0 gap-1 rounded-xl p-1">
           <Button
             onClick={() => setActiveTab("pending")}
             variant="ghost"
             className={cn(
-              "flex-1 py-1.5 h-8 text-xs font-bold rounded-lg transition-all hover:bg-none",
+              "h-8 flex-1 rounded-lg py-1.5 text-xs font-bold transition-all hover:bg-none",
               activeTab === "pending"
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -78,7 +78,7 @@ export function ActionsPanel({
             onClick={() => setActiveTab("history")}
             variant="ghost"
             className={cn(
-              "flex-1 py-1.5 h-8 text-xs font-bold rounded-lg transition-all hover:bg-none",
+              "h-8 flex-1 rounded-lg py-1.5 text-xs font-bold transition-all hover:bg-none",
               activeTab === "history"
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -96,18 +96,18 @@ export function ActionsPanel({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               onSubmit={handleSubmit}
-              className="mb-4 p-4 bg-muted/50 rounded-xl border border-border space-y-3 overflow-hidden"
+              className="bg-muted/50 border-border mb-4 space-y-3 overflow-hidden rounded-xl border p-4"
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-foreground text-sm font-medium">
                   New Action
                 </span>
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="p-1 hover:bg-muted rounded-full"
+                  className="hover:bg-muted rounded-full p-1"
                 >
-                  <X className="w-4 h-4 text-muted-foreground" />
+                  <X className="text-muted-foreground h-4 w-4" />
                 </button>
               </div>
               <input
@@ -118,7 +118,7 @@ export function ActionsPanel({
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                className="bg-background border-border focus:ring-primary/20 w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-hidden"
               />
               <input
                 type="text"
@@ -128,7 +128,7 @@ export function ActionsPanel({
                 onChange={(e) =>
                   setFormData({ ...formData, type: e.target.value })
                 }
-                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary/20"
+                className="bg-background border-border focus:ring-primary/20 w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-hidden"
               />
               <textarea
                 aria-label="Action notes"
@@ -137,7 +137,7 @@ export function ActionsPanel({
                 onChange={(e) =>
                   setFormData({ ...formData, notes: e.target.value })
                 }
-                className="w-full px-3 py-2 text-sm bg-background border border-border rounded-lg focus:outline-hidden focus:ring-2 focus:ring-primary/20 resize-none"
+                className="bg-background border-border focus:ring-primary/20 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-hidden"
                 rows={2}
               />
               <div className="flex gap-2">
@@ -146,7 +146,7 @@ export function ActionsPanel({
                   loading={isAddingAction}
                   loadingText="Saving..."
                   disabled={!formData.title.trim()}
-                  className="flex-1 h-8 text-xs"
+                  className="h-8 flex-1 text-xs"
                 >
                   Save Action
                 </LoadingButton>
@@ -156,39 +156,39 @@ export function ActionsPanel({
         </AnimatePresence>
 
         {/* Actions List */}
-        <div className="space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border">
+        <div className="scrollbar-thumb-border flex-1 scrollbar-thin space-y-3 overflow-y-auto">
           {isLoading ? (
             <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
+              <div className="border-primary h-6 w-6 animate-spin rounded-full border-b-2" />
             </div>
           ) : displayActions.length === 0 ? (
-            <p className="text-xs text-muted-foreground text-center py-8">
+            <p className="text-muted-foreground py-8 text-center text-xs">
               No {activeTab} actions
             </p>
           ) : (
             displayActions.map((action, i) => (
               <div
                 key={action.id ?? i}
-                className="flex gap-4 p-3 rounded-xl hover:bg-muted/50 transition-colors border border-transparent hover:border-border group"
+                className="hover:bg-muted/50 hover:border-border group flex gap-4 rounded-xl border border-transparent p-3 transition-colors"
               >
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0">
-                  <Activity className="w-5 h-5" />
+                <div className="bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors">
+                  <Activity className="h-5 w-5" />
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-foreground truncate">
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-foreground truncate text-sm font-bold">
                     {action.title}
                   </h4>
-                  <p className="text-xs text-muted-foreground truncate">
+                  <p className="text-muted-foreground truncate text-xs">
                     {action.type}
                   </p>
                   {action.notes && (
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">
                       {action.notes}
                     </p>
                   )}
-                  <div className="flex items-center gap-1 mt-1 text-[10px] text-muted-foreground">
-                    <Clock className="w-3 h-3" />
+                  <div className="text-muted-foreground mt-1 flex items-center gap-1 text-[10px]">
+                    <Clock className="h-3 w-3" />
                     <p className="pt-0.5">
                       {action.createdAt
                         ? new Date(action.createdAt).toLocaleDateString()
@@ -200,7 +200,7 @@ export function ActionsPanel({
                 <div className="flex flex-col items-end justify-between">
                   <CheckCircle2
                     className={cn(
-                      "w-4 h-4",
+                      "h-4 w-4",
                       activeTab === "history"
                         ? "text-green-500"
                         : "text-muted-foreground/30",
@@ -214,24 +214,24 @@ export function ActionsPanel({
       </div>
 
       {/* Add Action Button */}
-      <div className="p-4 border-t border-border bg-muted/10 mt-auto">
+      <div className="border-border bg-muted/10 mt-auto border-t p-4">
         <Button
           onClick={() => setIsFormOpen(!isFormOpen)}
           className={cn(
-            "w-full h-10 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-sm",
+            "flex h-10 w-full items-center justify-center gap-2 rounded-lg text-sm font-semibold shadow-sm transition-colors",
             isFormOpen
-              ? "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100"
+              ? "border border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
               : "bg-emerald-600 text-white hover:bg-emerald-700",
           )}
         >
           {isFormOpen ? (
             <>
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
               Cancel
             </>
           ) : (
             <>
-              <Plus className="w-4 h-4" />
+              <Plus className="h-4 w-4" />
               Add Action
             </>
           )}

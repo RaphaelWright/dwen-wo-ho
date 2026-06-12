@@ -1,12 +1,7 @@
 "use client";
 
 import { m, AnimatePresence } from "motion/react";
-import {
-  LayoutGrid,
-  Sparkles,
-  UserRoundX,
-  Zap,
-} from "lucide-react";
+import { LayoutGrid, Sparkles, UserRoundX, Zap } from "lucide-react";
 import { NEW_PROVIDER_STATUS_CHIPS } from "@/lib/constants/components/provider/dashboard";
 
 import PatientCard from "@/components/shared/patient-card";
@@ -49,7 +44,7 @@ export default function MainContent({
     return <ProviderDashboardSkeleton />;
   }
   return (
-    <main className="h-full overflow-y-auto no-scrollbar px-2 py-6 pb-40 md:pb-10 lg:ml-4">
+    <main className="no-scrollbar h-full overflow-y-auto px-2 py-6 pb-40 md:pb-10 lg:ml-4">
       {/* ── Status filter tabs ── */}
       <FilterTabBar
         tabs={NEW_PROVIDER_STATUS_CHIPS.map((chip) => ({
@@ -61,7 +56,7 @@ export default function MainContent({
         activeTab={activeStatus}
         onTabChange={setActiveStatus}
         showCount={true}
-        className="mb-6 mx-auto min-[640px]:w-fit"
+        className="mx-auto mb-6 min-[640px]:w-fit"
         activeTabLayoutId="provider-main-status-filter"
       />
 
@@ -89,23 +84,23 @@ export default function MainContent({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="flex flex-col items-center justify-center py-10 px-6"
+            className="flex flex-col items-center justify-center px-6 py-10"
           >
             <div className="relative mb-6">
-              <div className="absolute inset-0 blur-2xl opacity-20 bg-linear-to-br from-violet-500/40 to-cyan-500/40 rounded-full" />
-              <div className="relative w-20 h-20 rounded-full bg-linear-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-center shadow-lg shadow-slate-200/30 dark:shadow-slate-900/30">
+              <div className="absolute inset-0 rounded-full bg-linear-to-br from-violet-500/40 to-cyan-500/40 opacity-20 blur-2xl" />
+              <div className="relative flex h-20 w-20 items-center justify-center rounded-full border border-slate-200/60 bg-linear-to-br from-slate-100 to-slate-50 shadow-lg shadow-slate-200/30 dark:border-slate-700/60 dark:from-slate-800 dark:to-slate-900 dark:shadow-slate-900/30">
                 <UserRoundX
-                  className="w-9 h-9 text-slate-400 dark:text-slate-500"
+                  className="h-9 w-9 text-slate-400 dark:text-slate-500"
                   strokeWidth={1.5}
                 />
               </div>
             </div>
-            <p className="font-semibold text-lg text-slate-800 dark:text-slate-200">
+            <p className="text-lg font-semibold text-slate-800 dark:text-slate-200">
               No patients found
             </p>
-            <p className="text-sm mt-1.5 text-slate-500 dark:text-slate-400 max-w-xs text-center leading-relaxed">
-              Try adjusting your filters or search query to find what you&apos;re
-              looking for
+            <p className="mt-1.5 max-w-xs text-center text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              Try adjusting your filters or search query to find what
+              you&apos;re looking for
             </p>
           </m.div>
         )}

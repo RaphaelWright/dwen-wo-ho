@@ -26,7 +26,7 @@ const SignInContent = () => {
   });
 
   return (
-    <div className="h-full flex flex-col justify-between min-h-screen py-6">
+    <div className="flex h-full min-h-screen flex-col justify-between py-6">
       <SignInHeader />
 
       <SignInForm
@@ -49,33 +49,33 @@ const SignInContent = () => {
 };
 
 const SignInSkeleton = () => (
-  <div className="h-full flex flex-col justify-between min-h-screen py-6 animate-pulse">
+  <div className="flex h-full min-h-screen animate-pulse flex-col justify-between py-6">
     {/* Header skeleton */}
-    <div className="flex items-center px-8 justify-between w-full">
-      <div className="h-8 w-32 bg-muted rounded-md" />
-      <div className="h-7 w-24 bg-muted rounded-full" />
+    <div className="flex w-full items-center justify-between px-8">
+      <div className="bg-muted h-8 w-32 rounded-md" />
+      <div className="bg-muted h-7 w-24 rounded-full" />
     </div>
     {/* Form skeleton */}
-    <div className="px-8 md:px-20 w-full max-w-2xl mx-auto space-y-6">
-      <div className="text-center space-y-2">
-        <div className="h-9 w-64 bg-muted rounded-lg mx-auto" />
-        <div className="h-4 w-48 bg-muted rounded-md mx-auto" />
+    <div className="mx-auto w-full max-w-2xl space-y-6 px-8 md:px-20">
+      <div className="space-y-2 text-center">
+        <div className="bg-muted mx-auto h-9 w-64 rounded-lg" />
+        <div className="bg-muted mx-auto h-4 w-48 rounded-md" />
       </div>
       <div className="space-y-5">
         <div className="space-y-2">
-          <div className="h-4 w-12 bg-muted rounded-md" />
-          <div className="h-12 w-full bg-muted rounded-xl" />
+          <div className="bg-muted h-4 w-12 rounded-md" />
+          <div className="bg-muted h-12 w-full rounded-xl" />
         </div>
         <div className="space-y-2">
-          <div className="h-4 w-16 bg-muted rounded-md" />
-          <div className="h-12 w-full bg-muted rounded-xl" />
+          <div className="bg-muted h-4 w-16 rounded-md" />
+          <div className="bg-muted h-12 w-full rounded-xl" />
         </div>
       </div>
     </div>
     {/* Footer skeleton */}
-    <div className="flex border-t border-border/50 px-8 pt-6 items-center justify-between">
-      <div className="h-10 w-24 bg-muted rounded-full" />
-      <div className="h-10 w-28 bg-muted rounded-full" />
+    <div className="border-border/50 flex items-center justify-between border-t px-8 pt-6">
+      <div className="bg-muted h-10 w-24 rounded-full" />
+      <div className="bg-muted h-10 w-28 rounded-full" />
     </div>
   </div>
 );

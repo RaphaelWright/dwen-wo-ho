@@ -12,11 +12,11 @@ export function CheckEmailHeader() {
   const mounted = useHydrated();
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex items-center justify-between">
       <Logo variant={mounted && theme === "light" ? "black" : "white"} />
       <Link
         href={ROUTES.provider.checkEmail}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary transition-colors duration-200 group"
+        className="text-muted-foreground hover:text-primary group inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-200"
       >
         {CHECK_EMAIL_TEXTS.header.switchText}
         <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />

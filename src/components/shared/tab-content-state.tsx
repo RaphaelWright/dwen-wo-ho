@@ -19,8 +19,8 @@ export const TabContentState = ({
 }: TabContentStateProps) => {
   if (isLoading) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#955aa4] mx-auto mb-4" />
+      <div className="py-12 text-center">
+        <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2 border-[#955aa4]" />
         <p className="text-gray-500">{loadingMessage}</p>
       </div>
     );
@@ -28,9 +28,9 @@ export const TabContentState = ({
 
   if (isEmpty) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         {EmptyIcon && (
-          <EmptyIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <EmptyIcon className="mx-auto mb-4 h-12 w-12 text-gray-300" />
         )}
         <p className="text-gray-500">{emptyMessage}</p>
       </div>

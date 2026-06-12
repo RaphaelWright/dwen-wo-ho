@@ -20,15 +20,15 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="bg-footer-bg text-footer-foreground py-10 ">
+    <footer className="bg-footer-bg text-footer-foreground py-10">
       <WidthConstraint>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-12">
           {/* About Us Section with Social Icons */}
-          <div className="md:col-span-5 pr-0 md:pr-8">
-            <h3 className="text-white text-xl font-medium mb-8 tracking-wide">
+          <div className="pr-0 md:col-span-5 md:pr-8">
+            <h3 className="mb-8 text-xl font-medium tracking-wide text-white">
               About Dwen Wo Ho
             </h3>
-            <p className="mb-8 leading-relaxed text-[15px]">
+            <p className="mb-8 text-[15px] leading-relaxed">
               Dwen Wo Ho is your dedicated partner in holistic wellness. We
               empower you to take charge of your mental and physical health
               through personalized care, community support, and expert
@@ -55,11 +55,11 @@ export default function Footer() {
               onSubmit={(e) => {
                 e.preventDefault();
               }}
-              className="bg-muted/10 border-none text-white rounded-full h-13.75 pl-4 pr-1 w-full max-w-full overflow-hidden"
+              className="bg-muted/10 h-13.75 w-full max-w-full overflow-hidden rounded-full border-none pr-1 pl-4 text-white"
               submitButton={({ value }) => (
                 <Button
                   type="submit"
-                  className="absolute top-1 right-1 w-10 lg:w-auto h-10 lg:h-11.75 mr-2 mt-0.5 lg:mt-0 lg:mr-0 px-4 sm:px-8 rounded-full bg-primary hover:bg-primary/80 text-white font-semibold transition-colors gap-2 z-50 text-sm sm:text-base"
+                  className="bg-primary hover:bg-primary/80 absolute top-1 right-1 z-50 mt-0.5 mr-2 h-10 w-10 gap-2 rounded-full px-4 text-sm font-semibold text-white transition-colors sm:px-8 sm:text-base lg:mt-0 lg:mr-0 lg:h-11.75 lg:w-auto"
                 >
                   <span className="hidden sm:inline">Subscribe</span>
                   {value && <ArrowRight className="size-4" />}
@@ -71,19 +71,19 @@ export default function Footer() {
 
           {/* Latest Tweet Section (Remains the same) */}
           <div className="md:col-span-4">
-            <h3 className="text-white text-xl font-medium mb-8 tracking-wide">
+            <h3 className="mb-8 text-xl font-medium tracking-wide text-white">
               Wellness Tips
             </h3>
             <ul className="space-y-6">
               {WELLNESS_TIPS.map((tip) => (
                 <li key={tip.title} className="flex items-start">
-                  <div className="mr-4 mt-1 shrink-0">
-                    <ArrowRight className="w-5 h-5 text-teal-400" />
+                  <div className="mt-1 mr-4 shrink-0">
+                    <ArrowRight className="h-5 w-5 text-teal-400" />
                   </div>
-                  <div className="font-serif italic text-[15px] leading-relaxed">
+                  <div className="font-serif text-[15px] leading-relaxed italic">
                     <LinkPreview
                       url={tip.url}
-                      className="font-bold text-white hover:text-primary transition-colors"
+                      className="hover:text-primary font-bold text-white transition-colors"
                     >
                       {tip.title}
                     </LinkPreview>{" "}
@@ -96,14 +96,14 @@ export default function Footer() {
 
           {/* Instagram Section (Remains the same) */}
           <div className="md:col-span-3">
-            <h3 className="text-white text-xl font-medium mb-8 tracking-wide">
+            <h3 className="mb-8 text-xl font-medium tracking-wide text-white">
               Community Gallery
             </h3>
             <div className="grid grid-cols-2 gap-2">
               {COMMUNITY_GALLERY_IMAGES.map((item, i) => (
                 <div
                   key={item.alt}
-                  className="block relative aspect-square overflow-hidden rounded-lg"
+                  className="relative block aspect-square overflow-hidden rounded-lg"
                 >
                   <Image
                     src={item.src}
@@ -120,24 +120,24 @@ export default function Footer() {
         </div>
 
         {/* Bottom Menu & Logo (Remains the same) */}
-        <div className="mt-28 pt-8 border-t border-white/10 flex flex-col items-center text-center space-y-4 md:space-y-0 md:flex-row md:text-left">
-          <ul className="flex flex-wrap justify-center gap-4 md:gap-6 md:mr-auto text-white">
+        <div className="mt-28 flex flex-col items-center space-y-4 border-t border-white/10 pt-8 text-center md:flex-row md:space-y-0 md:text-left">
+          <ul className="flex flex-wrap justify-center gap-4 text-white md:mr-auto md:gap-6">
             {FOOTER_BOTTOM_LINKS.map((link) => (
               <li key={link.label}>
                 <Link
                   href={link.href}
-                  className="hover:text-primary transition-colors text-sm sm:text-base"
+                  className="hover:text-primary text-sm transition-colors sm:text-base"
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="flex items-center space-x-2 mt-4 md:mt-0 md:ml-auto">
-            <span className="text-white font-medium text-sm sm:text-base">
+          <div className="mt-4 flex items-center space-x-2 md:mt-0 md:ml-auto">
+            <span className="text-sm font-medium text-white sm:text-base">
               Just Go Health
             </span>
-            <span className="opacity-50 text-sm">&copy; {CURRENT_YEAR}</span>
+            <span className="text-sm opacity-50">&copy; {CURRENT_YEAR}</span>
           </div>
         </div>
       </WidthConstraint>

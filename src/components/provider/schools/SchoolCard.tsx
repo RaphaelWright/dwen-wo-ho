@@ -23,7 +23,7 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
   return (
     <Button
       onClick={() => onClick(school.id)}
-      className="relative group h-80 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:scale-105 hover:brightness-110 transition-all duration-300"
+      className="group relative h-80 overflow-hidden rounded-xl shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-xl hover:brightness-110"
     >
       {/* Background Image */}
       {school.logo ? (
@@ -33,12 +33,12 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
             alt={school.name}
             width={400}
             height={400}
-            className="object-cover w-full h-full"
+            className="h-full w-full object-cover"
           />
         </div>
       ) : (
-        <div className="absolute inset-0 bg-linear-to-br from-muted to-muted/50 flex items-center justify-center">
-          <MdSchool className="w-20 h-20 text-muted-foreground" />
+        <div className="from-muted to-muted/50 absolute inset-0 flex items-center justify-center bg-linear-to-br">
+          <MdSchool className="text-muted-foreground h-20 w-20" />
         </div>
       )}
 
@@ -48,14 +48,14 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
       {/* Loading Indicator */}
       {school.isLoading && (
         <div className="absolute top-4 left-4 z-10">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+          <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-white"></div>
         </div>
       )}
 
       {/* Top Left - New Patient Alert */}
       {school.newPatientName && !school.isLoading && (
-        <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3 py-2 shadow-md border-none w-60">
-          <span className="text-base font-semibold block truncate">
+        <div className="absolute top-4 left-4 z-10 w-60 border-none bg-white/95 px-3 py-2 shadow-md backdrop-blur-sm">
+          <span className="block truncate text-base font-semibold">
             <span className="text-destructive">New Patient.</span>{" "}
             <span className="text-foreground">{school.newPatientName}</span>
           </span>
@@ -64,25 +64,25 @@ export function SchoolCard({ school, onClick }: SchoolCardProps) {
 
       {/* Top Right - Student Count Badge */}
       {!school.isLoading && (
-        <div className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-destructive backdrop-blur-sm flex items-center justify-center shadow-lg">
-          <span className="text-destructive-foreground font-bold text-sm">
+        <div className="bg-destructive absolute top-4 right-4 z-10 flex h-12 w-12 items-center justify-center rounded-full shadow-lg backdrop-blur-sm">
+          <span className="text-destructive-foreground text-sm font-bold">
             {school.totalPatients ?? school.studentCount ?? 0}
           </span>
         </div>
       )}
 
       {/* Bottom Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 z-10 text-center">
-        <h3 className="text-white font-bold text-4xl mb-1 leading-tight">
+      <div className="absolute right-0 bottom-0 left-0 z-10 p-6 text-center">
+        <h3 className="mb-1 text-4xl leading-tight font-bold text-white">
           {school.name}
         </h3>
         {displayNickname && (
-          <p className="text-white/95 text-2xl font-medium mb-1">
+          <p className="mb-1 text-2xl font-medium text-white/95">
             {displayNickname}
           </p>
         )}
         {school.motto && (
-          <p className="text-white/90 text-sm font-medium italic">
+          <p className="text-sm font-medium text-white/90 italic">
             {school.motto}
           </p>
         )}

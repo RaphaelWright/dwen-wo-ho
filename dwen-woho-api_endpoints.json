@@ -39,11 +39,7 @@
             }
           }
         },
-        "required": [
-          "motto",
-          "name",
-          "nickname"
-        ]
+        "required": ["motto", "name", "nickname"]
       },
       "response": {
         "200": null
@@ -285,11 +281,7 @@
           },
           "actionStatus": {
             "type": "string",
-            "enum": [
-              "NONE",
-              "TREATING",
-              "REFERRED"
-            ]
+            "enum": ["NONE", "TREATING", "REFERRED"]
           }
         }
       },
@@ -497,9 +489,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       },
       "response": {
         "200": null
@@ -879,10 +869,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "title",
-          "type"
-        ]
+        "required": ["title", "type"]
       },
       "response": {
         "200": null
@@ -1178,9 +1165,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "response": {
         "200": null
@@ -1337,10 +1322,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "code",
-          "email"
-        ]
+        "required": ["code", "email"]
       },
       "response": {
         "200": null
@@ -1360,9 +1342,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "response": {
         "200": null
@@ -1409,9 +1389,7 @@
             "format": "int64"
           }
         },
-        "required": [
-          "schoolId"
-        ]
+        "required": ["schoolId"]
       },
       "response": {
         "200": null
@@ -1473,11 +1451,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "message",
-          "title",
-          "type"
-        ]
+        "required": ["message", "title", "type"]
       },
       "response": {
         "200": null
@@ -1501,10 +1475,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "officePhoneNumber",
-          "status"
-        ]
+        "required": ["officePhoneNumber", "status"]
       },
       "response": {
         "200": null
@@ -1529,10 +1500,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "code",
-          "email"
-        ]
+        "required": ["code", "email"]
       },
       "response": {
         "200": null
@@ -1557,10 +1525,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "code",
-          "email"
-        ]
+        "required": ["code", "email"]
       },
       "response": {
         "200": null
@@ -1594,10 +1559,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email",
-          "password"
-        ]
+        "required": ["email", "password"]
       },
       "response": {
         "200": null
@@ -1621,10 +1583,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "confirmPassword",
-          "password"
-        ]
+        "required": ["confirmPassword", "password"]
       },
       "response": {
         "200": null
@@ -1654,9 +1613,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "response": {
         "200": null
@@ -1689,12 +1646,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email",
-          "fullName",
-          "password",
-          "professionalTitle"
-        ]
+        "required": ["email", "fullName", "password", "professionalTitle"]
       },
       "response": {
         "200": null
@@ -1714,9 +1666,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "response": {
         "200": null
@@ -1849,10 +1799,7 @@
             "minLength": 1
           }
         },
-        "required": [
-          "fieldKey",
-          "value"
-        ]
+        "required": ["fieldKey", "value"]
       },
       "response": {
         "200": null

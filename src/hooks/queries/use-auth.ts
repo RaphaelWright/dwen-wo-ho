@@ -3,7 +3,7 @@ import { authService } from "@/services/auth";
 import { performLogout } from "@/lib/auth-utils";
 import { ROUTES } from "@/lib/constants/routes";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
-import { toast } from "sonner";
+import { toast } from "@/lib/utils/toast";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 
 // After any auth mutation, cached auth-scoped data (profile, session) may be

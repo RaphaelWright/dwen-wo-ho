@@ -5,16 +5,14 @@ import {
   PasswordStrengthTone,
 } from "@/lib/types/auth/password-strength";
 
-const PASSWORD_REQUIREMENT_CHECKS: Record<
-  keyof PasswordRequirements,
-  RegExp
-> = {
-  length: /.{6,}/,
-  lowercase: /(?=.*[a-z])/,
-  uppercase: /(?=.*[A-Z])/,
-  number: /(?=.*\d)/,
-  special: /(?=.*[@$!%*?&])/,
-};
+const PASSWORD_REQUIREMENT_CHECKS: Record<keyof PasswordRequirements, RegExp> =
+  {
+    length: /.{6,}/,
+    lowercase: /(?=.*[a-z])/,
+    uppercase: /(?=.*[A-Z])/,
+    number: /(?=.*\d)/,
+    special: /(?=.*[@$!%*?&])/,
+  };
 
 const getStrengthLabel = (score: number): PasswordStrengthLabel => {
   if (score <= 20) return "Weak";
@@ -31,7 +29,7 @@ const getStrengthTone = (score: number): PasswordStrengthTone => {
 };
 
 const evaluatePasswordRequirements = (
-  password: string
+  password: string,
 ): PasswordRequirements => ({
   length: PASSWORD_REQUIREMENT_CHECKS.length.test(password),
   lowercase: PASSWORD_REQUIREMENT_CHECKS.lowercase.test(password),
@@ -41,11 +39,10 @@ const evaluatePasswordRequirements = (
 });
 
 export const evaluatePasswordStrength = (
-  password: string
+  password: string,
 ): PasswordStrengthResult => {
   const requirements = evaluatePasswordRequirements(password);
-  const score =
-    Object.values(requirements).filter(Boolean).length * 20;
+  const score = Object.values(requirements).filter(Boolean).length * 20;
 
   return {
     score,

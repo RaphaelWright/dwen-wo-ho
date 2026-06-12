@@ -11,9 +11,9 @@ export function SchoolHeaderCard({
   searchComponent,
 }: SchoolHeaderCardProps) {
   return (
-    <div className="bg-card rounded-3xl shadow-sm border border-border p-6 sm:p-4 mb-8 relative group">
-      <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
-        <div className="flex flex-row items-center gap-6 min-w-0">
+    <div className="bg-card border-border group relative mb-8 rounded-3xl border p-6 shadow-sm sm:p-4">
+      <div className="relative z-10 flex flex-col items-start gap-6 md:flex-row md:items-center">
+        <div className="flex min-w-0 flex-row items-center gap-6">
           {/* Logo */}
           <div
             role="button"
@@ -21,9 +21,9 @@ export function SchoolHeaderCard({
             aria-label="Edit school logo"
             onClick={onEditClick}
             onKeyDown={activateOnKeyboard(onEditClick)}
-            className="cursor-pointer relative shrink-0"
+            className="relative shrink-0 cursor-pointer"
           >
-            <div className="relative size-20 sm:size-25 rounded-2xl overflow-hidden border-4 border-card shadow-lg bg-muted group-hover:shadow-xl transition-all duration-300">
+            <div className="border-card bg-muted relative size-20 overflow-hidden rounded-2xl border-4 shadow-lg transition-all duration-300 group-hover:shadow-xl sm:size-25">
               {school.logo ? (
                 <Image
                   src={school.logo}
@@ -31,37 +31,37 @@ export function SchoolHeaderCard({
                   width={80}
                   height={80}
                   priority
-                  className="object-cover rounded-2xl w-full h-full"
+                  className="h-full w-full rounded-2xl object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground/50">
+                <div className="bg-muted text-muted-foreground/50 flex h-full w-full items-center justify-center">
                   <MdSchool className="text-4xl sm:text-5xl" />
                 </div>
               )}
 
               {/* Edit Overlay */}
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
-                <Pencil className="text-white w-6 h-6" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-200 hover:opacity-100">
+                <Pencil className="h-6 w-6 text-white" />
               </div>
             </div>
           </div>
 
           {/* Info */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div
               role="button"
               tabIndex={0}
               aria-label="Edit school details"
               onClick={onEditClick}
               onKeyDown={activateOnKeyboard(onEditClick)}
-              className="cursor-pointer group/title"
+              className="group/title cursor-pointer"
             >
-              <h1 className="text-xl sm:text-2xl min-[1222px]:text-3xl 2xl:text-4xl font-bold text-foreground leading-tight group-hover/title:text-primary transition-colors truncate">
+              <h1 className="text-foreground group-hover/title:text-primary truncate text-xl leading-tight font-bold transition-colors min-[1222px]:text-3xl sm:text-2xl 2xl:text-4xl">
                 {school.name}
               </h1>
               {campusLabel && (
-                <div className="flex items-center gap-2 text-muted-foreground mt-1 sm:mt-2 text-xs sm:text-base font-medium">
-                  <span className="bg-muted px-2 py-0.5 rounded text-[10px] uppercase tracking-wider text-muted-foreground">
+                <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs font-medium sm:mt-2 sm:text-base">
+                  <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-[10px] tracking-wider uppercase">
                     Campus
                   </span>
                   {campusLabel}
@@ -69,17 +69,17 @@ export function SchoolHeaderCard({
               )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-2 mt-3 sm:mt-4 text-xs sm:text-sm text-muted-foreground">
+            <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:mt-4 sm:gap-x-6 sm:gap-y-2 sm:text-sm">
               {school.nickname && (
                 <div className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-success/50" />
-                  <span className="font-medium text-foreground">
+                  <span className="bg-success/50 size-1.5 rounded-full" />
+                  <span className="text-foreground font-medium">
                     {school.nickname}
                   </span>
                 </div>
               )}
               {school.motto && (
-                <div className="italic text-muted-foreground border-l border-border pl-3 sm:pl-4 line-clamp-1">
+                <div className="text-muted-foreground border-border line-clamp-1 border-l pl-3 italic sm:pl-4">
                   &quot;{school.motto}&quot;
                 </div>
               )}
@@ -89,7 +89,7 @@ export function SchoolHeaderCard({
 
         {/* Search Component injection point */}
         {searchComponent && (
-          <div className="hidden md:flex md:flex-1 md:min-w-0 md:ml-auto md:justify-end md:self-center pb-2">
+          <div className="hidden pb-2 md:ml-auto md:flex md:min-w-0 md:flex-1 md:justify-end md:self-center">
             {searchComponent}
           </div>
         )}

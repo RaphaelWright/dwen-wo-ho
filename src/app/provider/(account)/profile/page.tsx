@@ -16,7 +16,7 @@ export default function ProviderProfilePage() {
       <WidthConstraint>
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+            <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[#955aa4]"></div>
             <p className="text-gray-500">Loading profile...</p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export default function ProviderProfilePage() {
   if (!provider) {
     return (
       <WidthConstraint>
-        <div className="text-center py-20">
+        <div className="py-20 text-center">
           <p className="text-gray-500">Failed to load profile</p>
         </div>
       </WidthConstraint>

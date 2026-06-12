@@ -3,12 +3,16 @@ import { useStepper } from "@/hooks/components/miscellaneous/use-stepper";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const Stepper = <T extends string[]>({ steps, step }: IStepperProps<T>) => {
+const Stepper = <T extends string[]>({
+  steps,
+  step,
+  className,
+}: IStepperProps<T>) => {
   const { isStatusActive, isStatusCompleted } = useStepper(steps, step);
 
   return (
-    <div className="w-full overflow-x-auto py-2">
-      <ul className="flex items-center min-w-max space-x-2">
+    <div className={cn("w-full overflow-x-auto py-2", className)}>
+      <ul className="flex min-w-max items-center space-x-2">
         {steps.map((item, itemIdx) => {
           const currentStatusIndex = steps.findIndex(
             (currStatus) => currStatus.toLowerCase() === item.toLowerCase(),
@@ -23,7 +27,7 @@ const Stepper = <T extends string[]>({ steps, step }: IStepperProps<T>) => {
                 <div className="flex items-center gap-2">
                   <div
                     className={cn(
-                      "w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all duration-300",
+                      "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all duration-300",
                       isActive
                         ? "border-primary bg-primary text-primary-foreground"
                         : isCompleted
@@ -32,7 +36,7 @@ const Stepper = <T extends string[]>({ steps, step }: IStepperProps<T>) => {
                     )}
                   >
                     {isCompleted ? (
-                      <Check className="w-3.5 h-3.5 animate-in zoom-in" />
+                      <Check className="animate-in zoom-in h-3.5 w-3.5" />
                     ) : (
                       <span className="text-xs font-bold">{itemIdx + 1}</span>
                     )}

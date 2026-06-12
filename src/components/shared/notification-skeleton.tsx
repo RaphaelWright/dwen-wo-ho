@@ -19,28 +19,28 @@ export function NotificationSkeleton({ count = 5 }: { count?: number }) {
             delay: Math.min(i * 0.05, 0.3),
             ease: "easeOut",
           }}
-          className="relative flex items-start gap-3 p-4 rounded-xl border border-border bg-card"
+          className="border-border bg-card relative flex items-start gap-3 rounded-xl border p-4"
         >
           {/* Avatar skeleton */}
-          <div className="w-9 h-9 rounded-full bg-muted animate-pulse shrink-0" />
+          <div className="bg-muted h-9 w-9 shrink-0 animate-pulse rounded-full" />
 
           {/* Content skeleton */}
-          <div className="flex-1 min-w-0 space-y-2">
+          <div className="min-w-0 flex-1 space-y-2">
             {/* Title row */}
             <div className="flex items-center justify-between">
-              <div className="w-24 h-4 rounded bg-muted animate-pulse" />
-              <div className="w-2 h-2 rounded-full bg-muted animate-pulse" />
+              <div className="bg-muted h-4 w-24 animate-pulse rounded" />
+              <div className="bg-muted h-2 w-2 animate-pulse rounded-full" />
             </div>
             {/* Message row */}
-            <div className="w-full h-3.5 rounded bg-muted animate-pulse" />
+            <div className="bg-muted h-3.5 w-full animate-pulse rounded" />
             {/* Meta row */}
-            <div className="w-16 h-3 rounded bg-muted animate-pulse" />
+            <div className="bg-muted h-3 w-16 animate-pulse rounded" />
           </div>
 
           {/* Actions skeleton */}
-          <div className="flex flex-col gap-1 shrink-0">
-            <div className="w-7 h-7 rounded-md bg-muted animate-pulse" />
-            <div className="w-7 h-7 rounded-md bg-muted animate-pulse" />
+          <div className="flex shrink-0 flex-col gap-1">
+            <div className="bg-muted h-7 w-7 animate-pulse rounded-md" />
+            <div className="bg-muted h-7 w-7 animate-pulse rounded-md" />
           </div>
         </m.div>
       ))}

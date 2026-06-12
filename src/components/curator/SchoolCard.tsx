@@ -26,11 +26,11 @@ export function SchoolCard({
     <m.div
       initial="initial"
       whileHover="hover"
-      className="w-full max-w-xs mx-auto bg-card dark:bg-muted/80 rounded-lg"
+      className="bg-card dark:bg-muted/80 mx-auto w-full max-w-xs rounded-lg"
     >
       <Link
         href={`${ROUTES.curator.schools}/${school.id}`}
-        className="block group overflow-hidden relative rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-border/30"
+        className="group border-border/30 relative block overflow-hidden rounded-lg border shadow-sm transition-all duration-300 hover:shadow-md"
       >
         {/* Header Section (Image Background) */}
         <div className="relative h-48 w-full overflow-hidden">
@@ -50,11 +50,11 @@ export function SchoolCard({
                 fill
                 priority={priority}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover aspect-square"
+                className="aspect-square object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-muted flex items-center justify-center">
-                <School className="w-6 h-6 text-muted-foreground/30" />
+              <div className="bg-muted flex h-full w-full items-center justify-center">
+                <School className="text-muted-foreground/30 h-6 w-6" />
               </div>
             )}
           </m.div>
@@ -74,7 +74,7 @@ export function SchoolCard({
             {school.newPatientName && !school.isLoading && (
               <Badge
                 variant="secondary"
-                className="bg-background hover:bg-background text-foreground shadow-sm font-semibold text-xs py-0.5 px-2.5 rounded-full"
+                className="bg-background hover:bg-background text-foreground rounded-full px-2.5 py-0.5 text-xs font-semibold shadow-sm"
               >
                 New Patient
               </Badge>
@@ -88,7 +88,7 @@ export function SchoolCard({
                 initial: { scale: 1, y: 0 },
                 hover: { scale: 1.1, y: -3 },
               }}
-              className="h-16 w-16 rounded-full border-4 border-warning bg-background/50 backdrop-blur-sm overflow-hidden relative flex items-center justify-center shadow-xl"
+              className="border-warning bg-background/50 relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-4 shadow-xl backdrop-blur-sm"
             >
               {school.logo ? (
                 <Image
@@ -100,20 +100,20 @@ export function SchoolCard({
                   className="object-contain"
                 />
               ) : (
-                <School className="w-4 h-4 text-background/80" />
+                <School className="text-background/80 h-4 w-4" />
               )}
             </m.div>
           </div>
         </div>
 
         {/* Footer Section (White Background) */}
-        <div className="p-3 flex flex-col gap-3">
+        <div className="flex flex-col gap-3 p-3">
           {/* School Name */}
-          <div className="flex justify-between items-center gap-2">
-            <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
+          <div className="flex items-center justify-between gap-2">
+            <h1 className="text-foreground line-clamp-1 text-base leading-tight font-semibold">
               {school.name}
             </h1>
-            <h1 className="font-semibold text-base text-foreground leading-tight line-clamp-1">
+            <h1 className="text-foreground line-clamp-1 text-base leading-tight font-semibold">
               {school.nickname}
             </h1>
           </div>
@@ -121,8 +121,8 @@ export function SchoolCard({
           {/* Bottom Row: Location & Count */}
           <div className="flex items-center justify-between">
             {/* Location */}
-            <p className="text-sm text-muted-foreground flex items-center gap-1 font-medium">
-              <MapPin className="size-3.5 text-destructive" />
+            <p className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
+              <MapPin className="text-destructive size-3.5" />
               <span className="line-clamp-1">
                 {firstCampus || "Main Campus"}
               </span>
@@ -130,11 +130,11 @@ export function SchoolCard({
 
             {/* Student Count */}
             {school.isLoading ? (
-              <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
+              <Loader2 className="text-muted-foreground h-3 w-3 animate-spin" />
             ) : (
               <Badge
                 variant="secondary"
-                className="bg-primary/10 text-primary border-none font-semibold rounded-full px-2 py-0.5 text-xs"
+                className="bg-primary/10 text-primary rounded-full border-none px-2 py-0.5 text-xs font-semibold"
               >
                 {formatCount(school.totalPatients ?? school.studentCount ?? 0)}{" "}
                 Patients

@@ -25,21 +25,21 @@ export default function PartnersPage() {
       <div className="p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Partners</h1>
+          <h1 className="mb-2 text-3xl font-bold">Partners</h1>
           <p className="text-muted-foreground">Manage partner organizations</p>
         </div>
 
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5" />
+            <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform" />
             <input
               type="text"
               aria-label="Search partners"
               placeholder="Search partners by name, nickname, or slogan..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary border border-border transition-all"
+              className="focus:ring-primary border-border w-full rounded-xl border py-3 pr-4 pl-12 transition-all focus:ring-1 focus:outline-none"
             />
           </div>
         </div>
@@ -48,14 +48,14 @@ export default function PartnersPage() {
         {atomLoading && cachedPartners.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2"></div>
               <p className="text-muted-foreground">Loading partners...</p>
             </div>
           </div>
         ) : filteredPartners.length === 0 ? (
-          <div className="text-center py-20">
-            <Building2 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-muted-foreground mb-2">
+          <div className="py-20 text-center">
+            <Building2 className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+            <h3 className="text-muted-foreground mb-2 text-xl font-semibold">
               {searchQuery ? "No partners found" : "No partners yet"}
             </h3>
             <p className="text-muted-foreground">
@@ -65,41 +65,41 @@ export default function PartnersPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredPartners.map((partner) => (
               <button
                 type="button"
                 key={partner.id}
                 onClick={() => handlePartnerClick(partner)}
-                className="text-left rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow"
+                className="rounded-xl border p-6 text-left shadow-sm transition-shadow hover:shadow-md"
               >
                 <div className="flex items-start gap-4">
                   {partner.logo ? (
-                    <div className="relative w-16 h-16 shrink-0">
+                    <div className="relative h-16 w-16 shrink-0">
                       <Image
                         src={partner.logo}
                         alt={partner.name}
                         width={64}
                         height={64}
-                        className="object-contain rounded-lg w-full h-full"
+                        className="h-full w-full rounded-lg object-contain"
                       />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 shrink-0 bg-muted-foreground rounded-lg flex items-center justify-center">
-                      <Building2 className="w-8 h-8" />
+                    <div className="bg-muted-foreground flex h-16 w-16 shrink-0 items-center justify-center rounded-lg">
+                      <Building2 className="h-8 w-8" />
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold mb-1 truncate">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="mb-1 truncate text-lg font-semibold">
                       {partner.name}
                     </h3>
                     {partner.nickname && (
-                      <p className="text-sm text-muted-foreground mb-1">
+                      <p className="text-muted-foreground mb-1 text-sm">
                         @{partner.nickname}
                       </p>
                     )}
                     {partner.slogan && (
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                      <p className="text-muted-foreground mt-2 line-clamp-2 text-sm">
                         {partner.slogan}
                       </p>
                     )}

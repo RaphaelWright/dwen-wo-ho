@@ -32,12 +32,12 @@ export const SidebarContent = ({
   const isActive = (path: string) => pathname.startsWith(path);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Logo area */}
       <div
         className={cn(
-          "flex items-center justify-between border-b border-border transition-all duration-300",
-          collapsed ? "px-2 py-4 justify-center" : "px-4 py-4",
+          "border-border flex items-center justify-between border-b transition-all duration-300",
+          collapsed ? "justify-center px-2 py-4" : "px-4 py-4",
         )}
       >
         <div
@@ -52,7 +52,7 @@ export const SidebarContent = ({
                 priority
                 src="/favicons/apple-touch-icon.png"
                 alt="JustGo Health"
-                className="w-8 h-8 object-contain"
+                className="h-8 w-8 object-contain"
                 width={32}
                 height={32}
               />
@@ -66,7 +66,7 @@ export const SidebarContent = ({
           )}
         </div>
 
-        {!collapsed && <ThemeToggle className="rounded-md h-8 w-8" />}
+        {!collapsed && <ThemeToggle className="h-8 w-8 rounded-md" />}
       </div>
 
       {/* Navigation section label */}
@@ -75,7 +75,7 @@ export const SidebarContent = ({
           <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60"
+            className="text-muted-foreground/60 mb-2 px-5 text-[10px] font-semibold tracking-widest uppercase"
           >
             Navigation
           </m.p>
@@ -95,21 +95,21 @@ export const SidebarContent = ({
       </div>
 
       {/* Bottom section: collapse toggle + logout */}
-      <div className="border-t border-border p-2 space-y-1">
+      <div className="border-border space-y-1 border-t p-2">
         {/* Notification Menu Item */}
-        <div className="pt-2 mt-2">
+        <div className="mt-2 pt-2">
           <button
             type="button"
             onClick={() => setIsOpen(true)}
             className={cn(
-              "flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
+              "group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
               collapsed
-                ? "justify-center px-0 w-10 h-10 mx-auto text-muted-foreground hover:bg-muted"
+                ? "text-muted-foreground hover:bg-muted mx-auto h-10 w-10 justify-center px-0"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-              <FiBell className="text-lg shrink-0" />
+              <FiBell className="shrink-0 text-lg" />
             </span>
 
             <AnimatePresence mode="wait">
@@ -119,7 +119,7 @@ export const SidebarContent = ({
                   animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="whitespace-nowrap overflow-hidden"
+                  className="overflow-hidden whitespace-nowrap"
                 >
                   Notifications
                 </m.span>
@@ -132,7 +132,7 @@ export const SidebarContent = ({
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                className="ml-auto flex items-center justify-center min-w-6 h-5 rounded-full text-[10px] font-bold bg-success text-white px-1.5"
+                className="bg-success ml-auto flex h-5 min-w-6 items-center justify-center rounded-full px-1.5 text-[10px] font-bold text-white"
               >
                 {unreadCount > 99 ? "99+" : unreadCount}
               </m.span>
@@ -140,7 +140,7 @@ export const SidebarContent = ({
 
             {/* Collapsed Badge */}
             {collapsed && unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-3 h-3 rounded-full bg-destructive border-2 border-white" />
+              <span className="bg-destructive absolute top-1 right-1 h-3 w-3 rounded-full border-2 border-white" />
             )}
           </button>
         </div>
@@ -150,15 +150,15 @@ export const SidebarContent = ({
           type="button"
           onClick={onToggleCollapse}
           className={cn(
-            "hidden md:flex items-center gap-3 w-full rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200",
-            collapsed && "justify-center px-0 w-10 h-10 mx-auto",
+            "text-muted-foreground hover:bg-accent hover:text-foreground hidden w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 md:flex",
+            collapsed && "mx-auto h-10 w-10 justify-center px-0",
           )}
         >
           {collapsed ? (
-            <LuChevronsRight className="text-lg shrink-0" />
+            <LuChevronsRight className="shrink-0 text-lg" />
           ) : (
             <>
-              <LuChevronsLeft className="text-lg shrink-0" />
+              <LuChevronsLeft className="shrink-0 text-lg" />
               <span className="whitespace-nowrap">Collapse</span>
             </>
           )}
@@ -171,9 +171,9 @@ export const SidebarContent = ({
               <button
                 type="button"
                 onClick={onLogoutClick}
-                className="flex items-center justify-center w-10 h-10 mx-auto rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive mx-auto flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-200"
               >
-                <FiLogOut className="text-lg shrink-0" />
+                <FiLogOut className="shrink-0 text-lg" />
               </button>
             </TooltipTrigger>
             <TooltipContent side="right" className="font-medium">
@@ -184,9 +184,9 @@ export const SidebarContent = ({
           <Button
             onClick={onLogoutClick}
             variant="ghost"
-            className="w-full justify-start gap-3 px-3 py-2.5 h-auto text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-auto w-full justify-start gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200"
           >
-            <FiLogOut className="text-lg shrink-0" />
+            <FiLogOut className="shrink-0 text-lg" />
             <span>Logout</span>
           </Button>
         )}

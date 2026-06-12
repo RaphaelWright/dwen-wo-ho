@@ -143,3 +143,7 @@ export function useCuratorPatientDetails() {
     handleDeleteConfirm,
   };
 }
+
+export type CuratorPatientDetailsState = ReturnType<
+  typeof useCuratorPatientDetails
+>;

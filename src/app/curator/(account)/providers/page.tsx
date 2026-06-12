@@ -60,9 +60,9 @@ function ProvidersPageContent() {
     return (
       <WidthConstraint>
         <div className="flex flex-col gap-6 p-6">
-          <div className="flex items-center justify-center h-64">
+          <div className="flex h-64 items-center justify-center">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#955aa4] mx-auto mb-4"></div>
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-[#955aa4]"></div>
               <p className="text-gray-600">Loading providers...</p>
             </div>
           </div>
@@ -75,11 +75,11 @@ function ProvidersPageContent() {
     return (
       <WidthConstraint>
         <div className="flex flex-col gap-6 p-6">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-            <p className="text-red-600 font-medium mb-2">
+          <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+            <p className="mb-2 font-medium text-red-600">
               Failed to load providers
             </p>
-            <p className="text-red-500 text-sm">
+            <p className="text-sm text-red-500">
               {error?.message || "An error occurred"}
             </p>
           </div>
@@ -92,11 +92,11 @@ function ProvidersPageContent() {
     <WidthConstraint>
       <div className="flex flex-col gap-6 md:p-6">
         {/* Header */}
-        <div className="bg-card rounded-xl border border-border shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
+          <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold">Providers</h1>
+                <h1 className="text-2xl font-bold lg:text-3xl">Providers</h1>
                 <p className="text-muted-foreground text-sm">
                   Manage and review healthcare providers
                 </p>
@@ -104,13 +104,13 @@ function ProvidersPageContent() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center gap-2">
             {filterOptions.map((option) => (
               <button
                 type="button"
                 key={option.id}
                 onClick={() => setFilter(option.id)}
-                className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                className={`rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 ${
                   filter === option.id
                     ? `${option.color} text-white shadow-md`
                     : `${option.inactiveColor} ${option.hoverColor}`
@@ -118,7 +118,7 @@ function ProvidersPageContent() {
               >
                 {option.label}
                 <span
-                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                  className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
                     filter === option.id
                       ? "bg-background/10 text-white"
                       : "bg-muted text-muted-foreground"
@@ -131,14 +131,14 @@ function ProvidersPageContent() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {filteredProviders.length === 0 ? (
-            <div className="col-span-full text-center py-12">
-              <MdHealthAndSafety className="text-6xl text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg font-medium">
+            <div className="col-span-full py-12 text-center">
+              <MdHealthAndSafety className="mx-auto mb-4 text-6xl text-gray-300" />
+              <p className="text-lg font-medium text-gray-600">
                 No providers found
               </p>
-              <p className="text-gray-400 text-sm mt-2">
+              <p className="mt-2 text-sm text-gray-400">
                 Providers will appear here once they are registered
               </p>
             </div>

@@ -30,10 +30,10 @@ const ProviderCard = (props: ProviderCardProps) => {
       )}`}
       onClick={handleViewDetails}
       onKeyDown={activateOnKeyboard(handleViewDetails)}
-      className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50 group hover:scale-[1.02] flex flex-col items-center w-full relative"
+      className="bg-card border-border hover:border-primary/50 group relative flex w-full flex-col items-center rounded-xl border p-6 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
     >
       {/* Provider Image - Centered at Top */}
-      <div className="size-16 rounded-full overflow-hidden mb-4 ring-4 ring-muted group-hover:ring-primary/20 transition-all duration-300">
+      <div className="ring-muted group-hover:ring-primary/20 mb-4 size-16 overflow-hidden rounded-full ring-4 transition-all duration-300">
         <Image
           src={provider.profilePhotoURL || DEFAULT_PROVIDER_IMAGE}
           alt={formatProviderName(
@@ -42,31 +42,33 @@ const ProviderCard = (props: ProviderCardProps) => {
           )}
           width={64}
           height={64}
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
         />
       </div>
 
       {/* Provider Info - Centered */}
-      <div className="text-center w-full">
-        <h3 className="font-bold group-hover:text-primary transition-colors text-lg mb-2 truncate px-1">
-          {formatProviderName(provider.providerName || "", provider.providerTitle)}
+      <div className="w-full text-center">
+        <h3 className="group-hover:text-primary mb-2 truncate px-1 text-lg font-bold transition-colors">
+          {formatProviderName(
+            provider.providerName || "",
+            provider.providerTitle,
+          )}
         </h3>
-        <p className="text-muted-foreground text-sm mb-3 truncate px-1">
+        <p className="text-muted-foreground mb-3 truncate px-1 text-sm">
           {provider.specialty || "General Practice"}
         </p>
 
         {/* Time Added */}
-        <p className="text-orange-500 text-xs font-medium mb-4">
+        <p className="mb-4 text-xs font-medium text-orange-500">
           Added {timeAgo(provider.applicationDate || "")}
         </p>
 
-
         {/* Status Badge or Action Buttons */}
-        <div className="flex gap-2 justify-center w-full px-1">
+        <div className="flex w-full justify-center gap-2 px-1">
           {provider.applicationStatus === "APPROVED" ? (
             <>
-              <div className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold text-sm border border-green-200">
-                <FiCheck className="w-4 h-4" />
+              <div className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-green-200 bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+                <FiCheck className="h-4 w-4" />
                 Approved
               </div>
 
@@ -75,9 +77,9 @@ const ProviderCard = (props: ProviderCardProps) => {
                 loading={isRejecting}
                 loadingText="Rejecting..."
                 disabled={isActionDisabled && !isRejecting}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
+                className="bg-muted/80 hover:bg-muted-foreground/20 text-destructive border-border z-20 flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <FiX className="w-4 h-4" />
+                <FiX className="h-4 w-4" />
                 Reject
               </LoadingButton>
             </>
@@ -88,13 +90,13 @@ const ProviderCard = (props: ProviderCardProps) => {
                 loading={isApproving}
                 loadingText="Approving..."
                 disabled={isActionDisabled && !isApproving}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
+                className="bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground z-20 flex flex-1 items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <FiCheck className="w-4 h-4" />
+                <FiCheck className="h-4 w-4" />
                 Approve
               </LoadingButton>
-              <div className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold text-sm border border-red-200">
-                <FiX className="w-4 h-4" />
+              <div className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-red-200 bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
+                <FiX className="h-4 w-4" />
                 Rejected
               </div>
             </>
@@ -105,9 +107,9 @@ const ProviderCard = (props: ProviderCardProps) => {
                 loading={isApproving}
                 loadingText="Approving..."
                 disabled={isActionDisabled && !isApproving}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed z-20"
+                className="bg-muted/80 hover:bg-muted-foreground/20 text-muted-foreground z-20 flex flex-1 items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <FiCheck className="w-4 h-4" />
+                <FiCheck className="h-4 w-4" />
                 Approve
               </LoadingButton>
 
@@ -116,9 +118,9 @@ const ProviderCard = (props: ProviderCardProps) => {
                 loading={isRejecting}
                 loadingText="Rejecting..."
                 disabled={isActionDisabled && !isRejecting}
-                className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-muted/80 hover:bg-muted-foreground/20 text-destructive rounded-lg font-semibold text-sm transition-all duration-200 border border-border disabled:opacity-50 disabled:cursor-not-allowed z-20"
+                className="bg-muted/80 hover:bg-muted-foreground/20 text-destructive border-border z-20 flex flex-1 items-center justify-center gap-1 rounded-lg border px-3 py-2 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <FiX className="w-4 h-4" />
+                <FiX className="h-4 w-4" />
                 Reject
               </LoadingButton>
             </>

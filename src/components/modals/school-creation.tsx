@@ -46,7 +46,7 @@ const SchoolCreationModal = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-3xl z-50"
+            className="bg-background/80 fixed inset-0 z-50 backdrop-blur-3xl"
             onClick={handleClose}
           />
 
@@ -58,7 +58,7 @@ const SchoolCreationModal = ({
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card text-foreground rounded-2xl shadow-2xl w-full max-w-2xl mx-auto overflow-hidden flex flex-col max-h-[90vh] border border-border">
+            <div className="bg-card text-foreground border-border mx-auto flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
               <SchoolHeader
                 currentStep={currentStep}
                 handleClose={handleClose}

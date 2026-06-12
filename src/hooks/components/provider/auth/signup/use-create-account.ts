@@ -17,7 +17,7 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { toTitleCase } from "@/lib/utils/smart-typing";
 import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 function isExistingAccountError(message: string): boolean {
   const normalized = message.toLowerCase();
@@ -53,14 +53,15 @@ export const useCreateAccount = ({
   } = useSelectedValuesFromReactHookForm<ProviderSignUpFormData>(
     ProviderSignUpSchema,
     {
-    mode: "onChange",
-    defaultValues: {
-      email: propEmail || "",
-      title: propTitle || "",
-      fullName: propFullName ? toTitleCase(propFullName) : "",
-      password: "",
+      mode: "onChange",
+      defaultValues: {
+        email: propEmail || "",
+        title: propTitle || "",
+        fullName: propFullName ? toTitleCase(propFullName) : "",
+        password: "",
+      },
     },
-  });
+  );
 
   useEffect(() => {
     onValidityChange?.(isValid);
@@ -97,7 +98,8 @@ export const useCreateAccount = ({
         password: values.password,
       });
     } catch (error: unknown) {
-      const errorMsg = getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.general;
+      const errorMsg =
+        getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.general;
 
       if (isExistingAccountError(errorMsg)) {
         toast.error(SIGN_UP_TEXTS.errors.accountExists);

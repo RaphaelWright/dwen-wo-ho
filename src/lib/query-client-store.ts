@@ -21,6 +21,8 @@ export function refetchAllActiveQueries(): void {
     return;
   }
 
-  console.log("[QueryClientStore] 🔄 Triggering global refetch of all active queries...");
+  console.log(
+    "[QueryClientStore] 🔄 Triggering global refetch of all active queries...",
+  );
   client.refetchQueries({ type: "active" });
 }

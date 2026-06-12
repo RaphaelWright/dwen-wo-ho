@@ -54,8 +54,9 @@ export const providerDashboardService = {
       | { profilePhotoUrl?: string; avatarUrl?: string }
       | undefined;
 
-    return (data?.profilePhotoUrl ??
-      data?.avatarUrl) as unknown as { avatarUrl: string };
+    return (data?.profilePhotoUrl ?? data?.avatarUrl) as unknown as {
+      avatarUrl: string;
+    };
   },
 
   getPatients: async (

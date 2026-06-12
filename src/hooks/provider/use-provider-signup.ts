@@ -30,8 +30,7 @@ export function useProviderSignup() {
 
   const urlProfileStep = getProfileStepFromUrl();
   const isResumeLocked =
-    guard.isResumeLocked ||
-    (urlProfileStep !== null && hasProviderAuthToken());
+    guard.isResumeLocked || (urlProfileStep !== null && hasProviderAuthToken());
 
   const profileStep = isResumeLocked
     ? (guard.profileStep ?? urlProfileStep)

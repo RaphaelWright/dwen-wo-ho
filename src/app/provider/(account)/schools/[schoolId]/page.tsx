@@ -19,9 +19,9 @@ export default function ProviderSchoolDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2" />
           <p className="text-muted-foreground">Loading school details...</p>
         </div>
       </div>
@@ -30,22 +30,22 @@ export default function ProviderSchoolDetailsPage() {
 
   if (accessDenied) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto p-8">
+      <div className="bg-background min-h-screen">
+        <div className="mx-auto max-w-7xl p-8">
           <div className="mb-8">
             <Button
               onClick={() => router.push("/provider/schools")}
               variant="outline"
               className="w-fit"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Schools
             </Button>
           </div>
-          <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="flex min-h-[60vh] items-center justify-center">
             <div className="text-center">
-              <MdSchool className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-semibold text-foreground mb-2">
+              <MdSchool className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+              <h2 className="text-foreground mb-2 text-2xl font-semibold">
                 You do not have access to this school
               </h2>
               <p className="text-muted-foreground">
@@ -61,22 +61,22 @@ export default function ProviderSchoolDetailsPage() {
 
   if (!school) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto p-8">
+      <div className="bg-background min-h-screen">
+        <div className="mx-auto max-w-7xl p-8">
           <div className="mb-8">
             <Button
               onClick={() => router.push("/provider/schools")}
               variant="outline"
               className="w-fit"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Schools
             </Button>
           </div>
-          <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="flex min-h-[60vh] items-center justify-center">
             <div className="text-center">
-              <MdSchool className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-semibold text-foreground mb-2">
+              <MdSchool className="text-muted-foreground mx-auto mb-4 h-16 w-16" />
+              <h2 className="text-foreground mb-2 text-2xl font-semibold">
                 School not found
               </h2>
               <p className="text-muted-foreground">
@@ -91,8 +91,8 @@ export default function ProviderSchoolDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto p-8">
+    <div className="bg-background min-h-screen">
+      <div className="mx-auto max-w-7xl p-8">
         {/* Back Button */}
         <div className="mb-6">
           <Button
@@ -100,7 +100,7 @@ export default function ProviderSchoolDetailsPage() {
             variant="outline"
             className="w-fit"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Schools
           </Button>
         </div>
@@ -109,22 +109,22 @@ export default function ProviderSchoolDetailsPage() {
         <div className="mb-8">
           <div className="flex items-start gap-6">
             {school.logo ? (
-              <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-2 border-border bg-card shrink-0">
+              <div className="border-border bg-card relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl border-2">
                 <Image
                   src={school.logo}
                   alt={school.name}
                   width={128}
                   height={128}
-                  className="object-cover w-full h-full"
+                  className="h-full w-full object-cover"
                 />
               </div>
             ) : (
-              <div className="w-32 h-32 bg-muted rounded-2xl flex items-center justify-center shrink-0">
-                <MdSchool className="w-16 h-16 text-muted-foreground" />
+              <div className="bg-muted flex h-32 w-32 shrink-0 items-center justify-center rounded-2xl">
+                <MdSchool className="text-muted-foreground h-16 w-16" />
               </div>
             )}
             <div className="pt-2">
-              <h1 className="text-4xl font-bold text-foreground mb-2">
+              <h1 className="text-foreground mb-2 text-4xl font-bold">
                 {school.name}
               </h1>
               {school.nickname && (
@@ -133,7 +133,7 @@ export default function ProviderSchoolDetailsPage() {
                 </p>
               )}
               {school.type && (
-                <span className="inline-block mt-3 px-4 py-1.5 rounded-full text-sm font-medium bg-muted text-foreground">
+                <span className="bg-muted text-foreground mt-3 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
                   {school.type}
                 </span>
               )}
@@ -142,20 +142,20 @@ export default function ProviderSchoolDetailsPage() {
         </div>
 
         {/* Students Section */}
-        <div className="bg-card rounded-xl shadow-sm border border-border p-6">
-          <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-            <Users className="w-6 h-6" />
+        <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
+          <h2 className="text-foreground mb-4 flex items-center gap-2 text-xl font-bold">
+            <Users className="h-6 w-6" />
             Students ({students.length})
           </h2>
 
           {studentsLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
+            <div className="py-12 text-center">
+              <div className="border-primary mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-b-2" />
               <p className="text-muted-foreground">Loading students...</p>
             </div>
           ) : students.length === 0 ? (
-            <div className="text-center py-12">
-              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <div className="py-12 text-center">
+              <Users className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
               <p className="text-muted-foreground">No students available</p>
             </div>
           ) : (
@@ -165,21 +165,21 @@ export default function ProviderSchoolDetailsPage() {
                   type="button"
                   key={`${student.studentName}-${index}`}
                   onClick={() => handleStudentClick(student)}
-                  className="w-full text-left flex items-center justify-between p-4 bg-card rounded-lg border border-border hover:border-primary/30 hover:bg-muted/50 transition-colors"
+                  className="bg-card border-border hover:border-primary/30 hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border p-4 text-left transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
-                      <span className="text-white font-semibold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-teal-500 to-cyan-500">
+                      <span className="font-semibold text-white">
                         {student.studentName.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-foreground">
+                      <p className="text-foreground font-semibold">
                         {student.studentName}
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="mt-1 flex items-center gap-2">
                         <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
+                          className={`rounded px-2 py-1 text-xs font-medium ${
                             student.lockedInColor === "red"
                               ? "bg-destructive/10 text-destructive"
                               : student.lockedInColor === "yellow"
@@ -193,12 +193,12 @@ export default function ProviderSchoolDetailsPage() {
                         >
                           {student.lockedInInterpretation}
                         </span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-muted-foreground text-xs">
                           Score: {student.lockinScore.toFixed(2)}
                         </span>
                       </div>
                       {student.createdAt && (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-muted-foreground mt-1 text-sm">
                           {new Date(student.createdAt).toLocaleDateString()}
                         </p>
                       )}
@@ -206,17 +206,17 @@ export default function ProviderSchoolDetailsPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     {student.visibilityStatus === "NEW" && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
+                      <span className="bg-destructive/10 text-destructive rounded-full px-3 py-1 text-xs font-medium">
                         New
                       </span>
                     )}
                     {student.visibilityStatus === "SEEN" && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                      <span className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-xs font-medium">
                         Seen
                       </span>
                     )}
                     {!student.patientResultId && (
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
                         Not Opened
                       </span>
                     )}

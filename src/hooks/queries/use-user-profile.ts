@@ -3,7 +3,7 @@ import { authService } from "@/services/auth";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 const useUserQuery = (options?: {
-  refetchInterval?: number;
+  refetchInterval?: number | false;
   enabled?: boolean;
 }) => {
   const { data, isLoading } = useQuery({

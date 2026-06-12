@@ -24,27 +24,27 @@ export const ConfirmationModal = ({
 }: ConfirmationModalProps) => {
   return (
     <div
-      className={`fixed inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-50 p-4 transition-all duration-300 ease-in-out ${
-        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+      className={`bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300 ease-in-out ${
+        isOpen ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
-        className={`bg-card text-foreground rounded-xl border border-border p-4 sm:p-6 max-w-sm w-full shadow-xl transition-all duration-300 ease-in-out ${
+        className={`bg-card text-foreground border-border w-full max-w-sm rounded-xl border p-4 shadow-xl transition-all duration-300 ease-in-out sm:p-6 ${
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
         }`}
       >
-        <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-foreground">
+        <h2 className="text-foreground mb-3 text-center text-lg font-bold sm:mb-4 sm:text-xl">
           {title}
         </h2>
-        <p className="text-center text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">
+        <p className="text-muted-foreground mb-4 text-center text-sm sm:mb-6 sm:text-base">
           {message}
         </p>
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`flex-1 py-2.5 sm:py-2 text-center font-medium rounded-lg transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed ${variantStyles[variant]}`}
+            className={`flex-1 rounded-lg py-2.5 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2 sm:text-base ${variantStyles[variant]}`}
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
@@ -59,7 +59,7 @@ export const ConfirmationModal = ({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 py-2.5 sm:py-2 text-center font-medium bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 flex-1 rounded-lg py-2.5 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2 sm:text-base"
           >
             {cancelText}
           </button>

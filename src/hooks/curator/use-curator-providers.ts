@@ -84,7 +84,10 @@ export function useCuratorProviders() {
     (email: string) => {
       const provider = providersList.find((p) => p.email === email);
       if (!provider) return "";
-      return formatProviderName(provider.providerName || "", provider.providerTitle);
+      return formatProviderName(
+        provider.providerName || "",
+        provider.providerTitle,
+      );
     },
     [providersList],
   );

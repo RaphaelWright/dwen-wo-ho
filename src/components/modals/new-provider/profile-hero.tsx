@@ -19,37 +19,37 @@ export function ProfileHero({
     : "PR";
 
   return (
-    <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-0 px-5 md:px-7 pt-5 md:pt-7 pb-0 shrink-0">
+    <div className="flex shrink-0 flex-col items-center gap-4 px-5 pt-5 pb-0 md:flex-row md:items-start md:gap-0 md:px-7 md:pt-7">
       {/* Avatar area */}
       <div className="flex flex-col items-center gap-2.5 md:mr-6">
         <m.div
           whileHover={{ boxShadow: "0 0 40px rgba(139,92,246,.5)" }}
-          className="relative size-16 md:size-20 rounded-full flex items-center justify-center text-3xl md:text-4xl border-[3px] cursor-pointer bg-primary/20 border-primary"
+          className="bg-primary/20 border-primary relative flex size-16 cursor-pointer items-center justify-center rounded-full border-[3px] text-3xl md:size-20 md:text-4xl"
           onClick={() => onEdit("photo", "Profile Photo", "")}
         >
-          <Avatar className="w-full h-full">
+          <Avatar className="h-full w-full">
             <AvatarImage src={profileData.avatarUrl} />
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
-          <div className="absolute bottom-0 right-0 size-5 md:size-6.5 rounded-full z-10 flex items-center justify-center border-2 bg-primary">
+          <div className="bg-primary absolute right-0 bottom-0 z-10 flex size-5 items-center justify-center rounded-full border-2 md:size-6.5">
             <Pencil size={10} className="text-white" />
           </div>
         </m.div>
 
-        <Badge className="inline-flex items-center gap-1.5 text-[10.5px] font-bold tracking-wide uppercase px-2.5 py-1 rounded-full border bg-success">
+        <Badge className="bg-success inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px] font-bold tracking-wide uppercase">
           <CheckCircle2 size={10} /> Verified
         </Badge>
       </div>
 
       {/* Name + status */}
       <div className="flex-1 text-center md:text-left">
-        <h2 className="text-[20px] md:text-[24px] font-black mb-1">
+        <h2 className="mb-1 text-[20px] font-black md:text-[24px]">
           {fullName}
         </h2>
-        <p className="text-[12.5px] md:text-[13.5px] mb-3 text-muted-foreground">
+        <p className="text-muted-foreground mb-3 text-[12.5px] md:text-[13.5px]">
           {profileData.specialty} · Ranked #1
         </p>
-        <div className="inline-flex items-center gap-2 text-[12px] md:text-[12.5px] border rounded-full px-3 py-1.5">
+        <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] md:text-[12.5px]">
           &nbsp;&quot;{profileData.status}&quot;
         </div>
       </div>

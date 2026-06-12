@@ -771,14 +771,14 @@ This happens when:
 
 ## Quick Reference: Event Types
 
-| Event                    | When It Fires            | Who Receives It               | Frontend Action                                |
-| ------------------------ | ------------------------ | ----------------------------- | ---------------------------------------------- |
-| `CONNECTED`              | WebSocket first connects | Everyone                      | Set connection status                          |
-| `NEW_NOTIFICATION`       | New notification created | Intended recipient            | Toast + update sheet + update badge            |
-| `UNREAD_COUNT_CHANGED`   | Unread count updates     | The user                      | Update unread badge                            |
-| `NEW_URGENT_CASE`        | Patient marked urgent    | Assigned provider             | Toast + audio alert 🔊 + refresh UrgentPanel   |
-| `PATIENT_STATUS_CHANGED` | Patient status updates   | Assigned provider             | Toast + refresh patient list                   |
-| `NEW_PATIENT_RESULT`     | New result submitted     | Curators watching that school | Toast + refresh school patient lists           |
+| Event                    | When It Fires            | Who Receives It               | Frontend Action                              |
+| ------------------------ | ------------------------ | ----------------------------- | -------------------------------------------- |
+| `CONNECTED`              | WebSocket first connects | Everyone                      | Set connection status                        |
+| `NEW_NOTIFICATION`       | New notification created | Intended recipient            | Toast + update sheet + update badge          |
+| `UNREAD_COUNT_CHANGED`   | Unread count updates     | The user                      | Update unread badge                          |
+| `NEW_URGENT_CASE`        | Patient marked urgent    | Assigned provider             | Toast + audio alert 🔊 + refresh UrgentPanel |
+| `PATIENT_STATUS_CHANGED` | Patient status updates   | Assigned provider             | Toast + refresh patient list                 |
+| `NEW_PATIENT_RESULT`     | New result submitted     | Curators watching that school | Toast + refresh school patient lists         |
 
 ---
 

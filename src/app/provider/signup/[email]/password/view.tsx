@@ -28,8 +28,8 @@ const PasswordSetup = () => {
   const confirmPassword = watch("confirmPassword");
 
   return (
-    <div className="h-full flex flex-col justify-between">
-      <div className="flex items-center px-8 justify-between w-full">
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex w-full items-center justify-between px-8">
         <Logo />
         <p className="font-bold">
           for <span className="text-4xl">Providers</span>
@@ -46,7 +46,7 @@ const PasswordSetup = () => {
           <div className="relative flex flex-col">
             <label
               htmlFor="password"
-              className="text-2xl font-bold text-gray-500 pl-4 mb-2"
+              className="mb-2 pl-4 text-2xl font-bold text-gray-500"
             >
               Password
             </label>
@@ -55,21 +55,21 @@ const PasswordSetup = () => {
               {...register("password")}
               placeholder="Enter your password (6 or more characters)"
               type={showPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 ${
+              className={`w-full rounded-xl border-4 font-bold ${
                 errors?.password?.message
                   ? "border-red-500"
                   : "border-green-600"
-              } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              } bg-gray-200/50 p-4 text-2xl text-gray-500`}
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute top-10 right-4 transform -translate-y-1/2"
+              className="absolute top-10 right-4 -translate-y-1/2 transform"
             >
               {!showPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.password?.message && (
-              <p className="text-destructive text-sm mt-1">
+              <p className="text-destructive mt-1 text-sm">
                 {errors.password.message}
               </p>
             )}
@@ -78,7 +78,7 @@ const PasswordSetup = () => {
           <div className="relative flex flex-col">
             <label
               htmlFor="confirm-password"
-              className="text-2xl font-bold text-gray-500 pl-4 mb-2"
+              className="mb-2 pl-4 text-2xl font-bold text-gray-500"
             >
               Confirm Password
             </label>
@@ -87,33 +87,32 @@ const PasswordSetup = () => {
               {...register("confirmPassword")}
               placeholder="Confirm your password"
               type={showConfirmPassword ? "text" : "password"}
-              className={`font-bold w-full rounded-xl border-4 ${
+              className={`w-full rounded-xl border-4 font-bold ${
                 errors?.confirmPassword?.message
                   ? "border-red-500"
                   : "border-green-600"
-              } text-2xl text-gray-500 p-4 bg-gray-200/50`}
+              } bg-gray-200/50 p-4 text-2xl text-gray-500`}
             />
             <button
               type="button"
               onClick={toggleConfirmPasswordVisibility}
-              className="absolute top-10 right-4 transform -translate-y-1/2"
+              className="absolute top-10 right-4 -translate-y-1/2 transform"
             >
               {!showConfirmPassword ? <span>SHOW</span> : <span>HIDE</span>}
             </button>
             {errors?.confirmPassword?.message && (
-              <p className="text-destructive text-sm mt-1">
+              <p className="text-destructive mt-1 text-sm">
                 {errors.confirmPassword.message}
               </p>
             )}
           </div>
         </div>
-
       </form>
 
-      <div className="flex border-t border-gray-500 px-10 pt-10 items-center justify-between">
+      <div className="flex items-center justify-between border-t border-gray-500 px-10 pt-10">
         <Button
           onClick={() => router.back()}
-          className="rounded-full px-6 border-4 bg-background text-primary text-xl font-bold border-primary uppercase"
+          className="bg-background text-primary border-primary rounded-full border-4 px-6 text-xl font-bold uppercase"
         >
           Back
         </Button>
@@ -124,7 +123,7 @@ const PasswordSetup = () => {
           loading={signupMutation.isPending}
           loadingText="Setting Password..."
           disabled={!password || !confirmPassword}
-          className={`text-xl px-6 py-2 border-4 font-bold rounded-md ${
+          className={`rounded-md border-4 px-6 py-2 text-xl font-bold ${
             password && confirmPassword && !signupMutation.isPending
               ? "border-primary text-primary-foreground bg-primary hover:bg-primary/90"
               : "border-uted text-muted-foreground bg-muted cursor-not-allowed"

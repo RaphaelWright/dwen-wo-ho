@@ -20,7 +20,8 @@ export interface OrbitalCarouselProps {
 }
 
 // Calculate cardinal positions for items
-const getCardinalOffset = (index: number, total: number) => (index * 360) / total;
+const getCardinalOffset = (index: number, total: number) =>
+  (index * 360) / total;
 
 export default function OrbitalCarousel({
   items,
@@ -34,14 +35,14 @@ export default function OrbitalCarousel({
   return (
     <div
       className={cn(
-        "relative w-full h-full flex items-center justify-center",
+        "relative flex h-full w-full items-center justify-center",
         className,
       )}
     >
       {/* Orbit path visualization */}
       {showOrbitPath && (
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-3 border-purple-500/30 rounded-full animate-pulse"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full border-3 border-purple-500/30"
           style={{
             width: `${orbitRadius * 2}px`,
             height: `${orbitRadius * 2}px`,
@@ -142,7 +143,7 @@ function OrbitingItem({
     >
       <div
         className={cn(
-          "w-full h-full backdrop-blur-md border-2 rounded-full flex items-center justify-center text-4xl shadow-xl cursor-pointer overflow-hidden",
+          "flex h-full w-full cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 text-4xl shadow-xl backdrop-blur-md",
           className,
         )}
       >

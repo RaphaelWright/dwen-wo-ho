@@ -12,15 +12,15 @@ const BioStep = (props: BioStepProps) => {
     useBioStep(props);
 
   return (
-    <div className="w-full max-w-xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="animate-in fade-in slide-in-from-bottom-4 mx-auto w-full max-w-xl space-y-8 duration-500">
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="office-phone">
             {SIGN_UP_TEXTS.bioStep.officePhoneLabel}
             <span className="text-destructive">*</span>
           </Label>
-          <div className="group flex h-12 items-stretch overflow-hidden rounded-lg border border-input bg-background shadow-sm transition-all duration-200 focus-within:border-ring focus-within:ring focus-within:ring-primary/50">
-            <div className="flex shrink-0 items-center gap-1.5 border-r border-border bg-muted/40 px-2 sm:px-3 pointer-events-none">
+          <div className="group border-input bg-background focus-within:border-ring focus-within:ring-primary/50 flex h-12 items-stretch overflow-hidden rounded-lg border shadow-sm transition-all duration-200 focus-within:ring">
+            <div className="border-border bg-muted/40 pointer-events-none flex shrink-0 items-center gap-1.5 border-r px-2 sm:px-3">
               <Image
                 src={SIGN_UP_TEXTS.bioStep.ghanaFlagSrc}
                 alt=""
@@ -29,7 +29,7 @@ const BioStep = (props: BioStepProps) => {
                 className="rounded-sm object-cover"
                 aria-hidden
               />
-              <span className="text-sm font-medium text-foreground tabular-nums">
+              <span className="text-foreground text-sm font-medium tabular-nums">
                 {SIGN_UP_TEXTS.bioStep.countryCode}
               </span>
             </div>
@@ -43,7 +43,7 @@ const BioStep = (props: BioStepProps) => {
                 onChange={handlePhoneChange}
                 placeholder={SIGN_UP_TEXTS.bioStep.officePhonePlaceholder}
                 maxLength={10}
-                className="h-full pl-2 sm:pl-3 pr-12 sm:pr-16 text-base sm:text-lg shadow-none focus-visible:ring-0 rounded-none border-0"
+                className="h-full rounded-none border-0 pr-12 pl-2 text-base shadow-none focus-visible:ring-0 sm:pr-16 sm:pl-3 sm:text-lg"
               />
               {/* <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
                 <span className="text-[10px] sm:text-xs font-medium text-muted-foreground bg-muted px-1.5 sm:px-2 py-1 rounded-md">
@@ -52,7 +52,7 @@ const BioStep = (props: BioStepProps) => {
               </div> */}
             </div>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {SIGN_UP_TEXTS.bioStep.privateInfo}
           </p>
         </div>
@@ -64,7 +64,7 @@ const BioStep = (props: BioStepProps) => {
               <span className="text-destructive">*</span>
             </Label>
             <span
-              className={`text-[10px] sm:text-xs font-medium px-1.5 sm:px-2 py-1 rounded-md shrink-0 whitespace-nowrap ${
+              className={`shrink-0 rounded-md px-1.5 py-1 text-[10px] font-medium whitespace-nowrap sm:px-2 sm:text-xs ${
                 140 - bio.length < 10
                   ? "bg-destructive/10 text-destructive"
                   : "bg-muted text-muted-foreground"
@@ -81,9 +81,9 @@ const BioStep = (props: BioStepProps) => {
               placeholder={SIGN_UP_TEXTS.bioStep.bioPlaceholder}
               maxLength={140}
               minLength={10}
-              className="min-h-40 p-4 border-input bg-background focus-visible:ring-primary/50 resize-none shadow-sm transition-all duration-200"
+              className="border-input bg-background focus-visible:ring-primary/50 min-h-40 resize-none p-4 shadow-sm transition-all duration-200"
             />
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-muted-foreground mt-2 text-sm">
               {SIGN_UP_TEXTS.bioStep.bioDescription}
             </p>
           </div>

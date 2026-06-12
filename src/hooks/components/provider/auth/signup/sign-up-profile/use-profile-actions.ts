@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
@@ -38,7 +38,8 @@ export const useProfileActions = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { addSpecialtyMutation, updateProfileMutation, loginMutation } = useAuthQuery();
+  const { addSpecialtyMutation, updateProfileMutation, loginMutation } =
+    useAuthQuery();
 
   const redirectToSignIn = () => {
     router.push(
@@ -115,7 +116,10 @@ export const useProfileActions = ({
         toast.success(SIGN_UP_TEXTS.errors.profileUpdated);
         setCurrentStep(currentStep + 1);
       } catch (error: unknown) {
-        toast.error(getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.updateProfileFailed);
+        toast.error(
+          getCleanErrorMessage(error) ||
+            SIGN_UP_TEXTS.errors.updateProfileFailed,
+        );
       } finally {
         setIsSubmitting(false);
       }
@@ -132,7 +136,10 @@ export const useProfileActions = ({
         toast.success(SIGN_UP_TEXTS.errors.specialtyAdded);
         await finishSignup();
       } catch (error: unknown) {
-        toast.error(getCleanErrorMessage(error) || SIGN_UP_TEXTS.errors.addSpecialtyFailed);
+        toast.error(
+          getCleanErrorMessage(error) ||
+            SIGN_UP_TEXTS.errors.addSpecialtyFailed,
+        );
       } finally {
         setIsSubmitting(false);
       }

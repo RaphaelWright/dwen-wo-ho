@@ -12,8 +12,8 @@ export function MentalHealthSection({
   yesNoOptions,
 }: MentalHealthSectionProps) {
   return (
-    <div className="bg-card rounded-xl shadow-sm border border-border p-6">
-      <h2 className="text-xl font-bold text-foreground mb-4">
+    <div className="bg-card border-border rounded-xl border p-6 shadow-sm">
+      <h2 className="text-foreground mb-4 text-xl font-bold">
         {LOCK_IN_TEXTS.mentalHealth.title}
       </h2>
       <div className="space-y-4">
@@ -24,7 +24,7 @@ export function MentalHealthSection({
               id={field.name}
               {...register(field.name as keyof LockInFormData)}
               {...register(field.name as keyof LockInFormData)}
-              className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+              className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
             >
               <option value="">
                 {LOCK_IN_TEXTS.mentalHealth.frequencyPlaceholder}
@@ -36,7 +36,7 @@ export function MentalHealthSection({
               ))}
             </select>
             {errors[field.name as keyof LockInFormData] && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors[field.name as keyof LockInFormData]?.message}
               </p>
             )}
@@ -50,7 +50,7 @@ export function MentalHealthSection({
               id={field.name}
               {...register(field.name as keyof LockInFormData)}
               {...register(field.name as keyof LockInFormData)}
-              className="w-full px-3 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-background"
+              className="border-input focus:ring-primary/20 focus:border-primary bg-background w-full rounded-lg border px-3 py-2 focus:ring-2 focus:outline-none"
             >
               <option value="">
                 {LOCK_IN_TEXTS.mentalHealth.yesNoPlaceholder}
@@ -62,7 +62,7 @@ export function MentalHealthSection({
               ))}
             </select>
             {errors[field.name as keyof LockInFormData] && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors[field.name as keyof LockInFormData]?.message}
               </p>
             )}

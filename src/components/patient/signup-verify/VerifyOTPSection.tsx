@@ -12,10 +12,10 @@ export function VerifyOTPSection({
 }: VerifyOTPSectionProps) {
   return (
     <div className="grid place-items-center">
-      <h1 className="text-xl lg:text-3xl md:text-3xl text-center font-extrabold">
+      <h1 className="text-center text-xl font-extrabold md:text-3xl lg:text-3xl">
         {SIGNUP_VERIFY_TEXTS.otpSection.title}
       </h1>
-      <h2 className="text-2xl text-muted-foreground font-medium text-center">
+      <h2 className="text-muted-foreground text-center text-2xl font-medium">
         {SIGNUP_VERIFY_TEXTS.otpSection.subtitlePart1}
         <br /> {SIGNUP_VERIFY_TEXTS.otpSection.subtitlePart2} {email}
       </h2>
@@ -32,11 +32,11 @@ export function VerifyOTPSection({
           <Button
             disabled={seconds > 0}
             onClick={onResend}
-            className="rounded-md mt-4 disabled:bg-muted disabled:text-muted-foreground"
+            className="disabled:bg-muted disabled:text-muted-foreground mt-4 rounded-md"
           >
             {SIGNUP_VERIFY_TEXTS.otpSection.resendButton}
           </Button>
-          <span className="ml-4 border rounded-full p-2 text-sm">
+          <span className="ml-4 rounded-full border p-2 text-sm">
             {formatTime(seconds)}
           </span>
         </div>

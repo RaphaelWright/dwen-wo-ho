@@ -47,9 +47,9 @@ export default function PatientResultPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-muted/5">
+      <div className="bg-muted/5 flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3" />
+          <div className="border-primary mx-auto mb-3 h-10 w-10 animate-spin rounded-full border-b-2" />
           <p className="text-muted-foreground text-sm">
             Loading patient details...
           </p>
@@ -60,10 +60,10 @@ export default function PatientResultPage() {
 
   if (!patientResult) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-muted/5">
+      <div className="bg-muted/5 flex min-h-screen flex-col items-center justify-center p-6">
         <Button
           onClick={() => router.back()}
-          className="mb-3 text-muted-foreground hover:text-foreground text-sm"
+          className="text-muted-foreground hover:text-foreground mb-3 text-sm"
           variant="ghost"
         >
           Back
@@ -76,8 +76,8 @@ export default function PatientResultPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/5 flex flex-col animate-in fade-in duration-500">
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 lg:px-8">
+    <div className="bg-muted/5 animate-in fade-in flex min-h-screen flex-col duration-500">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
         {/* Header Card */}
         <PatientDetailsHeader
           patientResult={patientResult}
@@ -94,7 +94,7 @@ export default function PatientResultPage() {
               loading={isUpdating}
               loadingText="Updating..."
               disabled={isAnotherProviderTreating}
-              className="bg-teal-600 hover:bg-teal-700 px-6 py-2.5 disabled:opacity-50"
+              className="bg-teal-600 px-6 py-2.5 hover:bg-teal-700 disabled:opacity-50"
               title={
                 isAnotherProviderTreating
                   ? "Another provider is already treating this patient"
@@ -109,7 +109,7 @@ export default function PatientResultPage() {
               loading={isUpdating}
               loadingText="Updating..."
               variant="outline"
-              className="px-6 py-2.5 border-red-300 hover:bg-red-50 hover:text-red-700"
+              className="border-red-300 px-6 py-2.5 hover:bg-red-50 hover:text-red-700"
             >
               Stop Treating
             </LoadingButton>
@@ -122,17 +122,17 @@ export default function PatientResultPage() {
                 <TooltipTrigger asChild>
                   <div
                     className={cn(
-                      "flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium cursor-help border",
+                      "flex cursor-help items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium",
                       isTreating
-                        ? "bg-teal-50 text-teal-700 border-teal-200"
-                        : "bg-amber-50 text-amber-700 border-amber-200",
+                        ? "border-teal-200 bg-teal-50 text-teal-700"
+                        : "border-amber-200 bg-amber-50 text-amber-700",
                     )}
                   >
                     <span
                       className={cn(
-                        "w-1.5 h-1.5 rounded-full",
+                        "h-1.5 w-1.5 rounded-full",
                         isTreating
-                          ? "bg-teal-500 animate-pulse"
+                          ? "animate-pulse bg-teal-500"
                           : "bg-amber-500",
                       )}
                     />
@@ -142,7 +142,7 @@ export default function PatientResultPage() {
                 <TooltipContent
                   side="bottom"
                   align="start"
-                  className="max-w-xs bg-white text-slate-700 border border-slate-200 shadow-lg rounded-lg p-3"
+                  className="max-w-xs rounded-lg border border-slate-200 bg-white p-3 text-slate-700 shadow-lg"
                 >
                   <p className="text-xs leading-relaxed">
                     {isTreating
@@ -155,9 +155,9 @@ export default function PatientResultPage() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Left Column: Assessment Data */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 lg:col-span-2">
             {/* Detailed Metrics Cards */}
             <AssessmentMetricsPanel metrics={metrics} />
 

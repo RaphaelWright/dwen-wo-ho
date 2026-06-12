@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import { PatientStatusChangedEvent } from "@/lib/types/websocket";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 

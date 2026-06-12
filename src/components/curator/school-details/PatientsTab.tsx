@@ -53,7 +53,7 @@ export function PatientsTab({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
+        <div className="border-primary h-10 w-10 animate-spin rounded-full border-b-2" />
       </div>
     );
   }
@@ -70,12 +70,12 @@ export function PatientsTab({
 
   if (filteredPatients.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
-          <Users className="w-8 h-8 text-muted-foreground/50" />
+      <div className="text-muted-foreground py-12 text-center">
+        <div className="bg-muted mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full">
+          <Users className="text-muted-foreground/50 h-8 w-8" />
         </div>
         <p className="text-foreground font-medium">No patients found</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Try adjusting your search or add a new patient.
         </p>
       </div>
@@ -84,8 +84,8 @@ export function PatientsTab({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-2 items-center justify-between">
-        <div className="flex gap-2 items-center">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
           <p>Select all</p>
           <Checkbox
             id="select-all-checkbox"
@@ -101,7 +101,7 @@ export function PatientsTab({
           disabled={selectedPatients.size < 1}
           onClick={() => setShowBulkDeleteModal(true)}
         >
-          <div className="flex gap-2 items-center justify-center">
+          <div className="flex items-center justify-center gap-2">
             Delete <Trash className="size-4 text-white" />
           </div>
         </LoadingButton>

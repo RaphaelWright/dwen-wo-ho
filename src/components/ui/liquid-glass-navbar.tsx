@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  type Ref,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { type Ref, useState, type CSSProperties, type ReactNode } from "react";
 import { useTheme } from "next-themes";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { m } from "motion/react";
@@ -104,13 +99,13 @@ function TabItem({
       type="button"
       onClick={onActivate}
       onMouseEnter={onHover}
-      className="flex flex-1 flex-col  items-center justify-center gap-1 cursor-pointer select-none h-full relative bg-transparent border-none outline-none"
+      className="relative flex h-full flex-1 cursor-pointer flex-col items-center justify-center gap-1 border-none bg-transparent outline-none select-none"
     >
       {/* ── Active pill — glass backdrop ── */}
       {isActive && (
         <span
           className={cn(
-            "absolute w-full inset-0 rounded-full z-0 backdrop-blur-lg saturate-[1.6]",
+            "absolute inset-0 z-0 w-full rounded-full saturate-[1.6] backdrop-blur-lg",
             isDark
               ? "bg-white/12 shadow-[0_0_0_0.5px_rgba(255,255,255,0.5),inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_1px_rgba(0,0,0,0.05),0_2px_8px_rgba(0,0,0,0.08)]"
               : "bg-black/8 shadow-[0_0_0_0.5px_rgba(0,0,0,0.1),inset_0_1px_1px_rgba(255,255,255,0.8),inset_0_-1px_1px_rgba(0,0,0,0.03),0_2px_8px_rgba(0,0,0,0.06)]",
@@ -121,7 +116,7 @@ function TabItem({
       {isHovered && !isActive && (
         <m.div
           layoutId={layoutId}
-          className="absolute w-full h-full rounded-lg z-0 overflow-hidden"
+          className="absolute z-0 h-full w-full overflow-hidden rounded-lg"
           transition={{
             type: "spring",
             stiffness: 350,
@@ -130,7 +125,7 @@ function TabItem({
         >
           <span
             className={cn(
-              "absolute inset-0 rounded-full backdrop-blur-md saturate-[1.4]",
+              "absolute inset-0 rounded-full saturate-[1.4] backdrop-blur-md",
               isDark
                 ? "bg-white/8 shadow-[0_0_0_0.5px_rgba(255,255,255,0.3),inset_0_1px_1px_rgba(255,255,255,0.3),inset_0_-0.5px_1px_rgba(0,0,0,0.03)]"
                 : "bg-black/5 shadow-[0_0_0_0.5px_rgba(0,0,0,0.08),inset_0_1px_1px_rgba(255,255,255,0.5),inset_0_-0.5px_1px_rgba(0,0,0,0.02)]",
@@ -142,7 +137,7 @@ function TabItem({
       {/* Icon bubble container */}
       <div
         className={cn(
-          "flex items-center justify-center relative shrink-0 transition-all duration-250 ease-in-out rounded-full w-full h-full overflow-hidden",
+          "relative flex h-full w-full shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-250 ease-in-out",
         )}
       >
         {/* ── Badge ── */}
@@ -155,7 +150,7 @@ function TabItem({
         {/* ── Icon ── */}
         <div
           className={cn(
-            "size-6 flex items-center justify-center z-10 transition-colors duration-200 mt-0.5",
+            "z-10 mt-0.5 flex size-6 items-center justify-center transition-colors duration-200",
             isActive ? "text-primary" : "text-foreground",
           )}
         >
@@ -167,8 +162,8 @@ function TabItem({
       {showLabels && (
         <span
           className={cn(
-            "text-xs leading-none tracking-wide transition-colors duration-200 z-50 mb-1",
-            isActive ? "font-semibold text-primary" : "font-normal",
+            "z-50 mb-1 text-xs leading-none tracking-wide transition-colors duration-200",
+            isActive ? "text-primary font-semibold" : "font-normal",
           )}
         >
           {tab.label}
@@ -201,74 +196,74 @@ const LiquidGlassNavbar = ({
   showBorder = true,
   ref,
 }: LiquidGlassNavbarProps & { ref?: Ref<HTMLDivElement> }) => {
-    const { resolvedTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
-    const mounted = useHydrated();
+  const mounted = useHydrated();
 
-    // Support both controlled and uncontrolled modes
-    const [internalActive, setInternalActive] = useState(
-      defaultActiveTab ?? tabs[0]?.id ?? "",
-    );
-    const active = controlledActive ?? internalActive;
+  // Support both controlled and uncontrolled modes
+  const [internalActive, setInternalActive] = useState(
+    defaultActiveTab ?? tabs[0]?.id ?? "",
+  );
+  const active = controlledActive ?? internalActive;
 
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-    // Theme-aware tint default
-    const resolvedTint =
-      tint ?? (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.04)");
+  // Theme-aware tint default
+  const resolvedTint =
+    tint ?? (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.04)");
 
-    if (!mounted) {
-      return null;
+  if (!mounted) {
+    return null;
+  }
+
+  const handleActivate = (tab: GlassNavTab) => {
+    if (tab.onAction) {
+      tab.onAction();
+      return;
     }
+    if (controlledActive === undefined) {
+      setInternalActive(tab.id);
+    }
+    onTabChange?.(tab.id);
+  };
 
-    const handleActivate = (tab: GlassNavTab) => {
-      if (tab.onAction) {
-        tab.onAction();
-        return;
-      }
-      if (controlledActive === undefined) {
-        setInternalActive(tab.id);
-      }
-      onTabChange?.(tab.id);
-    };
-
-    return (
-      <LiquidGlass
-        ref={ref}
-        cornerRadius={cornerRadius}
-        blur={blur}
-        saturation={saturation}
-        displacementScale={displacementScale}
-        padding={padding}
-        tint={resolvedTint}
-        showBorder={showBorder}
-        style={style}
-        className={cn(
-          "w-full max-w-sm p-2 mx-auto z-50  bottom-3 right-0 left-0 md:hidden",
-          className,
-        )}
+  return (
+    <LiquidGlass
+      ref={ref}
+      cornerRadius={cornerRadius}
+      blur={blur}
+      saturation={saturation}
+      displacementScale={displacementScale}
+      padding={padding}
+      tint={resolvedTint}
+      showBorder={showBorder}
+      style={style}
+      className={cn(
+        "right-0 bottom-3 left-0 z-50 mx-auto w-full max-w-sm p-2 md:hidden",
+        className,
+      )}
+    >
+      <div
+        onMouseLeave={() => setHoveredId(null)}
+        className="flex h-full items-center gap-2 rounded-4xl"
       >
-        <div
-          onMouseLeave={() => setHoveredId(null)}
-          className="flex items-center h-full rounded-4xl gap-2"
-        >
-          {tabs.map((tab) => (
-            <TabItem
-              key={tab.id}
-              tab={tab}
-              isActive={active === tab.id}
-              isHovered={hoveredId === tab.id}
-              onActivate={() => handleActivate(tab)}
-              onHover={() => setHoveredId(tab.id)}
-              showLabels={showLabels}
-              layoutId={layoutId}
-              isDark={isDark}
-            />
-          ))}
-        </div>
-      </LiquidGlass>
-    );
+        {tabs.map((tab) => (
+          <TabItem
+            key={tab.id}
+            tab={tab}
+            isActive={active === tab.id}
+            isHovered={hoveredId === tab.id}
+            onActivate={() => handleActivate(tab)}
+            onHover={() => setHoveredId(tab.id)}
+            showLabels={showLabels}
+            layoutId={layoutId}
+            isDark={isDark}
+          />
+        ))}
+      </div>
+    </LiquidGlass>
+  );
 };
 
 export default LiquidGlassNavbar;

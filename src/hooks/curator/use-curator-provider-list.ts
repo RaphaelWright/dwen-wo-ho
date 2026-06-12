@@ -6,7 +6,7 @@ import { curatorProvidersService } from "@/services/curator-providers";
 import { formatProviderName } from "@/lib/utils/formatProviderName";
 import { ProviderDetails } from "@/lib/types/provider";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 
 async function fetchProviderDetails(email: string): Promise<ProviderDetails> {
   const result = await curatorProvidersService.getProvider(email);
@@ -59,7 +59,7 @@ export function useCuratorProviderList(
   const {
     data: providerData,
     isLoading,
-    error: queryError,
+    isError,
   } = useQuery({
     queryKey: [QUERY_KEYS.curatorProviderDetails, email],
     queryFn: () => fetchProviderDetails(email),
@@ -69,16 +69,24 @@ export function useCuratorProviderList(
     retry: false,
   });
 
-  // Use fallback data if query failed
+  // Use fallback data if query returned no data
   const provider = providerData ?? tryFallbackData();
 
+  // Toast on error — reactive effect driven by query status, not callbacks.
+  const hasFallback = useCallback(
+    () =>
+      typeof window !== "undefined" &&
+      !!sessionStorage.getItem(`provider_${email}`),
+    [email],
+  );
+
   useEffect(() => {
-    if (queryError && !provider) {
+    if (isError && !hasFallback()) {
       toast.error("Failed to load provider details. Please try again.");
     }
-  }, [queryError, provider]);
+  }, [isError, hasFallback]);
 
-  // Clear session storage on successful fetch
+  // Clear sessionStorage on successful fetch.
   useEffect(() => {
     if (providerData && typeof window !== "undefined") {
       sessionStorage.removeItem(`provider_${email}`);

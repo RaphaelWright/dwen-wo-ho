@@ -17,12 +17,12 @@ export const HeaderActions = ({
   return (
     <div className="flex items-center gap-4">
       <ThemeToggle />
-      <Button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2">
+      <Button onClick={() => setIsOpen(!isOpen)} className="p-2 lg:hidden">
         {isOpen ? <X size={24} /> : <AlignRight size={24} />}
       </Button>
       <Button
         onClick={handleGetStarted}
-        className="hidden lg:flex rounded-full h-9 px-5"
+        className="hidden h-9 rounded-full px-5 lg:flex"
       >
         Get Started
       </Button>

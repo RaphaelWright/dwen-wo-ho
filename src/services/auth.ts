@@ -71,23 +71,30 @@ export const authService = {
   },
 
   resendSignupVerification: async (data: { email: string }): Promise<void> => {
-    const response = await api(STATIC_ENDPOINTS.AUTH.RESEND_SIGNUP_VERIFICATION, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    const response = await api(
+      STATIC_ENDPOINTS.AUTH.RESEND_SIGNUP_VERIFICATION,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+    );
     if (!response?.success)
       throw new Error("Failed to resend signup verification email");
   },
 
-  resendPasswordResetVerification: async (data: { email: string }): Promise<void> => {
-    const response = await api(STATIC_ENDPOINTS.EMAIL.RESEND_PASSWORD_RESET_VERIFICATION, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+  resendPasswordResetVerification: async (data: {
+    email: string;
+  }): Promise<void> => {
+    const response = await api(
+      STATIC_ENDPOINTS.EMAIL.RESEND_PASSWORD_RESET_VERIFICATION,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+    );
     if (!response?.success)
       throw new Error("Failed to resend password reset verification email");
   },
-
 
   recoverAccount: async (data: { email: string }): Promise<void> => {
     const response = await api(STATIC_ENDPOINTS.AUTH.RECOVER_ACCOUNT, {

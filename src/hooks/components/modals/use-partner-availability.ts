@@ -19,7 +19,9 @@ export const usePartnerAvailability = ({
   associatedProviders,
 }: UsePartnerAvailabilityProps) => {
   const availableSchools = useMemo(() => {
-    const associatedSchoolIds = new Set(associatedSchools.map((s) => String(s.id)));
+    const associatedSchoolIds = new Set(
+      associatedSchools.map((s) => String(s.id)),
+    );
     return allSchools.flatMap((s) =>
       associatedSchoolIds.has(String(s.id))
         ? []
@@ -28,7 +30,9 @@ export const usePartnerAvailability = ({
   }, [allSchools, associatedSchools]);
 
   const availableProviders = useMemo(() => {
-    const associatedProviderIds = new Set(associatedProviders.map((p) => p.email));
+    const associatedProviderIds = new Set(
+      associatedProviders.map((p) => p.email),
+    );
     return providersList.flatMap((p) =>
       associatedProviderIds.has(p.email)
         ? []

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/lib/utils/toast";
 import {
   getSchoolLockInCount,
   getLatestPatientResult,
