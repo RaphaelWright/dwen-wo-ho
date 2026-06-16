@@ -2,7 +2,7 @@
   "name": "dwen-wo-ho",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.5.2",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -64,7 +64,7 @@
     "@hookform/resolvers": "^5.2.0",
     "@tailwindcss/postcss": "^4",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^20",
+    "@types/node": "20.19.41",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/sockjs-client": "^1.5.4",
