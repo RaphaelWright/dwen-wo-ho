@@ -1,0 +1,148 @@
+"use client";
+
+import {
+  NEW_PROVIDER_EDITABLE_FIELDS,
+  NEW_PROVIDER_FIELD_HOVER,
+} from "@/lib/constants/components/provider/workspace/dashboard";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { m } from "motion/react";
+import { Pencil } from "lucide-react";
+import { ReactNode } from "react";
+import type { ProviderProfileData } from "@/lib/types/api/provider-dashboard";
+
+function formatDate(dateString: string): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatRelativeTime(dateString: string | null): string {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+}
+
+export default function ProfileFieldsColumn({
+  profileData,
+  onEdit,
+}: {
+  profileData: Partial<ProviderProfileData>;
+  onEdit: (key: string, label: string, current: string) => void;
+}) {
+  // Dynamic read-only fields from API data
+  const readOnlyFields = [
+    { label: "Email", value: profileData.email || "N/A" },
+    { label: "Member Since", value: formatDate(profileData.memberSince || "") },
+    {
+      label: "Last Updated",
+      value: formatRelativeTime(profileData.lastUpdated || null),
+    },
+  ];
+
+  return (
+    <div className="flex max-h-[40vh] w-full shrink-0 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent flex-col gap-1.5 overflow-hidden overflow-y-auto border-b p-6 md:max-h-none md:border-r md:border-b-0">
+      {/* ── Editable ── */}
+      <SectionLabel>Editable</SectionLabel>
+
+      {/* Photo row */}
+      <FieldRow
+        label="Photo"
+        value={
+          <div className="flex items-center gap-2">
+            <Avatar className="size-5 shrink-0">
+              <AvatarImage src={profileData.avatarUrl} />
+              <AvatarFallback>
+                {profileData.name
+                  ? profileData.name.charAt(0).toUpperCase()
+                  : "PR"}
+              </AvatarFallback>
+            </Avatar>
+            <span>Current photo</span>
+          </div>
+        }
+        onEdit={() => onEdit("photo", "Profile Photo", "")}
+      />
+
+      {/* Dynamic editable fields */}
+      {NEW_PROVIDER_EDITABLE_FIELDS.map((f) => (
+        <FieldRow
+          key={f.key}
+          label={f.label}
+          value={(profileData as Record<string, string>)[f.key] ?? ""}
+          onEdit={() =>
+            onEdit(
+              f.key,
+              f.label,
+              (profileData as Record<string, string>)[f.key] ?? "",
+            )
+          }
+        />
+      ))}
+
+      {/* ── Read-only ── */}
+      <SectionLabel className="mt-4">Read Only</SectionLabel>
+
+      {readOnlyFields.map((f) => (
+        <div key={f.label} className="flex items-center gap-3 px-3 py-2">
+          <span className="w-22.5 shrink-0 text-[11.5px]">{f.label}</span>
+          <span className="text-[13px]">{f.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Sub-components ── */
+
+function SectionLabel({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <p
+      className={`mb-2 text-[10px] font-bold tracking-widest uppercase ${className}`}
+    >
+      {children}
+    </p>
+  );
+}
+
+function FieldRow({
+  label,
+  value,
+  onEdit,
+}: {
+  label: string;
+  value: ReactNode;
+  onEdit: () => void;
+}) {
+  return (
+    <m.button
+      whileHover={NEW_PROVIDER_FIELD_HOVER}
+      onClick={onEdit}
+      className="flex w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2.5 text-left"
+    >
+      <span className="w-22.5 shrink-0 text-[11.5px]">{label}</span>
+      <span className="flex flex-1 items-center truncate text-[13px] font-medium">
+        {value}
+      </span>
+      <Pencil size={12} className="shrink-0" />
+    </m.button>
+  );
+}

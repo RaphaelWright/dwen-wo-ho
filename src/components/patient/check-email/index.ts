@@ -1,3 +1,3 @@
-export * from "./CheckEmailHeader";
-export * from "./CheckEmailForm";
-export * from "./CheckEmailInfo";
+export * from "./check-email-header";
+export * from "./check-email-form";
+export * from "./check-email-info";

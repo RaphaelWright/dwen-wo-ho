@@ -2,7 +2,7 @@
 
 import { NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useDesktopNav } from "@/hooks/components/shared/use-desktop-nav";
+import { useDesktopNav } from "@/hooks/components/shared/header/use-desktop-nav";
 import { m } from "motion/react";
 import Link from "next/link";
 

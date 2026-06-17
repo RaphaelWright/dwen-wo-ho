@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { BioStepProps } from "@/lib/types/provider/auth";
+import { BioStepProps } from "@/lib/types/components/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useBioStep } from "@/hooks/components/provider/auth/signup/use-bio-step";
+import { useBioStep } from "@/hooks/components/provider/auth/signup/bio-step/use-bio-step";
 
 const BioStep = (props: BioStepProps) => {
   const { phoneNumber, bio } = props;

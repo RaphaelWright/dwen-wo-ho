@@ -1,7 +1,8 @@
-onlyBuiltDependencies:
-  - msw
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  '@fallow-cli/fallow-cov': true
+  msw: true
+  sharp: true
+  unrs-resolver: true
 
 # Delay installs until releases have had time to be vetted (7 days),
 # reducing exposure to malware shipped in freshly published versions.
@@ -10,3 +11,12 @@ minimumReleaseAge: 10080
 # Reject updates whose trust signals (provenance, signatures) weaken between
 # versions instead of silently accepting the downgrade.
 trustPolicy: no-downgrade
+
+# Skip trust downgrade checks for packages published before the vetting window
+# (pairs with minimumReleaseAge). Many ecosystem packages lost provenance on
+# republish without a security incident.
+trustPolicyIgnoreAfter: 10080
+
+# undici-types (via @types/node) lost npm provenance on recent releases.
+trustPolicyExclude:
+  - undici-types

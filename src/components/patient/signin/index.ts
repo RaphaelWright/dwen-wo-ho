@@ -1,3 +1,3 @@
-export * from "./SignInHeader";
-export * from "./SignInForm";
-export * from "./SignInFooter";
+export * from "./sign-in-header";
+export * from "./sign-in-form";
+export * from "./sign-in-footer";

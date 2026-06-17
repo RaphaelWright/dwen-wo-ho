@@ -1,10 +1,10 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/lib/utils/toast";
-import { unifiedNotificationsService } from "@/services/unified-notifications";
+import { toast } from "sonner";
+import { unifiedNotificationsService } from "@/services/shared/unified-notifications";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
-import { getUserType } from "@/lib/utils/getUserType";
+import { getUserType } from "@/lib/utils/auth/get-user-type";
 
 /**
  * Helper to get the correct query key for invalidation based on user role.

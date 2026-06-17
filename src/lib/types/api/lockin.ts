@@ -1,29 +1,3 @@
-export interface LockinSubmitRequest {
-  campus: number;
-  reasonForLockin: string;
-  timeToExam: string;
-  fullName: string;
-  age: number;
-  sex: string;
-  level: string;
-  feelingDepressed: string;
-  lossOfInterest: string;
-  feelingLonely: string;
-  suicidalThoughts: string;
-  suicidalPlans: string;
-  examWorrying: string;
-  sleepProblems: string;
-  fearOfFailure: string;
-  feelingNervous: string;
-  sweatingOrHeartRacing: string;
-  stomachUpset: string;
-  motivationToStudy: string;
-  focusWhileStudying: string;
-  activeStudying: string;
-  activeRecall: string;
-  lastMinuteStudying: string;
-}
-
 export interface AssessmentItem {
   itemName: string;
   category: string;
@@ -91,49 +65,4 @@ export interface LockinUpdateResponse {
   inUrgentCare: boolean;
   urgentCareEnteredAt?: string;
   timeInUrgentCareMinutes?: number;
-}
-
-export interface UrgentCarePatientFull {
-  id: number;
-  lockinId: number;
-  patientResultId: number;
-  patientName: string;
-  patientAge: number;
-  patientSex: string;
-  lockedInScore: number;
-  lockinDate: string;
-  urgentCareEnteredAt: string;
-  isTreating?: boolean;
-  treatingProviders?: import("./shared").TreatingProviderDTO[];
-}
-
-export interface UrgentCareListResponse {
-  schoolId: number;
-  count: number;
-  patients: UrgentCarePatientFull[];
-}
-
-export interface UrgentCareListLightResponse {
-  schoolId: number;
-  count: number;
-  patients: Pick<
-    UrgentCarePatientFull,
-    "id" | "patientName" | "lockedInScore"
-  >[];
-}
-
-export interface LockInStudentItem {
-  studentName: string;
-  lockinScore: number;
-  lockedInInterpretation: string;
-  lockedInColor: string;
-  lockinId?: number;
-  createdAt?: string;
-  patientResultId?: number;
-  visibilityStatus?: "NEW" | "SEEN";
-}
-
-export interface LockInForSchoolResponse {
-  schoolName: string;
-  students: LockInStudentItem[];
 }

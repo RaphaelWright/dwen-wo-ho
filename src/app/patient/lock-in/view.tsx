@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { MdSchool } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/shared/logo";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useLockInSchools } from "@/hooks/patient/use-lock-in-schools";
+import { useLockInSchools } from "@/hooks/patient/lock-in/use-schools";
 
 export default function LockInPage() {
   const {

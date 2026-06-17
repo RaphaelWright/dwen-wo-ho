@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
-import { HERO_CONTENT } from "@/lib/constants/components/hero";
+import { HERO_CONTENT } from "@/lib/constants/components/marketing/landing";
 
 export const useProvidersHero = () => {
   const router = useRouter();

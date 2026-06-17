@@ -1,6 +1,6 @@
 "use client";
 
-import { usePatientSignUpVerify } from "@/hooks/patient/use-patient-verify-signup";
+import { usePatientSignUpVerify } from "@/hooks/patient/verify-signup/use-verify-signup";
 import {
   VerifyHeader,
   VerifyOTPSection,

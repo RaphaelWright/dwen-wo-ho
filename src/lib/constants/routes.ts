@@ -1,7 +1,7 @@
 export const ROUTES = {
   public: {
     landing: "/",
-    forProviders: "/for-providers",
+    joinAsProvider: "/join-as-provider",
     about: "/about",
     privacyPolicy: "/privacy-policy",
     termsAndConditions: "/terms-and-conditions",
@@ -33,6 +33,7 @@ export const ROUTES = {
   },
   curator: {
     dashboard: "/curator",
+    create: "/curator/create",
     schools: "/curator/schools",
     providers: "/curator/providers",
     partners: "/curator/partners",
@@ -43,6 +44,8 @@ export const ROUTES = {
 
 export const DYNAMIC_ROUTES = {
   curator: {
+    createFlow: (type: "campus" | "provider" | "programme" | "tag", step = 1) =>
+      `/curator/create/${type}?step=${step}`,
     schoolDetails: (schoolId: string | number) =>
       `/curator/schools/${schoolId}`,
     patientDetails: (schoolId: string | number, patientId: string | number) =>

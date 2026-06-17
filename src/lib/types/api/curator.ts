@@ -1,4 +1,4 @@
-import { CuratorNotificationType } from "../notification";
+import { CuratorNotificationType } from "../entities/notification";
 
 export interface CuratorSummary {
   schoolCount: number;

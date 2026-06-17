@@ -1,3 +1,4 @@
 {
-  "gitlens.telemetry.enabled": false
+  "gitlens.telemetry.enabled": false,
+  "fallow.coverage.capturePath": "c:\\Users\\Dennis Sekyi - RBSFE\\Documents\\GitHub\\dwen-wo-ho"
 }

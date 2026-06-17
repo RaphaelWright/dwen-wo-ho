@@ -1,3 +1,3 @@
-export * from "./NewPasswordHeader";
-export * from "./NewPasswordForm";
-export * from "./NewPasswordFooter";
+export * from "./new-password-header";
+export * from "./new-password-form";
+export * from "./new-password-footer";

@@ -40,11 +40,6 @@ export interface ProviderDetailResponse {
   associatedPartners: ProviderAssociatedPartner[];
 }
 
-export interface ProviderPartnersResponse {
-  providerId: string;
-  partners: ProviderAssociatedPartner[];
-}
-
 export interface ProviderSchoolsSummaryItem {
   schoolId: number;
   schoolName: string;
@@ -52,6 +47,17 @@ export interface ProviderSchoolsSummaryItem {
   latestPatientResultAt?: string;
   urgentCareCount?: number;
   [key: string]: unknown;
+}
+
+export interface LatestSchoolPatientResult {
+  id: number;
+  patientName: string;
+  createdAt: string;
+}
+
+export interface SchoolNewPatientCheck {
+  hasNew: boolean;
+  latestPatient?: Pick<LatestSchoolPatientResult, "patientName" | "createdAt">;
 }
 
 export interface ProviderActivityParams {

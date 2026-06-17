@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/lib/utils/toast";
-import { patientsService } from "@/services/patients";
-import { lockinsService } from "@/services/lockins";
+import { toast } from "sonner";
+import { patientsService } from "@/services/shared/patients";
+import { lockinsService } from "@/services/patient/lock-ins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 // Hoisted query hooks — they close over no component state.

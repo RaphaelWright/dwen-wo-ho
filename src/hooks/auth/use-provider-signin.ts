@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "@/lib/utils/toast";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSelectedValuesFromReactHookForm } from "@/hooks/forms/use-selected-values";
 import {
@@ -9,18 +9,18 @@ import {
   ProviderLoginFormData,
 } from "@/lib/schemas/provider-auth-schema";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { setUserType } from "@/lib/utils/getUserType";
+import { setUserType } from "@/lib/utils/auth/get-user-type";
 import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { getProviderRedirectInfo } from "@/lib/utils/auth-redirect";
+import { getCleanErrorMessage } from "@/lib/utils/auth/error";
+import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
 import {
   buildProviderSignupResumeUrl,
   clearProviderAuthStorage,
   hasProviderAuthToken,
   isProfileIncompleteError,
   parseProfileIncompleteStepFromMessage,
-} from "@/lib/utils/provider-signup-resume";
+} from "@/lib/utils/provider/signup-resume";
 import { useAccountRecovery } from "@/hooks/auth/use-account-recovery";
 import type { Route } from "next";
 

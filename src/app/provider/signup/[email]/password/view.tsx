@@ -1,11 +1,11 @@
 "use client";
 
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { signUpSteps } from "@/lib/utils";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
 import Stepper from "@/components/miscellaneous/stepper";
-import { useProviderPassword } from "@/hooks/provider/use-provider-password";
+import { useProviderPassword } from "@/hooks/provider/password/use-password";
 
 const PasswordSetup = () => {
   const {

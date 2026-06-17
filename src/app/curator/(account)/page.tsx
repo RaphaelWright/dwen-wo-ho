@@ -1,6 +1,6 @@
 "use client";
 
-import { useCuratorRedirect } from "@/hooks/curator/use-curator-redirect";
+import { useCuratorRedirect } from "@/hooks/curator/redirect/use-redirect";
 
 export default function CuratorDashboard() {
   const { isChecking } = useCuratorRedirect();

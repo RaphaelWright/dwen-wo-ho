@@ -2,3 +2,4 @@ pnpm exec lint-staged
 pnpm lint
 pnpm typecheck
 pnpm doctor
+pnpm fallow:audit

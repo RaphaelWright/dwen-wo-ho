@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { useTheme } from "next-themes";
-import { activateOnKeyboard } from "@/lib/utils/a11y";
+import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
 
 /* ── Generate a smooth radial displacement map on a canvas ────
    Center = rgb(128,128,0) → no displacement.
@@ -107,7 +107,7 @@ function GlassFilter({
 }
 
 /* ── Props ────────────────────────────────────────────────────── */
-export interface LiquidGlassProps {
+interface LiquidGlassProps {
   children?: ReactNode;
   /** Corner radius in px (default 24) */
   cornerRadius?: number;

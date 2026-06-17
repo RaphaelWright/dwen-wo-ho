@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { authService } from "@/services/auth";
-import { performLogout } from "@/lib/auth-utils";
+import { authService } from "@/services/shared/auth";
+import { performLogout } from "@/lib/auth/session";
 import { ROUTES } from "@/lib/constants/routes";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
-import { toast } from "@/lib/utils/toast";
+import { toast } from "sonner";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 
 // After any auth mutation, cached auth-scoped data (profile, session) may be

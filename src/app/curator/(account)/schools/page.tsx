@@ -9,28 +9,28 @@ import { Loader2, School } from "lucide-react";
 
 import WidthConstraint from "@/components/ui/width-constraint";
 
-import { useCuratorSchools } from "@/hooks/curator/use-curator-schools";
+import { useCuratorSchools } from "@/hooks/curator/schools/use-schools";
 
-import { type FilterType } from "@/lib/types/curator";
+import { type FilterType } from "@/lib/types/components/shared/school-filter";
 
-import { FILTER_OPTIONS } from "@/lib/constants/components/curator/schools-list-search";
+import { FILTER_OPTIONS } from "@/lib/constants/components/curator/schools/schools-list-search";
 
-import { SchoolCard } from "@/components/curator/SchoolCard";
+import { SchoolCard } from "@/components/curator/schools/school-card/index";
 
-import { NotificationBell } from "@/components/shared/notification-bell";
+import { NotificationBell } from "@/components/shared/notification-bell/index";
 
-import { useCuratorNotification } from "@/hooks/use-curator-notification";
+import { useCuratorNotification } from "@/hooks/curator/notification/use-notification";
 
-import { FilterTabBar } from "@/components/shared/filter-tab-bar";
+import { FilterTabBar } from "@/components/shared/filter-tab-bar/index";
 
 import { SearchDropdown } from "@/components/shared/search-dropdown";
 
-import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card";
+import { SchoolSuggestionCard } from "@/components/shared/school-suggestion-card/index";
 
 import {
   SCHOOLS_LIST_SEARCH_PLACEHOLDERS,
   SCHOOL_FILTER_ICONS,
-} from "@/lib/constants/components/curator/schools-list-search";
+} from "@/lib/constants/components/curator/schools/schools-list-search";
 
 export default function SchoolsPage() {
   const {

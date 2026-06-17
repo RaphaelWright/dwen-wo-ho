@@ -7,7 +7,7 @@ export const NAV_ITEMS = [
   },
   {
     name: "Providers",
-    path: ROUTES.public.forProviders,
+    path: ROUTES.public.joinAsProvider,
   },
 ] as const;
 

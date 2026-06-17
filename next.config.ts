@@ -51,6 +51,11 @@ const nextConfig: NextConfig = {
         destination: "/provider/auth?step=sign-in",
         permanent: true,
       },
+      {
+        source: "/for-providers",
+        destination: "/join-as-provider",
+        permanent: true,
+      },
     ];
   },
 };

@@ -3,7 +3,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "./button";
-import { useHydrated } from "@/hooks/use-hydrated";
+import { useHydrated } from "@/hooks/shared/use-hydrated";
 
 import { cn } from "@/lib/utils";
 

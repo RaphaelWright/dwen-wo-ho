@@ -1,6 +1,6 @@
 "use client";
 
-import { usePatientCheckEmail } from "@/hooks/patient/use-patient-check-email";
+import { usePatientCheckEmail } from "@/hooks/patient/check-email/use-check-email";
 import {
   CheckEmailHeader,
   CheckEmailForm,

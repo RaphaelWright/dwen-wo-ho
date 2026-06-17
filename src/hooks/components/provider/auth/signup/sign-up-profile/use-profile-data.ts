@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ProviderProfileData } from "@/lib/types/provider/auth";
+import { ProviderProfileData } from "@/lib/types/components/provider/auth";
 
 export const useProfileData = () => {
   const [profileData, setProfileData] = useState<ProviderProfileData>({

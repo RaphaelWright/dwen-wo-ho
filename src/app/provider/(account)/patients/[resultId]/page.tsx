@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useProviderPatientDetails } from "@/hooks/provider/use-provider-patient-details";
+import { useProviderPatientDetails } from "@/hooks/provider/patient-details/use-patient-details";
 import {
   PatientDetailsHeader,
   AssessmentMetricsPanel,

@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfirmationModalProps } from "@/lib/types/shared-ui";
+import { ConfirmationModalProps } from "@/lib/types/components/shared/confirmation-modal";
 import { Spinner } from "@/components/ui/spinner";
 
 const variantStyles = {

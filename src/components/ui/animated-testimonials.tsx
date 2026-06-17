@@ -3,7 +3,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { m, AnimatePresence } from "motion/react";
 
-import { hashStringToRange } from "@/lib/utils/hash-to-range";
+import { hashStringToRange } from "@/lib/utils/shared/hash";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Testimonial = {

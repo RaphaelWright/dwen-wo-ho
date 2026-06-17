@@ -1,7 +1,7 @@
 "use client";
 
 import Layout from "@/app/provider/auth/layout";
-import NewPassword from "@/components/provider/auth/new-password";
+import NewPassword from "@/components/provider/auth/new-password/index";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 

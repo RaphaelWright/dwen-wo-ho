@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useHydrated } from "@/hooks/use-hydrated";
+import { useHydrated } from "@/hooks/shared/use-hydrated";
 
 interface ClientOnlyProps {
   children: React.ReactNode;

@@ -1,3 +1,3 @@
-export * from "./ProviderProfileHeader";
-export * from "./ProviderProfileCard";
-export * from "./ProviderStatsGrid";
+export * from "./provider-profile-header";
+export * from "./provider-profile-card";
+export * from "./provider-stats-grid";

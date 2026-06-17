@@ -5,12 +5,12 @@ import { Button } from "../ui/button";
 import {
   HERO_CONTAINER_VARIANTS,
   HERO_ITEM_VARIANTS,
-} from "@/lib/constants/components/hero-variants";
+} from "@/lib/constants/components/marketing/landing";
 import WidthConstraint from "../ui/width-constraint";
 import { CheckCircle2 } from "lucide-react";
 import { ContainerTextFlip } from "../ui/container-text-flip";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
-import { HERO_CONTENT } from "@/lib/constants/components/hero";
+import { HERO_CONTENT } from "@/lib/constants/components/marketing/landing";
 import OrbitalCarousel from "../ui/orbital-carousel";
 import { orbitalItemsLocal } from "./orbital-items";
 import { useProvidersHero } from "@/hooks/components/hero/use-providers-hero";

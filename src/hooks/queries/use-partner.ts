@@ -1,8 +1,8 @@
 "use client";
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/lib/utils/toast";
-import { partnersService } from "@/services/partners";
+import { toast } from "sonner";
+import { partnersService } from "@/services/curator/partners";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 // Hoisted query hooks — they close over no component state.

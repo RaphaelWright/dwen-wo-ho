@@ -26,11 +26,6 @@ export interface TokenResponse {
   refreshToken?: string;
 }
 
-export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
 export interface AddPhotoResponse {
   profilePhotoUrl: string;
 }

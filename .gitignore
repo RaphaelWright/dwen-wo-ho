@@ -21,6 +21,9 @@ pnpm-lock.yaml
 # production
 /build
 
+# fallow (machine-local cache — see docs.fallow.tools/cli/init)
+.fallow/
+
 # misc
 .DS_Store
 *.pem
@@ -41,7 +44,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .aider*
-
-# cursor
-.cursor/
-.agents/

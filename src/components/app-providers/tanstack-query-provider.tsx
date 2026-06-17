@@ -6,8 +6,8 @@ import {
   QueryCache,
 } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";
-import { registerQueryClient } from "@/lib/query-client-store";
-import { toast } from "@/lib/utils/toast";
+import { registerQueryClient } from "@/lib/query/client-store";
+import { toast } from "sonner";
 
 const TanstackQueryProvider = ({ children }: { children: ReactNode }) => {
   const [queryClient] = useState(() => {

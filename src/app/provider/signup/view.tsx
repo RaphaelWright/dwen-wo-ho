@@ -1,9 +1,9 @@
 "use client";
 
 import Layout from "@/app/provider/auth/layout";
-import ProviderSignUp from "@/components/provider/auth/sign-up";
+import ProviderSignUp from "@/components/provider/auth/sign-up/index";
 import { Suspense } from "react";
-import { useProviderSignup } from "@/hooks/provider/use-provider-signup";
+import { useProviderSignup } from "@/hooks/provider/signup/use-signup";
 
 const SignUpPageContent = () => {
   const {
