@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { ConnectionStatus } from "@/lib/types/websocket";
+import { ConnectionStatus } from "@/lib/types/entities/websocket";
 
 export const connectionStatusAtom = atom<ConnectionStatus>("DISCONNECTED");
 

@@ -2,15 +2,15 @@
 
 import { useMemo } from "react";
 
-import { School } from "@/lib/types/school";
+import { School } from "@/lib/types/entities/school";
 
-import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details";
+import { SchoolPatientRecord } from "@/lib/types/components/curator/school-details/school-details";
 
 import useSchoolsQuery from "@/hooks/queries/use-schools";
 
 import useSchoolDetailsQuery from "@/hooks/queries/use-school-details";
 
-import { parseCampuses } from "@/lib/utils/parseCampuses";
+import { parseCampuses } from "@/lib/utils/curator/schools/parse-campuses";
 
 export function useSchoolData(schoolId: string) {
   const { useSchool, invalidateSchool, disableSchool } = useSchoolsQuery();

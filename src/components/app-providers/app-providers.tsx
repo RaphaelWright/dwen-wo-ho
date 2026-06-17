@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { ThemeProvider } from "./theme-provider";
 import TanstackQueryProvider from "./tanstack-query-provider";
 import JotaiProvider from "./jotai-provider";
-import { StompProvider } from "@/components/providers/stomp-provider";
+import { StompProvider } from "@/components/app-providers/stomp-provider";
 import { OnlineStatus } from "./online-status";
 import MotionProvider from "./motion-provider";
 

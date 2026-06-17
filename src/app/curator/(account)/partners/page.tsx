@@ -3,8 +3,8 @@
 import WidthConstraint from "@/components/ui/width-constraint";
 import { Building2, Search } from "lucide-react";
 import Image from "next/image";
-import PartnerDetailsModal from "@/components/modals/partner-details";
-import { useCuratorPartners } from "@/hooks/curator/use-curator-partners";
+import PartnerDetailsPanel from "@/components/curator/partners/partner-details-panel";
+import { useCuratorPartners } from "@/hooks/curator/partners/use-partners";
 
 export default function PartnersPage() {
   const {
@@ -112,7 +112,7 @@ export default function PartnersPage() {
       </div>
 
       {/* Partner Details Modal */}
-      <PartnerDetailsModal
+      <PartnerDetailsPanel
         isOpen={showPartnerModal}
         onClose={handleModalClose}
         partnerId={selectedPartnerId}

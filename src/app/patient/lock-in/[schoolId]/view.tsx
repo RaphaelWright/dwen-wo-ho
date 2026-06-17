@@ -1,7 +1,7 @@
 "use client";
 
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useLockInForm } from "@/hooks/patient/use-lock-in-form";
+import { useLockInForm } from "@/hooks/patient/lock-in/use-form";
 import {
   LOCKIN_FREQUENCY_OPTIONS as frequencyOptions,
   LOCKIN_YES_NO_OPTIONS as yesNoOptions,

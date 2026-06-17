@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { School } from "@/lib/types/school";
+import { School } from "@/lib/types/entities/school";
 
 export interface SchoolWithExtras extends School {
   studentCount?: number;

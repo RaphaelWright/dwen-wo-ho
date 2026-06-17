@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/shared/logo";
 import { Home, ArrowLeft } from "lucide-react";
 import { m } from "motion/react";
 import { ROUTES } from "@/lib/constants/routes";

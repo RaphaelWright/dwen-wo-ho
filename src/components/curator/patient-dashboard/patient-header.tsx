@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { IconProgress } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { getColorHex } from "@/lib/utils/color-utils";
-import type { PatientHeaderProps } from "@/lib/types/components/curator/patient-dashboard/header";
+import { getColorHex } from "@/lib/utils/shared/color-hex";
+import type { PatientHeaderProps } from "@/lib/types/components/curator/patient-dashboard";
 
 export default function PatientHeader({
   patientResult,

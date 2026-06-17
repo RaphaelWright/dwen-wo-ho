@@ -1,7 +1,7 @@
 "use client";
 
 import WidthConstraint from "@/components/ui/width-constraint";
-import { usePatientWaitingRoom } from "@/hooks/patient/use-patient-waiting-room";
+import { usePatientWaitingRoom } from "@/hooks/patient/waiting-room/use-waiting-room";
 import {
   WaitingRoomHeader,
   WaitingRoomStatusCard,

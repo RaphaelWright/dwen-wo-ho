@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { toast } from "@/lib/utils/toast";
+import { toast } from "sonner";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { getCleanErrorMessage } from "@/lib/utils/auth-error";
+import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { ROUTES } from "@/lib/constants/routes";
 
 export const useAccountRecovery = (

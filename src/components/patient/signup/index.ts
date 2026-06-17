@@ -1,3 +1,3 @@
-export * from "./SignUpHeader";
-export * from "./SignUpForm";
-export * from "./SignUpFooter";
+export * from "./sign-up-header";
+export * from "./sign-up-form";
+export * from "./sign-up-footer";

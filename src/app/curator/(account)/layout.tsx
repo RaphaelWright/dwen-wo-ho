@@ -3,25 +3,25 @@
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 
-import { CuratorSidebar } from "@/components/ui/curator-sidebar";
+import { CuratorSidebar } from "@/components/curator/curator-sidebar";
 
-import CreateModal from "@/components/curator/create-modal";
+import CreateLauncher from "@/components/curator/create/create-launcher";
 
-import MemberCreationModal from "@/components/modals/member-creation";
+import MemberCreateModal from "@/components/curator/create/member-create-modal";
 
-import PartnerCreationModal from "@/components/modals/partner-creation";
+import PartnerCreateModal from "@/components/curator/create/partner-create-modal";
 
-import ReachModal from "@/components/modals/reach";
+import ReachOverviewModal from "@/components/curator/create/reach-overview-modal";
 
-import SchoolCreationModal from "@/components/modals/school-creation";
+import SchoolCreateModal from "@/components/curator/create/school-create-wizard";
 
-import { useCuratorLayout } from "@/hooks/curator/use-curator-layout";
+import { useCuratorLayout } from "@/hooks/curator/layout/use-layout";
 
 import { isCuratorNotificationSheetOpenAtom } from "@/atoms/notification";
-import { useCuratorNotification } from "@/hooks/use-curator-notification";
+import { useCuratorNotification } from "@/hooks/curator/notification/use-notification";
 import NotificationsSheet from "@/components/shared/notification-sheet";
 import { getCuratorNotificationRoute } from "@/lib/config/notification-routing";
-import type { CuratorNotification } from "@/lib/types/notification";
+import type { CuratorNotification } from "@/lib/types/entities/notification";
 
 function CuratorNotificationsSheet() {
   const router = useRouter();
@@ -75,9 +75,9 @@ export default function DashboardLayout({
 
     handleLogout,
 
-    showCreateModal,
+    showCreateLauncher,
 
-    setShowCreateModal,
+    setShowCreateLauncher,
 
     showSchoolModal,
 
@@ -85,7 +85,7 @@ export default function DashboardLayout({
 
     showPartnerModal,
 
-    showReachModal,
+    showReachOverview,
 
     openSchoolModal,
 
@@ -93,7 +93,7 @@ export default function DashboardLayout({
 
     openPartnerModal,
 
-    openReachModal,
+    openReachOverview,
 
     closeSchoolModal,
 
@@ -101,7 +101,7 @@ export default function DashboardLayout({
 
     closePartnerModal,
 
-    closeReachModal,
+    closeReachOverview,
   } = useCuratorLayout();
 
   // Show loading state only after mount to prevent hydration mismatch
@@ -125,41 +125,44 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen">
       <CuratorSidebar
-        onCreateClick={() => setShowCreateModal(true)}
+        onCreateClick={() => setShowCreateLauncher(true)}
         onLogout={handleLogout}
       />
 
       <div className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</div>
 
-      {showCreateModal && (
-        <CreateModal
-          setShowCreateModal={setShowCreateModal}
+      {showCreateLauncher && (
+        <CreateLauncher
+          setShowCreateLauncher={setShowCreateLauncher}
           onOpenSchoolModal={openSchoolModal}
           onOpenMemberModal={openMemberModal}
           onOpenPartnerModal={openPartnerModal}
-          onOpenReachModal={openReachModal}
+          onOpenReachOverview={openReachOverview}
         />
       )}
 
-      <SchoolCreationModal
+      <SchoolCreateModal
         isOpen={showSchoolModal}
         onClose={closeSchoolModal}
         onSchoolCreated={closeSchoolModal}
       />
 
-      <MemberCreationModal
+      <MemberCreateModal
         isOpen={showMemberModal}
         onClose={closeMemberModal}
         onMemberCreated={closeMemberModal}
       />
 
-      <PartnerCreationModal
+      <PartnerCreateModal
         isOpen={showPartnerModal}
         onClose={closePartnerModal}
         onPartnerCreated={closePartnerModal}
       />
 
-      <ReachModal isOpen={showReachModal} onClose={closeReachModal} />
+      <ReachOverviewModal
+        isOpen={showReachOverview}
+        onClose={closeReachOverview}
+      />
 
       <CuratorNotificationsSheet />
     </div>

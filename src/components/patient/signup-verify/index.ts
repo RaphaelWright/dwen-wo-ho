@@ -1,3 +1,3 @@
-export * from "./VerifyHeader";
-export * from "./VerifyOTPSection";
-export * from "./VerifyFooter";
+export * from "./verify-header";
+export * from "./verify-otp-section";
+export * from "./verify-footer";

@@ -1,35 +1,18 @@
 "use client";
 
-import { type Ref, useState, type CSSProperties, type ReactNode } from "react";
+import { type Ref, useState, type CSSProperties } from "react";
 import { useTheme } from "next-themes";
-import { useHydrated } from "@/hooks/use-hydrated";
+import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { m } from "motion/react";
 import LiquidGlass from "@/components/ui/liquid-glass";
 import { cn } from "@/lib/utils";
+import type { GlassNavTab } from "@/lib/types/components/ui/liquid-glass-navbar";
 
 /* ═══════════════════════════════════════════════════════════════
    Types
    ═══════════════════════════════════════════════════════════════ */
 
-/** A single tab item in the navbar. */
-export interface GlassNavTab {
-  /** Unique identifier for this tab */
-  id: string;
-  /** Display label shown below the icon */
-  label: string;
-  /** Icon element (e.g. a Lucide icon) */
-  icon: ReactNode;
-  /** Badge count — shows a red dot if > 0 */
-  badge?: number | null;
-  /** Render as a small avatar circle instead of the raw icon */
-  isAvatar?: boolean;
-  /** Custom avatar content (emoji, image, etc.) — used when isAvatar is true */
-  avatarContent?: ReactNode;
-  /** If set, clicking this tab fires onAction instead of switching active state */
-  onAction?: () => void;
-}
-
-export interface LiquidGlassNavbarProps {
+interface LiquidGlassNavbarProps {
   /** Tab definitions */
   tabs: GlassNavTab[];
   /** Currently active tab id (controlled mode) */

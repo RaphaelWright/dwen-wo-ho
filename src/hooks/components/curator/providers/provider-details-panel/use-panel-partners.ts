@@ -1,0 +1,93 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import usePartnerQuery from "@/hooks/queries/use-partner";
+import { AssociatedPartner, Partner } from "@/lib/types/entities/partners";
+import { ProviderDetails } from "@/lib/types/entities/provider";
+
+export const useProviderPanelPartners = (
+  isOpen: boolean,
+  providerEmail: string,
+  provider: ProviderDetails | null,
+  invalidateProvider: (email: string) => Promise<void>,
+) => {
+  const {
+    usePartnersList,
+    addProvider,
+    removeProvider,
+    isAddingProvider,
+    isRemovingProvider,
+  } = usePartnerQuery();
+  const { data: allPartnersData = [] } = usePartnersList({ enabled: isOpen });
+
+  const [partnerSearchQuery, setPartnerSearchQuery] = useState("");
+  const [partnerToAdd, setPartnerToAdd] = useState<AssociatedPartner | null>(
+    null,
+  );
+  const [partnerToRemove, setPartnerToRemove] =
+    useState<AssociatedPartner | null>(null);
+
+  const associatedPartners: AssociatedPartner[] = useMemo(() => {
+    const providerPartners = provider?.partners || [];
+    return providerPartners.map((p) => ({
+      id: String(p.id),
+      name: p.name,
+      logo: p.logo,
+      isAssociated: true,
+    }));
+  }, [provider?.partners]);
+
+  const availablePartners: AssociatedPartner[] = useMemo(() => {
+    const associatedIds = new Set(associatedPartners.map((p) => p.id));
+    return allPartnersData.flatMap((p: Partner) =>
+      associatedIds.has(String(p.id))
+        ? []
+        : [
+            {
+              id: String(p.id),
+              name: p.name,
+              logo: p.logo,
+              isAssociated: false,
+            },
+          ],
+    );
+  }, [allPartnersData, associatedPartners]);
+
+  const filteredAvailablePartners = useMemo(() => {
+    if (!partnerSearchQuery.trim()) return availablePartners;
+    const query = partnerSearchQuery.toLowerCase();
+    return availablePartners.filter((partner) =>
+      partner.name.toLowerCase().includes(query),
+    );
+  }, [availablePartners, partnerSearchQuery]);
+
+  const handleAddPartner = async (partner: AssociatedPartner) => {
+    const providerId = String(provider?.id || providerEmail);
+    await addProvider({ partnerId: String(partner.id), providerId });
+    await invalidateProvider(providerEmail);
+    setPartnerToAdd(null);
+  };
+
+  const handleRemovePartner = async (partner: AssociatedPartner) => {
+    const providerId = String(provider?.id || providerEmail);
+    await removeProvider({ partnerId: String(partner.id), providerId });
+    await invalidateProvider(providerEmail);
+    setPartnerToRemove(null);
+  };
+
+  return {
+    associatedPartners,
+    availablePartners,
+    filteredAvailablePartners,
+    partnerSearchQuery,
+    setPartnerSearchQuery,
+    partnerToAdd,
+    setPartnerToAdd,
+    partnerToRemove,
+    setPartnerToRemove,
+    handleAddPartner,
+    handleRemovePartner,
+    isAddingPartner: isAddingProvider,
+    isRemovingPartner: isRemovingProvider,
+  };
+};

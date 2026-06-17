@@ -1,6 +1,6 @@
 import { StickyScroll } from "../ui/sticky-scroll-reveal";
 import Image from "next/image";
-import { STICKY_SCROLL_CONTENT } from "@/lib/constants/components/sticky-scroll";
+import { STICKY_SCROLL_CONTENT } from "@/lib/constants/components/marketing/landing";
 
 export function StickyScrollSection() {
   const content = STICKY_SCROLL_CONTENT.map((item) => ({

@@ -1,10 +1,10 @@
 "use client";
 
-import { SpecialtyStepProps } from "@/lib/types/provider/auth";
+import { SpecialtyStepProps } from "@/lib/types/components/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { Button } from "@/components/ui/button";
 
-import { useSpecialtyStep } from "@/hooks/components/provider/auth/signup/use-specialty-step";
+import { useSpecialtyStep } from "@/hooks/components/provider/auth/signup/specialty-step/use-specialty-step";
 
 const SpecialtyStep = (props: SpecialtyStepProps) => {
   const {

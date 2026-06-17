@@ -1,4 +1,4 @@
-import { IStepperProps } from "@/lib/types/components/stepper";
+import { IStepperProps } from "@/lib/types/components/ui/stepper";
 import { useStepper } from "@/hooks/components/miscellaneous/use-stepper";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";

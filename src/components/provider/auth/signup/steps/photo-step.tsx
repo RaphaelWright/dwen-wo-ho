@@ -2,12 +2,12 @@
 
 import { CheckCircle2, Upload } from "lucide-react";
 import Image from "next/image";
-import { PhotoStepProps } from "@/lib/types/provider/auth";
+import { PhotoStepProps } from "@/lib/types/components/provider/auth";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { PhotoCropperModal } from "@/components/modals/photo-cropper-modal";
-import { usePhotoStep } from "@/hooks/components/provider/auth/signup/use-photo-step";
+import { PhotoCropperOverlay } from "@/components/shared/overlays/photo-cropper";
+import { usePhotoStep } from "@/hooks/components/provider/auth/signup/photo-step/use-photo-step";
 import { Input } from "@/components/ui/input";
-import { activateOnKeyboard } from "@/lib/utils/a11y";
+import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
 
 const PhotoStep = ({ profilePhoto, onChange }: PhotoStepProps) => {
   const {
@@ -109,7 +109,7 @@ const PhotoStep = ({ profilePhoto, onChange }: PhotoStepProps) => {
         className="hidden"
       />
 
-      <PhotoCropperModal
+      <PhotoCropperOverlay
         isOpen={isPhotoModalOpen}
         imageSrc={imageSrc}
         onClose={() => setIsPhotoModalOpen(false)}

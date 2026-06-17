@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { SchoolIcon } from "@/lib/types/school";
+import { SchoolIcon } from "@/lib/types/entities/school";
 
-export interface IconFormData {
+interface IconFormData {
   photo: File | null;
   name: string;
   slogan: string;

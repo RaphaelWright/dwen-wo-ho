@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { DevTool } from "@hookform/devtools";
-import { usePatientSignUp } from "@/hooks/patient/use-patient-signup";
+import { usePatientSignUp } from "@/hooks/patient/signup/use-signup";
 import {
   SignUpHeader,
   SignUpForm,

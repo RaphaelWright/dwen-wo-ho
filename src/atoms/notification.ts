@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import {
   CuratorNotification,
   ProviderNotification,
-} from "@/lib/types/notification";
+} from "@/lib/types/entities/notification";
 
 export const curatorNotificationListAtom = atom<CuratorNotification[]>([]);
 

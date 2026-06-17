@@ -1,12 +1,12 @@
 "use client";
 
 import { Suspense, type ReactNode } from "react";
-import CheckEmail from "@/components/provider/auth/check-email";
-import SignIn from "@/components/provider/auth/signin";
-import SignUp from "@/components/provider/auth/sign-up";
-import VerifyPasswordReset from "@/components/provider/auth/verify-password-reset";
-import { useProviderAuth } from "@/hooks/provider/use-provider-auth";
-import { SIGN_IN_TEXTS } from "@/lib/constants/components/provider/auth/signin";
+import CheckEmail from "@/components/provider/auth/check-email/index";
+import SignIn from "@/components/provider/auth/signin/index";
+import SignUp from "@/components/provider/auth/sign-up/index";
+import VerifyPasswordReset from "@/components/provider/auth/verify-password-reset/index";
+import { useProviderAuth } from "@/hooks/provider/auth/use-auth";
+import { SIGN_IN_TEXTS } from "@/lib/constants/components/provider/auth/auth-copy";
 
 const ProviderAuthPageContent = () => {
   const {

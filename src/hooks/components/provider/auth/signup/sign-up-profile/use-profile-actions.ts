@@ -3,25 +3,25 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
-import { toast } from "@/lib/utils/toast";
+import { toast } from "sonner";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { setUserType } from "@/lib/utils/getUserType";
-import { validateProviderProfileStep } from "@/lib/utils/provider-profile-validation";
+import { setUserType } from "@/lib/utils/auth/get-user-type";
+import { validateProviderProfileStep } from "@/lib/utils/provider/profile-validation";
 import type { ProviderProfileBioStepData } from "@/lib/schemas/provider-auth-schema";
 import {
   ProviderProfileData,
   ProviderProfileStep,
-} from "@/lib/types/provider/auth";
-import { getCleanErrorMessage } from "@/lib/utils/auth-error";
-import { toSentenceCase } from "@/lib/utils/smart-typing";
-import { applyProviderAuthTokens } from "@/lib/utils/provider-auth-tokens";
+} from "@/lib/types/components/provider/auth";
+import { getCleanErrorMessage } from "@/lib/utils/auth/error";
+import { toSentenceCase } from "@/lib/utils/shared/string-case";
+import { applyProviderAuthTokens } from "@/lib/utils/auth/provider-tokens";
 import {
   clearProviderSignupPassword,
   getProviderSignupPassword,
-} from "@/lib/utils/provider-signup-password";
-import { hasProviderAuthToken } from "@/lib/utils/provider-signup-resume";
+} from "@/lib/utils/provider/signup-password";
+import { hasProviderAuthToken } from "@/lib/utils/provider/signup-resume";
 
 export const useProfileActions = ({
   email,

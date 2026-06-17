@@ -4,10 +4,10 @@ import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { MdHealthAndSafety } from "react-icons/md";
 import WidthConstraint from "@/components/ui/width-constraint";
-import ProviderDetailsModal from "@/components/modals/provider-details";
-import ProviderCard from "@/components/curator/provider-card";
+import ProviderDetailsPanel from "@/components/curator/providers/provider-details-panel";
+import ProviderCard from "@/components/curator/providers/provider-card/index";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
-import { useCuratorProviders } from "@/hooks/curator/use-curator-providers";
+import { useCuratorProviders } from "@/hooks/curator/providers/use-providers";
 
 function ProvidersPageContent() {
   const searchParams = useSearchParams();
@@ -159,7 +159,7 @@ function ProvidersPageContent() {
         </div>
 
         {/* Provider Details Modal */}
-        <ProviderDetailsModal
+        <ProviderDetailsPanel
           isOpen={showProviderModal}
           onClose={() => setShowProviderModal(false)}
           providerEmail={selectedProviderEmail}

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useProviderSchools } from "@/hooks/provider/use-provider-schools";
+import { useProviderSchools } from "@/hooks/provider/schools/use-schools";
 import {
   ProviderSchoolsHeader,
   ProviderSchoolsFilter,

@@ -1,0 +1,42 @@
+# Fallow — dead code, duplication, complexity, and architecture drift in
+# TypeScript/JavaScript codebases. PR gate uses severity-aware audit.
+#
+# Docs: https://docs.fallow.tools/integrations/ci
+# Source: https://github.com/fallow-rs/fallow
+
+name: Fallow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: fallow-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fallow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: fallow-rs/fallow@v2
+        with:
+          command: audit
+          gate: new-only
+          comment: true
+          review-comments: true
+          score: true
+          fail-on-issues: true
+          dead-code-baseline: fallow-baselines/dead-code.json
+          health-baseline: fallow-baselines/health.json
+          dupes-baseline: fallow-baselines/dupes.json

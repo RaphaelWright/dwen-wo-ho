@@ -8,7 +8,7 @@ import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-w
 import HomePageHero from "@/components/hero/home-hero";
 import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
 import { testimonials } from "@/lib/constants/mock-data";
-import Footer from "@/components/shared/footer";
+import Footer from "@/components/shared/footer/index";
 import { getMetadata } from "@/lib/metadata";
 
 export const metadata = getMetadata();

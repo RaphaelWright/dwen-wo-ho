@@ -3,7 +3,7 @@ import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
 
 import { encode } from "qss";
 import React from "react";
-import { useHydrated } from "@/hooks/use-hydrated";
+import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { AnimatePresence, m, useMotionValue, useSpring } from "motion/react";
 
 import { cn } from "@/lib/utils";

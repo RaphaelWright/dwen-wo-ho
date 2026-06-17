@@ -3,8 +3,8 @@
 import {
   SignUpProfileProps,
   ProviderProfileStep,
-} from "@/lib/types/provider/auth";
-import { isProviderProfileStepValid } from "@/lib/utils/provider-profile-validation";
+} from "@/lib/types/components/provider/auth";
+import { isProviderProfileStepValid } from "@/lib/utils/provider/profile-validation";
 import { useProfileData } from "./use-profile-data";
 import { useProfileSteps } from "./use-profile-steps";
 import { useProfileActions } from "./use-profile-actions";

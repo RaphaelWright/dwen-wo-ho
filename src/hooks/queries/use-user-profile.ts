@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { authService } from "@/services/auth";
+import { authService } from "@/services/shared/auth";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 const useUserQuery = (options?: {

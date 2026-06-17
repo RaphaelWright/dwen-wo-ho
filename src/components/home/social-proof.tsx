@@ -1,4 +1,4 @@
-import { PARTNER_SCHOOLS } from "@/lib/constants/components/social-proof";
+import { PARTNER_SCHOOLS } from "@/lib/constants/components/marketing/landing";
 import WidthConstraint from "../ui/width-constraint";
 import { MarqueeRow } from "../shared/marquee-row";
 

@@ -7,7 +7,7 @@ import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
 import { testimonials } from "@/lib/constants/mock-data";
-import Footer from "@/components/shared/footer";
+import Footer from "@/components/shared/footer/index";
 import ProviderPageHero from "@/components/hero/providers";
 import { getMetadata } from "@/lib/metadata";
 

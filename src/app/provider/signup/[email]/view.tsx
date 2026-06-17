@@ -1,13 +1,14 @@
 "use client";
 
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
-import { formatTime, signUpSteps } from "@/lib/utils";
+import { formatElapsedSeconds as formatTime } from "@/lib/utils/shared/time-ago";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants/routes";
 import Stepper from "@/components/miscellaneous/stepper";
-import { useProviderVerifyEmail } from "@/hooks/provider/use-provider-verify-email";
+import { useProviderVerifyEmail } from "@/hooks/provider/verify-email/use-verify-email";
 
 const Verify = () => {
   const {

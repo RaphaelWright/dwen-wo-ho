@@ -31,7 +31,7 @@ must comply with the rules below. No exceptions.
 | Routes         | `app/`           | Route composition only                                |
 | Presentation   | `components/`    | UI rendering only (except `components/ui` primitives) |
 | Orchestration  | `hooks/`         | React state/effects; calls services                   |
-| Business Logic | `lib/services/`  | Business logic and API/data access                    |
+| Business Logic | `services/`      | Business logic and API/data access                    |
 | Utilities      | `lib/utils/`     | Pure, reusable helpers                                |
 | Types          | `lib/types/`     | Interfaces, type aliases, enums                       |
 | Constants      | `lib/constants/` | Static values                                         |
@@ -48,13 +48,263 @@ No layer may bypass this chain.
 
 ### File Placement
 
-| What                    | Where                                                 |
-| ----------------------- | ----------------------------------------------------- |
-| Subcomponent prop types | `lib/types/components/<feature>/`                     |
-| UI-specific hooks       | `hooks/components/<area>/`                            |
-| Presentational splits   | `components/<feature>/<part>.tsx`                     |
-| shadcn `cva` variants   | `components/ui/*-variants.ts` (non-component exports) |
-| Shared a11y helpers     | `lib/utils/a11y.ts`                                   |
+| What                    | Where                                                               |
+| ----------------------- | ------------------------------------------------------------------- |
+| Subcomponent prop types | `lib/types/components/<feature>/`                                   |
+| UI-specific hooks       | `hooks/components/<area>/`                                          |
+| Presentational splits   | `components/<feature>/<part>.tsx` or `<part>/index.tsx` (see below) |
+| shadcn `cva` variants   | `components/ui/*-variants.ts` (non-component exports)               |
+| Shared a11y helpers     | `lib/utils/a11y.ts`                                                 |
+
+### Component Folder Structure _(Mandatory)_
+
+Every directory under `components/` must be **homogeneous** at each level — pick one shape and stick to it:
+
+| Level contents      | Valid? | When to use                                                                       |
+| ------------------- | ------ | --------------------------------------------------------------------------------- |
+| **Files only**      | Yes    | Sibling components with no sub-structure (e.g. `provider-details/*.tsx`)          |
+| **Folders only**    | Yes    | Each child is its own unit (`index.tsx` entry) or grouping (`tabs/`, `overlays/`) |
+| **Files + folders** | **No** | Never — this is the only violation                                                |
+
+**Do not** convert a files-only directory into folders just for consistency. Folder-per-component is required only when you would otherwise **mix** a loose file with a subfolder at the same level.
+
+Run `pnpm components:audit` before large component PRs.
+
+#### Naming (folders)
+
+| Suffix / pattern      | Use for                                                         |
+| --------------------- | --------------------------------------------------------------- |
+| `*-wizard/`           | Multi-step create/edit flows                                    |
+| `*-picker/`           | Selection overlays (school, item, etc.)                         |
+| `*-host/`             | Renders a set of overlays from parent state                     |
+| `*-button/`, `*-tab/` | Focused workspace controls and tab panels                       |
+| `editor/`             | Main in-page workspace body (tab content + inline controls)     |
+| `overlays/`           | Modal/wizard/picker siblings for a feature                      |
+| `workspace/`          | In-page UI siblings (`editor/`, `overlay-host/`, `tabs/`, etc.) |
+
+Use **kebab-case** for folder and file names that describe the UI role, not PascalCase filenames or legacy prefixes (`curator-pages-*`, `content-pages-*`). React component **symbols** stay PascalCase (`export function ProviderProfileCard`).
+
+#### Examples
+
+**Files only** — no subfolders, nothing to fix:
+
+```
+components/curator/provider-details/
+  details-header.tsx
+  profile-card.tsx
+  specialties-card.tsx
+  action-buttons.tsx
+  status-display.tsx
+  index.ts
+```
+
+**Folders only** — parent has multiple units; each child is a folder:
+
+```
+components/curator/content-pages/
+  overlays/
+    add-cover-page-wizard/      # files only inside (index + steps)
+      index.tsx
+      slogan-step.tsx
+  workspace/
+    editor/
+      index.tsx
+    tabs/
+      cover-page-tab/
+        index.tsx
+```
+
+**Violation** — loose file alongside folders (fix by folderizing the loose file(s)):
+
+```
+components/curator/create/
+  create-launcher.tsx           # ← move to create-launcher/index.tsx
+  member-create-modal/
+  school-create-modal/
+```
+
+Import folder entries by path: `@/components/curator/content-pages/workspace/editor`. Import file siblings normally: `@/components/curator/provider-details`.
+
+Types for a feature domain live in **one** `lib/types/components/<domain>/<feature>.ts` module — not one micro-file per component.
+
+### Hook Folder Structure _(Mandatory)_
+
+Mirror **Component Folder Structure** homogeneity rules under `src/hooks/`:
+
+| Level contents      | Valid? | When to use                                                               |
+| ------------------- | ------ | ------------------------------------------------------------------------- |
+| **Files only**      | Yes    | Sibling hooks with no sub-structure (e.g. `hooks/queries/use-curator.ts`) |
+| **Folders only**    | Yes    | Each child is its own unit (`layout/`, `dashboard/`, `signup/bio-step/`)  |
+| **Files + folders** | **No** | Never — folderize loose hook files                                        |
+
+Run `pnpm hooks:audit` before large hook PRs. UI hooks under `hooks/components/<area>/` must mirror the matching `components/<area>/` feature paths.
+
+#### Naming (hook files)
+
+| Rule                           | Example                                                             |
+| ------------------------------ | ------------------------------------------------------------------- |
+| **`use-` prefix** + kebab-case | `use-layout.ts`, not `layout.ts`                                    |
+| **No redundant parent prefix** | `hooks/curator/layout/use-layout.ts`, not `use-curator-layout.ts`   |
+| **No legacy prefixes**         | `content-pages/`, not `curator-content-pages/`                      |
+| **UI-role suffixes**           | `use-panel-data.ts` for panel UI, not `use-*-modal-*`               |
+| **Barrel compositors**         | `index.ts` allowed (`useCuratorContentPages`, `useProviderDetails`) |
+
+**Cross-domain exceptions:** `hooks/queries/` keeps entity prefix (`use-curator.ts`) for disambiguation. `hooks/auth/use-provider-signin.ts` keeps role prefix when crossing domains.
+
+**Root layout:** `hooks/shared/` (generic utilities), `hooks/realtime/` (websocket/stomp), domain folders (`curator/`, `provider/`, `patient/`, `queries/`, `forms/`, `components/`).
+
+**Symbols:** exported hook names stay PascalCase after `use` (`useCuratorLayout`). Path renames first; rename symbols only when components already migrated (`Modal` → `Panel`).
+
+Use `pnpm hooks:reorg` / `pnpm hooks:reorg:apply` with `src/lib/scripts/hooks-reorg.manifest.json` for bulk moves.
+
+### Constants Folder Structure _(Mandatory)_
+
+Mirror **Component Folder Structure** homogeneity rules under `src/lib/constants/`:
+
+| Level contents      | Valid? | When to use                                                                |
+| ------------------- | ------ | -------------------------------------------------------------------------- |
+| **Files only**      | Yes    | Sibling constant modules with no sub-structure (e.g. `patient/lock-in.ts`) |
+| **Folders only**    | Yes    | Each child is its own unit (`curator/schools/`, `provider/workspace/`)     |
+| **Files + folders** | **No** | Never — folderize loose constant files                                     |
+
+Run `pnpm constants:audit` before large constants PRs. Constant paths under `lib/constants/components/<domain>/` must stay aligned with matching `components/<domain>/` and `hooks/<domain>/` paths.
+
+#### Placement
+
+| What                  | Where                                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Feature UI constants  | `lib/constants/components/<domain>/` — mirror `components/<domain>/`                                                           |
+| Infra / cross-cutting | `lib/constants/` root only: `routes.ts`, `endpoints.ts`, `query-keys.ts`, `z-index.ts`, `legal.ts`, `mock-data.ts`, `index.ts` |
+| Domain modules        | Merge micro-files (≤20 lines, ≤2 exports) into one module per folder (`school-forms.ts`, `auth-copy.ts`, `overlays.ts`)        |
+
+#### Naming
+
+| Rule                           | Example                                                                                                  |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| **Kebab-case filenames**       | `school-forms.ts`, `create-launcher.ts`                                                                  |
+| **No redundant parent prefix** | `curator/schools/school-forms.ts`, not `schools-school-forms.ts`                                         |
+| **UI-role suffixes**           | `create-launcher`, `provider-details-panel`, `school-edit-panel`, `pending-approval-modal/content.ts`    |
+| **Export symbols**             | `SCREAMING_SNAKE` for static objects; rename when UI role changes (`CREATE_LAUNCHER_ITEMS_CONFIG`)       |
+| **`.tsx` only for JSX**        | Search configs that export icon elements (e.g. `school-details/search.tsx`)                              |
+| **Single app barrel**          | `lib/constants/index.ts` only — no per-feature `index.ts` unless a composed constant module is justified |
+
+Use `pnpm constants:reorg` / `pnpm constants:reorg:apply` with `src/lib/scripts/constants-reorg.manifest.json` for bulk moves and consolidations.
+
+### Types Folder Structure _(Mandatory)_
+
+Mirror **Component Folder Structure** homogeneity rules under `src/lib/types/`:
+
+| Level contents      | Valid? | When to use                                                              |
+| ------------------- | ------ | ------------------------------------------------------------------------ |
+| **Files only**      | Yes    | Sibling type modules with no sub-structure                               |
+| **Folders only**    | Yes    | Each child is its own unit (`entities/`, `api/`, `components/<domain>/`) |
+| **Files + folders** | **No** | Never — folderize loose type files                                       |
+
+Run `pnpm types:audit` before large type PRs. Paths under `lib/types/components/<domain>/` must stay aligned with matching `components/<domain>/`, `hooks/<domain>/`, and `lib/constants/components/<domain>/`.
+
+#### Placement
+
+| What                  | Where                                                                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
+| **UI prop types**     | `lib/types/components/<domain>/` — mirror `components/<domain>/`                                      |
+| **Entities / DTOs**   | `lib/types/entities/` (domain shapes) or `lib/types/api/` (API contracts)                             |
+| **Infra**             | `lib/types/api/`, `lib/types/auth/` root only                                                         |
+| **Hook-shaped props** | Feature module under `components/<domain>/` or co-located with hook types — not loose in entity files |
+
+#### Naming
+
+| Rule                           | Example                                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------ |
+| **Kebab-case `.ts` only**      | `patient-dashboard.ts`, `overlay-host.ts` — no `.tsx` in `lib/types/`                      |
+| **No redundant parent prefix** | `patient-dashboard.ts` exports `PatientActionsPanelProps`, not a micro-file per card       |
+| **UI-role symbols**            | `*OverlayHostProps`, `*PanelProps`, `*WizardProps` — reserve `*ModalProps` for true modals |
+| **One module per feature**     | `curator/patient-dashboard.ts` not seven micro-files in `patient-dashboard/`               |
+| **Consolidation**              | Micro-module: ≤20 lines **and** ≤2 exported types; merge when ≥3 siblings in same folder   |
+
+Use `pnpm types:reorg` / `pnpm types:reorg:apply` with `src/lib/scripts/types-reorg.manifest.json` for bulk moves and consolidations.
+
+### Utils Folder Structure _(Mandatory)_
+
+Mirror **Component Folder Structure** homogeneity rules under `src/lib/utils/`:
+
+| Level contents      | Valid?     | When to use                                                                  |
+| ------------------- | ---------- | ---------------------------------------------------------------------------- |
+| **Files only**      | No at root | Root `lib/utils/` must be **folders-only** after domain split                |
+| **Folders only**    | Yes        | `shared/`, `auth/`, `provider/`, `curator/`, `patient/`, `notifications/`, … |
+| **Files + folders** | **No**     | Never — folderize loose util files                                           |
+
+| What                      | Where                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| **`cn()` only**           | `lib/utils.ts` — shadcn convention; no feature helpers or constant re-exports |
+| **Cross-cutting helpers** | `lib/utils/shared/` (`a11y.ts`, `time-ago.ts`, `search-query.ts`, …)          |
+| **Domain helpers**        | `lib/utils/<domain>/` — mirror `components/<domain>/` paths                   |
+| **Types**                 | `lib/types/` only — not in utils files                                        |
+
+#### Naming
+
+| Rule                     | Example                                                              |
+| ------------------------ | -------------------------------------------------------------------- |
+| **Kebab-case filenames** | `get-user-type.ts`, `time-ago.ts` — no `timeAgo.ts`                  |
+| **No `-utils` suffix**   | `shared/color-hex.ts`, not `color-utils.ts`                          |
+| **Pure functions**       | No React, hooks, or service imports                                  |
+| **Consolidation**        | Micro-file: ≤20 lines **and** ≤2 exports; merge siblings             |
+| **Dedup**                | One implementation per algorithm (`time-ago`, provider display name) |
+
+Run `pnpm utils:audit` before large utils PRs. Paths under `lib/utils/<domain>/` must stay aligned with matching `components/`, `hooks/`, `constants/`, and `types/`.
+
+Use `pnpm utils:reorg` / `pnpm utils:reorg:apply` with `src/lib/scripts/utils-reorg.manifest.json` for bulk moves and consolidations.
+
+### Service Folder Structure _(Mandatory)_
+
+Mirror **Component Folder Structure** homogeneity rules under `src/services/`:
+
+| Level contents      | Valid?     | When to use                                                                                    |
+| ------------------- | ---------- | ---------------------------------------------------------------------------------------------- |
+| **Files only**      | No at root | Root `src/services/` must be **folders-only** (`shared/`, `curator/`, `provider/`, `patient/`) |
+| **Folders only**    | Yes        | Domain folders mirror `hooks/<domain>/`                                                        |
+| **Files + folders** | **No**     | Never — folderize loose service files                                                          |
+
+**Domain-root exception:** `shared/`, `curator/`, `provider/`, and `patient/` may contain sibling module files plus one infra/feature subfolder (e.g. `curator/providers/`, `shared/websocket/`, `provider/dashboard/`). Deeper levels must stay homogeneous.
+
+| What                | Where                                                                                                                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Cross-role API**  | `services/shared/` (`auth.ts`, `patients.ts`, `specialties.ts`, `unified-notifications.ts`)                                                                                                      |
+| **Realtime infra**  | `services/shared/websocket/` (`stomp-client.ts`, `subscription-manager.ts`, `subscription-message-handlers.ts`, `provider-id.ts`) — not `*Service` names; split by lifecycle vs message dispatch |
+| **Curator domain**  | `services/curator/` (`index.ts`, `partners.ts`, `schools.ts`, `providers/`)                                                                                                                      |
+| **Provider domain** | `services/provider/dashboard/` (`index.ts` + sub-modules)                                                                                                                                        |
+| **Patient domain**  | `services/patient/` (`lock-ins.ts`)                                                                                                                                                              |
+
+#### Naming
+
+| Rule                             | Example                                                                                     |
+| -------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Kebab-case filenames**         | `lock-ins.ts`, not `lockins.ts`                                                             |
+| **No parent-prefix in filename** | `curator/providers/list.ts`, not `providers.ts`                                             |
+| **No legacy compound folders**   | `curator/providers/`, not `curator-providers/`                                              |
+| **No root shims**                | Delete one-line `foo.ts` beside `foo/index.ts`                                              |
+| **Facade barrels**               | One composed `*Service` per feature (`curatorProvidersService`, `providerDashboardService`) |
+| **Short sub-exports**            | `listService`, `schoolsService` inside folders — not `curatorProviderListService`           |
+| **Hooks import facades**         | `@/services/curator/providers`, not sub-paths like `.../schools`                            |
+
+Run `pnpm services:audit` before large service PRs. Paths under `services/<domain>/` must stay aligned with matching `hooks/<domain>/`, `components/<domain>/`, `constants/`, `types/`, and `utils/`.
+
+Use `pnpm services:reorg` / `pnpm services:reorg:apply` with `src/lib/scripts/services-reorg.manifest.json` for bulk moves and import rewrites.
+
+### `lib/` root infra _(Mandatory)_
+
+After utils domain split, `src/lib/` root holds **infra folders** plus the shadcn `utils.ts` entry — not feature helpers or services.
+
+| Path                  | Responsibility                                                        |
+| --------------------- | --------------------------------------------------------------------- |
+| `lib/utils.ts`        | **`cn()` only** — do not move                                         |
+| `lib/api/`            | HTTP client (`api()`); services import `@/lib/api`                    |
+| `lib/auth/session.ts` | Token refresh, logout, session expiry (impure; not `lib/utils/auth/`) |
+| `lib/metadata/`       | Next.js `getMetadata()` / site SEO defaults                           |
+| `lib/query/`          | TanStack Query client registration for non-React consumers            |
+| `lib/utils/`          | Pure helpers only — see Utils Folder Structure                        |
+| `src/services/`       | Domain API/business logic — hooks call services, not `api()` directly |
+
+**Do not** place API-calling modules at `lib/` root (`school-api-utils` pattern). **`processBatch`** and similar pure async helpers belong in `lib/utils/shared/`.
 
 ---
 
@@ -74,7 +324,7 @@ When a guard must stay client-side, add a one-line comment explaining why.
 
 - **Single responsibility** — one clear purpose per file, always.
 - **No API calls** in `components/` or `app/`.
-- **Components and routes** must not import directly from `lib/services/`.
+- **Components and routes** must not import directly from `services/` (use hooks).
 - **Services** must not import React, Next.js routing, components, or hooks.
 - **`.tsx` files** must not declare interfaces or type aliases.
 - **No inline definitions** — do not define constants, types, or utilities inside feature `.tsx` files.
@@ -94,7 +344,7 @@ or constant, verify one does not already exist.
 - Application source files should generally stay **under 250 lines**.
 - When a file grows beyond this limit, split it by concern: logic, UI, types, hooks, utilities.
 - **Route pages (`app/`):** compose hooks + feature components only. Splitting route files is behavior-sensitive — requires manual QA of the live flow.
-- **Modals / wizards:** one folder per feature (`components/modals/add-icon/`), step subcomponents, prop types in `lib/types/components/modals/`.
+- **Feature UI:** follow **Component Folder Structure** above — homogeneous directories, `index.tsx` entries, `overlays/` vs `workspace/` split; shared shell in `components/overlays/shared/`.
 - **Heavy UI logic:** extract to `hooks/components/...`; keep `.tsx` presentational.
 - **No `renderX()` helpers** called in JSX — use `let content: ReactNode` + `switch`, or a keyed child component.
 - **shadcn primitives:** colocated subcomponents are acceptable (`input-otp`, `input-group`). Move `cva` variants to sibling `*-variants.ts` so component files export components only.
@@ -191,18 +441,22 @@ shape → craft → critique → polish
 
 ## Documented Exceptions
 
-Some React Doctor rules conflict with deliberate architecture. Do **not** "fix" these to chase score — add a **one-line rationale comment** at the site instead.
+Some React Doctor rules and Fallow findings conflict with deliberate architecture. Do **not** "fix" these to chase score — add a **one-line rationale comment** at the site (React Doctor) or model them in `.fallowrc.json` (Fallow).
 
-| Category              | Examples                                                                        | Why kept                                          |
-| --------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Client auth guards    | `nextjs-no-client-side-redirect` in guard hooks                                 | `localStorage` unreadable server-side             |
-| Token reads           | `js-cache-storage` in auth utils                                                | Runtime-mutating tokens; cache = stale auth       |
-| shadcn inventory      | `unused-file` on `ui/combobox`, `drawer`, `progress`, `sheet`, `draggable-card` | Kept by design for the design system              |
-| Colocated primitives  | `no-multi-comp` in `input-otp`, `input-group`                                   | Upstream shadcn convention                        |
-| Concurrent UI flags   | `no-many-boolean-props` on notification sheets, confirmation modals             | Independent async states, not a status union      |
-| Dynamic / crop images | `nextjs-no-img-element` with eslint-disable                                     | Interactive editor or dynamic URLs                |
-| SSR-unsafe init       | `no-initialize-state` in canvas/DOM-measurement components                      | Cannot lazy-init without `useSyncExternalStore`   |
-| Runtime deps          | `unused-dependency` on `sharp`                                                  | Required by Next.js image optimization at runtime |
+| Category               | Examples                                                                        | Why kept                                           |
+| ---------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- |
+| Client auth guards     | `nextjs-no-client-side-redirect` in guard hooks                                 | `localStorage` unreadable server-side              |
+| Token reads            | `js-cache-storage` in auth utils                                                | Runtime-mutating tokens; cache = stale auth        |
+| shadcn inventory       | `unused-file` on `ui/combobox`, `drawer`, `progress`, `sheet`, `draggable-card` | Kept by design for the design system               |
+| Colocated primitives   | `no-multi-comp` in `input-otp`, `input-group`                                   | Upstream shadcn convention                         |
+| Concurrent UI flags    | `no-many-boolean-props` on notification sheets, confirmation modals             | Independent async states, not a status union       |
+| Dynamic / crop images  | `nextjs-no-img-element` with eslint-disable                                     | Interactive editor or dynamic URLs                 |
+| SSR-unsafe init        | `no-initialize-state` in canvas/DOM-measurement components                      | Cannot lazy-init without `useSyncExternalStore`    |
+| Runtime deps           | `unused-dependency` on `sharp`                                                  | Required by Next.js image optimization at runtime  |
+| Fallow sidecar         | `ignoreDependencies`: `@fallow-cli/fallow-cov`                                  | Runtime coverage sidecar; not statically imported  |
+| ESLint preset          | `ignoreDependencies`: `eslint-config-next`                                      | Consumed by ESLint config, not application imports |
+| Fallow shadcn exports  | `ignoreExports` in `.fallowrc.json` for design-system primitives                | Kept by design for the design system               |
+| shadcn flat primitives | `components/ui/` mixed with `curator-sidebar/`                                  | Upstream shadcn layout; sidebar is app extension   |
 
 Revisit exceptions only when the underlying constraint changes (e.g. cookie auth migration).
 
@@ -216,12 +470,28 @@ Revisit exceptions only when the underlying constraint changes (e.g. cookie auth
 npm run lint
 npx tsc --noEmit
 npx react-doctor@latest
+pnpm components:audit      # Before large component PRs
+pnpm hooks:audit             # Before large hook PRs
+pnpm constants:audit           # Before large constants PRs
+pnpm types:audit               # Before large type PRs
+pnpm utils:audit               # Before large utils PRs
+pnpm services:audit            # Before large service PRs
+pnpm conventions:audit         # Component + hook + constants + types + utils + services audits
+pnpm fallow:audit          # PR gate: new-only (introduced findings)
+pnpm fallow:audit:all      # Pre-release: gate all + production-health on changed files
 ```
+
+**Dual-gate policy:** PRs and `main` use `gate: new-only` (`.github/workflows/fallow.yml`). Pre-release checks use `pnpm fallow:audit:all` locally or the manual `Fallow Release` workflow (`.github/workflows/fallow-release.yml`). See [plan/process-fallow-release-gate-1.md](plan/process-fallow-release-gate-1.md).
 
 [React Doctor](https://www.react.doctor/) performs deterministic static analysis across state & effects,
 performance, architecture, security, and accessibility — and produces a health score for the codebase.
 The score must **not regress** on changes you touch. Fix new issues and regressions; document deliberate
 keeps per **Documented Exceptions** above rather than suppressing or working around rules.
+
+[Fallow](https://docs.fallow.tools/) performs codebase intelligence analysis: unused code, duplication,
+complexity hotspots, and architecture drift. `fallow audit` gates only **new** findings introduced by
+the changeset (`gate: new-only` default). Fix introduced issues; model intentional keeps in `.fallowrc.json`
+or with `@expected-unused` / `fallow-ignore-next-line` per **Documented Exceptions** above.
 
 Any violation of lint or type-check is treated as a **failing change request** and must be resolved before merge.
 Do not skip hooks (`--no-verify`) unless explicitly requested.

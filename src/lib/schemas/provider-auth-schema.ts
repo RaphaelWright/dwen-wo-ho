@@ -84,12 +84,6 @@ export const ProviderProfileSpecialtyStepSchema = z.object({
   specialty: z.string().min(1, { message: "Please select a specialty" }),
 });
 
-export type ProviderProfilePhotoStepData = z.infer<
-  typeof ProviderProfilePhotoStepSchema
->;
 export type ProviderProfileBioStepData = z.infer<
   typeof ProviderProfileBioStepSchema
->;
-export type ProviderProfileSpecialtyStepData = z.infer<
-  typeof ProviderProfileSpecialtyStepSchema
 >;

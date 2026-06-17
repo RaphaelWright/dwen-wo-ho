@@ -4,7 +4,7 @@ import { m } from "motion/react";
 import {
   HERO_CONTAINER_VARIANTS,
   HERO_ITEM_VARIANTS,
-} from "@/lib/constants/components/hero-variants";
+} from "@/lib/constants/components/marketing/landing";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/constants/routes";
@@ -14,7 +14,7 @@ import { ContainerTextFlip } from "../ui/container-text-flip";
 import { MovingButton } from "../ui/moving-border";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import GhanaMap from "../ui/ghana-map";
-import { HERO_CONTENT } from "@/lib/constants/components/hero";
+import { HERO_CONTENT } from "@/lib/constants/components/marketing/landing";
 
 // --- Main Hero Component ---
 export default function HomePageHero() {

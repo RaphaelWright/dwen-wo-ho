@@ -3,7 +3,7 @@
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { AlignRight, X } from "lucide-react";
-import { useHeaderActions } from "@/hooks/components/shared/use-header-actions";
+import { useHeaderActions } from "@/hooks/components/shared/header/use-header-actions";
 
 export const HeaderActions = ({
   isOpen,

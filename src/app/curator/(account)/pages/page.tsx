@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Logo } from "@/components/shared/Logo";
+import { Logo } from "@/components/shared/logo";
 import WidthConstraint from "@/components/ui/width-constraint";
-import { useCuratorContentPages } from "@/hooks/curator/curator-content-pages";
-import CuratorPagesContent from "@/components/curator/content-pages/curator-pages-content";
-import CuratorPagesModals from "@/components/curator/content-pages/curator-pages-modals";
+import { useCuratorContentPages } from "@/hooks/curator/content-pages";
+import ContentPagesWorkspace from "@/components/curator/content-pages/workspace/editor";
+import ContentPagesOverlayHost from "@/components/curator/content-pages/workspace/overlay-host";
 
 export default function CuratorPagesPage() {
   const pages = useCuratorContentPages();
@@ -63,8 +63,8 @@ export default function CuratorPagesPage() {
           })}
         </div>
 
-        <CuratorPagesContent pages={pages} />
-        <CuratorPagesModals pages={pages} />
+        <ContentPagesWorkspace pages={pages} />
+        <ContentPagesOverlayHost pages={pages} />
       </div>
     </WidthConstraint>
   );

@@ -2,7 +2,7 @@
 
 import { Brain, AlertCircle, BookOpen } from "lucide-react";
 import { m } from "motion/react";
-import type { PatientMetricsProps } from "@/lib/types/components/curator/patient-dashboard/metrics";
+import type { PatientMetricsProps } from "@/lib/types/components/curator/patient-dashboard";
 
 export default function PatientMetrics({ metrics }: PatientMetricsProps) {
   return (

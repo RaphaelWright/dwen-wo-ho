@@ -1,9 +1,9 @@
 "use client";
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "@/lib/utils/toast";
-import { schoolsService } from "@/services/schools";
-import { lockinsService } from "@/services/lockins";
+import { toast } from "sonner";
+import { schoolsService } from "@/services/curator/schools";
+import { lockinsService } from "@/services/patient/lock-ins";
 import { QUERY_KEYS } from "@/lib/constants/query-keys";
 
 // ─── Query Hooks ─────────────────────────────────────────────────────────────

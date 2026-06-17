@@ -10,7 +10,7 @@ import {
   IconMoodSmile,
 } from "@tabler/icons-react";
 import WidthConstraint from "../ui/width-constraint";
-import { SERVICES_DATA } from "@/lib/constants/components/services";
+import { SERVICES_DATA } from "@/lib/constants/components/marketing/landing";
 import {
   SkeletonOne,
   SkeletonTwo,

@@ -1,4 +1,4 @@
-import { ProviderNotification } from "../notification";
+import { ProviderNotification } from "../entities/notification";
 import type { PatientCase } from "./patient-results";
 import type { ProviderAssociatedSchool } from "./providers";
 

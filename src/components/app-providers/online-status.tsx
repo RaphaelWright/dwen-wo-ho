@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { useOnlineStatus } from "@/hooks/use-online-status";
+import { useOnlineStatus } from "@/hooks/shared/use-online-status";
 import { WifiOff, Wifi } from "lucide-react";
 
 // Custom spring easing for premium feel
