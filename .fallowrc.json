@@ -175,6 +175,10 @@
       "exports": ["*"]
     },
     {
+      "file": "src/components/ui/field.tsx",
+      "exports": ["*"]
+    },
+    {
       "file": "src/components/ui/select.tsx",
       "exports": ["*"]
     }

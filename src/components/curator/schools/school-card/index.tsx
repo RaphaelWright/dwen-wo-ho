@@ -26,14 +26,14 @@ export function SchoolCard({
     <m.div
       initial="initial"
       whileHover="hover"
-      className="bg-card dark:bg-muted/80 mx-auto w-full max-w-xs rounded-lg"
+      className="bg-card dark:bg-muted/80 mx-auto w-full max-w-sm rounded-lg"
     >
       <Link
         href={`${ROUTES.curator.schools}/${school.id}`}
         className="group border-border/30 relative block overflow-hidden rounded-lg border shadow-sm transition-all duration-300 hover:shadow-md"
       >
         {/* Header Section (Image Background) */}
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className="relative h-60 w-full overflow-hidden">
           {/* Background Image Layer */}
           <m.div
             variants={{

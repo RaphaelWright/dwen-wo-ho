@@ -12,12 +12,6 @@ export interface AnimatedModalShellProps {
   backdropClassName?: string;
 }
 
-export interface ModalPanelHeaderProps {
-  title: string;
-  subtitle: string;
-  onClose: () => void;
-}
-
 export interface ColorOption {
   hex: string;
   name: string;
@@ -40,28 +34,6 @@ export interface AddCoverPageWizardProps {
     color: string;
     slogan: string;
   } | null;
-}
-
-export interface FeatureComingSoonOverlayProps {
-  isOpen: boolean;
-  onClose: () => void;
-  featureName: string;
-}
-
-export interface MemberCreateModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onMemberCreated?: (member: unknown) => void;
-}
-
-export interface PartnerCreateModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onPartnerCreated?: (partner: {
-    name: string;
-    nickname?: string;
-    logo?: string;
-  }) => void;
 }
 
 export interface PartnerDetailsPanelProps {
@@ -91,18 +63,6 @@ export interface ProviderDetailsPanelProps {
 
 export type ProviderDetailsPanelTab =
   (typeof PROVIDER_DETAILS_TAB_VALUES)[number];
-
-export interface ReachOverviewModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export interface SchoolCreateModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSchoolCreated?: (school: any) => void;
-}
 
 export interface SchoolEditPanelProps {
   isOpen: boolean;

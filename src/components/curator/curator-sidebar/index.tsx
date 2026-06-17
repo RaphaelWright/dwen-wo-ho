@@ -26,7 +26,7 @@ export const CuratorSidebar = (props: SidebarProps) => {
     handleLogoutClick,
     pathname,
     setIsOpen,
-  } = useCuratorSidebar(props);
+  } = useCuratorSidebar();
 
   const { onLogout } = props;
 

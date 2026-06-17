@@ -5,16 +5,14 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { FiFileText, FiPlus } from "react-icons/fi";
+import type { Route } from "next";
 import { ROUTES } from "@/lib/constants/routes";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { useCuratorNotification } from "@/hooks/curator/notification/use-notification";
-import {
-  NavItem,
-  SidebarProps,
-} from "@/lib/types/components/curator/curator-sidebar/sidebar";
+import { NavItem } from "@/lib/types/components/curator/curator-sidebar/sidebar";
 import { useCuratorSummary } from "@/hooks/queries/use-curator";
 
-export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
+export const useCuratorSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -29,13 +27,16 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
   useEffect(() => {
     const mainPages: string[] = [
       ROUTES.curator.dashboard,
+      ROUTES.curator.create,
       ROUTES.curator.schools,
       ROUTES.curator.providers,
       ROUTES.curator.partners,
       ROUTES.curator.pages,
     ];
 
-    if (!mainPages.includes(pathname)) {
+    const isMainPage = mainPages.includes(pathname);
+
+    if (!isMainPage) {
       setIsCollapsed(true);
     } else {
       setIsCollapsed(false);
@@ -72,12 +73,9 @@ export const useCuratorSidebar = ({ onCreateClick }: SidebarProps) => {
       icon: <FiFileText className="shrink-0 text-lg" />,
     },
     {
+      href: ROUTES.curator.create as Route,
       label: "Create",
       icon: <FiPlus className="shrink-0 text-lg" />,
-      onClick: () => {
-        onCreateClick();
-        setIsMobileSidebarOpen(false);
-      },
     },
   ];
 

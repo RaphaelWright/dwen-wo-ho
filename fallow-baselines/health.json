@@ -1,10 +1,5 @@
 {
   "finding_counts": {
-    "src/app/curator/(account)/layout.tsx": {
-      "crap_moderate": {
-        "count": 1
-      }
-    },
     "src/app/curator/(account)/partners/page.tsx": {
       "crap_moderate": {
         "count": 1
@@ -16,6 +11,11 @@
       }
     },
     "src/app/curator/(account)/schools/page.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "src/app/curator/(studio)/create/[type]/view.tsx": {
       "crap_high": {
         "count": 1
       }
@@ -88,23 +88,33 @@
         "count": 1
       }
     },
-    "src/components/curator/create/member-create-modal/index.tsx": {
+    "src/components/curator/create/creative-studios/campus/image-upload-field/index.tsx": {
       "crap_moderate": {
         "count": 1
       }
     },
-    "src/components/curator/create/school-create-wizard/form-step.tsx": {
+    "src/components/curator/create/creative-studios/campus/step-1/index.tsx": {
       "crap_high": {
         "count": 1
       }
     },
-    "src/components/curator/create/school-create-wizard/preview-step.tsx": {
+    "src/components/curator/create/creative-studios/preview-panel/index.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "src/components/curator/create/creative-studios/programme/step-1/index.tsx": {
       "crap_moderate": {
         "count": 1
       }
     },
-    "src/components/curator/create/school-create-wizard/step-indicator.tsx": {
+    "src/components/curator/create/creative-studios/provider/clinical-toggle/index.tsx": {
       "crap_high": {
+        "count": 1
+      }
+    },
+    "src/components/curator/create/creative-studios/provider/step-1/index.tsx": {
+      "crap_moderate": {
         "count": 1
       }
     },
@@ -485,6 +495,11 @@
         "count": 1
       }
     },
+    "src/components/ui/field.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
     "src/components/ui/link-preview.tsx": {
       "crap_moderate": {
         "count": 1
@@ -541,8 +556,28 @@
         "count": 1
       }
     },
-    "src/hooks/components/curator/create/use-create-launcher.ts": {
+    "src/hooks/components/curator/create/campus/use-campus-step-1.ts": {
       "crap_moderate": {
+        "count": 2
+      }
+    },
+    "src/hooks/components/curator/create/programme/use-programme-step-1.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "src/hooks/components/curator/create/provider/use-provider-step-1.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "src/hooks/components/curator/create/use-creative-studios-dashboard.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "src/hooks/components/curator/create/use-creative-studios-flow.ts": {
+      "crap_critical": {
         "count": 1
       }
     },

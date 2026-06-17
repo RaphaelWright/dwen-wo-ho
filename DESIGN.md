@@ -16,6 +16,7 @@ colors:
   card: "#ffffff"
   footer-bg: "#202126"
   secondary-accent: "#0d9488"
+  warm-sand: "#e8d5b7"
 typography:
   display:
     fontFamily: "Poppins, var(--font-poppins), sans-serif"
@@ -118,6 +119,7 @@ A restrained healthcare palette anchored by **Care Purple** with institutional b
 ### Tertiary
 
 - **Teal Accent** (#0d9488): Secondary accent for variety without competing with primary purple.
+- **Warm Sand** (#e8d5b7): Soft warm beige for count badges, highlights, and tertiary accents on muted surfaces.
 - **Footer Charcoal** (#202126): Marketing footer only; not for in-app chrome.
 
 ## Typography

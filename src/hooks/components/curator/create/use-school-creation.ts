@@ -1,3 +1,5 @@
+// fallow-ignore-file unused-file
+// Kept for Creative Studios campus API wiring (plan/feature-creative-studios-api-1.md).
 "use client";
 
 import { useState, useRef } from "react";

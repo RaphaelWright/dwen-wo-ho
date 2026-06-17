@@ -10,7 +10,6 @@ export interface NavItem {
 }
 
 export interface SidebarProps {
-  onCreateClick: () => void;
   onLogout: () => void;
 }
 

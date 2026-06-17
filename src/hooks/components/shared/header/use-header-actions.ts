@@ -8,7 +8,8 @@ export const useHeaderActions = () => {
   const pathname = usePathname();
 
   const handleGetStarted = () => {
-    if (pathname === "/for-providers") router.push(ROUTES.provider.auth);
+    if (pathname === ROUTES.public.joinAsProvider)
+      router.push(ROUTES.provider.auth);
     else router.push(ROUTES.patient.checkEmail);
   };
 
