@@ -38,7 +38,7 @@ export function PendingApprovalModal({
         )}
       >
         {/* Header */}
-        <div className="border-border/20 flex items-center justify-between border-b px-3 py-4 sm:px-6">
+        <div className="border-border/20 flex items-center justify-between border-b px-3 py-3 sm:px-6">
           <div className="flex items-center gap-2">
             <Logo
               withLink={false}
@@ -52,8 +52,8 @@ export function PendingApprovalModal({
         </div>
 
         {/* Hero: profile + status */}
-        <div className="border-border/20 flex flex-col items-center gap-6 border-b px-3 py-6 sm:flex-row sm:px-6">
-          <div className="flex min-w-0 flex-1 items-center gap-5 text-center sm:text-left">
+        <div className="border-border/20 flex flex-col items-center gap-4 border-b px-3 py-4 sm:flex-row sm:px-6">
+          <div className="flex min-w-0 flex-1 items-center gap-4 text-center sm:text-left">
             <div className="relative shrink-0">
               <Avatar className="ring-primary/20 ring-offset-background size-20 ring-4 ring-offset-2">
                 <AvatarImage
@@ -83,7 +83,7 @@ export function PendingApprovalModal({
             </div>
           </div>
 
-          <div className="mt-2 flex shrink-0 flex-col items-center gap-2 sm:mt-0">
+          <div className="flex shrink-0 flex-col items-center gap-1.5">
             <div className="relative size-[72px]" aria-hidden>
               <svg
                 className="absolute inset-0 size-full -rotate-90"
@@ -127,13 +127,8 @@ export function PendingApprovalModal({
           </div>
         </div>
 
-        <p className="text-muted-foreground pt-2 text-center text-sm leading-relaxed text-pretty">
-          Our team is finishing the background check. Most applications clear
-          this stage within a few business days.
-        </p>
-
         {/* Timeline */}
-        <div className="border-border/20 border-b px-3 py-6 sm:px-6">
+        <div className="border-border/20 border-b px-3 py-4 sm:px-6">
           <div className="relative flex">
             <div className="bg-border absolute top-5 right-[16.5%] left-[16.5%] h-px" />
 
@@ -171,10 +166,10 @@ export function PendingApprovalModal({
         </div>
 
         {/* While you wait + Contact */}
-        <div className="grid grid-cols-1 gap-4 px-3 py-6 sm:px-6 md:grid-cols-2">
-          <div className="bg-muted/40 rounded-xl p-5">
-            <p className="mb-3 text-sm font-semibold">While you wait</p>
-            <ul className="space-y-3">
+        <div className="grid grid-cols-1 gap-3 px-3 py-4 sm:px-6 md:grid-cols-2">
+          <div className="bg-muted/40 rounded-xl p-4">
+            <p className="mb-2 text-sm font-semibold">While you wait</p>
+            <ul className="space-y-2">
               <li className="text-muted-foreground flex items-start gap-2.5 text-sm">
                 <Mail className="mt-0.5 size-4 shrink-0" aria-hidden />
                 {`We'll email you as soon as a decision is made`}
@@ -190,14 +185,14 @@ export function PendingApprovalModal({
             </ul>
           </div>
 
-          <div className="bg-muted/40 rounded-xl p-5">
-            <p className="mb-3 text-sm font-semibold">
+          <div className="bg-muted/40 rounded-xl p-4">
+            <p className="mb-2 text-sm font-semibold">
               Contact verification team
             </p>
-            <p className="text-muted-foreground mb-3 text-sm text-pretty">
+            <p className="text-muted-foreground mb-2 text-sm text-pretty">
               {PENDING_APPROVAL_TEXTS.contactMessage}
             </p>
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-2">
               <a
                 href={`tel:${PENDING_APPROVAL_TEXTS.phone}`}
                 className="text-primary flex w-fit items-center gap-2 text-sm transition-colors hover:underline"
@@ -217,7 +212,7 @@ export function PendingApprovalModal({
         </div>
 
         {/* Footer */}
-        <div className="border-border/20 flex items-center justify-center border-t px-3 py-4 sm:px-6">
+        <div className="border-border/20 flex items-center justify-center border-t px-3 py-3 sm:px-6">
           <LoadingButton
             onClick={() => {
               setIsLoggingOut(true);
