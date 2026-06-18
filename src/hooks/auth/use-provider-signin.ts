@@ -13,7 +13,7 @@ import { setUserType } from "@/lib/utils/auth/get-user-type";
 import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
-import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
+import { getProviderPostLoginTarget } from "@/lib/utils/auth/provider-post-login-redirect";
 import {
   buildProviderSignupResumeUrl,
   clearProviderAuthStorage,
@@ -80,20 +80,10 @@ export const useProviderSignIn = ({
       }
 
       if (userData) {
-        const redirectInfo = getProviderRedirectInfo(userData, response);
-
-        if (redirectInfo.isPending) {
-          localStorage.setItem("pendingUser:v1", JSON.stringify(userData));
-        } else {
-          localStorage.removeItem("pendingUser:v1");
-        }
-
         setIsRedirecting(true);
-        const targetPath = redirectInfo.step
-          ? `${redirectInfo.path}?email=${encodeURIComponent(values.email)}&step=${redirectInfo.step}`
-          : redirectInfo.path;
-
-        router.replace(targetPath as Route);
+        router.replace(
+          getProviderPostLoginTarget(userData, values.email, response) as Route,
+        );
         return;
       }
 

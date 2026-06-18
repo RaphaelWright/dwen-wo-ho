@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { formatProgrammeSchoolYearLabel } from "@/lib/constants/components/curator/create/creative-studios";
 import { useProgrammeStep1 } from "@/hooks/components/curator/create/programme/use-programme-step-1";
 
 export function ProgrammeStep1() {
@@ -28,13 +29,13 @@ export function ProgrammeStep1() {
     errors,
     nickRef,
     setField,
-    setWeekFrom,
-    setWeekTo,
+    setYearFrom,
+    setYearTo,
     addNick,
     rmNick,
     handleNext,
-    weekFromOptions,
-    weekToOptions,
+    yearFromOptions,
+    yearToOptions,
   } = useProgrammeStep1();
 
   return (
@@ -135,20 +136,20 @@ export function ProgrammeStep1() {
 
           <Field data-invalid={!!errors.dur}>
             <FieldLabel className="text-xs font-semibold">
-              Duration (weeks)
+              Duration (school years)
             </FieldLabel>
             <div className="flex items-center gap-3">
               <Select
-                value={String(programme.df)}
-                onValueChange={(value) => setWeekFrom(Number(value))}
+                value={String(programme.durationFromYear)}
+                onValueChange={(value) => setYearFrom(Number(value))}
               >
                 <SelectTrigger className="w-full" aria-invalid={!!errors.dur}>
-                  <SelectValue placeholder="From week" />
+                  <SelectValue placeholder="From year" />
                 </SelectTrigger>
                 <SelectContent>
-                  {weekFromOptions.map((n) => (
-                    <SelectItem key={n} value={String(n)}>
-                      Week {n}
+                  {yearFromOptions.map((year) => (
+                    <SelectItem key={year} value={String(year)}>
+                      {formatProgrammeSchoolYearLabel(year)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -157,16 +158,16 @@ export function ProgrammeStep1() {
                 to
               </span>
               <Select
-                value={String(programme.dt)}
-                onValueChange={(value) => setWeekTo(Number(value))}
+                value={String(programme.durationToYear)}
+                onValueChange={(value) => setYearTo(Number(value))}
               >
                 <SelectTrigger className="w-full" aria-invalid={!!errors.dur}>
-                  <SelectValue placeholder="To week" />
+                  <SelectValue placeholder="To year" />
                 </SelectTrigger>
                 <SelectContent>
-                  {weekToOptions.map((n) => (
-                    <SelectItem key={n} value={String(n)}>
-                      Week {n}
+                  {yearToOptions.map((year) => (
+                    <SelectItem key={year} value={String(year)}>
+                      {formatProgrammeSchoolYearLabel(year)}
                     </SelectItem>
                   ))}
                 </SelectContent>

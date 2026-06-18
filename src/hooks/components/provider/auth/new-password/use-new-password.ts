@@ -11,13 +11,13 @@ import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/auth-copy";
-import { setUserType } from "@/lib/utils/auth/get-user-type";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
-import type { SignInResponse } from "@/lib/types/api/auth";
+import { finalizeProviderSignInSession } from "@/lib/utils/auth/provider-sign-in-session";
 import type { Route } from "next";
 
 export const useNewPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const email = useGetSearchParams("email");
   const router = useRouter();
   const { resetPasswordMutation } = useAuthQuery();
@@ -79,44 +79,14 @@ export const useNewPassword = () => {
 
       localStorage.removeItem("recoveryToken");
 
-      const signInPayload = response as unknown;
-      if (signInPayload && typeof signInPayload === "object") {
-        const signInResponse = signInPayload as SignInResponse;
-        const token = signInResponse.token;
-        const userData = signInResponse.userData ?? signInPayload;
+      const { token, userData } = response;
 
-        if (token) {
-          localStorage.setItem("token", token);
-          if (
-            userData &&
-            typeof userData === "object" &&
-            "userRole" in userData &&
-            userData.userRole === "ROLE_CURATOR"
-          ) {
-            localStorage.setItem("curatorToken", token);
-            setUserType("curator");
-          } else {
-            setUserType("provider");
-          }
-        }
-
-        const refreshTokenValue = signInResponse.refreshToken;
-        if (refreshTokenValue) {
-          localStorage.setItem("refreshToken", refreshTokenValue);
-        }
-
+      if (token && userData) {
         toast.success(NEW_PASSWORD_TEXTS.toasts.success);
-
-        if (
-          userData &&
-          typeof userData === "object" &&
-          "applicationStatus" in userData &&
-          userData.applicationStatus === "APPROVED"
-        ) {
-          router.push(ROUTES.provider.profile);
-        } else {
-          router.push(ROUTES.provider.home);
-        }
+        setIsRedirecting(true);
+        router.replace(
+          finalizeProviderSignInSession(response, email ?? "") as Route,
+        );
         return;
       }
 
@@ -143,6 +113,6 @@ export const useNewPassword = () => {
     errors,
     onSubmit,
     handleBack,
-    resetPasswordMutation,
+    isSubmitting: resetPasswordMutation.isPending || isRedirecting,
   };
 };

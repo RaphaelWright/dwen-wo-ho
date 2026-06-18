@@ -8,7 +8,7 @@ import { createElement, type ReactNode } from "react";
 const getProfile = vi.fn();
 const storage = new Map<string, string>();
 
-const localStorageMock = {
+vi.stubGlobal("localStorage", {
   getItem: (key: string) => storage.get(key) ?? null,
   setItem: (key: string, value: string) => {
     storage.set(key, value);
@@ -19,9 +19,7 @@ const localStorageMock = {
   clear: () => {
     storage.clear();
   },
-};
-
-vi.stubGlobal("localStorage", localStorageMock);
+});
 
 vi.mock("@/services/shared/auth", () => ({
   authService: {

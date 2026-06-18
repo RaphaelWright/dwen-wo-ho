@@ -8,6 +8,11 @@ import type { CampusImageFieldKey } from "@/lib/types/components/curator/create/
 import { revokeObjectUrl } from "@/lib/utils/shared/revoke-object-url";
 import { selectImageFile } from "@/lib/utils/shared/select-image-file";
 
+const FILE_FIELD_MAP = {
+  logoUrl: "logoFile",
+  photoUrl: "bannerFile",
+} as const satisfies Record<CampusImageFieldKey, "logoFile" | "bannerFile">;
+
 export function useCampusStep2() {
   const { campus, updateCampus, submitCampus } =
     useCreativeStudiosFlowContext();
@@ -27,7 +32,10 @@ export function useCampusStep2() {
   const clearImage = useCallback(
     (field: CampusImageFieldKey) => {
       revokeObjectUrl(campus[field]);
-      updateCampus({ [field]: null });
+      updateCampus({
+        [field]: null,
+        [FILE_FIELD_MAP[field]]: null,
+      });
       setErrors((prev) => ({ ...prev, [field]: "" }));
 
       const input =
@@ -41,14 +49,18 @@ export function useCampusStep2() {
 
   const handleFileChange = useCallback(
     (field: CampusImageFieldKey) => (event: ChangeEvent<HTMLInputElement>) => {
+      const fileField = FILE_FIELD_MAP[field];
       applyImageFileSelection(
         selectImageFile(event.target.files?.[0]),
         field,
         event,
         setErrors,
-        (url) => {
+        (url, file) => {
           revokeObjectUrl(campus[field]);
-          updateCampus({ [field]: url });
+          updateCampus({
+            [field]: url,
+            [fileField]: file,
+          });
         },
       );
     },

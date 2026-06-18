@@ -109,11 +109,11 @@ export function ProviderStep1() {
             Clinical mode
           </FieldLabel>
           <ProviderClinicalToggle
-            checked={provider.clin}
-            onChange={(checked) => setField("clin", checked)}
+            checked={provider.clinical}
+            onChange={(checked) => setField("clinical", checked)}
           />
           <p className="text-muted-foreground mt-2 text-center text-[11px]">
-            Click to turn it {provider.clin ? "off" : "on"}
+            Click to turn it {provider.clinical ? "off" : "on"}
           </p>
         </Field>
 

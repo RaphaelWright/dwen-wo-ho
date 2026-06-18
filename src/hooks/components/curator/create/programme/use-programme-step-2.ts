@@ -10,8 +10,9 @@ export function useProgrammeStep2() {
     useCreativeStudiosFlowContext();
   const { isSubmitting, handleSubmit } =
     useCreativeStudiosSubmit(submitProgramme);
-  const updateCoverUrl = useCallback(
-    (coverUrl: string | null) => updateProgramme({ coverUrl }),
+  const updateCover = useCallback(
+    (coverUrl: string | null, coverFile: File | null) =>
+      updateProgramme({ coverUrl, coverFile }),
     [updateProgramme],
   );
   const {
@@ -22,7 +23,7 @@ export function useProgrammeStep2() {
   } = useCreativeStudiosImageField({
     field: "coverUrl",
     imageUrl: programme.coverUrl,
-    updateImageUrl: updateCoverUrl,
+    updateImage: updateCover,
   });
 
   return {

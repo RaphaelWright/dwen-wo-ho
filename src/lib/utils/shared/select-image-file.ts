@@ -3,7 +3,7 @@ import { validateImageFile } from "@/lib/utils/shared/validate-image-file";
 export type ImageFileSelection =
   | { status: "empty" }
   | { status: "invalid"; error: string }
-  | { status: "valid"; url: string };
+  | { status: "valid"; url: string; file: File };
 
 export function selectImageFile(file: File | undefined): ImageFileSelection {
   if (!file) {
@@ -15,5 +15,5 @@ export function selectImageFile(file: File | undefined): ImageFileSelection {
     return { status: "invalid", error };
   }
 
-  return { status: "valid", url: URL.createObjectURL(file) };
+  return { status: "valid", url: URL.createObjectURL(file), file };
 }

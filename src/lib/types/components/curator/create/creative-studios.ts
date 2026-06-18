@@ -10,9 +10,11 @@ export interface CampusDraft {
   nicks: string[];
   motto: string;
   type: string;
-  loc: string;
+  location: string;
   logoUrl: string | null;
   photoUrl: string | null;
+  logoFile: File | null;
+  bannerFile: File | null;
 }
 
 export type CampusImageFieldKey = "logoUrl" | "photoUrl";
@@ -36,11 +38,11 @@ export interface CampusImageUploadFieldProps {
 }
 
 export interface CampusStep1SelectFieldConfig {
-  name: "type" | "loc";
+  name: "type" | "location";
   id: string;
   label: string;
   placeholder: string;
-  optionsKey: "type" | "loc";
+  optionsKey: "type" | "location";
 }
 
 export interface CampusStep1TextFieldConfig {
@@ -60,8 +62,9 @@ export interface ProviderDraft {
   name: string;
   nicks: string[];
   bio: string;
-  clin: boolean;
+  clinical: boolean;
   photoUrl: string | null;
+  iconFile: File | null;
 }
 
 export type ProviderImageFieldKey = "photoUrl";
@@ -77,9 +80,10 @@ export interface ProgrammeDraft {
   name: string;
   nicks: string[];
   bio: string;
-  df: number;
-  dt: number;
+  durationFromYear: number;
+  durationToYear: number;
   coverUrl: string | null;
+  coverFile: File | null;
 }
 
 export type ProgrammeImageFieldKey = "coverUrl";
@@ -92,7 +96,7 @@ export interface ProgrammeImageUploadFieldConfig {
 }
 
 export interface TagDraft {
-  title: string;
+  mainTitle: string;
   tags: string[];
 }
 
@@ -107,40 +111,6 @@ export interface PreviewPanelProps {
   photoUrl?: string | null;
 }
 
-export interface CampusRecord {
-  name: string;
-  nicks: string[];
-  motto?: string;
-  type?: string;
-  loc?: string;
-}
-
-export interface ProviderRecord {
-  name: string;
-  nicks: string[];
-  bio?: string;
-  clin?: boolean;
-}
-
-export interface ProgrammeRecord {
-  name: string;
-  nicks: string[];
-  bio?: string;
-  df: number;
-  dt: number;
-}
-
-export interface TagRecord {
-  title: string;
-}
-
-export interface CreativeStudiosMockRecords {
-  campuses: CampusRecord[];
-  providers: ProviderRecord[];
-  programmes: ProgrammeRecord[];
-  tags: TagRecord[];
-}
-
 export interface CreativeStudiosFlowContextValue {
   type: CreativeStudiosType;
   campus: CampusDraft;
@@ -152,10 +122,10 @@ export interface CreativeStudiosFlowContextValue {
   updateProvider: (partial: Partial<ProviderDraft>) => void;
   updateProgramme: (partial: Partial<ProgrammeDraft>) => void;
   updateTag: (partial: Partial<TagDraft>) => void;
-  submitCampus: () => void;
-  submitProvider: () => void;
-  submitProgramme: () => void;
-  submitTag: () => void;
+  submitCampus: () => Promise<void>;
+  submitProvider: () => Promise<void>;
+  submitProgramme: () => Promise<void>;
+  submitTag: () => Promise<void>;
   resetDrafts: () => void;
 }
 

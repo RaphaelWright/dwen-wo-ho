@@ -1,3 +1,5 @@
+import type { ProviderOnboardingNextStep } from "@/lib/types/api/auth";
+
 export type ProviderSignupProfileStepSlug = "photo" | "bio" | "specialty";
 
 export type ProviderSignupProfileStepIndex = 0 | 1 | 2;
@@ -8,6 +10,7 @@ export interface ProviderProfileResumeInput {
   officePhoneNumber?: string;
   specialty?: string;
   email?: string;
+  nextStep?: ProviderOnboardingNextStep;
 }
 
 export interface ProviderSignupGuardState {

@@ -7,13 +7,16 @@ import type {
 } from "@/lib/types/api/curator";
 import type { ProviderDetailResponse } from "@/lib/types/api/providers";
 import { CuratorNotificationListResponse } from "@/lib/types/entities/notification";
+import { normalizeCuratorSummary } from "@/lib/utils/curator/summary/normalize-curator-summary";
 
 export const curatorService = {
   // T3-1: Summary counts
   getSummary: async (): Promise<CuratorSummary> => {
     const result = await api(STATIC_ENDPOINTS.CURATOR.SUMMARY);
-    if (result?.success && result.data) return result.data as CuratorSummary;
-    return { schoolCount: 0, providerCount: 0, partnerCount: 0 };
+    if (result?.success && result.data) {
+      return normalizeCuratorSummary(result.data as Partial<CuratorSummary>);
+    }
+    return normalizeCuratorSummary(null);
   },
 
   // T3-2: Provider detail (schools + partners for a specific provider)

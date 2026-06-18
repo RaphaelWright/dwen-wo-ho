@@ -4,6 +4,10 @@ export interface CuratorSummary {
   schoolCount: number;
   providerCount: number;
   partnerCount: number;
+  campusCount: number;
+  specialtyCount: number;
+  programmeCount: number;
+  tagCount: number;
 }
 
 export interface SendNotificationRequest {

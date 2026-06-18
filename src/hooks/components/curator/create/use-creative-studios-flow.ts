@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import type { Dispatch, SetStateAction } from "react";
-import { ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import useCreativeStudiosQuery from "@/hooks/queries/use-creative-studios";
 import type {
   CampusDraft,
   CreativeStudiosFlowContextValue,
@@ -14,40 +15,53 @@ import type {
   ProviderDraft,
   TagDraft,
 } from "@/lib/types/components/curator/create/creative-studios";
-import { useCreativeStudiosMockStore } from "@/hooks/components/curator/create/use-creative-studios-mock-store";
+import { getDefaultProgrammeYears } from "@/lib/utils/curator/create/reconcile-programme-years";
 import { revokeObjectUrl } from "@/lib/utils/shared/revoke-object-url";
+
+const defaultProgrammeYears = getDefaultProgrammeYears();
 
 const DEFAULT_CAMPUS: CampusDraft = {
   name: "",
   nicks: [],
   motto: "",
   type: "",
-  loc: "",
+  location: "",
   logoUrl: null,
   photoUrl: null,
+  logoFile: null,
+  bannerFile: null,
 };
 
 const DEFAULT_PROVIDER: ProviderDraft = {
   name: "",
   nicks: [],
   bio: "",
-  clin: false,
+  clinical: false,
   photoUrl: null,
+  iconFile: null,
 };
 
 const DEFAULT_PROGRAMME: ProgrammeDraft = {
   name: "",
   nicks: [],
   bio: "",
-  df: 1,
-  dt: 52,
+  durationFromYear: defaultProgrammeYears.durationFromYear,
+  durationToYear: defaultProgrammeYears.durationToYear,
   coverUrl: null,
+  coverFile: null,
 };
 
 const DEFAULT_TAG: TagDraft = {
-  title: "",
+  mainTitle: "",
   tags: [],
 };
+
+function navigateToStep1(
+  router: ReturnType<typeof useRouter>,
+  type: CreativeStudiosType,
+) {
+  router.replace(DYNAMIC_ROUTES.curator.createFlow(type, 1) as Route);
+}
 
 export function useCreativeStudiosFlow(
   type: CreativeStudiosType,
@@ -67,8 +81,8 @@ export function useCreativeStudiosFlow(
   >,
 ): CreativeStudiosFlowContextValue {
   const router = useRouter();
-  const { addCampus, addProvider, addProgramme, addTag } =
-    useCreativeStudiosMockStore();
+  const { createCampus, createProgramme, createTag, createSpecialty } =
+    useCreativeStudiosQuery();
 
   const preview = useMemo((): PreviewPanelProps => {
     switch (type) {
@@ -77,7 +91,7 @@ export function useCreativeStudiosFlow(
           name: drafts.campus.name || "Campus Name",
           nick: drafts.campus.nicks[0] || "",
           type: drafts.campus.type,
-          loc: drafts.campus.loc,
+          loc: drafts.campus.location,
           motto: drafts.campus.motto,
           logoUrl: drafts.campus.logoUrl,
           photoUrl: drafts.campus.photoUrl,
@@ -95,7 +109,7 @@ export function useCreativeStudiosFlow(
           photoUrl: drafts.programme.coverUrl,
         };
       case "tag":
-        return { name: drafts.tag.title || "Tag Title" };
+        return { name: drafts.tag.mainTitle || "Tag Title" };
       default:
         return { name: "—" };
     }
@@ -131,50 +145,60 @@ export function useCreativeStudiosFlow(
     setDrafts({
       campus: { ...DEFAULT_CAMPUS },
       provider: { ...DEFAULT_PROVIDER },
-      programme: { ...DEFAULT_PROGRAMME },
+      programme: {
+        ...DEFAULT_PROGRAMME,
+        ...getDefaultProgrammeYears(),
+      },
       tag: { ...DEFAULT_TAG },
     });
   };
 
-  const submitCampus = () => {
-    addCampus({
-      name: drafts.campus.name.trim(),
-      nicks: [...drafts.campus.nicks],
+  const submitCampus = async () => {
+    await createCampus({
+      fullName: drafts.campus.name.trim(),
+      nicknames: [...drafts.campus.nicks],
       motto: drafts.campus.motto,
       type: drafts.campus.type,
-      loc: drafts.campus.loc,
+      location: drafts.campus.location,
+      logo: drafts.campus.logoFile,
+      bannerPhoto: drafts.campus.bannerFile,
     });
     resetDrafts();
-    router.push(ROUTES.curator.create as Route);
+    navigateToStep1(router, "campus");
   };
 
-  const submitProvider = () => {
-    addProvider({
+  const submitProvider = async () => {
+    await createSpecialty({
       name: drafts.provider.name.trim(),
-      nicks: [...drafts.provider.nicks],
+      nicknames: [...drafts.provider.nicks],
       bio: drafts.provider.bio,
-      clin: drafts.provider.clin,
+      clinical: drafts.provider.clinical,
+      icon: drafts.provider.iconFile,
     });
     resetDrafts();
-    router.push(ROUTES.curator.create as Route);
+    navigateToStep1(router, "provider");
   };
 
-  const submitProgramme = () => {
-    addProgramme({
-      name: drafts.programme.name.trim(),
-      nicks: [...drafts.programme.nicks],
+  const submitProgramme = async () => {
+    await createProgramme({
+      fullName: drafts.programme.name.trim(),
+      nicknames: [...drafts.programme.nicks],
       bio: drafts.programme.bio,
-      df: drafts.programme.df,
-      dt: drafts.programme.dt,
+      durationFromYear: drafts.programme.durationFromYear,
+      durationToYear: drafts.programme.durationToYear,
+      coverPhoto: drafts.programme.coverFile,
     });
     resetDrafts();
-    router.push(ROUTES.curator.create as Route);
+    navigateToStep1(router, "programme");
   };
 
-  const submitTag = () => {
-    addTag({ title: drafts.tag.title.trim() });
+  const submitTag = async () => {
+    await createTag({
+      mainTitle: drafts.tag.mainTitle.trim(),
+      tags: [...drafts.tag.tags],
+    });
     resetDrafts();
-    router.push(ROUTES.curator.create as Route);
+    navigateToStep1(router, "tag");
   };
 
   return {

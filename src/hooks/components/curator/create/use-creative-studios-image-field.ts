@@ -18,7 +18,7 @@ export function applyImageFileSelection<TField extends string>(
   field: TField,
   event: ChangeEvent<HTMLInputElement>,
   setErrors: Dispatch<SetStateAction<Record<TField, string>>>,
-  onValid: (url: string) => void,
+  onValid: (url: string, file: File) => void,
 ): void {
   if (selection.status === "empty") {
     return;
@@ -30,18 +30,18 @@ export function applyImageFileSelection<TField extends string>(
     return;
   }
 
-  onValid(selection.url);
+  onValid(selection.url, selection.file);
   setErrors((prev) => ({ ...prev, [field]: "" }));
 }
 
 export function useCreativeStudiosImageField<TField extends string>({
   field,
   imageUrl,
-  updateImageUrl,
+  updateImage,
 }: {
   field: TField;
   imageUrl: string | null;
-  updateImageUrl: (url: string | null) => void;
+  updateImage: (url: string | null, file: File | null) => void;
 }): {
   errors: Record<TField, string>;
   inputRef: RefObject<HTMLInputElement | null>;
@@ -55,13 +55,13 @@ export function useCreativeStudiosImageField<TField extends string>({
 
   const clearImage = useCallback(() => {
     revokeObjectUrl(imageUrl);
-    updateImageUrl(null);
+    updateImage(null, null);
     setErrors((prev) => ({ ...prev, [field]: "" }));
 
     if (inputRef.current) {
       inputRef.current.value = "";
     }
-  }, [field, imageUrl, updateImageUrl]);
+  }, [field, imageUrl, updateImage]);
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,13 +70,13 @@ export function useCreativeStudiosImageField<TField extends string>({
         field,
         event,
         setErrors,
-        (url) => {
+        (url, file) => {
           revokeObjectUrl(imageUrl);
-          updateImageUrl(url);
+          updateImage(url, file);
         },
       );
     },
-    [field, imageUrl, updateImageUrl],
+    [field, imageUrl, updateImage],
   );
 
   return {

@@ -9,7 +9,7 @@ import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/mock-data";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/auth-copy";
 import { useTheme } from "next-themes";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import NewPasswordForm from "../new-password-form";
 import { useNewPassword } from "@/hooks/components/provider/auth/new-password/use-new-password";
 
@@ -26,7 +26,7 @@ const NewPasswordContent = () => {
     errors,
     onSubmit,
     handleBack,
-    resetPasswordMutation,
+    isSubmitting,
   } = useNewPassword();
   const { theme } = useTheme();
   const mounted = useHydrated();
@@ -56,7 +56,7 @@ const NewPasswordContent = () => {
           handleSubmit={handleSubmit}
           errors={errors}
           onSubmit={onSubmit}
-          isSubmitting={resetPasswordMutation.isPending}
+          isSubmitting={isSubmitting}
         />
       </div>
 
@@ -68,7 +68,7 @@ const NewPasswordContent = () => {
             className="text-muted-foreground hover:text-foreground group order-2 flex items-center gap-2 rounded-full px-6 py-2 sm:order-1"
           >
             <span className="transition-transform group-hover:-translate-x-1">
-              ←
+              <ArrowLeft className="size-4" />
             </span>{" "}
             {NEW_PASSWORD_TEXTS.form.back}
           </Button>
@@ -81,11 +81,11 @@ const NewPasswordContent = () => {
             <Button
               form="new-password-form"
               type="submit"
-              disabled={!isFormValid || resetPasswordMutation.isPending}
+              disabled={!isFormValid || isSubmitting}
               className="w-full rounded-full px-8 shadow-lg transition-all hover:shadow-xl sm:w-auto"
             >
               {NEW_PASSWORD_TEXTS.form.savePassword}{" "}
-              <span className="ml-2">→</span>
+              <ArrowRight className="size-4" />
             </Button>
           </div>
         </div>

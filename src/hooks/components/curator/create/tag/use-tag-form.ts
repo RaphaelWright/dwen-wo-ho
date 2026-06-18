@@ -2,21 +2,19 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useCreativeStudiosFlowContext } from "@/hooks/components/curator/create/use-creative-studios-flow-context";
-import { useCreativeStudiosMockStore } from "@/hooks/components/curator/create/use-creative-studios-mock-store";
 import { useCreativeStudiosSubmit } from "@/hooks/components/curator/create/use-creative-studios-submit";
 
 export function useTagForm() {
   const { tag, updateTag, submitTag } = useCreativeStudiosFlowContext();
-  const { records } = useCreativeStudiosMockStore();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const tagRef = useRef<HTMLInputElement>(null);
 
-  const setTitle = (val: string) => {
-    updateTag({ title: val });
-    if (errors.title) {
+  const setMainTitle = (val: string) => {
+    updateTag({ mainTitle: val });
+    if (errors.mainTitle) {
       setErrors((prev) => {
         const next = { ...prev };
-        delete next.title;
+        delete next.mainTitle;
         return next;
       });
     }
@@ -55,20 +53,15 @@ export function useTagForm() {
 
   const validate = useCallback(() => {
     const nextErrors: Record<string, string> = {};
-    const title = tag.title.trim();
-    if (!title) nextErrors.title = "Main title is required";
-    else if (
-      records.tags.some((r) => r.title.toLowerCase() === title.toLowerCase())
-    ) {
-      nextErrors.title = "A tag group with this title already exists";
-    }
+    const mainTitle = tag.mainTitle.trim();
+    if (!mainTitle) nextErrors.mainTitle = "Main title is required";
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
-  }, [records.tags, tag.title]);
+  }, [tag.mainTitle]);
 
   const submitWithValidation = useCallback(() => {
     if (!validate()) return false;
-    submitTag();
+    return submitTag();
   }, [submitTag, validate]);
 
   const { isSubmitting, handleSubmit } =
@@ -78,7 +71,7 @@ export function useTagForm() {
     tag,
     errors,
     tagRef,
-    setTitle,
+    setMainTitle,
     addTag,
     rmTag,
     mvTag,
