@@ -1,3 +1,4 @@
+import type { CampusApiType } from "@/lib/types/api/creative-studios";
 import type {
   CampusImageUploadFieldConfig,
   CampusStep1FormSection,
@@ -44,14 +45,27 @@ export const CAMPUS_LOCATION_OPTIONS = [
   "Wa",
 ] as const;
 
-export const W52_WEEKS = Array.from({ length: 52 }, (_, i) => i + 1);
+export const PROGRAMME_SCHOOL_YEAR_MIN = 1;
+export const PROGRAMME_SCHOOL_YEAR_MAX = 9;
 
-export const MOCK_SEED_COUNTS = {
-  campuses: 20,
-  providers: 16,
-  programmes: 4,
-  tags: 12,
-} as const;
+export function getProgrammeYearOptions(): number[] {
+  return Array.from(
+    { length: PROGRAMME_SCHOOL_YEAR_MAX - PROGRAMME_SCHOOL_YEAR_MIN + 1 },
+    (_, i) => PROGRAMME_SCHOOL_YEAR_MIN + i,
+  );
+}
+
+export function formatProgrammeSchoolYearLabel(year: number): string {
+  return `Year ${year}`;
+}
+
+export const CAMPUS_TYPE_API_MAP: Record<string, CampusApiType> = {
+  "High School": "HIGH_SCHOOL",
+  "Junior High": "JUNIOR_HIGH",
+  "Senior High": "SENIOR_HIGH",
+  College: "COLLEGE",
+  University: "UNIVERSITY",
+};
 
 export const CAMPUS_STEP_2_IMAGE_FIELDS = [
   {
@@ -116,10 +130,10 @@ export const CAMPUS_STEP_1_FORM_SECTIONS = [
   },
   {
     kind: "select",
-    name: "loc",
-    id: "campus-loc",
+    name: "location",
+    id: "campus-location",
     label: "Location",
     placeholder: "Select location...",
-    optionsKey: "loc",
+    optionsKey: "location",
   },
 ] as const satisfies readonly CampusStep1FormSection[];

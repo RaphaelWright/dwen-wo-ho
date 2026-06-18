@@ -10,8 +10,9 @@ export function useProviderStep2() {
     useCreativeStudiosFlowContext();
   const { isSubmitting, handleSubmit } =
     useCreativeStudiosSubmit(submitProvider);
-  const updatePhotoUrl = useCallback(
-    (photoUrl: string | null) => updateProvider({ photoUrl }),
+  const updatePhoto = useCallback(
+    (photoUrl: string | null, iconFile: File | null) =>
+      updateProvider({ photoUrl, iconFile }),
     [updateProvider],
   );
   const {
@@ -22,7 +23,7 @@ export function useProviderStep2() {
   } = useCreativeStudiosImageField({
     field: "photoUrl",
     imageUrl: provider.photoUrl,
-    updateImageUrl: updatePhotoUrl,
+    updateImage: updatePhoto,
   });
 
   return {

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useCreativeStudiosFlowContext } from "@/hooks/components/curator/create/use-creative-studios-flow-context";
-import { useCreativeStudiosMockStore } from "@/hooks/components/curator/create/use-creative-studios-mock-store";
 import { useCreativeStudiosNavigation } from "@/hooks/components/curator/create/use-creative-studios-navigation";
 import {
   CAMPUS_LOCATION_OPTIONS,
@@ -17,7 +16,6 @@ import {
 
 export function useCampusStep1() {
   const { campus, updateCampus } = useCreativeStudiosFlowContext();
-  const { records } = useCreativeStudiosMockStore();
   const { goNext } = useCreativeStudiosNavigation("campus");
   const [nickError, setNickError] = useState("");
   const nickRef = useRef<HTMLInputElement>(null);
@@ -27,9 +25,9 @@ export function useCampusStep1() {
       name: campus.name,
       motto: campus.motto,
       type: campus.type,
-      loc: campus.loc,
+      location: campus.location,
     }),
-    [campus.name, campus.motto, campus.type, campus.loc],
+    [campus.name, campus.motto, campus.type, campus.location],
   );
 
   const form = useForm<CampusStep1FormValues>({
@@ -38,8 +36,7 @@ export function useCampusStep1() {
     mode: "onSubmit",
   });
 
-  const { control, register, handleSubmit, formState, watch, setError, reset } =
-    form;
+  const { control, register, handleSubmit, formState, watch, reset } = form;
 
   useEffect(() => {
     reset(defaultValues);
@@ -51,7 +48,7 @@ export function useCampusStep1() {
         name: values.name ?? "",
         motto: values.motto ?? "",
         type: values.type ?? "",
-        loc: values.loc ?? "",
+        location: values.location ?? "",
       });
     });
 
@@ -67,19 +64,10 @@ export function useCampusStep1() {
       return;
     }
 
-    if (
-      records.campuses
-        .flatMap((r) => r.nicks)
-        .some((n) => n.toLowerCase() === val.toLowerCase())
-    ) {
-      setNickError("Nickname used by another campus");
-      return;
-    }
-
     updateCampus({ nicks: [...campus.nicks, val] });
     if (nickRef.current) nickRef.current.value = "";
     setNickError("");
-  }, [campus.nicks, records.campuses, updateCampus]);
+  }, [campus.nicks, updateCampus]);
 
   const rmNick = useCallback(
     (index: number) => {
@@ -89,23 +77,11 @@ export function useCampusStep1() {
   );
 
   const onSubmit = handleSubmit((values) => {
-    const name = values.name.trim();
-
-    if (
-      records.campuses.some((r) => r.name.toLowerCase() === name.toLowerCase())
-    ) {
-      setError("name", {
-        type: "manual",
-        message: "A campus with this name already exists",
-      });
-      return;
-    }
-
     updateCampus({
-      name,
+      name: values.name.trim(),
       motto: values.motto,
       type: values.type,
-      loc: values.loc,
+      location: values.location,
     });
     goNext();
   });

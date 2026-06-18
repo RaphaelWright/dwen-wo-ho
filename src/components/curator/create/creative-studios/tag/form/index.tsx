@@ -20,7 +20,7 @@ export function TagForm() {
     tag,
     errors,
     tagRef,
-    setTitle,
+    setMainTitle,
     addTag,
     rmTag,
     mvTag,
@@ -38,18 +38,18 @@ export function TagForm() {
       </p>
 
       <FieldGroup className="max-w-md gap-4">
-        <Field data-invalid={!!errors.title}>
+        <Field data-invalid={!!errors.mainTitle}>
           <FieldLabel htmlFor="tag-title" className="text-xs font-semibold">
             Main Title <span className="text-destructive">*</span>
           </FieldLabel>
           <Input
             id="tag-title"
-            value={tag.title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={tag.mainTitle}
+            onChange={(e) => setMainTitle(e.target.value)}
             placeholder="e.g. Subjects, Grades, Departments"
-            aria-invalid={!!errors.title}
+            aria-invalid={!!errors.mainTitle}
           />
-          <ErrorMsg msg={errors.title ?? ""} />
+          <ErrorMsg msg={errors.mainTitle ?? ""} />
         </Field>
 
         <Field data-invalid={!!errors.tag}>

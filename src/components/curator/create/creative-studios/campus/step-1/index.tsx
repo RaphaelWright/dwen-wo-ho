@@ -49,7 +49,7 @@ export function CampusStep1() {
 
   const selectOptions = {
     type: typeOptions,
-    loc: locationOptions,
+    location: locationOptions,
   } as const;
 
   return (
