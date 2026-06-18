@@ -125,7 +125,7 @@ export const authService = {
     password: string;
     confirmPassword: string;
     token?: string;
-  }): Promise<void> => {
+  }): Promise<SignInResponse> => {
     const headers: Record<string, string> = {};
     if (data.token) {
       headers.Authorization = `Bearer ${data.token}`;
@@ -139,7 +139,10 @@ export const authService = {
       }),
       headers,
     });
-    if (!response?.success) throw new Error("Failed to reset password");
+    if (response?.success && response.data) {
+      return response.data as SignInResponse;
+    }
+    throw new Error("Failed to reset password");
   },
 
   addPhoto: async (data: FormData): Promise<AddPhotoResponse> => {
