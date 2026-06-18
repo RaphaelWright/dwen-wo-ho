@@ -1,4 +1,6 @@
 import { ROUTES } from "@/lib/constants/routes";
+import type { ProviderOnboardingNextStep } from "@/lib/types/api/auth";
+import type { RedirectInfo } from "@/lib/types/auth/redirect";
 import type {
   ProviderProfileResumeInput,
   ProviderSignupProfileStepIndex,
@@ -30,6 +32,51 @@ export function getProviderProfileResumeStep(
     return "specialty";
   }
   return null;
+}
+
+export function mapBackendNextStepToSlug(
+  nextStep: ProviderOnboardingNextStep | string,
+): ProviderSignupProfileStepSlug | null {
+  switch (nextStep) {
+    case "photo":
+      return "photo";
+    case "phone":
+      return "bio";
+    case "specialty":
+      return "specialty";
+    case null:
+      return null;
+    default:
+      return null;
+  }
+}
+
+export function resolveProviderProfileResumeStep(
+  userData: ProviderProfileResumeInput,
+): ProviderSignupProfileStepSlug | null {
+  if (userData.nextStep === null) {
+    return null;
+  }
+
+  if (userData.nextStep !== undefined) {
+    const mappedStep = mapBackendNextStepToSlug(userData.nextStep);
+    if (mappedStep) {
+      return mappedStep;
+    }
+  }
+
+  return getProviderProfileResumeStep(userData);
+}
+
+export function buildProviderAuthRedirectTarget(
+  redirectInfo: RedirectInfo,
+  email: string,
+): string {
+  if (redirectInfo.step) {
+    return `${redirectInfo.path}?email=${encodeURIComponent(email)}&step=${redirectInfo.step}`;
+  }
+
+  return redirectInfo.path;
 }
 
 export function profileStepSlugToIndex(

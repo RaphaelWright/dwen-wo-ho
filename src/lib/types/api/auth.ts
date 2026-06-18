@@ -1,3 +1,5 @@
+export type ProviderOnboardingNextStep = "photo" | "phone" | "specialty" | null;
+
 export interface SignInUserData {
   userRole: string;
   providerName: string;
@@ -8,6 +10,8 @@ export interface SignInUserData {
   applicationTimestamp: string;
   title: string;
   status: string;
+  email?: string;
+  nextStep?: ProviderOnboardingNextStep;
 }
 
 export interface SignInResponse {
@@ -45,6 +49,7 @@ export interface ProviderProfileResponse {
   title?: string;
   applicationDate?: string;
   isVerified?: boolean;
+  nextStep?: ProviderOnboardingNextStep;
   [key: string]: unknown;
 }
 

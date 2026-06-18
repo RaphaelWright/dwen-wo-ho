@@ -9,11 +9,12 @@ import { ROUTES } from "@/lib/constants/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
 import {
+  buildProviderAuthRedirectTarget,
   buildProviderSignupResumeUrl,
-  getProviderProfileResumeStep,
   hasProviderAuthToken,
   isProviderSignupProfileStepSlug,
   profileStepSlugToIndex,
+  resolveProviderProfileResumeStep,
 } from "@/lib/utils/provider/signup-resume";
 import type { ProviderSignupGuardState } from "@/lib/types/components/provider/signup-resume";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
@@ -70,7 +71,7 @@ export function useProviderSignupGuard(
       if (hasProviderAuthToken()) {
         try {
           const profileData = await authService.getProfile();
-          const resumeSlug = getProviderProfileResumeStep(profileData);
+          const resumeSlug = resolveProviderProfileResumeStep(profileData);
           const profileEmail = profileData.email || email;
 
           if (resumeSlug && profileEmail) {
@@ -93,7 +94,12 @@ export function useProviderSignupGuard(
           }
 
           const redirectInfo = getProviderRedirectInfo(profileData);
-          router.replace(redirectInfo.path as Route);
+          router.replace(
+            buildProviderAuthRedirectTarget(
+              redirectInfo,
+              profileEmail,
+            ) as Route,
+          );
           return;
         } catch {
           if (

@@ -15,6 +15,7 @@ import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
 import {
+  buildProviderAuthRedirectTarget,
   buildProviderSignupResumeUrl,
   clearProviderAuthStorage,
   hasProviderAuthToken,
@@ -89,9 +90,11 @@ export const useProviderSignIn = ({
         }
 
         setIsRedirecting(true);
-        const targetPath = redirectInfo.step
-          ? `${redirectInfo.path}?email=${encodeURIComponent(values.email)}&step=${redirectInfo.step}`
-          : redirectInfo.path;
+        const redirectEmail = userData.email ?? values.email;
+        const targetPath = buildProviderAuthRedirectTarget(
+          redirectInfo,
+          redirectEmail,
+        );
 
         router.replace(targetPath as Route);
         return;

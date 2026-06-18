@@ -16,12 +16,16 @@ import {
 } from "@/lib/types/components/provider/auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { toSentenceCase } from "@/lib/utils/shared/string-case";
+import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
 import { applyProviderAuthTokens } from "@/lib/utils/auth/provider-tokens";
 import {
   clearProviderSignupPassword,
   getProviderSignupPassword,
 } from "@/lib/utils/provider/signup-password";
-import { hasProviderAuthToken } from "@/lib/utils/provider/signup-resume";
+import {
+  buildProviderAuthRedirectTarget,
+  hasProviderAuthToken,
+} from "@/lib/utils/provider/signup-resume";
 
 export const useProfileActions = ({
   email,
@@ -81,6 +85,26 @@ export const useProfileActions = ({
         refreshToken: loginResponse.refreshToken,
         userRole: loginResponse.userData?.userRole,
       });
+
+      const userData = loginResponse.userData;
+      if (userData) {
+        const redirectInfo = getProviderRedirectInfo(userData, loginResponse);
+
+        if (redirectInfo.isPending) {
+          localStorage.setItem("pendingUser:v1", JSON.stringify(userData));
+        } else {
+          localStorage.removeItem("pendingUser:v1");
+        }
+
+        router.push(
+          buildProviderAuthRedirectTarget(
+            redirectInfo,
+            userData.email ?? email,
+          ) as Route,
+        );
+        return;
+      }
+
       router.push(ROUTES.provider.home);
     } catch {
       toast.error(SIGN_UP_TEXTS.errors.autoLoginFailed);

@@ -1,8 +1,11 @@
 import { ROUTES } from "@/lib/constants/routes";
-import type { SignInResponse } from "@/lib/types/api/auth";
+import type {
+  ProviderOnboardingNextStep,
+  SignInResponse,
+} from "@/lib/types/api/auth";
 import type { RedirectInfo } from "@/lib/types/auth/redirect";
 import { verboseTimeAgo } from "@/lib/utils/shared/time-ago";
-import { getProviderProfileResumeStep } from "@/lib/utils/provider/signup-resume";
+import { resolveProviderProfileResumeStep } from "@/lib/utils/provider/signup-resume";
 
 interface ProviderUserData {
   applicationStatus?: string;
@@ -19,6 +22,8 @@ interface ProviderUserData {
   createdAt?: string | number | Date;
   created_at?: string | number | Date;
   joinedAt?: string | number | Date;
+  email?: string;
+  nextStep?: ProviderOnboardingNextStep;
 }
 
 type LoginResponse = SignInResponse | { message?: string };
@@ -51,7 +56,7 @@ function buildPendingUserInfo(
 function buildIncompleteProfileRedirect(
   userData: ProviderUserData,
 ): RedirectInfo | null {
-  const resumeStep = getProviderProfileResumeStep(userData);
+  const resumeStep = resolveProviderProfileResumeStep(userData);
 
   if (!resumeStep) {
     return null;
