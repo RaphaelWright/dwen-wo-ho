@@ -13,7 +13,7 @@ import type {
   CreativeStudiosWizardPreviewProps,
   CreativeStudiosWizardShellProps,
 } from "@/lib/types/components/curator/create/creative-studios";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { useCreativeStudiosNavigation } from "@/hooks/components/curator/create/use-creative-studios-navigation";
 
 function WizardPreview({ type }: CreativeStudiosWizardPreviewProps) {

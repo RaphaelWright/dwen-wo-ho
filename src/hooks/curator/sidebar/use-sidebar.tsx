@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { FiFileText, FiPlus } from "react-icons/fi";
 import type { Route } from "next";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { MdSchool, MdHealthAndSafety, MdHandshake } from "react-icons/md";
 import { useCuratorNotification } from "@/hooks/curator/notification/use-notification";
 import { NavItem } from "@/lib/types/components/curator/curator-sidebar/sidebar";

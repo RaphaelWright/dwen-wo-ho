@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/logo";
 import { Home, RefreshCcw } from "lucide-react";
 import { m } from "motion/react";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 export default function Error({
   reset,

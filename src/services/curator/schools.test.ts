@@ -26,7 +26,7 @@ vi.mock("../shared/patients", () => ({
   },
 }));
 
-vi.mock("@/lib/constants/endpoints", () => ({
+vi.mock("@/lib/constants/infra/endpoints", () => ({
   STATIC_ENDPOINTS: {
     SCHOOLS: "/schools",
     SCHOOLS_BATCH: "/schools/batch",

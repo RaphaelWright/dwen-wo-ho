@@ -4,7 +4,7 @@ import { patientsService } from "@/services/shared/patients";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useCallback } from "react";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 export function useDeleteBulkPatientRecords(schoolId: string) {
   const queryClient = useQueryClient();

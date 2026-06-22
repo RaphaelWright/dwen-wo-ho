@@ -7,7 +7,7 @@ import {
   hasValidToken,
   setUserType,
 } from "@/lib/utils/auth/get-user-type";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { refreshToken } from "@/lib/auth/session";
 import { authService } from "@/services/shared/auth";
 import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";

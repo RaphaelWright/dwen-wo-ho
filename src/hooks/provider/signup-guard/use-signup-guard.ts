@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import { toast } from "sonner";
 import { authService } from "@/services/shared/auth";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getProviderRedirectInfo } from "@/lib/utils/auth/redirect";
 import {

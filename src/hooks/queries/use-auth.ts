@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/services/shared/auth";
 import { performLogout } from "@/lib/auth/session";
-import { ROUTES } from "@/lib/constants/routes";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { ROUTES } from "@/lib/constants/infra/routes";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { toast } from "sonner";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 

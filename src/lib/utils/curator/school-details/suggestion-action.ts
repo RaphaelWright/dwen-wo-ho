@@ -1,5 +1,5 @@
 import type { Route } from "next";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import type {
   SchoolDetailsSuggestion,
   SchoolDetailsSuggestionActionContext,

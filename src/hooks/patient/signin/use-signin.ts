@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { LoginSchema } from "@/lib/schemas/patient-auth-schema";
 import { PatientSignInFormData } from "@/lib/types/components/patient/signin";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";

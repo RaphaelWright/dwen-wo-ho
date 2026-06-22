@@ -5,7 +5,7 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import { useCreativeStudiosView } from "@/hooks/components/curator/create/use-creative-studios-dashboard";
 import type { CreativeStudiosType } from "@/lib/types/components/curator/create/creative-studios";
 

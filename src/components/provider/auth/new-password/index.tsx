@@ -5,7 +5,7 @@ import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/miscellaneous/stepper";
-import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/mock-data";
+import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/components/shared/auth-flow";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/provider/auth/auth-copy";
 import { useTheme } from "next-themes";

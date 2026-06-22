@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { schoolsService } from "@/services/curator/schools";
 import { SchoolProvider } from "@/lib/types/entities/provider";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 async function fetchSchoolProviders(
   schoolId: string,

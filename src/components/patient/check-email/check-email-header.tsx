@@ -1,7 +1,7 @@
 "use client";
 import { Logo } from "@/components/shared/logo";
 import Link from "next/link";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { CHECK_EMAIL_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { useTheme } from "next-themes";
 import { useHydrated } from "@/hooks/shared/use-hydrated";

@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { finalizeProviderSignInSession } from "@/lib/utils/auth/provider-sign-in-session";
 import { mockBrowserStorage } from "@/lib/utils/shared/mock-browser-storage.test-helper";
 import type { SignInResponse } from "@/lib/types/api/auth";

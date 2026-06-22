@@ -12,7 +12,7 @@ import {
 } from "@/lib/constants/components/provider/auth/signup";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { useCreateAccount } from "@/hooks/components/provider/auth/signup/create-account/use-create-account";
 import { Label } from "@/components/ui/label";
 import PasswordStrengthIndicator from "@/components/shared/password-strength-indicator/index";

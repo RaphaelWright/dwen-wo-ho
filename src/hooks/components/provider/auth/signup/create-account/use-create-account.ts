@@ -14,7 +14,7 @@ import {
   SIGN_UP_TEXTS,
   TITLE_SELECT_OPEN_DELAY_MS,
 } from "@/lib/constants/components/provider/auth/signup";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { toTitleCase } from "@/lib/utils/shared/string-case";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { toast } from "sonner";

@@ -6,7 +6,7 @@ import {
 import {
   CURATOR_NOTIFICATION_ACTIONS,
   PROVIDER_NOTIFICATION_ACTIONS,
-} from "@/lib/constants";
+} from "@/lib/constants/infra/app";
 
 describe("inferProviderNotificationAction", () => {
   it("returns valid backend action when already recognized", () => {

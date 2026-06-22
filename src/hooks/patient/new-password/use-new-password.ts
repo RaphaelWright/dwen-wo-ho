@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { SignUpSchema } from "@/lib/schemas/patient-auth-schema";

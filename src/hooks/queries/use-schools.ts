@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { schoolsService } from "@/services/curator/schools";
 import { lockinsService } from "@/services/patient/lock-ins";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 // ─── Query Hooks ─────────────────────────────────────────────────────────────
 // Hoisted to module scope; they close over no component state, only imported

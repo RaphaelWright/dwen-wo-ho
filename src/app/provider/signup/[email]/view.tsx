@@ -4,9 +4,9 @@ import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
 import { formatElapsedSeconds as formatTime } from "@/lib/utils/shared/time-ago";
-import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/components/shared/auth-flow";
 import Link from "next/link";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import Stepper from "@/components/miscellaneous/stepper";
 import { useProviderVerifyEmail } from "@/hooks/provider/verify-email/use-verify-email";
 

@@ -4,7 +4,7 @@ import {
   IconBrandInstagram,
   IconBrandX,
 } from "@tabler/icons-react";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { ServicesConstants } from "@/lib/types/components/marketing/services";
 
 export const HERO_CONTENT = {
@@ -229,6 +229,44 @@ export const PARTNER_SCHOOLS = [
   { name: "Holy Child School", logo: "/schools/holy-child.png" },
   { name: "Adisadel College", logo: "/schools/adisadel.png" },
   { name: "St. James Seminary", logo: "/schools/st-james.png" },
+];
+
+export const testimonials = [
+  {
+    quote:
+      "Dwen Wo Ho has been a lifeline during my final year. The ability to connect with counselors anonymously made all the difference.",
+    name: "Akosua Mensah",
+    designation: "Final Year Student, UG",
+    src: "/home/home-hero-2.jpg",
+  },
+  {
+    quote:
+      "I finally found a platform that understands the pressure students face. The community support is incredible.",
+    name: "Kwame Osei",
+    designation: "Engineering Student, KNUST",
+    src: "/home/home-hero-1.jpg",
+  },
+  {
+    quote:
+      "As a counselor, this tool allows me to reach students who wouldn't normally walk into my office. It's revolutionizing campus mental health.",
+    name: "Dr. Abena Darko",
+    designation: "Clinical Psychologist",
+    src: "/providers/clinical-psychologist.jpg",
+  },
+  {
+    quote:
+      "The self-assessment tools helped me understand my anxiety triggers. I feel more in control of my mental health now.",
+    name: "Emmanuel Tetteh",
+    designation: "Business Student, UPSA",
+    src: "/home/home-hero-3.jpg",
+  },
+  {
+    quote:
+      "A safe space where I can express myself without fear of judgment. Every student needs this app on their phone.",
+    name: "Sarah Afriyie",
+    designation: "Medical Student, UCC",
+    src: "/home/home-hero-4.jpg",
+  },
 ];
 
 export const STICKY_SCROLL_CONTENT = [

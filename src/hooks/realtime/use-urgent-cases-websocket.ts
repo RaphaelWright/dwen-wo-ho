@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { urgentCasesAtom } from "@/atoms/websocket";
 import { NewUrgentCaseEvent } from "@/lib/types/entities/websocket";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 // Urgent alert audio — short beep using Web Audio API
 function playUrgentAlertSound() {

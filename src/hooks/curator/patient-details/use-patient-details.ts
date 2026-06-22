@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { patientsService } from "@/services/shared/patients";
 import usePatientResultQuery from "@/hooks/queries/use-patient-result";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { useDeleteSinglePatientRecord } from "@/hooks/curator/delete-patient-records/use-delete-patient-records";
 import { buildPatientLockinMetrics } from "@/lib/utils/curator/patient-dashboard/lockin-metrics";
 

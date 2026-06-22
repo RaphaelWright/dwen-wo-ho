@@ -16,9 +16,9 @@ import { Suspense } from "react";
 import { useHydrated } from "@/hooks/shared/use-hydrated";
 
 import { formatElapsedSeconds as formatTime } from "@/lib/utils/shared/time-ago";
-import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/mock-data";
+import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/components/shared/auth-flow";
 
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 import Stepper from "@/components/miscellaneous/stepper";
 

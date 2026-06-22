@@ -1,5 +1,8 @@
 import { api } from "@/lib/api";
-import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import {
+  STATIC_ENDPOINTS,
+  DYNAMIC_ENDPOINTS,
+} from "@/lib/constants/infra/endpoints";
 import { LockInData } from "@/lib/types/entities/lockin";
 import { LockinUpdateResponse } from "@/lib/types/api/lockin";
 import { UrgentCarePatient } from "@/lib/types/entities/patient";

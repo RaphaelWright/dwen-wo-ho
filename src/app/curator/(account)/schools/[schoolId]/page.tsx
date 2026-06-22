@@ -1,6 +1,6 @@
 "use client";
 
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { useCuratorSchoolDetails } from "@/hooks/curator/school-details/use-school-details";
 import {
   SchoolDetailsErrorView,

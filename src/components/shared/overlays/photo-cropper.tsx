@@ -6,7 +6,6 @@ import { m, AnimatePresence } from "motion/react";
 import { RotateCcw } from "lucide-react";
 import Cropper from "react-easy-crop";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { Z_INDEX_CLASSES } from "@/lib/constants/z-index";
 import { PhotoCropperOverlayProps } from "@/lib/types/components/shared/overlays";
 import { cn } from "@/lib/utils";
 import { usePhotoCropper } from "@/hooks/components/shared/overlays/use-photo-cropper";
@@ -32,8 +31,7 @@ export const PhotoCropperOverlay = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-              "bg-background/80 fixed inset-0 backdrop-blur-3xl",
-              Z_INDEX_CLASSES.modal,
+              "bg-background/80 z-modal-stack fixed inset-0 backdrop-blur-3xl",
             )}
             onClick={onClose}
           />
@@ -44,8 +42,7 @@ export const PhotoCropperOverlay = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className={cn(
-              "fixed inset-0 flex items-center justify-center p-4",
-              Z_INDEX_CLASSES.modal,
+              "z-modal-stack fixed inset-0 flex items-center justify-center p-4",
             )}
             onClick={(e) => e.stopPropagation()}
           >

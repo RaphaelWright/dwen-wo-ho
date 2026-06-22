@@ -12,7 +12,7 @@ import {
 } from "@/atoms/notification";
 import { unreadCountAtom } from "@/atoms/websocket";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { providerDashboardService } from "@/services/provider/dashboard";
 import { curatorService } from "@/services/curator";
 import { getUserType } from "@/lib/utils/auth/get-user-type";

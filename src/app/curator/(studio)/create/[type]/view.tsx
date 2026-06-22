@@ -11,7 +11,7 @@ import { ProviderStep1 } from "@/components/curator/create/creative-studios/prov
 import { ProviderStep2 } from "@/components/curator/create/creative-studios/provider/step-2";
 import { TagForm } from "@/components/curator/create/creative-studios/tag/form";
 import { CREATIVE_STUDIOS_STEP_BOUNDS } from "@/lib/constants/components/curator/create/creative-studios";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import { isCreativeStudiosType } from "@/lib/utils/curator/create/is-creative-studios-type";
 import { useCreativeStudiosNavigation } from "@/hooks/components/curator/create/use-creative-studios-navigation";
 import type { CreativeStudiosType } from "@/lib/types/components/curator/create/creative-studios";

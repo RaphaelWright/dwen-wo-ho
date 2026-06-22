@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import { Button } from "@/components/ui/button";
 
 import { Loader2, School } from "lucide-react";

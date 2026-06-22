@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { curatorProvidersService } from "@/services/curator/providers";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import type { ProviderActivityParams } from "@/lib/types/api/providers";
 
 export const useProviderActivityQuery = (params?: ProviderActivityParams) =>

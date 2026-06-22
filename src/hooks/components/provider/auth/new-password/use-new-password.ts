@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";

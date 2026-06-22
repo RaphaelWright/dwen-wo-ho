@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { curatorService } from "@/services/curator";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 // T3-1: Summary counts
 export const useCuratorSummary = () =>

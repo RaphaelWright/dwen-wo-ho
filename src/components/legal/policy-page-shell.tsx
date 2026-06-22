@@ -1,5 +1,5 @@
 import WidthConstraint from "@/components/ui/width-constraint";
-import { LEGAL_POLICY_LAST_UPDATED } from "@/lib/constants/legal";
+import { LEGAL_POLICY_LAST_UPDATED } from "@/lib/constants/components/legal/policy";
 import type { LegalPolicyPageShellProps } from "@/lib/types/components/legal/policy-page";
 
 export function LegalPolicyPageShell({

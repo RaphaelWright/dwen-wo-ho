@@ -9,7 +9,7 @@ import usePatientResultQuery from "@/hooks/queries/use-patient-result";
 import { patientsService } from "@/services/shared/patients";
 import { getColorHex } from "@/lib/utils/shared/color-hex";
 import { PatientActionResponseDTO } from "@/lib/types/api/patient-results";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 const EMPTY_HISTORY_ACTIONS: PatientActionResponseDTO[] = [];
 

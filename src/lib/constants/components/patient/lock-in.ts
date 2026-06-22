@@ -1,6 +1,43 @@
 export const CACHE_KEY_PREFIX = "lockin_form_cache_";
 export const CACHE_DURATION = 5 * 60 * 1000;
 
+export const LOCKIN_FREQUENCY_OPTIONS = [
+  "never",
+  "rarely",
+  "sometimes",
+  "often",
+  "always",
+];
+
+export const LOCKIN_YES_NO_OPTIONS = ["yes", "no"];
+
+export const LOCKIN_MOTIVATION_OPTIONS = [
+  "none",
+  "slightly",
+  "moderate",
+  "high",
+];
+
+export const LOCKIN_STUDY_FREQUENCY_OPTIONS = [
+  "never",
+  "rarely",
+  "occasionally",
+  "frequently",
+  "always",
+];
+
+export const LOCKIN_TIME_TO_EXAM_OPTIONS = [
+  "1d",
+  "2d",
+  "3d",
+  "1w",
+  "2w",
+  "1m",
+  "2m+",
+];
+
+export const LOCKIN_REASON_OPTIONS = ["exam", "assignment", "project", "other"];
+
 export const LOCK_IN_TEXTS = {
   header: {
     title: "Student Lock In Form",

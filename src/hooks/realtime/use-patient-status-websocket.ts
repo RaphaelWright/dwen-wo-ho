@@ -4,7 +4,7 @@ import { useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { PatientStatusChangedEvent } from "@/lib/types/entities/websocket";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 export function usePatientStatusWebSocket() {
   const queryClient = useQueryClient();

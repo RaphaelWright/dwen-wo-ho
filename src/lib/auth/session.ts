@@ -1,5 +1,5 @@
-import { ROUTES } from "@/lib/constants/routes";
-import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { ROUTES } from "@/lib/constants/infra/routes";
+import { STATIC_ENDPOINTS } from "@/lib/constants/infra/endpoints";
 import { API_BASE_URL } from "@/configs/config";
 import { setUserType, getStoredUserType } from "@/lib/utils/auth/get-user-type";
 import type { QueryClient } from "@tanstack/react-query";

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Stepper from "@/components/miscellaneous/stepper";
-import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/components/shared/auth-flow";
 import { SignUpFooterProps } from "@/lib/types/components/patient/signup";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { Input } from "@/components/ui/input";

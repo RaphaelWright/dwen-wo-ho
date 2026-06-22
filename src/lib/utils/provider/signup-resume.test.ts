@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import type { RedirectInfo } from "@/lib/types/auth/redirect";
 import {
   buildProviderAuthRedirectTarget,

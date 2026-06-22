@@ -1,6 +1,6 @@
 "use client";
 
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { usePathname, useRouter } from "next/navigation";
 
 export const useHeaderActions = () => {

@@ -161,32 +161,71 @@ Use `pnpm hooks:reorg` / `pnpm hooks:reorg:apply` with `src/lib/scripts/hooks-re
 
 Mirror **Component Folder Structure** homogeneity rules under `src/lib/constants/`:
 
-| Level contents      | Valid? | When to use                                                                |
-| ------------------- | ------ | -------------------------------------------------------------------------- |
-| **Files only**      | Yes    | Sibling constant modules with no sub-structure (e.g. `patient/lock-in.ts`) |
-| **Folders only**    | Yes    | Each child is its own unit (`curator/schools/`, `provider/workspace/`)     |
-| **Files + folders** | **No** | Never — folderize loose constant files                                     |
+| Level contents      | Valid? | When to use                                                                                   |
+| ------------------- | ------ | --------------------------------------------------------------------------------------------- |
+| **Files only**      | Yes    | Sibling constant modules with no sub-structure (e.g. `infra/routes.ts`, `patient/lock-in.ts`) |
+| **Folders only**    | Yes    | Each child is its own unit (`infra/`, `components/`, `curator/schools/`)                      |
+| **Files + folders** | **No** | Never — folderize loose constant files                                                        |
+
+**Root rule:** `src/lib/constants/` must be **folders-only** — `infra/` and `components/` only. No loose `.ts` files at the root (no `index.ts` barrel).
 
 Run `pnpm constants:audit` before large constants PRs. Constant paths under `lib/constants/components/<domain>/` must stay aligned with matching `components/<domain>/` and `hooks/<domain>/` paths.
 
 #### Placement
 
-| What                  | Where                                                                                                                          |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Feature UI constants  | `lib/constants/components/<domain>/` — mirror `components/<domain>/`                                                           |
-| Infra / cross-cutting | `lib/constants/` root only: `routes.ts`, `endpoints.ts`, `query-keys.ts`, `z-index.ts`, `legal.ts`, `mock-data.ts`, `index.ts` |
-| Domain modules        | Merge micro-files (≤20 lines, ≤2 exports) into one module per folder (`school-forms.ts`, `auth-copy.ts`, `overlays.ts`)        |
+| What                  | Where                                                                                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Feature UI constants  | `lib/constants/components/<domain>/` — copy, routes in content objects, variant maps, config — **not** `className` / Tailwind strings (see **No style constants**) |
+| Infra / cross-cutting | `lib/constants/infra/` — `routes.ts`, `endpoints.ts`, `query-keys.ts`, `app.ts` (nav items, notification action enums)                                             |
+| Cross-role UI config  | `lib/constants/components/shared/` — e.g. `auth-flow.ts` (signup/recover step labels shared by patient + provider)                                                 |
+| Legal / policy copy   | `lib/constants/components/legal/` — static policy metadata (e.g. `policy.ts` last-updated date)                                                                    |
+| Domain modules        | Merge micro-files (≤20 lines, ≤2 exports) into one module per folder (`school-forms.ts`, `auth-copy.ts`, `overlays.ts`)                                            |
+
+**Do not** create standalone root files for tiny one-offs (`z-index.ts`, `legal.ts`, `mock-data.ts`). Put layering in `globals.css`, domain copy under `components/<domain>/`, and shared form enums beside the feature they serve.
 
 #### Naming
 
-| Rule                           | Example                                                                                                  |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| **Kebab-case filenames**       | `school-forms.ts`, `create-launcher.ts`                                                                  |
-| **No redundant parent prefix** | `curator/schools/school-forms.ts`, not `schools-school-forms.ts`                                         |
-| **UI-role suffixes**           | `create-launcher`, `provider-details-panel`, `school-edit-panel`, `pending-approval-modal/content.ts`    |
-| **Export symbols**             | `SCREAMING_SNAKE` for static objects; rename when UI role changes (`CREATE_LAUNCHER_ITEMS_CONFIG`)       |
-| **`.tsx` only for JSX**        | Search configs that export icon elements (e.g. `school-details/search.tsx`)                              |
-| **Single app barrel**          | `lib/constants/index.ts` only — no per-feature `index.ts` unless a composed constant module is justified |
+| Rule                           | Example                                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| **Kebab-case filenames**       | `school-forms.ts`, `create-launcher.ts`, `auth-flow.ts`                                                |
+| **No redundant parent prefix** | `curator/schools/school-forms.ts`, not `schools-school-forms.ts`                                       |
+| **UI-role suffixes**           | `create-launcher`, `provider-details-panel`, `school-edit-panel`, `pending-approval-modal/content.ts`  |
+| **Export symbols**             | `SCREAMING_SNAKE` for static objects; rename when UI role changes (`CREATE_LAUNCHER_ITEMS_CONFIG`)     |
+| **`.tsx` only for JSX**        | Search configs that export icon elements (e.g. `school-details/search.tsx`)                            |
+| **No root barrel**             | Import `@/lib/constants/infra/routes`, `@/lib/constants/infra/app`, etc. — no `lib/constants/index.ts` |
+
+#### No style constants _(Mandatory)_
+
+**Never** export Tailwind classes, CSS values, easing curves, animation utility strings, or
+`className` arrays from `lib/constants/` for styling.
+
+| Put it here                       | Use for                                                                                                                                                                                |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`className` on the component**  | Normal presentational styling (Tailwind). Repeat within one file? Module-level strings in that **same component file** — not `lib/constants/`.                                         |
+| **`globals.css`** (or scoped CSS) | `@keyframes`, shell/layout hooks on root markers, z-index layering utilities (e.g. `.z-sticky-chrome`), and classes toggled by JS animation state (e.g. `.is-visible`, `.is-dropped`). |
+| **`components/ui/*-variants.ts`** | shadcn `cva` variant definitions.                                                                                                                                                      |
+
+**Only exception — DRY map objects:** a constant **object/map** whose keys are semantic
+variants and whose values are class strings, consumed by **multiple** components or a `.map()`
+over options. Examples: accent/badge variant maps, status chip configs, launcher item configs.
+The map must eliminate real duplication — not wrap a single element's classes.
+
+```ts
+// ✅ Allowed — variant map drives repeated UI
+export const CARD_ACCENTS = {
+  sand: { badgeClassName: "...", iconClassName: "..." },
+  info: { badgeClassName: "...", iconClassName: "..." },
+} as const;
+
+// ❌ Forbidden — style dumping ground
+export const HERO_CLASSES = "text-white opacity-0 translate-y-4 ...";
+export const BODY_SHELL_CLASSES = [
+  "h-full",
+  "w-full",
+  "overflow-hidden",
+] as const;
+export const EASE_SMOOTH = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+```
 
 Use `pnpm constants:reorg` / `pnpm constants:reorg:apply` with `src/lib/scripts/constants-reorg.manifest.json` for bulk moves and consolidations.
 
@@ -328,6 +367,7 @@ When a guard must stay client-side, add a one-line comment explaining why.
 - **Services** must not import React, Next.js routing, components, or hooks.
 - **`.tsx` files** must not declare interfaces or type aliases.
 - **No inline definitions** — do not define constants, types, or utilities inside feature `.tsx` files.
+- **No style constants** — never export Tailwind/CSS classes from `lib/constants/` except DRY variant maps (see **No style constants** under Constants Folder Structure).
 - **No circular imports** or cross-layer leakage.
 
 ---

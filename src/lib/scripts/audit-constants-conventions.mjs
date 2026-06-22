@@ -23,16 +23,6 @@ const CHECK = args.has("--check");
 const REVIEW = args.has("--review");
 
 const SOURCE_EXT = /\.(tsx?|jsx?)$/;
-const INFRA_ROOT_FILES = new Set([
-  "routes.ts",
-  "endpoints.ts",
-  "query-keys.ts",
-  "z-index.ts",
-  "legal.ts",
-  "mock-data.ts",
-  "index.ts",
-]);
-
 const MICRO_MAX_LINES = 20;
 const MICRO_MAX_EXPORTS = 2;
 const MICRO_CLUSTER_MIN = 3;
@@ -137,14 +127,16 @@ function detectMisplacedRoot(relFile) {
   if (!rel.startsWith("src/lib/constants/")) return violations;
 
   const base = path.basename(rel);
-  if (rel === `src/lib/constants/${base}` && !INFRA_ROOT_FILES.has(base)) {
-    if (/^provider-/i.test(base) || base === "mobile-dashboard.ts") {
-      violations.push({
-        type: "misplaced-root",
-        file: rel,
-        detail: "Feature constants belong under components/<domain>/",
-      });
-    }
+  const relFromConstants = rel.slice("src/lib/constants/".length);
+  const isRootFile = !relFromConstants.includes("/");
+
+  if (isRootFile && isSourceFile(base)) {
+    violations.push({
+      type: "misplaced-root",
+      file: rel,
+      detail:
+        "Root lib/constants/ must be folders-only (infra/, components/). Move module into infra/ or components/<domain>/.",
+    });
   }
 
   return violations;
@@ -209,11 +201,8 @@ function audit() {
   const microByDir = new Map();
 
   walkConstants(({ relDir, files, dirs, absDir }) => {
-    const isInfraRoot =
-      relDir === "" && dirs.length === 1 && dirs[0].name === "components";
-
-    if (files.length > 0 && dirs.length > 0 && !isInfraRoot) {
-      mixed.push(normalize(path.join("src/lib/constants", relDir)));
+    if (files.length > 0 && dirs.length > 0) {
+      mixed.push(normalize(path.join("src/lib/constants", relDir || ".")));
     }
 
     for (const file of files) {

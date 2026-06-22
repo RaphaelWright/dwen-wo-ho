@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { creativeStudiosService } from "@/services/curator/creative-studios";
 import { specialtiesService } from "@/services/shared/specialties";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import type {
   CreateCampusInput,
   CreateProgrammeInput,
