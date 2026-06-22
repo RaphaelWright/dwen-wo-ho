@@ -1,8 +1,8 @@
 import {
   PROVIDER_NOTIFICATION_ACTIONS,
   CURATOR_NOTIFICATION_ACTIONS,
-} from "@/lib/constants";
-import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/routes";
+} from "@/lib/constants/infra/app";
+import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/infra/routes";
 import {
   CuratorNotification,
   ProviderNotification,

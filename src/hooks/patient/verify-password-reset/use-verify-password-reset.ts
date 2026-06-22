@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 
 export function usePatientVerifyPasswordReset() {

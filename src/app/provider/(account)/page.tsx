@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import useProviderDashboard from "@/hooks/provider/dashboard/use-dashboard";
 import { performLogout } from "@/lib/auth/session";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import useProviderDashboardAuth from "@/hooks/provider/dashboard-auth/use-dashboard-auth";
 import ProviderDashboardShell from "@/components/provider/dashboard/dashboard-shell";
 import ProviderDashboardModals from "@/components/provider/dashboard/dashboard-overlay-host";

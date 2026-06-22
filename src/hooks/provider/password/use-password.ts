@@ -9,7 +9,7 @@ import {
   ProviderPasswordSchema,
   ProviderPasswordFormData,
 } from "@/lib/schemas/provider-auth-schema";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { toast } from "sonner";

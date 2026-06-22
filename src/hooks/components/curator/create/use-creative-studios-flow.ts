@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import type { Dispatch, SetStateAction } from "react";
-import { DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import useCreativeStudiosQuery from "@/hooks/queries/use-creative-studios";
 import type {
   CampusDraft,

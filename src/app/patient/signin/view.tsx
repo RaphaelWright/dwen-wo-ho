@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { usePatientSignIn } from "@/hooks/patient/signin/use-signin";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import {
   SignInHeader,
   SignInForm,

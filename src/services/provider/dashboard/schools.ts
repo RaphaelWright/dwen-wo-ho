@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { DYNAMIC_ENDPOINTS } from "@/lib/constants/infra/endpoints";
 import type {
   LatestSchoolPatientResult,
   SchoolNewPatientCheck,

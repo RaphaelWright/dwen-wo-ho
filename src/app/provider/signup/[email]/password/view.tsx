@@ -3,7 +3,7 @@
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/components/shared/auth-flow";
 import Stepper from "@/components/miscellaneous/stepper";
 import { useProviderPassword } from "@/hooks/provider/password/use-password";
 

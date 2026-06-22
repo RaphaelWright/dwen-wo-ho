@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { ProviderDetails } from "@/lib/types/entities/provider";
 import { PartnerDetailsTab } from "@/lib/types/entities/partners";
 import { PROVIDER_STATUS_CONFIG } from "@/lib/constants/components/curator/providers/provider-details-panel";

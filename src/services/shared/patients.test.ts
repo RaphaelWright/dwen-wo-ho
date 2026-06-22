@@ -18,7 +18,7 @@ vi.mock("../patient/lock-ins", () => ({
   },
 }));
 
-vi.mock("@/lib/constants/endpoints", () => ({
+vi.mock("@/lib/constants/infra/endpoints", () => ({
   STATIC_ENDPOINTS: { PATIENT_RESULTS: { CREATE: "/patients" } },
   DYNAMIC_ENDPOINTS: {
     PATIENT_RESULTS: {

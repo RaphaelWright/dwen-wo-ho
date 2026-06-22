@@ -1,4 +1,4 @@
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import type { ProviderOnboardingNextStep } from "@/lib/types/api/auth";
 import type { RedirectInfo } from "@/lib/types/auth/redirect";
 import type {

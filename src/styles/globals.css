@@ -110,6 +110,8 @@
   --loading: #94a3b8;
   --secondary-accent: #0d9488;
   --warm-sand: #e8d5b7;
+  --provider-launch-highlight: #e8b86d;
+  --provider-launch-highlight-header: #d4a574;
 }
 
 .dark {
@@ -156,6 +158,8 @@
   --loading: #64748b;
   --secondary-accent: #14b8a6;
   --warm-sand: #e8d5b7;
+  --provider-launch-highlight: #e8b86d;
+  --provider-launch-highlight-header: #d4a574;
 }
 
 @layer base {
@@ -288,6 +292,15 @@
 
 /* New Modern Animations */
 @layer utilities {
+  /** Layering: sticky page chrome (40) < site header (50) < modal stack (60) */
+  .z-sticky-chrome {
+    z-index: 40;
+  }
+
+  .z-modal-stack {
+    z-index: 60;
+  }
+
   .animate-blob {
     animation: blob 7s infinite;
   }
@@ -559,4 +572,656 @@ input:-webkit-autofill:active {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* Provider launch (/join-as-provider-2) — keyframes + JS state hooks */
+.pl2-nav-item {
+  opacity: 0;
+  transform: translateY(-44px);
+}
+
+.pl2-header {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pl2-header-role {
+  transition:
+    opacity 0.42s ease,
+    transform 0.42s ease;
+}
+
+.pl2-header-wave {
+  transform-origin: 70% 70%;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition:
+    opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pl2-body-copy .pl2-word {
+  display: inline-block;
+  transition:
+    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1.5s ease;
+}
+
+.pl2-card-pin {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pl2-card-pill {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pl2-card-bubble {
+  opacity: 0;
+  transform: translateY(22px) scale(0.98);
+  transition:
+    opacity 1.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    backdrop-filter 0.3s ease,
+    border 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.pl2-card-footer {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pl2-closing-line {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pl2-cta-btn {
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.15s ease;
+}
+
+@keyframes pl2-nav-drop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pl2-wave-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-18deg);
+  }
+  30% {
+    transform: rotate(15deg);
+  }
+  45% {
+    transform: rotate(-13deg);
+  }
+  60% {
+    transform: rotate(11deg);
+  }
+  75% {
+    transform: rotate(-6deg);
+  }
+  90% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes pl2-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.pl2-nav-item.is-dropped {
+  animation: pl2-nav-drop 0.68s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pl2-header.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-header-role.is-exiting {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.pl2-header-wave.is-dropped {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-header-wave.is-shaking {
+  animation: pl2-wave-shake 0.95s ease-in-out 1;
+}
+
+.pl2-body-copy .pl2-word.is-scattered {
+  /* transform applied inline via JS (element.style.transform) to avoid
+     inherited CSS-variable recalculation on every rAF tick */
+  opacity: 0;
+}
+
+.pl2-cursor {
+  animation: pl2-cursor-blink 1s steps(2) infinite;
+}
+
+.pl2-card-pin.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-card-pill.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-card-bubble.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.pl2-card-footer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-closing-line.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pl2-cta-btn.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .provider-launch-2-shell .pl2-nav-item,
+  .provider-launch-2-shell .pl2-header-wave,
+  .provider-launch-2-shell .pl2-header-role,
+  .provider-launch-2-shell .pl2-header,
+  .provider-launch-2-shell .pl2-card-pin,
+  .provider-launch-2-shell .pl2-card-pill,
+  .provider-launch-2-shell .pl2-card-bubble,
+  .provider-launch-2-shell .pl2-card-footer,
+  .provider-launch-2-shell .pl2-closing-line,
+  .provider-launch-2-shell .pl2-cta-btn,
+  .provider-launch-2-shell .pl2-body-copy .pl2-word,
+  .provider-launch-2-shell .pl2-cursor {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .provider-launch-2-shell .pl2-nav-item.is-dropped,
+  .provider-launch-2-shell .pl2-header-wave.is-dropped,
+  .provider-launch-2-shell .pl2-header.is-visible,
+  .provider-launch-2-shell .pl2-card-pin.is-visible,
+  .provider-launch-2-shell .pl2-card-pill.is-visible,
+  .provider-launch-2-shell .pl2-card-bubble.is-visible,
+  .provider-launch-2-shell .pl2-card-footer.is-visible,
+  .provider-launch-2-shell .pl2-closing-line.is-visible,
+  .provider-launch-2-shell .pl2-cta-btn.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Lock In 2 (/lock-in-2) — JS-toggled hooks, keyframes, frozen hero only */
+.li2-stage,
+.li2-nav-item,
+.li2-banner,
+.li2-stat-line,
+.li2-hero,
+.li2-photo,
+.li2-achievement,
+.li2-stage-controls,
+.li2-lock-in-btn {
+  opacity: 0;
+}
+
+.li2-nav-item {
+  transform: translateY(-44px);
+}
+
+.li2-banner {
+  position: absolute;
+  left: 260px;
+  top: 410px;
+  width: 1400px;
+  height: 260px;
+  transform: scale(0.96);
+  z-index: 5;
+}
+
+.li2-headline {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  transition:
+    top 0.7s ease,
+    left 0.7s ease,
+    font-size 0.7s ease,
+    color 0.7s ease,
+    opacity 0.45s ease;
+}
+
+.li2-stat-line {
+  position: absolute;
+  left: 50%;
+  top: 726px;
+  margin: 0;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 5;
+}
+
+.li2-hero {
+  position: absolute;
+  left: 40px;
+  top: 120px;
+  width: 880px;
+  height: 780px;
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.li2-achievement {
+  position: absolute;
+  left: 1040px;
+  width: 780px;
+  min-height: 92px;
+  transform: translateX(24px) translateY(8px);
+  filter: blur(4px);
+  z-index: 5;
+}
+
+.li2-stage-controls {
+  position: absolute;
+  left: 1040px;
+  top: 872px;
+  width: 780px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  transform: translateY(10px);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.li2-lock-in-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  height: 76px;
+  padding: 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transform: translateX(-50%) translateY(18px);
+  z-index: 25;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.li2-lock-in-btn.in:hover {
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.li2-stage.in,
+.li2-banner.in,
+.li2-stat-line.in,
+.li2-photo.in,
+.li2-achievement.in,
+.li2-stage-controls.in,
+.li2-lock-in-btn.in {
+  opacity: 1;
+}
+
+.li2-banner.in {
+  transform: scale(1);
+}
+
+.li2-stat-line.in {
+  transform: translateX(-50%) translateY(0);
+}
+
+.li2-achievement.in {
+  transform: translateX(0) translateY(0);
+  filter: blur(0);
+}
+
+.li2-achievement.passive {
+  opacity: 0.72;
+  transform: translateX(0) scale(0.985);
+  filter: blur(0);
+}
+
+.li2-achievement.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  filter: blur(0);
+  border-color: color-mix(in srgb, var(--foreground) 14%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+/* -------------------------------------------------
+   Achievement emoji – matches the original HTML design
+   ------------------------------------------------- */
+.achievement-emoji {
+  font-size: 32px; /* same visual size as the HTML mock-up */
+  line-height: 1;
+  margin-left: 8px;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+  opacity: 0; /* hidden by default – becomes visible when active */
+  transform: translateY(8px);
+}
+
+/* When the card is "active" (the same class that the HTML toggles) */
+.achievement-emoji.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.li2-stage-controls.in {
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.li2-lock-in-btn.in {
+  transform: translateX(-50%) translateY(0);
+}
+
+.li2-headline.inactive {
+  top: 40%;
+  font-size: 96px;
+  color: var(--muted-foreground);
+  transform: translate(-50%, -50%);
+}
+
+.li2-headline.gone,
+.li2-stat-line.gone {
+  opacity: 0;
+}
+
+.li2-headline.typing .li2-cursor {
+  display: inline-block;
+  animation: li2-blink 1s steps(1) infinite;
+}
+
+.li2-wave {
+  opacity: 0;
+  transform: translateY(-70px);
+}
+
+.li2-wave.dropped {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.li2-wave.shake {
+  animation: li2-wave-shake 0.7s ease-in-out 1;
+}
+
+.li2-lock-in-btn-text.is-out {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+
+.li2-lock-in-btn-text.is-in {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.li2-achievement-reaction.active {
+  transform: scale(1.5);
+  opacity: 1;
+  animation: achievement-emoji-grow 0.45s ease-in-out forwards;
+}
+
+.li2-achievement-reaction.passive {
+  transform: scale(1);
+  opacity: 0.72;
+}
+
+/* FROZEN — hero artifact layer */
+.li2-hero-artifacts {
+  --hero-soft: var(--background);
+  --hero-halo: rgba(107, 56, 251, 0.14);
+  --hero-accent: #6b38fb;
+  --hero-blob-1: #6b38fb;
+  --hero-blob-2: #4c1d95;
+  --hero-blob-3: #312e81;
+  --hero-blob-soft-a: rgba(107, 56, 251, 0.55);
+  --hero-blob-soft-b: rgba(76, 29, 149, 0.45);
+  --hero-squiggle: #f5c518;
+  --hero-ribbon-a: #db00ff;
+  --hero-ribbon-b: #7000ff;
+  --hero-ribbon-c: #00ffb2;
+  --hero-ribbon-d: #ffe600;
+}
+
+.li2-hero-artifacts.in {
+  animation: li2-hero-float 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.li2-hero-artifacts .hero-pink-circle {
+  position: absolute;
+  left: 140px;
+  top: 60px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    var(--background) 0%,
+    color-mix(in srgb, var(--hero-soft) 12%, var(--background)) 55%,
+    color-mix(in srgb, var(--hero-soft) 20%, var(--background)) 100%
+  );
+  @media (prefers-color-scheme: dark) {
+    background: radial-gradient(
+      circle at 38% 32%,
+      var(--background) 100%,
+      var(--background) 100%
+    );
+  }
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.035),
+    0 12px 28px rgba(0, 0, 0, 0.065),
+    0 28px 56px var(--hero-halo),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -10px 24px rgba(0, 0, 0, 0.03);
+  z-index: 0;
+  transition:
+    background 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.li2-hero-artifacts .hero-pink-circle::after {
+  content: "";
+  position: absolute;
+  inset: -7%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--hero-halo) 0%, transparent 72%);
+  z-index: -1;
+  pointer-events: none;
+  transition: background 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.li2-hero-artifacts .hero-dots {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  width: 160px;
+  height: 160px;
+  background-image: radial-gradient(circle, #c8c8c8 2px, transparent 2px);
+  background-size: 18px 18px;
+  opacity: 0.55;
+  z-index: 1;
+}
+
+.li2-hero-artifacts .hero-ribbon-stroke {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.li2-hero-artifacts .hero-ribbon-stroke .ribbon-path {
+  transition: stroke 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.li2-hero-artifacts .hero-ribbon-stroke stop {
+  transition: stop-color 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.li2-hero-artifacts .photo {
+  position: absolute;
+  z-index: 4;
+}
+
+@keyframes li2-nav-drop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes li2-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes li2-wave-shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(18deg);
+  }
+  30% {
+    transform: rotate(-12deg);
+  }
+  45% {
+    transform: rotate(16deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes li2-hero-float {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.li2-nav-item.is-dropped {
+  animation: li2-nav-drop 0.68s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.lock-in-2-shell.paused .li2-wave.shake {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lock-in-2-shell .li2-nav-item,
+  .lock-in-2-shell .li2-banner,
+  .lock-in-2-shell .li2-headline,
+  .lock-in-2-shell .li2-stat-line,
+  .lock-in-2-shell .li2-hero,
+  .lock-in-2-shell .li2-photo,
+  .lock-in-2-shell .li2-achievement,
+  .lock-in-2-shell .li2-stage-controls,
+  .lock-in-2-shell .li2-lock-in-btn,
+  .lock-in-2-shell .li2-wave,
+  .lock-in-2-shell .li2-lock-in-btn-text {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .lock-in-2-shell .li2-headline:not(.gone),
+  .lock-in-2-shell .li2-nav-item.is-dropped,
+  .lock-in-2-shell .li2-stage.in,
+  .lock-in-2-shell .li2-photo.in,
+  .lock-in-2-shell .li2-hero.in,
+  .lock-in-2-shell .li2-achievement.in,
+  .lock-in-2-shell .li2-achievement.active,
+  .lock-in-2-shell .li2-stage-controls.in,
+  .lock-in-2-shell .li2-lock-in-btn.in {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .lock-in-2-shell .li2-lock-in-btn.in {
+    transform: translateX(-50%) !important;
+  }
+
+  .lock-in-2-shell .li2-stat-line.in {
+    transform: translateX(-50%) !important;
+  }
+}
+
+.mask-bottom-fade {
+  mask-image: linear-gradient(to bottom, black 0%, black 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 75%,
+    transparent 100%
+  );
 }

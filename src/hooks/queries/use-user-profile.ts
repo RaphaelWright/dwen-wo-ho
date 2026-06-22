@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { authService } from "@/services/shared/auth";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 
 const useUserQuery = (options?: {
   refetchInterval?: number | false;

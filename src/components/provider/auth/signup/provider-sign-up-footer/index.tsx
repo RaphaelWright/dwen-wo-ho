@@ -6,9 +6,8 @@ import Stepper from "@/components/miscellaneous/stepper";
 import { ProfileStepIndicator } from "@/components/provider/auth/signup/profile-step-indicator/index";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { PROVIDER_SIGNUP_FOOTER_SLOTS } from "@/lib/constants/components/provider/auth/auth-copy";
-import { Z_INDEX_CLASSES } from "@/lib/constants/z-index";
+import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/components/shared/auth-flow";
 import { ProviderSignUpFooterProps } from "@/lib/types/components/provider/auth/signup-footer";
-import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/mock-data";
 import { cn } from "@/lib/utils";
 
 const footerButtonClassName = cn(
@@ -45,8 +44,7 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
   return (
     <footer
       className={cn(
-        "border-border bg-background/95 sticky bottom-0 mt-auto shrink-0 border-t backdrop-blur-md",
-        Z_INDEX_CLASSES.stickyChrome,
+        "border-border bg-background/95 z-sticky-chrome sticky bottom-0 mt-auto shrink-0 border-t backdrop-blur-md",
       )}
     >
       <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-4 sm:px-6">

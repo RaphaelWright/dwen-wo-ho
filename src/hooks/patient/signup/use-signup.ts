@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Route } from "next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { PatientSignUpSchema } from "@/lib/schemas/patient-auth-schema";
 import { SignUpFormData } from "@/lib/types/components/patient/signup";

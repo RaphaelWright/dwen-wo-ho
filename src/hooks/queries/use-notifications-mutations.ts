@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { unifiedNotificationsService } from "@/services/shared/unified-notifications";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { getUserType } from "@/lib/utils/auth/get-user-type";
 
 /**

@@ -2,7 +2,7 @@
 
 import type { Route } from "next";
 import type { UrgentPatient } from "@/lib/types/entities/patient";
-import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/routes";
+import { ROUTES, DYNAMIC_ROUTES } from "@/lib/constants/infra/routes";
 import type { CuratorSchoolDetailsState } from "@/hooks/curator/school-details/use-school-details";
 import {
   SchoolHeaderCard,

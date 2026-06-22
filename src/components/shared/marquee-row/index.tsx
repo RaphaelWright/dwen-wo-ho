@@ -3,7 +3,7 @@
 import { m } from "motion/react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { useMarquee } from "@/hooks/components/hero/use-marquee";
+import { useMarquee } from "@/hooks/components/marketing/landing/use-marquee";
 import { MarqueeRowProps } from "@/lib/types/components/shared/marquee-row";
 
 export const MarqueeRow = ({

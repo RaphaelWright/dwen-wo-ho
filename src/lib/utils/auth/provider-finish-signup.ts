@@ -1,4 +1,4 @@
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import type { SignInResponse } from "@/lib/types/api/auth";
 import { applyProviderAuthTokens } from "@/lib/utils/auth/provider-tokens";
 import { getProviderPostLoginTarget } from "@/lib/utils/auth/provider-post-login-redirect";

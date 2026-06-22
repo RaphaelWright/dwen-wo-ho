@@ -9,7 +9,7 @@ import {
   LOCKIN_STUDY_FREQUENCY_OPTIONS as studyFrequencyOptions,
   LOCKIN_TIME_TO_EXAM_OPTIONS as timeToExamOptions,
   LOCKIN_REASON_OPTIONS as reasonOptions,
-} from "@/lib/constants/mock-data";
+} from "@/lib/constants/components/patient/lock-in";
 import {
   LockInHeader,
   PersonalInfoSection,

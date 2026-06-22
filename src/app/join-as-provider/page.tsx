@@ -1,14 +1,14 @@
 import JsonLd from "@/components/miscellaneous/json-ld";
 import { JSON_LD_FOR_PROVIDERS_PAGE } from "@/configs/json-ld";
 import Header from "@/components/shared/header";
-import Services from "@/components/home/services";
-import SocialProof from "@/components/home/social-proof";
+import Services from "@/components/marketing/landing/services";
+import SocialProof from "@/components/marketing/landing/social-proof";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { StickyScrollSection } from "@/components/home/sticky-scroll-section";
-import { testimonials } from "@/lib/constants/mock-data";
+import { StickyScrollSection } from "@/components/marketing/landing/sticky-scroll-section";
+import { testimonials } from "@/lib/constants/components/marketing/landing";
 import Footer from "@/components/shared/footer/index";
-import ProviderPageHero from "@/components/hero/providers";
+import ProviderPageHero from "@/components/marketing/join-as-provider/hero";
 import { getMetadata } from "@/lib/metadata";
 
 export const metadata = getMetadata(

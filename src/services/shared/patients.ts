@@ -1,6 +1,9 @@
 import { api } from "@/lib/api";
 
-import { STATIC_ENDPOINTS, DYNAMIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import {
+  STATIC_ENDPOINTS,
+  DYNAMIC_ENDPOINTS,
+} from "@/lib/constants/infra/endpoints";
 
 import { PatientResult } from "@/lib/types/entities/patient";
 import { LockInAssessment } from "@/lib/types/entities/lockin";

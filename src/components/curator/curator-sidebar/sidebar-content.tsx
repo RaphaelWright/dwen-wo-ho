@@ -7,7 +7,7 @@ import { FiBell, FiLogOut } from "react-icons/fi";
 import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/logo";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
   Tooltip,

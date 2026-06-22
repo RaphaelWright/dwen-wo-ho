@@ -12,7 +12,7 @@ import { PatientSuggestionCard } from "@/components/shared/patient-suggestion-ca
 import type { PatientCase } from "@/lib/types/api/patient-results";
 import { ClientOnly } from "@/components/ui/client-only";
 import { NotificationBell } from "@/components/shared/notification-bell/index";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 const ProviderIdentity = ({
   providerTitle,

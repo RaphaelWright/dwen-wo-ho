@@ -9,7 +9,7 @@ import { lockinsService } from "@/services/patient/lock-ins";
 import { lockInSchema } from "@/lib/schemas/lockin-form-schema";
 import { useLockInCache } from "./use-cache";
 import { LockInFormData } from "@/lib/types/components/patient/lock-in";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 export function useLockInForm() {
   const params = useParams();

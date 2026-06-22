@@ -2,7 +2,7 @@ import { m } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { School, Loader2, MapPin } from "lucide-react";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { SchoolWithExtras } from "@/atoms/curator-schools";
 import { getFirstCampus } from "@/hooks/curator/schools/use-schools";
 import { Badge } from "@/components/ui/badge";

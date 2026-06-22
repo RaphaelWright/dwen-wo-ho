@@ -1,6 +1,6 @@
 "use client";
 
-import { NAV_ITEMS } from "@/lib/constants";
+import { NAV_ITEMS } from "@/lib/constants/infra/app";
 import { cn } from "@/lib/utils";
 import { useDesktopNav } from "@/hooks/components/shared/header/use-desktop-nav";
 import { m } from "motion/react";

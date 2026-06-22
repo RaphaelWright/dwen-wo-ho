@@ -1,4 +1,4 @@
-import { PROVIDER_NOTIFICATION_ACTIONS } from "@/lib/constants";
+import { PROVIDER_NOTIFICATION_ACTIONS } from "@/lib/constants/infra/app";
 import { Route } from "next";
 
 export type CuratorNotificationType =

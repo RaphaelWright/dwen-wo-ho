@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useAtom } from "jotai";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { providerNotificationListAtom } from "@/atoms/notification";
 import {
   useMarkNotificationReadMutation,

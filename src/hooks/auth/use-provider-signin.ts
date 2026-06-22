@@ -10,7 +10,7 @@ import {
 } from "@/lib/schemas/provider-auth-schema";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { setUserType } from "@/lib/utils/auth/get-user-type";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
 import { getProviderPostLoginTarget } from "@/lib/utils/auth/provider-post-login-redirect";

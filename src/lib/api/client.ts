@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { PUBLIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { PUBLIC_ENDPOINTS } from "@/lib/constants/infra/endpoints";
 import { API_BASE_URL } from "@/configs/config";
 
 // Only 401 (Unauthorized) is an auth error that requires token refresh.

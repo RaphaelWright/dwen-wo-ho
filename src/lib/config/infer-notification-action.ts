@@ -3,7 +3,7 @@ import {
   PROVIDER_NOTIFICATION_ACTIONS,
   VALID_PROVIDER_NOTIFICATION_ACTIONS,
   VALID_CURATOR_NOTIFICATION_ACTIONS,
-} from "@/lib/constants";
+} from "@/lib/constants/infra/app";
 import type {
   CuratorNotification,
   ProviderNotification,

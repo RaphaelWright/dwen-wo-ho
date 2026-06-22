@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { curatorProvidersService } from "@/services/curator/providers";
 import { formatProviderName } from "@/lib/utils/shared/provider-name";
 import { ProviderDetails } from "@/lib/types/entities/provider";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { toast } from "sonner";
 
 async function fetchProviderDetails(email: string): Promise<ProviderDetails> {

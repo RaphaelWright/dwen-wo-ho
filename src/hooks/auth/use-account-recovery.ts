@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { getCleanErrorMessage } from "@/lib/utils/auth/error";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 export const useAccountRecovery = (
   email: string,

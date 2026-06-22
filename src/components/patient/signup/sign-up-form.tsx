@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SignUpFormProps } from "@/lib/types/components/patient/signup";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/patient/auth-copy";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 

@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { providerDashboardService } from "@/services/provider/dashboard";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import type { ProviderUpdateProfileRequest } from "@/lib/types/api/provider-dashboard";
 
 const PD = QUERY_KEYS.providerDashboard;

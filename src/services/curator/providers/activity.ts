@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { STATIC_ENDPOINTS } from "@/lib/constants/endpoints";
+import { STATIC_ENDPOINTS } from "@/lib/constants/infra/endpoints";
 import type {
   ProviderActivityParams,
   ProviderActivityListResponse,

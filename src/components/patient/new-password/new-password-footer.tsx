@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/components/ui/loading-button";
 import Stepper from "@/components/miscellaneous/stepper";
-import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/mock-data";
+import { RECOVER_STEPS as recoverSteps } from "@/lib/constants/components/shared/auth-flow";
 import { NewPasswordFooterProps } from "@/lib/types/components/patient/new-password";
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { ArrowLeft, Check } from "lucide-react";

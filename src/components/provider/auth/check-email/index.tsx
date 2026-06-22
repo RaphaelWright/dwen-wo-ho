@@ -1,7 +1,7 @@
 import { Logo } from "@/components/shared/logo";
 import { useHydrated } from "@/hooks/shared/use-hydrated";
 import { LoadingButton } from "@/components/ui/loading-button";
-import { ROUTES } from "@/lib/constants/routes";
+import { ROUTES } from "@/lib/constants/infra/routes";
 import { ProviderEmailFormData } from "@/lib/schemas/provider-auth-schema";
 import Link from "next/link";
 import { useProviderCheckEmail } from "@/hooks/provider/check-email/use-check-email";

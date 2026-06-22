@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { specialtiesService } from "@/services/shared/specialties";
-import { QUERY_KEYS } from "@/lib/constants/query-keys";
+import { QUERY_KEYS } from "@/lib/constants/infra/query-keys";
 import { PROVIDER_SPECIALTIES } from "@/lib/constants/components/provider/auth/signup";
 
 export const useSpecialties = () => {

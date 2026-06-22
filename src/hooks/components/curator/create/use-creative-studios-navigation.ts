@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/routes";
+import { DYNAMIC_ROUTES, ROUTES } from "@/lib/constants/infra/routes";
 import { CREATIVE_STUDIOS_STEP_BOUNDS } from "@/lib/constants/components/curator/create/creative-studios";
 import type {
   CreativeStudiosStep,
