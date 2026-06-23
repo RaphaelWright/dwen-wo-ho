@@ -1,0 +1,31 @@
+.statLine {
+  position: absolute;
+  left: 50%;
+  top: 726px;
+  margin: 0;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--intro-black);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px);
+  transition:
+    opacity 1s ease,
+    transform 1s ease,
+    left 1s ease,
+    top 1s ease;
+  z-index: 5;
+}
+.statLine.in {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.statLine.gone {
+  opacity: 0;
+}
+
+.statHighlight {
+  color: #2db674;
+  font-weight: 800;
+}

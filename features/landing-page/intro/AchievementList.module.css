@@ -1,0 +1,153 @@
+.achievement {
+  position: absolute;
+  left: 895px;
+  width: 770px;
+  height: 105px;
+  border-radius: 52px;
+  padding: 0 50px;
+  display: flex;
+  align-items: center;
+  background: var(--intro-black);
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease,
+    background 0.6s ease;
+  z-index: 5;
+}
+.achievement.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.achievement.active {
+  background: #2db674;
+}
+.achievement.shake {
+  animation: pillShake 0.5s ease-in-out 1;
+}
+
+.achievementText {
+  color: var(--intro-white);
+  font-size: 32px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ── emoji badge ── */
+.achievementEmoji {
+  position: absolute;
+  left: 1690px;
+  width: 130px;
+  height: 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  opacity: 0;
+  transform: scale(0.85);
+  transition:
+    opacity 0.6s ease,
+    transform 0.4s ease;
+  z-index: 5;
+}
+.achievementEmoji.in {
+  opacity: 1;
+}
+.achievementEmoji.active {
+  transform: scale(1.15);
+}
+.achievementEmoji.shake {
+  animation: waveShake 1s ease-in-out 1;
+}
+.achievementEmoji::before {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(253, 222, 104, 0.9) 0%,
+    rgba(253, 222, 104, 0) 70%
+  );
+  z-index: -1;
+  opacity: 0.2;
+  transition: opacity 0.4s ease;
+}
+.achievementEmoji.active::before {
+  opacity: 1;
+}
+
+/* ── pause button ── */
+.pauseBtn {
+  position: absolute;
+  right: 60px;
+  bottom: 60px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--intro-black);
+  color: var(--intro-white);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 20;
+  font-family: inherit;
+}
+.pauseBtn.in {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@keyframes pillShake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes waveShake {
+  0% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(18deg);
+  }
+  30% {
+    transform: rotate(-12deg);
+  }
+  45% {
+    transform: rotate(16deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
