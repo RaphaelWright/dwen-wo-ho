@@ -1,0 +1,57 @@
+.pill {
+  position: absolute;
+  top: 40px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  border-radius: 36px;
+  font-weight: 700;
+  font-size: 31px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-18px);
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
+  z-index: 10;
+}
+.pill.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pledge {
+  left: 60px;
+  padding: 0 36px;
+  background: var(--intro-black);
+  color: var(--intro-white);
+}
+
+.providers {
+  right: 64px;
+  padding: 0 31px;
+  gap: 7px;
+  background: var(--intro-tan);
+  color: var(--intro-blue);
+}
+.arrow {
+  font-size: 29px;
+  line-height: 1;
+}
+
+.logo {
+  position: absolute;
+  left: 800px;
+  top: 40px;
+  opacity: 0;
+  transform: translateY(-18px);
+  transition:
+    opacity 1s ease,
+    transform 1s ease;
+  z-index: 10;
+  width: auto;
+}
+.logo.in {
+  opacity: 1;
+  transform: translateY(0);
+}
