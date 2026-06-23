@@ -1,0 +1,21 @@
+.closing {
+  max-width: 920px;
+  margin: 4vh auto 0;
+  text-align: center;
+  color: #f4eef7;
+  font-size: clamp(15px, 2vw, 22px);
+  line-height: 1.5;
+}
+
+.closingLine {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  margin: 0 0 8px;
+}
+.closingLine.in {
+  opacity: 1;
+  transform: translateY(0);
+}

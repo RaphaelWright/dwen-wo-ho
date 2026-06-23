@@ -1,0 +1,88 @@
+.cards {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px 28px;
+  max-width: 1480px;
+  margin: 5vh auto 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* pill stays centered */
+}
+.cardMiddle {
+  margin-top: -22px;
+}
+
+.pill {
+  font-weight: 700;
+  font-size: 15.5px;
+  padding: 11px 21px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.pill.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tan {
+  background: var(--prov-tan);
+  color: #3a2f1f;
+}
+.ink {
+  background: #181818;
+  color: #fff;
+}
+.green {
+  background: var(--prov-green);
+  color: #fff;
+}
+.purple {
+  background: var(--prov-purple-soft);
+  color: #fff;
+}
+
+.bubble {
+  margin: 14px 0 0;
+  background: #181818;
+  color: #fff;
+  border-radius: 20px;
+  padding: 18px 19px;
+  font-size: 14px;
+  line-height: 1.5;
+  height: 240px;
+  overflow: hidden;
+  /* stretch to full column width — align-items:center on parent would shrink-wrap without this */
+  width: 100%;
+  align-self: stretch;
+  font-family: var(--prov-body, "Inter", sans-serif);
+  --prov-green: #2bb673;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+.bubble.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 880px) {
+  .cards {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+  .cardMiddle {
+    margin-top: 0;
+  }
+}

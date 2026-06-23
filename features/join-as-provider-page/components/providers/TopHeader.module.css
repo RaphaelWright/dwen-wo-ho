@@ -1,0 +1,77 @@
+.topHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  flex-wrap: wrap;
+  font-weight: 800;
+  color: #fff;
+  font-size: clamp(28px, 4.6vw, 56px);
+  line-height: 1.05;
+  text-align: center;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.topHeader.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.role {
+  color: var(--prov-purple-soft);
+  display: inline-block;
+  transition:
+    opacity 0.42s ease,
+    transform 0.42s ease;
+}
+.role.out {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.wave {
+  display: inline-block;
+  font-size: 0.78em;
+  transform-origin: 70% 70%;
+  opacity: 0;
+  transform: translateY(-40px);
+  transition:
+    opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.wave.drop {
+  opacity: 1;
+  transform: translateY(0);
+}
+.wave.shake {
+  animation: waveShake 0.95s ease-in-out;
+}
+
+@keyframes waveShake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-18deg);
+  }
+  30% {
+    transform: rotate(15deg);
+  }
+  45% {
+    transform: rotate(-13deg);
+  }
+  60% {
+    transform: rotate(11deg);
+  }
+  75% {
+    transform: rotate(-6deg);
+  }
+  90% {
+    transform: rotate(4deg);
+  }
+}

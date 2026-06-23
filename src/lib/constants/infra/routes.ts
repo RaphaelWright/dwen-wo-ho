@@ -2,8 +2,6 @@ export const ROUTES = {
   public: {
     landing: "/",
     joinAsProvider: "/join-as-provider",
-    joinAsProvider2: "/join-as-provider-2",
-    lockIn2: "/lock-in-2",
     about: "/about",
     privacyPolicy: "/privacy-policy",
     termsAndConditions: "/terms-and-conditions",

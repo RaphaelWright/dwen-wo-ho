@@ -1,0 +1,26 @@
+.viewport {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  background: #ffffff;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.stage.in {
+  opacity: 1;
+}
+
+/* freeze shake animations while paused */
+.stage.paused :global(.shake) {
+  animation-play-state: paused;
+}
