@@ -1,0 +1,18 @@
+export const JOIN_AS_PROVIDER_2_SEQUENCE_IDS = {
+  shell: "joinAsProvider2Shell",
+  role: "roleEl",
+  wave: "waveEl",
+  header: "topHeader",
+  bodyCopy: "bodyCopy",
+  scaleRoot: "scaleRoot",
+  cardsWrap: "cardsWrap",
+  closingWrap: "closingWrap",
+  lockInBtn: "lockinBtn",
+  closingLine: "close1",
+  closingLine2: "close2",
+  cardPin: (index: number) => `pin${index}`,
+  cardPill: (index: number) => `pill${index}`,
+  cardBubble: (index: number) => `bubble${index}`,
+  cardBody: (index: number) => `body${index}`,
+  cardFooter: (index: number) => `footer${index}`,
+} as const;
