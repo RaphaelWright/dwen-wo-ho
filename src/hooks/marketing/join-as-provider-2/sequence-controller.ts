@@ -13,7 +13,6 @@ import {
   typeMarkupAt,
 } from "@/lib/marketing/markup-animation";
 import {
-  delay,
   dropJoinAsProvider2Nav,
   fadeInElement,
   getCardElements,
@@ -30,6 +29,7 @@ export class JoinAsProvider2SequenceController {
   private cardsWrapNode: HTMLElement;
   private closingWrapNode: HTMLElement;
   private lockInBtnNode: HTMLElement;
+  private timeoutIds = new Set<number>();
 
   private roleIndex = 0;
   private roleTimer: ReturnType<typeof setInterval> | null = null;
@@ -75,13 +75,50 @@ export class JoinAsProvider2SequenceController {
   public unmount() {
     this.destroyed = true;
     if (this.roleTimer) clearInterval(this.roleTimer);
+    this.roleTimer = null;
+    this.clearAllTimeouts();
     this.resizeObserver.disconnect();
     window.removeEventListener("resize", this.boundApplyScale);
   }
 
-  private isCancelled = () => this.destroyed;
+  private isActive = () => !this.destroyed;
+
+  private scheduleTimeout(callback: () => void, delayMs: number) {
+    const id = window.setTimeout(() => {
+      this.timeoutIds.delete(id);
+      if (!this.isActive()) return;
+      callback();
+    }, delayMs);
+    this.timeoutIds.add(id);
+    return id;
+  }
+
+  private clearAllTimeouts() {
+    for (const id of this.timeoutIds) {
+      clearTimeout(id);
+    }
+    this.timeoutIds.clear();
+  }
+
+  private wait(ms: number) {
+    if (!this.isActive()) {
+      return Promise.resolve(false);
+    }
+
+    return new Promise<boolean>((resolve) => {
+      this.scheduleTimeout(() => resolve(this.isActive()), ms);
+    });
+  }
+
+  private dropNav(instant = false) {
+    dropJoinAsProvider2Nav(instant, (fn, delayMs) => {
+      this.scheduleTimeout(fn, delayMs);
+    });
+  }
 
   private applyScale() {
+    if (!this.isActive() || !this.scaleRootNode.isConnected) return;
+
     const natural = this.scaleRootNode.scrollHeight;
     const ctaReserve = this.lockInBtnNode.offsetHeight + 48;
     const available = window.innerHeight - 6 - ctaReserve;
@@ -90,9 +127,13 @@ export class JoinAsProvider2SequenceController {
   }
 
   private swapRole() {
+    if (!this.isActive() || !this.roleNode.isConnected) return;
+
     this.roleIndex = (this.roleIndex + 1) % JOIN_AS_PROVIDER_2_ROLES.length;
     this.roleNode.classList.add("is-exiting");
-    window.setTimeout(() => {
+    this.scheduleTimeout(() => {
+      if (!this.isActive() || !this.roleNode.isConnected) return;
+
       this.roleNode.textContent = JOIN_AS_PROVIDER_2_ROLES[this.roleIndex];
       this.roleNode.classList.remove("is-exiting");
       this.waveNode.classList.remove("is-shaking");
@@ -132,8 +173,7 @@ export class JoinAsProvider2SequenceController {
     const { pinDelayMs, pillDelayMs, bubbleDelayMs, typingSpeedMs } =
       JOIN_AS_PROVIDER_2_CARD_REVEAL_TIMING;
 
-    await delay(startDelay);
-    if (this.destroyed) return;
+    if (!(await this.wait(startDelay))) return;
 
     const elements = getCardElements(
       IDS.cardPin(cardIndex),
@@ -145,19 +185,22 @@ export class JoinAsProvider2SequenceController {
     if (!elements) return;
 
     elements.pin.classList.add("is-visible");
-    await delay(pinDelayMs);
+    if (!(await this.wait(pinDelayMs))) return;
     elements.pill.classList.add("is-visible");
-    await delay(pillDelayMs);
+    if (!(await this.wait(pillDelayMs))) return;
     elements.bubble.classList.add("is-visible");
-    await delay(bubbleDelayMs);
+    if (!(await this.wait(bubbleDelayMs))) return;
+
     await typeMarkupAt(
       elements.body,
       JOIN_AS_PROVIDER_2_BUBBLE_MARKUP[markupKey],
       typingSpeedMs,
-      this.isCancelled,
+      () => !this.isActive(),
     );
+    if (!this.isActive()) return;
+
     elements.body.querySelector(".j2-cursor")?.remove();
-    await delay(500);
+    if (!(await this.wait(500))) return;
     elements.footer.classList.add("is-visible");
   }
 
@@ -183,31 +226,39 @@ export class JoinAsProvider2SequenceController {
       this.bodyCopyNode,
       JOIN_AS_PROVIDER_2_MARKUP_NARRATIVE.line1,
       32,
-      this.isCancelled,
+      () => !this.isActive(),
     );
-    await delay(timing.lineHoldMs);
+    if (!(await this.wait(timing.lineHoldMs))) return;
+
     await disintegrateMarkup(
       this.bodyCopyNode,
       JOIN_AS_PROVIDER_2_MARKUP_NARRATIVE.line1,
       1800,
+      () => !this.isActive(),
     );
+    if (!this.isActive() || !this.bodyCopyNode.isConnected) return;
+
     this.bodyCopyNode.innerHTML = "";
-    await delay(500);
+    if (!(await this.wait(500))) return;
 
     await typeMarkupAt(
       this.bodyCopyNode,
       JOIN_AS_PROVIDER_2_MARKUP_NARRATIVE.line2,
       32,
-      this.isCancelled,
+      () => !this.isActive(),
     );
-    await delay(timing.lineHoldMs);
+    if (!(await this.wait(timing.lineHoldMs))) return;
+
     await disintegrateMarkup(
       this.bodyCopyNode,
       JOIN_AS_PROVIDER_2_MARKUP_NARRATIVE.line2,
       1800,
+      () => !this.isActive(),
     );
+    if (!this.isActive() || !this.bodyCopyNode.isConnected) return;
+
     this.bodyCopyNode.innerHTML = "";
-    await delay(500);
+    await this.wait(500);
   }
 
   private revealShowcaseGrid() {
@@ -225,39 +276,44 @@ export class JoinAsProvider2SequenceController {
   private async runSequence() {
     const { timing } = JOIN_AS_PROVIDER_2_CONTENT;
 
-    dropJoinAsProvider2Nav();
-    await delay(timing.showWaveDelayMs);
+    this.dropNav();
+    if (!(await this.wait(timing.showWaveDelayMs))) return;
 
     fadeInElement(this.headerNode);
-    await delay(2000);
+    if (!(await this.wait(2000))) return;
 
     this.waveNode.classList.add("is-dropped");
-    await delay(600);
+    if (!(await this.wait(600))) return;
+
     this.waveNode.classList.add("is-shaking");
-    await delay(2000);
+    if (!(await this.wait(2000))) return;
 
     this.startRoleCycle(timing.roleRotationMs);
-    await delay(700);
+    if (!(await this.wait(700))) return;
 
     await this.runNarrativePhase();
+    if (!this.isActive()) return;
 
     this.revealShowcaseGrid();
-    await delay(50);
+    if (!(await this.wait(50))) return;
 
     await this.runShowcaseCardsStaggered();
-    await delay(1500);
+    if (!(await this.wait(1500))) return;
 
     this.revealClosingSection();
-    await delay(50);
+    if (!(await this.wait(50))) return;
+
     fadeInElement(getElement(IDS.closingLine));
-    await delay(timing.closingDelayMs);
+    if (!(await this.wait(timing.closingDelayMs))) return;
+
     fadeInElement(getElement(IDS.closingLine2));
-    await delay(timing.ctaDelayMs);
+    if (!(await this.wait(timing.ctaDelayMs))) return;
+
     this.lockInBtnNode.classList.add("is-visible");
   }
 
   private showFinalStateInstantly() {
-    dropJoinAsProvider2Nav(true);
+    this.dropNav(true);
     fadeInElement(this.headerNode);
     this.waveNode.classList.add("is-dropped");
     this.revealShowcaseGrid();

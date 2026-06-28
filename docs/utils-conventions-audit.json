@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-06-28T06:31:35.270Z",
+  "summary": {
+    "mixedDirectories": 0,
+    "camelCaseFiles": 0,
+    "utilsSuffixFiles": 0,
+    "looseRootFiles": 0,
+    "microFiles": 13,
+    "consolidationClusters": 2,
+    "typesInUtils": 3,
+    "timeAgoDuplicateModules": 1,
+    "utilsTsViolations": 0
+  },
+  "mixed": [],
+  "camelCase": [],
+  "utilsSuffix": [],
+  "looseRootFiles": [],
+  "microFiles": [
+    {
+      "file": "src/lib/utils/curator/content-pages/icons.ts",
+      "lines": 4,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/curator/create/escape-html.ts",
+      "lines": 7,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/curator/create/is-creative-studios-type.ts",
+      "lines": 9,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/curator/create/to-campus-api-type.ts",
+      "lines": 11,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/provider/application-status.ts",
+      "lines": 12,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/a11y.ts",
+      "lines": 16,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/color-hex.ts",
+      "lines": 12,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/format-resend-timer.ts",
+      "lines": 6,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/hash.ts",
+      "lines": 17,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/revoke-object-url.ts",
+      "lines": 6,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/utils/shared/select-image-file.ts",
+      "lines": 20,
+      "exports": 2
+    },
+    {
+      "file": "src/lib/utils/shared/string-case.ts",
+      "lines": 12,
+      "exports": 2
+    },
+    {
+      "file": "src/lib/utils/shared/validate-image-file.ts",
+      "lines": 14,
+      "exports": 1
+    }
+  ],
+  "consolidationCandidates": [
+    {
+      "directory": "src/lib/utils/curator/create",
+      "files": [
+        "src/lib/utils/curator/create/escape-html.ts",
+        "src/lib/utils/curator/create/is-creative-studios-type.ts",
+        "src/lib/utils/curator/create/to-campus-api-type.ts"
+      ],
+      "count": 3
+    },
+    {
+      "directory": "src/lib/utils/shared",
+      "files": [
+        "src/lib/utils/shared/a11y.ts",
+        "src/lib/utils/shared/color-hex.ts",
+        "src/lib/utils/shared/format-resend-timer.ts",
+        "src/lib/utils/shared/hash.ts",
+        "src/lib/utils/shared/revoke-object-url.ts",
+        "src/lib/utils/shared/select-image-file.ts",
+        "src/lib/utils/shared/string-case.ts",
+        "src/lib/utils/shared/validate-image-file.ts"
+      ],
+      "count": 8
+    }
+  ],
+  "typesInUtils": [
+    {
+      "type": "type-in-utils",
+      "file": "src/lib/utils/auth/provider-finish-signup.ts",
+      "symbol": "ProviderFinishSignupLogin",
+      "kind": "type"
+    },
+    {
+      "type": "type-in-utils",
+      "file": "src/lib/utils/auth/provider-finish-signup.ts",
+      "symbol": "ProviderFinishSignupAutoLoginResult",
+      "kind": "type"
+    },
+    {
+      "type": "type-in-utils",
+      "file": "src/lib/utils/shared/select-image-file.ts",
+      "symbol": "ImageFileSelection",
+      "kind": "type"
+    }
+  ],
+  "timeAgoDuplicateModules": ["src/lib/utils/shared/time-ago.ts"],
+  "utilsTsViolations": []
+}

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { formatElapsedSeconds as formatTime } from "@/lib/utils/shared/time-ago";
-import { VerifyPasswordResetOTPSectionProps } from "@/lib/types/components/patient/onboarding";
+import { VerifyPasswordResetOTPSectionProps } from "@/lib/types/components/patient/verify-password-reset";
 import { VERIFY_PASSWORD_RESET_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { Timer, Send } from "lucide-react";
 

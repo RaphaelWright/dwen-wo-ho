@@ -33,12 +33,12 @@ export function usePatientVerifyPasswordReset() {
   // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
     if (!emailParam) {
-      router.push(ROUTES.patient.checkEmail);
+      router.push(ROUTES.patient.join);
     }
   }, [emailParam, router]);
 
   const handleComplete = useCallback(() => {
-    router.push(`${ROUTES.patient.newPassword}?email=${emailParam}`);
+    router.push(`${ROUTES.patient.resetPasswordNew}?email=${emailParam}`);
   }, [router, emailParam]);
 
   const handleResend = useCallback(() => {

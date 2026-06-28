@@ -33,7 +33,7 @@ const CheckEmail = ({ onEmailSubmit }: CheckEmailProps) => {
           />
         </div>
         <Link
-          href={ROUTES.patient.checkEmail}
+          href={ROUTES.patient.join}
           className="text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full py-2 text-sm font-medium transition-colors sm:px-4"
         >
           {CHECK_EMAIL_TEXTS.header.switchToPatients}

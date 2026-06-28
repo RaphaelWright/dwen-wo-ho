@@ -104,7 +104,7 @@ export const useCreateAccount = ({
       if (isExistingAccountError(errorMsg)) {
         toast.error(SIGN_UP_TEXTS.errors.accountExists);
         router.push(
-          `${ROUTES.provider.singIn}&email=${encodeURIComponent(values.email)}` as Route,
+          `${ROUTES.provider.signIn}&email=${encodeURIComponent(values.email)}` as Route,
         );
         return;
       }

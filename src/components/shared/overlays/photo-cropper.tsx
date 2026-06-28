@@ -42,24 +42,24 @@ export const PhotoCropperOverlay = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className={cn(
-              "z-modal-stack fixed inset-0 flex items-center justify-center p-4",
+              "z-modal-stack fixed inset-0 flex items-center justify-center p-3 sm:p-4",
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-card text-foreground border-border flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border shadow-2xl">
+            <div className="bg-card text-foreground border-border flex w-full max-w-2xl flex-col overflow-hidden rounded-xl border shadow-2xl sm:rounded-2xl">
               {/* Header */}
-              <div className="border-border bg-muted/30 border-b px-8 py-6">
-                <h2 className="text-foreground text-xl font-bold">
+              <div className="border-border bg-muted/30 border-b px-4 py-4 sm:px-8 sm:py-6">
+                <h2 className="text-foreground text-lg font-bold sm:text-xl">
                   {SIGN_UP_TEXTS.photoStep.editPhoto}
                 </h2>
-                <p className="text-muted-foreground mt-1 text-sm">
+                <p className="text-muted-foreground mt-1 text-xs sm:text-sm">
                   {SIGN_UP_TEXTS.photoStep.editPhotoDescription}
                 </p>
               </div>
 
               {/* Body */}
-              <div className="flex flex-col gap-6 p-8">
-                <div className="bg-muted relative h-96 w-full overflow-hidden">
+              <div className="flex flex-col gap-4 p-4 sm:gap-6 sm:p-8">
+                <div className="bg-muted relative h-56 w-full overflow-hidden sm:h-96">
                   <Cropper
                     image={imageSrc}
                     crop={crop}
@@ -97,12 +97,12 @@ export const PhotoCropperOverlay = ({
               </div>
 
               {/* Footer */}
-              <div className="border-border bg-muted/30 flex justify-end gap-3 border-t px-8 py-6">
+              <div className="border-border bg-muted/30 flex justify-end gap-2 border-t px-4 py-4 sm:gap-3 sm:px-8 sm:py-6">
                 <Button
                   type="button"
                   onClick={onCancel}
                   variant="outline"
-                  className="border-destructive text-destructive hover:border-destructive hover:bg-destructive px-6 hover:text-white"
+                  className="border-destructive text-destructive hover:border-destructive hover:bg-destructive h-9 px-4 text-sm hover:text-white sm:h-10 sm:px-6"
                   disabled={isSaving}
                 >
                   {SIGN_UP_TEXTS.photoStep.cancel}
@@ -112,7 +112,7 @@ export const PhotoCropperOverlay = ({
                   onClick={onSave}
                   loading={isSaving}
                   loadingText={SIGN_UP_TEXTS.photoStep.uploading}
-                  className="bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 px-8 font-semibold shadow-lg disabled:opacity-50 disabled:shadow-none"
+                  className="bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 h-9 px-5 text-sm font-semibold shadow-lg disabled:opacity-50 disabled:shadow-none sm:h-10 sm:px-8 sm:text-base"
                 >
                   {SIGN_UP_TEXTS.photoStep.add}
                 </LoadingButton>

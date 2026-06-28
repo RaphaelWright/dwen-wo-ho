@@ -20,7 +20,7 @@ export const useAccountRecovery = (
         onForgotPassword();
       } else {
         router.push(
-          `${ROUTES.provider.verifyPasswordReset}&email=${encodeURIComponent(email)}`,
+          `${ROUTES.provider.resetPassword}&email=${encodeURIComponent(email)}`,
         );
       }
     } catch (error: unknown) {

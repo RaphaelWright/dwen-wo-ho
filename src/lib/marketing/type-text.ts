@@ -1,18 +1,20 @@
 export function typeText(
-  el: HTMLElement,
+  el: HTMLElement | null,
   text: string,
   speed: number,
   onDone: (() => void) | undefined,
   token: number,
   getToken: () => number,
 ): void {
-  el.textContent = "";
+  if (!el) return;
+  const target = el;
+  target.textContent = "";
   let i = 0;
 
   function step() {
-    if (token !== getToken()) return;
+    if (!target.isConnected || token !== getToken()) return;
     if (i < text.length) {
-      el.textContent += text.charAt(i);
+      target.textContent += text.charAt(i);
       i += 1;
       window.setTimeout(step, speed);
     } else if (onDone) {

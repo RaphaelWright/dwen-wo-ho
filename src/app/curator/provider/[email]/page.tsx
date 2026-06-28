@@ -1,5 +1,5 @@
 import { getMetadata } from "@/lib/metadata";
-import CuratorProviderDetailsView from "./view";
+import { CuratorProviderDetailsScreen } from "@/components/curator/provider-details/screen";
 
 export const metadata = getMetadata(
   "Provider Details",
@@ -8,5 +8,5 @@ export const metadata = getMetadata(
 );
 
 export default function CuratorProviderDetailsPage() {
-  return <CuratorProviderDetailsView />;
+  return <CuratorProviderDetailsScreen />;
 }

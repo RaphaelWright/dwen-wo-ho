@@ -14,6 +14,10 @@ import {
   LANDING_2_TIMING_SCALE,
 } from "@/lib/marketing/landing-2";
 import { useLanding2Sequence } from "@/hooks/marketing/landing-2/use-sequence";
+import {
+  buildPatientJoinRoute,
+  getLanding2LockInReferral,
+} from "@/lib/utils/marketing/landing-2-referral";
 import { Landing2AchievementCard } from "./achievement-card";
 import { Landing2HeroSection } from "./hero-section";
 import { Landing2InfluencerBadge } from "./influencer-badge";
@@ -131,7 +135,9 @@ export function Landing2() {
             id="l2-lock-in-btn"
             type="button"
             aria-label="Lock In - Get started now"
-            onClick={() => router.push(links.lockIn)}
+            onClick={() =>
+              router.push(buildPatientJoinRoute(getLanding2LockInReferral()))
+            }
           >
             <Lock className="size-6" />
             <span className="inline-block overflow-hidden align-middle">

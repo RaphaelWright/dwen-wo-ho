@@ -44,7 +44,7 @@ export const useNewPassword = () => {
   // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
     if (!email) {
-      router.push(ROUTES.provider.checkEmail);
+      router.push(ROUTES.provider.auth);
       return;
     }
 
@@ -52,7 +52,7 @@ export const useNewPassword = () => {
     if (!storedToken) {
       toast.error(NEW_PASSWORD_TEXTS.toasts.sessionExpired);
       router.push(
-        `${ROUTES.provider.verifyPasswordReset}&email=${encodeURIComponent(email)}`,
+        `${ROUTES.provider.resetPassword}&email=${encodeURIComponent(email)}`,
       );
     }
   }, [email, router]);
@@ -63,7 +63,7 @@ export const useNewPassword = () => {
       return;
     }
     router.push(
-      `${ROUTES.provider.verifyPasswordReset}&email=${encodeURIComponent(email)}`,
+      `${ROUTES.provider.resetPassword}&email=${encodeURIComponent(email)}`,
     );
   };
 

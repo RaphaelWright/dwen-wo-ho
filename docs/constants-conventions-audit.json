@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-06-28T06:31:32.934Z",
+  "summary": {
+    "mixedDirectories": 0,
+    "pascalCaseFiles": 0,
+    "legacyViolations": 0,
+    "misplacedRootFiles": 0,
+    "microFiles": 7,
+    "consolidationClusters": 0,
+    "mirrorDrift": 0,
+    "explicitRoleRenamesPending": 0
+  },
+  "mixed": [],
+  "pascalCase": [],
+  "legacyViolations": [],
+  "misplacedRoot": [],
+  "microFiles": [
+    {
+      "file": "src/lib/constants/components/curator/curator-sidebar/layout.ts",
+      "lines": 3,
+      "exports": 2
+    },
+    {
+      "file": "src/lib/constants/components/curator/providers/provider-card.ts",
+      "lines": 2,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/constants/components/curator/schools/school-forms.ts",
+      "lines": 13,
+      "exports": 2
+    },
+    {
+      "file": "src/lib/constants/components/legal/policy.ts",
+      "lines": 3,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/constants/components/marketing/join-as-provider-2-sequence.ts",
+      "lines": 19,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/constants/components/provider/pending-approval-modal/content.ts",
+      "lines": 11,
+      "exports": 1
+    },
+    {
+      "file": "src/lib/constants/components/shared/auth-flow.ts",
+      "lines": 4,
+      "exports": 2
+    }
+  ],
+  "consolidationCandidates": [],
+  "mirrorDrift": [],
+  "explicitRoleRenamesPending": []
+}

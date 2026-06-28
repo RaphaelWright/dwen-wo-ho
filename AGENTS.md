@@ -201,7 +201,7 @@ Run `pnpm constants:audit` before large constants PRs. Constant paths under `lib
 
 | Put it here                       | Use for                                                                                                                                                                                |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`className` on the component**  | Normal presentational styling (Tailwind). Repeat within one file? Module-level strings in that **same component file** — not `lib/constants/`.                                         |
+| **`className` on the component**  | Normal presentational styling (Tailwind). Put classes **directly on JSX** — see **No Tailwind class constants** below.                                                                 |
 | **`globals.css`** (or scoped CSS) | `@keyframes`, shell/layout hooks on root markers, z-index layering utilities (e.g. `.z-sticky-chrome`), and classes toggled by JS animation state (e.g. `.is-visible`, `.is-dropped`). |
 | **`components/ui/*-variants.ts`** | shadcn `cva` variant definitions.                                                                                                                                                      |
 
@@ -225,6 +225,32 @@ export const BODY_SHELL_CLASSES = [
   "overflow-hidden",
 ] as const;
 export const EASE_SMOOTH = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+```
+
+#### No Tailwind class constants _(Mandatory)_
+
+**Never** hoist Tailwind/`className` strings into module-level constants in `.tsx` files — including
+`const fooClassName = "..."`, `cn(...)` bundles at file top, or re-exports from `lib/constants/`.
+
+| Put it here                         | Use for                                                                                           |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **`className` on the element**      | Normal one-off styling — inline on JSX                                                            |
+| **`components/ui/*-variants.ts`**   | shadcn `cva` variant definitions                                                                  |
+| **Variant map in `lib/constants/`** | DRY map consumed by **multiple** components or `.map()` over options (see **No style constants**) |
+| **`globals.css` utilities**         | Cross-cutting hooks (e.g. `.scrollbar-hide`, `.z-sticky-chrome`)                                  |
+
+```tsx
+// ❌ Forbidden — module-level class dumping
+const footerButtonClassName = cn("h-10", "rounded-full", "px-8");
+
+// ✅ Allowed — inline on the element
+<Button className="h-10 rounded-full px-8 shadow-lg" />;
+
+// ✅ Allowed — cva variants file
+// components/ui/button-variants.ts
+
+// ✅ Allowed — map driving repeated UI across components
+CARD_ACCENTS.sand.badgeClassName;
 ```
 
 Use `pnpm constants:reorg` / `pnpm constants:reorg:apply` with `src/lib/scripts/constants-reorg.manifest.json` for bulk moves and consolidations.
@@ -363,11 +389,14 @@ When a guard must stay client-side, add a one-line comment explaining why.
 
 - **Single responsibility** — one clear purpose per file, always.
 - **No API calls** in `components/` or `app/`.
+- **Routes compose only** — `app/**/page.tsx` wires metadata + feature components; no `view.tsx` or other UI modules under `app/`.
 - **Components and routes** must not import directly from `services/` (use hooks).
 - **Services** must not import React, Next.js routing, components, or hooks.
 - **`.tsx` files** must not declare interfaces or type aliases.
 - **No inline definitions** — do not define constants, types, or utilities inside feature `.tsx` files.
 - **No style constants** — never export Tailwind/CSS classes from `lib/constants/` except DRY variant maps (see **No style constants** under Constants Folder Structure).
+- **No Tailwind class constants** — never hoist `className` / `cn(...)` strings to module scope in `.tsx` except `cva` variant files or DRY variant maps (see **No Tailwind class constants**).
+- **No micro-files** — do not add a file for a single export; merge into the feature module (see **No micro-files** under File Size & Modularity).
 - **No circular imports** or cross-layer leakage.
 
 ---
@@ -391,6 +420,22 @@ or constant, verify one does not already exist.
 - **Justified exception:** files with strong internal cohesion where splitting would harm readability.
 - **Excluded from this rule:** generated files, config files, framework boilerplate, lockfiles,
   build artifacts, `node_modules`, `.next`, generated SDKs, migration snapshots, and package manifests.
+
+### No micro-files _(Mandatory)_
+
+Do **not** create files whose only job is a single export (one type, one constant object, one
+10-line helper, one wrapper component). That is not modularity — it is noise.
+
+| Layer          | Rule                                                                                                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Types**      | One module per feature/domain (`lib/types/components/patient/onboarding.ts`), not `onboarding-footer.ts` with one interface                                                     |
+| **Constants**  | Merge ≤20-line / ≤2-export siblings into one module per folder (`auth-copy.ts`, `onboarding.ts`)                                                                                |
+| **Utils**      | One algorithm per file is fine when the file has real logic; do not split a single pure function into its own file                                                              |
+| **Components** | No folder that only wraps `index.tsx` with one export when it could be a sibling file under `workspace/` or merged into the parent; no shared micro-primitives for one callsite |
+
+**Before adding a file**, ask: does this export stand alone with meaningful size (typically **>20 lines** or **≥3 related exports**), or am I fragmenting for appearance? Prefer extending an existing feature module.
+
+Micro-module consolidation thresholds (types, constants, utils): **≤20 lines and ≤2 exports** → merge with siblings in the same folder. Run the matching `pnpm *:audit` before large PRs.
 
 ---
 

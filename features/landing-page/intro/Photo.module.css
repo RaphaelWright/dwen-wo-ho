@@ -1,8 +1,0 @@
-.photo {
-  position: absolute;
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-.photo.in {
-  opacity: 1;
-}

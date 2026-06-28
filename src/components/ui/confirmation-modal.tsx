@@ -24,27 +24,27 @@ export const ConfirmationModal = ({
 }: ConfirmationModalProps) => {
   return (
     <div
-      className={`bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300 ease-in-out ${
+      className={`bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-3 backdrop-blur-sm transition-all duration-300 ease-in-out sm:p-4 ${
         isOpen ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
       <div
-        className={`bg-card text-foreground border-border w-full max-w-sm rounded-xl border p-4 shadow-xl transition-all duration-300 ease-in-out sm:p-6 ${
+        className={`bg-card text-foreground border-border w-full max-w-sm rounded-xl border p-3 shadow-xl transition-all duration-300 ease-in-out sm:p-6 ${
           isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
         }`}
       >
-        <h2 className="text-foreground mb-3 text-center text-lg font-bold sm:mb-4 sm:text-xl">
+        <h2 className="text-foreground mb-2 text-center text-base font-bold sm:mb-4 sm:text-xl">
           {title}
         </h2>
-        <p className="text-muted-foreground mb-4 text-center text-sm sm:mb-6 sm:text-base">
+        <p className="text-muted-foreground mb-3 text-center text-xs sm:mb-6 sm:text-base">
           {message}
         </p>
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
           <button
             type="button"
             onClick={onConfirm}
             disabled={isLoading}
-            className={`flex-1 rounded-lg py-2.5 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2 sm:text-base ${variantStyles[variant]}`}
+            className={`flex-1 rounded-lg py-2 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2.5 sm:text-base ${variantStyles[variant]}`}
           >
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
@@ -59,7 +59,7 @@ export const ConfirmationModal = ({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 flex-1 rounded-lg py-2.5 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2 sm:text-base"
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/80 flex-1 rounded-lg py-2 text-center text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:py-2.5 sm:text-base"
           >
             {cancelText}
           </button>

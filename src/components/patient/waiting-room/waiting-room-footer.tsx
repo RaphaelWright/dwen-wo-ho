@@ -1,4 +1,4 @@
-import { WaitingRoomFooterProps } from "@/lib/types/components/patient/onboarding";
+import { WaitingRoomFooterProps } from "@/lib/types/components/patient/waiting-room";
 import { WAITING_ROOM_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { Button } from "@/components/ui/button";
 

@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-06-28T06:30:58.420Z",
+  "summary": {
+    "mixedDirectories": 1,
+    "conventionViolations": 8,
+    "missingUsePrefix": 6,
+    "explicitRoleRenamesPending": 0,
+    "componentMirrorDrift": 0
+  },
+  "mixed": ["src/hooks/components/curator/create"],
+  "violations": [
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/hooks/components/curator/create/provider/use-provider-step-1.ts",
+      "detail": "use-provider-step-1 repeats parent folder provider",
+      "suggested": "use-step-1"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/hooks/components/curator/create/provider/use-provider-step-2.ts",
+      "detail": "use-provider-step-2 repeats parent folder provider",
+      "suggested": "use-step-2"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/join-as-provider-2/dom-helpers.ts",
+      "detail": "Hook file must use use- prefix: dom-helpers"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/join-as-provider-2/sequence-controller.ts",
+      "detail": "Hook file must use use- prefix: sequence-controller"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/landing-2/dom-helpers.ts",
+      "detail": "Hook file must use use- prefix: dom-helpers"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/landing-2/lock-in-label.ts",
+      "detail": "Hook file must use use- prefix: lock-in-label"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/landing-2/paused-flow-timer.ts",
+      "detail": "Hook file must use use- prefix: paused-flow-timer"
+    },
+    {
+      "type": "missing-use-prefix",
+      "file": "src/hooks/marketing/landing-2/sequence-controller.ts",
+      "detail": "Hook file must use use- prefix: sequence-controller"
+    }
+  ],
+  "explicitRoleRenamesPending": [],
+  "componentMirrorDrift": []
+}

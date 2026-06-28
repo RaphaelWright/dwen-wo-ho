@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/constants/infra/routes";
 
 export function usePatientWaitingRoom() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export function usePatientWaitingRoom() {
   }, []);
 
   const handleBackToLockIn = useCallback(() => {
-    router.push("/patient/lock-in");
+    router.push(ROUTES.patient.lockIn);
   }, [router]);
 
   return {

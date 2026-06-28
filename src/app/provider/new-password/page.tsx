@@ -1,5 +1,5 @@
 import { getMetadata } from "@/lib/metadata";
-import ProviderNewPasswordView from "./view";
+import { ProviderNewPasswordScreen } from "@/components/provider/auth/new-password-screen";
 
 export const metadata = getMetadata(
   "Reset Password",
@@ -8,5 +8,5 @@ export const metadata = getMetadata(
 );
 
 export default function ProviderNewPasswordPage() {
-  return <ProviderNewPasswordView />;
+  return <ProviderNewPasswordScreen />;
 }

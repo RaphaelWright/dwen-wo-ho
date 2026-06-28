@@ -1,5 +1,5 @@
 import { getMetadata } from "@/lib/metadata";
-import ProviderAuthView from "./view";
+import { ProviderAuthWorkspace } from "@/components/provider/auth/auth-workspace";
 
 export const metadata = getMetadata(
   "Provider Sign In",
@@ -8,5 +8,5 @@ export const metadata = getMetadata(
 );
 
 export default function ProviderAuthPage() {
-  return <ProviderAuthView />;
+  return <ProviderAuthWorkspace />;
 }

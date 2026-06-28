@@ -32,6 +32,7 @@ export class Landing2SequenceController {
   private hero: HTMLElement;
   private lockInBtn: HTMLElement;
   private flow = new PausedFlowTimer();
+  private timeoutIds = new Set<number>();
 
   private lockInRevealed = false;
   private isPaused = false;
@@ -76,6 +77,7 @@ export class Landing2SequenceController {
   public unmount() {
     this.flow.markDestroyed();
     this.flow.stopAll();
+    this.clearAllTimeouts();
     window.removeEventListener("resize", this.boundFitStage);
     getElement(IDS.prevBtn)?.removeEventListener("click", this.boundOnPrev);
     getElement(IDS.nextBtn)?.removeEventListener("click", this.boundOnNext);
@@ -86,6 +88,23 @@ export class Landing2SequenceController {
   private fitStage() {
     const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     this.stage.style.transform = `scale(${scale})`;
+  }
+
+  private scheduleTimeout(callback: () => void, delay: number) {
+    const id = window.setTimeout(() => {
+      this.timeoutIds.delete(id);
+      if (this.flow.isDestroyed()) return;
+      callback();
+    }, delay);
+    this.timeoutIds.add(id);
+    return id;
+  }
+
+  private clearAllTimeouts() {
+    for (const id of this.timeoutIds) {
+      clearTimeout(id);
+    }
+    this.timeoutIds.clear();
   }
 
   private revealLockInCta(defaultInstant = true) {
@@ -305,7 +324,7 @@ export class Landing2SequenceController {
 
   private scheduleNextCharacter(fromIndex: number) {
     const token = this.flow.getFlowToken();
-    window.setTimeout(
+    this.scheduleTimeout(
       this.flow.guard(token, () => {
         this.playCharacter((fromIndex + 1) % LANDING_2_CHARACTERS.length);
       }),
@@ -321,7 +340,8 @@ export class Landing2SequenceController {
     this.populateCharacter(character);
 
     getElement(IDS.headline)?.classList.add("gone");
-    getElement(IDS.typed)!.textContent = "";
+    const typed = getElement(IDS.typed);
+    if (typed) typed.textContent = "";
     getElement(IDS.statLine)?.classList.add("gone");
 
     this.revealLockInCta(true);
@@ -336,6 +356,7 @@ export class Landing2SequenceController {
 
   private navigateCharacter(delta: number) {
     this.flow.stopAll();
+    this.clearAllTimeouts();
     if (this.isPaused) {
       this.isPaused = false;
       this.shell.classList.remove("paused");
@@ -356,27 +377,27 @@ export class Landing2SequenceController {
     const timing = LANDING_2_TIMING;
     const headline = getElement(IDS.headline);
 
-    window.setTimeout(
+    this.scheduleTimeout(
       this.flow.guard(token, () => {
         headline?.classList.add("inactive");
-        window.setTimeout(
+        this.scheduleTimeout(
           this.flow.guard(token, () => {
             this.revealLockInCta(true);
 
-            window.setTimeout(
+            this.scheduleTimeout(
               this.flow.guard(token, () => {
                 showElement(getElement(IDS.statLine));
 
-                window.setTimeout(
+                this.scheduleTimeout(
                   this.flow.guard(token, () => {
                     headline?.classList.add("gone");
                     getElement(IDS.statLine)?.classList.add("gone");
 
-                    window.setTimeout(
+                    this.scheduleTimeout(
                       this.flow.guard(token, () => {
-                        window.setTimeout(
+                        this.scheduleTimeout(
                           this.flow.guard(token, () => {
-                            window.setTimeout(
+                            this.scheduleTimeout(
                               this.flow.guard(token, () => {
                                 showElement(this.hero);
                                 showElement(getElement(IDS.photo));
@@ -384,7 +405,7 @@ export class Landing2SequenceController {
                                   this.lockInBtn,
                                   lockInLabelFor(character.name),
                                 );
-                                window.setTimeout(
+                                this.scheduleTimeout(
                                   this.flow.guard(token, () => {
                                     this.runAchievements(
                                       character.achievements.length,
@@ -418,6 +439,7 @@ export class Landing2SequenceController {
 
   private playCharacter(index: number) {
     const token = this.flow.stopAll();
+    this.clearAllTimeouts();
     const character = LANDING_2_CHARACTERS[index];
     this.currentCharacterIndex = index;
 
@@ -430,10 +452,11 @@ export class Landing2SequenceController {
 
     const headline = getElement(IDS.headline);
     const typed = getElement(IDS.typed);
+    if (!typed || this.flow.isDestroyed()) return;
 
     headline?.classList.add("typing");
     typeText(
-      typed!,
+      typed,
       character.headline,
       LANDING_2_TIMING.typeSpeed,
       this.flow.guard(token, () => {
@@ -452,28 +475,28 @@ export class Landing2SequenceController {
 
     const banner = getElement(IDS.banner);
     const bannerRevealAt = timing.stageFade + timing.bannerDelay;
-    window.setTimeout(() => showElement(banner), bannerRevealAt);
+    this.scheduleTimeout(() => showElement(banner), bannerRevealAt);
 
     const waveDropAt =
       bannerRevealAt + timing.bannerInDuration + timing.waveDropDelay;
-    window.setTimeout(
+    this.scheduleTimeout(
       () => getElement(IDS.wave)?.classList.add("dropped"),
       waveDropAt,
     );
 
     const waveShakeAt =
       waveDropAt + timing.waveDropDuration + timing.shakeDelay;
-    window.setTimeout(
+    this.scheduleTimeout(
       () => getElement(IDS.wave)?.classList.add("shake"),
       waveShakeAt,
     );
 
     const bannerHideAt = waveShakeAt + timing.shakeDuration + timing.bannerHold;
-    window.setTimeout(() => banner?.classList.remove("in"), bannerHideAt);
+    this.scheduleTimeout(() => banner?.classList.remove("in"), bannerHideAt);
 
     const startCharacterAt =
       bannerHideAt + timing.bannerOutDuration + timing.pauseAfterBanner;
-    window.setTimeout(() => this.playCharacter(0), startCharacterAt);
+    this.scheduleTimeout(() => this.playCharacter(0), startCharacterAt);
   }
 
   private showFinalStateInstantly() {

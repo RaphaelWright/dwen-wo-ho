@@ -21,7 +21,7 @@ export function usePatientNewPassword() {
   // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
     if (!email) {
-      router.push(ROUTES.patient.checkEmail);
+      router.push(ROUTES.patient.join);
     }
   }, [email, router]);
 
@@ -43,7 +43,7 @@ export function usePatientNewPassword() {
     (values: SignUpFormData) => {
       loginMutation.mutate(values, {
         onSuccess: () => {
-          router.push(ROUTES.patient.singIn);
+          router.push(ROUTES.patient.join);
         },
       });
     },

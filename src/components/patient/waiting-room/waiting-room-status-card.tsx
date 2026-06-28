@@ -1,5 +1,5 @@
 import { Loader2, Clock, Users } from "lucide-react";
-import { WaitingRoomStatusCardProps } from "@/lib/types/components/patient/onboarding";
+import { WaitingRoomStatusCardProps } from "@/lib/types/components/patient/waiting-room";
 import { WAITING_ROOM_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 
 export function WaitingRoomStatusCard({

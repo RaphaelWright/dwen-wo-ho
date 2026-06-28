@@ -34,16 +34,21 @@ export function getCardElements(
   };
 }
 
-export function dropJoinAsProvider2Nav(instant = false) {
+type ScheduleFn = (callback: () => void, delay: number) => void;
+
+export function dropJoinAsProvider2Nav(
+  instant = false,
+  schedule: ScheduleFn = (fn, delay) => {
+    window.setTimeout(fn, delay);
+  },
+) {
   document.querySelectorAll(".j2-nav-item").forEach((el, index) => {
     if (instant) {
       el.classList.add("is-dropped");
       return;
     }
 
-    window.setTimeout(() => {
-      el.classList.add("is-dropped");
-    }, index * 150);
+    schedule(() => el.classList.add("is-dropped"), index * 150);
   });
 }
 

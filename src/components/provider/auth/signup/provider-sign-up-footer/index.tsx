@@ -5,36 +5,9 @@ import { LoadingButton } from "@/components/ui/loading-button";
 import Stepper from "@/components/miscellaneous/stepper";
 import { ProfileStepIndicator } from "@/components/provider/auth/signup/profile-step-indicator/index";
 import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
-import { PROVIDER_SIGNUP_FOOTER_SLOTS } from "@/lib/constants/components/provider/auth/auth-copy";
 import { SIGNUP_STEPS as signUpSteps } from "@/lib/constants/components/shared/auth-flow";
 import { ProviderSignUpFooterProps } from "@/lib/types/components/provider/auth/signup-footer";
 import { cn } from "@/lib/utils";
-
-const footerButtonClassName = cn(
-  PROVIDER_SIGNUP_FOOTER_SLOTS.rowHeight,
-  "items-center justify-center",
-);
-
-const backButtonBaseClassName = cn(footerButtonClassName, "rounded-full px-6");
-
-const backButtonInteractiveClassName = cn(
-  backButtonBaseClassName,
-  "border border-border bg-background text-foreground shadow-xs",
-  "transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out",
-  "hover:border-primary hover:bg-primary/20 hover:shadow-md hover:ring-2 hover:ring-primary/25 hover:-translate-x-0.5",
-  "active:translate-x-0 active:scale-[0.98]",
-);
-
-const backButtonInactiveClassName = cn(
-  backButtonBaseClassName,
-  "border border-transparent bg-transparent text-muted-foreground",
-);
-
-const actionButtonClassName = cn(
-  footerButtonClassName,
-  "rounded-full px-8 shadow-lg hover:shadow-xl transition-[box-shadow,background-color,color,opacity]",
-  PROVIDER_SIGNUP_FOOTER_SLOTS.actionMinWidth,
-);
 
 export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
   const hideBack = props.mode === "profile" && props.hideBack;
@@ -42,19 +15,9 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
   const isBackInteractive = !hideBack && !backDisabled;
 
   return (
-    <footer
-      className={cn(
-        "border-border bg-background/95 z-sticky-chrome sticky bottom-0 mt-auto shrink-0 border-t backdrop-blur-md",
-      )}
-    >
+    <footer className="border-border bg-background/95 z-sticky-chrome sticky bottom-0 mt-auto shrink-0 border-t backdrop-blur-md">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 py-4 sm:px-6">
-        <div
-          className={cn(
-            "flex items-center justify-start",
-            PROVIDER_SIGNUP_FOOTER_SLOTS.rowHeight,
-            PROVIDER_SIGNUP_FOOTER_SLOTS.backMinWidth,
-          )}
-        >
+        <div className="flex h-10 min-w-[5.5rem] items-center justify-start">
           <Button
             type="button"
             variant="ghost"
@@ -63,9 +26,10 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
             aria-hidden={hideBack || undefined}
             tabIndex={hideBack ? -1 : undefined}
             className={cn(
+              "flex h-10 items-center justify-center rounded-full px-6",
               isBackInteractive
-                ? backButtonInteractiveClassName
-                : backButtonInactiveClassName,
+                ? "border-border bg-background text-foreground hover:border-primary hover:bg-primary/20 hover:ring-primary/25 border shadow-xs transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out hover:-translate-x-0.5 hover:shadow-md hover:ring-2 active:translate-x-0 active:scale-[0.98]"
+                : "text-muted-foreground border border-transparent bg-transparent",
               hideBack && "pointer-events-none invisible",
             )}
           >
@@ -73,12 +37,7 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
           </Button>
         </div>
 
-        <div
-          className={cn(
-            "flex items-center justify-center",
-            PROVIDER_SIGNUP_FOOTER_SLOTS.rowHeight,
-          )}
-        >
+        <div className="flex h-10 items-center justify-center">
           {props.mode === "main" ? (
             <Stepper
               steps={signUpSteps}
@@ -90,29 +49,20 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
           )}
         </div>
 
-        <div
-          className={cn(
-            "flex items-center justify-end",
-            PROVIDER_SIGNUP_FOOTER_SLOTS.rowHeight,
-            PROVIDER_SIGNUP_FOOTER_SLOTS.actionMinWidth,
-          )}
-        >
+        <div className="flex h-10 min-w-[9.5rem] items-center justify-end">
           {props.mode === "main" ? (
             props.showNext ? (
               <Button
                 form="create-account-form"
                 type="submit"
                 disabled={props.nextDisabled}
-                className={actionButtonClassName}
+                className="flex h-10 min-w-[9.5rem] items-center justify-center rounded-full px-8 shadow-lg transition-[box-shadow,background-color,color,opacity] hover:shadow-xl"
               >
                 {SIGN_UP_TEXTS.navigation.next}
               </Button>
             ) : (
               <div
-                className={cn(
-                  actionButtonClassName,
-                  "pointer-events-none invisible",
-                )}
+                className="pointer-events-none invisible flex h-10 min-w-[9.5rem] items-center justify-center rounded-full px-8 shadow-lg"
                 aria-hidden
               />
             )
@@ -123,7 +73,7 @@ export function ProviderSignUpFooter(props: ProviderSignUpFooterProps) {
               loading={props.isSubmitting}
               loadingText={SIGN_UP_TEXTS.profile.submitting}
               disabled={props.nextDisabled}
-              className={actionButtonClassName}
+              className="flex h-10 min-w-[9.5rem] items-center justify-center rounded-full px-8 shadow-lg transition-[box-shadow,background-color,color,opacity] hover:shadow-xl"
             >
               {props.profileStep === 2
                 ? SIGN_UP_TEXTS.profile.submit

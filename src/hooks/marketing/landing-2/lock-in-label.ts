@@ -1,6 +1,7 @@
 import { LANDING_2_SEQUENCE_IDS as IDS } from "@/lib/constants/components/marketing/landing-2-sequence";
 import { LANDING_2_TIMING } from "@/lib/marketing/landing-2";
 import { getElement } from "@/hooks/marketing/landing-2/dom-helpers";
+import { syncLockInButtonReferral } from "@/lib/utils/marketing/landing-2-referral";
 
 type LabelTimerEl = HTMLElement & { _labelTimer?: number | null };
 
@@ -59,6 +60,7 @@ function applyLockInLabelAnimation(
         labelEl.classList.remove("is-in");
         lockInBtn.style.width = `${endWidth}px`;
         releaseLockInBtnWidth(lockInBtn);
+        syncLockInButtonReferral(lockInBtn, text);
       });
     });
     timedLabel._labelTimer = null;
@@ -75,6 +77,7 @@ function setInstantLockInLabel(
   labelEl.textContent = text;
   labelEl.classList.remove("is-out", "is-in");
   lockInBtn.style.width = "";
+  syncLockInButtonReferral(lockInBtn, text);
 }
 
 export function setLockInLabel(

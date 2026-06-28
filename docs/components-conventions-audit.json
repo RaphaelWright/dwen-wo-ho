@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-06-28T06:30:57.283Z",
+  "summary": {
+    "mixedDirectories": 2,
+    "pascalCaseFiles": 0,
+    "shimFiles": 0,
+    "nameCollisions": 0,
+    "heuristicRoleViolations": 23,
+    "explicitRoleRenamesPending": 0
+  },
+  "mixed": [
+    "src/components/curator/create/creative-studios",
+    "src/components/patient/onboarding/workspace"
+  ],
+  "pascalCase": [],
+  "shims": [],
+  "collisions": [],
+  "roleViolations": [
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/lock-in/lock-in-details-section.tsx",
+      "detail": "lock-in-details-section repeats parent folder lock-in",
+      "suggested": "details-section"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/lock-in/lock-in-frequency-select-field.tsx",
+      "detail": "lock-in-frequency-select-field repeats parent folder lock-in",
+      "suggested": "frequency-select-field"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/lock-in/lock-in-header.tsx",
+      "detail": "lock-in-header repeats parent folder lock-in",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/new-password/new-password-footer.tsx",
+      "detail": "new-password-footer repeats parent folder new-password",
+      "suggested": "footer"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/new-password/new-password-form.tsx",
+      "detail": "new-password-form repeats parent folder new-password",
+      "suggested": "form"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/new-password/new-password-header.tsx",
+      "detail": "new-password-header repeats parent folder new-password",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/verify-password-reset/verify-password-reset-footer.tsx",
+      "detail": "verify-password-reset-footer repeats parent folder verify-password-reset",
+      "suggested": "footer"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/verify-password-reset/verify-password-reset-header.tsx",
+      "detail": "verify-password-reset-header repeats parent folder verify-password-reset",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/verify-password-reset/verify-password-reset-otp-section.tsx",
+      "detail": "verify-password-reset-otp-section repeats parent folder verify-password-reset",
+      "suggested": "otp-section"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/waiting-room/waiting-room-footer.tsx",
+      "detail": "waiting-room-footer repeats parent folder waiting-room",
+      "suggested": "footer"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/waiting-room/waiting-room-header.tsx",
+      "detail": "waiting-room-header repeats parent folder waiting-room",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/waiting-room/waiting-room-info-box.tsx",
+      "detail": "waiting-room-info-box repeats parent folder waiting-room",
+      "suggested": "info-box"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/patient/waiting-room/waiting-room-status-card.tsx",
+      "detail": "waiting-room-status-card repeats parent folder waiting-room",
+      "suggested": "status-card"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/provider/patient-details/patient-details-header.tsx",
+      "detail": "patient-details-header repeats parent folder patient-details",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/notification-sheet/notification-sheet-header.tsx",
+      "detail": "notification-sheet-header repeats parent folder notification-sheet",
+      "suggested": "header"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/notification-sheet/notification-sheet-list.tsx",
+      "detail": "notification-sheet-list repeats parent folder notification-sheet",
+      "suggested": "list"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/patient-card/patient-card-accessors.ts",
+      "detail": "patient-card-accessors repeats parent folder patient-card",
+      "suggested": "accessors"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/patient-card/patient-card-action.tsx",
+      "detail": "patient-card-action repeats parent folder patient-card",
+      "suggested": "action"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/patient-card/patient-card-info.tsx",
+      "detail": "patient-card-info repeats parent folder patient-card",
+      "suggested": "info"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/search-dropdown/search-dropdown-active-filters.tsx",
+      "detail": "search-dropdown-active-filters repeats parent folder search-dropdown",
+      "suggested": "active-filters"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/search-dropdown/search-dropdown-panel.tsx",
+      "detail": "search-dropdown-panel repeats parent folder search-dropdown",
+      "suggested": "panel"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/search-dropdown/search-dropdown-quick-filters.tsx",
+      "detail": "search-dropdown-quick-filters repeats parent folder search-dropdown",
+      "suggested": "quick-filters"
+    },
+    {
+      "type": "redundant-parent-prefix",
+      "file": "src/components/shared/search-dropdown/search-dropdown-suggestions.tsx",
+      "detail": "search-dropdown-suggestions repeats parent folder search-dropdown",
+      "suggested": "suggestions"
+    }
+  ],
+  "explicitRoleRenamesPending": []
+}

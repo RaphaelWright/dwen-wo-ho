@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-06-28T06:31:36.409Z",
+  "summary": {
+    "mixedDirectories": 0,
+    "camelCaseFiles": 0,
+    "barrelShims": 0,
+    "legacyFolders": 0,
+    "legacyRootShims": 0,
+    "looseRootFiles": 0,
+    "parentPrefixFiles": 0
+  },
+  "mixed": [],
+  "camelCase": [],
+  "barrelShims": [],
+  "legacyFolders": [],
+  "legacyRootShims": [],
+  "looseRootFiles": [],
+  "parentPrefix": [],
+  "missingDomainRoot": []
+}

@@ -114,13 +114,9 @@ export const handleTokenExpiration = async () => {
 
   const currentPath = window.location.pathname;
   const isAuthPage =
-    currentPath.includes("/signin") ||
-    currentPath.includes("/signup") ||
     currentPath.includes("/auth") ||
-    currentPath.includes("/check-email") ||
-    currentPath.includes("/verify") ||
-    currentPath.includes("/new-password") ||
-    currentPath.includes("/recover");
+    currentPath.includes("/join") ||
+    currentPath.includes("/reset-password");
 
   if (!isAuthPage) {
     window.location.replace(ROUTES.provider.auth);

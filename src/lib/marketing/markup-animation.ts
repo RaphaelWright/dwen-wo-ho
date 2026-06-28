@@ -66,15 +66,20 @@ function domAnchorValid(el: HTMLElement, cursor: HTMLSpanElement): boolean {
 }
 
 export function typeMarkupAt(
-  el: HTMLElement,
+  el: HTMLElement | null,
   markup: string,
   speed: number,
   isCancelled: () => boolean,
 ): Promise<void> {
-  el.innerHTML = "";
+  if (!el || !el.isConnected || isCancelled()) {
+    return Promise.resolve();
+  }
+
+  const target = el;
+  target.innerHTML = "";
   const cursor = document.createElement("span");
   cursor.className = JOIN_AS_PROVIDER_2_MARKUP_CURSOR_CLASS;
-  el.appendChild(cursor);
+  target.appendChild(cursor);
 
   const segments = parseMarkup(markup);
   const state = {
@@ -90,10 +95,10 @@ export function typeMarkupAt(
       clearTimeout(tid);
       tid = null;
     }
-    if (cursor.parentNode === el) cursor.remove();
+    if (cursor.parentNode === target) cursor.remove();
   };
 
-  const canContinue = () => !isCancelled() && domAnchorValid(el, cursor);
+  const canContinue = () => !isCancelled() && domAnchorValid(target, cursor);
 
   const schedule = (fn: () => void, delay = 0) => {
     if (tid !== null) clearTimeout(tid);
@@ -113,7 +118,7 @@ export function typeMarkupAt(
       const seg = segments[state.segIdx];
 
       if (seg.break) {
-        if (!advanceBreak(state, el, cursor)) {
+        if (!advanceBreak(state, target, cursor)) {
           finish();
           return;
         }
@@ -122,7 +127,7 @@ export function typeMarkupAt(
       }
 
       if (!state.container) {
-        state.container = initContainer(seg, el, cursor);
+        state.container = initContainer(seg, target, cursor);
         if (!state.container) {
           finish();
           return;
@@ -209,7 +214,12 @@ export function disintegrateMarkup(
   el: HTMLElement,
   markup: string,
   duration: number,
+  isCancelled?: () => boolean,
 ): Promise<void> {
+  if (!el.isConnected || isCancelled?.()) {
+    return Promise.resolve();
+  }
+
   const tokens: Array<{ text: string; green?: boolean }> = [];
   parseMarkup(markup).forEach((seg) => {
     if (seg.break || !seg.text) return;
@@ -232,6 +242,7 @@ export function disintegrateMarkup(
   });
 
   requestAnimationFrame(() => {
+    if (!el.isConnected || isCancelled?.()) return;
     spans.forEach((s, idx) => {
       const tx = (Math.random() * 2 - 1) * 240;
       const ty = -Math.random() * 170 - 30;
@@ -243,6 +254,6 @@ export function disintegrateMarkup(
   });
 
   return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, duration);
+    window.setTimeout(() => resolve(), duration);
   });
 }

@@ -1,5 +1,5 @@
 import { getMetadata } from "@/lib/metadata";
-import ProviderSignUpView from "./view";
+import { ProviderSignupScreen } from "@/components/provider/auth/signup-screen";
 
 export const metadata = getMetadata(
   "Provider Sign Up",
@@ -8,5 +8,5 @@ export const metadata = getMetadata(
 );
 
 export default function ProviderSignUpPage() {
-  return <ProviderSignUpView />;
+  return <ProviderSignupScreen />;
 }

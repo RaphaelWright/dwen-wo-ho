@@ -63,7 +63,7 @@ export function useProviderSignupGuard(
         }
 
         router.replace(
-          `${ROUTES.provider.singIn}&email=${encodeURIComponent(email)}` as Route,
+          `${ROUTES.provider.signIn}&email=${encodeURIComponent(email)}` as Route,
         );
         toast.error(SIGN_UP_TEXTS.resume.signInRequired);
       };

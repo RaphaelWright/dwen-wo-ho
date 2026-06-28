@@ -1,0 +1,116 @@
+"use client";
+
+import { useOnboardingWizard } from "@/hooks/components/patient/onboarding/wizard/use-onboarding-wizard";
+import {
+  ONBOARDING_COPY,
+  ONBOARDING_SCREENS,
+} from "@/lib/constants/components/patient/onboarding";
+import type { OnboardingScreen } from "@/lib/types/components/patient/onboarding";
+import {
+  getAuthFooterStepLabel,
+  getOnboardingCompletedSteps,
+  getOnboardingFooterStepLabel,
+  usesFooterContinue,
+} from "@/lib/utils/patient/onboarding-validation";
+import { isOnboardingScreenValid } from "@/lib/utils/patient/onboarding-screen-validation";
+
+const AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+  ONBOARDING_SCREENS.CREATE_ACCOUNT,
+  ONBOARDING_SCREENS.VERIFY,
+  ONBOARDING_SCREENS.PROFILE_PHOTO,
+]);
+
+const AUTH_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+  ONBOARDING_SCREENS.CREATE_ACCOUNT,
+  ONBOARDING_SCREENS.VERIFY,
+  ONBOARDING_SCREENS.PROFILE_PHOTO,
+  ONBOARDING_SCREENS.SIGN_IN,
+  ONBOARDING_SCREENS.FORGOT_PASSWORD,
+  ONBOARDING_SCREENS.NEW_PASSWORD,
+]);
+
+export function useOnboardingWorkspace() {
+  const wizard = useOnboardingWizard();
+  const {
+    screen,
+    phase,
+    contactMode,
+    otp,
+    draft,
+    signInPassword,
+    goNext,
+    goBack,
+    handleContactSubmit,
+  } = wizard;
+
+  const canAdvance = isOnboardingScreenValid(
+    screen,
+    draft,
+    otp,
+    signInPassword,
+    contactMode,
+  );
+  const showAuthFooter = AUTH_FOOTER_SCREENS.has(screen);
+  const showAuthStepper = AUTH_STEPPER_SCREENS.has(screen);
+  const showOnboardingFooter = phase === "onboarding";
+  const authStepLabel = getAuthFooterStepLabel(screen);
+  const onboardingStepLabel = getOnboardingFooterStepLabel(screen);
+  const completedOnboardingSteps = getOnboardingCompletedSteps(draft);
+
+  const isLastStep = screen === ONBOARDING_SCREENS.GRADE;
+
+  const nextLabel =
+    screen === ONBOARDING_SCREENS.GRADE
+      ? ONBOARDING_COPY.grade.submit
+      : screen === ONBOARDING_SCREENS.SIGN_IN
+        ? ONBOARDING_COPY.signIn.continue
+        : screen === ONBOARDING_SCREENS.NEW_PASSWORD
+          ? ONBOARDING_COPY.newPassword.continue
+          : screen === ONBOARDING_SCREENS.FORGOT_PASSWORD
+            ? ONBOARDING_COPY.verify.continue
+            : ONBOARDING_COPY.contact.continue;
+
+  const backDisabled =
+    screen === ONBOARDING_SCREENS.CONTACT ||
+    screen === ONBOARDING_SCREENS.PROFILE_PHOTO ||
+    screen === ONBOARDING_SCREENS.SCHOOL_TYPE;
+
+  const handleNext = () => {
+    if (!canAdvance) {
+      return;
+    }
+    goNext();
+  };
+
+  const handleProgrammeChange = (programme: string) => {
+    wizard.updateDraft({
+      programme,
+      programmeTags: programme ? [programme] : [],
+    });
+  };
+
+  const handlePhotoChange = (url: string, file: File | null) => {
+    wizard.updateDraft({ profilePhotoUrl: url, profilePhotoFile: file });
+  };
+
+  return {
+    ...wizard,
+    canAdvance,
+    showAuthFooter,
+    showAuthStepper,
+    showOnboardingFooter,
+    showFooterContinue: usesFooterContinue(screen),
+    authStepLabel,
+    onboardingStepLabel,
+    completedOnboardingSteps,
+    isLastStep,
+    nextLabel,
+    backDisabled,
+    handleNext,
+    handleContactSubmit,
+    handleProgrammeChange,
+    handlePhotoChange,
+    handleSchoolSelect: wizard.handleSchoolSelect,
+    goBack,
+  };
+}
