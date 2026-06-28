@@ -14,13 +14,13 @@ export const JSON_LD_FOR_PROVIDERS_PAGE = {
   },
 };
 
-export const JSON_LD_LOCK_IN_2_PAGE = {
+export const JSON_LD_LANDING_2_PAGE = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Lock In — JustGo Health",
+  name: "Landing 2 — JustGo Health",
   description:
     "Meet Gen Z achievers and lock in your future with JustGo Health.",
-  url: "https://justgo.health/lock-in-2",
+  url: "https://justgo.health/landing-2",
   isPartOf: {
     "@id": "https://justgo.health/#website",
   },
