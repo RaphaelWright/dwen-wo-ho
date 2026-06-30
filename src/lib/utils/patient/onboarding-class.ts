@@ -1,35 +1,8 @@
-import type { SchoolType } from "@/lib/types/components/patient/onboarding";
-import {
-  ONBOARDING_COLLEGE_GRADES,
-  ONBOARDING_HS_GRADES,
-} from "@/lib/constants/components/patient/onboarding";
-
-function getGradeOptionsForSchoolType(
-  schoolType: SchoolType,
-): readonly string[] {
-  return schoolType === "high-school"
-    ? ONBOARDING_HS_GRADES
-    : ONBOARDING_COLLEGE_GRADES;
-}
-
 export function computeGraduationYear(
-  gradeShort: string,
-  schoolType: SchoolType,
+  yearsRemaining: number,
   referenceYear = new Date().getFullYear(),
-): number | null {
-  if (!gradeShort.trim()) {
-    return null;
-  }
-
-  const options = getGradeOptionsForSchoolType(schoolType);
-  const gradeIndex = options.findIndex((grade) => grade === gradeShort);
-
-  if (gradeIndex < 0) {
-    return null;
-  }
-
-  const yearsUntilGraduation = options.length - gradeIndex - 1;
-  return referenceYear + yearsUntilGraduation;
+): number {
+  return referenceYear + yearsRemaining;
 }
 
 export function formatClassOf(graduationYear: number): string {
@@ -38,20 +11,19 @@ export function formatClassOf(graduationYear: number): string {
 
 export function formatStudentClassSummary(params: {
   gradeShort: string;
-  schoolType: SchoolType;
+  yearsRemaining: number;
   programme: string;
   schoolName: string;
   referenceYear?: number;
 }): string | null {
-  const graduationYear = computeGraduationYear(
-    params.gradeShort,
-    params.schoolType,
-    params.referenceYear,
-  );
-
-  if (graduationYear === null) {
+  if (!params.gradeShort.trim()) {
     return null;
   }
+
+  const graduationYear = computeGraduationYear(
+    params.yearsRemaining,
+    params.referenceYear,
+  );
 
   const detailParts = [
     params.programme.trim(),
@@ -66,19 +38,8 @@ export function formatStudentClassSummary(params: {
 }
 
 export function getClassLabelForGrade(
-  gradeShort: string,
-  schoolType: SchoolType,
+  yearsRemaining: number,
   referenceYear = new Date().getFullYear(),
-): string | null {
-  const graduationYear = computeGraduationYear(
-    gradeShort,
-    schoolType,
-    referenceYear,
-  );
-
-  if (graduationYear === null) {
-    return null;
-  }
-
-  return formatClassOf(graduationYear);
+): string {
+  return formatClassOf(computeGraduationYear(yearsRemaining, referenceYear));
 }

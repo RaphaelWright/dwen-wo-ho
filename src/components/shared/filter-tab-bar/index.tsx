@@ -129,7 +129,7 @@ export function FilterTabBar<T extends string = string>({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onSearchChange(e.target.value)
               }
-              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              onSubmit={(e: React.SubmitEvent) => {
                 e.preventDefault();
               }}
               className={cn(

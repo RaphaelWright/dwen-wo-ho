@@ -3,21 +3,22 @@
 import { useEffect, useState } from "react";
 import { HomeProfileModal } from "@/components/patient/onboarding/overlays/home-profile-modal";
 import { consumeShowHomeProfileModalFlag } from "@/lib/utils/patient/onboarding-session";
+import type { HomeProfilePreview } from "@/lib/types/components/patient/onboarding";
 
 export function OnboardingHomeProfileModalGate() {
   const [open, setOpen] = useState(false);
-  const [nickname, setNickname] = useState("");
+  const [preview, setPreview] = useState<HomeProfilePreview | null>(null);
 
   useEffect(() => {
-    const { shouldShow, nickname: storedNickname } =
+    const { shouldShow, preview: storedPreview } =
       consumeShowHomeProfileModalFlag();
     if (shouldShow) {
-      setNickname(storedNickname);
+      setPreview(storedPreview);
       setOpen(true);
     }
   }, []);
 
   return (
-    <HomeProfileModal open={open} onOpenChange={setOpen} nickname={nickname} />
+    <HomeProfileModal open={open} onOpenChange={setOpen} preview={preview} />
   );
 }

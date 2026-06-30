@@ -9,10 +9,18 @@ import type { OnboardingStepContentProps } from "@/lib/types/components/patient/
 export function OnboardingEducationStepContent({
   screen,
   draft,
-  onProgrammeChange,
+  programmeSearch,
+  onProgrammeSearchChange,
+  onProgrammeSelect,
   onSchoolTypeChange,
   onSelectSchool,
+  onOpenSchoolPicker,
+  onSchoolPickerOpenChange,
+  schoolPickerOpen,
+  selectedSchoolLogo,
   onGradeChange,
+  canContinue,
+  onContinue,
 }: OnboardingStepContentProps) {
   switch (screen) {
     case ONBOARDING_SCREENS.SCHOOL_TYPE:
@@ -20,15 +28,26 @@ export function OnboardingEducationStepContent({
         <SchoolTypeStep
           schoolType={draft.schoolType}
           selectedSchoolId={draft.schoolId}
+          selectedSchoolName={draft.schoolName}
+          selectedSchoolLogo={selectedSchoolLogo ?? draft.schoolLogo}
+          pickerOpen={schoolPickerOpen}
           onSchoolTypeChange={onSchoolTypeChange}
+          onOpenPicker={onOpenSchoolPicker}
+          onPickerOpenChange={onSchoolPickerOpenChange}
           onSelectSchool={onSelectSchool}
+          canContinue={canContinue}
+          onContinue={onContinue}
         />
       );
     case ONBOARDING_SCREENS.PROGRAMME:
       return (
         <ProgrammeStep
           programme={draft.programme}
-          onProgrammeChange={onProgrammeChange}
+          searchQuery={programmeSearch}
+          onSearchChange={onProgrammeSearchChange}
+          onProgrammeSelect={onProgrammeSelect}
+          canContinue={canContinue}
+          onContinue={onContinue}
         />
       );
     case ONBOARDING_SCREENS.GRADE:
@@ -38,7 +57,10 @@ export function OnboardingEducationStepContent({
           gradeShort={draft.gradeShort}
           programme={draft.programme}
           schoolName={draft.schoolName}
+          programmeDurationYears={draft.programmeDurationYears}
           onGradeChange={onGradeChange}
+          canContinue={canContinue}
+          onContinue={onContinue}
         />
       );
     default:

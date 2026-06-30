@@ -13,7 +13,7 @@ export function useSchoolDataFetcher(
     id: number | string,
     data: Partial<SchoolWithExtras>,
   ) => void,
-  previousSchoolsRef: React.MutableRefObject<Map<number, SchoolWithExtras>>,
+  previousSchoolsRef: React.RefObject<Map<number, SchoolWithExtras>>,
 ) {
   const { data: schoolsSummaryData } = useProviderSchoolsSummary();
 

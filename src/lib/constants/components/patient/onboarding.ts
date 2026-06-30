@@ -3,6 +3,7 @@ import type {
   OnboardingFooterStepLabel,
   OnboardingScreen,
 } from "@/lib/types/components/patient/onboarding";
+import { LANDING_2_CHARACTERS } from "@/lib/marketing/landing-2";
 
 export const ONBOARDING_DEFAULT_SCHOOL_TYPE = "high-school" as const;
 
@@ -23,10 +24,13 @@ export const ONBOARDING_INITIAL_DRAFT = {
   profilePhotoFile: null,
   schoolId: "",
   schoolName: "",
+  schoolLogo: "",
   schoolType: ONBOARDING_DEFAULT_SCHOOL_TYPE,
   programme: "",
   programmeTags: [],
+  programmeDurationYears: 0,
   gradeShort: "",
+  gradeYearsRemaining: 0,
   graduationYearOffset: "",
   educationLevel: ONBOARDING_DEFAULT_SCHOOL_TYPE,
   school: "",
@@ -34,6 +38,7 @@ export const ONBOARDING_INITIAL_DRAFT = {
 } as const;
 
 export const ONBOARDING_SCREENS = {
+  CHOICE: "choice",
   CONTACT: "contact",
   CREATE_ACCOUNT: "createAccount",
   VERIFY: "verify",
@@ -46,7 +51,7 @@ export const ONBOARDING_SCREENS = {
   GRADE: "grade",
 } as const;
 
-export const ONBOARDING_INITIAL_SCREEN = ONBOARDING_SCREENS.CONTACT;
+export const ONBOARDING_INITIAL_SCREEN = ONBOARDING_SCREENS.CHOICE;
 
 export const ONBOARDING_CONTACT_MODE_OPTIONS = [
   { value: "phone", label: "Phone" },
@@ -60,8 +65,8 @@ export const AUTH_FOOTER_STEP_LABELS = [
 ] as const;
 
 export const ONBOARDING_FOOTER_STEP_LABELS = [
+  "Profile",
   "Campus",
-  "Programme",
   "Class",
 ] as const;
 
@@ -69,10 +74,11 @@ export const AUTH_FOOTER_STEP_BY_SCREEN: Record<
   OnboardingScreen,
   AuthFooterStepLabel | null
 > = {
+  choice: null,
   contact: null,
   createAccount: "Create Account",
   verify: "Verify",
-  profilePhoto: "Profile Photo",
+  profilePhoto: null,
   signIn: null,
   forgotPassword: null,
   newPassword: null,
@@ -85,15 +91,16 @@ export const ONBOARDING_FOOTER_STEP_BY_SCREEN: Record<
   OnboardingScreen,
   OnboardingFooterStepLabel | null
 > = {
+  choice: null,
   contact: null,
   createAccount: null,
   verify: null,
-  profilePhoto: null,
+  profilePhoto: "Profile",
   signIn: null,
   forgotPassword: null,
   newPassword: null,
   schoolType: "Campus",
-  programme: "Programme",
+  programme: "Campus",
   grade: "Class",
 };
 
@@ -109,6 +116,13 @@ export const ONBOARDING_GHANA_PHONE = {
   maxLength: 10,
   minLength: 9,
 } as const;
+
+export const ONBOARDING_REFERRAL_INFLUENCERS = LANDING_2_CHARACTERS.map(
+  (character) => ({
+    handle: character.name,
+    label: character.name,
+  }),
+);
 
 export const ONBOARDING_SOCIAL_PROOF = {
   name: "Amanda",
@@ -137,9 +151,27 @@ export const ONBOARDING_COPY = {
     emailLabel: "Email",
     phonePlaceholder: "24 123 4567",
     emailPlaceholder: "you@example.com",
-    outsideGhanaNote:
-      "If you're outside Ghana, try JustGo Health (Canada/USA version)",
+    countryLabel: "Ghana",
+    phoneBoxLabel: "Phone Number",
+    emailBoxLabel: "Email Address",
+    outsideGhanaPrefix: "If you're outside Ghana, try ",
+    outsideGhanaLink: "JustGo Health (Canada/USA version)",
+    termsPrefix: "By continuing, you agree to ",
+    termsLink: "JustGo Health Terms & Conditions",
     continue: "Continue",
+  },
+  policySheets: {
+    canadaUs: {
+      eyebrow: "Early Access",
+      title: "JustGo Health Canada and USA.",
+      scrollHint: "scroll to explore ↓",
+    },
+    terms: {
+      eyebrow: "Legal",
+      title: "Terms & Conditions",
+      scrollHint: "scroll to read ↓",
+    },
+    closeLabel: "Close",
   },
   verify: {
     title: "Enter Verification Code",
@@ -208,9 +240,13 @@ export const ONBOARDING_COPY = {
     toggleSubtitle: "Pick your level so we can show the right schools.",
     pickerLabel: "Your school",
     pickerPlaceholder: "Search and select your school",
+    pickerButton: "Find your school",
     pickerLoading: "Loading schools…",
     emptyResults: "No schools found. Try a different search.",
     clearSchool: "Clear selection",
+    lockedInSuffix: "Locked In",
+    modalTitle: "Select your school",
+    searchPlaceholder: "Search schools…",
   },
   programme: {
     title: "What's your programme?",
@@ -221,22 +257,32 @@ export const ONBOARDING_COPY = {
     clearProgramme: "Clear selection",
   },
   grade: {
-    title: "What grade are you in?",
-    subtitle: "Choosing this tells us your class.",
+    hsTitle: "What Grade Are You In?",
+    collegeTitle: "What Year Are You In?",
+    hsSubtitle: "Choosing this tells us your class.",
+    collegeSubtitle: "Choosing this tells us your year of study.",
+    hsSectionLabel: "Current Grade",
+    collegeSectionLabel: "Current Year",
     submit: "Enter Lock In",
   },
   homeModal: {
-    title: "Complete your profile",
-    subtitle:
-      "Add a few more details so your campus experience feels personal.",
+    title: "You're locked in",
+    subtitle: "Here's how your campus will see you.",
     cta: "Go to profile",
     dismiss: "Maybe later",
+    ageLabel: "Age",
+    genderLabel: "Gender",
+    phoneLabel: "Phone",
+    emailLabel: "Email",
+    logout: "Logout",
   },
   toast: {
     onboardingComplete: "You're locked in! Welcome to your campus.",
   },
   referralPrefix: "Locking in with",
   referralOnly: "Locking in",
+  referralPickerLabel: "Choose who you're locking in with",
+  referralNone: "No influencer",
   progressAria: "Onboarding progress",
   back: "Back",
 } as const;
@@ -259,27 +305,133 @@ export const ONBOARDING_SCHOOL_TYPES = [
   },
 ] as const;
 
-export const ONBOARDING_PROGRAMME_SEED = [
-  "Medicine",
-  "Nursing",
-  "Pharmacy",
-  "Engineering",
-  "Computer Science",
-  "Business Administration",
-  "Law",
-  "Psychology",
-  "Architecture",
-  "Economics",
+export const ONBOARDING_PROGRAMMES = [
+  {
+    name: "Chemistry",
+    tags: ["Chem", "BSc Chemistry", "Chemist", "Pre-Med Track"],
+    durationYears: 4,
+  },
+  {
+    name: "Human Biology (Medicine)",
+    tags: ["Med", "MBChB", "Doctor", "Pre-Med"],
+    durationYears: 6,
+  },
+  {
+    name: "Electrical Engineering",
+    tags: ["EE", "BSc EE", "Engineer", "Power & Electronics"],
+    durationYears: 4,
+  },
+  {
+    name: "Computer Science",
+    tags: ["CS", "BSc CS", "Software Engineer", "Coding"],
+    durationYears: 4,
+  },
+  {
+    name: "Nursing",
+    tags: ["Nursing", "BSc Nursing", "Nurse", "RN Track"],
+    durationYears: 4,
+  },
+  {
+    name: "Pharmacy",
+    tags: ["Pharm", "PharmD", "Pharmacist", "Drugs & Meds"],
+    durationYears: 4,
+  },
+  {
+    name: "Law",
+    tags: ["Law", "LLB", "Lawyer", "Legal Studies"],
+    durationYears: 4,
+  },
+  {
+    name: "Business Administration",
+    tags: ["BA", "BBA", "Business", "Management"],
+    durationYears: 4,
+  },
+  {
+    name: "Economics",
+    tags: ["Econ", "BSc Economics", "Economist", "Markets & Money"],
+    durationYears: 4,
+  },
+  {
+    name: "Psychology",
+    tags: ["Psych", "BSc Psychology", "Psychologist", "Mind Science"],
+    durationYears: 4,
+  },
 ] as const;
 
-export const ONBOARDING_HS_GRADES = ["Form 1", "Form 2", "Form 3"] as const;
+export const ONBOARDING_HS_GRADE_OPTIONS = [
+  {
+    label: "Freshman (9th Grade)",
+    short: "Freshman",
+    yearsRemaining: 3,
+    yearNumber: 1,
+  },
+  {
+    label: "Sophomore (10th Grade)",
+    short: "Sophomore",
+    yearsRemaining: 2,
+    yearNumber: 2,
+  },
+  {
+    label: "Junior (11th Grade)",
+    short: "Junior",
+    yearsRemaining: 1,
+    yearNumber: 3,
+  },
+  {
+    label: "Senior (12th Grade)",
+    short: "Senior",
+    yearsRemaining: 0,
+    yearNumber: 4,
+  },
+] as const;
 
-export const ONBOARDING_COLLEGE_GRADES = [
-  "Year 1",
-  "Year 2",
-  "Year 3",
-  "Year 4",
-  "Final year",
+export const ONBOARDING_COLLEGE_GRADE_OPTIONS = [
+  {
+    label: "Year 1 (Freshman)",
+    short: "Freshman",
+    yearsRemaining: 3,
+    yearNumber: 1,
+  },
+  {
+    label: "Year 2 (Sophomore)",
+    short: "Sophomore",
+    yearsRemaining: 2,
+    yearNumber: 2,
+  },
+  {
+    label: "Year 3 (Junior)",
+    short: "Junior",
+    yearsRemaining: 1,
+    yearNumber: 3,
+  },
+  {
+    label: "Year 4 (Senior)",
+    short: "Senior",
+    yearsRemaining: 0,
+    yearNumber: 4,
+  },
+] as const;
+
+export const ONBOARDING_POLICY_CANADA_SECTIONS = [
+  {
+    title: "Built for North America",
+    body: "JustGo Health Canada and USA brings campus mental health support to students abroad — same belonging, same Lock In experience.",
+  },
+  {
+    title: "Early adopters welcome",
+    body: "Join the early adopters shaping Lock In 3.0 — powered by campus programs that actually move the needle.",
+  },
+] as const;
+
+export const ONBOARDING_POLICY_TERMS_SECTIONS = [
+  {
+    title: "Your privacy matters",
+    body: "We protect your data and never share your mental health information without your consent.",
+  },
+  {
+    title: "Community guidelines",
+    body: "Lock In is a safe space. Respect, kindness, and campus belonging guide everything we build.",
+  },
 ] as const;
 
 export const ONBOARDING_DOB_MONTHS = [
@@ -316,6 +468,7 @@ export const ONBOARDING_SESSION_KEYS = {
 } as const;
 
 export const ONBOARDING_AUTH_SCREENS: OnboardingScreen[] = [
+  ONBOARDING_SCREENS.CHOICE,
   ONBOARDING_SCREENS.CONTACT,
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,

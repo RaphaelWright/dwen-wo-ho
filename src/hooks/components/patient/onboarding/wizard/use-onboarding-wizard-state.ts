@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
 import { ONBOARDING_INITIAL_SCREEN } from "@/lib/constants/components/patient/onboarding";
 import type {
@@ -16,10 +16,10 @@ import { getInitialOnboardingDraft } from "@/lib/utils/patient/onboarding-sessio
 
 export function useOnboardingWizardState() {
   const refParam = useGetSearchParams("ref");
-  const referralHandle = useMemo(() => {
+  const [referralHandle, setReferralHandle] = useState<string | null>(() => {
     const trimmed = refParam?.trim();
     return trimmed ? trimmed : null;
-  }, [refParam]);
+  });
 
   const [screen, setScreen] = useState<OnboardingScreen>(
     ONBOARDING_INITIAL_SCREEN,
@@ -37,11 +37,14 @@ export function useOnboardingWizardState() {
   const [draft, setDraft] = useState<OnboardingDraft>(
     getInitialOnboardingDraft,
   );
+  const [programmeSearch, setProgrammeSearch] = useState("");
+  const [schoolPickerOpen, setSchoolPickerOpen] = useState(false);
 
   const contactValue = contactMode === "phone" ? draft.phone : draft.email;
 
   return {
     referralHandle,
+    setReferralHandle,
     screen,
     setScreen,
     phase,
@@ -63,5 +66,9 @@ export function useOnboardingWizardState() {
     draft,
     setDraft,
     contactValue,
+    programmeSearch,
+    setProgrammeSearch,
+    schoolPickerOpen,
+    setSchoolPickerOpen,
   };
 }

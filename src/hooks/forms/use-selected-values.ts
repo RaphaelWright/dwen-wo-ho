@@ -1,9 +1,9 @@
 import { useForm, type UseFormProps, type FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type z } from "zod";
+import { type z } from "zod/v4";
 
 export function useSelectedValuesFromReactHookForm<T extends FieldValues>(
-  schema: z.ZodSchema<T>,
+  schema: z.ZodType<T>,
   options: Omit<UseFormProps<T>, "resolver"> = {},
 ) {
   const form = useForm<T>({

@@ -17,7 +17,7 @@ import { SIGN_UP_TEXTS } from "@/lib/constants/components/provider/auth/signup";
 import { ProviderPasswordSchema } from "@/lib/schemas/provider-auth-schema";
 import { cn } from "@/lib/utils";
 
-type PasswordFormData = z.infer<typeof ProviderPasswordSchema>;
+type PasswordFormData = z.output<typeof ProviderPasswordSchema>;
 
 interface NewPasswordFormProps {
   email: string | null;

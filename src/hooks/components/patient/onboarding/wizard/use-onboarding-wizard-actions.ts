@@ -19,6 +19,7 @@ import { patientOnboardingService } from "@/services/patient/onboarding/account-
 import { syncDraftDerivedFields } from "@/lib/utils/patient/onboarding-validation";
 import { setShowHomeProfileModalFlag } from "@/lib/utils/patient/onboarding-session";
 import { normalizeContactKey } from "@/lib/utils/patient/onboarding-format";
+import { computeGraduationYear } from "@/lib/utils/patient/onboarding-class";
 
 interface WizardActionDeps {
   contactMode: ContactMode;
@@ -180,14 +181,16 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
   }, [goToScreen, setPhase]);
 
   const handleSchoolSelect = useCallback(
-    (school: { id: string; name: string }) => {
+    (school: { id: string; name: string; logo?: string }) => {
       updateDraft({
         schoolId: school.id,
         schoolName: school.name,
         school: school.name,
+        schoolLogo: school.logo ?? "",
       });
+      goToScreen(ONBOARDING_SCREENS.PROGRAMME);
     },
-    [updateDraft],
+    [goToScreen, updateDraft],
   );
 
   const handleSubmit = useCallback(() => {
@@ -203,7 +206,23 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
       contactValue,
       syncedDraft,
     );
-    setShowHomeProfileModalFlag(syncedDraft.nickname);
+    const referenceYear = new Date().getFullYear();
+    setShowHomeProfileModalFlag({
+      nickname: syncedDraft.nickname,
+      fullName: syncedDraft.fullName,
+      profilePhotoUrl: syncedDraft.profilePhotoUrl,
+      gender: syncedDraft.gender,
+      phone: syncedDraft.phone,
+      email: syncedDraft.email,
+      birthYear: syncedDraft.birthYear,
+      gradeShort: syncedDraft.gradeShort,
+      graduationYear: syncedDraft.gradeShort
+        ? computeGraduationYear(syncedDraft.gradeYearsRemaining, referenceYear)
+        : null,
+      programme: syncedDraft.programme,
+      schoolName: syncedDraft.schoolName,
+      contactMode,
+    });
     toast.success(ONBOARDING_COPY.toast.onboardingComplete);
     router.push(ROUTES.patient.lockIn);
   }, [contactMode, contactValue, draft, router]);

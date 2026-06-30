@@ -2,7 +2,7 @@ import { UseFormRegister, FieldErrors } from "react-hook-form";
 import * as z from "zod/v4";
 import { lockInSchema } from "@/lib/schemas/lockin-form-schema";
 
-export type LockInFormData = z.infer<typeof lockInSchema>;
+export type LockInFormData = z.output<typeof lockInSchema>;
 
 export interface CacheData {
   data: Partial<LockInFormData>;

@@ -39,7 +39,7 @@ export function ActionsPanel({
     notes: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!formData.title.trim()) return;
     await onAddAction(formData);

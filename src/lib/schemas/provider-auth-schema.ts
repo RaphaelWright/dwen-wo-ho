@@ -1,4 +1,4 @@
-import * as z from "zod";
+import z from "zod/v4";
 
 export const ProviderEmailSchema = z.object({
   email: z
@@ -27,9 +27,9 @@ export const ProviderSignUpSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-export type ProviderEmailFormData = z.infer<typeof ProviderEmailSchema>;
-export type ProviderLoginFormData = z.infer<typeof ProviderLoginSchema>;
-export type ProviderSignUpFormData = z.infer<typeof ProviderSignUpSchema>;
+export type ProviderEmailFormData = z.output<typeof ProviderEmailSchema>;
+export type ProviderLoginFormData = z.output<typeof ProviderLoginSchema>;
+export type ProviderSignUpFormData = z.output<typeof ProviderSignUpSchema>;
 
 export const ProviderPasswordSchema = z
   .object({
@@ -45,7 +45,7 @@ export const ProviderPasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export type ProviderPasswordFormData = z.infer<typeof ProviderPasswordSchema>;
+export type ProviderPasswordFormData = z.output<typeof ProviderPasswordSchema>;
 
 export const ProviderProfilePhotoStepSchema = z.object({
   photo: z
@@ -84,6 +84,6 @@ export const ProviderProfileSpecialtyStepSchema = z.object({
   specialty: z.string().min(1, { message: "Please select a specialty" }),
 });
 
-export type ProviderProfileBioStepData = z.infer<
+export type ProviderProfileBioStepData = z.output<
   typeof ProviderProfileBioStepSchema
 >;

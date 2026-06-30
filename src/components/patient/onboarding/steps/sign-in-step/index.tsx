@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
+import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import {
   Field,
   FieldContent,
@@ -20,45 +21,49 @@ export function SignInStep({
   onPasswordChange,
   onBlur,
   onForgotPassword,
+  canContinue,
+  onContinue,
 }: SignInStepProps) {
   return (
     <StepShell
       title={`${ONBOARDING_COPY.signIn.greetingPrefix} ${nickname || "there"}`}
       subtitle={ONBOARDING_COPY.signIn.subtitle}
     >
-      <FieldGroup>
-        <Field>
-          <FieldLabel htmlFor="patient-sign-in-password">
-            {ONBOARDING_COPY.signIn.password}
-          </FieldLabel>
-          <FieldContent>
-            <Input
-              id="patient-sign-in-password"
-              type="password"
-              autoComplete="current-password"
-              placeholder={ONBOARDING_COPY.signIn.passwordPlaceholder}
-              value={password}
-              onBlur={onBlur}
-              onChange={(event) => onPasswordChange(event.target.value)}
-              className={cn(
-                validationState === "valid" &&
-                  "border-success ring-success/30 ring-1",
-                validationState === "invalid" &&
-                  "border-destructive ring-destructive/30 ring-1",
-              )}
-            />
-          </FieldContent>
-        </Field>
+      <OnboardingContinueForm canContinue={canContinue} onContinue={onContinue}>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="patient-sign-in-password">
+              {ONBOARDING_COPY.signIn.password}
+            </FieldLabel>
+            <FieldContent>
+              <Input
+                id="patient-sign-in-password"
+                type="password"
+                autoComplete="current-password"
+                placeholder={ONBOARDING_COPY.signIn.passwordPlaceholder}
+                value={password}
+                onBlur={onBlur}
+                onChange={(event) => onPasswordChange(event.target.value)}
+                className={cn(
+                  validationState === "valid" &&
+                    "border-success ring-success/30 ring-1",
+                  validationState === "invalid" &&
+                    "border-destructive ring-destructive/30 ring-1",
+                )}
+              />
+            </FieldContent>
+          </Field>
 
-        <Button
-          type="button"
-          variant="link"
-          className="text-primary h-auto justify-start p-0"
-          onClick={onForgotPassword}
-        >
-          {ONBOARDING_COPY.signIn.forgotPassword}
-        </Button>
-      </FieldGroup>
+          <Button
+            type="button"
+            variant="link"
+            className="text-primary h-auto justify-start p-0"
+            onClick={onForgotPassword}
+          >
+            {ONBOARDING_COPY.signIn.forgotPassword}
+          </Button>
+        </FieldGroup>
+      </OnboardingContinueForm>
     </StepShell>
   );
 }

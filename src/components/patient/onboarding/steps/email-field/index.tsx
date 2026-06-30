@@ -1,30 +1,34 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
+import { OnboardingFieldBox } from "@/components/patient/onboarding/steps/onboarding-field-box";
+import { OnboardingFieldSubmitButton } from "@/components/patient/onboarding/steps/onboarding-field-box/submit-button";
 import type { EmailFieldProps } from "@/lib/types/components/patient/onboarding";
-import { cn } from "@/lib/utils";
 
 export function EmailField({
   value,
   validationState,
   onChange,
   onBlur,
+  submitDisabled,
 }: EmailFieldProps) {
   return (
-    <Input
-      id="patient-email"
-      type="email"
-      autoComplete="email"
-      placeholder={ONBOARDING_COPY.contact.emailPlaceholder}
-      value={value}
-      onBlur={onBlur}
-      onChange={(event) => onChange(event.target.value)}
-      className={cn(
-        validationState === "valid" && "border-success ring-success/30 ring-1",
-        validationState === "invalid" &&
-          "border-destructive ring-destructive/30 ring-1",
-      )}
-    />
+    <OnboardingFieldBox
+      label={ONBOARDING_COPY.contact.emailBoxLabel}
+      validationState={validationState}
+      className="relative pr-14 sm:pr-16"
+    >
+      <input
+        id="patient-email"
+        type="email"
+        autoComplete="email"
+        placeholder={ONBOARDING_COPY.contact.emailPlaceholder}
+        value={value}
+        onBlur={onBlur}
+        onChange={(event) => onChange(event.target.value)}
+        className="text-foreground placeholder:text-muted-foreground w-full border-0 bg-transparent text-xl font-semibold outline-none sm:text-2xl"
+      />
+      <OnboardingFieldSubmitButton disabled={submitDisabled} />
+    </OnboardingFieldBox>
   );
 }

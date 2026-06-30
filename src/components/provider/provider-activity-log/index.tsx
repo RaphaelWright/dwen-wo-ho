@@ -41,7 +41,7 @@ export default function ProviderActivityLog() {
     dispatch({ type: "SET_SEARCH", search: e.target.value });
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
+  const handleSearchSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     dispatch({ type: "SET_DEBOUNCED_SEARCH", search });
   };

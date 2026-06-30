@@ -1,14 +1,16 @@
 "use client";
 
 import { AnimatePresence, m } from "motion/react";
+import { ModalPortal } from "@/components/shared/overlays/modal-portal";
 import { AnimatedModalShellProps } from "@/lib/types/components/shared/overlays";
 import { cn } from "@/lib/utils";
-
-const DEFAULT_PANEL_CLASS =
-  "bg-card text-foreground border-border mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border shadow-2xl";
-
-const DEFAULT_BACKDROP_CLASS =
-  "bg-background/80 fixed inset-0 z-50 backdrop-blur-3xl";
+import {
+  OVERLAY_BACKDROP_TRANSITION,
+  OVERLAY_PANEL_ANIMATE,
+  OVERLAY_PANEL_EXIT,
+  OVERLAY_PANEL_INITIAL,
+  OVERLAY_PANEL_TRANSITION,
+} from "@/lib/utils/shared/overlay-motion";
 
 export function AnimatedModalShell({
   isOpen,
@@ -16,31 +18,44 @@ export function AnimatedModalShell({
   children,
   panelClassName,
   backdropClassName,
+  contentClassName,
 }: AnimatedModalShellProps) {
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
+    <ModalPortal>
+      <AnimatePresence>
+        {isOpen ? (
           <m.div
+            key="modal-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={backdropClassName ?? DEFAULT_BACKDROP_CLASS}
+            transition={OVERLAY_BACKDROP_TRANSITION}
+            className={cn(
+              "z-modal-stack fixed inset-0 flex items-center justify-center bg-black/50 p-3 sm:p-4",
+              backdropClassName,
+            )}
             onClick={onClose}
-          />
-          <m.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()}
           >
-            <div className={cn(DEFAULT_PANEL_CLASS, panelClassName)}>
-              {children}
-            </div>
+            <m.div
+              initial={OVERLAY_PANEL_INITIAL}
+              animate={OVERLAY_PANEL_ANIMATE}
+              exit={OVERLAY_PANEL_EXIT}
+              transition={OVERLAY_PANEL_TRANSITION}
+              className={cn("relative w-full max-w-xl", contentClassName)}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div
+                className={cn(
+                  "bg-card text-foreground border-border flex w-full flex-col overflow-hidden rounded-2xl border shadow-2xl",
+                  panelClassName,
+                )}
+              >
+                {children}
+              </div>
+            </m.div>
           </m.div>
-        </>
-      )}
-    </AnimatePresence>
+        ) : null}
+      </AnimatePresence>
+    </ModalPortal>
   );
 }

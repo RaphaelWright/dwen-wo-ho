@@ -10,6 +10,7 @@ export interface AnimatedModalShellProps {
   children: ReactNode;
   panelClassName?: string;
   backdropClassName?: string;
+  contentClassName?: string;
 }
 
 export interface ColorOption {

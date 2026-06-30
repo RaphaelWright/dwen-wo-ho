@@ -14,7 +14,7 @@ export interface SchoolEditPanelFormProps {
   selectedCampuses: string[];
   handleCampusToggle: (campus: string) => void;
   campusDropdownRef: React.RefObject<HTMLDivElement | null>;
-  handleSubmit: (e: React.FormEvent) => void;
+  handleSubmit: (e: React.SubmitEvent) => void;
   school: School;
 }
 

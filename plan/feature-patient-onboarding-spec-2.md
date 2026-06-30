@@ -1,8 +1,9 @@
 ---
-status: Completed
-last_updated: 2026-06-28
+status: Superseded
+last_updated: 2026-06-30
 name: Patient Onboarding Spec v2
 supersedes: plan/feature-patient-onboarding-ui-1.md
+superseded_by: plan/feature-patient-onboarding-nega-feedback-1.md
 ---
 
 # Patient Lock-In Onboarding — Spec v2

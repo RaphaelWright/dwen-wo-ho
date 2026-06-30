@@ -64,6 +64,7 @@ const SCREEN_VALIDATORS: Record<
   OnboardingScreen,
   (context: ScreenValidationContext) => boolean
 > = {
+  [ONBOARDING_SCREENS.CHOICE]: () => true,
   [ONBOARDING_SCREENS.CONTACT]: ({ draft, contactMode }) =>
     contactMode === "phone"
       ? validatePhone(draft.phone)
@@ -90,7 +91,7 @@ const SCREEN_VALIDATORS: Record<
   [ONBOARDING_SCREENS.SCHOOL_TYPE]: ({ draft }) =>
     Boolean(draft.schoolType && draft.schoolId && draft.schoolName),
   [ONBOARDING_SCREENS.PROGRAMME]: ({ draft }) =>
-    Boolean(draft.programme.trim() || draft.programmeTags.length > 0),
+    Boolean(draft.programme.trim()),
   [ONBOARDING_SCREENS.GRADE]: ({ draft }) => Boolean(draft.gradeShort),
 };
 

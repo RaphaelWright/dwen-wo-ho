@@ -4,15 +4,12 @@ import type {
   OnboardingFooterStepLabel,
   OnboardingPhase,
   OnboardingScreen,
-  SchoolType,
 } from "@/lib/types/components/patient/onboarding";
 import {
   AUTH_FOOTER_STEP_BY_SCREEN,
-  ONBOARDING_COLLEGE_GRADES,
   ONBOARDING_DOB_DEFAULT_YEAR,
   ONBOARDING_FOOTER_STEP_BY_SCREEN,
   ONBOARDING_FOOTER_STEP_LABELS,
-  ONBOARDING_HS_GRADES,
   ONBOARDING_SCREENS,
   AUTH_FOOTER_STEP_LABELS,
 } from "@/lib/constants/components/patient/onboarding";
@@ -40,11 +37,15 @@ export function getOnboardingCompletedSteps(
   draft: OnboardingDraft,
 ): OnboardingFooterStepLabel[] {
   const completed: OnboardingFooterStepLabel[] = [];
-  if (draft.schoolId && draft.schoolName) {
-    completed.push("Campus");
+  if (draft.profilePhotoUrl) {
+    completed.push("Profile");
   }
-  if (draft.programme.trim() || draft.programmeTags.length > 0) {
-    completed.push("Programme");
+  if (
+    draft.schoolId &&
+    draft.schoolName &&
+    (draft.programme.trim() || draft.programmeTags.length > 0)
+  ) {
+    completed.push("Campus");
   }
   if (draft.gradeShort) {
     completed.push("Class");
@@ -62,14 +63,6 @@ export function getOnboardingPhaseForScreen(
     : "auth";
 }
 
-export function getGradeOptionsForSchoolType(
-  schoolType: SchoolType,
-): readonly string[] {
-  return schoolType === "high-school"
-    ? ONBOARDING_HS_GRADES
-    : ONBOARDING_COLLEGE_GRADES;
-}
-
 export function syncDraftDerivedFields(
   draft: OnboardingDraft,
 ): OnboardingDraft {
@@ -77,14 +70,14 @@ export function syncDraftDerivedFields(
   const classSummary = draft.gradeShort
     ? formatStudentClassSummary({
         gradeShort: draft.gradeShort,
-        schoolType: draft.schoolType,
+        yearsRemaining: draft.gradeYearsRemaining,
         programme: draft.programme,
         schoolName: draft.schoolName,
         referenceYear,
       })
     : null;
   const graduationYear = draft.gradeShort
-    ? computeGraduationYear(draft.gradeShort, draft.schoolType, referenceYear)
+    ? computeGraduationYear(draft.gradeYearsRemaining, referenceYear)
     : null;
 
   return {
@@ -100,5 +93,8 @@ export function syncDraftDerivedFields(
 }
 
 export function usesFooterContinue(screen: OnboardingScreen): boolean {
-  return screen !== ONBOARDING_SCREENS.CONTACT;
+  return (
+    screen !== ONBOARDING_SCREENS.CONTACT &&
+    screen !== ONBOARDING_SCREENS.CHOICE
+  );
 }

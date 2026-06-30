@@ -27,7 +27,7 @@ export const useNewPassword = () => {
     handleSubmit,
     watch,
     formState: { errors, isValid },
-  } = useForm<z.infer<typeof ProviderPasswordSchema>>({
+  } = useForm<z.output<typeof ProviderPasswordSchema>>({
     resolver: zodResolver(ProviderPasswordSchema),
     mode: "onChange",
     defaultValues: {
@@ -67,7 +67,7 @@ export const useNewPassword = () => {
     );
   };
 
-  const onSubmit = async (values: z.infer<typeof ProviderPasswordSchema>) => {
+  const onSubmit = async (values: z.output<typeof ProviderPasswordSchema>) => {
     try {
       const storedToken = localStorage.getItem("recoveryToken");
 

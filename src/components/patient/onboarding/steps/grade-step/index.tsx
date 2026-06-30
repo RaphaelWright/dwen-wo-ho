@@ -1,67 +1,108 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Field, FieldContent, FieldGroup } from "@/components/ui/field";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
+import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type { GradeStepProps } from "@/lib/types/components/patient/onboarding";
 import { formatStudentClassSummary } from "@/lib/utils/patient/onboarding-class";
-import { getGradeOptionsForSchoolType } from "@/lib/utils/patient/onboarding-validation";
+import { getFilteredGradeOptions } from "@/lib/utils/patient/get-grade-options";
+import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
 
 export function GradeStep({
   schoolType,
   gradeShort,
   programme,
   schoolName,
+  programmeDurationYears,
   onGradeChange,
+  canContinue,
+  onContinue,
 }: GradeStepProps) {
-  const gradeOptions = getGradeOptionsForSchoolType(schoolType);
-  const classSummary = gradeShort
-    ? formatStudentClassSummary({
-        gradeShort,
-        schoolType,
-        programme,
-        schoolName,
-      })
-    : null;
+  const gradeOptions = getFilteredGradeOptions({
+    schoolType,
+    programmeDurationYears,
+  });
+
+  const title =
+    schoolType === "high-school"
+      ? ONBOARDING_COPY.grade.hsTitle
+      : ONBOARDING_COPY.grade.collegeTitle;
+
+  const subtitle =
+    schoolType === "high-school"
+      ? ONBOARDING_COPY.grade.hsSubtitle
+      : ONBOARDING_COPY.grade.collegeSubtitle;
+
+  const sectionLabel =
+    schoolType === "high-school"
+      ? ONBOARDING_COPY.grade.hsSectionLabel
+      : ONBOARDING_COPY.grade.collegeSectionLabel;
+
+  const activeOption = gradeOptions.find(
+    (option) => option.short === gradeShort,
+  );
+
+  const classSummary =
+    activeOption &&
+    formatStudentClassSummary({
+      gradeShort: activeOption.short,
+      yearsRemaining: activeOption.yearsRemaining,
+      programme,
+      schoolName,
+    });
 
   return (
-    <StepShell
-      title={ONBOARDING_COPY.grade.title}
-      subtitle={ONBOARDING_COPY.grade.subtitle}
-    >
-      <FieldGroup>
-        <Field>
-          <FieldContent>
-            <div className="flex w-full gap-2">
-              {gradeOptions.map((grade) => {
-                const isActive = gradeShort === grade;
+    <StepShell title={title} subtitle={subtitle} centered>
+      <OnboardingContinueForm
+        canContinue={canContinue}
+        onContinue={onContinue}
+        listenForEnter
+        className="flex w-full flex-col gap-5"
+      >
+        <p className="text-muted-foreground text-left text-xs font-semibold tracking-wide uppercase">
+          {sectionLabel}
+        </p>
 
-                return (
-                  <Button
-                    key={grade}
-                    type="button"
-                    variant={isActive ? "default" : "outline"}
-                    className={`h-11 min-w-0 flex-1 rounded-full px-1.5 text-xs font-semibold sm:h-12 sm:px-2 sm:text-sm ${
-                      isActive ? "bg-primary text-primary-foreground" : ""
-                    }`}
-                    aria-pressed={isActive}
-                    onClick={() => onGradeChange(grade)}
-                  >
-                    {grade}
-                  </Button>
-                );
-              })}
-            </div>
-          </FieldContent>
-        </Field>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {gradeOptions.map((option) => {
+            const isActive = gradeShort === option.short;
+
+            return (
+              <div
+                key={option.label}
+                role="button"
+                tabIndex={0}
+                aria-pressed={isActive}
+                onClick={() =>
+                  onGradeChange({
+                    short: option.short,
+                    yearsRemaining: option.yearsRemaining,
+                  })
+                }
+                onKeyDown={activateOnKeyboard(() =>
+                  onGradeChange({
+                    short: option.short,
+                    yearsRemaining: option.yearsRemaining,
+                  }),
+                )}
+                className={`border-border hover:border-primary hover:bg-accent flex min-h-18 cursor-pointer items-center rounded-2xl border-2 px-4 py-3 text-left transition-colors ${
+                  isActive ? "border-primary bg-accent" : "bg-card"
+                }`}
+              >
+                <span className="text-foreground text-sm font-semibold sm:text-base">
+                  {option.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
         {classSummary ? (
-          <div className="border-primary bg-primary/5 text-foreground w-full rounded-2xl border px-3 py-2.5 text-center text-xs leading-snug font-semibold text-balance sm:px-4 sm:py-3 sm:text-sm">
+          <output className="border-success/40 bg-success/10 text-success block w-full rounded-2xl border px-4 py-3 text-center text-sm leading-snug font-semibold text-balance sm:text-base">
             {classSummary}
-          </div>
+          </output>
         ) : null}
-      </FieldGroup>
+      </OnboardingContinueForm>
     </StepShell>
   );
 }

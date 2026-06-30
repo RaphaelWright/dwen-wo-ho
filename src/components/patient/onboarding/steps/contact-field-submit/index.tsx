@@ -16,7 +16,7 @@ export function ContactFieldSubmit({
         type="button"
         aria-label={ONBOARDING_COPY.contact.continue}
         onClick={onSubmit}
-        className="bg-primary text-primary-foreground hover:bg-primary/90 size-10 shrink-0 rounded-full shadow-lg"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 size-10 shrink-0 rounded-full"
       >
         <ArrowRightIcon className="size-4" />
       </Button>

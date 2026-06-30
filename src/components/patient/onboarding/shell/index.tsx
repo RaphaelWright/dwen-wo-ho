@@ -8,7 +8,7 @@ export function OnboardingShell({ children }: OnboardingShellProps) {
   return (
     <main className="bg-background flex h-dvh w-full flex-col overflow-hidden lg:flex-row">
       <SocialProofPanel />
-      <section className="flex h-dvh min-w-0 flex-1 flex-col overflow-hidden lg:w-1/2">
+      <section className="bg-background text-foreground flex h-dvh min-w-0 flex-1 flex-col overflow-hidden lg:w-1/2">
         {children}
       </section>
     </main>

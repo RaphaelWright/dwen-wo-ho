@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { ONBOARDING_PROGRAMME_SEED } from "@/lib/constants/components/patient/onboarding";
+import { ONBOARDING_PROGRAMMES } from "@/lib/constants/components/patient/onboarding";
 import type { ProgrammeComboboxItem } from "@/lib/types/components/patient/onboarding";
 
 function toComboboxItem(name: string): ProgrammeComboboxItem {
@@ -10,7 +10,8 @@ function toComboboxItem(name: string): ProgrammeComboboxItem {
 
 export function useProgrammeCombobox(selectedProgramme: string) {
   const items = useMemo(
-    () => ONBOARDING_PROGRAMME_SEED.map(toComboboxItem),
+    () =>
+      ONBOARDING_PROGRAMMES.map((programme) => toComboboxItem(programme.name)),
     [],
   );
 

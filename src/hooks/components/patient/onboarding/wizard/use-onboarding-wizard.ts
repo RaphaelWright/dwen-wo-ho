@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import type { Route } from "next";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   ONBOARDING_DEMO_OTP,
   ONBOARDING_SCREENS,
@@ -21,10 +22,14 @@ import { resolveFieldBlurState } from "@/lib/utils/patient/onboarding-field-blur
 import { advanceOnboardingScreen } from "@/lib/utils/patient/onboarding-wizard-navigation";
 import { useOnboardingWizardActions } from "@/hooks/components/patient/onboarding/wizard/use-onboarding-wizard-actions";
 import { useOnboardingWizardState } from "@/hooks/components/patient/onboarding/wizard/use-onboarding-wizard-state";
+import { usePolicySheets } from "@/hooks/components/patient/onboarding/contact/use-policy-sheets";
 
 export function useOnboardingWizard() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const state = useOnboardingWizardState();
+  const policySheets = usePolicySheets();
   const {
     screen,
     setScreen,
@@ -48,6 +53,14 @@ export function useOnboardingWizard() {
     setDraft,
     contactValue,
     referralHandle,
+    setReferralHandle,
+  } = state;
+
+  const {
+    programmeSearch,
+    setProgrammeSearch,
+    schoolPickerOpen,
+    setSchoolPickerOpen,
   } = state;
 
   const updateDraft = useCallback(
@@ -128,6 +141,27 @@ export function useOnboardingWizard() {
     return () => window.clearTimeout(timer);
   }, [actions, otp, screen]);
 
+  const handleChoiceContinue = useCallback(() => {
+    goToScreen(ONBOARDING_SCREENS.CONTACT);
+  }, [goToScreen]);
+
+  const handleReferralChange = useCallback(
+    (handle: string | null) => {
+      setReferralHandle(handle);
+      const params = new URLSearchParams(searchParams.toString());
+      if (handle) {
+        params.set("ref", handle);
+      } else {
+        params.delete("ref");
+      }
+      const query = params.toString();
+      router.replace((query ? `${pathname}?${query}` : pathname) as Route, {
+        scroll: false,
+      });
+    },
+    [pathname, router, searchParams, setReferralHandle],
+  );
+
   return {
     screen,
     phase,
@@ -138,6 +172,7 @@ export function useOnboardingWizard() {
     signInPassword,
     draft,
     referralHandle,
+    handleReferralChange,
     fieldValidation,
     contactValue,
     activeContactKey,
@@ -153,5 +188,12 @@ export function useOnboardingWizard() {
     handleFieldBlur,
     handleSchoolSelect: actions.handleSchoolSelect,
     handleSubmit: actions.handleSubmit,
+    programmeSearch,
+    setProgrammeSearch,
+    schoolPickerOpen,
+    setSchoolPickerOpen,
+    selectedSchoolLogo: draft.schoolLogo,
+    ...policySheets,
+    handleChoiceContinue,
   };
 }

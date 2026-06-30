@@ -1,118 +1,84 @@
 "use client";
 
-import { Mail, Phone } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field";
 import { PhoneField } from "@/components/patient/onboarding/steps/phone-field";
 import { EmailField } from "@/components/patient/onboarding/steps/email-field";
-import { ContactFieldSubmit } from "@/components/patient/onboarding/steps/contact-field-submit";
+import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
-import {
-  ONBOARDING_CONTACT_MODE_OPTIONS,
-  ONBOARDING_COPY,
-} from "@/lib/constants/components/patient/onboarding";
-import type {
-  ContactMode,
-  ContactStepProps,
-} from "@/lib/types/components/patient/onboarding";
+import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
+import type { ContactStepProps } from "@/lib/types/components/patient/onboarding";
+import { resolveOnboardingFieldUiState } from "@/lib/utils/patient/onboarding-field-blur";
 
 export function ContactStep({
   contactMode,
   draft,
   fieldValidation,
-  onContactModeChange,
   onDraftChange,
   onFieldBlur,
   onSubmit,
+  onOpenCanadaSheet,
+  onOpenTermsSheet,
 }: ContactStepProps) {
   const title =
     contactMode === "phone"
       ? ONBOARDING_COPY.contact.phoneTitle
       : ONBOARDING_COPY.contact.emailTitle;
 
-  const validationState =
-    contactMode === "phone" ? fieldValidation.phone : fieldValidation.email;
+  const fieldKey = contactMode === "phone" ? "phone" : "email";
+  const { canSubmit, validationState } = resolveOnboardingFieldUiState(
+    fieldValidation[fieldKey],
+    draft,
+    fieldKey,
+  );
 
   return (
-    <StepShell title={title} subtitle={ONBOARDING_COPY.contact.entrySubtitle}>
-      <FieldGroup>
-        <Field>
-          <FieldTitle>{ONBOARDING_COPY.choice.title}</FieldTitle>
-          <FieldDescription>{ONBOARDING_COPY.choice.subtitle}</FieldDescription>
-          <FieldContent>
-            <div
-              className="bg-muted/60 mt-3 flex rounded-full p-1"
-              role="group"
-              aria-label="Contact method"
-            >
-              {ONBOARDING_CONTACT_MODE_OPTIONS.map(({ value, label }) => {
-                const Icon = value === "phone" ? Phone : Mail;
-                const isActive = contactMode === value;
+    <StepShell
+      title={title}
+      subtitle={ONBOARDING_COPY.contact.entrySubtitle}
+      centered
+    >
+      <div className="flex w-full flex-col gap-5">
+        <OnboardingContinueForm canContinue={canSubmit} onContinue={onSubmit}>
+          {contactMode === "phone" ? (
+            <PhoneField
+              value={draft.phone}
+              validationState={validationState}
+              onChange={(phone) => onDraftChange({ phone })}
+              onBlur={() => onFieldBlur("phone")}
+              submitDisabled={!canSubmit}
+            />
+          ) : (
+            <EmailField
+              value={draft.email}
+              validationState={validationState}
+              onChange={(email) => onDraftChange({ email })}
+              onBlur={() => onFieldBlur("email")}
+              submitDisabled={!canSubmit}
+            />
+          )}
+        </OnboardingContinueForm>
 
-                return (
-                  <Button
-                    key={value}
-                    type="button"
-                    variant={isActive ? "default" : "ghost"}
-                    className={`h-10 flex-1 rounded-full ${
-                      isActive
-                        ? "bg-primary text-primary-foreground shadow-xs"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                    onClick={() => onContactModeChange(value as ContactMode)}
-                    aria-pressed={isActive}
-                  >
-                    <Icon className="size-4" aria-hidden="true" />
-                    {label}
-                  </Button>
-                );
-              })}
-            </div>
-          </FieldContent>
-        </Field>
-
-        <Field>
-          <FieldLabel
-            htmlFor={
-              contactMode === "phone" ? "patient-phone" : "patient-email"
-            }
+        <p className="text-muted-foreground text-left text-sm leading-relaxed">
+          {ONBOARDING_COPY.contact.outsideGhanaPrefix}
+          <button
+            type="button"
+            onClick={onOpenCanadaSheet}
+            className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2"
           >
-            {contactMode === "phone"
-              ? ONBOARDING_COPY.contact.phoneLabel
-              : ONBOARDING_COPY.contact.emailLabel}
-          </FieldLabel>
-          <FieldContent>
-            <ContactFieldSubmit onSubmit={onSubmit}>
-              {contactMode === "phone" ? (
-                <PhoneField
-                  value={draft.phone}
-                  validationState={validationState}
-                  onChange={(phone) => onDraftChange({ phone })}
-                  onBlur={() => onFieldBlur("phone")}
-                />
-              ) : (
-                <EmailField
-                  value={draft.email}
-                  validationState={validationState}
-                  onChange={(email) => onDraftChange({ email })}
-                  onBlur={() => onFieldBlur("email")}
-                />
-              )}
-            </ContactFieldSubmit>
-          </FieldContent>
-        </Field>
+            {ONBOARDING_COPY.contact.outsideGhanaLink}
+          </button>
+        </p>
 
-        <FieldDescription className="text-center">
-          {ONBOARDING_COPY.contact.outsideGhanaNote}
-        </FieldDescription>
-      </FieldGroup>
+        <p className="text-muted-foreground text-left text-sm leading-relaxed">
+          {ONBOARDING_COPY.contact.termsPrefix}
+          <button
+            type="button"
+            onClick={onOpenTermsSheet}
+            className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2"
+          >
+            {ONBOARDING_COPY.contact.termsLink}
+          </button>
+        </p>
+      </div>
     </StepShell>
   );
 }

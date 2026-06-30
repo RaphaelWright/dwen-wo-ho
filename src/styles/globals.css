@@ -1329,3 +1329,9 @@ input:-webkit-autofill:active {
     transparent 100%
   );
 }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot="drawer-overlay"] {
+    animation-duration: 0.01ms !important;
+  }
+}

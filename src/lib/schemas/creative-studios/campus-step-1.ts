@@ -7,4 +7,4 @@ export const campusStep1Schema = z.object({
   location: z.string().min(1, "Location is required"),
 });
 
-export type CampusStep1FormValues = z.infer<typeof campusStep1Schema>;
+export type CampusStep1FormValues = z.output<typeof campusStep1Schema>;

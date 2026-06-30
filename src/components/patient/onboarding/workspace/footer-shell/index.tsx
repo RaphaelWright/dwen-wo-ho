@@ -27,7 +27,7 @@ export function OnboardingFooterShell({
   const isBackInteractive = !hideBack;
 
   return (
-    <footer className="border-border bg-background/95 z-sticky-chrome w-full shrink-0 border-t pb-[max(0px,env(safe-area-inset-bottom,0px))] backdrop-blur-md">
+    <footer className="border-border bg-background z-sticky-chrome w-full shrink-0 border-t pb-[max(0px,env(safe-area-inset-bottom,0px))]">
       <div className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:grid-cols-[minmax(5.5rem,1fr)_minmax(0,2.5fr)_minmax(9.5rem,1fr)] sm:gap-4 sm:px-6 sm:py-4">
         <div className="flex h-10 items-center justify-start">
           <Button
@@ -41,7 +41,7 @@ export function OnboardingFooterShell({
             className={cn(
               "gap-1",
               isBackInteractive
-                ? "border-border bg-background text-foreground hover:border-primary hover:bg-primary/20 hover:ring-primary/25 flex h-10 items-center justify-center rounded-full border px-3 shadow-xs transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out hover:-translate-x-0.5 hover:shadow-md hover:ring-2 active:translate-x-0 active:scale-[0.98] sm:px-6"
+                ? "border-border bg-card text-foreground hover:border-primary hover:bg-accent hover:text-accent-foreground flex h-10 items-center justify-center rounded-full border px-3 transition-[color,background-color,border-color,transform] duration-200 ease-out hover:-translate-x-0.5 active:translate-x-0 active:scale-[0.98] sm:px-6"
                 : `text-muted-foreground flex h-10 items-center justify-center rounded-full border border-transparent bg-transparent px-3 sm:px-6${hideBack ? "pointer-events-none invisible" : ""}`,
             )}
           >
@@ -59,7 +59,7 @@ export function OnboardingFooterShell({
             type="button"
             disabled={nextDisabled}
             onClick={onNext}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-10 max-w-[9.5rem] shrink-0 items-center justify-center gap-1 rounded-full px-4 text-sm shadow-lg transition-[box-shadow,background-color,color,opacity] hover:shadow-xl sm:max-w-none sm:px-8 sm:text-base"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-10 max-w-38 shrink-0 items-center justify-center gap-1 rounded-full px-4 text-sm transition-[background-color,color,opacity] sm:max-w-none sm:px-8 sm:text-base"
           >
             <span className="truncate">{nextLabel}</span>
             <ArrowRightIcon className="size-4 shrink-0" />

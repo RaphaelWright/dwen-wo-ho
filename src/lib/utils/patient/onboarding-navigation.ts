@@ -6,6 +6,8 @@ import type {
 import { ONBOARDING_SCREENS } from "@/lib/constants/components/patient/onboarding";
 
 const STATIC_BACK_NAV: Partial<Record<OnboardingScreen, OnboardingScreen>> = {
+  [ONBOARDING_SCREENS.CONTACT]: ONBOARDING_SCREENS.CHOICE,
+
   [ONBOARDING_SCREENS.CREATE_ACCOUNT]: ONBOARDING_SCREENS.CONTACT,
 
   [ONBOARDING_SCREENS.SIGN_IN]: ONBOARDING_SCREENS.CONTACT,

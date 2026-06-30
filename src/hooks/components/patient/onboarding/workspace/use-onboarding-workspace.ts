@@ -17,23 +17,27 @@ import { isOnboardingScreenValid } from "@/lib/utils/patient/onboarding-screen-v
 const AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,
-  ONBOARDING_SCREENS.PROFILE_PHOTO,
 ]);
 
 const AUTH_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,
-  ONBOARDING_SCREENS.PROFILE_PHOTO,
   ONBOARDING_SCREENS.SIGN_IN,
   ONBOARDING_SCREENS.FORGOT_PASSWORD,
   ONBOARDING_SCREENS.NEW_PASSWORD,
+]);
+
+const ONBOARDING_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+  ONBOARDING_SCREENS.PROFILE_PHOTO,
+  ONBOARDING_SCREENS.SCHOOL_TYPE,
+  ONBOARDING_SCREENS.PROGRAMME,
+  ONBOARDING_SCREENS.GRADE,
 ]);
 
 export function useOnboardingWorkspace() {
   const wizard = useOnboardingWizard();
   const {
     screen,
-    phase,
     contactMode,
     otp,
     draft,
@@ -52,7 +56,7 @@ export function useOnboardingWorkspace() {
   );
   const showAuthFooter = AUTH_FOOTER_SCREENS.has(screen);
   const showAuthStepper = AUTH_STEPPER_SCREENS.has(screen);
-  const showOnboardingFooter = phase === "onboarding";
+  const showOnboardingFooter = ONBOARDING_FOOTER_SCREENS.has(screen);
   const authStepLabel = getAuthFooterStepLabel(screen);
   const onboardingStepLabel = getOnboardingFooterStepLabel(screen);
   const completedOnboardingSteps = getOnboardingCompletedSteps(draft);
@@ -71,6 +75,7 @@ export function useOnboardingWorkspace() {
             : ONBOARDING_COPY.contact.continue;
 
   const backDisabled =
+    screen === ONBOARDING_SCREENS.CHOICE ||
     screen === ONBOARDING_SCREENS.CONTACT ||
     screen === ONBOARDING_SCREENS.PROFILE_PHOTO ||
     screen === ONBOARDING_SCREENS.SCHOOL_TYPE;
@@ -82,10 +87,27 @@ export function useOnboardingWorkspace() {
     goNext();
   };
 
-  const handleProgrammeChange = (programme: string) => {
+  const handleProgrammeSelect = (programme: {
+    name: string;
+    tags: readonly string[];
+    durationYears: number;
+  }) => {
     wizard.updateDraft({
-      programme,
-      programmeTags: programme ? [programme] : [],
+      programme: programme.name,
+      programmeTags: [...programme.tags],
+      programmeDurationYears: programme.durationYears,
+      gradeShort: "",
+      gradeYearsRemaining: 0,
+    });
+  };
+
+  const handleGradeChange = (grade: {
+    short: string;
+    yearsRemaining: number;
+  }) => {
+    wizard.updateDraft({
+      gradeShort: grade.short,
+      gradeYearsRemaining: grade.yearsRemaining,
     });
   };
 
@@ -108,7 +130,18 @@ export function useOnboardingWorkspace() {
     backDisabled,
     handleNext,
     handleContactSubmit,
-    handleProgrammeChange,
+    handleProgrammeSelect,
+    handleGradeChange,
+    programmeSearch: wizard.programmeSearch,
+    setProgrammeSearch: wizard.setProgrammeSearch,
+    schoolPickerOpen: wizard.schoolPickerOpen,
+    setSchoolPickerOpen: wizard.setSchoolPickerOpen,
+    selectedSchoolLogo: draft.schoolLogo,
+    policySheet: wizard.policySheet,
+    openCanadaSheet: wizard.openCanadaSheet,
+    openTermsSheet: wizard.openTermsSheet,
+    closePolicySheet: wizard.closePolicySheet,
+    handleChoiceContinue: wizard.handleChoiceContinue,
     handlePhotoChange,
     handleSchoolSelect: wizard.handleSchoolSelect,
     goBack,

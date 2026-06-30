@@ -29,8 +29,15 @@ export function usePatientPhotoStep({
     const reader = new FileReader();
     reader.onload = (loadEvent) => {
       const photoData = loadEvent.target?.result as string;
-      setImageSrc(photoData);
-      setIsPhotoModalOpen(true);
+      const preload = new window.Image();
+      preload.onload = () => {
+        setImageSrc(photoData);
+        setIsPhotoModalOpen(true);
+      };
+      preload.onerror = () => {
+        toast.error("Could not load that image. Try another file.");
+      };
+      preload.src = photoData;
     };
     reader.readAsDataURL(file);
   };

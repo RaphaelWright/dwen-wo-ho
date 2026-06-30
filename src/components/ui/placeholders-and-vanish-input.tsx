@@ -17,7 +17,7 @@ export function PlaceholdersAndVanishInput({
 }: {
   placeholders: string[];
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.SubmitEvent) => void;
   className?: string; // Allow custom classes for the container
   value?: string; // Add support for controlled external value
   autoFocus?: boolean;
@@ -52,7 +52,7 @@ export function PlaceholdersAndVanishInput({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     vanishAndSubmit();
     onSubmit(e);

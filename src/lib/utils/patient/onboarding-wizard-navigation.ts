@@ -32,6 +32,11 @@ export function advanceOnboardingScreen(
   goToScreen: (screen: OnboardingScreen) => void,
   actions: AdvanceScreenActions,
 ): void {
+  if (screen === ONBOARDING_SCREENS.CHOICE) {
+    goToScreen(ONBOARDING_SCREENS.CONTACT);
+    return;
+  }
+
   if (screen === ONBOARDING_SCREENS.SCHOOL_TYPE) {
     goToScreen(ONBOARDING_SCREENS.PROGRAMME);
     return;
