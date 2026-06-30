@@ -14,7 +14,7 @@ export function PatientWaitingRoomScreen() {
     usePatientWaitingRoom();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center">
       <WidthConstraint>
         <div className="p-8 text-center">
           <WaitingRoomHeader />

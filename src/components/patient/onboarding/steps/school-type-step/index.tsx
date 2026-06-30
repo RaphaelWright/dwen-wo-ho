@@ -1,24 +1,16 @@
 "use client";
 
-import { GraduationCap, School } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SchoolContextPill } from "@/components/patient/onboarding/steps/school-context-pill";
 import { SchoolPicker } from "@/components/patient/onboarding/overlays/school-picker";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
-import {
-  ONBOARDING_COPY,
-  ONBOARDING_SCHOOL_TYPES,
-} from "@/lib/constants/components/patient/onboarding";
+import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type {
   SchoolType,
   SchoolTypeStepProps,
 } from "@/lib/types/components/patient/onboarding";
-
-const SCHOOL_TYPE_ICONS = {
-  "high-school": School,
-  college: GraduationCap,
-} as const;
+import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
+import { cn } from "@/lib/utils";
 
 export function SchoolTypeStep({
   schoolType,
@@ -32,55 +24,56 @@ export function SchoolTypeStep({
   onSelectSchool,
   canContinue,
   onContinue,
+  screenClassName,
 }: SchoolTypeStepProps) {
   const hasSchool = Boolean(selectedSchoolId && selectedSchoolName);
 
+  const handleTypeSelect = (type: SchoolType) => {
+    onSchoolTypeChange(type);
+    onOpenPicker();
+  };
+
   return (
     <StepShell
-      title={ONBOARDING_COPY.schoolType.title}
+      title="High School or College?"
       subtitle={ONBOARDING_COPY.schoolType.subtitle}
-      centered
+      className={cn("onboarding-step", screenClassName)}
     >
       <OnboardingContinueForm
         canContinue={canContinue}
         onContinue={onContinue}
         listenForEnter
-        className="flex w-full flex-col gap-6"
       >
-        <div>
-          <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
-            {ONBOARDING_COPY.schoolType.toggleTitle}
-          </p>
-          <p className="text-muted-foreground mb-3 text-sm">
-            {ONBOARDING_COPY.schoolType.toggleSubtitle}
-          </p>
+        <div className="type-card-row">
           <div
-            className="bg-muted flex rounded-full p-1"
-            role="group"
-            aria-label="School level"
+            role="button"
+            tabIndex={0}
+            className={cn(
+              "type-card",
+              schoolType === "high-school" && "selected",
+            )}
+            data-type="high-school"
+            onClick={() => handleTypeSelect("high-school")}
+            onKeyDown={activateOnKeyboard(() =>
+              handleTypeSelect("high-school"),
+            )}
           >
-            {ONBOARDING_SCHOOL_TYPES.map(({ value, label }) => {
-              const Icon = SCHOOL_TYPE_ICONS[value];
-              const isActive = schoolType === value;
+            <div className="check-badge">✓</div>
+            <div className="icon">🏫</div>
+            <div className="label">HIGH SCHOOL</div>
+          </div>
 
-              return (
-                <Button
-                  key={value}
-                  type="button"
-                  variant={isActive ? "default" : "ghost"}
-                  className={`h-10 flex-1 rounded-full ${
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                  onClick={() => onSchoolTypeChange(value as SchoolType)}
-                  aria-pressed={isActive}
-                >
-                  <Icon className="size-4 shrink-0" aria-hidden="true" />
-                  <span className="truncate">{label}</span>
-                </Button>
-              );
-            })}
+          <div
+            role="button"
+            tabIndex={0}
+            className={cn("type-card", schoolType === "college" && "selected")}
+            data-type="college"
+            onClick={() => handleTypeSelect("college")}
+            onKeyDown={activateOnKeyboard(() => handleTypeSelect("college"))}
+          >
+            <div className="check-badge">✓</div>
+            <div className="icon">🎓</div>
+            <div className="label">COLLEGE</div>
           </div>
         </div>
 
@@ -91,15 +84,7 @@ export function SchoolTypeStep({
             schoolType={schoolType}
             onChangeSchool={onOpenPicker}
           />
-        ) : (
-          <Button
-            type="button"
-            className="h-12 w-full rounded-full text-base font-semibold"
-            onClick={onOpenPicker}
-          >
-            {ONBOARDING_COPY.schoolType.pickerButton}
-          </Button>
-        )}
+        ) : null}
 
         <SchoolPicker
           open={pickerOpen}

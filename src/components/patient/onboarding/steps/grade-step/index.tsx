@@ -1,12 +1,11 @@
 "use client";
 
-import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type { GradeStepProps } from "@/lib/types/components/patient/onboarding";
 import { formatStudentClassSummary } from "@/lib/utils/patient/onboarding-class";
 import { getFilteredGradeOptions } from "@/lib/utils/patient/get-grade-options";
-import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
+import { cn } from "@/lib/utils";
 
 export function GradeStep({
   schoolType,
@@ -17,6 +16,7 @@ export function GradeStep({
   onGradeChange,
   canContinue,
   onContinue,
+  screenClassName,
 }: GradeStepProps) {
   const gradeOptions = getFilteredGradeOptions({
     schoolType,
@@ -51,58 +51,66 @@ export function GradeStep({
       schoolName,
     });
 
+  const typeLabel = schoolType === "high-school" ? "High School" : "College";
+  const badgeLabel = schoolName.trim().charAt(0).toUpperCase();
+
   return (
-    <StepShell title={title} subtitle={subtitle} centered>
-      <OnboardingContinueForm
-        canContinue={canContinue}
-        onContinue={onContinue}
-        listenForEnter
-        className="flex w-full flex-col gap-5"
-      >
-        <p className="text-muted-foreground text-left text-xs font-semibold tracking-wide uppercase">
-          {sectionLabel}
-        </p>
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {gradeOptions.map((option) => {
-            const isActive = gradeShort === option.short;
-
-            return (
-              <div
-                key={option.label}
-                role="button"
-                tabIndex={0}
-                aria-pressed={isActive}
-                onClick={() =>
-                  onGradeChange({
-                    short: option.short,
-                    yearsRemaining: option.yearsRemaining,
-                  })
-                }
-                onKeyDown={activateOnKeyboard(() =>
-                  onGradeChange({
-                    short: option.short,
-                    yearsRemaining: option.yearsRemaining,
-                  }),
-                )}
-                className={`border-border hover:border-primary hover:bg-accent flex min-h-18 cursor-pointer items-center rounded-2xl border-2 px-4 py-3 text-left transition-colors ${
-                  isActive ? "border-primary bg-accent" : "bg-card"
-                }`}
-              >
-                <span className="text-foreground text-sm font-semibold sm:text-base">
-                  {option.label}
-                </span>
-              </div>
-            );
-          })}
+    <OnboardingContinueForm
+      canContinue={canContinue}
+      onContinue={onContinue}
+      listenForEnter
+      className={cn("screen onboarding-step", screenClassName)}
+    >
+      {schoolName ? (
+        <div className={cn("school-context-pill", "show")}>
+          <div className="mini-badge">{badgeLabel}</div>
+          <div className="txt">
+            {schoolName} <span>· {typeLabel}</span>
+          </div>
         </div>
+      ) : null}
 
-        {classSummary ? (
-          <output className="border-success/40 bg-success/10 text-success block w-full rounded-2xl border px-4 py-3 text-center text-sm leading-snug font-semibold text-balance sm:text-base">
-            {classSummary}
-          </output>
-        ) : null}
-      </OnboardingContinueForm>
-    </StepShell>
+      <h1 className="screen-title" id="gradeScreenTitle">
+        {title}
+      </h1>
+      <p className="screen-sub" id="gradeScreenSub">
+        {subtitle}
+      </p>
+
+      <div className="section-label">
+        <span id="gradeSectionLabel">{sectionLabel}</span>
+        <span
+          className={cn("result-pill", classSummary && "show")}
+          id="resultPill"
+        >
+          {classSummary ?? ""}
+        </span>
+      </div>
+
+      <div className="grade-grid" id="gradeGrid">
+        {gradeOptions.map((option) => {
+          const isSelected = gradeShort === option.short;
+
+          return (
+            <button
+              key={option.label}
+              type="button"
+              className={cn("grade-pill", isSelected && "selected")}
+              data-years={option.yearsRemaining}
+              data-short={option.short}
+              aria-pressed={isSelected}
+              onClick={() =>
+                onGradeChange({
+                  short: option.short,
+                  yearsRemaining: option.yearsRemaining,
+                })
+              }
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </OnboardingContinueForm>
   );
 }

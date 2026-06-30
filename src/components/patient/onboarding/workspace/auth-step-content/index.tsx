@@ -65,6 +65,7 @@ function renderAuthStep(
       <VerifyStep
         contactValue={contactValue}
         otp={props.otp}
+        verifyFlow={props.verifyFlow}
         onOtpChange={props.onOtpChange}
         canContinue={props.canContinue}
         onContinue={props.onContinue}
@@ -83,6 +84,7 @@ function renderAuthStep(
     [ONBOARDING_SCREENS.SIGN_IN]: () => (
       <SignInStep
         nickname={props.draft.nickname}
+        contactValue={contactValue}
         password={props.signInPassword}
         validationState={props.fieldValidation.password}
         onPasswordChange={props.onSignInPasswordChange}
@@ -103,6 +105,7 @@ function renderAuthStep(
 
     [ONBOARDING_SCREENS.NEW_PASSWORD]: () => (
       <NewPasswordStep
+        contactValue={contactValue}
         password={props.draft.password}
         confirmPassword={props.draft.confirmPassword}
         fieldValidation={props.fieldValidation}
@@ -126,7 +129,7 @@ export function OnboardingAuthStepContent(props: OnboardingStepContentProps) {
       {renderAuthStep(props.screen, props)}
       {props.policySheet ? (
         <PolicySheet
-          open={Boolean(props.policySheet)}
+          open
           onOpenChange={(open) => {
             if (!open) {
               props.onClosePolicySheet();

@@ -18,8 +18,6 @@ const STATIC_BACK_NAV: Partial<Record<OnboardingScreen, OnboardingScreen>> = {
 
   [ONBOARDING_SCREENS.PROFILE_PHOTO]: ONBOARDING_SCREENS.VERIFY,
 
-  [ONBOARDING_SCREENS.SCHOOL_TYPE]: ONBOARDING_SCREENS.PROFILE_PHOTO,
-
   [ONBOARDING_SCREENS.PROGRAMME]: ONBOARDING_SCREENS.SCHOOL_TYPE,
 
   [ONBOARDING_SCREENS.GRADE]: ONBOARDING_SCREENS.PROGRAMME,
@@ -28,9 +26,15 @@ const STATIC_BACK_NAV: Partial<Record<OnboardingScreen, OnboardingScreen>> = {
 const VERIFY_BACK_NAV: Record<AuthPath, OnboardingScreen> = {
   signup: ONBOARDING_SCREENS.CREATE_ACCOUNT,
 
-  signin: ONBOARDING_SCREENS.CREATE_ACCOUNT,
+  signin: ONBOARDING_SCREENS.SIGN_IN,
 
-  recovery: ONBOARDING_SCREENS.FORGOT_PASSWORD,
+  recovery: ONBOARDING_SCREENS.SIGN_IN,
+};
+
+const SCHOOL_TYPE_BACK_NAV: Record<AuthPath, OnboardingScreen> = {
+  signup: ONBOARDING_SCREENS.PROFILE_PHOTO,
+  signin: ONBOARDING_SCREENS.SIGN_IN,
+  recovery: ONBOARDING_SCREENS.SIGN_IN,
 };
 
 export function getPreviousScreen(params: {
@@ -42,6 +46,10 @@ export function getPreviousScreen(params: {
 
   if (screen === ONBOARDING_SCREENS.VERIFY) {
     return VERIFY_BACK_NAV[authPath];
+  }
+
+  if (screen === ONBOARDING_SCREENS.SCHOOL_TYPE) {
+    return SCHOOL_TYPE_BACK_NAV[authPath];
   }
 
   return STATIC_BACK_NAV[screen] ?? null;

@@ -3,6 +3,7 @@
 import { useCallback, useEffect } from "react";
 import type { Route } from "next";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useHostToast } from "@/hooks/components/patient/onboarding/use-host-toast";
 import {
   ONBOARDING_DEMO_OTP,
   ONBOARDING_SCREENS,
@@ -30,6 +31,7 @@ export function useOnboardingWizard() {
   const searchParams = useSearchParams();
   const state = useOnboardingWizardState();
   const policySheets = usePolicySheets();
+  const hostToast = useHostToast();
   const {
     screen,
     setScreen,
@@ -94,6 +96,7 @@ export function useOnboardingWizard() {
     setSignInPassword,
     setOtp,
     router,
+    showHostToast: hostToast.showToast,
   });
 
   const goBack = useCallback(() => {
@@ -195,5 +198,8 @@ export function useOnboardingWizard() {
     selectedSchoolLogo: draft.schoolLogo,
     ...policySheets,
     handleChoiceContinue,
+    hostToastMessage: hostToast.message,
+    hostToastVisible: hostToast.visible,
+    showHostToast: hostToast.showToast,
   };
 }

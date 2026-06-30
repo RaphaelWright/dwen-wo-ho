@@ -1,5 +1,7 @@
 import type {
   AuthFooterStepLabel,
+  ContactMode,
+  HomeProfilePreview,
   OnboardingDraft,
   OnboardingFooterStepLabel,
   OnboardingPhase,
@@ -10,6 +12,7 @@ import {
   ONBOARDING_DOB_DEFAULT_YEAR,
   ONBOARDING_FOOTER_STEP_BY_SCREEN,
   ONBOARDING_FOOTER_STEP_LABELS,
+  ONBOARDING_INITIAL_DRAFT,
   ONBOARDING_SCREENS,
   AUTH_FOOTER_STEP_LABELS,
 } from "@/lib/constants/components/patient/onboarding";
@@ -37,15 +40,11 @@ export function getOnboardingCompletedSteps(
   draft: OnboardingDraft,
 ): OnboardingFooterStepLabel[] {
   const completed: OnboardingFooterStepLabel[] = [];
-  if (draft.profilePhotoUrl) {
-    completed.push("Profile");
-  }
-  if (
-    draft.schoolId &&
-    draft.schoolName &&
-    (draft.programme.trim() || draft.programmeTags.length > 0)
-  ) {
+  if (draft.schoolId && draft.schoolName) {
     completed.push("Campus");
+  }
+  if (draft.programme.trim() || draft.programmeTags.length > 0) {
+    completed.push("Programme");
   }
   if (draft.gradeShort) {
     completed.push("Class");
@@ -97,4 +96,43 @@ export function usesFooterContinue(screen: OnboardingScreen): boolean {
     screen !== ONBOARDING_SCREENS.CONTACT &&
     screen !== ONBOARDING_SCREENS.CHOICE
   );
+}
+
+export function buildHomeProfilePreview(
+  draft: OnboardingDraft,
+  contactMode: ContactMode,
+): HomeProfilePreview {
+  const referenceYear = new Date().getFullYear();
+
+  return {
+    nickname: draft.nickname,
+    fullName: draft.fullName,
+    profilePhotoUrl: draft.profilePhotoUrl,
+    gender: draft.gender,
+    phone: draft.phone,
+    email: draft.email,
+    birthYear: draft.birthYear,
+    gradeShort: draft.gradeShort,
+    graduationYear: draft.gradeShort
+      ? computeGraduationYear(draft.gradeYearsRemaining, referenceYear)
+      : null,
+    programme: draft.programme,
+    schoolName: draft.schoolName,
+    contactMode,
+  };
+}
+
+export function mergeStoredOnboardingDraft(
+  patch: Partial<OnboardingDraft>,
+): OnboardingDraft {
+  return syncDraftDerivedFields({
+    ...ONBOARDING_INITIAL_DRAFT,
+    ...patch,
+  } as OnboardingDraft);
+}
+
+export function hasCampusOnboardingData(
+  draft: Partial<OnboardingDraft>,
+): boolean {
+  return Boolean(draft.schoolName?.trim() || draft.school?.trim());
 }

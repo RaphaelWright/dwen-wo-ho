@@ -1,10 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { SchoolPickerCardProps } from "@/lib/types/components/patient/onboarding";
-import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
+
+function formatLockedInCount(count: number): string {
+  if (count >= 1000) {
+    return `${Math.round(count / 1000)}K`;
+  }
+  return String(count);
+}
 
 export function SchoolPickerCard({
   id,
@@ -13,10 +18,16 @@ export function SchoolPickerCard({
   nickname,
   motto,
   studentCount,
+  animationDelay = 0,
   onSelect,
 }: SchoolPickerCardProps) {
-  const nicknames = nickname ? [nickname, name] : [name];
+  const nicknames = nickname
+    ? nickname.split(",").map((part) => part.trim())
+    : [name];
   const [nicknameIndex, setNicknameIndex] = useState(0);
+  const contentDelay = animationDelay + 0.22;
+  const displayNickname = nicknames[nicknameIndex] ?? name;
+  const mottoLine = motto ? `${motto}` : "";
 
   useEffect(() => {
     if (nicknames.length <= 1) {
@@ -32,51 +43,46 @@ export function SchoolPickerCard({
 
     const timer = window.setInterval(() => {
       setNicknameIndex((current) => (current + 1) % nicknames.length);
-    }, 2800);
+    }, 5000);
 
     return () => window.clearInterval(timer);
   }, [nicknames.length]);
-
-  const displayNickname = nicknames[nicknameIndex] ?? name;
-  const lockedInLabel = `${studentCount.toLocaleString()} ${ONBOARDING_COPY.schoolType.lockedInSuffix}`;
 
   return (
     <div
       role="button"
       tabIndex={0}
       id={id}
+      className="school-card"
+      style={{ animationDelay: `${animationDelay}s` }}
       onClick={onSelect}
       onKeyDown={activateOnKeyboard(onSelect)}
-      className="border-border bg-card hover:border-primary hover:bg-accent group relative flex min-h-44 cursor-pointer flex-col overflow-hidden rounded-2xl border-2 transition-colors"
     >
-      <div className="relative h-28 w-full overflow-hidden bg-black/20">
-        {logo ? (
-          <Image
-            src={logo}
-            alt=""
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, 240px"
-          />
-        ) : (
-          <div className="bg-primary/20 flex h-full items-center justify-center text-2xl font-bold">
-            {name.charAt(0)}
-          </div>
-        )}
+      <div
+        className="logo-bg"
+        style={logo ? { backgroundImage: `url('${logo}')` } : undefined}
+      />
+      <div className="shade" />
+      <div
+        className="lockedin-pill"
+        style={{ animationDelay: `${contentDelay}s` }}
+      >
+        <span className="star">⭐</span>
+        <span className="count">{formatLockedInCount(studentCount)}</span>{" "}
+        Locked In
       </div>
-      <div className="flex flex-1 flex-col gap-1 p-3 text-left">
-        <p className="text-primary text-xs font-semibold tracking-wide uppercase">
-          {displayNickname}
-        </p>
-        <p className="text-foreground line-clamp-1 text-sm font-semibold">
-          {name}
-        </p>
-        {motto ? (
-          <p className="text-muted-foreground line-clamp-2 text-xs">{motto}</p>
-        ) : null}
-        <p className="text-success mt-auto text-xs font-semibold">
-          {lockedInLabel}
-        </p>
+      <div
+        className="school-nick-wrap"
+        style={{ animationDelay: `${contentDelay}s` }}
+      >
+        <div className="school-nick">{displayNickname}</div>
+      </div>
+      <div
+        className="school-card-content"
+        style={{ animationDelay: `${contentDelay}s` }}
+      >
+        <div className="school-fullname">{name}</div>
+        {mottoLine ? <div className="school-motto">{mottoLine}</div> : null}
       </div>
     </div>
   );

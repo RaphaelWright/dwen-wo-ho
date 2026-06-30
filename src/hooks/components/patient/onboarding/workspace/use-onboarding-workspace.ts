@@ -2,8 +2,10 @@
 
 import { useOnboardingWizard } from "@/hooks/components/patient/onboarding/wizard/use-onboarding-wizard";
 import {
+  AUTH_FOOTER_STEP_LABELS,
   ONBOARDING_COPY,
   ONBOARDING_SCREENS,
+  RECOVERY_FOOTER_STEP_LABELS,
 } from "@/lib/constants/components/patient/onboarding";
 import type { OnboardingScreen } from "@/lib/types/components/patient/onboarding";
 import {
@@ -14,21 +16,24 @@ import {
 } from "@/lib/utils/patient/onboarding-validation";
 import { isOnboardingScreenValid } from "@/lib/utils/patient/onboarding-screen-validation";
 
-const AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+const SIGNUP_AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,
+]);
+
+const RECOVERY_AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+  ONBOARDING_SCREENS.VERIFY,
+  ONBOARDING_SCREENS.NEW_PASSWORD,
 ]);
 
 const AUTH_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,
-  ONBOARDING_SCREENS.SIGN_IN,
-  ONBOARDING_SCREENS.FORGOT_PASSWORD,
+  ONBOARDING_SCREENS.PROFILE_PHOTO,
   ONBOARDING_SCREENS.NEW_PASSWORD,
 ]);
 
 const ONBOARDING_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
-  ONBOARDING_SCREENS.PROFILE_PHOTO,
   ONBOARDING_SCREENS.SCHOOL_TYPE,
   ONBOARDING_SCREENS.PROGRAMME,
   ONBOARDING_SCREENS.GRADE,
@@ -39,6 +44,7 @@ export function useOnboardingWorkspace() {
   const {
     screen,
     contactMode,
+    verifyFlow,
     otp,
     draft,
     signInPassword,
@@ -55,7 +61,15 @@ export function useOnboardingWorkspace() {
     contactMode,
   );
   const showAuthFooter = AUTH_FOOTER_SCREENS.has(screen);
-  const showAuthStepper = AUTH_STEPPER_SCREENS.has(screen);
+  const showAuthStepper =
+    verifyFlow === "recovery"
+      ? RECOVERY_AUTH_STEPPER_SCREENS.has(screen)
+      : SIGNUP_AUTH_STEPPER_SCREENS.has(screen);
+  const authStepperLabels =
+    verifyFlow === "recovery"
+      ? RECOVERY_FOOTER_STEP_LABELS
+      : AUTH_FOOTER_STEP_LABELS;
+  const hideAuthFooterNext = screen === ONBOARDING_SCREENS.VERIFY;
   const showOnboardingFooter = ONBOARDING_FOOTER_SCREENS.has(screen);
   const authStepLabel = getAuthFooterStepLabel(screen);
   const onboardingStepLabel = getOnboardingFooterStepLabel(screen);
@@ -70,15 +84,11 @@ export function useOnboardingWorkspace() {
         ? ONBOARDING_COPY.signIn.continue
         : screen === ONBOARDING_SCREENS.NEW_PASSWORD
           ? ONBOARDING_COPY.newPassword.continue
-          : screen === ONBOARDING_SCREENS.FORGOT_PASSWORD
-            ? ONBOARDING_COPY.verify.continue
-            : ONBOARDING_COPY.contact.continue;
+          : "Next";
 
   const backDisabled =
     screen === ONBOARDING_SCREENS.CHOICE ||
-    screen === ONBOARDING_SCREENS.CONTACT ||
-    screen === ONBOARDING_SCREENS.PROFILE_PHOTO ||
-    screen === ONBOARDING_SCREENS.SCHOOL_TYPE;
+    screen === ONBOARDING_SCREENS.CONTACT;
 
   const handleNext = () => {
     if (!canAdvance) {
@@ -120,6 +130,8 @@ export function useOnboardingWorkspace() {
     canAdvance,
     showAuthFooter,
     showAuthStepper,
+    authStepperLabels,
+    hideAuthFooterNext,
     showOnboardingFooter,
     showFooterContinue: usesFooterContinue(screen),
     authStepLabel,

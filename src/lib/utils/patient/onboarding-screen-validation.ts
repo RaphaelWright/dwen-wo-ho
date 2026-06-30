@@ -6,13 +6,13 @@ import type {
   OnboardingScreen,
 } from "@/lib/types/components/patient/onboarding";
 import { ONBOARDING_SCREENS } from "@/lib/constants/components/patient/onboarding";
-import { evaluatePasswordStrength } from "@/lib/utils/shared/password-strength";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isOnboardingPasswordValid(password: string): boolean {
-  const { requirements } = evaluatePasswordStrength(password);
-  return Object.values(requirements).every(Boolean);
+  return (
+    password.length >= 6 && /[A-Za-z]/.test(password) && /\d/.test(password)
+  );
 }
 
 function validatePhone(value: string): boolean {
@@ -71,14 +71,12 @@ const SCREEN_VALIDATORS: Record<
       : validateEmail(draft.email),
   [ONBOARDING_SCREENS.CREATE_ACCOUNT]: ({ draft }) =>
     draft.firstName.trim().length > 0 &&
-    draft.lastName.trim().length > 0 &&
     draft.nickname.trim().length > 0 &&
     Boolean(draft.gender) &&
     Boolean(draft.birthMonth) &&
     Boolean(draft.birthDay) &&
     Boolean(draft.birthYear) &&
-    isOnboardingPasswordValid(draft.password) &&
-    draft.confirmPassword === draft.password,
+    isOnboardingPasswordValid(draft.password),
   [ONBOARDING_SCREENS.VERIFY]: ({ otp }) => otp.length === 6,
   [ONBOARDING_SCREENS.PROFILE_PHOTO]: ({ draft }) =>
     Boolean(draft.profilePhotoUrl),

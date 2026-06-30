@@ -1,98 +1,87 @@
 "use client";
 
-import { Check, ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   ONBOARDING_COPY,
   ONBOARDING_REFERRAL_INFLUENCERS,
 } from "@/lib/constants/components/patient/onboarding";
 import type { OnboardingReferralPickerProps } from "@/lib/types/components/patient/onboarding";
+import { cn } from "@/lib/utils";
 
 export function OnboardingReferralPicker({
   referralHandle,
   onReferralChange,
 }: OnboardingReferralPickerProps) {
-  const hasReferral = Boolean(referralHandle);
-  const influencers =
-    referralHandle &&
-    !ONBOARDING_REFERRAL_INFLUENCERS.some(
-      (item) => item.handle === referralHandle,
-    )
-      ? [
-          { handle: referralHandle, label: referralHandle },
-          ...ONBOARDING_REFERRAL_INFLUENCERS,
-        ]
-      : ONBOARDING_REFERRAL_INFLUENCERS;
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+  const handle =
+    referralHandle ?? ONBOARDING_REFERRAL_INFLUENCERS[0]?.handle ?? "Setornam";
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [open]);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
+    <div className="referral-picker" ref={rootRef}>
+      <button
+        className="referral-pill"
         type="button"
-        className="border-border bg-muted/50 text-foreground hover:bg-accent hover:text-accent-foreground inline-flex max-w-full min-w-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors sm:gap-1.5 sm:px-4 sm:py-2 sm:text-sm"
-        aria-label={
-          hasReferral
-            ? `${ONBOARDING_COPY.referralPrefix} @${referralHandle}. ${ONBOARDING_COPY.referralPickerLabel}`
-            : `${ONBOARDING_COPY.referralOnly}. ${ONBOARDING_COPY.referralPickerLabel}`
-        }
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-label={ONBOARDING_COPY.referralPickerLabel}
+        onClick={() => setOpen((current) => !current)}
       >
-        {hasReferral ? (
-          <>
-            <span className="text-muted-foreground shrink-0">
-              {ONBOARDING_COPY.referralPrefix}
-            </span>
-            <span className="text-primary min-w-0 truncate font-semibold">
-              @{referralHandle}
-            </span>
-          </>
-        ) : (
-          <span className="truncate font-medium">
-            {ONBOARDING_COPY.referralOnly}
-          </span>
-        )}
-        <ChevronDown
-          className="text-muted-foreground size-3.5 shrink-0 sm:size-4"
-          aria-hidden="true"
-        />
-      </DropdownMenuTrigger>
+        <span className="sun">☀️</span>
+        {ONBOARDING_COPY.referralPrefix}{" "}
+        <span className="handle">@{handle}</span> 🧑‍🎓
+      </button>
 
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>
-          {ONBOARDING_COPY.referralPickerLabel}
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => onReferralChange(null)}
-          className="justify-between"
+      <div
+        className={cn("referral-picker-menu", open && "open")}
+        id={listId}
+        role="listbox"
+        aria-label={ONBOARDING_COPY.referralPickerLabel}
+      >
+        <button
+          className="referral-picker-option"
+          type="button"
+          role="option"
+          aria-selected={referralHandle === null}
+          onClick={() => {
+            onReferralChange(null);
+            setOpen(false);
+          }}
         >
           {ONBOARDING_COPY.referralNone}
-          {!hasReferral ? (
-            <Check className="text-primary size-4" aria-hidden="true" />
-          ) : null}
-        </DropdownMenuItem>
-        {influencers.map((influencer) => {
-          const isSelected = referralHandle === influencer.handle;
-
-          return (
-            <DropdownMenuItem
-              key={influencer.handle}
-              onClick={() => onReferralChange(influencer.handle)}
-              className="justify-between"
-            >
-              @{influencer.label}
-              {isSelected ? (
-                <Check className="text-primary size-4" aria-hidden="true" />
-              ) : null}
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </button>
+        {ONBOARDING_REFERRAL_INFLUENCERS.map((influencer) => (
+          <button
+            key={influencer.handle}
+            className="referral-picker-option"
+            type="button"
+            role="option"
+            aria-selected={referralHandle === influencer.handle}
+            onClick={() => {
+              onReferralChange(influencer.handle);
+              setOpen(false);
+            }}
+          >
+            @{influencer.handle}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

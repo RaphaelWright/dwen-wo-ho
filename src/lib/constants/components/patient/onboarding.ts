@@ -58,15 +58,13 @@ export const ONBOARDING_CONTACT_MODE_OPTIONS = [
   { value: "email", label: "Email" },
 ] as const;
 
-export const AUTH_FOOTER_STEP_LABELS = [
-  "Create Account",
-  "Verify",
-  "Profile Photo",
-] as const;
+export const AUTH_FOOTER_STEP_LABELS = ["Create", "Verify"] as const;
+
+export const RECOVERY_FOOTER_STEP_LABELS = ["Verify", "New Password"] as const;
 
 export const ONBOARDING_FOOTER_STEP_LABELS = [
-  "Profile",
   "Campus",
+  "Programme",
   "Class",
 ] as const;
 
@@ -76,12 +74,12 @@ export const AUTH_FOOTER_STEP_BY_SCREEN: Record<
 > = {
   choice: null,
   contact: null,
-  createAccount: "Create Account",
+  createAccount: "Create",
   verify: "Verify",
   profilePhoto: null,
   signIn: null,
   forgotPassword: null,
-  newPassword: null,
+  newPassword: "New Password",
   schoolType: null,
   programme: null,
   grade: null,
@@ -95,12 +93,12 @@ export const ONBOARDING_FOOTER_STEP_BY_SCREEN: Record<
   contact: null,
   createAccount: null,
   verify: null,
-  profilePhoto: "Profile",
+  profilePhoto: null,
   signIn: null,
   forgotPassword: null,
   newPassword: null,
   schoolType: "Campus",
-  programme: "Campus",
+  programme: "Programme",
   grade: "Class",
 };
 
@@ -154,8 +152,10 @@ export const ONBOARDING_COPY = {
     countryLabel: "Ghana",
     phoneBoxLabel: "Phone Number",
     emailBoxLabel: "Email Address",
-    outsideGhanaPrefix: "If you're outside Ghana, try ",
-    outsideGhanaLink: "JustGo Health (Canada/USA version)",
+    outsideGhanaHelper:
+      "If you're outside Ghana, try JustGo Health (Canada/USA version)",
+    canadaReachOutPrefix: "Need support from outside Ghana? ",
+    canadaReachOutLink: "Reach out to JustGo Health Canada USA",
     termsPrefix: "By continuing, you agree to ",
     termsLink: "JustGo Health Terms & Conditions",
     continue: "Continue",
@@ -163,19 +163,51 @@ export const ONBOARDING_COPY = {
   policySheets: {
     canadaUs: {
       eyebrow: "Early Access",
-      title: "JustGo Health Canada and USA.",
+      titlePrefix: "JustGo Health ",
+      titleAccent: "Canada and USA.",
+      titleAccentClass: "accent-g" as const,
+      lede: [
+        {
+          text: "We're still early, and that's the best part. Join the early adopters shaping ",
+        },
+        { text: "Lock In 3.0", accent: "accent-p" as const },
+        {
+          text: " — the smartest version we've built yet. It's powered by the campus mental health programs that actually move the needle.",
+        },
+      ],
+      contactLabel: "Want in early? Reach out",
       scrollHint: "scroll to explore ↓",
     },
     terms: {
-      eyebrow: "Legal",
-      title: "Terms & Conditions",
-      scrollHint: "scroll to read ↓",
+      eyebrow: "Privacy",
+      titlePrefix: "The ",
+      titleAccent: "God's Eye",
+      titleAccentClass: "accent-p" as const,
+      titleSuffix: " Policy",
+      lede: [
+        { text: "Real talk: everything you drop here stays " },
+        { text: "between you and God.", accent: "accent-g" as const },
+        {
+          text: " Not us, not anybody. No one peeks at your stuff without your say-so. That's a promise, and here's how we keep it locked:",
+        },
+      ],
+      closing: [
+        { text: "When you're ready, " },
+        { text: "you", accent: "accent-g" as const },
+        {
+          text: " pick which doctor, hospital, or clinic gets to see what. And even then? We'll ask if you're sure. ",
+        },
+        { text: "Twice.", accent: "accent-p" as const },
+      ],
+      scrollHint: "scroll to explore ↓",
     },
     closeLabel: "Close",
   },
   verify: {
     title: "Enter Verification Code",
+    recoveryTitle: "Enter account recovery code",
     subtitlePrefix: "A 6-digit verification code was just sent to",
+    recoverySubtitlePrefix: "A 6-digit recovery code was just sent to",
     resendPrefix: "Resend code in",
     resendReady: "Resend code",
     continue: "Continue",
@@ -213,28 +245,28 @@ export const ONBOARDING_COPY = {
     photoAddedDescription: "Your photo is ready. Continue when you're set.",
   },
   signIn: {
-    greetingPrefix: "Hey",
-    subtitle: "Welcome back. Enter your password to continue.",
-    password: "Password",
-    passwordPlaceholder: "Your password",
-    forgotPassword: "Forgot password?",
-    continue: "Continue",
+    greetingPrefix: "Hello",
+    subtitlePrefix: "You're signing in with",
+    password: "PASSWORD",
+    passwordPlaceholder: "Enter your password",
+    forgotPassword: "Forgot your password?",
+    continue: "Sign In",
   },
   forgotPassword: {
     title: "Reset your password",
     subtitlePrefix: "We'll send a verification code to",
   },
   newPassword: {
-    title: "Create a new password",
-    subtitle: "Choose a strong password you'll remember.",
-    password: "New password",
-    confirmPassword: "Confirm new password",
+    title: "Create New Password",
+    subtitlePrefix: "Set new password for your account",
+    password: "PASSWORD",
+    confirmPassword: "CONFIRM PASSWORD",
     passwordMatch: "Passwords match",
     passwordMismatch: "Passwords do not match",
-    continue: "Continue",
+    continue: "Save password →",
   },
   schoolType: {
-    title: "Where do you study?",
+    title: "High School or College?",
     subtitle: "This helps us find your campus.",
     toggleTitle: "High School or College?",
     toggleSubtitle: "Pick your level so we can show the right schools.",
@@ -246,13 +278,13 @@ export const ONBOARDING_COPY = {
     clearSchool: "Clear selection",
     lockedInSuffix: "Locked In",
     modalTitle: "Select your school",
-    searchPlaceholder: "Search schools…",
+    searchPlaceholder: "Search schools...",
   },
   programme: {
-    title: "What's your programme?",
+    title: "What's Your Programme?",
     subtitle: "Pick the one you're studying — search if it's not in view.",
     label: "Programme",
-    placeholder: "Search programmes…",
+    placeholder: "Search programmes...",
     emptyResults: "No programmes found. Try a different search.",
     clearProgramme: "Clear selection",
   },
@@ -260,15 +292,16 @@ export const ONBOARDING_COPY = {
     hsTitle: "What Grade Are You In?",
     collegeTitle: "What Year Are You In?",
     hsSubtitle: "Choosing this tells us your class.",
-    collegeSubtitle: "Choosing this tells us your year of study.",
+    collegeSubtitle: "Choosing this tells us your class.",
     hsSectionLabel: "Current Grade",
     collegeSectionLabel: "Current Year",
-    submit: "Enter Lock In",
+    submit: "Finish",
   },
   homeModal: {
     title: "You're locked in",
     subtitle: "Here's how your campus will see you.",
-    cta: "Go to profile",
+    cta: "Edit Profile",
+    moreOptionsToast: "More options coming soon",
     dismiss: "Maybe later",
     ageLabel: "Age",
     genderLabel: "Gender",
@@ -277,7 +310,11 @@ export const ONBOARDING_COPY = {
     logout: "Logout",
   },
   toast: {
-    onboardingComplete: "You're locked in! Welcome to your campus.",
+    onboardingComplete: "Profile locked in 🎉",
+    schoolLockedIn: (schoolName: string) => `${schoolName} locked in 🎓`,
+    radioPlaying: "Playing Lock In Radio 🎵",
+    loggedOut: "Logged out 👋",
+    editProfileComingSoon: "Edit profile coming soon",
   },
   referralPrefix: "Locking in with",
   referralOnly: "Locking in",
@@ -414,23 +451,75 @@ export const ONBOARDING_COLLEGE_GRADE_OPTIONS = [
 
 export const ONBOARDING_POLICY_CANADA_SECTIONS = [
   {
-    title: "Built for North America",
-    body: "JustGo Health Canada and USA brings campus mental health support to students abroad — same belonging, same Lock In experience.",
+    imageSrc: "/onboarding/policy/canada-1.jpg",
+    imageAlt: "",
+    num: "Yale University",
+    heading: "Breaking the Barrier.",
+    headingAccent: "accent-p",
+    body: "Yale's program tears down the stigma that keeps students silent. We baked that same openness into how Lock In gets you talking before things pile up.",
   },
   {
-    title: "Early adopters welcome",
-    body: "Join the early adopters shaping Lock In 3.0 — powered by campus programs that actually move the needle.",
+    imageSrc: "/onboarding/policy/canada-2.jpg",
+    imageAlt: "",
+    num: "Harvard University",
+    heading: "We're All Human.",
+    headingAccent: "accent-g",
+    body: "Harvard's program is built on one truth: everybody struggles, nobody's alone. Lock In carries that energy, so reaching out feels normal, not heavy.",
+  },
+  {
+    imageSrc: "/onboarding/policy/canada-3.jpg",
+    imageAlt: "",
+    num: "MIT",
+    heading: "Active Minds.",
+    headingAccent: "accent-b",
+    body: "MIT's student-led Active Minds runs campus-wide wellness screening and peer outreach. That screening-first, peer-powered approach is the backbone of Lock In 3.0.",
   },
 ] as const;
 
+export const ONBOARDING_POLICY_CANADA_CONTACT = {
+  rows: [
+    { label: "Email", value: "earlyaccess@justgo.health" },
+    { label: "Call Dr. Obed", value: "+1 (303) 555-0142" },
+  ],
+} as const;
+
 export const ONBOARDING_POLICY_TERMS_SECTIONS = [
   {
-    title: "Your privacy matters",
-    body: "We protect your data and never share your mental health information without your consent.",
+    imageSrc: "/onboarding/policy/terms-1.jpg",
+    imageAlt: "",
+    num: "01",
+    headingPrefix: "No Google. No Apple. ",
+    heading: "No middleman.",
+    headingAccent: "accent-p",
+    body: "We don't trust the big tech guys with your business, so there's no \"sign in with Google or Apple\" here. Just you.",
   },
   {
-    title: "Community guidelines",
-    body: "Lock In is a safe space. Respect, kindness, and campus belonging guide everything we build.",
+    imageSrc: "/onboarding/policy/terms-2.jpg",
+    imageAlt: "",
+    num: "02",
+    headingPrefix: "Screenshots? ",
+    heading: "Blocked.",
+    headingAccent: "accent-g",
+    body: "Nobody screenshots this app. Not your nosy friend, not even you. It's airtight in here.",
+  },
+  {
+    imageSrc: "/onboarding/policy/terms-3.jpg",
+    imageAlt: "",
+    num: "03",
+    headingPrefix: "Built ",
+    heading: "dark",
+    headingSuffix: " on purpose.",
+    headingAccent: "accent-b",
+    body: "The whole app stays dark so nobody can read it over your shoulder. Privacy, even in public.",
+  },
+  {
+    imageSrc: "/onboarding/policy/terms-4.jpg",
+    imageAlt: "",
+    num: "04",
+    headingPrefix: "You're ",
+    heading: "Locked In.",
+    headingAccent: "accent-gold",
+    body: "This is LOCKED IN for real. You hold the keys, you call the shots. Only you.",
   },
 ] as const;
 

@@ -2,7 +2,6 @@
 
 import { PhoneField } from "@/components/patient/onboarding/steps/phone-field";
 import { EmailField } from "@/components/patient/onboarding/steps/email-field";
-import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type { ContactStepProps } from "@/lib/types/components/patient/onboarding";
@@ -36,44 +35,46 @@ export function ContactStep({
       subtitle={ONBOARDING_COPY.contact.entrySubtitle}
       centered
     >
-      <div className="flex w-full flex-col gap-5">
-        <OnboardingContinueForm canContinue={canSubmit} onContinue={onSubmit}>
-          {contactMode === "phone" ? (
-            <PhoneField
-              value={draft.phone}
-              validationState={validationState}
-              onChange={(phone) => onDraftChange({ phone })}
-              onBlur={() => onFieldBlur("phone")}
-              submitDisabled={!canSubmit}
-            />
-          ) : (
-            <EmailField
-              value={draft.email}
-              validationState={validationState}
-              onChange={(email) => onDraftChange({ email })}
-              onBlur={() => onFieldBlur("email")}
-              submitDisabled={!canSubmit}
-            />
-          )}
-        </OnboardingContinueForm>
+      {contactMode === "phone" ? (
+        <PhoneField
+          value={draft.phone}
+          validationState={validationState}
+          onChange={(phone) => onDraftChange({ phone })}
+          onBlur={() => onFieldBlur("phone")}
+          submitDisabled={!canSubmit}
+          onSubmit={onSubmit}
+        />
+      ) : (
+        <EmailField
+          value={draft.email}
+          validationState={validationState}
+          onChange={(email) => onDraftChange({ email })}
+          onBlur={() => onFieldBlur("email")}
+          submitDisabled={!canSubmit}
+          onSubmit={onSubmit}
+        />
+      )}
 
-        <p className="text-muted-foreground text-left text-sm leading-relaxed">
-          {ONBOARDING_COPY.contact.outsideGhanaPrefix}
+      <div className="contact-notes">
+        <p className="helper">{ONBOARDING_COPY.contact.outsideGhanaHelper}</p>
+
+        <p className="helper cta">
+          {ONBOARDING_COPY.contact.canadaReachOutPrefix}
           <button
             type="button"
+            className="highlight"
             onClick={onOpenCanadaSheet}
-            className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2"
           >
-            {ONBOARDING_COPY.contact.outsideGhanaLink}
+            {ONBOARDING_COPY.contact.canadaReachOutLink}
           </button>
         </p>
 
-        <p className="text-muted-foreground text-left text-sm leading-relaxed">
+        <p className="terms">
           {ONBOARDING_COPY.contact.termsPrefix}
           <button
             type="button"
+            className="highlight"
             onClick={onOpenTermsSheet}
-            className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2"
           >
             {ONBOARDING_COPY.contact.termsLink}
           </button>

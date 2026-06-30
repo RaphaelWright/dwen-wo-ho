@@ -11,15 +11,20 @@ import {
 import type {
   AuthPath,
   ContactMode,
+  HomeProfilePreview,
   OnboardingDraft,
   OnboardingScreen,
   VerifyFlow,
 } from "@/lib/types/components/patient/onboarding";
 import { patientOnboardingService } from "@/services/patient/onboarding/account-registry";
-import { syncDraftDerivedFields } from "@/lib/utils/patient/onboarding-validation";
-import { setShowHomeProfileModalFlag } from "@/lib/utils/patient/onboarding-session";
+import {
+  buildHomeProfilePreview,
+  hasCampusOnboardingData,
+  mergeStoredOnboardingDraft,
+  syncDraftDerivedFields,
+} from "@/lib/utils/patient/onboarding-validation";
 import { normalizeContactKey } from "@/lib/utils/patient/onboarding-format";
-import { computeGraduationYear } from "@/lib/utils/patient/onboarding-class";
+import { setShowHomeProfileModalFlag } from "@/lib/utils/patient/onboarding-session";
 
 interface WizardActionDeps {
   contactMode: ContactMode;
@@ -37,6 +42,7 @@ interface WizardActionDeps {
   setSignInPassword: (value: string) => void;
   setOtp: (value: string) => void;
   router: AppRouterInstance;
+  showHostToast: (message: string) => void;
 }
 
 export function useOnboardingWizardActions(deps: WizardActionDeps) {
@@ -56,7 +62,47 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
     setSignInPassword,
     setOtp,
     router,
+    showHostToast,
   } = deps;
+
+  const navigateToPatientWithHomeModal = useCallback(
+    (preview: HomeProfilePreview, toastMessage?: string) => {
+      setShowHomeProfileModalFlag(preview, { toastMessage });
+      router.push(ROUTES.patient.lockIn);
+    },
+    [router],
+  );
+
+  const openHomeOrOnboarding = useCallback(
+    (accountDraft: Partial<OnboardingDraft>) => {
+      const mergedDraft = mergeStoredOnboardingDraft({
+        ...accountDraft,
+        phone:
+          contactMode === "phone" ? contactValue : (accountDraft.phone ?? ""),
+        email:
+          contactMode === "email" ? contactValue : (accountDraft.email ?? ""),
+      });
+      updateDraft(mergedDraft);
+
+      if (hasCampusOnboardingData(mergedDraft)) {
+        navigateToPatientWithHomeModal(
+          buildHomeProfilePreview(mergedDraft, contactMode),
+        );
+        return;
+      }
+
+      setPhase("onboarding");
+      goToScreen(ONBOARDING_SCREENS.SCHOOL_TYPE);
+    },
+    [
+      contactMode,
+      contactValue,
+      goToScreen,
+      navigateToPatientWithHomeModal,
+      setPhase,
+      updateDraft,
+    ],
+  );
 
   const routeAfterContactSubmit = useCallback(() => {
     const account = patientOnboardingService.lookupContact(
@@ -66,7 +112,7 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
 
     if (account) {
       setActiveContactKey(account.contactKey);
-      updateDraft({ nickname: account.nickname });
+      updateDraft({ nickname: account.nickname, ...account.draft });
       setAuthPath("signin");
       goToScreen(ONBOARDING_SCREENS.SIGN_IN);
       return;
@@ -98,29 +144,21 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
     }
 
     setActiveContactKey(account.contactKey);
-
-    if (account.onboardingComplete) {
-      router.push(ROUTES.patient.lockIn);
-      return;
-    }
-
-    setPhase("onboarding");
-    goToScreen(ONBOARDING_SCREENS.SCHOOL_TYPE);
+    openHomeOrOnboarding(account.draft);
   }, [
     contactMode,
     contactValue,
-    goToScreen,
-    router,
+    openHomeOrOnboarding,
     setActiveContactKey,
-    setPhase,
     signInPassword,
   ]);
 
   const handleForgotPassword = useCallback(() => {
     setAuthPath("recovery");
     setVerifyFlow("recovery");
-    goToScreen(ONBOARDING_SCREENS.FORGOT_PASSWORD);
-  }, [goToScreen, setAuthPath, setVerifyFlow]);
+    setOtp("");
+    goToScreen(ONBOARDING_SCREENS.VERIFY);
+  }, [goToScreen, setAuthPath, setOtp, setVerifyFlow]);
 
   const handleStartRecovery = useCallback(() => {
     setOtp("");
@@ -134,13 +172,27 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
 
     patientOnboardingService.updatePassword(activeContactKey, draft.password);
     setSignInPassword("");
+
+    const account = patientOnboardingService.lookupContact(
+      contactMode,
+      contactValue,
+    );
+    if (!account) {
+      return;
+    }
+
     setAuthPath("signin");
-    goToScreen(ONBOARDING_SCREENS.SIGN_IN);
-    toast.success("Password updated. Sign in with your new password.");
+    openHomeOrOnboarding({
+      ...account.draft,
+      password: draft.password,
+      confirmPassword: draft.password,
+    });
   }, [
     activeContactKey,
+    contactMode,
+    contactValue,
     draft.password,
-    goToScreen,
+    openHomeOrOnboarding,
     setAuthPath,
     setSignInPassword,
   ]);
@@ -188,9 +240,10 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
         school: school.name,
         schoolLogo: school.logo ?? "",
       });
+      showHostToast(ONBOARDING_COPY.toast.schoolLockedIn(school.name));
       goToScreen(ONBOARDING_SCREENS.PROGRAMME);
     },
-    [goToScreen, updateDraft],
+    [goToScreen, showHostToast, updateDraft],
   );
 
   const handleSubmit = useCallback(() => {
@@ -206,26 +259,11 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
       contactValue,
       syncedDraft,
     );
-    const referenceYear = new Date().getFullYear();
-    setShowHomeProfileModalFlag({
-      nickname: syncedDraft.nickname,
-      fullName: syncedDraft.fullName,
-      profilePhotoUrl: syncedDraft.profilePhotoUrl,
-      gender: syncedDraft.gender,
-      phone: syncedDraft.phone,
-      email: syncedDraft.email,
-      birthYear: syncedDraft.birthYear,
-      gradeShort: syncedDraft.gradeShort,
-      graduationYear: syncedDraft.gradeShort
-        ? computeGraduationYear(syncedDraft.gradeYearsRemaining, referenceYear)
-        : null,
-      programme: syncedDraft.programme,
-      schoolName: syncedDraft.schoolName,
-      contactMode,
-    });
-    toast.success(ONBOARDING_COPY.toast.onboardingComplete);
-    router.push(ROUTES.patient.lockIn);
-  }, [contactMode, contactValue, draft, router]);
+    navigateToPatientWithHomeModal(
+      buildHomeProfilePreview(syncedDraft, contactMode),
+      ONBOARDING_COPY.toast.onboardingComplete,
+    );
+  }, [contactMode, contactValue, draft, navigateToPatientWithHomeModal]);
 
   return {
     routeAfterContactSubmit,

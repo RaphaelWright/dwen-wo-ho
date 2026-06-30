@@ -1,21 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
-import {
-  Field,
-  FieldContent,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type { SignInStepProps } from "@/lib/types/components/patient/onboarding";
 import { cn } from "@/lib/utils";
 
 export function SignInStep({
   nickname,
+  contactValue,
   password,
   validationState,
   onPasswordChange,
@@ -24,45 +18,75 @@ export function SignInStep({
   canContinue,
   onContinue,
 }: SignInStepProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <StepShell
-      title={`${ONBOARDING_COPY.signIn.greetingPrefix} ${nickname || "there"}`}
-      subtitle={ONBOARDING_COPY.signIn.subtitle}
+      title={
+        <>
+          {ONBOARDING_COPY.signIn.greetingPrefix},{" "}
+          <span id="signinNickname">{nickname || "there"}</span>
+        </>
+      }
+      subtitle={
+        <>
+          {ONBOARDING_COPY.signIn.subtitlePrefix}{" "}
+          <strong id="signinContact">{contactValue || "—"}</strong>
+        </>
+      }
+      centered
     >
       <OnboardingContinueForm canContinue={canContinue} onContinue={onContinue}>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="patient-sign-in-password">
-              {ONBOARDING_COPY.signIn.password}
-            </FieldLabel>
-            <FieldContent>
-              <Input
-                id="patient-sign-in-password"
-                type="password"
+        <div className="field-group">
+          <div
+            className={cn(
+              "input-box",
+              validationState === "valid" && "success",
+              validationState === "invalid" && "error",
+            )}
+            id="signinPasswordBox"
+          >
+            <div className="box-title">{ONBOARDING_COPY.signIn.password}</div>
+            <div className="input-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="signinPasswordInput"
                 autoComplete="current-password"
                 placeholder={ONBOARDING_COPY.signIn.passwordPlaceholder}
                 value={password}
                 onBlur={onBlur}
                 onChange={(event) => onPasswordChange(event.target.value)}
-                className={cn(
-                  validationState === "valid" &&
-                    "border-success ring-success/30 ring-1",
-                  validationState === "invalid" &&
-                    "border-destructive ring-destructive/30 ring-1",
-                )}
               />
-            </FieldContent>
-          </Field>
+              <button
+                className="show-toggle"
+                id="signinPasswordToggle"
+                type="button"
+                onClick={() => setShowPassword((current) => !current)}
+              >
+                {showPassword
+                  ? ONBOARDING_COPY.createAccount.hidePassword
+                  : ONBOARDING_COPY.createAccount.showPassword}
+              </button>
+            </div>
+          </div>
+        </div>
 
-          <Button
-            type="button"
-            variant="link"
-            className="text-primary h-auto justify-start p-0"
-            onClick={onForgotPassword}
-          >
-            {ONBOARDING_COPY.signIn.forgotPassword}
-          </Button>
-        </FieldGroup>
+        <button
+          className="signin-btn"
+          id="signinBtn"
+          type="button"
+          onClick={onContinue}
+        >
+          Sign In
+        </button>
+        <button
+          className="forgot-link"
+          id="forgotLink"
+          type="button"
+          onClick={onForgotPassword}
+        >
+          {ONBOARDING_COPY.signIn.forgotPassword}
+        </button>
       </OnboardingContinueForm>
     </StepShell>
   );

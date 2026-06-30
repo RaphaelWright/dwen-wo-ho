@@ -16,20 +16,17 @@ export function ForgotPasswordStep({
       subtitle={
         <>
           {ONBOARDING_COPY.forgotPassword.subtitlePrefix}{" "}
-          <strong className="text-foreground font-semibold">
-            {contactValue}
-          </strong>
+          <strong>{contactValue}</strong>
         </>
       }
+      centered
     >
       <OnboardingContinueForm
         canContinue={canContinue}
         onContinue={onContinue}
         listenForEnter
       >
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          Tap continue to receive a verification code.
-        </p>
+        <p className="sub">Tap continue to receive a verification code.</p>
       </OnboardingContinueForm>
     </StepShell>
   );

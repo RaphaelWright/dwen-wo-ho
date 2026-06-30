@@ -3,6 +3,7 @@ import type {
   AUTH_FOOTER_STEP_LABELS,
   ONBOARDING_FOOTER_STEP_LABELS,
   ONBOARDING_SCREENS,
+  RECOVERY_FOOTER_STEP_LABELS,
 } from "@/lib/constants/components/patient/onboarding";
 
 export type OnboardingScreen =
@@ -64,10 +65,23 @@ export interface PatientOnboardingLayoutProps {
 
 export interface OnboardingShellProps {
   children: ReactNode;
+  className?: string;
 }
 
 export interface OnboardingShellContentProps {
   children: ReactNode;
+}
+
+export type OnboardingBrandLogoPlacement =
+  | "photo-side"
+  | "header"
+  | "modal-header"
+  | "home-modal"
+  | "policy-sheet";
+
+export interface OnboardingBrandLogoProps {
+  placement?: OnboardingBrandLogoPlacement;
+  className?: string;
 }
 
 export interface OnboardingSocialProof {
@@ -100,7 +114,9 @@ export interface OnboardingReferralPickerProps {
 
 export type OnboardingHeaderProps = OnboardingReferralPickerProps;
 
-export type AuthFooterStepLabel = (typeof AUTH_FOOTER_STEP_LABELS)[number];
+export type AuthFooterStepLabel =
+  | (typeof AUTH_FOOTER_STEP_LABELS)[number]
+  | (typeof RECOVERY_FOOTER_STEP_LABELS)[number];
 
 export type OnboardingFooterStepLabel =
   (typeof ONBOARDING_FOOTER_STEP_LABELS)[number];
@@ -116,6 +132,8 @@ export interface OnboardingFooterBaseProps {
 export interface AuthFooterProps extends OnboardingFooterBaseProps {
   stepLabel: AuthFooterStepLabel;
   showStepper?: boolean;
+  stepLabels?: readonly string[];
+  hideNext?: boolean;
 }
 
 export interface OnboardingPhaseFooterProps extends OnboardingFooterBaseProps {
@@ -124,9 +142,10 @@ export interface OnboardingPhaseFooterProps extends OnboardingFooterBaseProps {
 }
 
 export interface StepShellProps {
-  title: string;
+  title: ReactNode;
   subtitle?: ReactNode;
   centered?: boolean;
+  className?: string;
   children: ReactNode;
 }
 
@@ -136,6 +155,7 @@ export interface PhoneFieldProps {
   onChange: (value: string) => void;
   onBlur: () => void;
   submitDisabled: boolean;
+  onSubmit: () => void;
 }
 
 export interface EmailFieldProps {
@@ -144,6 +164,7 @@ export interface EmailFieldProps {
   onChange: (value: string) => void;
   onBlur: () => void;
   submitDisabled: boolean;
+  onSubmit: () => void;
 }
 
 export interface ChoiceStepProps {
@@ -175,6 +196,7 @@ export interface CreateAccountStepProps extends OnboardingStepContinueProps {
 export interface VerifyStepProps extends OnboardingStepContinueProps {
   contactValue: string;
   otp: string;
+  verifyFlow: VerifyFlow;
   onOtpChange: (value: string) => void;
 }
 
@@ -185,6 +207,7 @@ export interface ProfilePhotoStepProps extends OnboardingStepContinueProps {
 
 export interface SignInStepProps extends OnboardingStepContinueProps {
   nickname: string;
+  contactValue: string;
   password: string;
   validationState: FieldValidationState;
   onPasswordChange: (value: string) => void;
@@ -197,6 +220,7 @@ export interface ForgotPasswordStepProps extends OnboardingStepContinueProps {
 }
 
 export interface NewPasswordStepProps extends OnboardingStepContinueProps {
+  contactValue: string;
   password: string;
   confirmPassword: string;
   fieldValidation: Record<FieldValidationKey, FieldValidationState>;
@@ -225,6 +249,7 @@ export interface SchoolTypeStepProps extends OnboardingStepContinueProps {
   selectedSchoolName: string;
   selectedSchoolLogo?: string;
   pickerOpen: boolean;
+  screenClassName?: string;
   onSchoolTypeChange: (type: SchoolType) => void;
   onOpenPicker: () => void;
   onPickerOpenChange: (open: boolean) => void;
@@ -279,6 +304,7 @@ export interface SchoolPickerCardProps {
   nickname?: string;
   motto?: string;
   studentCount: number;
+  animationDelay?: number;
   onSelect: () => void;
 }
 
@@ -291,7 +317,11 @@ export interface SchoolContextPillProps {
 
 export interface ProgrammeStepProps extends OnboardingStepContinueProps {
   programme: string;
+  schoolName: string;
+  schoolLogo: string;
+  schoolType: SchoolType;
   searchQuery: string;
+  screenClassName?: string;
   onSearchChange: (value: string) => void;
   onProgrammeSelect: (programme: {
     name: string;
@@ -306,7 +336,35 @@ export interface GradeStepProps extends OnboardingStepContinueProps {
   programme: string;
   schoolName: string;
   programmeDurationYears: number;
+  screenClassName?: string;
   onGradeChange: (grade: { short: string; yearsRemaining: number }) => void;
+}
+
+export type OnboardingPolicyAccent =
+  | "accent-p"
+  | "accent-g"
+  | "accent-b"
+  | "accent-gold";
+
+export interface OnboardingPolicyTextPart {
+  text: string;
+  accent?: OnboardingPolicyAccent;
+}
+
+export interface OnboardingPolicyFeatureSection {
+  imageSrc: string;
+  imageAlt: string;
+  num: string;
+  heading?: string;
+  headingPrefix?: string;
+  headingSuffix?: string;
+  headingAccent?: OnboardingPolicyAccent;
+  body: string;
+}
+
+export interface OnboardingPolicyContactRow {
+  label: string;
+  value: string;
 }
 
 export interface PolicySheetProps {
@@ -334,11 +392,20 @@ export interface HomeProfileModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   preview: HomeProfilePreview | null;
+  onGoToProfile?: () => void;
+  onLogout?: () => void;
+  onShowToast?: (message: string) => void;
+}
+
+export interface OnboardingHostToastProps {
+  message: string | null;
+  visible: boolean;
 }
 
 export interface OnboardingStepContentProps extends OnboardingStepContinueProps {
   screen: OnboardingScreen;
   contactMode: ContactMode;
+  verifyFlow: VerifyFlow;
   draft: OnboardingDraft;
   otp: string;
   signInPassword: string;
@@ -370,6 +437,7 @@ export interface OnboardingStepContentProps extends OnboardingStepContinueProps 
   onOpenCanadaSheet: () => void;
   onOpenTermsSheet: () => void;
   onClosePolicySheet: () => void;
+  screenClassName?: string;
 }
 
 export interface ContactFieldSubmitProps {

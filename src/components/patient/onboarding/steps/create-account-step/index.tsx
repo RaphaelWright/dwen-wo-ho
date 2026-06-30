@@ -1,25 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import PasswordMatchIndicator from "@/components/shared/password-match-indicator";
-import PasswordStrengthIndicator from "@/components/shared/password-strength-indicator";
 import { DobField } from "@/components/patient/onboarding/steps/dob-field";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
-import {
-  Field,
-  FieldContent,
-  FieldGroup,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field";
-import {
-  ONBOARDING_COPY,
-  ONBOARDING_GENDER_OPTIONS,
-} from "@/lib/constants/components/patient/onboarding";
+import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type {
   CreateAccountStepProps,
   GenderValue,
@@ -28,6 +13,25 @@ import {
   formatNickname,
   formatPersonName,
 } from "@/lib/utils/patient/onboarding-format";
+import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
+import { cn } from "@/lib/utils";
+
+function getPasswordChecklist(password: string) {
+  return {
+    length: password.length >= 6,
+    letter: /[A-Za-z]/.test(password),
+    number: /\d/.test(password),
+  };
+}
+
+function splitNameForDraft(name: string) {
+  const trimmed = name.trim();
+  const parts = trimmed.split(/\s+/).filter(Boolean);
+  const firstName = parts[0] ?? "";
+  const lastName = parts.slice(1).join(" ") || firstName;
+
+  return { firstName, lastName, fullName: trimmed };
+}
 
 export function CreateAccountStep({
   contactValue,
@@ -37,7 +41,14 @@ export function CreateAccountStep({
   onContinue,
 }: CreateAccountStepProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const passwordRules = getPasswordChecklist(draft.password);
+  const displayName =
+    draft.fullName.trim() || draft.firstName.trim() || draft.lastName.trim();
+
+  const handleNameChange = (value: string) => {
+    const formatted = formatPersonName(value);
+    onDraftChange(splitNameForDraft(formatted));
+  };
 
   return (
     <StepShell
@@ -45,65 +56,35 @@ export function CreateAccountStep({
       subtitle={
         <>
           {ONBOARDING_COPY.createAccount.subtitlePrefix}{" "}
-          <strong className="text-foreground font-semibold">
-            {contactValue}
-          </strong>{" "}
+          <strong>{contactValue}</strong>{" "}
           {ONBOARDING_COPY.createAccount.subtitleSuffix}
         </>
       }
+      centered
     >
       <OnboardingContinueForm canContinue={canContinue} onContinue={onContinue}>
-        <FieldGroup>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field>
-              <FieldLabel htmlFor="patient-first-name">
-                {ONBOARDING_COPY.createAccount.firstName}
-              </FieldLabel>
-              <FieldContent>
-                <Input
-                  id="patient-first-name"
-                  autoComplete="given-name"
-                  placeholder={
-                    ONBOARDING_COPY.createAccount.firstNamePlaceholder
-                  }
-                  value={draft.firstName}
-                  onChange={(event) =>
-                    onDraftChange({
-                      firstName: formatPersonName(event.target.value),
-                    })
-                  }
-                />
-              </FieldContent>
-            </Field>
-
-            <Field>
-              <FieldLabel htmlFor="patient-last-name">
-                {ONBOARDING_COPY.createAccount.lastName}
-              </FieldLabel>
-              <FieldContent>
-                <Input
-                  id="patient-last-name"
-                  autoComplete="family-name"
-                  placeholder={
-                    ONBOARDING_COPY.createAccount.lastNamePlaceholder
-                  }
-                  value={draft.lastName}
-                  onChange={(event) =>
-                    onDraftChange({
-                      lastName: formatPersonName(event.target.value),
-                    })
-                  }
-                />
-              </FieldContent>
-            </Field>
+        <div className="field-group">
+          <div className="input-box">
+            <div className="box-title">YOUR NAME</div>
+            <div className="input-wrap">
+              <input
+                type="text"
+                id="patient-name"
+                autoComplete="name"
+                placeholder="What's your name?"
+                value={displayName}
+                onChange={(event) => handleNameChange(event.target.value)}
+              />
+            </div>
           </div>
+        </div>
 
-          <Field>
-            <FieldLabel htmlFor="patient-nickname">
-              {ONBOARDING_COPY.createAccount.nickname}
-            </FieldLabel>
-            <FieldContent>
-              <Input
+        <div className="field-group">
+          <div className="input-box">
+            <div className="box-title">NICKNAME</div>
+            <div className="input-wrap">
+              <input
+                type="text"
                 id="patient-nickname"
                 autoComplete="nickname"
                 placeholder={ONBOARDING_COPY.createAccount.nicknamePlaceholder}
@@ -114,128 +95,103 @@ export function CreateAccountStep({
                   })
                 }
               />
-            </FieldContent>
-          </Field>
+            </div>
+          </div>
+        </div>
 
-          <Field>
-            <FieldTitle>{ONBOARDING_COPY.createAccount.gender}</FieldTitle>
-            <FieldContent>
-              <div className="flex gap-2" role="group" aria-label="Gender">
-                {ONBOARDING_GENDER_OPTIONS.map((option) => {
-                  const isActive = draft.gender === option.value;
+        <div className="field-group">
+          <div className="box-title" style={{ marginBottom: 10 }}>
+            {ONBOARDING_COPY.createAccount.gender}
+          </div>
+          <div className="gender-row" role="group" aria-label="Gender">
+            {(
+              [
+                { value: "male", label: "Male" },
+                { value: "female", label: "Female" },
+              ] as const
+            ).map((option) => {
+              const isSelected = draft.gender === option.value;
 
-                  return (
-                    <Button
-                      key={option.value}
-                      type="button"
-                      variant={isActive ? "default" : "outline"}
-                      className={`h-10 min-w-0 flex-1 gap-2 rounded-full ${
-                        isActive ? "bg-primary text-primary-foreground" : ""
-                      }`}
-                      aria-pressed={isActive}
-                      onClick={() =>
-                        onDraftChange({ gender: option.value as GenderValue })
-                      }
-                    >
-                      <Image
-                        src={option.iconSrc}
-                        alt=""
-                        width={20}
-                        height={20}
-                        className="size-5 shrink-0 object-contain"
-                      />
-                      {option.label}
-                    </Button>
-                  );
-                })}
-              </div>
-            </FieldContent>
-          </Field>
+              return (
+                <div
+                  key={option.value}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isSelected}
+                  className={cn("gender-pill", isSelected && "selected")}
+                  data-gender={option.label}
+                  onClick={() =>
+                    onDraftChange({ gender: option.value as GenderValue })
+                  }
+                  onKeyDown={activateOnKeyboard(() =>
+                    onDraftChange({ gender: option.value as GenderValue }),
+                  )}
+                >
+                  {option.label} <span className="check" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-          <DobField
-            birthMonth={draft.birthMonth}
-            birthDay={draft.birthDay}
-            birthYear={draft.birthYear}
-            onChange={onDraftChange}
-          />
+        <DobField
+          birthMonth={draft.birthMonth}
+          birthDay={draft.birthDay}
+          birthYear={draft.birthYear}
+          onChange={onDraftChange}
+        />
 
-          <Field>
-            <FieldLabel htmlFor="patient-password">
+        <div className="field-group">
+          <div className="input-box">
+            <div className="box-title">
               {ONBOARDING_COPY.createAccount.password}
-            </FieldLabel>
-            <FieldContent>
-              <div className="relative">
-                <Input
-                  id="patient-password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  placeholder={
-                    ONBOARDING_COPY.createAccount.passwordPlaceholder
-                  }
-                  value={draft.password}
-                  className="pr-16"
-                  onChange={(event) =>
-                    onDraftChange({ password: event.target.value })
-                  }
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="text-muted-foreground absolute top-1/2 right-1 h-8 -translate-y-1/2 px-3 text-xs font-semibold tracking-wide"
-                  onClick={() => setShowPassword((current) => !current)}
-                >
-                  {showPassword
-                    ? ONBOARDING_COPY.createAccount.hidePassword
-                    : ONBOARDING_COPY.createAccount.showPassword}
-                </Button>
-              </div>
-              {draft.password ? (
-                <PasswordStrengthIndicator password={draft.password} />
-              ) : null}
-            </FieldContent>
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="patient-confirm-password">
-              {ONBOARDING_COPY.createAccount.confirmPassword}
-            </FieldLabel>
-            <FieldContent>
-              <div className="relative">
-                <Input
-                  id="patient-confirm-password"
-                  type={showConfirmPassword ? "text" : "password"}
-                  autoComplete="new-password"
-                  placeholder={
-                    ONBOARDING_COPY.createAccount.confirmPasswordPlaceholder
-                  }
-                  value={draft.confirmPassword}
-                  className="pr-16"
-                  onChange={(event) =>
-                    onDraftChange({ confirmPassword: event.target.value })
-                  }
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="text-muted-foreground absolute top-1/2 right-1 h-8 -translate-y-1/2 px-3 text-xs font-semibold tracking-wide"
-                  onClick={() => setShowConfirmPassword((current) => !current)}
-                >
-                  {showConfirmPassword
-                    ? ONBOARDING_COPY.createAccount.hidePassword
-                    : ONBOARDING_COPY.createAccount.showPassword}
-                </Button>
-              </div>
-              {draft.confirmPassword ? (
-                <PasswordMatchIndicator
-                  password={draft.password}
-                  confirmPassword={draft.confirmPassword}
-                  matchLabel={ONBOARDING_COPY.createAccount.passwordMatch}
-                  mismatchLabel={ONBOARDING_COPY.createAccount.passwordMismatch}
-                />
-              ) : null}
-            </FieldContent>
-          </Field>
-        </FieldGroup>
+            </div>
+            <div className="input-wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="patient-password"
+                autoComplete="new-password"
+                placeholder={ONBOARDING_COPY.createAccount.passwordPlaceholder}
+                value={draft.password}
+                onChange={(event) =>
+                  onDraftChange({
+                    password: event.target.value,
+                    confirmPassword: event.target.value,
+                  })
+                }
+              />
+              <button
+                className="show-toggle"
+                type="button"
+                onClick={() => setShowPassword((current) => !current)}
+              >
+                {showPassword
+                  ? ONBOARDING_COPY.createAccount.hidePassword
+                  : ONBOARDING_COPY.createAccount.showPassword}
+              </button>
+            </div>
+          </div>
+          <ul className="pw-checklist">
+            <li
+              data-rule="length"
+              className={cn(passwordRules.length && "met")}
+            >
+              6+ characters
+            </li>
+            <li
+              data-rule="letter"
+              className={cn(passwordRules.letter && "met")}
+            >
+              One letter
+            </li>
+            <li
+              data-rule="number"
+              className={cn(passwordRules.number && "met")}
+            >
+              One number
+            </li>
+          </ul>
+        </div>
       </OnboardingContinueForm>
     </StepShell>
   );

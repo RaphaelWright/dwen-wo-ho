@@ -1,14 +1,12 @@
 "use client";
 
-import { Search, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Logo } from "@/components/shared/logo";
-import { AnimatedModalShell } from "@/components/overlays/shared/animated-modal-shell";
+import { useEffect, useState } from "react";
 import { SchoolPickerCard } from "@/components/patient/onboarding/overlays/school-picker/school-picker-card";
+import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 import { useSchoolPicker } from "@/hooks/components/patient/onboarding/school-picker/use-school-picker";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type { SchoolPickerProps } from "@/lib/types/components/patient/onboarding";
+import { cn } from "@/lib/utils";
 
 export function SchoolPicker({
   open,
@@ -20,73 +18,93 @@ export function SchoolPicker({
     schoolType,
     open,
   );
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setSearchOpen(false);
+      setSearchQuery("");
+    }
+  }, [open, setSearchQuery]);
+
+  const toggleSearch = () => {
+    setSearchOpen((current) => {
+      const next = !current;
+      if (!next) {
+        setSearchQuery("");
+      }
+      return next;
+    });
+  };
+
+  const modalTitle =
+    schoolType === "high-school"
+      ? "Select your high school"
+      : "Select your college";
+
+  if (!open) {
+    return null;
+  }
 
   return (
-    <AnimatedModalShell
-      isOpen={open}
-      onClose={() => onOpenChange(false)}
-      contentClassName="w-[min(88vw,56rem)] max-w-5xl"
-      panelClassName="bg-background text-foreground border-border max-h-[88vh] rounded-2xl border-2 shadow-2xl"
+    <div
+      className="modal-overlay"
+      id="schoolModalOverlay"
+      onClick={() => onOpenChange(false)}
     >
       <div
+        className="school-modal"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="school-picker-title"
-        className="flex max-h-[88vh] flex-col overflow-hidden"
+        aria-labelledby="modalTitle"
+        onClick={(event) => event.stopPropagation()}
       >
-        <div className="border-border flex items-center justify-between gap-3 border-b px-5 py-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <Logo
-              variant="auto"
-              withLink={false}
-              className="hidden h-8 w-auto sm:block"
-            />
-            <h2
-              id="school-picker-title"
-              className="font-heading text-foreground truncate text-lg font-semibold"
+        <div className="school-modal-header">
+          <div className="brand">
+            <OnboardingBrandLogo placement="modal-header" />
+          </div>
+          <h2 className="school-modal-title" id="modalTitle">
+            {modalTitle}
+          </h2>
+          <div className="search-row">
+            <div
+              className={cn("search-box-wrap", searchOpen && "open")}
+              id="searchBoxWrap"
             >
-              {ONBOARDING_COPY.schoolType.modalTitle}
-            </h2>
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="text-muted-foreground hover:bg-destructive/5 hover:text-destructive shrink-0"
-            onClick={() => onOpenChange(false)}
-            aria-label={ONBOARDING_COPY.policySheets.closeLabel}
-          >
-            <X className="size-5" aria-hidden="true" />
-          </Button>
-        </div>
-
-        <div className="border-border border-b px-5 py-4">
-          <div className="relative">
-            <Search
-              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
-              aria-hidden="true"
-            />
-            <Input
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder={ONBOARDING_COPY.schoolType.searchPlaceholder}
-              className="pl-10"
-            />
+              <div className="search-box">
+                <span>🔍</span>
+                <input
+                  type="text"
+                  id="schoolSearchInput"
+                  placeholder={ONBOARDING_COPY.schoolType.searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                />
+              </div>
+            </div>
+            <button
+              className={cn("search-toggle", searchOpen && "active")}
+              id="searchToggleBtn"
+              type="button"
+              onClick={toggleSearch}
+            >
+              🔍
+            </button>
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain p-5">
-          {isLoading ? (
-            <p className="text-muted-foreground text-center text-sm">
-              {ONBOARDING_COPY.schoolType.pickerLoading}
-            </p>
-          ) : schools.length === 0 ? (
-            <p className="text-muted-foreground text-center text-sm">
-              {ONBOARDING_COPY.schoolType.emptyResults}
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {schools.map((school) => (
+        <div className="school-grid-wrap">
+          <div className="school-grid" id="schoolGrid">
+            {isLoading ? (
+              <div className="school-empty">
+                {ONBOARDING_COPY.schoolType.pickerLoading}
+              </div>
+            ) : schools.length === 0 ? (
+              <div className="school-empty">
+                {ONBOARDING_COPY.schoolType.emptyResults}
+              </div>
+            ) : (
+              schools.map((school, index) => (
                 <SchoolPickerCard
                   key={String(school.id)}
                   id={`school-card-${school.id}`}
@@ -97,6 +115,7 @@ export function SchoolPicker({
                   studentCount={
                     school.totalPatients ?? school.studentCount ?? 0
                   }
+                  animationDelay={index * 0.04}
                   onSelect={() => {
                     onSelectSchool({
                       id: String(school.id),
@@ -106,11 +125,11 @@ export function SchoolPicker({
                     onOpenChange(false);
                   }}
                 />
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </AnimatedModalShell>
+    </div>
   );
 }

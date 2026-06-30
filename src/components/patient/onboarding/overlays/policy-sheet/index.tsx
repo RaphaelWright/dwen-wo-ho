@@ -1,91 +1,171 @@
 "use client";
 
-import { useCallback, useRef } from "react";
-import { X } from "lucide-react";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import { useCallback, useEffect, useId, useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 import {
   ONBOARDING_COPY,
+  ONBOARDING_POLICY_CANADA_CONTACT,
   ONBOARDING_POLICY_CANADA_SECTIONS,
   ONBOARDING_POLICY_TERMS_SECTIONS,
 } from "@/lib/constants/components/patient/onboarding";
-import type { PolicySheetProps } from "@/lib/types/components/patient/onboarding";
+import type {
+  OnboardingPolicyFeatureSection,
+  OnboardingPolicyTextPart,
+  PolicySheetProps,
+} from "@/lib/types/components/patient/onboarding";
+import { cn } from "@/lib/utils";
+
+function renderTextParts(
+  parts: readonly OnboardingPolicyTextPart[],
+): ReactNode {
+  return parts.map((part, index) =>
+    part.accent ? (
+      <span key={`${part.text}-${index}`} className={part.accent}>
+        {part.text}
+      </span>
+    ) : (
+      <span key={`${part.text}-${index}`}>{part.text}</span>
+    ),
+  );
+}
+
+function PolicyFeatureCard({
+  section,
+}: {
+  section: OnboardingPolicyFeatureSection;
+}) {
+  return (
+    <div className="policy-feature">
+      <div className="policy-photo">
+        {/* eslint-disable-next-line @next/next/no-img-element -- mock layout uses cover-fit editorial photos */}
+        <img src={section.imageSrc} alt={section.imageAlt} />
+      </div>
+      <div className="policy-text">
+        <p className="num">{section.num}</p>
+        <h3>
+          {section.headingPrefix}
+          {section.heading ? (
+            section.headingAccent ? (
+              <span className={section.headingAccent}>{section.heading}</span>
+            ) : (
+              section.heading
+            )
+          ) : null}
+          {section.headingSuffix}
+        </h3>
+        <p>{section.body}</p>
+      </div>
+    </div>
+  );
+}
 
 export function PolicySheet({ open, onOpenChange, variant }: PolicySheetProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const scrollHintId = useId();
+  const overlayId = variant === "canada-us" ? "overlay" : "overlay2";
+  const sheetDomId = variant === "canada-us" ? "sheet" : "sheet2";
+  const mounted = typeof document !== "undefined";
 
   const handleScroll = useCallback(() => {
-    const node = contentRef.current;
-    if (!node) {
+    const sheet = sheetRef.current;
+    if (!sheet) {
       return;
     }
-    const scrolled = (scrollRef.current?.scrollTop ?? 0) > 24;
-    node.dataset.expanded = scrolled ? "true" : "false";
+    sheet.classList.toggle("expanded", sheet.scrollTop > 24);
   }, []);
 
-  const copy =
-    variant === "canada-us"
-      ? ONBOARDING_COPY.policySheets.canadaUs
-      : ONBOARDING_COPY.policySheets.terms;
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
 
-  const sections =
-    variant === "canada-us"
-      ? ONBOARDING_POLICY_CANADA_SECTIONS
-      : ONBOARDING_POLICY_TERMS_SECTIONS;
+  const canadaCopy = ONBOARDING_COPY.policySheets.canadaUs;
+  const termsCopy = ONBOARDING_COPY.policySheets.terms;
 
-  return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent
-        ref={contentRef}
-        data-expanded="false"
-        className="bg-background text-foreground data-[expanded=false]:max-h-[88vh] data-[expanded=true]:h-dvh data-[expanded=true]:max-h-dvh data-[expanded=true]:rounded-none"
+  if (!open || !mounted) {
+    return null;
+  }
+
+  const heroCopy = variant === "canada-us" ? canadaCopy : termsCopy;
+
+  const sheet = (
+    <div className="patient-onboarding">
+      <div
+        className={cn("popup-overlay", "open")}
+        id={overlayId}
+        onClick={() => onOpenChange(false)}
+      />
+
+      <div
+        ref={sheetRef}
+        className={cn("popup-sheet", "open")}
+        id={sheetDomId}
+        onScroll={handleScroll}
       >
-        <div className="relative flex min-h-0 flex-1 flex-col">
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-6 pt-10 pb-28"
-          >
-            <p className="text-muted-foreground text-xs font-semibold tracking-[0.12em] uppercase">
-              {copy.eyebrow}
-            </p>
-            <DrawerTitle className="font-heading text-foreground mt-2 text-2xl font-semibold">
-              {copy.title}
-            </DrawerTitle>
-            <p className="text-muted-foreground mt-2 text-sm">
-              {copy.scrollHint}
-            </p>
+        <div className="sheet-logo">
+          <OnboardingBrandLogo placement="policy-sheet" />
+        </div>
+        <div className="scroll-hint" id={scrollHintId}>
+          {heroCopy.scrollHint}
+        </div>
 
-            <div className="mt-8 flex flex-col gap-6">
-              {sections.map((section) => (
-                <section key={section.title}>
-                  <h3 className="text-foreground text-base font-semibold">
-                    {section.title}
-                  </h3>
-                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-                    {section.body}
-                  </p>
-                </section>
+        <div className="policy-hero">
+          <p className="eyebrow">{heroCopy.eyebrow}</p>
+          <h2>
+            {heroCopy.titlePrefix}
+            <span className={heroCopy.titleAccentClass}>
+              {heroCopy.titleAccent}
+            </span>
+            {"titleSuffix" in heroCopy ? heroCopy.titleSuffix : null}
+          </h2>
+          <p className="lede">{renderTextParts(heroCopy.lede)}</p>
+        </div>
+
+        <div className="policy-features">
+          {(variant === "canada-us"
+            ? ONBOARDING_POLICY_CANADA_SECTIONS
+            : ONBOARDING_POLICY_TERMS_SECTIONS
+          ).map((section) => (
+            <PolicyFeatureCard key={section.num} section={section} />
+          ))}
+        </div>
+
+        {variant === "canada-us" ? (
+          <div className="ca-contact">
+            <p className="ca-contact-label">{canadaCopy.contactLabel}</p>
+            <div className="contact-list">
+              {ONBOARDING_POLICY_CANADA_CONTACT.rows.map((row) => (
+                <div key={row.label} className="contact-row">
+                  <span className="label">{row.label}</span>
+                  <span className="value">{row.value}</span>
+                </div>
               ))}
             </div>
           </div>
-
-          <div className="from-background via-background/90 pointer-events-none absolute inset-x-0 bottom-0 flex justify-center bg-linear-to-t to-transparent px-6 pt-12 pb-6">
-            <DrawerClose
-              type="button"
-              className="border-border bg-card text-muted-foreground hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive pointer-events-auto flex size-12 items-center justify-center rounded-full border shadow-lg transition-colors"
-              aria-label={ONBOARDING_COPY.policySheets.closeLabel}
-            >
-              <X className="size-6" aria-hidden="true" />
-            </DrawerClose>
+        ) : (
+          <div className="policy-closing">
+            <p>{renderTextParts(termsCopy.closing)}</p>
           </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
+        )}
+      </div>
+
+      <button
+        className={cn("popup-close-btn", "open")}
+        type="button"
+        aria-label={ONBOARDING_COPY.policySheets.closeLabel}
+        onClick={() => onOpenChange(false)}
+      >
+        &times;
+      </button>
+    </div>
   );
+
+  return createPortal(sheet, document.body);
 }

@@ -26,7 +26,7 @@ export function PatientLockInFormScreen() {
     useLockInForm();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <WidthConstraint>
         <div className="p-8 pb-20">
           <LockInHeader onBack={() => router.push(ROUTES.patient.lockIn)} />
