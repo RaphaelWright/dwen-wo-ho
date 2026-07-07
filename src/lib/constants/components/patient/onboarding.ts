@@ -311,7 +311,7 @@ export const ONBOARDING_COPY = {
   },
   toast: {
     onboardingComplete: "Profile locked in 🎉",
-    schoolLockedIn: (schoolName: string) => `${schoolName} locked in 🎓`,
+    schoolLockedIn: (schoolName: string) => `${schoolName} locked in`,
     radioPlaying: "Playing Lock In Radio 🎵",
     loggedOut: "Logged out 👋",
     editProfileComingSoon: "Edit profile coming soon",

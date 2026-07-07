@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IoCheckmark, IoSearchOutline } from "react-icons/io5";
 import { SchoolContextPill } from "@/components/patient/onboarding/steps/school-context-pill";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
 import { useProgrammePicker } from "@/hooks/components/patient/onboarding/programme-combobox/use-programme-picker";
@@ -61,7 +62,7 @@ export function ProgrammeStep({
               id="programmeSearchBoxWrap"
             >
               <div className="search-box">
-                <span>🔍</span>
+                <IoSearchOutline aria-hidden="true" />
                 <input
                   type="text"
                   id="programmeSearchInput"
@@ -76,8 +77,9 @@ export function ProgrammeStep({
               id="programmeSearchToggleBtn"
               type="button"
               onClick={toggleSearch}
+              aria-label={ONBOARDING_COPY.programme.placeholder}
             >
-              🔍
+              <IoSearchOutline aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -112,7 +114,9 @@ export function ProgrammeStep({
                     ))}
                   </div>
                 </div>
-                <div className="check-badge">✓</div>
+                <div className="check-badge">
+                  <IoCheckmark aria-hidden="true" />
+                </div>
               </div>
             );
           })

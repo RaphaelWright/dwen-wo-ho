@@ -27,34 +27,38 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="icon" disabled className={className}>
+      <Button
+        variant="outline"
+        size="icon"
+        disabled
+        className={cn(
+          "border-border bg-background text-foreground rounded-full",
+          className,
+        )}
+      >
         <Sun className="size-5" />
       </Button>
     );
   }
+
   return (
-    <div className={className}>
-      {theme === "light" ? (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => changeTheme("dark")}
-          className={cn("border-0 bg-transparent!", className)}
-        >
-          <Sun className="size-5" />
-          <span className="sr-only">Toggle dark theme</span>
-        </Button>
-      ) : (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => changeTheme("light")}
-          className={cn("rounded-lg border-0", className)}
-        >
-          <Moon className="size-5 rotate-270 transition-all" />
-          <span className="sr-only">Toggle light theme</span>
-        </Button>
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={() => changeTheme(theme === "light" ? "dark" : "light")}
+      className={cn(
+        "border-border bg-background text-foreground hover:bg-muted rounded-full transition-colors",
+        className,
       )}
-    </div>
+      aria-label={
+        theme === "light" ? "Switch to dark theme" : "Switch to light theme"
+      }
+    >
+      {theme === "light" ? (
+        <Sun className="size-5" aria-hidden="true" />
+      ) : (
+        <Moon className="size-5" aria-hidden="true" />
+      )}
+    </Button>
   );
 }

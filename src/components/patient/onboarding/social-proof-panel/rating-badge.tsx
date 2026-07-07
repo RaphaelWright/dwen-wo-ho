@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { IoStar } from "react-icons/io5";
 import { RatingBadgeProps } from "@/lib/types/components/patient/onboarding";
 
 const STAR_COUNT = 5;
@@ -15,7 +15,7 @@ export function RatingBadge({ rating, label }: RatingBadgeProps) {
         aria-hidden="true"
       >
         {Array.from({ length: STAR_COUNT }, (_, index) => (
-          <Star
+          <IoStar
             key={index}
             className="text-warm-sand size-2 fill-current lg:size-2.5"
             style={{ transform: `rotate(${STAR_ARC_OFFSETS[index]}deg)` }}
