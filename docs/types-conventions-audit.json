@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-06T22:27:13.661Z",
+  "generatedAt": "2026-06-28T06:31:34.133Z",
   "summary": {
     "rootMixed": 0,
     "mixedDirectories": 2,
@@ -8,7 +8,7 @@
     "misplacedLayerFiles": 0,
     "microFiles": 29,
     "consolidationClusters": 2,
-    "tsxTypeViolations": 203,
+    "tsxTypeViolations": 188,
     "duplicateExportNames": 5,
     "explicitRoleRenamesPending": 0
   },
@@ -206,1428 +206,942 @@
     {
       "type": "tsx-exported-types",
       "file": "src/components/app-providers/online-status.tsx",
-      "exports": [
-        "OnlineStatus"
-      ]
+      "exports": ["OnlineStatus"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/app-providers/stomp-provider.tsx",
-      "exports": [
-        "StompProvider"
-      ]
+      "exports": ["StompProvider"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/app-providers/theme-provider.tsx",
-      "exports": [
-        "ThemeProvider"
-      ]
+      "exports": ["ThemeProvider"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/auth/base-sign-in-form.tsx",
-      "exports": [
-        "BaseSignInForm"
-      ]
+      "exports": ["BaseSignInForm"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/overlays/add-cover-page-wizard/edit-image-step.tsx",
-      "exports": [
-        "EditImageStep"
-      ]
+      "exports": ["EditImageStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/overlays/add-cover-page-wizard/photo-color-step.tsx",
-      "exports": [
-        "PhotoColorStep"
-      ]
+      "exports": ["PhotoColorStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/overlays/add-cover-page-wizard/slogan-step.tsx",
-      "exports": [
-        "SloganStep"
-      ]
+      "exports": ["SloganStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/overlays/add-icon-wizard/icon-form-fields.tsx",
-      "exports": [
-        "IconFormFields"
-      ]
+      "exports": ["IconFormFields"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/overlays/add-icon-wizard/icon-preview-panel.tsx",
-      "exports": [
-        "IconPreviewPanel"
-      ]
+      "exports": ["IconPreviewPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/workspace/school-selector-button/index.tsx",
-      "exports": [
-        "SchoolSelectorButton"
-      ]
+      "exports": ["SchoolSelectorButton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/workspace/tabs/cover-page-tab/index.tsx",
-      "exports": [
-        "CoverPageTab"
-      ]
+      "exports": ["CoverPageTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/workspace/tabs/icons-tab/index.tsx",
-      "exports": [
-        "IconsTab"
-      ]
+      "exports": ["IconsTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/content-pages/workspace/tabs/lock-ins-empty-state/index.tsx",
-      "exports": [
-        "LockInsEmptyState"
-      ]
+      "exports": ["LockInsEmptyState"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/campus/image-upload-field/index.tsx",
-      "exports": [
-        "CampusImageUploadField"
-      ]
+      "exports": ["CampusImageUploadField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/campus/step-1/index.tsx",
-      "exports": [
-        "CampusStep1"
-      ]
+      "exports": ["CampusStep1"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/campus/step-2/index.tsx",
-      "exports": [
-        "CampusStep2"
-      ]
+      "exports": ["CampusStep2"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/dashboard/index.tsx",
-      "exports": [
-        "CreativeStudiosView"
-      ]
+      "exports": ["CreativeStudiosView"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/flow-provider.tsx",
-      "exports": [
-        "CreativeStudiosFlowProvider"
-      ]
+      "exports": ["CreativeStudiosFlowProvider"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/flow-view/index.tsx",
-      "exports": [
-        "CreativeStudiosFlowView"
-      ]
+      "exports": ["CreativeStudiosFlowView"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/preview-panel/index.tsx",
-      "exports": [
-        "PreviewPanel"
-      ]
+      "exports": ["PreviewPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/programme/step-1/index.tsx",
-      "exports": [
-        "ProgrammeStep1"
-      ]
+      "exports": ["ProgrammeStep1"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/programme/step-2/index.tsx",
-      "exports": [
-        "ProgrammeStep2"
-      ]
+      "exports": ["ProgrammeStep2"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/provider/clinical-toggle/index.tsx",
-      "exports": [
-        "ProviderClinicalToggle"
-      ]
+      "exports": ["ProviderClinicalToggle"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/provider/step-1/index.tsx",
-      "exports": [
-        "ProviderStep1"
-      ]
+      "exports": ["ProviderStep1"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/provider/step-2/index.tsx",
-      "exports": [
-        "ProviderStep2"
-      ]
+      "exports": ["ProviderStep2"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/shared/back-button.tsx",
-      "exports": [
-        "BackButton"
-      ]
+      "exports": ["BackButton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/shared/chip.tsx",
-      "exports": [
-        "Chip"
-      ]
+      "exports": ["Chip"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/shared/error-msg.tsx",
-      "exports": [
-        "ErrorMsg"
-      ]
+      "exports": ["ErrorMsg"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/shared/home-button.tsx",
-      "exports": [
-        "HomeButton"
-      ]
+      "exports": ["HomeButton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/tag/form/index.tsx",
-      "exports": [
-        "TagForm"
-      ]
+      "exports": ["TagForm"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/create/creative-studios/wizard-shell/index.tsx",
-      "exports": [
-        "CreativeStudiosWizardShell"
-      ]
+      "exports": ["CreativeStudiosWizardShell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/curator-sidebar/index.tsx",
-      "exports": [
-        "CuratorSidebar"
-      ]
+      "exports": ["CuratorSidebar"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/curator-sidebar/mobile-header.tsx",
-      "exports": [
-        "MobileHeader"
-      ]
+      "exports": ["MobileHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/curator-sidebar/sidebar-content.tsx",
-      "exports": [
-        "SidebarContent"
-      ]
+      "exports": ["SidebarContent"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/curator-sidebar/sidebar-nav-item.tsx",
-      "exports": [
-        "SidebarNavItem"
-      ]
+      "exports": ["SidebarNavItem"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/layout/curator-auth-gate.tsx",
-      "exports": [
-        "CuratorAuthGate"
-      ]
+      "exports": ["CuratorAuthGate"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/layout/curator-notifications-host.tsx",
-      "exports": [
-        "CuratorNotificationsHost"
-      ]
+      "exports": ["CuratorNotificationsHost"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/confirmation-overlay-host.tsx",
-      "exports": [
-        "PartnerConfirmationModals"
-      ]
+      "exports": ["PartnerConfirmationModals"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/header.tsx",
-      "exports": [
-        "PartnerHeader"
-      ]
+      "exports": ["PartnerHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/overview-tab.tsx",
-      "exports": [
-        "OverviewTab"
-      ]
+      "exports": ["OverviewTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/providers-tab.tsx",
-      "exports": [
-        "ProvidersTab"
-      ]
+      "exports": ["ProvidersTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/schools-tab.tsx",
-      "exports": [
-        "SchoolsTab"
-      ]
+      "exports": ["SchoolsTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/partners/partner-details-panel/tabs.tsx",
-      "exports": [
-        "PartnerTabs"
-      ]
+      "exports": ["PartnerTabs"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/patient-dashboard/page-content.tsx",
-      "exports": [
-        "PatientDetailsPageContent"
-      ]
+      "exports": ["PatientDetailsPageContent"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/patient-dashboard/page-states.tsx",
-      "exports": [
-        "PatientDetailsLoadingView",
-        "PatientDetailsErrorView"
-      ]
+      "exports": ["PatientDetailsLoadingView", "PatientDetailsErrorView"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/action-buttons.tsx",
-      "exports": [
-        "ProviderActionButtons"
-      ]
+      "exports": ["ProviderActionButtons"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/details-header.tsx",
-      "exports": [
-        "ProviderDetailsHeader"
-      ]
+      "exports": ["ProviderDetailsHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/profile-card.tsx",
-      "exports": [
-        "ProviderProfileCard"
-      ]
+      "exports": ["ProviderProfileCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/screen.tsx",
-      "exports": [
-        "CuratorProviderDetailsScreen"
-      ]
+      "exports": ["CuratorProviderDetailsScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/specialties-card.tsx",
-      "exports": [
-        "ProviderSpecialtiesCard"
-      ]
+      "exports": ["ProviderSpecialtiesCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/provider-details/status-display.tsx",
-      "exports": [
-        "ProviderStatusDisplay"
-      ]
+      "exports": ["ProviderStatusDisplay"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/confirmation-overlay-host.tsx",
-      "exports": [
-        "ProviderConfirmationModals"
-      ]
+      "exports": ["ProviderConfirmationModals"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/footer.tsx",
-      "exports": [
-        "ProviderFooter"
-      ]
+      "exports": ["ProviderFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/header.tsx",
-      "exports": [
-        "ProviderHeader"
-      ]
+      "exports": ["ProviderHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/overview-tab.tsx",
-      "exports": [
-        "OverviewTab"
-      ]
+      "exports": ["OverviewTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/partners-tab.tsx",
-      "exports": [
-        "PartnersTab"
-      ]
+      "exports": ["PartnersTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/schools-tab.tsx",
-      "exports": [
-        "SchoolsTab"
-      ]
+      "exports": ["SchoolsTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/providers/provider-details-panel/tabs.tsx",
-      "exports": [
-        "ProviderTabs"
-      ]
+      "exports": ["ProviderTabs"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/back-nav.tsx",
-      "exports": [
-        "SchoolDetailsBackNav"
-      ]
+      "exports": ["SchoolDetailsBackNav"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/icons-tab.tsx",
-      "exports": [
-        "IconsTab"
-      ]
+      "exports": ["IconsTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/page-content.tsx",
-      "exports": [
-        "SchoolDetailsPageContent"
-      ]
+      "exports": ["SchoolDetailsPageContent"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/page-states.tsx",
-      "exports": [
-        "SchoolDetailsLoadingView",
-        "SchoolDetailsErrorView"
-      ]
+      "exports": ["SchoolDetailsLoadingView", "SchoolDetailsErrorView"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/patients-tab.tsx",
-      "exports": [
-        "PatientsTab"
-      ]
+      "exports": ["PatientsTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/providers-tab.tsx",
-      "exports": [
-        "ProvidersTab"
-      ]
+      "exports": ["ProvidersTab"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/school-header-card.tsx",
-      "exports": [
-        "SchoolHeaderCard"
-      ]
+      "exports": ["SchoolHeaderCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/search-section.tsx",
-      "exports": [
-        "SchoolDetailsSearchSection"
-      ]
+      "exports": ["SchoolDetailsSearchSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/school-details/tab-content.tsx",
-      "exports": [
-        "SchoolDetailsTabContent"
-      ]
+      "exports": ["SchoolDetailsTabContent"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/schools/school-card/index.tsx",
-      "exports": [
-        "SchoolCard"
-      ]
+      "exports": ["SchoolCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/schools/school-edit-panel/footer.tsx",
-      "exports": [
-        "SchoolEditFooter"
-      ]
+      "exports": ["SchoolEditFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/schools/school-edit-panel/form.tsx",
-      "exports": [
-        "SchoolEditForm"
-      ]
+      "exports": ["SchoolEditForm"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/curator/schools/school-edit-panel/header.tsx",
-      "exports": [
-        "SchoolEditHeader"
-      ]
+      "exports": ["SchoolEditHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/legal/policy-page-shell.tsx",
-      "exports": [
-        "LegalPolicyPageShell"
-      ]
+      "exports": ["LegalPolicyPageShell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/join-as-provider-2/index.tsx",
-      "exports": [
-        "JoinAsProvider2"
-      ]
+      "exports": ["JoinAsProvider2"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/join-as-provider-2/showcase-card.tsx",
-      "exports": [
-        "JoinAsProvider2ShowcaseCard"
-      ]
+      "exports": ["JoinAsProvider2ShowcaseCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/landing-2/achievement-card.tsx",
-      "exports": [
-        "Landing2AchievementCard"
-      ]
+      "exports": ["Landing2AchievementCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/landing-2/hero-section.tsx",
-      "exports": [
-        "Landing2HeroSection"
-      ]
+      "exports": ["Landing2HeroSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/landing-2/index.tsx",
-      "exports": [
-        "Landing2"
-      ]
+      "exports": ["Landing2"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/landing-2/influencer-badge.tsx",
-      "exports": [
-        "Landing2InfluencerBadge"
-      ]
+      "exports": ["Landing2InfluencerBadge"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/marketing/landing-2/stage-controls.tsx",
-      "exports": [
-        "Landing2StageControls"
-      ]
+      "exports": ["Landing2StageControls"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/overlays/shared/animated-modal-shell.tsx",
-      "exports": [
-        "AnimatedModalShell"
-      ]
+      "exports": ["AnimatedModalShell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/exam-anxiety-section.tsx",
-      "exports": [
-        "ExamAnxietySection"
-      ]
+      "exports": ["ExamAnxietySection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/form-action-buttons.tsx",
-      "exports": [
-        "FormActionButtons"
-      ]
+      "exports": ["FormActionButtons"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/form-screen.tsx",
-      "exports": [
-        "PatientLockInFormScreen"
-      ]
+      "exports": ["PatientLockInFormScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/lock-in-details-section.tsx",
-      "exports": [
-        "LockInDetailsSection"
-      ]
+      "exports": ["LockInDetailsSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/lock-in-frequency-select-field.tsx",
-      "exports": [
-        "LockInFrequencySelectField"
-      ]
+      "exports": ["LockInFrequencySelectField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/lock-in-header.tsx",
-      "exports": [
-        "LockInHeader"
-      ]
+      "exports": ["LockInHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/mental-health-section.tsx",
-      "exports": [
-        "MentalHealthSection"
-      ]
+      "exports": ["MentalHealthSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/personal-info-section.tsx",
-      "exports": [
-        "PersonalInfoSection"
-      ]
+      "exports": ["PersonalInfoSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/school-picker-screen.tsx",
-      "exports": [
-        "PatientLockInSchoolPickerScreen"
-      ]
+      "exports": ["PatientLockInSchoolPickerScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/lock-in/study-habits-section.tsx",
-      "exports": [
-        "StudyHabitsSection"
-      ]
+      "exports": ["StudyHabitsSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/new-password/new-password-footer.tsx",
-      "exports": [
-        "NewPasswordFooter"
-      ]
+      "exports": ["NewPasswordFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/new-password/new-password-form.tsx",
-      "exports": [
-        "NewPasswordForm"
-      ]
+      "exports": ["NewPasswordForm"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/new-password/new-password-header.tsx",
-      "exports": [
-        "NewPasswordHeader"
-      ]
+      "exports": ["NewPasswordHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/new-password/screen.tsx",
-      "exports": [
-        "PatientNewPasswordScreen"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/brand-logo/index.tsx",
-      "exports": [
-        "OnboardingBrandLogo"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/host-toast/index.tsx",
-      "exports": [
-        "OnboardingHostToast"
-      ]
+      "exports": ["PatientNewPasswordScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/overlays/home-profile-modal/gate.tsx",
-      "exports": [
-        "OnboardingHomeProfileModalGate"
-      ]
+      "exports": ["OnboardingHomeProfileModalGate"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/overlays/home-profile-modal/index.tsx",
-      "exports": [
-        "HomeProfileModal"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/overlays/policy-sheet/index.tsx",
-      "exports": [
-        "PolicySheet"
-      ]
+      "exports": ["HomeProfileModal"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/overlays/school-picker/index.tsx",
-      "exports": [
-        "SchoolPicker"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/overlays/school-picker/school-picker-card/index.tsx",
-      "exports": [
-        "SchoolPickerCard"
-      ]
+      "exports": ["SchoolPickerOverlay"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/shell/index.tsx",
-      "exports": [
-        "OnboardingShell",
-        "OnboardingShellContent"
-      ]
+      "exports": ["OnboardingShell", "OnboardingShellContent"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/social-proof-panel/index.tsx",
-      "exports": [
-        "SocialProofPanel"
-      ]
+      "exports": ["SocialProofPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/social-proof-panel/rating-badge.tsx",
-      "exports": [
-        "RatingBadge"
-      ]
+      "exports": ["RatingBadge"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/social-proof-panel/student-meta.tsx",
-      "exports": [
-        "StudentMeta"
-      ]
+      "exports": ["StudentMeta"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/social-proof-panel/testimonial-quote.tsx",
-      "exports": [
-        "TestimonialQuote"
-      ]
+      "exports": ["TestimonialQuote"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/choice-step/index.tsx",
-      "exports": [
-        "ChoiceStep"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/contact-field-submit/index.tsx",
-      "exports": [
-        "ContactFieldSubmit"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/contact-step/index.tsx",
-      "exports": [
-        "ContactStep"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/continue-form/index.tsx",
-      "exports": [
-        "OnboardingContinueForm"
-      ]
+      "exports": ["ChoiceStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/create-account-step/index.tsx",
-      "exports": [
-        "CreateAccountStep"
-      ]
+      "exports": ["CreateAccountStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/dob-field/index.tsx",
-      "exports": [
-        "DobField"
-      ]
+      "exports": ["DobField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/email-field/index.tsx",
-      "exports": [
-        "EmailField"
-      ]
+      "exports": ["EmailField"]
+    },
+    {
+      "type": "tsx-exported-types",
+      "file": "src/components/patient/onboarding/steps/email-step/index.tsx",
+      "exports": ["EmailStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/forgot-password-step/index.tsx",
-      "exports": [
-        "ForgotPasswordStep"
-      ]
+      "exports": ["ForgotPasswordStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/grade-step/index.tsx",
-      "exports": [
-        "GradeStep"
-      ]
+      "exports": ["GradeStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/new-password-step/index.tsx",
-      "exports": [
-        "NewPasswordStep"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/onboarding-field-box/index.tsx",
-      "exports": [
-        "OnboardingFieldBox"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/onboarding-field-box/submit-button.tsx",
-      "exports": [
-        "OnboardingFieldSubmitButton"
-      ]
+      "exports": ["NewPasswordStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/phone-field/index.tsx",
-      "exports": [
-        "PhoneField"
-      ]
+      "exports": ["PhoneField"]
+    },
+    {
+      "type": "tsx-exported-types",
+      "file": "src/components/patient/onboarding/steps/phone-step/index.tsx",
+      "exports": ["PhoneStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/profile-photo-step/index.tsx",
-      "exports": [
-        "ProfilePhotoStep"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/programme-combobox/index.tsx",
-      "exports": [
-        "ProgrammeCombobox"
-      ]
+      "exports": ["ProfilePhotoStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/programme-step/index.tsx",
-      "exports": [
-        "ProgrammeStep"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/school-combobox/index.tsx",
-      "exports": [
-        "SchoolCombobox"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/steps/school-context-pill/index.tsx",
-      "exports": [
-        "SchoolContextPill"
-      ]
+      "exports": ["ProgrammeStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/school-type-step/index.tsx",
-      "exports": [
-        "SchoolTypeStep"
-      ]
+      "exports": ["SchoolTypeStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/sign-in-step/index.tsx",
-      "exports": [
-        "SignInStep"
-      ]
+      "exports": ["SignInStep"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/step-shell/index.tsx",
-      "exports": [
-        "StepShell"
-      ]
+      "exports": ["StepShell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/steps/verify-step/index.tsx",
-      "exports": [
-        "VerifyStep"
-      ]
+      "exports": ["VerifyStep"]
     },
     {
       "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/auth-step-content/index.tsx",
-      "exports": [
-        "OnboardingAuthStepContent"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/education-step-content/index.tsx",
-      "exports": [
-        "OnboardingEducationStepContent"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/footer-shell/index.tsx",
-      "exports": [
-        "OnboardingFooterShell"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/footers/index.tsx",
-      "exports": [
-        "OnboardingAuthFooter",
-        "OnboardingPhaseFooter"
-      ]
+      "file": "src/components/patient/onboarding/workspace/auth-footer/index.tsx",
+      "exports": ["OnboardingAuthFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/workspace/header.tsx",
-      "exports": [
-        "OnboardingWorkspaceHeader"
-      ]
+      "exports": ["OnboardingReferralBadge"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/onboarding/workspace/index.tsx",
-      "exports": [
-        "OnboardingWorkspace"
-      ]
+      "exports": ["OnboardingWorkspace"]
     },
     {
       "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/referral-picker/index.tsx",
-      "exports": [
-        "OnboardingReferralPicker"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/patient/onboarding/workspace/step-content/index.tsx",
-      "exports": [
-        "OnboardingStepContent"
-      ]
+      "file": "src/components/patient/onboarding/workspace/onboarding-footer/index.tsx",
+      "exports": ["OnboardingPhaseFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/verify-password-reset/screen.tsx",
-      "exports": [
-        "PatientVerifyPasswordResetScreen"
-      ]
+      "exports": ["PatientVerifyPasswordResetScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/verify-password-reset/verify-password-reset-footer.tsx",
-      "exports": [
-        "VerifyPasswordResetFooter"
-      ]
+      "exports": ["VerifyPasswordResetFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/verify-password-reset/verify-password-reset-header.tsx",
-      "exports": [
-        "VerifyPasswordResetHeader"
-      ]
+      "exports": ["VerifyPasswordResetHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/verify-password-reset/verify-password-reset-otp-section.tsx",
-      "exports": [
-        "VerifyPasswordResetOTPSection"
-      ]
+      "exports": ["VerifyPasswordResetOTPSection"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/waiting-room/screen.tsx",
-      "exports": [
-        "PatientWaitingRoomScreen"
-      ]
+      "exports": ["PatientWaitingRoomScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/waiting-room/waiting-room-footer.tsx",
-      "exports": [
-        "WaitingRoomFooter"
-      ]
+      "exports": ["WaitingRoomFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/waiting-room/waiting-room-header.tsx",
-      "exports": [
-        "WaitingRoomHeader"
-      ]
+      "exports": ["WaitingRoomHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/waiting-room/waiting-room-info-box.tsx",
-      "exports": [
-        "WaitingRoomInfoBox"
-      ]
+      "exports": ["WaitingRoomInfoBox"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/patient/waiting-room/waiting-room-status-card.tsx",
-      "exports": [
-        "WaitingRoomStatusCard"
-      ]
+      "exports": ["WaitingRoomStatusCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/auth-shell/index.tsx",
-      "exports": [
-        "ProviderAuthShell"
-      ]
+      "exports": ["ProviderAuthShell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/auth-workspace/index.tsx",
-      "exports": [
-        "ProviderAuthWorkspace"
-      ]
+      "exports": ["ProviderAuthWorkspace"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/new-password-screen/index.tsx",
-      "exports": [
-        "ProviderNewPasswordScreen"
-      ]
+      "exports": ["ProviderNewPasswordScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/signup/profile-step-indicator/index.tsx",
-      "exports": [
-        "ProfileStepIndicator"
-      ]
+      "exports": ["ProfileStepIndicator"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/signup/provider-sign-up-footer/index.tsx",
-      "exports": [
-        "ProviderSignUpFooter"
-      ]
+      "exports": ["ProviderSignUpFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/auth/signup-screen/index.tsx",
-      "exports": [
-        "ProviderSignupScreen"
-      ]
+      "exports": ["ProviderSignupScreen"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/dashboard/provider-dashboard-desktop-layout/index.tsx",
-      "exports": [
-        "ProviderDashboardDesktopLayout"
-      ]
+      "exports": ["ProviderDashboardDesktopLayout"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/dashboard/provider-dashboard-mobile-panels/index.tsx",
-      "exports": [
-        "ProviderDashboardMobilePanels"
-      ]
+      "exports": ["ProviderDashboardMobilePanels"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/dashboard/provider-dashboard-mobile-search-overlay/index.tsx",
-      "exports": [
-        "ProviderDashboardMobileSearchOverlay"
-      ]
+      "exports": ["ProviderDashboardMobileSearchOverlay"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/actions-panel.tsx",
-      "exports": [
-        "ActionsPanel"
-      ]
+      "exports": ["ActionsPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/assessment-metadata-card.tsx",
-      "exports": [
-        "AssessmentMetadataCard"
-      ]
+      "exports": ["AssessmentMetadataCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/assessment-metrics-panel.tsx",
-      "exports": [
-        "AssessmentMetricsPanel"
-      ]
+      "exports": ["AssessmentMetricsPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/patient-details-header.tsx",
-      "exports": [
-        "PatientDetailsHeader"
-      ]
+      "exports": ["PatientDetailsHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/school-comparison-card.tsx",
-      "exports": [
-        "SchoolComparisonCard"
-      ]
+      "exports": ["SchoolComparisonCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/patient-details/urgent-care-status-card.tsx",
-      "exports": [
-        "UrgentCareStatusCard"
-      ]
+      "exports": ["UrgentCareStatusCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/pending-approval-modal/index.tsx",
-      "exports": [
-        "PendingApprovalModal"
-      ]
+      "exports": ["PendingApprovalModal"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile/provider-profile-card.tsx",
-      "exports": [
-        "ProviderProfileCard"
-      ]
+      "exports": ["ProviderProfileCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile/provider-profile-header.tsx",
-      "exports": [
-        "ProviderProfileHeader"
-      ]
+      "exports": ["ProviderProfileHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile/provider-stats-grid.tsx",
-      "exports": [
-        "ProviderStatsGrid"
-      ]
+      "exports": ["ProviderStatsGrid"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile-dialog/profile-footer.tsx",
-      "exports": [
-        "ProfileFooter"
-      ]
+      "exports": ["ProfileFooter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile-dialog/profile-helpers.tsx",
-      "exports": [
-        "SectionLabel",
-        "InfoCard"
-      ]
+      "exports": ["SectionLabel", "InfoCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile-dialog/profile-hero.tsx",
-      "exports": [
-        "ProfileHero"
-      ]
+      "exports": ["ProfileHero"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/profile-dialog/profile-tabs.tsx",
-      "exports": [
-        "ProfileTabs"
-      ]
+      "exports": ["ProfileTabs"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/schools/provider-schools-filter.tsx",
-      "exports": [
-        "ProviderSchoolsFilter"
-      ]
+      "exports": ["ProviderSchoolsFilter"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/schools/provider-schools-header.tsx",
-      "exports": [
-        "ProviderSchoolsHeader"
-      ]
+      "exports": ["ProviderSchoolsHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/schools/provider-schools-list.tsx",
-      "exports": [
-        "ProviderSchoolsList"
-      ]
+      "exports": ["ProviderSchoolsList"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/schools/school-card.tsx",
-      "exports": [
-        "SchoolCard"
-      ]
+      "exports": ["SchoolCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/dashboard-skeleton/index.tsx",
-      "exports": [
-        "ProviderDashboardSkeleton"
-      ]
+      "exports": ["ProviderDashboardSkeleton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field/emoji-status-field/index.tsx",
-      "exports": [
-        "EmojiStatusField"
-      ]
+      "exports": ["EmojiStatusField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field/searchable-select-field/index.tsx",
-      "exports": [
-        "SearchableSelectField"
-      ]
+      "exports": ["SearchableSelectField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field-dialog/photo-field.tsx",
-      "exports": [
-        "EditFieldPhotoField"
-      ]
+      "exports": ["EditFieldPhotoField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field-dialog/select-field.tsx",
-      "exports": [
-        "EditFieldSelectField"
-      ]
+      "exports": ["EditFieldSelectField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field-dialog/status-field.tsx",
-      "exports": [
-        "EditFieldStatusField"
-      ]
+      "exports": ["EditFieldStatusField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/edit-field-dialog/text-field.tsx",
-      "exports": [
-        "EditFieldTextField"
-      ]
+      "exports": ["EditFieldTextField"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/provider/workspace/schools-sidebar-skeleton/index.tsx",
-      "exports": [
-        "SchoolsSidebarSkeleton"
-      ]
+      "exports": ["SchoolsSidebarSkeleton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/filter-tab-bar/index.tsx",
-      "exports": [
-        "FilterTabBar"
-      ]
+      "exports": ["FilterTabBar"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/logo/index.tsx",
-      "exports": [
-        "Logo"
-      ]
+      "exports": ["Logo"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-bell/index.tsx",
-      "exports": [
-        "NotificationBell"
-      ]
+      "exports": ["NotificationBell"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-sheet/index.tsx",
-      "exports": [
-        "default"
-      ]
+      "exports": ["default"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-sheet/notification-filter-tabs.tsx",
-      "exports": [
-        "NotificationFilterTabs"
-      ]
+      "exports": ["NotificationFilterTabs"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-sheet/notification-sheet-header.tsx",
-      "exports": [
-        "NotificationSheetHeader"
-      ]
+      "exports": ["NotificationSheetHeader"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-sheet/notification-sheet-list.tsx",
-      "exports": [
-        "NotificationSheetList"
-      ]
+      "exports": ["NotificationSheetList"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/notification-skeleton/index.tsx",
-      "exports": [
-        "NotificationSkeleton"
-      ]
-    },
-    {
-      "type": "tsx-exported-types",
-      "file": "src/components/shared/overlays/modal-portal.tsx",
-      "exports": [
-        "ModalPortal"
-      ]
+      "exports": ["NotificationSkeleton"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/overlays/photo-cropper.tsx",
-      "exports": [
-        "PhotoCropperOverlay"
-      ]
+      "exports": ["PhotoCropperOverlay"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/patient-card/index.tsx",
-      "exports": [
-        "default"
-      ]
+      "exports": ["default"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/patient-card/patient-card-action.tsx",
-      "exports": [
-        "PatientCardAction"
-      ]
+      "exports": ["PatientCardAction"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/patient-card/patient-card-info.tsx",
-      "exports": [
-        "PatientCardInfo"
-      ]
+      "exports": ["PatientCardInfo"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/patient-suggestion-card/index.tsx",
-      "exports": [
-        "PatientSuggestionCard"
-      ]
+      "exports": ["PatientSuggestionCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/school-suggestion-card/index.tsx",
-      "exports": [
-        "SchoolSuggestionCard"
-      ]
+      "exports": ["SchoolSuggestionCard"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/index.tsx",
-      "exports": [
-        "SearchDropdown"
-      ]
+      "exports": ["SearchDropdown"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/search-dropdown-active-filters.tsx",
-      "exports": [
-        "SearchDropdownActiveFilters"
-      ]
+      "exports": ["SearchDropdownActiveFilters"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/search-dropdown-panel.tsx",
-      "exports": [
-        "SearchDropdownPanel"
-      ]
+      "exports": ["SearchDropdownPanel"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/search-dropdown-quick-filters.tsx",
-      "exports": [
-        "SearchDropdownQuickFilters"
-      ]
+      "exports": ["SearchDropdownQuickFilters"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/search-dropdown-suggestions.tsx",
-      "exports": [
-        "SearchDropdownSuggestions"
-      ]
+      "exports": ["SearchDropdownSuggestions"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/search-dropdown/search-dropdown.tsx",
-      "exports": [
-        "SearchDropdown"
-      ]
+      "exports": ["SearchDropdown"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/tab-content-state/index.tsx",
-      "exports": [
-        "TabContentState"
-      ]
+      "exports": ["TabContentState"]
     },
     {
       "type": "tsx-exported-types",
       "file": "src/components/shared/urgent-panel-skeleton/index.tsx",
-      "exports": [
-        "UrgentPanelSkeleton"
-      ]
+      "exports": ["UrgentPanelSkeleton"]
     }
   ],
   "duplicateExports": [

@@ -29,11 +29,6 @@ export function useOnboardingWizardState() {
   const [verifyFlow, setVerifyFlow] = useState<VerifyFlow>("signup");
   const [contactMode, setContactMode] = useState<ContactMode>("phone");
   const [otp, setOtp] = useState("");
-  const [otpReference, setOtpReference] = useState<string | null>(null);
-  const [passwordResetToken, setPasswordResetToken] = useState<string | null>(
-    null,
-  );
-  const [patientUserId, setPatientUserId] = useState<string | null>(null);
   const [signInPassword, setSignInPassword] = useState("");
   const [activeContactKey, setActiveContactKey] = useState<string | null>(null);
   const [fieldValidation, setFieldValidation] = useState(
@@ -62,12 +57,6 @@ export function useOnboardingWizardState() {
     setContactMode,
     otp,
     setOtp,
-    otpReference,
-    setOtpReference,
-    passwordResetToken,
-    setPasswordResetToken,
-    patientUserId,
-    setPatientUserId,
     signInPassword,
     setSignInPassword,
     activeContactKey,
