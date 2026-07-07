@@ -801,6 +801,38 @@ input:-webkit-autofill:active {
   }
 }
 
+.l2-rise {
+  animation: l2-rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.l2-rise-delay {
+  animation-delay: 0.12s;
+}
+
+.l2-soft-orbit {
+  animation: l2-soft-orbit 14s ease-in-out infinite alternate;
+}
+
+@keyframes l2-rise-in {
+  from {
+    opacity: 0.88;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes l2-soft-orbit {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 18px, 0) scale(1.03);
+  }
+}
+
 /* landing-2(/landing-2) — JS-toggled hooks, keyframes, frozen hero only */
 .l2-stage,
 .l2-nav-item,

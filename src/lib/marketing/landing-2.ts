@@ -149,9 +149,9 @@ export const LANDING_2_CHARACTERS: Landing2Character[] = [
 
 export const LANDING_2_CONTENT = {
   metadata: {
-    title: "Landing 2",
+    title: "Dwen Wo Ho | Confidential Student Mental Health Support",
     description:
-      "Meet Gen Z achievers and lock in your future with JustGo Health.",
+      "Dwen Wo Ho connects Ghanaian students with confidential mental health support, licensed providers, and practical care when school pressure gets heavy.",
   },
   navigation: {
     pledgeLabel: "The Pledge",
@@ -173,3 +173,47 @@ export const LANDING_2_CONTENT = {
     lockIn: ROUTES.patient.lockIn,
   },
 } as const;
+
+export const LANDING_2_SUPPORT_POINTS = [
+  {
+    title: "Your story stays yours",
+    text: "Talk privately about stress, mood, burnout, or crisis concerns.",
+  },
+  {
+    title: "Pressure gets named early",
+    text: "Anxiety and overwhelm become signals, not personal failure.",
+  },
+  {
+    title: "Real care, not hype",
+    text: "Licensed providers help students move from panic to a plan.",
+  },
+] as const;
+
+export const LANDING_2_CARE_STEPS = [
+  {
+    title: "Start with your school context",
+    text: "Choose your school and what feels heavy.",
+  },
+  {
+    title: "Get routed to the right care",
+    text: "Your answers guide the next step.",
+  },
+  {
+    title: "Build a rhythm you can return to",
+    text: "Check in before things become urgent.",
+  },
+] as const;
+
+export const LANDING_2_PRESSURE_LINES = [
+  "I should be fine.",
+  "Everyone expects me to win.",
+  "I cannot afford to fall behind.",
+  "I do not know who to tell.",
+] as const;
+
+export const LANDING_2_HERO_SIGNALS = [
+  "Exam anxiety",
+  "Burnout",
+  "Low mood",
+  "Crisis support",
+] as const;

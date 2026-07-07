@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  IoCheckmark,
+  IoEllipsisHorizontal,
+  IoPlay,
+  IoStar,
+} from "react-icons/io5";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 import type { HomeProfileModalProps } from "@/lib/types/components/patient/onboarding";
@@ -109,7 +115,9 @@ export function HomeProfileModal({
                 <span className="home-nickname" id="homeNickname">
                   @{preview.nickname}
                 </span>
-                <span className="home-verified-badge">✓</span>
+                <span className="home-verified-badge">
+                  <IoCheckmark aria-hidden="true" />
+                </span>
                 <div className="home-action-btns">
                   <button
                     className="home-edit-btn"
@@ -122,8 +130,9 @@ export function HomeProfileModal({
                     className="home-more-btn"
                     type="button"
                     onClick={handleMoreOptions}
+                    aria-label={ONBOARDING_COPY.homeModal.moreOptionsToast}
                   >
-                    •••
+                    <IoEllipsisHorizontal aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -132,7 +141,7 @@ export function HomeProfileModal({
                 <span className="home-fullname" id="homeFullname">
                   {preview.fullName}
                 </span>
-                <span className="home-verified-star">⭐</span>
+                <IoStar className="home-verified-star" aria-hidden="true" />
               </div>
 
               <div className="home-stats-row">
@@ -185,7 +194,7 @@ export function HomeProfileModal({
               }}
             >
               <div className="home-highlight-circle radio">
-                <span className="play-icon">▶</span>
+                <IoPlay className="play-icon" aria-hidden="true" />
               </div>
               <span className="home-highlight-label">Radio</span>
             </div>

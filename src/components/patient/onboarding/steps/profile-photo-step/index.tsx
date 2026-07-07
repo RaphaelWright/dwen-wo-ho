@@ -1,5 +1,6 @@
 "use client";
 
+import { IoAdd } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
 import { PhotoCropperOverlay } from "@/components/shared/overlays/photo-cropper";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
@@ -75,7 +76,7 @@ export function ProfilePhotoStep({
                   profilePhotoUrl ? handleFileClick : handleUploadClick,
                 )}
               >
-                {!profilePhotoUrl ? "+" : null}
+                {!profilePhotoUrl ? <IoAdd aria-hidden="true" /> : null}
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { IoSchoolOutline, IoStar } from "react-icons/io5";
 import { ONBOARDING_SOCIAL_PROOF } from "@/lib/constants/components/patient/onboarding";
 import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 
@@ -10,7 +11,7 @@ export function SocialProofPanel() {
 
       <div className="student-name-cycle">
         <b>{ONBOARDING_SOCIAL_PROOF.name}</b>
-        <span className="grad-cap">🎓</span>
+        <IoSchoolOutline className="grad-cap" aria-hidden="true" />
       </div>
 
       <div className="student-quote">
@@ -27,7 +28,13 @@ export function SocialProofPanel() {
       </div>
 
       <div className="student-rating">
-        <div className="stars">★★★★★</div>
+        <div className="stars" aria-hidden="true">
+          <IoStar />
+          <IoStar />
+          <IoStar />
+          <IoStar />
+          <IoStar />
+        </div>
         <div className="num">{ONBOARDING_SOCIAL_PROOF.rating}</div>
         <div className="label">{ONBOARDING_SOCIAL_PROOF.ratingLabel}</div>
       </div>
