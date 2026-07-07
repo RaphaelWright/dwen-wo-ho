@@ -1,16 +1,13 @@
 {
-  "generatedAt": "2026-07-06T22:26:56.305Z",
+  "generatedAt": "2026-06-28T06:30:58.420Z",
   "summary": {
-    "mixedDirectories": 2,
+    "mixedDirectories": 1,
     "conventionViolations": 8,
     "missingUsePrefix": 6,
     "explicitRoleRenamesPending": 0,
     "componentMirrorDrift": 0
   },
-  "mixed": [
-    "src/hooks/components/curator/create",
-    "src/hooks/components/patient/onboarding"
-  ],
+  "mixed": ["src/hooks/components/curator/create"],
   "violations": [
     {
       "type": "redundant-parent-prefix",

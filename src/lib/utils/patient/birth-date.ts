@@ -109,17 +109,3 @@ export function getBirthDateHints(
     year,
   };
 }
-
-export function formatBirthDateForApi(parts: BirthDateParts): string {
-  const monthIndex = getMonthIndex(parts.month);
-  const day = Number.parseInt(parts.day, 10);
-  const year = Number.parseInt(parts.year, 10);
-
-  if (monthIndex === null || Number.isNaN(day) || Number.isNaN(year)) {
-    return "";
-  }
-
-  const month = String(monthIndex + 1).padStart(2, "0");
-  const dayOfMonth = String(day).padStart(2, "0");
-  return `${year}-${month}-${dayOfMonth}`;
-}

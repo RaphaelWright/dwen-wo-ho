@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  IoBusinessOutline,
-  IoCheckmark,
-  IoSchoolOutline,
-} from "react-icons/io5";
 import { SchoolContextPill } from "@/components/patient/onboarding/steps/school-context-pill";
 import { SchoolPicker } from "@/components/patient/onboarding/overlays/school-picker";
 import { OnboardingContinueForm } from "@/components/patient/onboarding/steps/continue-form";
@@ -63,12 +58,8 @@ export function SchoolTypeStep({
               handleTypeSelect("high-school"),
             )}
           >
-            <div className="check-badge">
-              <IoCheckmark aria-hidden="true" />
-            </div>
-            <div className="icon">
-              <IoBusinessOutline aria-hidden="true" />
-            </div>
+            <div className="check-badge">✓</div>
+            <div className="icon">🏫</div>
             <div className="label">HIGH SCHOOL</div>
           </div>
 
@@ -80,12 +71,8 @@ export function SchoolTypeStep({
             onClick={() => handleTypeSelect("college")}
             onKeyDown={activateOnKeyboard(() => handleTypeSelect("college"))}
           >
-            <div className="check-badge">
-              <IoCheckmark aria-hidden="true" />
-            </div>
-            <div className="icon">
-              <IoSchoolOutline aria-hidden="true" />
-            </div>
+            <div className="check-badge">✓</div>
+            <div className="icon">🎓</div>
             <div className="label">COLLEGE</div>
           </div>
         </div>

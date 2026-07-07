@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
 import { SchoolPickerCard } from "@/components/patient/onboarding/overlays/school-picker/school-picker-card";
 import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 import { useSchoolPicker } from "@/hooks/components/patient/onboarding/school-picker/use-school-picker";
@@ -73,7 +72,7 @@ export function SchoolPicker({
               id="searchBoxWrap"
             >
               <div className="search-box">
-                <IoSearchOutline aria-hidden="true" />
+                <span>🔍</span>
                 <input
                   type="text"
                   id="schoolSearchInput"
@@ -88,9 +87,8 @@ export function SchoolPicker({
               id="searchToggleBtn"
               type="button"
               onClick={toggleSearch}
-              aria-label={ONBOARDING_COPY.schoolType.searchPlaceholder}
             >
-              <IoSearchOutline aria-hidden="true" />
+              🔍
             </button>
           </div>
         </div>

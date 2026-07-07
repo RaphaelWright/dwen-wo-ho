@@ -16,19 +16,14 @@ import type {
   OnboardingScreen,
   VerifyFlow,
 } from "@/lib/types/components/patient/onboarding";
-import { patientAuthService } from "@/services/patient/auth";
-import { applyPatientAuthTokens } from "@/lib/utils/auth/patient-tokens";
-import { formatBirthDateForApi } from "@/lib/utils/patient/birth-date";
+import { patientOnboardingService } from "@/services/patient/onboarding/account-registry";
 import {
   buildHomeProfilePreview,
   hasCampusOnboardingData,
   mergeStoredOnboardingDraft,
   syncDraftDerivedFields,
 } from "@/lib/utils/patient/onboarding-validation";
-import {
-  composeFullName,
-  normalizeContactKey,
-} from "@/lib/utils/patient/onboarding-format";
+import { normalizeContactKey } from "@/lib/utils/patient/onboarding-format";
 import { setShowHomeProfileModalFlag } from "@/lib/utils/patient/onboarding-session";
 
 interface WizardActionDeps {
@@ -37,30 +32,17 @@ interface WizardActionDeps {
   draft: OnboardingDraft;
   signInPassword: string;
   verifyFlow: VerifyFlow;
-  otp: string;
-  otpReference: string | null;
-  passwordResetToken: string | null;
+  activeContactKey: string | null;
   goToScreen: (screen: OnboardingScreen) => void;
   updateDraft: (patch: Partial<OnboardingDraft>) => void;
   setAuthPath: (path: AuthPath) => void;
   setVerifyFlow: (flow: VerifyFlow) => void;
   setPhase: (phase: "auth" | "onboarding") => void;
   setActiveContactKey: (key: string | null) => void;
-  setOtpReference: (value: string | null) => void;
-  setPasswordResetToken: (value: string | null) => void;
-  setPatientUserId: (value: string | null) => void;
   setSignInPassword: (value: string) => void;
   setOtp: (value: string) => void;
   router: AppRouterInstance;
   showHostToast: (message: string) => void;
-}
-
-function getContactType(contactMode: ContactMode) {
-  return contactMode === "phone" ? "PHONE" : "EMAIL";
-}
-
-function getContactKey(contactMode: ContactMode, contactValue: string) {
-  return `${contactMode}:${normalizeContactKey(contactMode, contactValue)}`;
 }
 
 export function useOnboardingWizardActions(deps: WizardActionDeps) {
@@ -70,18 +52,13 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
     draft,
     signInPassword,
     verifyFlow,
-    otp,
-    otpReference,
-    passwordResetToken,
+    activeContactKey,
     goToScreen,
     updateDraft,
     setAuthPath,
     setVerifyFlow,
     setPhase,
     setActiveContactKey,
-    setOtpReference,
-    setPasswordResetToken,
-    setPatientUserId,
     setSignInPassword,
     setOtp,
     router,
@@ -128,110 +105,60 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
   );
 
   const routeAfterContactSubmit = useCallback(() => {
-    void patientAuthService
-      .checkContact({
-        type: getContactType(contactMode),
-        value: contactValue,
-      })
-      .then((account) => {
-        setPatientUserId(account.userId ?? null);
-        setActiveContactKey(getContactKey(contactMode, contactValue));
+    const account = patientOnboardingService.lookupContact(
+      contactMode,
+      contactValue,
+    );
 
-        if (account.exists) {
-          updateDraft({ nickname: account.nickname ?? "" });
-          setAuthPath("signin");
-          goToScreen(ONBOARDING_SCREENS.SIGN_IN);
-          return;
-        }
+    if (account) {
+      setActiveContactKey(account.contactKey);
+      updateDraft({ nickname: account.nickname, ...account.draft });
+      setAuthPath("signin");
+      goToScreen(ONBOARDING_SCREENS.SIGN_IN);
+      return;
+    }
 
-        setAuthPath("signup");
-        setVerifyFlow("signup");
-        goToScreen(ONBOARDING_SCREENS.CREATE_ACCOUNT);
-      })
-      .catch(() => {
-        toast.error("We could not check that contact. Try again.");
-      });
+    setAuthPath("signup");
+    setVerifyFlow("signup");
+    goToScreen(ONBOARDING_SCREENS.CREATE_ACCOUNT);
   }, [
     contactMode,
     contactValue,
     goToScreen,
     setActiveContactKey,
     setAuthPath,
-    setPatientUserId,
     setVerifyFlow,
     updateDraft,
   ]);
 
   const handleSignIn = useCallback(() => {
-    void patientAuthService
-      .signin({
-        contact: contactValue,
-        password: signInPassword,
-      })
-      .then((response) => {
-        applyPatientAuthTokens({
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-        });
-        setPatientUserId(response.userId);
-        setOtpReference(response.otpReference ?? null);
-        setActiveContactKey(getContactKey(contactMode, contactValue));
-        updateDraft({ nickname: response.nickname });
+    const account = patientOnboardingService.verifyPassword(
+      contactMode,
+      contactValue,
+      signInPassword,
+    );
 
-        if (response.onboardingCompleted) {
-          navigateToPatientWithHomeModal(
-            buildHomeProfilePreview(
-              mergeStoredOnboardingDraft({
-                ...draft,
-                nickname: response.nickname,
-              }),
-              contactMode,
-            ),
-          );
-          return;
-        }
+    if (!account) {
+      toast.error("Incorrect password. Try again.");
+      return;
+    }
 
-        openHomeOrOnboarding({ ...draft, nickname: response.nickname });
-      })
-      .catch(() => {
-        toast.error("Incorrect password. Try again.");
-      });
+    setActiveContactKey(account.contactKey);
+    openHomeOrOnboarding(account.draft);
   }, [
     contactMode,
     contactValue,
-    draft,
-    navigateToPatientWithHomeModal,
     openHomeOrOnboarding,
     setActiveContactKey,
-    setOtpReference,
-    setPatientUserId,
     signInPassword,
-    updateDraft,
   ]);
 
   const handleForgotPassword = useCallback(() => {
-    void patientAuthService
-      .forgotPassword({ contact: contactValue })
-      .then((response) => {
-        setOtpReference(response.otpReference);
-        setPasswordResetToken(null);
-        setAuthPath("recovery");
-        setVerifyFlow("recovery");
-        setOtp("");
-        goToScreen(ONBOARDING_SCREENS.VERIFY);
-      })
-      .catch(() => {
-        toast.error("We could not start password recovery. Try again.");
-      });
-  }, [
-    contactValue,
-    goToScreen,
-    setAuthPath,
-    setOtp,
-    setOtpReference,
-    setPasswordResetToken,
-    setVerifyFlow,
-  ]);
+    setAuthPath("recovery");
+    setVerifyFlow("recovery");
+    setOtp("");
+    goToScreen(ONBOARDING_SCREENS.VERIFY);
+  }, [goToScreen, setAuthPath, setOtp, setVerifyFlow]);
 
   const handleStartRecovery = useCallback(() => {
     setOtp("");
@@ -239,65 +166,49 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
   }, [goToScreen, setOtp]);
 
   const handleNewPasswordContinue = useCallback(() => {
-    if (!passwordResetToken) {
-      toast.error("Verify your recovery code before setting a new password.");
+    if (!activeContactKey) {
       return;
     }
 
-    void patientAuthService
-      .setPassword({
-        passwordResetToken,
-        password: draft.password,
-        confirmPassword: draft.confirmPassword,
-      })
-      .then(() => {
-        setSignInPassword("");
-        setPasswordResetToken(null);
-        setAuthPath("signin");
-        goToScreen(ONBOARDING_SCREENS.SIGN_IN);
-        toast.success("Password updated. Sign in with your new password.");
-      })
-      .catch(() => {
-        toast.error("We could not update your password. Try again.");
-      });
+    patientOnboardingService.updatePassword(activeContactKey, draft.password);
+    setSignInPassword("");
+
+    const account = patientOnboardingService.lookupContact(
+      contactMode,
+      contactValue,
+    );
+    if (!account) {
+      return;
+    }
+
+    setAuthPath("signin");
+    openHomeOrOnboarding({
+      ...account.draft,
+      password: draft.password,
+      confirmPassword: draft.password,
+    });
   }, [
-    draft.confirmPassword,
+    activeContactKey,
+    contactMode,
+    contactValue,
     draft.password,
-    goToScreen,
-    passwordResetToken,
+    openHomeOrOnboarding,
     setAuthPath,
-    setPasswordResetToken,
     setSignInPassword,
   ]);
 
   const handleCreateAccountContinue = useCallback(() => {
-    const fullName = composeFullName(draft.firstName, draft.lastName);
-    const dateOfBirth = formatBirthDateForApi({
-      month: draft.birthMonth,
-      day: draft.birthDay,
-      year: draft.birthYear,
+    patientOnboardingService.registerAccount({
+      contactMode,
+      contactValue,
+      password: draft.password,
+      draft,
     });
-
-    void patientAuthService
-      .signup({
-        contactType: getContactType(contactMode),
-        contact: contactValue,
-        name: fullName,
-        nickname: draft.nickname,
-        gender: draft.gender,
-        dateOfBirth,
-        password: draft.password,
-      })
-      .then((response) => {
-        setPatientUserId(response.userId);
-        setOtpReference(response.otpReference);
-        setActiveContactKey(getContactKey(contactMode, contactValue));
-        setOtp("");
-        goToScreen(ONBOARDING_SCREENS.VERIFY);
-      })
-      .catch(() => {
-        toast.error("We could not create your account. Try again.");
-      });
+    setActiveContactKey(
+      `${contactMode}:${normalizeContactKey(contactMode, contactValue)}`,
+    );
+    setOtp("");
+    goToScreen(ONBOARDING_SCREENS.VERIFY);
   }, [
     contactMode,
     contactValue,
@@ -305,62 +216,16 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
     goToScreen,
     setActiveContactKey,
     setOtp,
-    setOtpReference,
-    setPatientUserId,
   ]);
 
   const handleVerifyContinue = useCallback(() => {
-    if (!otpReference) {
-      toast.error("Request a new verification code and try again.");
+    if (verifyFlow === "recovery") {
+      updateDraft({ password: "", confirmPassword: "" });
+      goToScreen(ONBOARDING_SCREENS.NEW_PASSWORD);
       return;
     }
-
-    void patientAuthService
-      .verifyOtp({
-        otpReference,
-        code: otp,
-      })
-      .then((response) => {
-        if (!response.verified) {
-          toast.error("That verification code is not valid.");
-          return;
-        }
-
-        if (verifyFlow === "recovery") {
-          setPasswordResetToken(response.passwordResetToken ?? null);
-          updateDraft({ password: "", confirmPassword: "" });
-          goToScreen(ONBOARDING_SCREENS.NEW_PASSWORD);
-          return;
-        }
-
-        return patientAuthService
-          .signin({
-            contact: contactValue,
-            password: draft.password,
-          })
-          .then((signinResponse) => {
-            applyPatientAuthTokens({
-              accessToken: signinResponse.accessToken,
-              refreshToken: signinResponse.refreshToken,
-            });
-            setPatientUserId(signinResponse.userId);
-            goToScreen(ONBOARDING_SCREENS.PROFILE_PHOTO);
-          });
-      })
-      .catch(() => {
-        toast.error("We could not verify that code. Try again.");
-      });
-  }, [
-    contactValue,
-    draft.password,
-    goToScreen,
-    otp,
-    otpReference,
-    setPatientUserId,
-    setPasswordResetToken,
-    updateDraft,
-    verifyFlow,
-  ]);
+    goToScreen(ONBOARDING_SCREENS.PROFILE_PHOTO);
+  }, [goToScreen, updateDraft, verifyFlow]);
 
   const handleProfilePhotoContinue = useCallback(() => {
     setPhase("onboarding");
@@ -383,11 +248,22 @@ export function useOnboardingWizardActions(deps: WizardActionDeps) {
 
   const handleSubmit = useCallback(() => {
     const syncedDraft = syncDraftDerivedFields(draft);
+    patientOnboardingService.registerAccount({
+      contactMode,
+      contactValue,
+      password: syncedDraft.password,
+      draft: syncedDraft,
+    });
+    patientOnboardingService.markOnboardingComplete(
+      contactMode,
+      contactValue,
+      syncedDraft,
+    );
     navigateToPatientWithHomeModal(
       buildHomeProfilePreview(syncedDraft, contactMode),
       ONBOARDING_COPY.toast.onboardingComplete,
     );
-  }, [contactMode, draft, navigateToPatientWithHomeModal]);
+  }, [contactMode, contactValue, draft, navigateToPatientWithHomeModal]);
 
   return {
     routeAfterContactSubmit,

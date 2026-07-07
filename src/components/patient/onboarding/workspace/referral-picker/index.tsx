@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { IoSchoolOutline, IoSunnyOutline } from "react-icons/io5";
 import {
   ONBOARDING_COPY,
   ONBOARDING_REFERRAL_INFLUENCERS,
@@ -44,12 +43,9 @@ export function OnboardingReferralPicker({
         aria-label={ONBOARDING_COPY.referralPickerLabel}
         onClick={() => setOpen((current) => !current)}
       >
-        <span className="sun" aria-hidden="true">
-          <IoSunnyOutline />
-        </span>
+        <span className="sun">☀️</span>
         {ONBOARDING_COPY.referralPrefix}{" "}
-        <span className="handle">@{handle}</span>
-        <IoSchoolOutline className="referral-student-icon" aria-hidden="true" />
+        <span className="handle">@{handle}</span> 🧑‍🎓
       </button>
 
       <div

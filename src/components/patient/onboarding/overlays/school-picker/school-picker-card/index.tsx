@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IoStar } from "react-icons/io5";
 import type { SchoolPickerCardProps } from "@/lib/types/components/patient/onboarding";
 import { activateOnKeyboard } from "@/lib/utils/shared/a11y";
 
@@ -68,7 +67,7 @@ export function SchoolPickerCard({
         className="lockedin-pill"
         style={{ animationDelay: `${contentDelay}s` }}
       >
-        <IoStar className="star" aria-hidden="true" />
+        <span className="star">⭐</span>
         <span className="count">{formatLockedInCount(studentCount)}</span>{" "}
         Locked In
       </div>
