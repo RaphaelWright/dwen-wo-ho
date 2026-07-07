@@ -171,6 +171,7 @@ export interface ChoiceStepProps {
   contactMode: ContactMode;
   onContactModeChange: (mode: ContactMode) => void;
   onContinue: () => void;
+  onOpenTermsSheet: () => void;
 }
 
 export interface ContactStepProps {

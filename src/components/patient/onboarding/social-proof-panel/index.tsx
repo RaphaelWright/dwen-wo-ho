@@ -1,11 +1,15 @@
 import { ONBOARDING_SOCIAL_PROOF } from "@/lib/constants/components/patient/onboarding";
-import { OnboardingBrandLogo } from "@/components/patient/onboarding/brand-logo";
 
 export function SocialProofPanel() {
   return (
     <aside className="photo-side">
-      <div className="photo-logo">
-        <OnboardingBrandLogo placement="photo-side" />
+      <div className="ps-name">
+        <span className="ps-name-text">
+          {ONBOARDING_SOCIAL_PROOF.name}{" "}
+          <span className="ps-emoji" aria-hidden="true">
+            &#127891;
+          </span>
+        </span>
       </div>
 
       <div className="student-name-cycle">
@@ -19,11 +23,9 @@ export function SocialProofPanel() {
         of my mental health.&rdquo;
       </div>
 
-      <div className="student-block">
-        <div className="student-programme">
-          {ONBOARDING_SOCIAL_PROOF.programme}
-        </div>
-        <div className="student-school">{ONBOARDING_SOCIAL_PROOF.school}</div>
+      <div className="ps-footer">
+        <div className="ps-programme">{ONBOARDING_SOCIAL_PROOF.programme}</div>
+        <div className="ps-school">{ONBOARDING_SOCIAL_PROOF.school}</div>
       </div>
 
       <div className="student-rating">

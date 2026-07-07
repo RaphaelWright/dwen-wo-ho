@@ -32,6 +32,7 @@ function renderAuthStep(
         contactMode={props.contactMode}
         onContactModeChange={props.onContactModeChange}
         onContinue={props.onChoiceContinue}
+        onOpenTermsSheet={props.onOpenTermsSheet}
       />
     ),
 
