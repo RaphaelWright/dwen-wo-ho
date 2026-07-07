@@ -11,7 +11,9 @@ export function StepShell({
   children,
 }: StepShellProps) {
   return (
-    <div className={cn("screen", centered && "centered", className)}>
+    <div
+      className={cn("screen", centered && "centered screen-vcenter", className)}
+    >
       <h1 className="screen-title">{title}</h1>
       {subtitle ? (
         <p className={centered ? "sub" : "screen-sub"}>{subtitle}</p>

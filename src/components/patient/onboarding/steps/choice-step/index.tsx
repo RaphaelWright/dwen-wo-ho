@@ -14,6 +14,7 @@ export function ChoiceStep({
   contactMode,
   onContactModeChange,
   onContinue,
+  onOpenTermsSheet,
 }: ChoiceStepProps) {
   const handleSelect = (mode: ContactMode) => {
     onContactModeChange(mode);
@@ -45,6 +46,17 @@ export function ChoiceStep({
           </div>
         ))}
       </div>
+
+      <p className="terms choice-terms">
+        {ONBOARDING_COPY.contact.termsPrefix}
+        <button
+          type="button"
+          className="highlight"
+          onClick={onOpenTermsSheet}
+        >
+          {ONBOARDING_COPY.contact.termsLink}
+        </button>
+      </p>
     </StepShell>
   );
 }

@@ -120,7 +120,7 @@
     linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.6) 80%),
     url("/amanda.jpg") no-repeat center center;
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
 }
 .patient-onboarding .photo-logo {
   position: absolute;
@@ -175,70 +175,83 @@
   font-size: 22px;
   color: #fff;
 }
-.patient-onboarding .student-name-cycle {
+.patient-onboarding .ps-name {
   position: absolute;
-  top: 128px;
-  left: 68px;
-  right: 40px;
+  top: 7%;
+  left: 0;
+  right: 0;
   z-index: 2;
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-.patient-onboarding .student-name-cycle b {
+  justify-content: center;
+  text-align: center;
   font-family: var(--display);
   font-weight: 800;
-  font-size: 48px;
-  line-height: 1;
-  color: var(--gold);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  border-bottom: 1.65px solid var(--gold);
-  display: inline-block;
-  padding-bottom: 8px;
+  font-size: clamp(39px, 4.8vw, 60px);
+  color: #fff;
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.9),
+    0 0 28px rgba(255, 233, 170, 0.85),
+    0 0 60px rgba(255, 233, 170, 0.55);
 }
-.patient-onboarding .student-name-cycle .grad-cap {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
+.patient-onboarding .ps-name-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.14em;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.16em;
 }
-.patient-onboarding .student-quote {
+.patient-onboarding .ps-emoji {
+  font-size: 0.85em;
+  text-shadow: none;
+}
+.patient-onboarding .ps-quote {
   position: absolute;
-  left: 68px;
-  right: 40px;
-  bottom: 150px;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
   z-index: 2;
+  padding: 0 11%;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 600;
   font-style: italic;
   color: #fff;
-  font-size: 18px;
-  line-height: 1.45;
+  font-size: clamp(18px, 2.1vw, 25px);
+  line-height: 1.42;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
 }
-.patient-onboarding .student-block {
+.patient-onboarding .ps-footer {
   position: absolute;
-  left: 68px;
-  right: 170px;
-  bottom: 64px;
+  left: 7%;
+  bottom: 7%;
   z-index: 2;
 }
-.patient-onboarding .student-programme {
+.patient-onboarding .ps-programme {
   font-family: var(--display);
   font-weight: 800;
-  font-size: 22px;
+  font-size: clamp(18px, 2vw, 25px);
   color: #fff;
   margin: 0 0 4px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
-.patient-onboarding .student-school {
+.patient-onboarding .ps-school {
   font-family: var(--body);
-  font-size: 15px;
+  font-size: clamp(13px, 1.25vw, 15px);
   color: var(--green);
   font-weight: 600;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
-.patient-onboarding .student-rating {
+.patient-onboarding .ps-rating {
   position: absolute;
-  right: 40px;
-  bottom: 48px;
+  right: 7%;
+  bottom: 7%;
   z-index: 2;
-  width: 78px;
-  height: 78px;
+  width: clamp(64px, 7vw, 84px);
+  height: clamp(64px, 7vw, 84px);
   border-radius: 50%;
   background: var(--gold-pale);
   display: flex;
@@ -249,26 +262,21 @@
   box-sizing: border-box;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
-.patient-onboarding .student-rating .stars {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
+.patient-onboarding .ps-stars {
+  font-size: clamp(7px, 0.75vw, 9px);
   color: var(--gold-deep);
-  gap: 1px;
+  line-height: 1;
+  letter-spacing: -1px;
 }
-.patient-onboarding .student-rating .stars svg {
-  width: 9px;
-  height: 9px;
-}
-.patient-onboarding .student-rating .num {
+.patient-onboarding .ps-score {
   font-family: var(--display);
   font-weight: 800;
-  font-size: 18px;
+  font-size: clamp(15px, 1.6vw, 19px);
   color: var(--green-deep);
+  line-height: 1.05;
 }
-.patient-onboarding .student-rating .label {
-  font-size: 7px;
+.patient-onboarding .ps-label {
+  font-size: clamp(5px, 0.58vw, 7px);
   letter-spacing: 0.5px;
   color: var(--gold-deep);
   font-weight: 700;
@@ -284,13 +292,22 @@
   background: var(--ob-auth-bg);
   color: var(--ob-text);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.patient-onboarding .auth-side::-webkit-scrollbar {
+  display: none;
 }
 .patient-onboarding .auth-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--ob-auth-bg);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 34px 64px 0;
+  padding: 34px 64px 24px;
 }
 .patient-onboarding .auth-header .brand {
   display: flex;
@@ -304,25 +321,28 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--ob-referral-bg);
-  border: 1.65px solid var(--gold);
+  background: rgba(232, 212, 173, 0.07);
+  border: 1.65px solid rgba(232, 212, 173, 0.25);
   border-radius: 30px;
-  padding: 8px 18px 8px 8px;
-  font-family: var(--display);
-  font-weight: 700;
+  padding: 9px 18px;
+  font-family: var(--body);
+  font-weight: 500;
   font-size: 14px;
-  color: var(--gold);
+  color: var(--green);
 }
 .patient-onboarding .referral-pill .sun {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: none;
+  display: inline;
+  font-size: 15px;
   flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.patient-onboarding .referral-pill .sun:hover {
+  transform: scale(1.15) rotate(15deg);
 }
 .patient-onboarding .referral-pill .sun svg {
   width: 15px;
@@ -334,7 +354,8 @@
   flex-shrink: 0;
 }
 .patient-onboarding .referral-pill .handle {
-  color: var(--ob-referral-handle);
+  color: var(--green);
+  font-weight: 800;
 }
 .patient-onboarding .referral-picker {
   position: relative;
@@ -378,18 +399,14 @@
   color: var(--gold);
 }
 .patient-onboarding .screen {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 140px;
-  bottom: 110px;
-  padding: 0 64px;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  position: relative;
+  min-height: calc(100vh - 250px);
+  padding: 0 64px 40px;
 }
-.patient-onboarding .screen::-webkit-scrollbar {
-  display: none;
+.patient-onboarding .screen-vcenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .patient-onboarding .screen.hidden {
   display: none;
@@ -433,7 +450,8 @@ p.screen-sub {
 /* ---------- type cards (High School / College) ---------- */
 .patient-onboarding .type-card-row {
   display: flex;
-  gap: 20px;
+  gap: 24px;
+  justify-content: center;
 }
 @keyframes statCardIn {
   from {
@@ -446,31 +464,32 @@ p.screen-sub {
   }
 }
 .patient-onboarding .type-card {
-  width: 230px;
-  height: 230px;
-  border-radius: 18px;
-  border: 1.65px solid var(--ob-border);
+  width: 170px;
+  height: 170px;
+  border-radius: 22px;
+  border: 1.65px solid var(--ob-border-bold);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   cursor: pointer;
   color: var(--ob-text);
-  background: var(--ob-fill-card);
+  background: var(--ob-auth-bg);
   position: relative;
   transition:
-    border-color 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease;
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
   animation: statCardIn 0.35s ease both;
 }
 .patient-onboarding .type-card:nth-child(2) {
   animation-delay: 0.05s;
 }
 .patient-onboarding .type-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-2px) scale(1.03);
+  border-color: var(--purple-soft);
+  background: var(--ob-purple-tint-soft);
+  transform: translateY(-3px);
 }
 .patient-onboarding .type-card:active {
   transform: scale(0.97);
@@ -479,8 +498,8 @@ p.screen-sub {
   color: var(--gold);
 }
 .patient-onboarding .type-card .icon svg {
-  width: 46px;
-  height: 46px;
+  width: 38px;
+  height: 38px;
 }
 .patient-onboarding .type-card .label {
   font-family: var(--display);
@@ -489,8 +508,11 @@ p.screen-sub {
   letter-spacing: 0.06em;
 }
 .patient-onboarding .type-card.selected {
-  border-color: var(--purple-soft);
-  background: var(--ob-purple-tint);
+  border-color: var(--green);
+  background: var(--gold-tint);
+}
+.patient-onboarding .type-card.selected .label {
+  color: var(--green);
 }
 .patient-onboarding .type-card .check-badge {
   position: absolute;
@@ -514,6 +536,7 @@ p.screen-sub {
 }
 .patient-onboarding .type-card.selected .check-badge {
   opacity: 1;
+  background: var(--green);
 }
 .patient-onboarding .school-context-pill {
   display: none;
@@ -648,8 +671,8 @@ p.screen-sub {
   margin-top: 4px;
 }
 .patient-onboarding .programme-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
   padding-bottom: 30px;
 }
@@ -737,7 +760,7 @@ p.screen-sub {
 }
 /* ---------- footer / stepper ---------- */
 .patient-onboarding .footer-bar {
-  position: absolute;
+  position: sticky;
   left: 0;
   right: 0;
   bottom: 0;
@@ -745,11 +768,7 @@ p.screen-sub {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(
-    180deg,
-    var(--ob-footer-from),
-    var(--ob-footer-to) 40%
-  );
+  background: var(--ob-auth-bg);
   z-index: 6;
 }
 .patient-onboarding .ghost-btn {
@@ -1975,7 +1994,7 @@ p.screen-sub {
 }
 /* ---- auth footer + stepper (signup/verify/newpass only — separate from the onboarding footer-bar) ---- */
 .patient-onboarding .auth-footer {
-  position: absolute;
+  position: sticky;
   left: 0;
   right: 0;
   bottom: 0;
@@ -1984,6 +2003,8 @@ p.screen-sub {
   justify-content: space-between;
   padding: 24px 64px;
   border-top: 1.1px solid var(--ob-border-hairline);
+  background: var(--ob-auth-bg);
+  z-index: 6;
 }
 .patient-onboarding .auth-footer.hidden {
   display: none;
@@ -2419,6 +2440,10 @@ p.screen-sub {
   color: var(--ob-text-ghost);
   margin-top: 18px;
 }
+.patient-onboarding .choice-terms {
+  margin-top: 56px;
+  text-align: center;
+}
 /* ================= popup sheet ================= */
 .patient-onboarding .popup-overlay {
   position: fixed;
@@ -2695,19 +2720,12 @@ p.screen-sub {
     width: 66%;
   }
 
-  .patient-onboarding .photo-logo,
-  .patient-onboarding .student-name-cycle,
-  .patient-onboarding .student-quote,
-  .patient-onboarding .student-block {
+  .patient-onboarding .ps-footer {
     left: 36px;
-    right: 28px;
+    right: 120px;
   }
 
-  .patient-onboarding .student-name-cycle b {
-    font-size: 38px;
-  }
-
-  .patient-onboarding .student-rating {
+  .patient-onboarding .ps-rating {
     right: 28px;
     bottom: 36px;
   }
@@ -2733,25 +2751,27 @@ p.screen-sub {
 
 @media (max-width: 900px) {
   .patient-onboarding.app {
-    display: block;
-    min-height: 100vh;
-    min-height: 100dvh;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
   }
 
   .patient-onboarding .photo-side {
-    display: none;
+    width: 100%;
+    height: 190px;
+    flex-shrink: 0;
   }
 
   .patient-onboarding .auth-side {
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .patient-onboarding .auth-header {
     gap: 16px;
-    padding: 22px 24px 0;
+    padding: 16px 24px 12px;
   }
 
   .patient-onboarding .auth-header .brand {
@@ -2786,9 +2806,52 @@ p.screen-sub {
   }
 
   .patient-onboarding .screen {
-    top: 98px;
-    bottom: 96px;
-    padding: 0 24px 20px;
+    min-height: 0;
+    padding: 0 24px 28px;
+  }
+
+  .patient-onboarding .screen-vcenter {
+    justify-content: flex-start;
+    padding-top: 18px;
+  }
+
+  .patient-onboarding .ps-name {
+    top: 14px;
+    font-size: 26px;
+  }
+
+  .patient-onboarding .ps-quote {
+    display: none;
+  }
+
+  .patient-onboarding .ps-footer {
+    left: 5%;
+    right: 74px;
+    bottom: 5%;
+  }
+
+  .patient-onboarding .ps-programme {
+    font-size: 14px;
+  }
+
+  .patient-onboarding .ps-school {
+    margin-top: 1px;
+    font-size: 12px;
+  }
+
+  .patient-onboarding .ps-rating {
+    right: 5%;
+    bottom: 5%;
+    width: 56px;
+    height: 56px;
+  }
+
+  .patient-onboarding .ps-score {
+    font-size: 13px;
+  }
+
+  .patient-onboarding .ps-label {
+    font-size: 5px;
   }
 
   .patient-onboarding .screen.onboarding-step {
@@ -2935,7 +2998,7 @@ p.screen-sub {
 @media (max-width: 560px) {
   .patient-onboarding .auth-header {
     align-items: flex-start;
-    padding: 18px 18px 0;
+    padding: 18px 18px 12px;
   }
 
   .patient-onboarding .auth-header .onboarding-brand-logo img {
@@ -2954,14 +3017,12 @@ p.screen-sub {
   }
 
   .patient-onboarding .referral-pill .sun {
-    width: 22px;
-    height: 22px;
+    width: auto;
+    height: auto;
     font-size: 11px;
   }
 
   .patient-onboarding .screen {
-    top: 84px;
-    bottom: 88px;
     padding: 0 18px 18px;
   }
 
@@ -3152,8 +3213,7 @@ p.screen-sub {
 
 @media (max-height: 620px) and (max-width: 900px) {
   .patient-onboarding .screen {
-    top: 76px;
-    bottom: 78px;
+    min-height: calc(100dvh - 210px);
   }
 
   .patient-onboarding .auth-header {

@@ -213,7 +213,7 @@ export const ONBOARDING_COPY = {
     continue: "Continue",
   },
   createAccount: {
-    title: "Create your LOCK IN account",
+    title: "Create your LOCK IN",
     subtitlePrefix: "You're using",
     subtitleSuffix: "for this account.",
     firstName: "First name",
@@ -237,8 +237,8 @@ export const ONBOARDING_COPY = {
     continue: "Continue",
   },
   profilePhoto: {
-    title: "Add a profile photo",
-    subtitle: "Help your campus community recognize you.",
+    title: "Add A Photo",
+    subtitle: "Upload, then drag and zoom to position your photo.",
     addPhoto: "Add photo",
     changePhoto: "Change photo",
     photoAdded: "Looking good!",
