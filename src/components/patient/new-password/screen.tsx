@@ -21,10 +21,10 @@ function PatientNewPasswordContent() {
   } = usePatientNewPassword();
 
   return (
-    <div className="animate-in fade-in zoom-in-95 flex min-h-screen w-full flex-col justify-between px-4 py-4 duration-700 sm:px-8 sm:py-6 md:px-12 lg:px-16">
+    <div className="animate-in fade-in zoom-in-95 flex h-full min-h-screen w-full flex-col justify-between px-6 py-6 duration-700 sm:px-8 md:px-12 lg:px-16">
       <NewPasswordHeader />
 
-      <div className="flex flex-1 items-center justify-center py-8 sm:py-12">
+      <div className="flex flex-1 items-center justify-center py-12">
         <NewPasswordForm
           register={register}
           errors={errors}

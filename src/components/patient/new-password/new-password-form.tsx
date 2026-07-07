@@ -2,12 +2,7 @@ import { NewPasswordFormProps } from "@/lib/types/components/patient/new-passwor
 import { NEW_PASSWORD_TEXTS } from "@/lib/constants/components/patient/auth-copy";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  IoAlertCircleOutline,
-  IoEyeOffOutline,
-  IoEyeOutline,
-  IoLockClosedOutline,
-} from "react-icons/io5";
+import { Eye, EyeOff, Lock, AlertCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 export function NewPasswordForm({
@@ -21,7 +16,7 @@ export function NewPasswordForm({
     <form
       id="login-form"
       onSubmit={onSubmit}
-      className="animate-in fade-in slide-in-from-bottom-4 mx-auto w-full max-w-md space-y-6 duration-700 sm:space-y-8"
+      className="animate-in fade-in slide-in-from-bottom-4 mx-auto w-full max-w-md space-y-8 duration-700"
     >
       <div className="space-y-2 text-center">
         <h1 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
@@ -38,7 +33,7 @@ export function NewPasswordForm({
             New Password
           </Label>
           <div className="group relative">
-            <IoLockClosedOutline className="text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors duration-200" />
+            <Lock className="text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors duration-200" />
             <Input
               {...register("password")}
               placeholder={NEW_PASSWORD_TEXTS.form.passwordPlaceholder}
@@ -57,15 +52,15 @@ export function NewPasswordForm({
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 hover:bg-transparent"
             >
               {showPassword ? (
-                <IoEyeOffOutline className="h-4 w-4" />
+                <EyeOff className="h-4 w-4" />
               ) : (
-                <IoEyeOutline className="h-4 w-4" />
+                <Eye className="h-4 w-4" />
               )}
             </Button>
           </div>
           {errors?.password?.message && (
             <div className="animate-in slide-in-from-top-1 fade-in flex items-center gap-1.5 pl-1 duration-200">
-              <IoAlertCircleOutline className="text-destructive h-3.5 w-3.5 shrink-0" />
+              <AlertCircle className="text-destructive h-3.5 w-3.5 shrink-0" />
               <p className="text-destructive text-xs font-medium">
                 {errors.password.message}
               </p>
@@ -78,7 +73,7 @@ export function NewPasswordForm({
             Confirm Password
           </Label>
           <div className="group relative">
-            <IoLockClosedOutline className="text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors duration-200" />
+            <Lock className="text-muted-foreground group-focus-within:text-primary absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transition-colors duration-200" />
             <Input
               {...register("repeatPassword")}
               placeholder={NEW_PASSWORD_TEXTS.form.repeatPasswordPlaceholder}
@@ -97,15 +92,15 @@ export function NewPasswordForm({
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 hover:bg-transparent"
             >
               {showPassword ? (
-                <IoEyeOffOutline className="h-4 w-4" />
+                <EyeOff className="h-4 w-4" />
               ) : (
-                <IoEyeOutline className="h-4 w-4" />
+                <Eye className="h-4 w-4" />
               )}
             </Button>
           </div>
           {errors?.repeatPassword?.message && (
             <div className="animate-in slide-in-from-top-1 fade-in flex items-center gap-1.5 pl-1 duration-200">
-              <IoAlertCircleOutline className="text-destructive h-3.5 w-3.5 shrink-0" />
+              <AlertCircle className="text-destructive h-3.5 w-3.5 shrink-0" />
               <p className="text-destructive text-xs font-medium">
                 {errors.repeatPassword.message}
               </p>

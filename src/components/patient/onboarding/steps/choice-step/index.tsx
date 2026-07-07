@@ -1,6 +1,5 @@
 "use client";
 
-import { IoCallOutline, IoMailOutline } from "react-icons/io5";
 import { StepShell } from "@/components/patient/onboarding/steps/step-shell";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
 import type {
@@ -38,9 +37,7 @@ export function ChoiceStep({
             onClick={() => handleSelect(mode)}
             onKeyDown={activateOnKeyboard(() => handleSelect(mode))}
           >
-            <div className="emoji" aria-hidden="true">
-              {mode === "phone" ? <IoCallOutline /> : <IoMailOutline />}
-            </div>
+            <div className="emoji">{mode === "phone" ? "📞" : "📩"}</div>
             <div className="label">{mode === "phone" ? "PHONE" : "EMAIL"}</div>
             <div className="plus" />
           </div>

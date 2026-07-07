@@ -29,20 +29,14 @@ export const refreshToken = async (): Promise<string | null> => {
 
       // Call refresh token endpoint directly (not via api()) to avoid a
       // circular dependency between this module and lib/api.
-      const storedUserType = getStoredUserType();
-      const refreshEndpoint =
-        storedUserType === "patient"
-          ? STATIC_ENDPOINTS.PATIENT_AUTH.REFRESH_TOKEN
-          : STATIC_ENDPOINTS.AUTH.REFRESH_TOKEN;
-
-      const res = await fetch(`${API_BASE_URL}${refreshEndpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "*/*" },
-        body:
-          storedUserType === "patient"
-            ? undefined
-            : JSON.stringify({ refreshToken: refreshTokenValue }),
-      });
+      const res = await fetch(
+        `${API_BASE_URL}${STATIC_ENDPOINTS.AUTH.REFRESH_TOKEN}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "*/*" },
+          body: JSON.stringify({ refreshToken: refreshTokenValue }),
+        },
+      );
 
       if (res.ok) {
         const json = await res.json();
@@ -51,6 +45,7 @@ export const refreshToken = async (): Promise<string | null> => {
         const newRefreshToken = data?.refreshToken;
 
         if (newAccessToken) {
+          const storedUserType = getStoredUserType();
           const isCurator =
             storedUserType === "curator" ||
             localStorage.getItem("curatorToken");
@@ -58,10 +53,6 @@ export const refreshToken = async (): Promise<string | null> => {
           if (isCurator) {
             localStorage.setItem("curatorToken", newAccessToken);
             setUserType("curator");
-          } else if (storedUserType === "patient") {
-            localStorage.setItem("token", newAccessToken);
-            localStorage.setItem("patientToken", newAccessToken);
-            setUserType("patient");
           } else {
             localStorage.setItem("token", newAccessToken);
             if (!storedUserType) {
@@ -150,7 +141,6 @@ export const performLogout = (
   const authKeys = [
     "token",
     "curatorToken",
-    "patientToken",
     "refreshToken",
     "userType",
     "pendingUser:v1",

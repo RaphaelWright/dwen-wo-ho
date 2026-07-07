@@ -1,6 +1,5 @@
 "use client";
 
-import { IoCheckmark } from "react-icons/io5";
 import {
   AUTH_FOOTER_STEP_LABELS,
   ONBOARDING_FOOTER_STEP_LABELS,
@@ -33,9 +32,7 @@ function MockAuthStepper({
             <div
               className={cn("astep", isActive && "active", isDone && "done")}
             >
-              <div className="astep-circle">
-                {isDone ? <IoCheckmark aria-hidden="true" /> : index + 1}
-              </div>
+              <div className="astep-circle">{isDone ? "✓" : index + 1}</div>
               <div className="astep-label">{label}</div>
             </div>
             {index < steps.length - 1 ? <div className="astep-line" /> : null}
@@ -71,7 +68,7 @@ function MockOnboardingStepper({
         return (
           <div key={label} className="contents">
             <div className={cn("step-chip", isDone && "done")}>
-              {isDone ? <IoCheckmark aria-hidden="true" /> : null}
+              {isDone ? "✓" : ""}
             </div>
             <span className="step-label">{label}</span>
             {index < steps.length - 1 ? <div className="step-seg" /> : null}

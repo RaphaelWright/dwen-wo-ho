@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-07T01:04:04.668Z",
+  "generatedAt": "2026-06-28T06:30:57.283Z",
   "summary": {
-    "mixedDirectories": 3,
+    "mixedDirectories": 2,
     "pascalCaseFiles": 0,
     "shimFiles": 0,
     "nameCollisions": 0,
@@ -10,7 +10,6 @@
   },
   "mixed": [
     "src/components/curator/create/creative-studios",
-    "src/components/patient/onboarding/overlays/school-picker",
     "src/components/patient/onboarding/workspace"
   ],
   "pascalCase": [],

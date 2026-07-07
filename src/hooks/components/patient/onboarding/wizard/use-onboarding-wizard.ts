@@ -4,7 +4,10 @@ import { useCallback, useEffect } from "react";
 import type { Route } from "next";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useHostToast } from "@/hooks/components/patient/onboarding/use-host-toast";
-import { ONBOARDING_SCREENS } from "@/lib/constants/components/patient/onboarding";
+import {
+  ONBOARDING_DEMO_OTP,
+  ONBOARDING_SCREENS,
+} from "@/lib/constants/components/patient/onboarding";
 import type {
   FieldValidationKey,
   OnboardingDraft,
@@ -42,12 +45,6 @@ export function useOnboardingWizard() {
     setContactMode,
     otp,
     setOtp,
-    otpReference,
-    setOtpReference,
-    passwordResetToken,
-    setPasswordResetToken,
-    patientUserId,
-    setPatientUserId,
     signInPassword,
     setSignInPassword,
     activeContactKey,
@@ -89,18 +86,13 @@ export function useOnboardingWizard() {
     draft,
     signInPassword,
     verifyFlow,
-    otp,
-    otpReference,
-    passwordResetToken,
+    activeContactKey,
     goToScreen,
     updateDraft,
     setAuthPath,
     setVerifyFlow,
     setPhase,
     setActiveContactKey,
-    setOtpReference,
-    setPasswordResetToken,
-    setPatientUserId,
     setSignInPassword,
     setOtp,
     router,
@@ -144,7 +136,9 @@ export function useOnboardingWizard() {
     }
 
     const timer = window.setTimeout(() => {
-      actions.handleVerifyContinue();
+      if (otp === ONBOARDING_DEMO_OTP || otp.length === 6) {
+        actions.handleVerifyContinue();
+      }
     }, 150);
 
     return () => window.clearTimeout(timer);
@@ -178,9 +172,6 @@ export function useOnboardingWizard() {
     verifyFlow,
     contactMode,
     otp,
-    otpReference,
-    passwordResetToken,
-    patientUserId,
     signInPassword,
     draft,
     referralHandle,

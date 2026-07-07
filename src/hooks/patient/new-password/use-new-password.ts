@@ -4,16 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { ROUTES } from "@/lib/constants/infra/routes";
 import useGetSearchParams from "@/hooks/shared/use-get-search-params";
+import { useAuthQuery } from "@/hooks/queries/use-auth";
 import { SignUpSchema } from "@/lib/schemas/patient-auth-schema";
 import { SignUpFormData } from "@/lib/types/components/patient/new-password";
-import { patientAuthService } from "@/services/patient/auth";
 
 export function usePatientNewPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { loginMutation } = useAuthQuery();
   const email = useGetSearchParams("email");
   const router = useRouter();
 
@@ -21,12 +20,7 @@ export function usePatientNewPassword() {
   // only exists in the browser (URL search param / localStorage auth tokens),
   // so it cannot be relocated to middleware or a server redirect.
   useEffect(() => {
-    const recoveryToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("patientRecoveryToken")
-        : null;
-
-    if (!email || !recoveryToken) {
+    if (!email) {
       router.push(ROUTES.patient.join);
     }
   }, [email, router]);
@@ -46,30 +40,14 @@ export function usePatientNewPassword() {
   });
 
   const onSubmit = useCallback(
-    async (values: SignUpFormData) => {
-      const recoveryToken = localStorage.getItem("patientRecoveryToken");
-      if (!recoveryToken) {
-        router.push(ROUTES.patient.join);
-        return;
-      }
-
-      setIsSubmitting(true);
-      try {
-        await patientAuthService.setPassword({
-          passwordResetToken: recoveryToken,
-          password: values.password,
-          confirmPassword: values.repeatPassword,
-        });
-        localStorage.removeItem("patientRecoveryToken");
-        toast.success("Password updated. Sign in with your new password.");
-        router.push(ROUTES.patient.join);
-      } catch {
-        toast.error("We could not update your password. Try again.");
-      } finally {
-        setIsSubmitting(false);
-      }
+    (values: SignUpFormData) => {
+      loginMutation.mutate(values, {
+        onSuccess: () => {
+          router.push(ROUTES.patient.join);
+        },
+      });
     },
-    [router],
+    [loginMutation, router],
   );
 
   const togglePasswordVisibility = useCallback(() => {
@@ -85,6 +63,6 @@ export function usePatientNewPassword() {
     togglePasswordVisibility,
     onSubmit,
     router,
-    isSubmitting,
+    isSubmitting: loginMutation.isPending,
   };
 }

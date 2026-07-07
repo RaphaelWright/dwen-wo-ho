@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { ONBOARDING_COPY } from "@/lib/constants/components/patient/onboarding";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface OnboardingFooterShellProps {
@@ -45,7 +45,7 @@ export function OnboardingFooterShell({
                 : `text-muted-foreground flex h-10 items-center justify-center rounded-full border border-transparent bg-transparent px-3 sm:px-6${hideBack ? "pointer-events-none invisible" : ""}`,
             )}
           >
-            <IoArrowBackOutline className="size-4 shrink-0" />
+            <ArrowLeftIcon className="size-4 shrink-0" />
             <span className="hidden sm:inline">{ONBOARDING_COPY.back}</span>
           </Button>
         </div>
@@ -62,7 +62,7 @@ export function OnboardingFooterShell({
             className="bg-primary text-primary-foreground hover:bg-primary/90 flex h-10 max-w-38 shrink-0 items-center justify-center gap-1 rounded-full px-4 text-sm transition-[background-color,color,opacity] sm:max-w-none sm:px-8 sm:text-base"
           >
             <span className="truncate">{nextLabel}</span>
-            <IoArrowForwardOutline className="size-4 shrink-0" />
+            <ArrowRightIcon className="size-4 shrink-0" />
           </Button>
         </div>
       </div>
