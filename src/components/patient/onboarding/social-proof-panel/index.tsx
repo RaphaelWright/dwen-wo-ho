@@ -12,26 +12,19 @@ export function SocialProofPanel() {
         </span>
       </div>
 
-      <div className="student-name-cycle">
-        <b>{ONBOARDING_SOCIAL_PROOF.name}</b>
-        <span className="grad-cap">🎓</span>
-      </div>
-
-      <div className="student-quote">
-        &ldquo;Lock In makes it easy for me to take care
-        <br />
-        of my mental health.&rdquo;
-      </div>
+      <div className="ps-quote">&ldquo;{ONBOARDING_SOCIAL_PROOF.quote}&rdquo;</div>
 
       <div className="ps-footer">
         <div className="ps-programme">{ONBOARDING_SOCIAL_PROOF.programme}</div>
         <div className="ps-school">{ONBOARDING_SOCIAL_PROOF.school}</div>
       </div>
 
-      <div className="student-rating">
-        <div className="stars">★★★★★</div>
-        <div className="num">{ONBOARDING_SOCIAL_PROOF.rating}</div>
-        <div className="label">{ONBOARDING_SOCIAL_PROOF.ratingLabel}</div>
+      <div className="ps-rating">
+        <div className="ps-stars" aria-hidden="true">
+          &#9733;&#9733;&#9733;&#9733;&#9733;
+        </div>
+        <div className="ps-score">{ONBOARDING_SOCIAL_PROOF.rating}</div>
+        <div className="ps-label">{ONBOARDING_SOCIAL_PROOF.ratingLabel}</div>
       </div>
     </aside>
   );

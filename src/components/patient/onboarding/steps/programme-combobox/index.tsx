@@ -1,7 +1,7 @@
 "use client";
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
-import { BookOpen } from "lucide-react";
+import { IoBookOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import {
   Combobox,
@@ -28,7 +28,7 @@ function ProgrammeComboboxOption({ item }: { item: ProgrammeComboboxItem }) {
   return (
     <div className="flex min-w-0 items-center gap-2">
       <span className="bg-primary/10 text-primary flex size-6 shrink-0 items-center justify-center rounded-md border sm:size-8">
-        <BookOpen className="size-3.5 sm:size-4" aria-hidden="true" />
+        <IoBookOutline className="size-3.5 sm:size-4" aria-hidden="true" />
       </span>
       <span className="truncate">{item.label}</span>
     </div>
@@ -71,7 +71,7 @@ export function ProgrammeCombobox({
           <InputGroupAddon align="inline-end">
             {selectedItem ? (
               <span className="bg-primary/10 text-primary flex size-7 shrink-0 items-center justify-center rounded-md border">
-                <BookOpen className="size-4" aria-hidden="true" />
+                <IoBookOutline className="size-4" aria-hidden="true" />
               </span>
             ) : (
               <InputGroupButton

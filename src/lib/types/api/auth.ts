@@ -63,3 +63,50 @@ export interface ProfileQueryHandle {
   data: ProviderProfileResponse | undefined;
   isLoading: boolean;
 }
+
+export type PatientAuthContactType = "PHONE" | "EMAIL";
+
+export interface PatientContactCheckResponse {
+  exists: boolean;
+  userId?: string;
+  nickname?: string;
+  nextStep?: string;
+}
+
+export interface PatientSignupResponse {
+  userId: string;
+  verificationRequired: boolean;
+  otpReference: string;
+  nextStep: string;
+}
+
+export interface PatientSigninResponse {
+  accessToken: string;
+  refreshToken: string;
+  nickname: string;
+  onboardingCompleted: boolean;
+  nextStep: string;
+  userId: string;
+  otpReference?: string;
+}
+
+export interface PatientForgotPasswordResponse {
+  otpReference: string;
+  nextStep: string;
+}
+
+export interface PatientOtpVerifyResponse {
+  verified: boolean;
+  passwordResetToken?: string;
+  nextStep: string;
+}
+
+export interface PatientSendOtpResponse {
+  otpReference: string;
+  expiresInSeconds: number;
+}
+
+export interface PatientSetPasswordResponse {
+  success: boolean;
+  nextStep: string;
+}
