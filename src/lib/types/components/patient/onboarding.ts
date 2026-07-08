@@ -168,7 +168,7 @@ export interface EmailFieldProps {
 }
 
 export interface ChoiceStepProps {
-  contactMode: ContactMode;
+  contactMode: ContactMode | null;
   onContactModeChange: (mode: ContactMode) => void;
   onContinue: () => void;
   onOpenTermsSheet: () => void;

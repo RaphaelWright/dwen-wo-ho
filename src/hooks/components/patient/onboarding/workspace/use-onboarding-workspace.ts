@@ -27,6 +27,7 @@ const RECOVERY_AUTH_STEPPER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
 ]);
 
 const AUTH_FOOTER_SCREENS: ReadonlySet<OnboardingScreen> = new Set([
+  ONBOARDING_SCREENS.CONTACT,
   ONBOARDING_SCREENS.CREATE_ACCOUNT,
   ONBOARDING_SCREENS.VERIFY,
   ONBOARDING_SCREENS.PROFILE_PHOTO,
@@ -69,7 +70,9 @@ export function useOnboardingWorkspace() {
     verifyFlow === "recovery"
       ? RECOVERY_FOOTER_STEP_LABELS
       : AUTH_FOOTER_STEP_LABELS;
-  const hideAuthFooterNext = screen === ONBOARDING_SCREENS.VERIFY;
+  const hideAuthFooterNext =
+    screen === ONBOARDING_SCREENS.CONTACT ||
+    screen === ONBOARDING_SCREENS.VERIFY;
   const showOnboardingFooter = ONBOARDING_FOOTER_SCREENS.has(screen);
   const authStepLabel = getAuthFooterStepLabel(screen);
   const onboardingStepLabel = getOnboardingFooterStepLabel(screen);
@@ -86,9 +89,7 @@ export function useOnboardingWorkspace() {
           ? ONBOARDING_COPY.newPassword.continue
           : "Next";
 
-  const backDisabled =
-    screen === ONBOARDING_SCREENS.CHOICE ||
-    screen === ONBOARDING_SCREENS.CONTACT;
+  const backDisabled = screen === ONBOARDING_SCREENS.CHOICE;
 
   const handleNext = () => {
     if (!canAdvance) {

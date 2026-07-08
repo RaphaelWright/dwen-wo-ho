@@ -29,7 +29,7 @@ function renderAuthStep(
   const renderers: Partial<Record<OnboardingScreen, () => ReactNode>> = {
     [ONBOARDING_SCREENS.CHOICE]: () => (
       <ChoiceStep
-        contactMode={props.contactMode}
+        contactMode={null}
         onContactModeChange={props.onContactModeChange}
         onContinue={props.onChoiceContinue}
         onOpenTermsSheet={props.onOpenTermsSheet}
